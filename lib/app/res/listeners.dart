@@ -12,6 +12,8 @@ import 'settings.dart';
 class InAppListeners {
   const InAppListeners._();
 
+  static void home() {}
+
   static Future<void> authorizationChanged(bool authorized) async {}
 
   static void connectivityChanged(bool connected) {}
@@ -21,9 +23,9 @@ class InAppListeners {
     await ExerciseManager.init();
     await InAppNotifications.init(
       onReady: () async {
-        if (InAppSettings.isHourlyNotifications) {
+        if (RemoteSettings.isHourlyNotifications) {
           await InAppNotifications.initHourlyNotifications(
-            perHour: InAppSettings.hourlyNotificationsTime,
+            perHour: RemoteSettings.hourlyNotificationsTime,
             startHour: mHourlyNotificationStartTime,
             endHour: mHourlyNotificationEndTime,
           );

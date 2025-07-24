@@ -41,9 +41,9 @@ class _ProfilePageState extends State<ProfilePage>
 
   void _contactUs() => Utils.sendEmail(context);
 
-  void _termsAndConditions() => Utils.launchLink(link: InAppConfigs.termsLink);
+  void _termsAndConditions() => Utils.launchLink(link: RemoteConfigs.termsLink);
 
-  void _privacyPolicy() => Utils.launchLink(link: InAppConfigs.privacyLink);
+  void _privacyPolicy() => Utils.launchLink(link: RemoteConfigs.privacyLink);
 
   void _deleteAccount() async {
     final deleted = await UserHelper.deleteAccount(context);

@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/utils/settings.dart';
 import 'package:flutter_andomie/utils/translation.dart';
 
+import '../../../../app/res/listeners.dart';
 import '../../../../roots/widgets/auth.dart';
 import '../../../../roots/widgets/paywall.dart';
 import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/system_overlay.dart';
+import '../../../../roots/widgets/text.dart';
 import '../widgets/navigation_bar.dart';
-import '../widgets/timeline.dart';
 
 const kNavigationIndex = "navigation_index";
 
@@ -31,23 +32,24 @@ class _MainPageState extends State<MainPage> with TranslationMixin {
   @override
   void initState() {
     super.initState();
-    initTimeline();
+    InAppListeners.home();
   }
 
   Widget findBody(String id) {
     switch (id) {
       default:
-        return SizedBox();
+        return Center(
+          child: InAppText(
+            id.toUpperCase(),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+        );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final contents = gets(
-      key: "navigation",
-      parser: NavigationItem.from,
-      autoTranslatorFields: ["label"],
-    );
+    final contents = gets(key: "navigation", parser: NavigationItem.from);
     return InAppSystemOverlay(
       child: InAppAuth(
         name: name,

@@ -1,9 +1,5 @@
 class InAppReferences {
   const InAppReferences._();
 
-  static Set<String> translationPaths = {
-    "animations",
-    "exercises",
-    "nutrients",
-  };
+  static Set<String> translationPaths = {};
 }

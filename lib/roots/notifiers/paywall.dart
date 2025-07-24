@@ -28,7 +28,7 @@ class PaywallNotifier extends ChangeNotifier {
   static bool get isNone => i.status.isNone;
 
   static final PaywallNotifier i = PaywallNotifier._(
-    InAppSettings.premium ? PaywallStatus.premium : PaywallStatus.none,
+    RemoteSettings.premium ? PaywallStatus.premium : PaywallStatus.none,
   );
 
   static void changeStatus(PaywallStatus value) {

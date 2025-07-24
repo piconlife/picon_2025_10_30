@@ -2,7 +2,7 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/utils/translation.dart';
 
-import '../../features/main/views/widgets/leading.dart';
+import '../../app/widgets/leading.dart';
 import 'layout.dart';
 import 'position.dart';
 

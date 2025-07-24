@@ -1,7 +1,5 @@
 part of '_imports.dart';
 
-const kZotloExpireDate = "zotlo_expire_date";
-
 class Root extends StatefulWidget {
   final Widget? app;
   final AsyncCallback? onInit;
@@ -521,11 +519,11 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
   Future<void> _initTranslation() async {
     await Translation.init(
       connected: Internet.i.value,
-      autoTranslateMode: InAppConfigs.translationAutoMode,
-      showLogs: InAppDebugConfigs.translationShowLogs,
-      locale: InAppConfigs.translationSavedLocale,
-      defaultLocale: InAppConfigs.translationFallbackLocale,
-      supportedLocales: InAppConfigs.translationSupportedLocales,
+      autoTranslateMode: RemoteConfigs.translationAutoMode,
+      showLogs: StaticConfigs.translationShowLogs,
+      locale: RemoteSettings.translationSavedLocale,
+      defaultLocale: StaticConfigs.translationFallbackLocale,
+      supportedLocales: RemoteConfigs.translationSupportedLocales,
       paths: {
         ...RootReferences.translationPaths,
         ...InAppReferences.translationPaths,
@@ -545,19 +543,19 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
   }
 
   Future<void> _initZotlo() async {
-    if (InAppConfigs.zotloPackages.isEmpty ||
-        InAppConfigs.zotloAccessKey.isEmpty ||
-        InAppConfigs.zotloSecretKey.isEmpty) {
+    if (RemoteConfigs.zotloPackages.isEmpty ||
+        RemoteConfigs.zotloAccessKey.isEmpty ||
+        RemoteConfigs.zotloSecretKey.isEmpty) {
       return;
     }
     return ZotloService.init(
       connected: Internet.i.value,
-      key: InAppConfigs.zotloAccessKey,
-      secret: InAppConfigs.zotloSecretKey,
-      appId: InAppConfigs.zotloAppId,
-      packageIds: InAppConfigs.zotloPackages,
+      key: RemoteConfigs.zotloAccessKey,
+      secret: RemoteConfigs.zotloSecretKey,
+      appId: RemoteConfigs.zotloAppId,
+      packageIds: RemoteConfigs.zotloPackages,
       subscriberId: UserHelper.email,
-      expireDate: Settings.get(kZotloExpireDate, null),
+      expireDate: RemoteSettings.zotloExpireDate,
       onReady: (expireDate) => Settings.set(kZotloExpireDate, expireDate),
     );
   }

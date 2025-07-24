@@ -31,7 +31,7 @@ class AuthManager extends ChangeNotifier {
   static bool get isInitialized => !i.initializing;
 
   static final AuthManager i = AuthManager._(
-    InAppSettings.authorized ? AuthStatus.authorized : AuthStatus.none,
+    RemoteSettings.authorized ? AuthStatus.authorized : AuthStatus.none,
   );
 
   static void setInitialized(bool value) {

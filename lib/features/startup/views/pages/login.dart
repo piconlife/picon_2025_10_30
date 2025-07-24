@@ -99,7 +99,7 @@ class _LoginPageState extends State<LoginPage>
                   child: InAppLayout(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (!mode.isNone && InAppConfigs.isGoogleAuthEnabled)
+                      if (!mode.isNone && RemoteConfigs.isGoogleAuthEnabled)
                         OnboardingAuthButton(
                           text: localize(
                             "button_1",
@@ -111,7 +111,7 @@ class _LoginPageState extends State<LoginPage>
                         ),
                       if (!mode.isNone &&
                           isIosDevice &&
-                          InAppConfigs.isAppleAuthEnabled)
+                          RemoteConfigs.isAppleAuthEnabled)
                         OnboardingAuthButton(
                           text: localize(
                             "button_2",

@@ -72,7 +72,7 @@ dependencies:
   web: ^1.1.1
 
   # AUTHORIZATION (WITH NATIVE)
-#  local_auth: ^2.3.0       # BIOMETRIC SIGN IN
+  local_auth: ^2.3.0       # BIOMETRIC SIGN IN
   google_sign_in: ^6.3.0    # GOOGLE SIGN IN
   sign_in_with_apple: ^7.0.1  # APPLE SIGN IN
 
@@ -175,20 +175,13 @@ flutter:
 
   assets:
     - assets/
-    - assets/animations/
     - assets/app/
     - assets/configs/
     - assets/contents/
     - assets/icons/
     - assets/images/
-    - assets/images/animations/
-    - assets/images/home/
-    - assets/images/exercises/
-    - assets/images/nutrients/
-    - assets/images/startup/
     - assets/translations/
     - assets/videos/
-    - assets/videos/exercises/
 
 
   # ------------------------------------------------------------------------------------------------

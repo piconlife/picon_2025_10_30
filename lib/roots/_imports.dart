@@ -27,6 +27,8 @@ import '../app/constants/configs.dart';
 import '../app/res/configs.dart';
 import '../app/res/listeners.dart';
 import '../app/res/references.dart';
+import '../app/res/settings.dart';
+import '../app/res/statics.dart';
 import '../configs/delegates/auth.dart';
 import '../configs/delegates/auth_backup.dart';
 import '../configs/delegates/configs.dart';
