@@ -6,12 +6,8 @@ import '../../../../roots/widgets/auth.dart';
 import '../../../../roots/widgets/paywall.dart';
 import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/system_overlay.dart';
-import '../../../ai/views/pages/ai.dart';
-import '../../../nutrition/views/pages/nutrition.dart';
-import '../../../settings/views/pages/settings.dart';
 import '../widgets/navigation_bar.dart';
 import '../widgets/timeline.dart';
-import 'home.dart';
 
 const kNavigationIndex = "navigation_index";
 
@@ -40,14 +36,6 @@ class _MainPageState extends State<MainPage> with TranslationMixin {
 
   Widget findBody(String id) {
     switch (id) {
-      case "ai":
-        return AiPage();
-      case "home":
-        return HomePage();
-      case "nutrition":
-        return NutritionPage();
-      case "settings":
-        return SettingsPage();
       default:
         return SizedBox();
     }

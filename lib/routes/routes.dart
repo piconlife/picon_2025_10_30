@@ -31,9 +31,6 @@ class InAppRouter extends InAppRouteGenerator {
       ...kPaywallRoutes,
       ...kMainRoutes,
       ...kSettingsRoutes,
-      ...kAiRoutes,
-      ...kNutritionRoutes,
-      ...kExerciseRoutes,
     };
   }
 }

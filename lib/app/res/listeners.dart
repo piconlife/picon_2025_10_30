@@ -3,11 +3,11 @@ import 'dart:ui';
 import 'package:flutter_andomie/utils/translation.dart';
 
 import '../../data/services/manager.dart';
-import '../../features/nutrition/views/pages/nutrition.dart';
 import '../../features/settings/views/pages/settings.dart';
 import '../../features/settings/views/widgets/remainder.dart';
 import '../../roots/services/notification.dart';
 import '../../roots/utils/speech.dart';
+import 'settings.dart';
 
 class InAppListeners {
   const InAppListeners._();
@@ -21,9 +21,9 @@ class InAppListeners {
     await ExerciseManager.init();
     await InAppNotifications.init(
       onReady: () async {
-        if (mNutritionHydrationReminderOn) {
+        if (InAppSettings.isHourlyNotifications) {
           await InAppNotifications.initHourlyNotifications(
-            perHour: mNutritionHydrationReminder,
+            perHour: InAppSettings.hourlyNotificationsTime,
             startHour: mHourlyNotificationStartTime,
             endHour: mHourlyNotificationEndTime,
           );
