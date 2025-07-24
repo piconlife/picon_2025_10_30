@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "680509866471",
+    "firebase_url": "https://picon-co-default-rtdb.firebaseio.com",
+    "project_id": "picon-co",
+    "storage_bucket": "picon-co.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:680509866471:android:6b5999ebee170bffb6bd42",
+        "android_client_info": {
+          "package_name": "com.picon.picon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "680509866471-v1kf1pkfcqcu5vpkmkf4hu8t5ocht1c7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.picon.picon",
+            "certificate_hash": "93dcc29fc9b2eb2ece7fd2e45a91b85ba21b084d"
+          }
+        },
+        {
+          "client_id": "680509866471-k0c6r7p91dr819h9c844l32j5hurk30r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDxdzmh7WV4e8661GAMpB16aF3y97vuOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "680509866471-k0c6r7p91dr819h9c844l32j5hurk30r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "680509866471-f28triv3jc5u2mliqmoud1nd4p1omm29.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.picon.picon"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:680509866471:android:9b7da4e27ca2d36fb6bd42",
+        "android_client_info": {
+          "package_name": "com.picon_co.picon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "680509866471-02q9o6ho9pg0tvbvimbinmvn6oun4cma.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.picon_co.picon",
+            "certificate_hash": "a68ef1c3aa64eaa3070958d94a16aa7e5de17610"
+          }
+        },
+        {
+          "client_id": "680509866471-k0c6r7p91dr819h9c844l32j5hurk30r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDxdzmh7WV4e8661GAMpB16aF3y97vuOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "680509866471-k0c6r7p91dr819h9c844l32j5hurk30r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "680509866471-f28triv3jc5u2mliqmoud1nd4p1omm29.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.picon.picon"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

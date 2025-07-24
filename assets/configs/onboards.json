@@ -1,0 +1,16 @@
+{
+  "default": {
+  },
+  "live": {},
+  "test": {
+    "hero_configs": {
+      "title": true,
+      "body": true,
+      "filled_button": true,
+      "outlined_button": true,
+      "appbar": true,
+      "appbar_leading": false,
+      "appbar_title": false
+    }
+  }
+}

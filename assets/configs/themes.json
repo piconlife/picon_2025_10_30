@@ -1,0 +1,212 @@
+{
+  "default": {
+    "themeMode": "light",
+    "base": {
+      "light": {
+        "primary": "ff041330",
+        "secondary": "ffff5306",
+        "tertiary": "ffffc107",
+        "error": "fff44336",
+        "warning": "ffffab40",
+        "disable": "fffafafa",
+        "light": "ffffffff",
+        "lightAsFixed": "ffffffff",
+        "dark": "ff000000",
+        "darkAsFixed": "ff000000",
+        "mid": "ff676c75",
+        "holo": "fff2f2f2",
+        "soft": "fffafafa",
+        "deep": "fffafafa"
+      },
+      "dark": {
+        "primary": "ff2eca7f",
+        "secondary": "ff001333",
+        "tertiary": "ffffc107",
+        "error": "fff44336",
+        "warning": "ffff6e40",
+        "disable": "ff212121",
+        "light": "ff000000",
+        "lightAsFixed": "ffffffff",
+        "dark": "ffffffff",
+        "darkAsFixed": "ff000000",
+        "mid": "ff424242",
+        "holo": "ff131313",
+        "soft": "ff181c1f",
+        "deep": "ff181c1f"
+      }
+    },
+    "appbar": {
+      "light": {
+        "primary": "FFF6F6F6"
+      },
+      "dark": {
+        "primary": "FFF6F6F6"
+      }
+    },
+    "background": {
+      "light": {
+        "primary": "ffffffff"
+      },
+      "dark": {
+        "primary": "ffffffff"
+      }
+    },
+    "bottom": {
+      "light": {
+        "primary": "ffffffff"
+      },
+      "dark": {
+        "primary": "ffffffff"
+      }
+    },
+    "card": {
+      "light": {
+        "primary": "ffffffff"
+      },
+      "dark": {
+        "primary": "ffffffff"
+      }
+    },
+    "dialog": {
+      "light": {
+        "primary": "ffffffff"
+      },
+      "dark": {
+        "primary": "ffffffff"
+      }
+    },
+    "divider": {
+      "light": {
+        "soft": "1a676c75"
+      },
+      "dark": {
+        "soft": "1a676c75"
+      }
+    },
+    "highlight": {
+      "light": {
+        "primary": "ffffffff"
+      },
+      "dark": {
+        "primary": "ffffffff"
+      }
+    },
+    "hint": {
+      "light": {
+        "primary": "ffffffff"
+      },
+      "dark": {
+        "primary": "ffffffff"
+      }
+    },
+    "hover": {
+      "light": {
+        "primary": "ffffffff"
+      },
+      "dark": {
+        "primary": "ffffffff"
+      }
+    },
+    "icon": {
+      "light": {
+        "primary": "ff999999",
+        "secondary": "ff808080",
+        "tertiary": "ff041330",
+        "disable": "ff808080"
+      },
+      "dark": {
+        "primary": "ff999999",
+        "secondary": "ff808080",
+        "tertiary": "ff2eca7f",
+        "disable": "ff808080"
+      }
+    },
+    "label": {
+      "light": {
+        "primary": "ff999999",
+        "secondary": "ff808080",
+        "tertiary": "ff041330"
+      },
+      "dark": {
+        "primary": "ff999999",
+        "secondary": "ff808080",
+        "tertiary": "ff2eca7f"
+      }
+    },
+    "placeholder": {
+      "light": {
+        "primary": "ffffffff"
+      },
+      "dark": {
+        "primary": "ffffffff"
+      }
+    },
+    "scaffold": {
+      "light": {
+        "primary": "ffffffff"
+      },
+      "dark": {
+        "primary": "ffffffff"
+      }
+    },
+    "shadow": {
+      "light": {
+        "primary": "ffffffff"
+      },
+      "dark": {
+        "primary": "ffffffff"
+      }
+    },
+    "surface": {
+      "light": {
+        "primary": "ffffffff"
+      },
+      "dark": {
+        "primary": "ffffffff"
+      }
+    },
+    "text": {
+      "light": {
+        "primary": "ff111111",
+        "secondary": "ff929292",
+        "light": "ffffffff",
+        "dark": "ff041330",
+        "mid": "ff5c5c5c"
+      }
+    },
+    "colors": [
+      {
+        "name": "custom",
+        "config": {
+          "light": {
+            "primary": "ff041330"
+          },
+          "dark": {
+            "primary": "ff2eca7f"
+          }
+        }
+      }
+    ],
+    "gradients": [
+      {
+        "name": "scaffold",
+        "config": {
+          "light": {
+            "primary": {
+              "colors": [
+              ],
+              "type": "linear"
+            }
+          },
+          "dark": {
+            "primary": {
+              "colors": [
+              ],
+              "type": "linear"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

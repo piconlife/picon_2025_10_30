@@ -1,0 +1,399 @@
+{
+  "default": {
+    "firebase_app": true,
+    "launch_mode": true,
+    "authorization_mode": "normal",
+    "connectivity_checking": true,
+    "connectivity_timeout": 5,
+    "connectivity_url": "https://www.cloudflare.com/cdn-cgi/trace",
+    "onboard_select_to_next": false,
+    "onboard_appbar_type": "steps",
+    "onboard_quiz_center": true,
+    "nutrition_hydration_reminder_on": false,
+    "supported_locales": [
+      "en_US",
+      "ar_AE",
+      "bn_BD",
+      "ca_ES",
+      "zh_CN",
+      "hr_HR",
+      "cs_CZ",
+      "da_DK",
+      "nl_NL",
+      "fi_FI",
+      "fr_FR",
+      "de_DE",
+      "el_GR",
+      "he_IL",
+      "hi_IN",
+      "hu_HU",
+      "id_ID",
+      "it_IT",
+      "ja_JP",
+      "ko_KR",
+      "ms_MY",
+      "no_NO",
+      "pl_PL",
+      "pt_PT",
+      "ro_RO",
+      "ru_RU",
+      "sl_SL",
+      "es_ES",
+      "sv_SE",
+      "th_TH",
+      "tr_TR",
+      "uk_UA",
+      "vi_VN"
+    ],
+    "navigation_main": [
+      "home",
+      "ai",
+      "nutrition",
+      "settings"
+    ],
+    "notification_channels": [
+      {
+        "channelKey": "basic_channel",
+        "channelName": "Basic Notifications",
+        "channelDescription": "Notification channel for basic tests",
+        "defaultColor": "0x00000000",
+        "importance": "NotificationImportance.High",
+        "ledColor": "0xFFFFFFFF"
+      },
+      {
+        "channelKey": "hourly_channel",
+        "channelName": "Hydration Reminders",
+        "channelDescription": "Reminders to stay hydrated",
+        "defaultColor": "0x00000000",
+        "importance": "NotificationImportance.High",
+        "channelShowBadge": "{IS_ANDROID? \"true\":\"false\"}",
+        "enableVibration": true,
+        "playSound": true,
+        "criticalAlerts": true,
+        "ledColor": "0xFFffFFff",
+        "defaultRingtoneType": "DefaultRingtoneType.Alarm",
+        "vibrationPattern": [
+          0,
+          1000,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200
+        ]
+      },
+      {
+        "channelKey": "time_of_day_channel",
+        "channelName": "Weekly Reminders",
+        "channelDescription": "This is a weekly notification reminder",
+        "defaultColor": "0x00000000",
+        "importance": "NotificationImportance.Max",
+        "channelShowBadge": "{IS_ANDROID? \"true\":\"false\"}",
+        "enableVibration": true,
+        "playSound": true,
+        "criticalAlerts": true,
+        "ledColor": "0xFFFFFFFF",
+        "defaultRingtoneType": "DefaultRingtoneType.Alarm",
+        "vibrationPattern": [
+          0,
+          1000,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200
+        ]
+      },
+      {
+        "channelKey": "weekly_channel",
+        "channelName": "Exercise scheduled notifications",
+        "channelDescription": "Exercise scheduled notifications",
+        "defaultColor": "0x00000000",
+        "importance": "NotificationImportance.Max",
+        "channelShowBadge": "{IS_ANDROID? \"true\":\"false\"}",
+        "enableVibration": true,
+        "playSound": true,
+        "criticalAlerts": true,
+        "ledColor": "0xFFFFFFFF",
+        "defaultRingtoneType": "DefaultRingtoneType.Alarm",
+        "vibrationPattern": [
+          0,
+          1000,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200
+        ]
+      }
+    ],
+    "notification_configs": {
+      "daily": {
+        "duration": "days:1",
+        "length": {
+          "android": 7,
+          "ios": 7
+        }
+      },
+      "weekly": {
+        "duration": "days:1",
+        "length": {
+          "android": 7,
+          "ios": 7
+        }
+      }
+    },
+    "hero_configs": {
+      "onboards": {
+        "title": true,
+        "body": true,
+        "filled_button": true,
+        "outlined_button": true,
+        "appbar": true,
+        "appbar_leading": false,
+        "appbar_title": false
+      }
+    },
+    "secrets": {
+      "object": {
+        "active": "v1",
+        "versions": {
+          "v1": {
+            "version": "v1",
+            "key": "THIS_IS_DOC_KEY",
+            "iv": "THIS_IS_DOC_IV",
+            "secret": "THIS_IS_DOC_SECRET"
+          }
+        }
+      },
+      "password": {
+        "active": "v1",
+        "versions": {
+          "v1": {
+            "version": "v1",
+            "key": "THIS_IS_PASSWORD_KEY",
+            "iv": "THIS_IS_PASSWORD_IV",
+            "secret": "THIS_IS_PASSWORD_SECRET"
+          }
+        }
+      }
+    },
+    "theme": {
+      "themeMode": "light",
+      "base": {
+        "light": {
+          "primary": "ff041330",
+          "secondary": "ffff5306",
+          "tertiary": "ffffc107",
+          "error": "fff44336",
+          "warning": "ffffab40",
+          "disable": "fffafafa",
+          "light": "ffffffff",
+          "lightAsFixed": "ffffffff",
+          "dark": "ff000000",
+          "darkAsFixed": "ff000000",
+          "mid": "ff676c75",
+          "holo": "fff2f2f2",
+          "soft": "fffafafa",
+          "deep": "fffafafa"
+        },
+        "dark": {
+          "primary": "ff2eca7f",
+          "secondary": "ff001333",
+          "tertiary": "ffffc107",
+          "error": "fff44336",
+          "warning": "ffff6e40",
+          "disable": "ff212121",
+          "light": "ff000000",
+          "lightAsFixed": "ffffffff",
+          "dark": "ffffffff",
+          "darkAsFixed": "ff000000",
+          "mid": "ff424242",
+          "holo": "ff131313",
+          "soft": "ff181c1f",
+          "deep": "ff181c1f"
+        }
+      },
+      "appbar": {
+        "light": {
+          "primary": "FFF6F6F6"
+        },
+        "dark": {
+          "primary": "FFF6F6F6"
+        }
+      },
+      "background": {
+        "light": {
+          "primary": "ffffffff"
+        },
+        "dark": {
+          "primary": "ffffffff"
+        }
+      },
+      "bottom": {
+        "light": {
+          "primary": "ffffffff"
+        },
+        "dark": {
+          "primary": "ffffffff"
+        }
+      },
+      "card": {
+        "light": {
+          "primary": "ffffffff"
+        },
+        "dark": {
+          "primary": "ffffffff"
+        }
+      },
+      "dialog": {
+        "light": {
+          "primary": "ffffffff"
+        },
+        "dark": {
+          "primary": "ffffffff"
+        }
+      },
+      "divider": {
+        "light": {
+          "soft": "1a676c75"
+        },
+        "dark": {
+          "soft": "1a676c75"
+        }
+      },
+      "highlight": {
+        "light": {
+          "primary": "ffffffff"
+        },
+        "dark": {
+          "primary": "ffffffff"
+        }
+      },
+      "hint": {
+        "light": {
+          "primary": "ffffffff"
+        },
+        "dark": {
+          "primary": "ffffffff"
+        }
+      },
+      "hover": {
+        "light": {
+          "primary": "ffffffff"
+        },
+        "dark": {
+          "primary": "ffffffff"
+        }
+      },
+      "icon": {
+        "light": {
+          "primary": "ff999999",
+          "secondary": "ff808080",
+          "tertiary": "ff041330",
+          "disable": "ff808080"
+        },
+        "dark": {
+          "primary": "ff999999",
+          "secondary": "ff808080",
+          "tertiary": "ff2eca7f",
+          "disable": "ff808080"
+        }
+      },
+      "label": {
+        "light": {
+          "primary": "ff999999",
+          "secondary": "ff808080",
+          "tertiary": "ff041330"
+        },
+        "dark": {
+          "primary": "ff999999",
+          "secondary": "ff808080",
+          "tertiary": "ff2eca7f"
+        }
+      },
+      "placeholder": {
+        "light": {
+          "primary": "ffffffff"
+        },
+        "dark": {
+          "primary": "ffffffff"
+        }
+      },
+      "scaffold": {
+        "light": {
+          "primary": "ffffffff"
+        },
+        "dark": {
+          "primary": "ffffffff"
+        }
+      },
+      "shadow": {
+        "light": {
+          "primary": "ffffffff"
+        },
+        "dark": {
+          "primary": "ffffffff"
+        }
+      },
+      "surface": {
+        "light": {
+          "primary": "ffffffff"
+        },
+        "dark": {
+          "primary": "ffffffff"
+        }
+      },
+      "text": {
+        "light": {
+          "primary": "ff111111",
+          "secondary": "ff929292",
+          "light": "ffffffff",
+          "dark": "ff041330",
+          "mid": "ff5c5c5c"
+        }
+      },
+      "colors": [
+        {
+          "name": "custom",
+          "config": {
+            "light": {
+              "primary": "ff041330"
+            },
+            "dark": {
+              "primary": "ff2eca7f"
+            }
+          }
+        }
+      ],
+      "gradients": [
+        {
+          "name": "scaffold",
+          "config": {
+            "light": {
+              "primary": {
+                "colors": [
+                ],
+                "type": "linear"
+              }
+            },
+            "dark": {
+              "primary": {
+                "colors": [
+                ],
+                "type": "linear"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "live": {
+  },
+  "test": {
+  }
+}

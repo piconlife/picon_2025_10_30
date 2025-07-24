@@ -1,0 +1,23 @@
+{
+  "default": {
+    "duration": "days:1",
+    "length": {
+      "android": 7,
+      "ios": 7
+    }
+  },
+  "live": {
+    "duration": "days:1",
+    "length": {
+      "android": 7,
+      "ios": 7
+    }
+  },
+  "test": {
+    "duration": "minutes:15",
+    "length": {
+      "android": 7,
+      "ios": 7
+    }
+  }
+}

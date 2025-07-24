@@ -1,0 +1,273 @@
+[
+  {
+    "id": "adductor_stretch",
+    "name": "Adductor Stretch",
+    "duration": 7,
+    "repetitions": 14,
+    "preferredShift": "morning",
+    "preview": "assets/videos/exercises/adductor_stretch.mp4",
+    "thumbnail": "assets/images/exercises/adductor_stretch.jpg",
+    "type": "video"
+  },
+  {
+    "id": "air_bike",
+    "name": "Air Bike",
+    "description": "A gentle exercise perfect for morning sessions.",
+    "duration": 8,
+    "repetitions": 12,
+    "preferredShift": "any",
+    "preview": "assets/videos/exercises/air_bike.mp4",
+    "thumbnail": "assets/images/exercises/air_bike.jpg",
+    "type": "video"
+  },
+  {
+    "id": "air_twisting_crunch",
+    "name": "Air Twisting Crunch",
+    "duration": 5,
+    "repetitions": 14,
+    "preferredShift": "day",
+    "preview": "assets/videos/exercises/air_twisting_crunch.mp4",
+    "thumbnail": "assets/images/exercises/air_twisting_crunch.jpg",
+    "type": "video"
+  },
+  {
+    "id": "alternate_lying_floor_leg_raise",
+    "name": "Alternate Lying Floor Leg Raise",
+    "duration": 6,
+    "repetitions": 14,
+    "preferredShift": "night",
+    "preview": "assets/videos/exercises/alternate_lying_floor_leg_raise.mp4",
+    "thumbnail": "assets/images/exercises/alternate_lying_floor_leg_raise.jpg",
+    "type": "video"
+  },
+  {
+    "id": "bridge_pose_setu_bandhasana",
+    "name": "Bridge Pose Setu Bandhasana",
+    "duration": 14,
+    "repetitions": 14,
+    "preferredShift": "any",
+    "preview": "assets/videos/exercises/bridge_pose_setu_bandhasana.mp4",
+    "thumbnail": "assets/images/exercises/bridge_pose_setu_bandhasana.jpg",
+    "type": "video"
+  },
+  {
+    "id": "butterfly_yoga_pose",
+    "name": "Butterfly Yoga Pose",
+    "duration": 7,
+    "repetitions": 14,
+    "preferredShift": "night",
+    "preview": "assets/videos/exercises/butterfly_yoga_pose.mp4",
+    "thumbnail": "assets/images/exercises/butterfly_yoga_pose.jpg",
+    "type": "video"
+  },
+  {
+    "id": "cat_stretch",
+    "name": "Cat Stretch",
+    "duration": 6,
+    "repetitions": 20,
+    "preferredShift": "night",
+    "preview": "assets/videos/exercises/cat_stretch.mp4",
+    "thumbnail": "assets/images/exercises/cat_stretch.jpg",
+    "type": "video"
+  },
+  {
+    "id": "circles_knee_stretch",
+    "name": "Circles Knee Stretch",
+    "duration": 6,
+    "repetitions": 20,
+    "preferredShift": "day",
+    "preview": "assets/videos/exercises/circles_knee_stretch.mp4",
+    "thumbnail": "assets/images/exercises/circles_knee_stretch.jpg",
+    "type": "video"
+  },
+  {
+    "id": "cobra_push_up",
+    "name": "Cobra Push up",
+    "duration": 6,
+    "repetitions": 14,
+    "preferredShift": "morning",
+    "preview": "assets/videos/exercises/cobra_push_up.mp4",
+    "thumbnail": "assets/images/exercises/cobra_push_up.jpg",
+    "type": "video"
+  },
+  {
+    "id": "cobra_yoga_pose",
+    "name": "Cobra Yoga Pose",
+    "duration": 5,
+    "repetitions": 14,
+    "preferredShift": "any",
+    "preview": "assets/videos/exercises/cobra_yoga_pose.mp4",
+    "thumbnail": "assets/images/exercises/cobra_yoga_pose.jpg",
+    "type": "video"
+  },
+  {
+    "id": "cocoons",
+    "name": "Cocoons",
+    "duration": 7,
+    "repetitions": 14,
+    "preferredShift": "night",
+    "preview": "assets/videos/exercises/cocoons.mp4",
+    "thumbnail": "assets/images/exercises/cocoons.jpg",
+    "type": "video"
+  },
+  {
+    "id": "cow_stretch",
+    "name": "Cow Stretch",
+    "duration": 7,
+    "repetitions": 16,
+    "preferredShift": "night",
+    "preview": "assets/videos/exercises/cow_stretch.mp4",
+    "thumbnail": "assets/images/exercises/cow_stretch.jpg",
+    "type": "video"
+  },
+  {
+    "id": "crab_twist_toe_touch",
+    "name": "Crab Twist Toe Touch",
+    "duration": 13,
+    "repetitions": 8,
+    "preferredShift": "morning",
+    "preview": "assets/videos/exercises/crab_twist_toe_touch.mp4",
+    "thumbnail": "assets/images/exercises/crab_twist_toe_touch.jpg",
+    "type": "video"
+  },
+  {
+    "id": "laying_floor_leg_raise",
+    "name": "Laying Floor Leg Raise",
+    "duration": 6,
+    "repetitions": 14,
+    "preferredShift": "day",
+    "preview": "assets/videos/exercises/laying_floor_leg_raise.mp4",
+    "thumbnail": "assets/images/exercises/laying_floor_leg_raise.jpg",
+    "type": "video"
+  },
+  {
+    "id": "pelvic_tilt_into_bridge",
+    "name": "Pelvic Tilt Into Bridge",
+    "duration": 6,
+    "repetitions": 20,
+    "preferredShift": "night",
+    "preview": "assets/videos/exercises/pelvic_tilt_into_bridge.mp4",
+    "thumbnail": "assets/images/exercises/pelvic_tilt_into_bridge.jpg",
+    "type": "video"
+  },
+  {
+    "id": "pelvic_tilt",
+    "name": "Pelvic Tilt",
+    "duration": 6,
+    "repetitions": 20,
+    "preferredShift": "any",
+    "preview": "assets/videos/exercises/pelvic_tilt.mp4",
+    "thumbnail": "assets/images/exercises/pelvic_tilt.jpg",
+    "type": "video"
+  },
+  {
+    "id": "rear_decline_bridge",
+    "name": "Rear Decline Bridge",
+    "duration": 6,
+    "repetitions": 20,
+    "preferredShift": "night",
+    "preview": "assets/videos/exercises/rear_decline_bridge.mp4",
+    "thumbnail": "assets/images/exercises/rear_decline_bridge.jpg",
+    "type": "video"
+  },
+  {
+    "id": "rear_decline",
+    "name": "Rear Decline",
+    "duration": 6,
+    "repetitions": 20,
+    "preferredShift": "day",
+    "preview": "assets/videos/exercises/rear_decline.mp4",
+    "thumbnail": "assets/images/exercises/rear_decline.jpg",
+    "type": "video"
+  },
+  {
+    "id": "rocking_frog_stretch",
+    "name": "Rocking Frog Stretch",
+    "duration": 7,
+    "repetitions": 22,
+    "preferredShift": "day",
+    "preview": "assets/videos/exercises/rocking_frog_stretch.mp4",
+    "thumbnail": "assets/images/exercises/rocking_frog_stretch.jpg",
+    "type": "video"
+  },
+  {
+    "id": "sitting_wide_leg_adductor_stretch",
+    "name": "Sitting Wide Leg Adductor Stretch ",
+    "duration": 6,
+    "repetitions": 12,
+    "preferredShift": "morning",
+    "preview": "assets/videos/exercises/sitting_wide_leg_adductor_stretch.mp4",
+    "thumbnail": "assets/images/exercises/sitting_wide_leg_adductor_stretch.jpg",
+    "type": "video"
+  },
+  {
+    "id": "sliding_floor_bridge_curl_on_towel",
+    "name": "Sliding Floor Bridge Curl on Towel",
+    "duration": 6,
+    "repetitions": 12,
+    "preferredShift": "morning",
+    "preview": "assets/videos/exercises/sliding_floor_bridge_curl_on_towel.mp4",
+    "thumbnail": "assets/images/exercises/sliding_floor_bridge_curl_on_towel.jpg",
+    "type": "video"
+  },
+  {
+    "id": "sliding_floor_pull_down_on_towel",
+    "name": "Sliding Floor Pull down on Towel",
+    "duration": 6,
+    "repetitions": 12,
+    "preferredShift": "morning",
+    "preview": "assets/videos/exercises/sliding_floor_pull_down_on_towel.mp4",
+    "thumbnail": "assets/images/exercises/sliding_floor_pull_down_on_towel.jpg",
+    "type": "video"
+  },
+  {
+    "id": "stretching_adductor_stretch",
+    "name": "Stretching Adductor Stretch",
+    "duration": 7,
+    "repetitions": 14,
+    "preferredShift": "day",
+    "preview": "assets/videos/exercises/stretching_adductor_stretch.mp4",
+    "thumbnail": "assets/images/exercises/stretching_adductor_stretch.jpg",
+    "type": "video"
+  },
+  {
+    "id": "stretching_ceiling_look_stretch",
+    "name": "Stretching Ceiling Look Stretch",
+    "duration": 6,
+    "repetitions": 15,
+    "preferredShift": "any",
+    "preview": "assets/videos/exercises/stretching_ceiling_look_stretch.mp4",
+    "thumbnail": "assets/images/exercises/stretching_ceiling_look_stretch.jpg",
+    "type": "video"
+  },
+  {
+    "id": "stretching_hip_circles_stretch",
+    "name": "Stretching Hip Circles Stretch",
+    "duration": 4,
+    "repetitions": 25,
+    "preferredShift": "morning",
+    "preview": "assets/videos/exercises/stretching_hip_circles_stretch.mp4",
+    "thumbnail": "assets/images/exercises/stretching_hip_circles_stretch.jpg",
+    "type": "video"
+  },
+  {
+    "id": "v_up",
+    "name": "V-Up",
+    "duration": 6,
+    "repetitions": 20,
+    "preferredShift": "morning",
+    "preview": "assets/videos/exercises/v_up.mp4",
+    "thumbnail": "assets/images/exercises/v_up.jpg",
+    "type": "video"
+  },
+  {
+    "id": "yoga_butterfly_pose",
+    "name": "Yoga Butterfly Pose",
+    "duration": 7,
+    "repetitions": 14,
+    "preferredShift": "night",
+    "preview": "assets/videos/exercises/yoga_butterfly_pose.mp4",
+    "thumbnail": "assets/images/exercises/yoga_butterfly_pose.jpg",
+    "type": "video"
+  }
+]
