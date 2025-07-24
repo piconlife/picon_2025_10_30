@@ -41,57 +41,61 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDeliB8fewrqASzhYHBlXh8eat2lgHf6RU',
-    appId: '1:680509866471:web:76063bcd03e8c204b6bd42',
-    messagingSenderId: '680509866471',
-    projectId: 'picon-co',
-    authDomain: 'picon-co.firebaseapp.com',
-    databaseURL: 'https://picon-co-default-rtdb.firebaseio.com',
-    storageBucket: 'picon-co.appspot.com',
-    measurementId: 'G-7NYG351LYL',
+    apiKey: 'AIzaSyD3fyaWcxTxC9P4x7zikxOoC8DpP7RRnwo',
+    appId: '1:916319691429:web:41148e60476fb266d8e34c',
+    messagingSenderId: '916319691429',
+    projectId: 'kegelx-bd',
+    authDomain: 'kegelx-bd.firebaseapp.com',
+    databaseURL: 'https://kegelx-bd-default-rtdb.firebaseio.com',
+    storageBucket: 'kegelx-bd.firebasestorage.app',
+    measurementId: 'G-1E6MKF5597',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDDxdzmh7WV4e8661GAMpB16aF3y97vuOk',
-    appId: '1:680509866471:android:6b5999ebee170bffb6bd42',
-    messagingSenderId: '680509866471',
-    projectId: 'picon-co',
-    databaseURL: 'https://picon-co-default-rtdb.firebaseio.com',
-    storageBucket: 'picon-co.appspot.com',
+    apiKey: 'AIzaSyAh_PSvNqr7sLFc1kIjI8PqVkjY_8Eod3I',
+    appId: '1:916319691429:android:37f5d76d2c2154d5d8e34c',
+    messagingSenderId: '916319691429',
+    projectId: 'kegelx-bd',
+    databaseURL: 'https://kegelx-bd-default-rtdb.firebaseio.com',
+    storageBucket: 'kegelx-bd.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAQtOv9ZqM8pwEtRyJdS5bZcSguac9CZHw',
-    appId: '1:680509866471:ios:dc78ee3463b3cda6b6bd42',
-    messagingSenderId: '680509866471',
-    projectId: 'picon-co',
-    databaseURL: 'https://picon-co-default-rtdb.firebaseio.com',
-    storageBucket: 'picon-co.appspot.com',
-    androidClientId: '680509866471-02q9o6ho9pg0tvbvimbinmvn6oun4cma.apps.googleusercontent.com',
-    iosClientId: '680509866471-f28triv3jc5u2mliqmoud1nd4p1omm29.apps.googleusercontent.com',
-    iosBundleId: 'com.picon.picon',
+    apiKey: 'AIzaSyBlV9MJ0Q9YePJhUQquIWB-ENYvDqJNitw',
+    appId: '1:916319691429:ios:4f113b54b15dadb1d8e34c',
+    messagingSenderId: '916319691429',
+    projectId: 'kegelx-bd',
+    databaseURL: 'https://kegelx-bd-default-rtdb.firebaseio.com',
+    storageBucket: 'kegelx-bd.firebasestorage.app',
+    androidClientId:
+        '916319691429-mdas88m9bd2im857gmaai5gknoq51cha.apps.googleusercontent.com',
+    iosClientId:
+        '916319691429-qn44to2iv3cp9l02f0ulkftrbd725f04.apps.googleusercontent.com',
+    iosBundleId: 'com.teckpek.kegelx',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAQtOv9ZqM8pwEtRyJdS5bZcSguac9CZHw',
-    appId: '1:680509866471:ios:dc78ee3463b3cda6b6bd42',
-    messagingSenderId: '680509866471',
-    projectId: 'picon-co',
-    databaseURL: 'https://picon-co-default-rtdb.firebaseio.com',
-    storageBucket: 'picon-co.appspot.com',
-    androidClientId: '680509866471-02q9o6ho9pg0tvbvimbinmvn6oun4cma.apps.googleusercontent.com',
-    iosClientId: '680509866471-f28triv3jc5u2mliqmoud1nd4p1omm29.apps.googleusercontent.com',
-    iosBundleId: 'com.picon.picon',
+    apiKey: 'AIzaSyBlV9MJ0Q9YePJhUQquIWB-ENYvDqJNitw',
+    appId: '1:916319691429:ios:4f113b54b15dadb1d8e34c',
+    messagingSenderId: '916319691429',
+    projectId: 'kegelx-bd',
+    databaseURL: 'https://kegelx-bd-default-rtdb.firebaseio.com',
+    storageBucket: 'kegelx-bd.firebasestorage.app',
+    androidClientId:
+        '916319691429-mdas88m9bd2im857gmaai5gknoq51cha.apps.googleusercontent.com',
+    iosClientId:
+        '916319691429-qn44to2iv3cp9l02f0ulkftrbd725f04.apps.googleusercontent.com',
+    iosBundleId: 'com.teckpek.kegelx',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyAV6xRkXfnqSRwFeZ8OU2SaNQYcmThvkpE',
-    appId: '1:680509866471:web:830fa610e778bba4b6bd42',
-    messagingSenderId: '680509866471',
-    projectId: 'picon-co',
-    authDomain: 'picon-co.firebaseapp.com',
-    databaseURL: 'https://picon-co-default-rtdb.firebaseio.com',
-    storageBucket: 'picon-co.appspot.com',
-    measurementId: 'G-M4W0673TJ7',
+    apiKey: 'AIzaSyD3fyaWcxTxC9P4x7zikxOoC8DpP7RRnwo',
+    appId: '1:916319691429:web:419fc706ea160637d8e34c',
+    messagingSenderId: '916319691429',
+    projectId: 'kegelx-bd',
+    authDomain: 'kegelx-bd.firebaseapp.com',
+    databaseURL: 'https://kegelx-bd-default-rtdb.firebaseio.com',
+    storageBucket: 'kegelx-bd.firebasestorage.app',
+    measurementId: 'G-M7LZXMJ61J',
   );
 }
