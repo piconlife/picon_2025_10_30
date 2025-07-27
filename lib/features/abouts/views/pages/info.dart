@@ -14,34 +14,45 @@ class AboutsContent {
   final String text;
   final dynamic icon;
   final Color? color;
+  final VoidCallback? callback;
 
-  const AboutsContent({required this.text, this.icon, this.color});
+  const AboutsContent({
+    required this.text,
+    this.icon,
+    this.color,
+    this.callback,
+  });
 
   static List<AboutsContent> items = [
-    const AboutsContent(
+    AboutsContent(
       text: "Update",
       color: Color(0xff4BBEEB),
       icon: Icons.update_outlined,
+      callback: () {},
     ),
-    const AboutsContent(
+    AboutsContent(
       text: "Support",
       color: Color(0xff4B8BEB),
       icon: Icons.support_outlined,
+      callback: () {},
     ),
-    const AboutsContent(
+    AboutsContent(
       text: "Recommend to Friends",
       color: Color(0xff4BEB8B),
       icon: Icons.recommend_outlined,
+      callback: () {},
     ),
-    const AboutsContent(
+    AboutsContent(
       text: "Like",
       color: Color(0xffEB9E4B),
       icon: Icons.thumb_up_outlined,
+      callback: () {},
     ),
-    const AboutsContent(
+    AboutsContent(
       text: "Privacy and Legal",
       color: Color(0xff4B86EB),
       icon: Icons.privacy_tip_outlined,
+      callback: () {},
     ),
   ];
 }
@@ -105,7 +116,7 @@ class _InfoPageState extends State<InfoPage> with ColorMixin {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: AboutsContent.items.map((e) {
                       return InAppGesture(
-                        onTap: () {},
+                        onTap: e.callback,
                         scalerLowerBound: 1,
                         backgroundColor: light,
                         highlightColor: context.dark.t05,
