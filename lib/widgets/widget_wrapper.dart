@@ -4,11 +4,7 @@ import 'package:flutter/rendering.dart';
 class WidgetWrapper extends SingleChildRenderObjectWidget {
   final Function(Size size) wrapper;
 
-  const WidgetWrapper({
-    super.key,
-    required this.wrapper,
-    super.child,
-  });
+  const WidgetWrapper({super.key, required this.wrapper, super.child});
 
   @override
   RenderObject createRenderObject(BuildContext context) {

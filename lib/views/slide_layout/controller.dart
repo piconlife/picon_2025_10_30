@@ -58,11 +58,7 @@ class SlideLayoutController<T> extends ViewController {
     }
   }
 
-  String countingText(
-    int current,
-    int total, [
-    String separator = "/",
-  ]) {
+  String countingText(int current, int total, [String separator = "/"]) {
     return "$current$separator$total";
   }
 

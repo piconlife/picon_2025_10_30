@@ -294,10 +294,7 @@ class NavigationView extends YMRView<NavigationViewController> {
   }
 
   @override
-  Widget? attach(
-    BuildContext context,
-    NavigationViewController controller,
-  ) {
+  Widget? attach(BuildContext context, NavigationViewController controller) {
     Widget child = Flex(
       direction: controller.navDirection,
       mainAxisSize: MainAxisSize.max,

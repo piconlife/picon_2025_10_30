@@ -197,10 +197,7 @@ class SplashLayout<T extends SplashLayoutController> extends YMRView<T> {
             y: controller.axisY,
             child: controller.content,
           ),
-          Positioned(
-            bottom: 0,
-            child: controller.footer ?? const SizedBox(),
-          ),
+          Positioned(bottom: 0, child: controller.footer ?? const SizedBox()),
         ],
       ),
     );

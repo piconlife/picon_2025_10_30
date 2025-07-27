@@ -104,14 +104,9 @@ class RawImageView extends StatelessWidget {
         height: height,
         fit: scaleType ?? BoxFit.contain,
         colorFilter: tint != null
-            ? ColorFilter.mode(
-                tint!,
-                tintMode ?? BlendMode.srcIn,
-              )
+            ? ColorFilter.mode(tint!, tintMode ?? BlendMode.srcIn)
             : null,
-        theme: SvgTheme(
-          currentColor: tint ?? const Color(0xFF808080),
-        ),
+        theme: SvgTheme(currentColor: tint ?? const Color(0xFF808080)),
       );
     } else if (type == ImageType.svgNetwork) {
       return SvgPicture.network(
@@ -120,14 +115,9 @@ class RawImageView extends StatelessWidget {
         height: height,
         fit: scaleType ?? BoxFit.contain,
         colorFilter: tint != null
-            ? ColorFilter.mode(
-                tint!,
-                tintMode ?? BlendMode.srcIn,
-              )
+            ? ColorFilter.mode(tint!, tintMode ?? BlendMode.srcIn)
             : null,
-        theme: SvgTheme(
-          currentColor: tint ?? const Color(0xFF808080),
-        ),
+        theme: SvgTheme(currentColor: tint ?? const Color(0xFF808080)),
       );
     } else if (type == ImageType.svgCode) {
       return SvgPicture.string(
@@ -136,20 +126,12 @@ class RawImageView extends StatelessWidget {
         height: height,
         fit: scaleType ?? BoxFit.contain,
         colorFilter: tint != null
-            ? ColorFilter.mode(
-                tint!,
-                tintMode ?? BlendMode.srcIn,
-              )
+            ? ColorFilter.mode(tint!, tintMode ?? BlendMode.srcIn)
             : null,
-        theme: SvgTheme(
-          currentColor: tint ?? const Color(0xFF808080),
-        ),
+        theme: SvgTheme(currentColor: tint ?? const Color(0xFF808080)),
       );
     } else {
-      return SizedBox(
-        width: width,
-        height: height,
-      );
+      return SizedBox(width: width, height: height);
     }
   }
 }

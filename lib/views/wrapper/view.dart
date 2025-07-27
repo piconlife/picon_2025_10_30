@@ -178,10 +178,7 @@ class WrapperView extends YMRView<WrapperViewController> {
 
   @override
   Widget? attach(BuildContext context, WrapperViewController controller) {
-    return WidgetWrapper(
-      wrapper: controller.onNotify,
-      child: child,
-    );
+    return WidgetWrapper(wrapper: controller.onNotify, child: child);
   }
 }
 

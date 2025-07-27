@@ -3,9 +3,7 @@ part of 'view.dart';
 class _Text extends StatelessWidget {
   final ButtonController controller;
 
-  const _Text({
-    required this.controller,
-  });
+  const _Text({required this.controller});
 
   @override
   Widget build(BuildContext context) {

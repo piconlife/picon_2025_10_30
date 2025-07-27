@@ -268,7 +268,8 @@ class DropdownView<T extends Object>
                       return trailingIconBuilder!(context);
                     } else {
                       return RawIconView(
-                        icon: controller.trailingIcon ??
+                        icon:
+                            controller.trailingIcon ??
                             Icons.keyboard_arrow_down,
                         tint: controller.trailingIconTint,
                         size: controller.trailingIconSize ?? 18,
@@ -284,7 +285,8 @@ class DropdownView<T extends Object>
                       return trailingSelectedIconBuilder!(context);
                     } else {
                       return RawIconView(
-                        icon: controller.trailingSelectedIcon ??
+                        icon:
+                            controller.trailingSelectedIcon ??
                             Icons.keyboard_arrow_up,
                         tint: controller.trailingSelectedIconTint,
                         size: controller.trailingSelectedIconSize ?? 18,
@@ -308,10 +310,7 @@ class DropdownView<T extends Object>
             padding: MaterialStateProperty.all(EdgeInsets.zero),
           ),
           dropdownMenuEntries: items.map((e) {
-            return DropdownMenuEntry<T>(
-              value: e.value,
-              label: e.name,
-            );
+            return DropdownMenuEntry<T>(value: e.value, label: e.name);
           }).toList(),
           onSelected: onItemSelected,
         );

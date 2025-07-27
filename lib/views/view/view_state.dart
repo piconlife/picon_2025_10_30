@@ -6,7 +6,7 @@ class _ViewState<T extends ViewController> extends State<YMRView<T>> {
   @override
   void initState() {
     super.initState();
-    if (mounted){
+    if (mounted) {
       controller = widget.controller ?? widget.initController();
       controller.setNotifier(setState);
       controller.isMountable = mounted;
@@ -213,10 +213,7 @@ class _ViewState<T extends ViewController> extends State<YMRView<T>> {
 
       /// CALLBACKS
       if (controller.isClickMode) {
-        child = ViewListener(
-          controller: controller,
-          child: child,
-        );
+        child = ViewListener(controller: controller, child: child);
       }
 
       /// DIMENSION
@@ -229,10 +226,7 @@ class _ViewState<T extends ViewController> extends State<YMRView<T>> {
 
       /// EXPENDABLE
       if (controller.isExpendable) {
-        child = Expanded(
-          flex: controller.flex,
-          child: child,
-        );
+        child = Expanded(flex: controller.flex, child: child);
       }
 
       /// POSITION

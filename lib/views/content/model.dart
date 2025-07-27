@@ -4,8 +4,5 @@ class Content {
   final String? title;
   final String? body;
 
-  Content({
-    this.title,
-    this.body,
-  });
+  Content({this.title, this.body});
 }

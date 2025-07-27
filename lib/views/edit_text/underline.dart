@@ -5,12 +5,7 @@ class Underline extends StatelessWidget {
   final bool active;
   final double height;
 
-  const Underline({
-    super.key,
-    this.color,
-    this.active = true,
-    this.height = 1,
-  });
+  const Underline({super.key, this.color, this.active = true, this.height = 1});
 
   @override
   Widget build(BuildContext context) {

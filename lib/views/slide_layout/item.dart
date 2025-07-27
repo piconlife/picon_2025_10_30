@@ -4,11 +4,7 @@ class _Item<T> extends StatefulWidget {
   final SlideLayoutController<T> controller;
   final OnSlideLayoutItemBuilder<T> itemBuilder;
 
-  const _Item({
-    super.key,
-    required this.controller,
-    required this.itemBuilder,
-  });
+  const _Item({super.key, required this.controller, required this.itemBuilder});
 
   @override
   State<_Item<T>> createState() => _ItemState<T>();

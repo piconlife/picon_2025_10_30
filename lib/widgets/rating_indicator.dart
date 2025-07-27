@@ -72,23 +72,20 @@ class _RatingIndicatorState extends State<RatingIndicator> {
   }
 
   List<Widget> get _children {
-    return List.generate(
-      widget.itemCount,
-      (index) {
-        if (widget.textDirection != null) {
-          if (widget.textDirection == TextDirection.rtl &&
-              Directionality.of(context) != TextDirection.rtl) {
-            return Transform(
-              transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
-              alignment: Alignment.center,
-              transformHitTests: false,
-              child: _buildItems(index),
-            );
-          }
+    return List.generate(widget.itemCount, (index) {
+      if (widget.textDirection != null) {
+        if (widget.textDirection == TextDirection.rtl &&
+            Directionality.of(context) != TextDirection.rtl) {
+          return Transform(
+            transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
+            alignment: Alignment.center,
+            transformHitTests: false,
+            child: _buildItems(index),
+          );
         }
-        return _buildItems(index);
-      },
-    );
+      }
+      return _buildItems(index);
+    });
   }
 
   Widget _buildItems(int index) {
@@ -128,9 +125,7 @@ class _RatingIndicatorState extends State<RatingIndicator> {
                 FittedBox(
                   fit: BoxFit.contain,
                   child: ClipRect(
-                    clipper: _IndicatorClipper(
-                      ratingFraction: _ratingFraction,
-                    ),
+                    clipper: _IndicatorClipper(ratingFraction: _ratingFraction),
                     child: widget.itemBuilder(context, index),
                   ),
                 ),
@@ -142,10 +137,7 @@ class _RatingIndicatorState extends State<RatingIndicator> {
 }
 
 class _IndicatorClipper extends CustomClipper<Rect> {
-  _IndicatorClipper({
-    required this.ratingFraction,
-    this.rtlMode = false,
-  });
+  _IndicatorClipper({required this.ratingFraction, this.rtlMode = false});
 
   final double ratingFraction;
   final bool rtlMode;
@@ -159,12 +151,7 @@ class _IndicatorClipper extends CustomClipper<Rect> {
             size.width,
             size.height,
           )
-        : Rect.fromLTRB(
-            0.0,
-            0.0,
-            size.width * ratingFraction,
-            size.height,
-          );
+        : Rect.fromLTRB(0.0, 0.0, size.width * ratingFraction, size.height);
   }
 
   @override

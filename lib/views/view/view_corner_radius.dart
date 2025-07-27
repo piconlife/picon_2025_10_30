@@ -14,34 +14,34 @@ class ViewCornerRadius {
   });
 
   const ViewCornerRadius.all(double value)
-      : topLeft = value,
-        topRight = value,
-        bottomLeft = value,
-        bottomRight = value;
+    : topLeft = value,
+      topRight = value,
+      bottomLeft = value,
+      bottomRight = value;
 
   const ViewCornerRadius.topAll(double value)
-      : topLeft = value,
-        topRight = value,
-        bottomLeft = 0,
-        bottomRight = 0;
+    : topLeft = value,
+      topRight = value,
+      bottomLeft = 0,
+      bottomRight = 0;
 
   const ViewCornerRadius.bottomAll(double value)
-      : topLeft = 0,
-        topRight = 0,
-        bottomLeft = value,
-        bottomRight = value;
+    : topLeft = 0,
+      topRight = 0,
+      bottomLeft = value,
+      bottomRight = value;
 
   const ViewCornerRadius.leftAll(double value)
-      : topLeft = value,
-        topRight = 0,
-        bottomLeft = value,
-        bottomRight = 0;
+    : topLeft = value,
+      topRight = 0,
+      bottomLeft = value,
+      bottomRight = 0;
 
   const ViewCornerRadius.rightAll(double value)
-      : topLeft = 0,
-        topRight = value,
-        bottomLeft = 0,
-        bottomRight = value;
+    : topLeft = 0,
+      topRight = value,
+      bottomLeft = 0,
+      bottomRight = value;
 
   double get all {
     var radius = topLeft;

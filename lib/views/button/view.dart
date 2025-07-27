@@ -204,20 +204,14 @@ class Button<T extends ButtonController> extends TextView<T> {
   @override
   Widget? attach(BuildContext context, T controller) {
     if (controller.iconOnly) {
-      return _Icon(
-        controller: controller,
-        visible: controller.icon != null,
-      );
+      return _Icon(controller: controller, visible: controller.icon != null);
     }
     return controller.isCenterText
         ? Stack(
             alignment: Alignment.center,
             children: [
               _Text(controller: controller),
-              _Icon(
-                controller: controller,
-                visible: controller.icon != null,
-              ),
+              _Icon(controller: controller, visible: controller.icon != null),
             ],
           )
         : Row(

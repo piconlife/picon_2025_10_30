@@ -6,19 +6,9 @@ class ArrowConfig {
   final Color? color;
   final double? size;
 
-  const ArrowConfig({
-    this.arrow,
-    this.icon,
-    this.color,
-    this.size,
-  });
+  const ArrowConfig({this.arrow, this.icon, this.color, this.size});
 
-  ArrowConfig copy({
-    Widget? arrow,
-    dynamic icon,
-    double? size,
-    Color? color,
-  }) {
+  ArrowConfig copy({Widget? arrow, dynamic icon, double? size, Color? color}) {
     return ArrowConfig(
       arrow: arrow ?? this.arrow,
       icon: icon ?? this.icon,

@@ -33,9 +33,7 @@ enum ViewPositionType {
 
   final ViewPosition position;
 
-  const ViewPositionType([
-    this.position = const ViewPosition(),
-  ]);
+  const ViewPositionType([this.position = const ViewPosition()]);
 }
 
 extension ViewPositionExtension on ViewPositionType? {

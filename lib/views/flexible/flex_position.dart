@@ -10,10 +10,5 @@ enum FlexPosition {
 
   final double? top, bottom, left, right;
 
-  const FlexPosition({
-    this.top,
-    this.bottom,
-    this.left,
-    this.right,
-  });
+  const FlexPosition({this.top, this.bottom, this.left, this.right});
 }

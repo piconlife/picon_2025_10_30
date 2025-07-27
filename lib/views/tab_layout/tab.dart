@@ -6,10 +6,5 @@ class TabItem {
   final dynamic icon;
   final ValueState<dynamic>? iconState;
 
-  const TabItem({
-    this.icon,
-    this.iconState,
-    this.title,
-    this.titleState,
-  });
+  const TabItem({this.icon, this.iconState, this.title, this.titleState});
 }

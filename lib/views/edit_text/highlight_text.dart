@@ -21,7 +21,8 @@ class _HighlightText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = textStyle ??
+    final style =
+        textStyle ??
         TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w500,

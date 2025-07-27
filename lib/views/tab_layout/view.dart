@@ -4,11 +4,8 @@ import '../tab/view.dart';
 import '../view/view.dart';
 
 part 'controller.dart';
-
 part 'enums.dart';
-
 part 'tab.dart';
-
 part 'typedefs.dart';
 
 class TabLayout extends YMRView<TabLayoutController> {

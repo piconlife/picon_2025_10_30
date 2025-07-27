@@ -8,39 +8,22 @@ import 'package:flutter/material.dart';
 import '../../widgets/widget_wrapper.dart';
 
 part 'controller.dart';
-
 part 'decoration.dart';
-
 part 'typedefs.dart';
-
 part 'value_state.dart';
-
 part 'value_state_type.dart';
-
 part 'view_corner_radius.dart';
-
 part 'view_error.dart';
-
 part 'view_listener.dart';
-
 part 'view_listener_effect.dart';
-
 part 'view_position.dart';
-
 part 'view_position_type.dart';
-
 part 'view_recognizer.dart';
-
 part 'view_roots.dart';
-
 part 'view_scrolling_type.dart';
-
 part 'view_shadow_type.dart';
-
 part 'view_shape.dart';
-
 part 'view_state.dart';
-
 part 'view_toggle_content.dart';
 
 class YMRView<T extends ViewController> extends StatefulWidget {

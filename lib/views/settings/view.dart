@@ -188,10 +188,10 @@ class SettingsView extends YMRView<SettingsViewController> {
     required this.title,
     this.summary,
     this.summaryState,
-  })  : type = SettingsViewType.none,
-        arrowConfig = const ArrowConfig(),
-        checkmarkConfig = const CheckmarkConfig(),
-        switchConfig = const SwitchConfig();
+  }) : type = SettingsViewType.none,
+       arrowConfig = const ArrowConfig(),
+       checkmarkConfig = const CheckmarkConfig(),
+       switchConfig = const SwitchConfig();
 
   const SettingsView.arrow({
     /// ROOT PROPERTIES
@@ -347,9 +347,9 @@ class SettingsView extends YMRView<SettingsViewController> {
     this.summary,
     this.summaryState,
     this.arrowConfig = const ArrowConfig(),
-  })  : type = SettingsViewType.arrow,
-        checkmarkConfig = const CheckmarkConfig(),
-        switchConfig = const SwitchConfig();
+  }) : type = SettingsViewType.arrow,
+       checkmarkConfig = const CheckmarkConfig(),
+       switchConfig = const SwitchConfig();
 
   const SettingsView.checkmark({
     /// ROOT PROPERTIES
@@ -505,9 +505,9 @@ class SettingsView extends YMRView<SettingsViewController> {
     this.summary,
     this.summaryState,
     this.checkmarkConfig = const CheckmarkConfig(),
-  })  : type = SettingsViewType.checkmark,
-        arrowConfig = const ArrowConfig(),
-        switchConfig = const SwitchConfig();
+  }) : type = SettingsViewType.checkmark,
+       arrowConfig = const ArrowConfig(),
+       switchConfig = const SwitchConfig();
 
   const SettingsView.switcher({
     /// ROOT PROPERTIES
@@ -663,9 +663,9 @@ class SettingsView extends YMRView<SettingsViewController> {
     this.summary,
     this.summaryState,
     this.switchConfig = const SwitchConfig(),
-  })  : type = SettingsViewType.switcher,
-        arrowConfig = const ArrowConfig(),
-        checkmarkConfig = const CheckmarkConfig();
+  }) : type = SettingsViewType.switcher,
+       arrowConfig = const ArrowConfig(),
+       checkmarkConfig = const CheckmarkConfig();
 
   @override
   SettingsViewController initController() {

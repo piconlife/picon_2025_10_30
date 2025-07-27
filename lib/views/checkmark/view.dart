@@ -283,8 +283,8 @@ class CheckmarkView extends TextView<CheckmarkViewController> {
       crossGravity: controller.checkboxAlignment.isTopMode
           ? CrossAxisAlignment.start
           : controller.checkboxAlignment.isBottomMode
-              ? CrossAxisAlignment.end
-              : CrossAxisAlignment.center,
+          ? CrossAxisAlignment.end
+          : CrossAxisAlignment.center,
       children: [
         if (controller._isStart) child,
         Expanded(

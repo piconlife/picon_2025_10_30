@@ -3,10 +3,7 @@ part of 'view.dart';
 class _LayerX4<T> extends StatelessWidget {
   final ImageLayoutController<T> controller;
 
-  const _LayerX4({
-    super.key,
-    required this.controller,
-  });
+  const _LayerX4({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +21,7 @@ class _LayerX4<T> extends StatelessWidget {
                   dimension: 1,
                   image: controller.items[0],
                 ),
-                SizedBox(
-                  width: controller.spaceBetween,
-                ),
+                SizedBox(width: controller.spaceBetween),
                 _Builder(
                   controller: controller,
                   dimension: 1,
@@ -35,9 +30,7 @@ class _LayerX4<T> extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
-            height: controller.spaceBetween,
-          ),
+          SizedBox(height: controller.spaceBetween),
           Expanded(
             child: Flex(
               direction: Axis.horizontal,
@@ -47,9 +40,7 @@ class _LayerX4<T> extends StatelessWidget {
                   dimension: 1,
                   image: controller.items[2],
                 ),
-                SizedBox(
-                  width: controller.spaceBetween,
-                ),
+                SizedBox(width: controller.spaceBetween),
                 _Builder(
                   controller: controller,
                   dimension: 1,

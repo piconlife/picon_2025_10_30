@@ -1300,10 +1300,7 @@ class ViewController {
     _notify;
   }
 
-  void setViewSize({
-    double? width,
-    double? height,
-  }) {
+  void setViewSize({double? width, double? height}) {
     _width = width ?? _width;
     _height = height ?? _height;
     _notify;

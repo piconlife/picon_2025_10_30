@@ -38,8 +38,8 @@ class RawRatingView extends StatefulWidget {
     this.tapOnlyMode = false,
     this.updateOnDrag = false,
     this.wrapAlignment = WrapAlignment.start,
-  })  : _itemBuilder = null,
-        _ratingWidget = ratingIcon;
+  }) : _itemBuilder = null,
+       _ratingWidget = ratingIcon;
 
   const RawRatingView.builder({
     super.key,
@@ -62,8 +62,8 @@ class RawRatingView extends StatefulWidget {
     this.tapOnlyMode = false,
     this.updateOnDrag = false,
     this.wrapAlignment = WrapAlignment.start,
-  })  : _itemBuilder = itemBuilder,
-        _ratingWidget = null;
+  }) : _itemBuilder = itemBuilder,
+       _ratingWidget = null;
 
   final ValueChanged<double>? onRatingChange;
 
@@ -224,7 +224,8 @@ class _RawRatingViewState extends State<RawRatingView> {
           } else {
             final tappedPosition = details.localPosition.dx;
             final tappedOnFirstHalf = tappedPosition <= widget.itemSize / 2;
-            value = index +
+            value =
+                index +
                 (tappedOnFirstHalf && widget.allowHalfRating ? 0.5 : 1.0);
           }
 
@@ -355,18 +356,13 @@ class _HalfRatingWidget extends StatelessWidget {
                 FittedBox(
                   fit: BoxFit.contain,
                   child: ClipRect(
-                    clipper: _HalfClipper(
-                      rtlMode: rtlMode,
-                    ),
+                    clipper: _HalfClipper(rtlMode: rtlMode),
                     child: child,
                   ),
                 ),
               ],
             )
-          : FittedBox(
-              fit: BoxFit.contain,
-              child: child,
-            ),
+          : FittedBox(fit: BoxFit.contain, child: child),
     );
   }
 }
@@ -378,18 +374,8 @@ class _HalfClipper extends CustomClipper<Rect> {
 
   @override
   Rect getClip(Size size) => rtlMode
-      ? Rect.fromLTRB(
-          size.width / 2,
-          0.0,
-          size.width,
-          size.height,
-        )
-      : Rect.fromLTRB(
-          0.0,
-          0.0,
-          size.width / 2,
-          size.height,
-        );
+      ? Rect.fromLTRB(size.width / 2, 0.0, size.width, size.height)
+      : Rect.fromLTRB(0.0, 0.0, size.width / 2, size.height);
 
   @override
   bool shouldReclip(CustomClipper<Rect> oldClipper) => true;
@@ -417,10 +403,7 @@ class _NoRatingWidget extends StatelessWidget {
         fit: BoxFit.contain,
         child: enableMask
             ? ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                  unratedColor,
-                  BlendMode.srcIn,
-                ),
+                colorFilter: ColorFilter.mode(unratedColor, BlendMode.srcIn),
                 child: child,
               )
             : child,

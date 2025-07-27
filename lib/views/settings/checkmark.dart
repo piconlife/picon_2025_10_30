@@ -3,10 +3,7 @@ part of 'view.dart';
 class SettingsTailingCheckmark extends StatelessWidget {
   final SettingsViewController controller;
 
-  const SettingsTailingCheckmark({
-    super.key,
-    required this.controller,
-  });
+  const SettingsTailingCheckmark({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {

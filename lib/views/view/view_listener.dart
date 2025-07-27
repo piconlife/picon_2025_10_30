@@ -43,10 +43,7 @@ class ViewListener extends StatelessWidget {
     }
     if (kIsWeb) {
       return RepaintBoundary(
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: child,
-        ),
+        child: MouseRegion(cursor: SystemMouseCursors.click, child: child),
       );
     } else {
       return child;
@@ -174,22 +171,14 @@ class _ListenerState extends State<_Listener>
         onDoubleTap: widget.controller.isDoubleClickable ? _onDClick : null,
         onLongPress: widget.controller.isLongClickable ? _onLClick : null,
         onHover: widget.controller.isHovered ? _onHover : null,
-        child: _Effect(
-          effect: _effect,
-          value: _animation,
-          child: widget.child,
-        ),
+        child: _Effect(effect: _effect, value: _animation, child: widget.child),
       );
     } else {
       return GestureDetector(
         onTap: widget.controller.isClickable ? _onClick : null,
         onDoubleTap: widget.controller.isDoubleClickable ? _onDClick : null,
         onLongPress: widget.controller.isLongClickable ? _onLClick : null,
-        child: _Effect(
-          effect: _effect,
-          value: _animation,
-          child: widget.child,
-        ),
+        child: _Effect(effect: _effect, value: _animation, child: widget.child),
       );
     }
   }
@@ -215,11 +204,8 @@ class _Effect extends StatelessWidget {
       } else if (effect.effect.isCustom) {
         child = AnimatedBuilder(
           animation: value!,
-          builder: (context, child) => effect.builder!(
-            context,
-            value!.value,
-            child!,
-          ),
+          builder: (context, child) =>
+              effect.builder!(context, value!.value, child!),
           child: child,
         );
       }

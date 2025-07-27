@@ -179,9 +179,7 @@ class CountdownView extends YMRView<CountdownViewController> {
   CountdownViewController initController() => CountdownViewController();
 
   @override
-  CountdownViewController attachController(
-    CountdownViewController controller,
-  ) {
+  CountdownViewController attachController(CountdownViewController controller) {
     return controller.fromCountdownView(this);
   }
 

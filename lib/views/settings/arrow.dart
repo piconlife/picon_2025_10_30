@@ -3,10 +3,7 @@ part of 'view.dart';
 class SettingsTailingArrow extends StatelessWidget {
   final SettingsViewController controller;
 
-  const SettingsTailingArrow({
-    super.key,
-    required this.controller,
-  });
+  const SettingsTailingArrow({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {

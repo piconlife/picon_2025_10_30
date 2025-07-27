@@ -3,10 +3,7 @@ part of 'view.dart';
 class _LayerX6<T> extends StatelessWidget {
   final ImageLayoutController<T> controller;
 
-  const _LayerX6({
-    super.key,
-    required this.controller,
-  });
+  const _LayerX6({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +21,13 @@ class _LayerX6<T> extends StatelessWidget {
                   image: controller.items[0],
                   flexible: true,
                 ),
-                SizedBox(
-                  width: controller.spaceBetween,
-                ),
+                SizedBox(width: controller.spaceBetween),
                 _Builder(
                   controller: controller,
                   image: controller.items[1],
                   flexible: true,
                 ),
-                SizedBox(
-                  width: controller.spaceBetween,
-                ),
+                SizedBox(width: controller.spaceBetween),
                 _Builder(
                   controller: controller,
                   image: controller.items[2],
@@ -43,9 +36,7 @@ class _LayerX6<T> extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
-            height: controller.spaceBetween,
-          ),
+          SizedBox(height: controller.spaceBetween),
           Expanded(
             child: Flex(
               direction: Axis.horizontal,
@@ -55,17 +46,13 @@ class _LayerX6<T> extends StatelessWidget {
                   image: controller.items[3],
                   flexible: true,
                 ),
-                SizedBox(
-                  width: controller.spaceBetween,
-                ),
+                SizedBox(width: controller.spaceBetween),
                 _Builder(
                   controller: controller,
                   image: controller.items[4],
                   flexible: true,
                 ),
-                SizedBox(
-                  width: controller.spaceBetween,
-                ),
+                SizedBox(width: controller.spaceBetween),
                 _Builder(
                   controller: controller,
                   image: controller.items[5],

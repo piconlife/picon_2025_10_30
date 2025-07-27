@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import '../view/view.dart';
 
 part 'controller.dart';
-
 part 'flex_position.dart';
-
 part 'flex_visible_type.dart';
 
 class FlexibleView extends YMRView<FlexibleViewController> {

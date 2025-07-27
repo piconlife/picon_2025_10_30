@@ -190,9 +190,6 @@ class SlideLayout<T> extends YMRView<SlideLayoutController<T>> {
 
   @override
   Widget? attach(BuildContext context, SlideLayoutController<T> controller) {
-    return _Item(
-      controller: controller,
-      itemBuilder: itemBuilder,
-    );
+    return _Item(controller: controller, itemBuilder: itemBuilder);
   }
 }

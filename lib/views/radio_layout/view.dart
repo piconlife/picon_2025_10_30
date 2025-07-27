@@ -255,7 +255,8 @@ class RadioLayout extends YMRView<RadioLayoutController> {
             rippleColor: item.rippleColor ?? controller.itemRippleColor,
             radioSelectedColor:
                 item.radioSelectedColor ?? controller.itemRadioSelectedColor,
-            radioUnselectedColor: item.radioUnselectedColor ??
+            radioUnselectedColor:
+                item.radioUnselectedColor ??
                 controller.itemRadioUnselectedColor,
             selection: controller.currentIndex,
             spaceBetween: itemSpaceBetween,

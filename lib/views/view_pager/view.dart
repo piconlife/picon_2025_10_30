@@ -165,11 +165,7 @@ class ViewPager extends YMRView<ViewPagerController> {
 
   @override
   ViewPagerController attachController(ViewPagerController controller) {
-    return controller.fromView(
-      this,
-      items: items,
-      onPageChange: onPageChange,
-    );
+    return controller.fromView(this, items: items, onPageChange: onPageChange);
   }
 
   @override

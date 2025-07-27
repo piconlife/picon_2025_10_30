@@ -21,26 +21,15 @@ class RawIconView extends StatelessWidget {
     final type = getType(icon);
     switch (type) {
       case IconType.icon:
-        return Icon(
-          icon,
-          color: tint,
-          size: size,
-        );
+        return Icon(icon, color: tint, size: size);
       case IconType.svg:
         return SvgPicture.asset(
           icon,
           width: size,
           height: size,
           fit: fit ?? BoxFit.contain,
-          colorFilter: tint != null
-              ? ColorFilter.mode(
-                  tint!,
-                  tintMode,
-                )
-              : null,
-          theme: SvgTheme(
-            currentColor: tint ?? const Color(0xFF808080),
-          ),
+          colorFilter: tint != null ? ColorFilter.mode(tint!, tintMode) : null,
+          theme: SvgTheme(currentColor: tint ?? const Color(0xFF808080)),
         );
       case IconType.png:
         return Image.asset(
@@ -52,10 +41,7 @@ class RawIconView extends StatelessWidget {
           colorBlendMode: tintMode,
         );
       default:
-        return SizedBox(
-          width: size,
-          height: size,
-        );
+        return SizedBox(width: size, height: size);
     }
   }
 

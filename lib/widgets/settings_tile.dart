@@ -27,10 +27,7 @@ class SettingTile extends StatelessWidget {
     this.background,
     this.rippleColor,
     this.pressedColor,
-    this.padding = const EdgeInsets.symmetric(
-      horizontal: 24,
-      vertical: 12,
-    ),
+    this.padding = const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
     this.onClick,
   });
 
@@ -53,10 +50,7 @@ class SettingTile extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (header != null) header!,
-              if (body != null) body!,
-            ],
+            children: [if (header != null) header!, if (body != null) body!],
           ),
         ),
         if (content != null) content!,

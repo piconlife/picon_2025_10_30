@@ -172,10 +172,7 @@ class RawTextView extends StatelessWidget {
                     decorationThickness: prefixTextDecorationThickness,
                   ),
                 ),
-              TextSpan(
-                text: text,
-                recognizer: context.onClick(onClick),
-              ),
+              TextSpan(text: text, recognizer: context.onClick(onClick)),
               ...textSpans,
               if (isSuffix)
                 TextSpan(
@@ -201,7 +198,8 @@ class RawTextView extends StatelessWidget {
       return LayoutBuilder(
         builder: (context, constraints) {
           var painter = TextPainter(
-            text: span ??
+            text:
+                span ??
                 TextSpan(
                   text: text,
                   style: style,

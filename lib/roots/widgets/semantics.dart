@@ -8,9 +8,7 @@ class InAppSemantics extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.red),
-      ),
+      decoration: BoxDecoration(border: Border.all(color: Colors.red)),
       child: child,
     );
   }

@@ -113,15 +113,13 @@ class _SwitchButtonState extends State<SwitchButton>
       value: widget.value ? 1.0 : 0.0,
       duration: _duration,
     );
-    _toggleAnimation = AlignmentTween(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-    ).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.linear,
-      ),
-    );
+    _toggleAnimation =
+        AlignmentTween(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ).animate(
+          CurvedAnimation(parent: _animationController, curve: Curves.linear),
+        );
   }
 
   @override
@@ -161,7 +159,8 @@ class _SwitchButtonState extends State<SwitchButton>
     ).detect(active);
 
     var trackOutlineColor = ViewToggleContent(
-      active: I.activeTrackStrokeColor ??
+      active:
+          I.activeTrackStrokeColor ??
           theme.trackOutlineColor(MaterialState.selected) ??
           Colors.transparent,
       inactive:
@@ -169,7 +168,8 @@ class _SwitchButtonState extends State<SwitchButton>
     ).detect(active);
 
     var thumbColor = ViewToggleContent(
-      active: I.activeThumbColor ??
+      active:
+          I.activeThumbColor ??
           theme.thumbColor(MaterialState.selected) ??
           Theme.of(context).colorScheme.background,
       inactive: I.inactiveThumbColor ?? theme.thumbColor.none ?? mIC,
@@ -246,9 +246,7 @@ class _SwitchButtonState extends State<SwitchButton>
                 child: thumbIcon != null
                     ? FittedBox(
                         child: Padding(
-                          padding: EdgeInsets.all(
-                            I.thumbIconSpacing ?? 0,
-                          ),
+                          padding: EdgeInsets.all(I.thumbIconSpacing ?? 0),
                           child: RawIconView(
                             icon: thumbIcon,
                             tint: thumbIconTint,

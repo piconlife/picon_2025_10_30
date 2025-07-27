@@ -206,10 +206,7 @@ class ImageLayout<T> extends YMRView<ImageLayoutController<T>> {
   }
 
   @override
-  Widget? attach(
-    BuildContext context,
-    ImageLayoutController<T> controller,
-  ) {
+  Widget? attach(BuildContext context, ImageLayoutController<T> controller) {
     switch (controller.layer) {
       case ImageLayoutLayers.x:
         return _LayerX<T>(controller: controller);

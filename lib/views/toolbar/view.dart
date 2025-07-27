@@ -244,7 +244,7 @@ class ToolbarView extends YMRView<ToolbarViewController> {
             width: double.infinity,
             height: controller.elevation,
             color: controller.elevationColor,
-          )
+          ),
         ],
       );
     } else {
@@ -341,15 +341,13 @@ class ToolbarViewController extends ViewController {
   }
 
   void changeStatusBarBrightness(Brightness? brightness) {
-    changeStatusBar(statusBarStyle.copyWith(
-      statusBarBrightness: brightness,
-    ));
+    changeStatusBar(statusBarStyle.copyWith(statusBarBrightness: brightness));
   }
 
   void changeStatusBarIconBrightness(Brightness? brightness) {
-    changeStatusBar(statusBarStyle.copyWith(
-      statusBarIconBrightness: brightness,
-    ));
+    changeStatusBar(
+      statusBarStyle.copyWith(statusBarIconBrightness: brightness),
+    );
   }
 
   void changeStatusBar([SystemUiOverlayStyle? style]) =>

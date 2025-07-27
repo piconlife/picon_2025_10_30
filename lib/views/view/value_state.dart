@@ -52,11 +52,7 @@ class ValueState<T> {
     }
   }
 
-  factory ValueState.activation({
-    T? activated,
-    T? unactivated,
-    T? disabled,
-  }) {
+  factory ValueState.activation({T? activated, T? unactivated, T? disabled}) {
     return ValueState<T>(
       primary: unactivated,
       secondary: activated,
@@ -72,11 +68,7 @@ class ValueState<T> {
     }
   }
 
-  factory ValueState.selection({
-    T? selected,
-    T? unselected,
-    T? disabled,
-  }) {
+  factory ValueState.selection({T? selected, T? unselected, T? disabled}) {
     return ValueState<T>(
       primary: unselected,
       secondary: selected,

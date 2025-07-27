@@ -3,10 +3,7 @@ part of 'view.dart';
 class _LayerX<T> extends StatelessWidget {
   final ImageLayoutController<T> controller;
 
-  const _LayerX({
-    super.key,
-    required this.controller,
-  });
+  const _LayerX({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {

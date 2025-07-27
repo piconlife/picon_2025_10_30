@@ -191,9 +191,7 @@ class TitledView extends YMRView<TitledViewController> {
   TitledViewController initController() => TitledViewController();
 
   @override
-  TitledViewController attachController(
-    TitledViewController controller,
-  ) {
+  TitledViewController attachController(TitledViewController controller) {
     return controller.fromDescriptionView(this);
   }
 

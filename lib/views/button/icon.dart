@@ -4,10 +4,7 @@ class _Icon extends StatelessWidget {
   final ButtonController controller;
   final bool visible;
 
-  const _Icon({
-    required this.controller,
-    this.visible = true,
-  });
+  const _Icon({required this.controller, this.visible = true});
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +18,8 @@ class _Icon extends StatelessWidget {
           : null,
       positionType: controller.isCenterText
           ? controller.isEndIconVisible
-              ? ViewPositionType.right
-              : ViewPositionType.left
+                ? ViewPositionType.right
+                : ViewPositionType.left
           : null,
       icon: controller.icon,
       tint: controller.iconTint,

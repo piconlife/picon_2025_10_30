@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../routes/builder.dart';
 import '../../routes/paths.dart';
+import '../abouts/views/pages/privacy.dart';
+import '../abouts/views/pages/terms.dart';
 import 'views/pages/final.dart';
 import 'views/pages/intro.dart';
 import 'views/pages/login.dart';
 import 'views/pages/permission.dart';
-import '../abouts/views/pages/privacy.dart';
 import 'views/pages/quiz.dart';
 import 'views/pages/splash.dart';
-import '../abouts/views/pages/terms.dart';
 
 Map<String, RouteBuilder> get kStartupRoutes {
   return {

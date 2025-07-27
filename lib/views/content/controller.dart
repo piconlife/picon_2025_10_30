@@ -20,10 +20,7 @@ class ContentViewController extends ViewController {
   }
 
   ContentStyle get titleStyle {
-    return _titleStyle ??
-        paragraphStyle.copy(
-          fontWeight: FontWeight.bold,
-        );
+    return _titleStyle ?? paragraphStyle.copy(fontWeight: FontWeight.bold);
   }
 
   set titleStyle(ContentStyle value) => _titleStyle = value;

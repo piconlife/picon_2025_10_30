@@ -41,9 +41,7 @@ class ImageLayoutController<T> extends ViewController {
   int get itemSize => items.length;
 
   double get ratio {
-    return frameRatioBuilder?.call(
-          ImageLayoutLayers.from(itemSize),
-        ) ??
+    return frameRatioBuilder?.call(ImageLayoutLayers.from(itemSize)) ??
         frameRatio ??
         0;
   }

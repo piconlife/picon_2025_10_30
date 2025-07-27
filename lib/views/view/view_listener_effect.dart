@@ -12,11 +12,8 @@ enum ViewClickEffects {
   bool get isCustom => this == custom;
 }
 
-typedef OnClickEffectBuilder = Widget Function(
-  BuildContext context,
-  double value,
-  Widget child,
-);
+typedef OnClickEffectBuilder =
+    Widget Function(BuildContext context, double value, Widget child);
 
 class ViewClickEffect {
   final AnimationBehavior behavior;
@@ -54,17 +51,17 @@ class ViewClickEffect {
     double upperBound = 1.0,
     double lowerBound = 0.5,
   }) : this._(
-          effect: ViewClickEffects.custom,
-          behavior: behavior,
-          curve: curve,
-          reverseCurve: reverseCurve,
-          duration: duration,
-          reverseDuration: reverseDuration,
-          value: value,
-          upperBound: upperBound,
-          lowerBound: lowerBound,
-          builder: builder,
-        );
+         effect: ViewClickEffects.custom,
+         behavior: behavior,
+         curve: curve,
+         reverseCurve: reverseCurve,
+         duration: duration,
+         reverseDuration: reverseDuration,
+         value: value,
+         upperBound: upperBound,
+         lowerBound: lowerBound,
+         builder: builder,
+       );
 
   const ViewClickEffect.none() : this._();
 
@@ -78,14 +75,14 @@ class ViewClickEffect {
     double upperBound = 1.0,
     double lowerBound = 0.95,
   }) : this._(
-          effect: ViewClickEffects.bounce,
-          behavior: behavior,
-          curve: curve,
-          reverseCurve: reverseCurve,
-          duration: duration,
-          reverseDuration: reverseDuration,
-          value: value,
-          upperBound: upperBound,
-          lowerBound: lowerBound,
-        );
+         effect: ViewClickEffects.bounce,
+         behavior: behavior,
+         curve: curve,
+         reverseCurve: reverseCurve,
+         duration: duration,
+         reverseDuration: reverseDuration,
+         value: value,
+         upperBound: upperBound,
+         lowerBound: lowerBound,
+       );
 }

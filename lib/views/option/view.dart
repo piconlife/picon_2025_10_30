@@ -285,7 +285,8 @@ class OptionViewBuilder<T> extends YMRView<OptionViewBuilderController<T>> {
 
   @override
   OptionViewBuilderController<T> attachController(
-      OptionViewBuilderController<T> controller) {
+    OptionViewBuilderController<T> controller,
+  ) {
     return controller.fromOptionView(this);
   }
 
@@ -324,14 +325,11 @@ class OptionViewBuilder<T> extends YMRView<OptionViewBuilderController<T>> {
                 );
               }
               var root = GestureDetector(
-                onTap: () => controller.onNotifyWithCallback(
-                  () {
-                    if (controller.onItemClick != null) {
-                      controller.onItemClick?.call(context, item);
-                    }
-                  },
-                  index: index,
-                ),
+                onTap: () => controller.onNotifyWithCallback(() {
+                  if (controller.onItemClick != null) {
+                    controller.onItemClick?.call(context, item);
+                  }
+                }, index: index),
                 child: AbsorbPointer(child: child),
               );
               return controller.isExpandable ? Expanded(child: root) : root;

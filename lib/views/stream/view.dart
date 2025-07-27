@@ -172,19 +172,14 @@ class StreamView<T> extends YMRView<StreamViewController> {
   Widget? attach(BuildContext context, StreamViewController controller) {
     return StreamBuilder(
       stream: stream,
-      builder: (context, state) => builder(
-        context,
-        state.data,
-      ),
+      builder: (context, state) => builder(context, state.data),
     );
   }
 }
 
 class StreamViewController extends ViewController {
   @override
-  StreamViewController fromView(
-    YMRView<ViewController> view,
-  ) {
+  StreamViewController fromView(YMRView<ViewController> view) {
     super.fromView(view);
     return this;
   }

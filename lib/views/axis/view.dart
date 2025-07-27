@@ -167,10 +167,7 @@ class AxisView<T extends AxisViewController> extends YMRView<T> {
   T attachController(T controller) => controller.fromAxisView(this) as T;
 
   @override
-  Widget? attach(
-    BuildContext context,
-    ViewController controller,
-  ) {
+  Widget? attach(BuildContext context, ViewController controller) {
     return LayoutBuilder(
       builder: (context, constraints) {
         bool isPositiveX = x > 0;

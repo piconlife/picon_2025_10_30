@@ -5,10 +5,7 @@ class EditTextController extends TextViewController {
 
   FocusNode _node = FocusNode();
 
-  EditTextController({
-    TextEditingController? editor,
-    FocusNode? focusNode,
-  }) {
+  EditTextController({TextEditingController? editor, FocusNode? focusNode}) {
     _editor = editor ?? _editor;
     _node = focusNode ?? _node;
     addFocusListener();
@@ -431,7 +428,8 @@ class EditTextController extends TextViewController {
   TextStyle? _floatingTextStyle;
 
   TextStyle get floatingTextStyle {
-    final x = floatingTextStyleState?.fromController(this) ??
+    final x =
+        floatingTextStyleState?.fromController(this) ??
         _floatingTextStyle ??
         const TextStyle(fontSize: 12, fontWeight: FontWeight.w500);
     if (floatingVisibility.isVisible || text.isNotEmpty) {
@@ -920,8 +918,8 @@ class EditTextController extends TextViewController {
       _onAppPrivateCommand = listener;
 
   void setOnEditTextPrivateCommandListener(
-          EditTextPrivateCommandListener listener) =>
-      onAppPrivateCommand = listener;
+    EditTextPrivateCommandListener listener,
+  ) => onAppPrivateCommand = listener;
 
   EditTextVoidListener? _onEditingComplete;
 
@@ -1087,10 +1085,7 @@ class EditTextController extends TextViewController {
   EdgeInsets get drawableEndSpace {
     final isRTL = textDirection == TextDirection.rtl;
     final space = drawableEndPadding ?? 12;
-    return EdgeInsets.only(
-      left: !isRTL ? space : 0,
-      right: isRTL ? space : 0,
-    );
+    return EdgeInsets.only(left: !isRTL ? space : 0, right: isRTL ? space : 0);
   }
 
   Color? get drawableEndTint {
@@ -1117,10 +1112,7 @@ class EditTextController extends TextViewController {
   EdgeInsets get drawableStartSpace {
     final isRTL = textDirection == TextDirection.rtl;
     final space = drawableStartPadding ?? 12;
-    return EdgeInsets.only(
-      left: isRTL ? space : 0,
-      right: !isRTL ? space : 0,
-    );
+    return EdgeInsets.only(left: isRTL ? space : 0, right: !isRTL ? space : 0);
   }
 
   Color? get drawableStartTint {
@@ -1196,8 +1188,8 @@ class EditTextController extends TextViewController {
     return maxLength > 0
         ? '$currentLength / $maxLength'
         : currentLength > 0
-            ? "$currentLength"
-            : "";
+        ? "$currentLength"
+        : "";
   }
 
   List<TextInputFormatter>? get _formatter {

@@ -61,13 +61,15 @@ class _SimpleGestureDetectorState extends State<SimpleGestureDetector> {
       final offsetDifference = initialOffset.dy - finalOffset.dy;
 
       if (offsetDifference.abs() > widget.swipeConfig.verticalThreshold) {
-        _initialSwipeOffset = widget.swipeConfig.swipeDetectionBehavior ==
+        _initialSwipeOffset =
+            widget.swipeConfig.swipeDetectionBehavior ==
                 SwipeDetectionBehavior.singular
             ? null
             : _finalSwipeOffset;
 
-        final direction =
-            offsetDifference > 0 ? SwipeDirection.up : SwipeDirection.down;
+        final direction = offsetDifference > 0
+            ? SwipeDirection.up
+            : SwipeDirection.down;
 
         if (widget.swipeConfig.swipeDetectionBehavior ==
                 SwipeDetectionBehavior.continuous ||
@@ -90,8 +92,9 @@ class _SimpleGestureDetectorState extends State<SimpleGestureDetector> {
         final offsetDifference = initialOffset.dy - finalOffset.dy;
 
         if (offsetDifference.abs() > widget.swipeConfig.verticalThreshold) {
-          final direction =
-              offsetDifference > 0 ? SwipeDirection.up : SwipeDirection.down;
+          final direction = offsetDifference > 0
+              ? SwipeDirection.up
+              : SwipeDirection.down;
           widget.onVerticalSwipe!(direction);
         }
       }
@@ -120,13 +123,15 @@ class _SimpleGestureDetectorState extends State<SimpleGestureDetector> {
       final offsetDifference = initialOffset.dx - finalOffset.dx;
 
       if (offsetDifference.abs() > widget.swipeConfig.horizontalThreshold) {
-        _initialSwipeOffset = widget.swipeConfig.swipeDetectionBehavior ==
+        _initialSwipeOffset =
+            widget.swipeConfig.swipeDetectionBehavior ==
                 SwipeDetectionBehavior.singular
             ? null
             : _finalSwipeOffset;
 
-        final direction =
-            offsetDifference > 0 ? SwipeDirection.left : SwipeDirection.right;
+        final direction = offsetDifference > 0
+            ? SwipeDirection.left
+            : SwipeDirection.right;
 
         if (widget.swipeConfig.swipeDetectionBehavior ==
                 SwipeDetectionBehavior.continuous ||
@@ -149,8 +154,9 @@ class _SimpleGestureDetectorState extends State<SimpleGestureDetector> {
         final offsetDifference = initialOffset.dx - finalOffset.dx;
 
         if (offsetDifference.abs() > widget.swipeConfig.horizontalThreshold) {
-          final direction =
-              offsetDifference > 0 ? SwipeDirection.left : SwipeDirection.right;
+          final direction = offsetDifference > 0
+              ? SwipeDirection.left
+              : SwipeDirection.right;
           widget.onHorizontalSwipe!(direction);
         }
       }
@@ -167,18 +173,24 @@ class _SimpleGestureDetectorState extends State<SimpleGestureDetector> {
       onTap: widget.onTap,
       onLongPress: widget.onLongPress,
       onDoubleTap: widget.onDoubleTap,
-      onVerticalDragStart:
-          widget.onVerticalSwipe != null ? _onVerticalDragStart : null,
-      onVerticalDragUpdate:
-          widget.onVerticalSwipe != null ? _onVerticalDragUpdate : null,
-      onVerticalDragEnd:
-          widget.onVerticalSwipe != null ? _onVerticalDragEnd : null,
-      onHorizontalDragStart:
-          widget.onHorizontalSwipe != null ? _onHorizontalDragStart : null,
-      onHorizontalDragUpdate:
-          widget.onHorizontalSwipe != null ? _onHorizontalDragUpdate : null,
-      onHorizontalDragEnd:
-          widget.onHorizontalSwipe != null ? _onHorizontalDragEnd : null,
+      onVerticalDragStart: widget.onVerticalSwipe != null
+          ? _onVerticalDragStart
+          : null,
+      onVerticalDragUpdate: widget.onVerticalSwipe != null
+          ? _onVerticalDragUpdate
+          : null,
+      onVerticalDragEnd: widget.onVerticalSwipe != null
+          ? _onVerticalDragEnd
+          : null,
+      onHorizontalDragStart: widget.onHorizontalSwipe != null
+          ? _onHorizontalDragStart
+          : null,
+      onHorizontalDragUpdate: widget.onHorizontalSwipe != null
+          ? _onHorizontalDragUpdate
+          : null,
+      onHorizontalDragEnd: widget.onHorizontalSwipe != null
+          ? _onHorizontalDragEnd
+          : null,
       child: widget.child,
     );
   }
