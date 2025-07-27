@@ -27,6 +27,7 @@ class InAppRouter extends InAppRouteGenerator {
   @override
   Map<String, RouteBuilder> pages() {
     return {
+      ...kAboutsRoutes,
       ...kStartupRoutes,
       ...kPaywallRoutes,
       ...kMainRoutes,

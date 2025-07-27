@@ -82,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage>
           appBar: InAppAppbar(
             elevation: 0,
             titleText: localize("title", defaultValue: "Profile"),
-            titleStyle: TextStyle(
+            titleTextStyle: TextStyle(
               color: dark,
               fontSize: 20,
               fontWeight: FontWeight.bold,

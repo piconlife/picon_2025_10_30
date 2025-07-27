@@ -1,22 +1,18 @@
 import 'package:app_color/app_color.dart';
-import 'package:auth_management/auth_management.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/extensions/object.dart';
 import 'package:flutter_andomie/utils/translation.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:picon/app/constants/app.dart';
 
-import '../../../../roots/data/models/user.dart';
-import '../../../../roots/widgets/align.dart';
-import '../../../../roots/widgets/layout.dart';
+import '../../../../roots/widgets/column.dart';
+import '../../../../roots/widgets/filled_button.dart';
+import '../../../../roots/widgets/image.dart';
+import '../../../../roots/widgets/outlined_button.dart';
+import '../../../../roots/widgets/padding.dart';
+import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/system_overlay.dart';
+import '../../../../roots/widgets/text.dart';
 import '../../../../routes/paths.dart';
-import '../../configs/onboard.dart';
-import '../widgets/logo.dart';
-import '../widgets/onboarding_appbar.dart';
-import '../widgets/onboarding_body.dart';
-import '../widgets/onboarding_filled_button.dart';
-import '../widgets/onboarding_title.dart';
-import '../widgets/startup_screen.dart';
 
 class IntroPage extends StatefulWidget {
   final Object? args;
@@ -29,69 +25,90 @@ class IntroPage extends StatefulWidget {
 
 class _IntroPageState extends State<IntroPage>
     with TranslationMixin, ColorMixin {
-  void _next() async {
-    final alreadyLoggedIn = await context.isLoggedIn<User>();
-    if (!mounted) return;
-    context.next(Routes.intro, arguments: alreadyLoggedIn);
+  void _seePrivacy(BuildContext context) {
+    context.open(Routes.privacy);
+  }
+
+  void _seeTerms(BuildContext context) {
+    context.open(Routes.terms);
+  }
+
+  void _joining() {
+    context.next(Routes.intro);
+  }
+
+  void _login() {
+    context.open(Routes.login);
   }
 
   @override
   Widget build(BuildContext context) {
-    final configs = OnboardConfigs.i;
     return InAppSystemOverlay(
-      child: OnboardScreen(
+      child: InAppScreen(
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          body: SafeArea(
-            child: InAppLayout(
-              layout: LayoutType.stack,
-              children: [
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  top: 8,
-                  child: OnboardingAppbar(
-                    title: localize("title", defaultValue: ''),
-                    showLeading: widget.args.find(defaultValue: false),
-                  ),
+          body: InAppColumn(
+            children: [
+              Expanded(
+                child: InAppColumn(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [InAppImage("assets/app/logo.png", width: 120)],
                 ),
-                InAppAlign(
-                  alignment: const Alignment(0, -0.15),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
-                    child: InAppLayout(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        OnboardingLogo(hero: configs.hero.logo),
-                        SizedBox(height: 40),
-                        OnboardingTitle(
-                          localize(
-                            "header",
-                            defaultValue: "Confidence Starts Inside",
-                          ),
-                        ),
-                        SizedBox(height: 6),
-                        OnboardingBody(
-                          localize(
-                            "description",
-                            applyNumber: true,
-                            defaultValue:
-                                "Take just 5 minutes a day to see results.",
-                          ),
-                        ),
-                      ],
+              ),
+              Expanded(
+                child: InAppColumn(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 8,
+                  children: [
+                    InAppText(
+                      "Welcome to ${AppConstants.name}",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 24),
                     ),
+                    InAppText(
+                      " and ",
+                      prefix: "Privacy",
+                      suffix: "Terms Services",
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                      prefixStyle: TextStyle(
+                        color: context.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      suffixStyle: TextStyle(
+                        color: context.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      onPrefixClick: _seePrivacy,
+                      onSuffixClick: _seeTerms,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: InAppPadding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: InAppColumn(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    spacing: 24,
+                    children: [
+                      InAppFilledButton(
+                        text: "Join with ${AppConstants.name}",
+                        borderRadius: BorderRadius.circular(50),
+                        onTap: _joining,
+                      ),
+                      InAppOutlinedButton(
+                        text: "Continue with Email",
+                        borderRadius: BorderRadius.circular(50),
+                        onTap: _login,
+                      ),
+                    ],
                   ),
                 ),
-                InAppAlign(
-                  alignment: Alignment.bottomCenter,
-                  child: OnboardingFilledButton(
-                    text: localize("button", defaultValue: "Get Started"),
-                    onTap: _next,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

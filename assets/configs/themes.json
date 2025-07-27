@@ -3,9 +3,9 @@
     "themeMode": "light",
     "base": {
       "light": {
-        "primary": "ff041330",
-        "secondary": "ffff5306",
-        "tertiary": "ffffc107",
+        "primary": "ff2eca7f",
+        "secondary": "ff19A4FA",
+        "tertiary": "ffFFC107",
         "error": "fff44336",
         "warning": "ffffab40",
         "disable": "fffafafa",
@@ -20,8 +20,8 @@
       },
       "dark": {
         "primary": "ff2eca7f",
-        "secondary": "ff001333",
-        "tertiary": "ffffc107",
+        "secondary": "ff19A4FA",
+        "tertiary": "ffFFC107",
         "error": "fff44336",
         "warning": "ffff6e40",
         "disable": "ff212121",

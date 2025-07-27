@@ -1,3 +1,4 @@
+import 'package:app_color/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 
@@ -19,7 +20,7 @@ class InAppOutlinedButton extends StatefulWidget {
     this.onTap,
     this.enabled = true,
     this.width = double.infinity,
-    this.height = 45,
+    this.height = 48,
     this.textColor,
   });
 
@@ -58,8 +59,11 @@ class InAppOutlinedButtonState extends State<InAppOutlinedButton> {
   Widget build(BuildContext context) {
     return AndrossyButton(
       enabled: widget.enabled,
-      borderColor: AndrossyButtonProperty(enabled: widget.borderColor),
+      borderColor: AndrossyButtonProperty(
+        enabled: widget.borderColor ?? context.primary,
+      ),
       borderRadius: widget.borderRadius,
+      borderStrokeAlign: BorderSide.strokeAlignInside,
       text: widget.text,
       width: widget.width,
       height: widget.height,

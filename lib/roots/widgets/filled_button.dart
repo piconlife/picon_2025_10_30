@@ -1,3 +1,4 @@
+import 'package:app_color/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 
@@ -9,7 +10,6 @@ class InAppFilledButton extends StatefulWidget {
   final double? width;
   final double? height;
   final String text;
-  final Color? textColor;
   final TextStyle textStyle;
   final dynamic icon;
   final Color? background;
@@ -24,11 +24,13 @@ class InAppFilledButton extends StatefulWidget {
     this.background,
     this.icon,
     this.text = "",
-    this.textColor,
-    this.textStyle = const TextStyle(fontFamily: InAppFonts.primary),
+    this.textStyle = const TextStyle(
+      fontFamily: InAppFonts.primary,
+      fontWeight: FontWeight.bold,
+    ),
     this.onTap,
     this.width = double.infinity,
-    this.height = 65,
+    this.height = 50,
   });
 
   @override
@@ -86,15 +88,17 @@ class InAppFilledButtonState extends State<InAppFilledButton> {
             ? EdgeInsets.symmetric(horizontal: 24)
             : EdgeInsets.all(8),
         iconOrIndicatorFlexible: widget.icon != null,
-        borderRadius: widget.borderRadius,
+        borderRadius: widget.borderRadius ?? BorderRadius.circular(50),
         text: widget.text,
         width: widget.width,
         height: widget.height,
         textStyle: widget.textStyle.copyWith(
-          fontFamily: widget.textStyle.fontFamily ?? InAppFonts.primary,
+          fontFamily: widget.textStyle.fontFamily ?? InAppFonts.secondary,
         ),
-        backgroundColor: AndrossyButtonProperty(enabled: widget.background),
-        textColor: AndrossyButtonProperty(enabled: widget.textColor),
+        backgroundColor: AndrossyButtonProperty(
+          enabled: widget.background ?? context.primary,
+        ),
+        textColor: AndrossyButtonProperty(enabled: widget.textStyle.color),
         clickEffect: const AndrossyGestureEffect(
           primary: AndrossyGestureAnimation.scale(),
           secondary: AndrossyGestureAnimation.fade(),

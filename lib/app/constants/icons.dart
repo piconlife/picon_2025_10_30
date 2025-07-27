@@ -30,7 +30,7 @@ class IconConstants {
 
   static const close = Icons.close;
   static const check = Icons.check;
-  static const arrowLeft = Icons.arrow_back_ios_new_rounded;
+  static const arrowLeft = Icons.arrow_back;
   static const arrowRight = Icons.arrow_forward_ios_rounded;
   static const dropdown = Icons.arrow_drop_down;
   static const language = Icons.language;

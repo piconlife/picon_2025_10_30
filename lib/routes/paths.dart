@@ -8,6 +8,9 @@ class Routes {
   static const permission = "/permission";
   static const final_ = "/final";
   static const login = "/login";
+  static const info = "/info";
+  static const privacy = "/privacy";
+  static const terms = "/terms";
 
   // PAYWALL
   static const paywall = "/paywall";

@@ -27,10 +27,7 @@ class InAppScreen extends StatelessWidget {
     Widget child = this.child;
     if (useBackground) {
       child = DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: gradient ?? context.gradientOf('scaffold').primary,
-          color: context.scaffoldColor.primary,
-        ),
+        decoration: BoxDecoration(color: context.scaffoldColor.primary),
         child: child,
       );
     }

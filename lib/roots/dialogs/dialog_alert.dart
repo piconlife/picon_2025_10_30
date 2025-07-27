@@ -1,12 +1,13 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/utils/translation.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 
 import '../../roots/widgets/icon.dart';
 import '../../roots/widgets/text.dart';
 import '../../roots/widgets/text_button.dart';
+import '../widgets/column.dart';
+import '../widgets/row.dart';
 
 class InAppAlertDialog extends StatelessWidget {
   final dynamic icon;
@@ -63,7 +64,9 @@ class InAppAlertDialog extends StatelessWidget {
     final isSubtitled = subtitle.isNotEmpty || (subtitleSpans ?? []).isNotEmpty;
     return Dialog(
       clipBehavior: Clip.antiAlias,
-      child: Column(
+      surfaceTintColor: Colors.transparent,
+      backgroundColor: context.dialogColor.primary,
+      child: InAppColumn(
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(height: dimen.dp(32)),
@@ -73,7 +76,7 @@ class InAppAlertDialog extends StatelessWidget {
           ],
           Padding(
             padding: EdgeInsets.symmetric(horizontal: dimen.dp(32)),
-            child: Column(
+            child: InAppColumn(
               children: [
                 if (isTitled)
                   InAppText(
@@ -134,19 +137,12 @@ class InAppAlertDialog extends StatelessWidget {
             child: SizedBox(
               width: double.infinity,
               height: dimen.dp(40),
-              child: Row(
+              child: InAppRow(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
                     child: InAppTextButton(
-                      negativeButtonText ??
-                          "dialog_button_negative".trWithOption(
-                            defaultValue: "Cancel",
-                            name: "dialog_alert",
-                            replace: (value) {
-                              return value.toUpperCase();
-                            },
-                          ),
+                      negativeButtonText ?? "Cancel",
                       height: double.infinity,
                       padding: EdgeInsets.zero,
                       borderRadius: BorderRadius.circular(dimen.dp(50)),
@@ -161,14 +157,7 @@ class InAppAlertDialog extends StatelessWidget {
                   ),
                   Expanded(
                     child: InAppTextButton(
-                      positiveButtonText ??
-                          "dialog_button_positive".trWithOption(
-                            defaultValue: "OK",
-                            name: "dialog_alert",
-                            replace: (value) {
-                              return value.toUpperCase();
-                            },
-                          ),
+                      positiveButtonText ?? "OK",
                       height: double.infinity,
                       foregroundColor: primary,
                       padding: EdgeInsets.zero,

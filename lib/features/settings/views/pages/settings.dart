@@ -75,7 +75,7 @@ class _SettingsPageState extends State<SettingsPage>
           appBar: InAppAppbar(
             elevation: 0,
             titleText: localize("title", defaultValue: "Settings"),
-            titleStyle: TextStyle(
+            titleTextStyle: TextStyle(
               color: dark,
               fontSize: 28,
               fontWeight: FontWeight.bold,

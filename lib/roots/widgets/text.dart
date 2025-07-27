@@ -1,5 +1,4 @@
 import 'package:app_color/app_color.dart';
-import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/utils/translation.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
@@ -41,7 +40,6 @@ class InAppText extends AndrossyText {
 
   @override
   Widget build(BuildContext context) {
-    final dimen = context.dimens;
     return AndrossyText(
       data,
       ellipsis: ellipsis,
@@ -51,26 +49,23 @@ class InAppText extends AndrossyText {
       onPrefixClick: onPrefixClick,
       onSuffixClick: onSuffixClick,
       prefix: prefix,
-      prefixStyle: prefixStyle.applyDimen(dimen),
+      prefixStyle: prefixStyle,
       selectionColor: selectionColor,
       semanticsLabel: semanticsLabel,
       softWrap: softWrap,
       strutStyle: strutStyle,
       suffix: suffix,
-      suffixStyle: suffixStyle.applyDimen(dimen),
+      suffixStyle: suffixStyle,
       textAlign: textAlign,
       textDirection: textDirection ?? Translation.textDirection,
       textHeightBehavior: textHeightBehavior,
       overflow: overflow,
       textScaler: textScaler,
       spans: spans,
-      style: (style ?? TextStyle())
-          .copyWith(
-            color: style?.color ?? context.textColor.primary ?? context.dark,
-            fontFamily: style?.fontFamily ?? InAppFonts.primary,
-            fontWeight: style?.fontWeight ?? context.normalFontWeight,
-          )
-          .applyDimen(dimen),
+      style: (style ?? TextStyle()).copyWith(
+        color: style?.color ?? context.textColor.primary ?? context.dark,
+        fontFamily: style?.fontFamily ?? InAppFonts.primary,
+      ),
       textWidthBasis: textWidthBasis,
       translate: translate,
     );
