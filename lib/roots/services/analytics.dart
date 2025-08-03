@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 class Analytics {
   const Analytics._();
 
-  static void _log(msg, {String? name, bool show = true}) {
+  static void _log(Object? msg, {String? name, bool show = true}) {
     if (!show) return;
     dev.log("$name:$msg", name: "ANALYTICS");
   }

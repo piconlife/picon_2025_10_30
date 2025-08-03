@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
+import '../../app/helpers/user.dart';
 import '../../features/startup/views/pages/login.dart';
-import '../helpers/user.dart';
 import '../notifiers/auth.dart';
 
 class InAppAuth extends StatefulWidget {

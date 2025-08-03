@@ -2,7 +2,7 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../configs/extensions/text_direction.dart';
+import '../../../../app/extensions/text_direction.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/layout.dart';

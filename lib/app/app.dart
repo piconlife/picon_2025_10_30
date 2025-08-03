@@ -4,8 +4,8 @@ import 'package:flutter_andomie/utils/translation.dart';
 import '../routes/_imports.dart';
 import 'constants/app.dart';
 import 'constants/configs.dart';
-import 'theme/dark/theme.dart';
-import 'theme/light/theme.dart';
+import 'theme/dark.dart';
+import 'theme/light.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

@@ -6,13 +6,13 @@ import 'package:flutter_andomie/utils/translation.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/res/configs.dart';
+import '../../../../roots/enums/authorization_mode.dart';
 import '../../../../roots/res/listeners.dart';
 import '../../../../roots/utils/platform.dart';
 import '../../../../roots/widgets/align.dart';
 import '../../../../roots/widgets/layout.dart';
 import '../../../../roots/widgets/system_overlay.dart';
 import '../../../../routes/paths.dart';
-import '../../enums/authorization_mode.dart';
 import '../widgets/logo.dart';
 import '../widgets/onboarding_appbar.dart';
 import '../widgets/onboarding_auth_button.dart';
@@ -110,7 +110,7 @@ class _LoginPageState extends State<LoginPage>
                           onTap: () => _login(OauthButtonType.google),
                         ),
                       if (!mode.isNone &&
-                          isIosDevice &&
+                          isAppleDevice &&
                           RemoteConfigs.isAppleAuthEnabled)
                         OnboardingAuthButton(
                           text: localize(

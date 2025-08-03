@@ -6,7 +6,7 @@ import 'package:flutter_andomie/utils/translation.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
-import '../../../../configs/extensions/text_direction.dart';
+import '../../../../app/extensions/text_direction.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/column.dart';
 import '../../../../roots/widgets/filled_button.dart';

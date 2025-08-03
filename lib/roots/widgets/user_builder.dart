@@ -1,9 +1,9 @@
 import 'package:auth_management/widgets.dart';
 import 'package:flutter/material.dart';
 
+import '../../app/helpers/user.dart';
 import '../../data/models/user.dart';
-import '../data/use_cases/user/get.dart';
-import '../helpers/user.dart';
+import '../../data/use_cases/user/get.dart';
 
 class InAppUserBuilder extends StatefulWidget {
   final String? id;
@@ -30,7 +30,7 @@ class _InAppUserBuilderState extends State<InAppUserBuilder> {
         return widget.builder(context, widget.initial!);
       }
       return FutureBuilder(
-        future: GetUserUseCase.i(id),
+        future: GetUserUseCase.i(uid: id),
         builder: (context, snapshot) =>
             widget.builder(context, snapshot.data?.data ?? User()),
       );

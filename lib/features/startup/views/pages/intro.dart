@@ -6,7 +6,7 @@ import 'package:picon/app/constants/app.dart';
 
 import '../../../../roots/widgets/column.dart';
 import '../../../../roots/widgets/filled_button.dart';
-import '../../../../roots/widgets/image.dart';
+import '../../../../roots/widgets/logo.dart';
 import '../../../../roots/widgets/outlined_button.dart';
 import '../../../../roots/widgets/padding.dart';
 import '../../../../roots/widgets/screen.dart';
@@ -45,7 +45,7 @@ class _IntroPageState extends State<IntroPage>
                 child: InAppColumn(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: [InAppImage("assets/app/logo.png", width: 120)],
+                  children: [InAppLogo()],
                 ),
               ),
               Expanded(

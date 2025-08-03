@@ -9,8 +9,7 @@ import 'package:flutter_andomie/utils/translation.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/constants/app.dart';
-import '../../../../roots/keys/configs.dart';
-import '../../../../roots/res/defaults.dart';
+import '../../../../app/res/configs.dart';
 import '../../../../roots/services/analytics.dart';
 import '../../../../roots/widgets/align.dart';
 import '../../../../roots/widgets/layout.dart';
@@ -52,10 +51,7 @@ class _QuizPageState extends State<QuizPage> with TranslationMixin, ColorMixin {
 
   bool get isSelectToNext {
     if (content.isEnabled) return false;
-    return Configs.get(
-      ConfigKeys.onboardSelectToNext,
-      defaultValue: RootDefaults.onboardSelectToNext,
-    );
+    return RemoteConfigs.isOnboardSelectToNext;
   }
 
   int get total => contents.length + (kIsWeb ? 1 : 2);

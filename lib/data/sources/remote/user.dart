@@ -1,9 +1,9 @@
-import '../../../../roots/data/constants/paths.dart';
+import '../../constants/paths.dart';
 import '../../models/user.dart';
 import '../../services/firestore.dart';
 
 class RemoteUserDataSource extends FirestoreDataSource<User> {
-  RemoteUserDataSource._({super.path = RootPaths.users});
+  RemoteUserDataSource._({super.path = Paths.users});
 
   static RemoteUserDataSource? _i;
 

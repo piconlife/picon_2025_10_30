@@ -1,7 +1,7 @@
-import 'package:data_management/core.dart';
+import 'package:data_management/data_management.dart';
 
-import '../../../roots/data/repositories/user.dart';
 import '../../models/user.dart';
+import '../../repositories/user.dart';
 
 class BaseUserUseCase {
   final DataRepository<User> repository;

@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-class Profile {
+class ZotloProfile {
   final String? status;
   final String? realStatus;
   final String? subscriberId;
@@ -22,12 +22,12 @@ class Profile {
   final String? lastTransactionId;
   final String? subscriptionPackageType;
   final String? cancellation;
-  final CustomParameters? customParameters;
+  final ZotloCustomParameters? customParameters;
   final int? quantity;
   final int? pendingQuantity;
   final int? renewalFetchCount;
 
-  const Profile({
+  const ZotloProfile({
     this.status,
     this.realStatus,
     this.subscriberId,
@@ -51,8 +51,8 @@ class Profile {
     this.freezeEndDate,
   });
 
-  factory Profile.fromJson(Map<String, dynamic> json) {
-    return Profile(
+  factory ZotloProfile.fromJson(Map<String, dynamic> json) {
+    return ZotloProfile(
       status: json["status"],
       realStatus: json["realStatus"],
       subscriberId: json["subscriberId"],
@@ -80,7 +80,7 @@ class Profile {
       cancellation: json["cancellation"],
       customParameters: json["customParameters"] == null
           ? null
-          : CustomParameters.fromJson(json["customParameters"]),
+          : ZotloCustomParameters.fromJson(json["customParameters"]),
       quantity: json["quantity"],
       pendingQuantity: json["pendingQuantity"],
       renewalFetchCount: json["renewalFetchCount"],
@@ -114,7 +114,7 @@ class Profile {
   }
 }
 
-class Package {
+class ZotloPackage {
   final String? packageId;
   final double? price;
   final String? currency;
@@ -123,7 +123,7 @@ class Package {
   final String? subscriptionPackageType;
   final List<dynamic>? bundlePackages;
 
-  const Package({
+  const ZotloPackage({
     this.packageId,
     this.price,
     this.currency,
@@ -133,8 +133,8 @@ class Package {
     this.bundlePackages,
   });
 
-  factory Package.fromJson(Map<String, dynamic> json) {
-    return Package(
+  factory ZotloPackage.fromJson(Map<String, dynamic> json) {
+    return ZotloPackage(
       packageId: json["packageId"],
       price: json["price"]?.toDouble(),
       currency: json["currency"],
@@ -162,15 +162,15 @@ class Package {
   }
 }
 
-class Card {
+class ZotloCard {
   final String? cardNumber;
   final String? expireDate;
   final int? tokenId;
 
-  const Card({this.cardNumber, this.expireDate, this.tokenId});
+  const ZotloCard({this.cardNumber, this.expireDate, this.tokenId});
 
-  factory Card.fromJson(Map<String, dynamic> json) {
-    return Card(
+  factory ZotloCard.fromJson(Map<String, dynamic> json) {
+    return ZotloCard(
       cardNumber: json["cardNumber"],
       expireDate: json["expireDate"],
       tokenId: json["tokenId"],
@@ -186,15 +186,15 @@ class Card {
   }
 }
 
-class Customer {
+class ZotloCustomer {
   final String? fullName;
   final String? address;
   final String? subscriberId;
 
-  const Customer({this.fullName, this.address, this.subscriberId});
+  const ZotloCustomer({this.fullName, this.address, this.subscriberId});
 
-  factory Customer.fromJson(Map<String, dynamic> json) {
-    return Customer(
+  factory ZotloCustomer.fromJson(Map<String, dynamic> json) {
+    return ZotloCustomer(
       fullName: json["fullName"],
       address: json["address"],
       subscriberId: json["subscriberId"],
@@ -210,14 +210,14 @@ class Customer {
   }
 }
 
-class Result {
-  final Profile? profile;
-  final Package? package;
-  final Package? newPackage;
-  final Card? card;
-  final Customer? customer;
+class ZotloResult {
+  final ZotloProfile? profile;
+  final ZotloPackage? package;
+  final ZotloPackage? newPackage;
+  final ZotloCard? card;
+  final ZotloCustomer? customer;
 
-  const Result({
+  const ZotloResult({
     this.profile,
     this.package,
     this.newPackage,
@@ -225,21 +225,21 @@ class Result {
     this.customer,
   });
 
-  factory Result.fromJson(Map<String, dynamic> json) {
-    return Result(
+  factory ZotloResult.fromJson(Map<String, dynamic> json) {
+    return ZotloResult(
       profile: json["profile"] == null
           ? null
-          : Profile.fromJson(json["profile"]),
+          : ZotloProfile.fromJson(json["profile"]),
       package: json["package"] == null
           ? null
-          : Package.fromJson(json["package"]),
+          : ZotloPackage.fromJson(json["package"]),
       newPackage: json["newPackage"] == null
           ? null
-          : Package.fromJson(json["newPackage"]),
-      card: json["card"] == null ? null : Card.fromJson(json["card"]),
+          : ZotloPackage.fromJson(json["newPackage"]),
+      card: json["card"] == null ? null : ZotloCard.fromJson(json["card"]),
       customer: json["customer"] == null
           ? null
-          : Customer.fromJson(json["customer"]),
+          : ZotloCustomer.fromJson(json["customer"]),
     );
   }
 
@@ -254,14 +254,14 @@ class Result {
   }
 }
 
-class Invoice {
+class ZotloInvoice {
   final String? invoiceName;
   final String? invoiceProductTitle;
   final int? invoiceStatus;
   final bool? receiptStatus;
   final String? documentType;
 
-  const Invoice({
+  const ZotloInvoice({
     this.invoiceName,
     this.invoiceProductTitle,
     this.invoiceStatus,
@@ -269,8 +269,8 @@ class Invoice {
     this.documentType,
   });
 
-  factory Invoice.fromJson(Map<String, dynamic> json) {
-    return Invoice(
+  factory ZotloInvoice.fromJson(Map<String, dynamic> json) {
+    return ZotloInvoice(
       invoiceName: json["invoiceName"],
       invoiceProductTitle: json["invoiceProductTitle"],
       invoiceStatus: json["invoiceStatus"],
@@ -290,7 +290,7 @@ class Invoice {
   }
 }
 
-class DataWarehouse {
+class ZotloDataWarehouse {
   final String? paymentModule;
   final int? siteId;
   final int? flowId;
@@ -299,7 +299,7 @@ class DataWarehouse {
   final bool? acceptPolicy;
   final String? fullName;
 
-  const DataWarehouse({
+  const ZotloDataWarehouse({
     this.paymentModule,
     this.siteId,
     this.flowId,
@@ -309,8 +309,8 @@ class DataWarehouse {
     this.fullName,
   });
 
-  factory DataWarehouse.fromJson(Map<String, dynamic> json) {
-    return DataWarehouse(
+  factory ZotloDataWarehouse.fromJson(Map<String, dynamic> json) {
+    return ZotloDataWarehouse(
       paymentModule: json["paymentModule"],
       siteId: json["siteId"],
       flowId: json["flowId"],
@@ -334,17 +334,23 @@ class DataWarehouse {
   }
 }
 
-class Utm {
+class ZotloUtm {
   final dynamic source;
   final dynamic medium;
   final dynamic campaign;
   final dynamic term;
   final dynamic content;
 
-  const Utm({this.source, this.medium, this.campaign, this.term, this.content});
+  const ZotloUtm({
+    this.source,
+    this.medium,
+    this.campaign,
+    this.term,
+    this.content,
+  });
 
-  factory Utm.fromJson(Map<String, dynamic> json) {
-    return Utm(
+  factory ZotloUtm.fromJson(Map<String, dynamic> json) {
+    return ZotloUtm(
       source: json["source"],
       medium: json["medium"],
       campaign: json["campaign"],
@@ -364,7 +370,7 @@ class Utm {
   }
 }
 
-class Company {
+class ZotloCompany {
   final String? title;
   final String? address;
   final String? phone;
@@ -372,7 +378,7 @@ class Company {
   final String? taxNumber;
   final String? taxOffice;
 
-  const Company({
+  const ZotloCompany({
     this.title,
     this.address,
     this.phone,
@@ -381,8 +387,8 @@ class Company {
     this.taxOffice,
   });
 
-  factory Company.fromJson(Map<String, dynamic> json) {
-    return Company(
+  factory ZotloCompany.fromJson(Map<String, dynamic> json) {
+    return ZotloCompany(
       title: json["title"],
       address: json["address"],
       phone: json["phone"],
@@ -404,7 +410,7 @@ class Company {
   }
 }
 
-class Product {
+class ZotloProduct {
   final String? name;
   final String? detail;
   final int? quantity;
@@ -414,7 +420,7 @@ class Product {
   final double? includeVatTotal;
   final String? pricesCurrency;
 
-  const Product({
+  const ZotloProduct({
     this.name,
     this.detail,
     this.quantity,
@@ -425,8 +431,8 @@ class Product {
     this.pricesCurrency,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
+  factory ZotloProduct.fromJson(Map<String, dynamic> json) {
+    return ZotloProduct(
       name: json["name"],
       detail: json["detail"],
       quantity: json["quantity"],
@@ -452,24 +458,24 @@ class Product {
   }
 }
 
-class Agreement {
-  final Company? company;
-  final Customer? customer;
-  final Product? product;
+class ZotloAgreement {
+  final ZotloCompany? company;
+  final ZotloCustomer? customer;
+  final ZotloProduct? product;
 
-  const Agreement({this.company, this.customer, this.product});
+  const ZotloAgreement({this.company, this.customer, this.product});
 
-  factory Agreement.fromJson(Map<String, dynamic> json) {
-    return Agreement(
+  factory ZotloAgreement.fromJson(Map<String, dynamic> json) {
+    return ZotloAgreement(
       company: json["company"] == null
           ? null
-          : Company.fromJson(json["company"]),
+          : ZotloCompany.fromJson(json["company"]),
       customer: json["customer"] == null
           ? null
-          : Customer.fromJson(json["customer"]),
+          : ZotloCustomer.fromJson(json["customer"]),
       product: json["product"] == null
           ? null
-          : Product.fromJson(json["product"]),
+          : ZotloProduct.fromJson(json["product"]),
     );
   }
 
@@ -482,16 +488,16 @@ class Agreement {
   }
 }
 
-class CustomParameters {
-  final Invoice? invoice;
+class ZotloCustomParameters {
+  final ZotloInvoice? invoice;
   final String? clientUuid;
-  final DataWarehouse? dataWarehouse;
-  final Utm? utm;
-  final Agreement? agreement;
+  final ZotloDataWarehouse? dataWarehouse;
+  final ZotloUtm? utm;
+  final ZotloAgreement? agreement;
   final List<dynamic>? merchantParameters;
   final String? subscriberIpAddress;
 
-  const CustomParameters({
+  const ZotloCustomParameters({
     this.invoice,
     this.clientUuid,
     this.dataWarehouse,
@@ -501,19 +507,19 @@ class CustomParameters {
     this.subscriberIpAddress,
   });
 
-  factory CustomParameters.fromJson(Map<String, dynamic> json) {
-    return CustomParameters(
+  factory ZotloCustomParameters.fromJson(Map<String, dynamic> json) {
+    return ZotloCustomParameters(
       invoice: json["invoice"] == null
           ? null
-          : Invoice.fromJson(json["invoice"]),
+          : ZotloInvoice.fromJson(json["invoice"]),
       clientUuid: json["clientUuid"],
       dataWarehouse: json["dataWarehouse"] == null
           ? null
-          : DataWarehouse.fromJson(json["dataWarehouse"]),
-      utm: json["utm"] == null ? null : Utm.fromJson(json["utm"]),
+          : ZotloDataWarehouse.fromJson(json["dataWarehouse"]),
+      utm: json["utm"] == null ? null : ZotloUtm.fromJson(json["utm"]),
       agreement: json["agreement"] == null
           ? null
-          : Agreement.fromJson(json["agreement"]),
+          : ZotloAgreement.fromJson(json["agreement"]),
       merchantParameters: json["merchantParameters"] == null
           ? []
           : List<dynamic>.from(json["merchantParameters"]!.map((x) => x)),
@@ -536,21 +542,21 @@ class CustomParameters {
   }
 }
 
-class Meta {
+class ZotloMeta {
   final String? requestId;
   final int? httpStatus;
   final String? errorMessage;
   final String? errorCode;
 
-  const Meta({
+  const ZotloMeta({
     this.requestId,
     this.httpStatus,
     this.errorMessage,
     this.errorCode,
   });
 
-  factory Meta.fromJson(Map<String, dynamic> json) {
-    return Meta(
+  factory ZotloMeta.fromJson(Map<String, dynamic> json) {
+    return ZotloMeta(
       requestId: json["requestId"],
       httpStatus: json["httpStatus"],
       errorMessage: json["errorMessage"],
@@ -568,18 +574,20 @@ class Meta {
   }
 }
 
-class Details {
-  final Meta? meta;
-  final Result? result;
+class ZotloDetails {
+  final ZotloMeta? meta;
+  final ZotloResult? result;
 
-  const Details({this.meta, this.result});
+  const ZotloDetails({this.meta, this.result});
 
-  factory Details.fromJson(Map<String, dynamic> json) {
+  factory ZotloDetails.fromJson(Map<String, dynamic> json) {
     final meta = json['meta'];
     final result = json['result'];
-    return Details(
-      meta: meta is! Map<String, dynamic> ? null : Meta.fromJson(meta),
-      result: result is! Map<String, dynamic> ? null : Result.fromJson(result),
+    return ZotloDetails(
+      meta: meta is! Map<String, dynamic> ? null : ZotloMeta.fromJson(meta),
+      result: result is! Map<String, dynamic>
+          ? null
+          : ZotloResult.fromJson(result),
     );
   }
 
@@ -588,13 +596,13 @@ class Details {
   }
 }
 
-class Api {
+class ZotloApi {
   final String key;
   final String secret;
   final String? appId;
   final String baseUrl = 'https://api.zotlo.com/v1';
 
-  const Api({required this.key, required this.secret, this.appId});
+  const ZotloApi({required this.key, required this.secret, this.appId});
 
   Map<String, String> get _headers {
     return {
@@ -605,7 +613,7 @@ class Api {
     };
   }
 
-  Future<Details?> check({
+  Future<ZotloDetails?> check({
     required String subscriberId,
     required String packageId,
   }) async {
@@ -614,7 +622,7 @@ class Api {
         '$baseUrl/subscription/profile?subscriberId=$subscriberId&packageId=$packageId',
       );
       final resp = await http.get(url, headers: _headers);
-      return Details.fromJson(jsonDecode(resp.body));
+      return ZotloDetails.fromJson(jsonDecode(resp.body));
     } catch (_) {
       return null;
     }
@@ -637,7 +645,7 @@ class Api {
     return (value.status == 'active' && value.realStatus == 'active');
   }
 
-  Future<Result?> result({
+  Future<ZotloResult?> result({
     required String subscriberId,
     required String packageId,
   }) async {
@@ -650,7 +658,7 @@ class Api {
     });
   }
 
-  Future<Profile?> profile({
+  Future<ZotloProfile?> profile({
     required String subscriberId,
     required String packageId,
   }) {
@@ -665,7 +673,7 @@ class Api {
 class ZotloService extends ChangeNotifier {
   ZotloService._();
 
-  Api? _api;
+  ZotloApi? _api;
   String? subscriberId;
   Iterable<String> packageIds = [];
   String? _expireDate;
@@ -674,23 +682,23 @@ class ZotloService extends ChangeNotifier {
     return profile?.expireDate?.toIso8601String() ?? _expireDate;
   }
 
-  Api get api => _api!;
+  ZotloApi get api => _api!;
 
-  Details? _details;
+  ZotloDetails? _details;
 
-  Details? get details => _details;
+  ZotloDetails? get details => _details;
 
-  Result? get result => details?.result;
+  ZotloResult? get result => details?.result;
 
-  Profile? get profile => result?.profile;
+  ZotloProfile? get profile => result?.profile;
 
-  Card? get card => result?.card;
+  ZotloCard? get card => result?.card;
 
-  Customer? get customer => result?.customer;
+  ZotloCustomer? get customer => result?.customer;
 
-  Package? get package => result?.package;
+  ZotloPackage? get package => result?.package;
 
-  Package? get newPackage => result?.newPackage;
+  ZotloPackage? get newPackage => result?.newPackage;
 
   bool initialized = false;
 
@@ -723,7 +731,7 @@ class ZotloService extends ChangeNotifier {
     i.subscriberId = subscriberId;
     i.packageIds = packageIds;
     i._expireDate = expireDate;
-    i._api = Api(key: key, secret: secret, appId: appId);
+    i._api = ZotloApi(key: key, secret: secret, appId: appId);
     i._callback = onReady;
     i.initialized = true;
     if (connected) await i.load();
@@ -785,21 +793,21 @@ class ZotloService extends ChangeNotifier {
   }
 }
 
-void main() async {
-  ZotloService.init(
-    key: '829b2e43d70ea0fd28dac625cce43845e8332551c0e5129240',
-    secret:
-        'dw3mdm82o-07a28uot!hy4i_rofcd3x3s-fbovrcgk2d0r890ty@yjombjmbcft-i_u5p0o%#88im74!',
-    appId: '501',
-    packageIds: [
-      'com.madduck.drcal.zotlo.1month1',
-      'com.madduck.drcal.zotlo.1month2',
-      'com.madduck.drcal.zotlo.1month3',
-      'com.madduck.drcal.zotlo.1month',
-    ],
-  );
-  ZotloService.instance.addListener(() {
-    print(ZotloService.i.details?.toJson());
-  });
-  ZotloService.i.login('mohiuddin655.developer@gmail.com');
-}
+// void main() async {
+//   ZotloService.init(
+//     key: '829b2e43d70ea0fd28dac625cce43845e8332551c0e5129240',
+//     secret:
+//         'dw3mdm82o-07a28uot!hy4i_rofcd3x3s-fbovrcgk2d0r890ty@yjombjmbcft-i_u5p0o%#88im74!',
+//     appId: '501',
+//     packageIds: [
+//       'com.madduck.drcal.zotlo.1month1',
+//       'com.madduck.drcal.zotlo.1month2',
+//       'com.madduck.drcal.zotlo.1month3',
+//       'com.madduck.drcal.zotlo.1month',
+//     ],
+//   );
+//   ZotloService.instance.addListener(() {
+//     print(ZotloService.i.details?.toJson());
+//   });
+//   ZotloService.i.login('mohiuddin655.developer@gmail.com');
+// }

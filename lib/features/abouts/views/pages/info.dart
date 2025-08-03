@@ -87,7 +87,7 @@ class _InfoPageState extends State<InfoPage> with ColorMixin {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    const InAppLogo(size: 120),
+                    const InAppLogo(),
                     SizedBox(height: 16),
                     const InAppText(
                       AppConstants.name,

@@ -35,7 +35,7 @@ class InAppText extends AndrossyText {
     super.suffix,
     super.suffixStyle,
     super.onSuffixClick,
-    super.translate = false,
+    super.translate = true,
   });
 
   @override

@@ -3,10 +3,10 @@ class Limitations {
 
   static const ageMaximum = 75;
   static const ageMinimum = 10;
-  static const maxFullname = 30;
+  static const maxFullName = 30;
   static const maxUsername = 20;
   static const minUsername = 3;
-  static const minFullname = 3;
+  static const minFullName = 3;
   static const maxEmail = 20;
   static const minEmail = 5;
   static const maxPassword = 25;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/utils/settings.dart';
 
-import '../../roots/helpers/user.dart';
 import '../../roots/services/zotlo_subscription.dart';
+import '../helpers/user.dart';
 
 const kHourlyNotificationsEnabled = "hourly_notifications_enabled";
 const kHourlyNotificationsTime = "hourly_notifications_time";

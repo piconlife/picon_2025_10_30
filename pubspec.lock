@@ -45,10 +45,10 @@ packages:
     dependency: "direct main"
     description:
       name: app_color
-      sha256: "8f336049ddf3363c38cdc04f5896c8549d4fea285d394b672e03c30dc740e48d"
+      sha256: c8315bad7161d030564277c8551d0c113e73afeca653f90b5c7d2f34d873cf8b
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "1.1.2"
   app_dimen:
     dependency: "direct main"
     description:

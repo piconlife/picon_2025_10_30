@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter_andomie/utils/configs.dart';
 
 import '../../roots/utils/platform.dart';
@@ -5,6 +7,8 @@ import '../constants/app.dart';
 
 const kIsAppleAuthEnabled = "is_apple_auth_enabled";
 const kIsGoogleAuthEnabled = "is_google_auth_enabled";
+const kIsOnboardSelectToNext = "is_onboard_select_to_next";
+
 const kAppPrivacyPolicy = "privacy_policy";
 const kAppTerms = "terms_and_conditions";
 const kTranslationAutoMode = "translation_auto_mode";
@@ -19,11 +23,18 @@ class RemoteConfigs {
   const RemoteConfigs._();
 
   static bool get isAppleAuthEnabled {
-    return Configs.get(kIsAppleAuthEnabled, defaultValue: isIos);
+    return Configs.get(kIsAppleAuthEnabled, defaultValue: isIOS);
   }
 
   static bool get isGoogleAuthEnabled {
     return Configs.get(kIsGoogleAuthEnabled, defaultValue: isAndroid);
+  }
+
+  static bool get isOnboardSelectToNext {
+    return Configs.get(
+      kIsOnboardSelectToNext,
+      defaultValue: LocalConfigs.onboardSelectToNext,
+    );
   }
 
   static String get privacyLink =>
@@ -51,4 +62,16 @@ class RemoteConfigs {
   static Iterable<String> get zotloPackages {
     return Configs.get(kZotloPackages, defaultValue: []);
   }
+}
+
+class LocalConfigs {
+  const LocalConfigs._();
+
+  static const connectivityChecking = true;
+  static const connectivityTimeout = 5;
+  static const connectivityUrl = "https://www.cloudflare.com/cdn-cgi/trace";
+  static const onboardSelectToNext = true;
+
+  static bool translationShowLogs = true;
+  static Locale translationFallbackLocale = Locale("en", "US");
 }

@@ -94,7 +94,7 @@ dependencies:
   flutter_androssy_kits: ^1.0.13
 
   # LOGICS (WITHOUT PLATFORM)
-  app_color: ^1.1.1
+  app_color: ^1.1.2
   app_dimen: ^1.0.11
   auth_management: ^3.0.2
   data_management: ^2.1.9

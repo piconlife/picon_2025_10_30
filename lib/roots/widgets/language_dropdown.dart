@@ -3,8 +3,8 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 
+import '../../app/dialogs/dialog_language.dart';
 import '../../app/res/icons.dart';
-import '../dialogs/dialog_language.dart';
 import 'gesture.dart';
 import 'icon.dart';
 import 'text.dart';

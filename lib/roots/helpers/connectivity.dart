@@ -5,16 +5,19 @@ import 'package:flutter_andomie/utils/configs.dart';
 import 'package:flutter_network_status/flutter_network_status.dart';
 import 'package:http/http.dart';
 
-import '../keys/configs.dart';
-import '../res/defaults.dart';
+import '../../app/res/configs.dart';
+
+const kConnectivityChecking = "connectivity_checking";
+const kConnectivityTimeout = "connectivity_timeout";
+const kConnectivityUrl = "connectivity_url";
 
 class ConnectivityHelper {
   const ConnectivityHelper._();
 
   static Future<bool> get isInternetActive async {
     if (!Configs.get(
-      ConfigKeys.connectivityChecking,
-      defaultValue: RootDefaults.connectivityChecking,
+      kConnectivityChecking,
+      defaultValue: LocalConfigs.connectivityChecking,
     )) {
       return true;
     }
@@ -22,15 +25,15 @@ class ConnectivityHelper {
       await get(
         Uri.parse(
           Configs.get(
-            ConfigKeys.connectivityUrl,
-            defaultValue: RootDefaults.connectivityUrl,
+            kConnectivityUrl,
+            defaultValue: LocalConfigs.connectivityUrl,
           ),
         ),
       ).timeout(
         Duration(
           seconds: Configs.get(
-            ConfigKeys.connectivityTimeout,
-            defaultValue: RootDefaults.connectivityTimeout,
+            kConnectivityTimeout,
+            defaultValue: LocalConfigs.connectivityTimeout,
           ),
         ),
       );

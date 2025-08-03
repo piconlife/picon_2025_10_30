@@ -171,7 +171,7 @@ class ListMask extends StatelessWidget {
       shaderCallback: (Rect rect) {
         double h = a.size.height;
         double top = a.padding.top;
-        double bottom = max(0, a.padding.bottom - (isIos ? 15 : 0));
+        double bottom = max(0, a.padding.bottom - (isIOS ? 15 : 0));
         double first = top + firstStop;
         double second = first + secondStop;
         double fourth = h - bottom - fourthStop;

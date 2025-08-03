@@ -27,7 +27,7 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
     final binding = WidgetsFlutterBinding.ensureInitialized();
     FlutterNativeSplash.preserve(widgetsBinding: binding);
     WidgetsBinding.instance.addObserver(this);
-    await Utils.resetOrientation();
+    await SystemUi.resetOrientation();
     if (widget.onInit != null) await widget.onInit!();
     await Analytics.call(
       "root",
@@ -272,10 +272,37 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
     });
   }
 
-  void _initCustomizers() {
-    kDeviceConfig.createInstance();
-    kDimen.createInstance();
-    ColorTheme.tryParse(Configs.load())?.apply();
+  Future<void> _initCustomizers() async {
+    DeviceConfig.init(
+      watch: InAppDevices.watch,
+      mobile: InAppDevices.mobile,
+      tablet: InAppDevices.tablet,
+      laptop: InAppDevices.laptop,
+      desktop: InAppDevices.desktop,
+      tv: InAppDevices.tv,
+    );
+    DimenInitializer.init(
+      appbar: InAppDimens.appbar,
+      avatar: InAppDimens.avatar,
+      bottom: InAppDimens.bottom,
+      button: InAppDimens.button,
+      corner: InAppDimens.corner,
+      divider: InAppDimens.divider,
+      fontSize: InAppDimens.fontSize,
+      fontWeight: InAppDimens.fontWeight,
+      icon: InAppDimens.icon,
+      image: InAppDimens.image,
+      indicator: InAppDimens.indicator,
+      logo: InAppDimens.logo,
+      margin: InAppDimens.margin,
+      padding: InAppDimens.padding,
+      scaffold: InAppDimens.scaffold,
+      size: InAppDimens.size,
+      spacing: InAppDimens.space,
+      stroke: InAppDimens.stroke,
+      dimens: InAppDimens.customs,
+    );
+    ColorTheme.tryParse(Configs.load(name: "themes"))?.apply();
   }
 
   void _initDatabase() {
@@ -521,14 +548,11 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
     await Translation.init(
       connected: Internet.i.value,
       autoTranslateMode: RemoteConfigs.translationAutoMode,
-      showLogs: StaticConfigs.translationShowLogs,
+      showLogs: LocalConfigs.translationShowLogs,
       locale: RemoteSettings.translationSavedLocale,
-      defaultLocale: StaticConfigs.translationFallbackLocale,
+      defaultLocale: LocalConfigs.translationFallbackLocale,
       supportedLocales: RemoteConfigs.translationSupportedLocales,
-      paths: {
-        ...RootReferences.translationPaths,
-        ...InAppReferences.translationPaths,
-      },
+      paths: InAppReferences.translationPaths,
       delegate: InAppTranslationDelegate(),
       translator: InAppTranslatorDelegate(),
       onReady: () {
@@ -570,12 +594,12 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
       await _initHive();
       await _initConfigs();
       await _initSettings();
+      await _initCustomizers();
       await _initTranslation();
       await _initZotlo();
       _initAndomie();
       _initAndrossy();
       _initAnalytics();
-      _initCustomizers();
       _initDatabase();
       _initDialogs();
       _initNavigator();

@@ -19,7 +19,7 @@ class Haptics {
     if (isAndroid) {
       HapticFeedback.lightImpact();
     } else {
-      HapticService.impactFeedback('soft', 1.0);
+      HapticService.impactFeedback(HapticStyle.light, 1.0);
     }
   }
 
@@ -43,7 +43,7 @@ class Haptics {
     if (isAndroid) {
       HapticFeedback.lightImpact();
     } else {
-      HapticService.impactFeedback('rigid', 1);
+      HapticService.impactFeedback(HapticStyle.hard, 1);
     }
   }
 }
