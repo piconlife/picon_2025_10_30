@@ -4,8 +4,8 @@
     "base": {
       "light": {
         "primary": "ff2eca7f",
-        "secondary": "ff19A4FA",
-        "tertiary": "ffFFC107",
+        "secondary": "ff19a4fa",
+        "tertiary": "ffffc107",
         "error": "fff44336",
         "warning": "ffffab40",
         "disable": "fffafafa",
@@ -13,15 +13,15 @@
         "lightAsFixed": "ffffffff",
         "dark": "ff000000",
         "darkAsFixed": "ff000000",
-        "mid": "ff676c75",
+        "mid": "ff808080",
         "holo": "fff2f2f2",
         "soft": "fffafafa",
         "deep": "fffafafa"
       },
       "dark": {
         "primary": "ff2eca7f",
-        "secondary": "ff19A4FA",
-        "tertiary": "ffFFC107",
+        "secondary": "ff001333",
+        "tertiary": "ffffc107",
         "error": "fff44336",
         "warning": "ffff6e40",
         "disable": "ff212121",
@@ -37,34 +37,38 @@
     },
     "appbar": {
       "light": {
-        "primary": "FFF6F6F6"
+        "primary": "ffffffff",
+        "secondary": "fff4f4f4",
+        "tertiary": "fff4f4f4"
       },
       "dark": {
-        "primary": "FFF6F6F6"
+        "primary": "ff001333",
+        "secondary": "ff131313",
+        "tertiary": "ff131313"
       }
     },
     "background": {
       "light": {
-        "primary": "ffffffff"
+        "primary": "fff2f2f2",
+        "secondary": "fff4f4f4",
+        "tertiary": "ff151515"
       },
       "dark": {
-        "primary": "ffffffff"
+        "primary": "ff808080",
+        "secondary": "ff131313",
+        "tertiary": "ff151515"
       }
     },
     "bottom": {
       "light": {
-        "primary": "ffffffff"
+        "primary": "fffefaf1",
+        "secondary": "fff4f4f4",
+        "tertiary": "fff4f4f4"
       },
       "dark": {
-        "primary": "ffffffff"
-      }
-    },
-    "card": {
-      "light": {
-        "primary": "ffffffff"
-      },
-      "dark": {
-        "primary": "ffffffff"
+        "primary": "ff151515",
+        "secondary": "ff131313",
+        "tertiary": "ff131313"
       }
     },
     "dialog": {
@@ -72,141 +76,44 @@
         "primary": "ffffffff"
       },
       "dark": {
-        "primary": "ffffffff"
+        "primary": "ff121b22"
       }
     },
     "divider": {
       "light": {
-        "soft": "1a676c75"
+        "primary": "ff84959f"
       },
       "dark": {
-        "soft": "1a676c75"
-      }
-    },
-    "highlight": {
-      "light": {
-        "primary": "ffffffff"
-      },
-      "dark": {
-        "primary": "ffffffff"
-      }
-    },
-    "hint": {
-      "light": {
-        "primary": "ffffffff"
-      },
-      "dark": {
-        "primary": "ffffffff"
-      }
-    },
-    "hover": {
-      "light": {
-        "primary": "ffffffff"
-      },
-      "dark": {
-        "primary": "ffffffff"
+        "primary": "ff202020"
       }
     },
     "icon": {
       "light": {
-        "primary": "ff999999",
-        "secondary": "ff808080",
-        "tertiary": "ff041330",
-        "disable": "ff808080"
+        "primary": "ff808080"
       },
       "dark": {
-        "primary": "ff999999",
-        "secondary": "ff808080",
-        "tertiary": "ff2eca7f",
-        "disable": "ff808080"
-      }
-    },
-    "label": {
-      "light": {
-        "primary": "ff999999",
-        "secondary": "ff808080",
-        "tertiary": "ff041330"
-      },
-      "dark": {
-        "primary": "ff999999",
-        "secondary": "ff808080",
-        "tertiary": "ff2eca7f"
-      }
-    },
-    "placeholder": {
-      "light": {
-        "primary": "ffffffff"
-      },
-      "dark": {
-        "primary": "ffffffff"
+        "primary": "ff808080"
       }
     },
     "scaffold": {
       "light": {
-        "primary": "ffffffff"
+        "primary": "ffffffff",
+        "secondary": "fff2f2f2"
       },
       "dark": {
-        "primary": "ffffffff"
-      }
-    },
-    "shadow": {
-      "light": {
-        "primary": "ffffffff"
-      },
-      "dark": {
-        "primary": "ffffffff"
-      }
-    },
-    "surface": {
-      "light": {
-        "primary": "ffffffff"
-      },
-      "dark": {
-        "primary": "ffffffff"
+        "primary": "ff000000",
+        "secondary": "ff121212"
       }
     },
     "text": {
       "light": {
-        "primary": "ff111111",
-        "secondary": "ff929292",
-        "light": "ffffffff",
-        "dark": "ff041330",
-        "mid": "ff5c5c5c"
+        "primary": "ff000000",
+        "secondary": "ff808080"
+      },
+      "dark": {
+        "primary": "ffffffff",
+        "secondary": "ff808080"
       }
-    },
-    "colors": [
-      {
-        "name": "custom",
-        "config": {
-          "light": {
-            "primary": "ff041330"
-          },
-          "dark": {
-            "primary": "ff2eca7f"
-          }
-        }
-      }
-    ],
-    "gradients": [
-      {
-        "name": "scaffold",
-        "config": {
-          "light": {
-            "primary": {
-              "colors": [
-              ],
-              "type": "linear"
-            }
-          },
-          "dark": {
-            "primary": {
-              "colors": [
-              ],
-              "type": "linear"
-            }
-          }
-        }
-      }
-    ]
+    }
   }
 }

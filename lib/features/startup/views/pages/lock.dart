@@ -5,7 +5,7 @@ import 'package:flutter_andomie/extensions/object.dart';
 import 'package:flutter_andomie/utils/translation.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
-import '../../../../roots/data/models/user.dart';
+import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/align.dart';
 import '../../../../roots/widgets/layout.dart';
 import '../../../../roots/widgets/system_overlay.dart';
@@ -90,5 +90,5 @@ class _LockPageState extends State<LockPage> with TranslationMixin, ColorMixin {
   }
 
   @override
-  String get name => "onboard:intro";
+  String get name => "startup:lock";
 }

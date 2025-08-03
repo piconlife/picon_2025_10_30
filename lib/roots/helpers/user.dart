@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_andomie/utils/validator.dart';
 
-import '../data/models/user.dart';
+import '../../data/models/user.dart';
 import '../data/use_cases/user/get.dart';
 import '../notifiers/paywall.dart';
 import '../preferences/preferences.dart';

@@ -1,5 +1,7 @@
 import 'package:app_color/app_color.dart';
+import 'package:app_color/extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../app/widgets/leading.dart';
 import 'column.dart';
@@ -18,6 +20,7 @@ class InAppAppbar extends StatelessWidget implements PreferredSizeWidget {
   final double titleSpacing;
   final String? titleText;
   final TextStyle titleTextStyle;
+  final bool hide;
 
   const InAppAppbar({
     super.key,
@@ -34,10 +37,25 @@ class InAppAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.titleSpacing = 12,
     this.titleText,
     this.titleTextStyle = const TextStyle(fontSize: 18),
+    this.hide = false,
   });
+
+  const InAppAppbar.hide({Key? key, Color? backgroundColor})
+    : this(key: key, backgroundColor: backgroundColor, hide: true);
 
   @override
   Widget build(BuildContext context) {
+    if (hide) {
+      return AppBar(
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+        toolbarHeight: 0,
+        surfaceTintColor: Colors.transparent,
+        systemOverlayStyle: backgroundColor?.isDark ?? context.isDarkMode
+            ? SystemUiOverlayStyle.light
+            : SystemUiOverlayStyle.dark,
+      );
+    }
     return InAppColumn(
       mainAxisSize: MainAxisSize.min,
       children: [

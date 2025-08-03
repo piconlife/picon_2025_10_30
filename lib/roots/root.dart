@@ -66,7 +66,8 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
   void _initAndrossy() {
     Androssy.init(
       textConverter: (context, value) {
-        return value.tr;
+        if (RemoteConfigs.translationAutoMode) return value.tr;
+        return value;
       },
       cachedNetworkImageBuilder: (context, config) {
         return CachedNetworkImage(
@@ -295,7 +296,7 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
     Loader.init(
       barrierDismissible: true,
       barrierBlurSigma: 10,
-      barrierColor: context.dark.tx(7.5),
+      barrierColor: context.dark.withValues(alpha: .075),
       duration: const Duration(milliseconds: 500),
       reverseDuration: const Duration(milliseconds: 300),
       builder: (context, content) {

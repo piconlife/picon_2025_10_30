@@ -17,8 +17,8 @@
       "ios": ""
     },
     "translation_auto_mode": {
-      "android": true,
-      "ios": true
+      "android": false,
+      "ios": false
     },
     "translation_supported_locales": {
       "android": [
@@ -113,13 +113,8 @@
     "onboard_select_to_next": false,
     "onboard_appbar_type": "steps",
     "onboard_quiz_center": true,
-    "navigation_main": [
-      "home",
-      "me"
-    ]
+    "navigation_main": ["home", "me"]
   },
-  "live": {
-  },
-  "test": {
-  }
+  "live": {},
+  "test": {}
 }

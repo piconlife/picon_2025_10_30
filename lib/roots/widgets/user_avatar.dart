@@ -3,7 +3,7 @@ import 'package:auth_management/widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/res/placeholders.dart';
-import '../data/models/user.dart';
+import '../../data/models/user.dart';
 import 'gesture.dart';
 import 'icon.dart';
 import 'image.dart';

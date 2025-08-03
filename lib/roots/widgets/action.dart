@@ -1,4 +1,5 @@
 import 'package:app_color/app_color.dart';
+import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
@@ -33,7 +34,7 @@ class InAppAction extends StatelessWidget {
           primary: AndrossyGestureAnimation.scale(),
           secondary: AndrossyGestureAnimation.fade(),
         ),
-        icon: icon ?? InAppIcons.leading.regular,
+        icon: icon ?? AppIcons.leading.regular,
         iconSize: dimen.normalIcon,
         iconColor: AndrossyButtonProperty(enabled: color, disabled: color.t50),
         splashColor: color.t02,

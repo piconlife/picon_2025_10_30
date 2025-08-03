@@ -2,7 +2,7 @@ import 'package:data_management_local_delegate/data_management_local_delegate.da
 import 'package:in_app_database/in_app_database.dart';
 
 import '../../../../roots/data/constants/paths.dart';
-import '../../../../roots/data/models/user.dart';
+import '../../models/user.dart';
 
 class LocalUserDataSource extends InAppDataSource<User> {
   const LocalUserDataSource._({

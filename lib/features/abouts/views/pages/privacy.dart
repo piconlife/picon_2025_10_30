@@ -97,29 +97,30 @@ class _PrivacyPageState extends State<PrivacyPage>
                     style: TextStyle(fontSize: 14, height: 1.8),
                   ),
                 ),
-                InAppAlign(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 24),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [light.withAlpha(0), light],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        stops: [0, 0.5],
+                if (widget.isStartupMode || !isPrivacySeen)
+                  InAppAlign(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 24),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [light.withAlpha(0), light],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          stops: [0, 0.5],
+                        ),
                       ),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsetsGeometry.symmetric(horizontal: 50),
-                      child: InAppFilledButton(
-                        onTap: _accept,
-                        text: "Accept",
-                        borderRadius: BorderRadius.circular(50),
+                      child: Padding(
+                        padding: EdgeInsetsGeometry.symmetric(horizontal: 50),
+                        child: InAppFilledButton(
+                          onTap: _accept,
+                          text: widget.isStartupMode ? "Next" : "Accept",
+                          borderRadius: BorderRadius.circular(50),
+                        ),
                       ),
                     ),
                   ),
-                ),
               ],
             ),
           ),

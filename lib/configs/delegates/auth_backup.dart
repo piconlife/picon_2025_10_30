@@ -1,6 +1,6 @@
 import 'package:auth_management/auth_management.dart';
 
-import '../../roots/data/models/user.dart';
+import '../../data/models/user.dart';
 import '../../roots/data/use_cases/user/create.dart';
 import '../../roots/data/use_cases/user/delete.dart';
 import '../../roots/data/use_cases/user/get.dart';

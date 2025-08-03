@@ -1,4 +1,5 @@
 import 'package:app_color/app_color.dart';
+import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 
@@ -38,7 +39,7 @@ class InAppMenuButton<T> extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(dimen.dp(8)),
         child: InAppIcon(
-          icon ?? InAppIcons.more.regular,
+          icon ?? AppIcons.more.regular,
           size: dimen.dp(24),
           color: color.t50,
         ),

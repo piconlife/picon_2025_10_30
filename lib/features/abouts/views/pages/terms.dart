@@ -1,4 +1,5 @@
 import 'package:app_color/app_color.dart';
+import 'package:app_color/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/utils/settings.dart';
 import 'package:flutter_andomie/utils/translation.dart';
@@ -57,7 +58,7 @@ class _TermsPageState extends State<TermsPage>
   void _accept() async {
     if (Settings.set(kSeenTerms, true)) {
       if (widget.isStartupMode) {
-        context.next(Routes.terms);
+        context.next(Routes.terms, arguments: true);
       } else {
         context.close();
       }
@@ -184,7 +185,7 @@ class _TermsPageState extends State<TermsPage>
                   ],
                 ),
               ),
-              if (!isTermsSeen)
+              if (!isTermsSeen || widget.isStartupMode)
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
@@ -201,8 +202,8 @@ class _TermsPageState extends State<TermsPage>
                       ],
                     ),
                     child: InAppFilledButton(
-                      enabled: isApproved,
-                      text: "Accept",
+                      enabled: isApproved || widget.isStartupMode,
+                      text: widget.isStartupMode ? "Next" : "Accept",
                       onTap: _accept,
                     ),
                   ),

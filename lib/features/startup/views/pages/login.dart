@@ -148,5 +148,5 @@ class _LoginPageState extends State<LoginPage>
   }
 
   @override
-  String get name => "onboard:login";
+  String get name => "startup:login";
 }

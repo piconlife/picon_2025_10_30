@@ -6,8 +6,8 @@ import 'package:flutter_andomie/utils/translation.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 
 import '../../app/res/listeners.dart';
+import '../../data/models/user.dart';
 import '../../roots/services/zotlo_subscription.dart';
-import '../data/models/user.dart';
 import '../helpers/connectivity.dart';
 import '../notifiers/auth.dart';
 

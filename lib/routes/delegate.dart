@@ -1,11 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/extensions/object.dart';
-import 'package:flutter_andomie/utils/configs.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
-import '../features/startup/enums/authorization_mode.dart';
-import '../roots/keys/configs.dart';
 import '../roots/preferences/preferences.dart';
 import 'paths.dart';
 
@@ -27,18 +22,14 @@ class NavigatorDelegate extends InAppNavigatorDelegate {
 
   @override
   Future<List<String>> routes({String? groupName, Object? args}) async {
-    final route = args.getOrNull("route");
-    final mode = Configs.get(
-      ConfigKeys.authorizationMode,
-      defaultValue: AuthorizationMode.normal,
-      parser: AuthorizationMode.parse,
-    );
     return [
       Routes.splash,
       Routes.intro,
-      if (args != true && (!mode.isNone || route == Routes.login)) Routes.login,
+      Routes.register,
+      Routes.terms,
+      Routes.privacy,
+      Routes.username,
       Routes.quiz,
-      if (!kIsWeb) Routes.permission,
       Routes.final_,
     ];
   }

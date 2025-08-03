@@ -1,4 +1,5 @@
 import 'package:app_color/app_color.dart';
+import 'package:app_color/extension.dart';
 import 'package:auth_management/auth_management.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,7 @@ import 'package:flutter_andomie/utils/translation.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/res/configs.dart';
-import '../../../../roots/data/models/user.dart';
+import '../../../../data/models/user.dart';
 import '../../../../roots/helpers/user.dart';
 import '../../../../roots/utils/utils.dart';
 import '../../../../roots/widgets/appbar.dart';

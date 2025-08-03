@@ -27,7 +27,7 @@ class OnboardingArrowBack extends StatelessWidget {
         alignment: Alignment.center,
         padding: EdgeInsets.all(10).apply(dimen),
         child: InAppIcon(
-          InAppIcons.arrowBack.regular,
+          AppIcons.arrowBack.regular,
           size: double.infinity,
           color: Color(0xff454545),
           flipByTextDirection: true,

@@ -21,7 +21,7 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "com.picon.picon"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion //"27.0.12077973"
+    ndkVersion = "29.0.13846066"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -38,6 +38,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        multiDexEnabled true
     }
 
     signingConfigs {

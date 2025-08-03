@@ -1,4 +1,5 @@
 import 'package:app_color/app_color.dart';
+import 'package:app_color/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 
@@ -57,12 +58,9 @@ class InAppAvatar extends StatelessWidget {
         size: size,
         backgroundColor:
             backgroundColor ??
-            (context.isDarkMode ? context.mid.dx(50) : context.mid.lx(50)),
+            (context.isDarkMode ? context.mid.shade(.5) : context.mid.tint(.5)),
         border: borderSize > 0
-            ? Border.all(
-                color: borderColor ?? context.dark ?? Colors.transparent,
-                width: borderSize,
-              )
+            ? Border.all(color: borderColor ?? context.dark, width: borderSize)
             : null,
         shadow: BoxShadow(
           color:

@@ -25,21 +25,13 @@ class IntroPage extends StatefulWidget {
 
 class _IntroPageState extends State<IntroPage>
     with TranslationMixin, ColorMixin {
-  void _seePrivacy(BuildContext context) {
-    context.open(Routes.privacy);
-  }
+  void _seePrivacy(BuildContext context) => context.open(Routes.privacy);
 
-  void _seeTerms(BuildContext context) {
-    context.open(Routes.terms);
-  }
+  void _seeTerms(BuildContext context) => context.open(Routes.terms);
 
-  void _joining() {
-    context.next(Routes.intro);
-  }
+  void _register() => context.open(Routes.register);
 
-  void _login() {
-    context.open(Routes.login);
-  }
+  void _login() => context.open(Routes.login);
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +89,7 @@ class _IntroPageState extends State<IntroPage>
                       InAppFilledButton(
                         text: "Join with ${AppConstants.name}",
                         borderRadius: BorderRadius.circular(50),
-                        onTap: _joining,
+                        onTap: _register,
                       ),
                       InAppOutlinedButton(
                         text: "Continue with Email",
@@ -116,5 +108,5 @@ class _IntroPageState extends State<IntroPage>
   }
 
   @override
-  String get name => "onboard:intro";
+  String get name => "startup:intro";
 }

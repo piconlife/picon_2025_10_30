@@ -1,4 +1,5 @@
 import 'package:app_color/app_color.dart';
+import 'package:app_color/extension.dart';
 import 'package:auth_management/auth_management.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
@@ -37,11 +38,11 @@ import '../configs/delegates/purchase.dart';
 import '../configs/delegates/settings_backup.dart';
 import '../configs/delegates/translation.dart';
 import '../configs/delegates/translator.dart';
+import '../data/models/user.dart';
 import '../routes/delegate.dart';
 import '../runner.dart';
 import 'customizers/device.dart';
 import 'customizers/dimen.dart';
-import 'data/models/user.dart';
 import 'dialogs/bsd_editor.dart';
 import 'dialogs/bsd_options.dart';
 import 'dialogs/dialog_alert.dart';

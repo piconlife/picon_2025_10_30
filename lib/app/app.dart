@@ -4,6 +4,8 @@ import 'package:flutter_andomie/utils/translation.dart';
 import '../routes/_imports.dart';
 import 'constants/app.dart';
 import 'constants/configs.dart';
+import 'theme/dark/theme.dart';
+import 'theme/light/theme.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -21,6 +23,8 @@ class App extends StatelessWidget {
               Translation.i.localeOrNull ?? Translation.i.defaultLocaleOrNull,
           initialRoute: InAppRouter.initialRoute,
           onGenerateRoute: InAppRouter.I.generate,
+          theme: kLightTheme,
+          darkTheme: kDarkTheme,
         );
       },
     );

@@ -15,9 +15,9 @@ Widget _info(BuildContext context, Object? args) {
 }
 
 Widget _privacy(BuildContext context, Object? args) {
-  return PrivacyPage(args: args);
+  return PrivacyPage(args: args, isStartupMode: args == true);
 }
 
 Widget _terms(BuildContext context, Object? args) {
-  return TermsPage(args: args);
+  return TermsPage(args: args, isStartupMode: args == true);
 }

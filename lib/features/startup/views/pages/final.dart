@@ -106,5 +106,5 @@ class _FinalPageState extends State<FinalPage>
   }
 
   @override
-  String get name => "onboard:final";
+  String get name => "startup:final";
 }

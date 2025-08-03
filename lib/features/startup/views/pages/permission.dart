@@ -153,5 +153,5 @@ class _PermissionPageState extends State<PermissionPage>
   }
 
   @override
-  String get name => "onboard:permission";
+  String get name => "startup:permission";
 }

@@ -1,4 +1,5 @@
 import 'package:app_color/app_color.dart';
+import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/contents/country_flags.dart';
@@ -100,7 +101,7 @@ class _LocaleBsdState extends State<LocaleBsd>
             child: Container(
               padding: EdgeInsets.all(8).apply(dimen),
               child: InAppIcon(
-                InAppIcons.close.regular,
+                AppIcons.close.regular,
                 size: 28.0.dp(dimen),
                 color: context.dark,
               ),
@@ -198,7 +199,7 @@ class _LocaleBsdState extends State<LocaleBsd>
       ),
       padding: EdgeInsets.all(4).apply(dimen),
       child: InAppIcon(
-        InAppIcons.check.regular,
+        AppIcons.check.regular,
         color: context.lightAsFixed,
         size: 18.0.dp(dimen),
       ),

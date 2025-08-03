@@ -13,6 +13,8 @@ class InAppFilledButton extends StatefulWidget {
   final TextStyle textStyle;
   final dynamic icon;
   final Color? background;
+  final Color? disabledBackgroundColor;
+  final Color? disabledTextColor;
   final BorderRadius? borderRadius;
   final VoidCallback? onTap;
 
@@ -22,12 +24,11 @@ class InAppFilledButton extends StatefulWidget {
     this.activated = false,
     this.borderRadius,
     this.background,
+    this.disabledBackgroundColor,
+    this.disabledTextColor,
     this.icon,
     this.text = "",
-    this.textStyle = const TextStyle(
-      fontFamily: InAppFonts.primary,
-      fontWeight: FontWeight.bold,
-    ),
+    this.textStyle = const TextStyle(),
     this.onTap,
     this.width = double.infinity,
     this.height = 50,
@@ -77,7 +78,7 @@ class InAppFilledButtonState extends State<InAppFilledButton> {
       tag: "primary_button",
       child: AndrossyButton(
         loading: loading,
-        enabled: enabled,
+        enabled: enabled && widget.onTap != null,
         activated: activated,
         icon: widget.icon,
         iconColor: AndrossyButtonProperty.all(
@@ -94,11 +95,17 @@ class InAppFilledButtonState extends State<InAppFilledButton> {
         height: widget.height,
         textStyle: widget.textStyle.copyWith(
           fontFamily: widget.textStyle.fontFamily ?? InAppFonts.secondary,
+          fontSize: widget.textStyle.fontSize ?? 16,
+          fontWeight: widget.textStyle.fontWeight ?? FontWeight.w600,
         ),
         backgroundColor: AndrossyButtonProperty(
+          disabled: widget.disabledBackgroundColor,
           enabled: widget.background ?? context.primary,
         ),
-        textColor: AndrossyButtonProperty(enabled: widget.textStyle.color),
+        textColor: AndrossyButtonProperty(
+          enabled: widget.textStyle.color,
+          disabled: widget.disabledTextColor,
+        ),
         clickEffect: const AndrossyGestureEffect(
           primary: AndrossyGestureAnimation.scale(),
           secondary: AndrossyGestureAnimation.fade(),

@@ -1,4 +1,5 @@
 import 'package:app_color/app_color.dart';
+import 'package:app_color/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
@@ -43,7 +44,7 @@ class InAppLeading extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: InAppIcon(
-                InAppIcons.leading.regular,
+                AppIcons.leading.regular,
                 color: context.dark.t95,
                 flipByTextDirection: true,
                 size: 24,

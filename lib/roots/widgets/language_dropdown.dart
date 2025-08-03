@@ -37,7 +37,7 @@ class _InAppLanguageDropdownState extends State<InAppLanguageDropdown>
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          InAppIcon(InAppIcons.language.bold, color: primary),
+          InAppIcon(AppIcons.language.bold, color: primary),
           dimen.space.small.w,
           Container(
             decoration: BoxDecoration(
@@ -59,7 +59,7 @@ class _InAppLanguageDropdownState extends State<InAppLanguageDropdown>
                     fontWeight: dimen.fontWeight.medium.fontWeight,
                   ),
                 ),
-                InAppIcon(InAppIcons.dropdown.regular, color: primary),
+                InAppIcon(AppIcons.dropdown.regular, color: primary),
               ],
             ),
           ),

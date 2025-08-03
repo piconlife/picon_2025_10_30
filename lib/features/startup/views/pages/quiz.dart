@@ -269,5 +269,5 @@ class _QuizPageState extends State<QuizPage> with TranslationMixin, ColorMixin {
   }
 
   @override
-  String get name => "onboard:quiz";
+  String get name => "startup:quiz";
 }

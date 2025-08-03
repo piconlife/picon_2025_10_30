@@ -1,6 +1,6 @@
 import 'package:flutter_entity/entity.dart';
 
-import '../../models/user.dart';
+import '../../../../data/models/user.dart';
 import 'base.dart';
 
 class GetUserUseCase extends BaseUserUseCase {
