@@ -16,12 +16,11 @@ class ConfigsConstants {
   static const hitLogger = false;
 
   // TRANSLATION
-  static const configs = null;
   static const configName = "configs";
   static const configDefault = "application";
   static const configPlatform = PlatformType.system;
   static const configEnvironment = EnvironmentType.system;
-  static const configPaths = <String>{};
+  static const configPaths = <String>{"legals"};
   static const configLogs = true;
 
   // IN_APP_DATABASE

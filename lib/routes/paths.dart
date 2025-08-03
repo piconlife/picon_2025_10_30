@@ -13,6 +13,7 @@ class Routes {
   static const info = "/info";
   static const privacy = "/privacy";
   static const terms = "/terms";
+  static const termsReader = "/terms_reader";
   static const username = "/username";
 
   // PAYWALL

@@ -5,9 +5,15 @@ import '../../routes/paths.dart';
 import '../abouts/views/pages/privacy.dart';
 import '../abouts/views/pages/terms.dart';
 import 'views/pages/info.dart';
+import 'views/pages/terms_reader.dart';
 
 Map<String, RouteBuilder> get kAboutsRoutes {
-  return {Routes.info: _info, Routes.privacy: _privacy, Routes.terms: _terms};
+  return {
+    Routes.info: _info,
+    Routes.privacy: _privacy,
+    Routes.terms: _terms,
+    Routes.termsReader: _termsReader,
+  };
 }
 
 Widget _info(BuildContext context, Object? args) {
@@ -20,4 +26,8 @@ Widget _privacy(BuildContext context, Object? args) {
 
 Widget _terms(BuildContext context, Object? args) {
   return TermsPage(args: args, isStartupMode: args == true);
+}
+
+Widget _termsReader(BuildContext context, Object? args) {
+  return TermsReaderPage(args: args);
 }

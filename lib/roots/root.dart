@@ -250,15 +250,14 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
 
   Future<void> _initConfigs() async {
     await Configs.init(
-      delegate: InAppConfigDelegate(),
+      name: ConfigsConstants.configName,
       connected: Internet.i.value,
-      // initial: ConfigsConstants.configs,
-      // showLogs: ConfigsConstants.configLogs,
-      // defaultPath: ConfigsConstants.configDefault,
-      // name: ConfigsConstants.configName,
-      // paths: ConfigsConstants.configPaths,
-      // platform: ConfigsConstants.configPlatform,
-      // environment: ConfigsConstants.configEnvironment,
+      delegate: InAppConfigDelegate(),
+      paths: {...kDefaultConfigPaths, ...ConfigsConstants.configPaths},
+      showLogs: ConfigsConstants.configLogs,
+      defaultPath: ConfigsConstants.configDefault,
+      platform: ConfigsConstants.configPlatform,
+      environment: ConfigsConstants.configEnvironment,
     );
   }
 

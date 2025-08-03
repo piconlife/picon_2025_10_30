@@ -1,12 +1,16 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
+import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_andomie/extensions/string.dart';
+import 'package:flutter_andomie/utils/configs.dart';
 import 'package:flutter_andomie/utils/settings.dart';
 import 'package:flutter_andomie/utils/translation.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
+import 'package:flutter_terms_viewer/flutter_terms_viewer.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
-import '../../../../app/extensions/text_direction.dart';
+import '../../../../app/constants/app.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/column.dart';
 import '../../../../roots/widgets/filled_button.dart';
@@ -14,29 +18,11 @@ import '../../../../roots/widgets/logo_trailing.dart';
 import '../../../../roots/widgets/stack.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../routes/paths.dart';
+import '../../data/legals.dart';
 
 const kSeenTerms = "seen_terms";
 
 bool get isTermsSeen => Settings.get(kSeenTerms, false);
-
-class TermsInfo {
-  final String id;
-  final String? title;
-  final String? subtitle;
-
-  TermsInfo({required this.id, this.title, this.subtitle});
-
-  static List<TermsInfo> get items {
-    return List.generate(5, (index) {
-      return TermsInfo(
-        id: "$index",
-        title: "Help apps find location",
-        subtitle:
-            "Tap to learn more about each service, such as how to turn it on or off later. Data will be used according to PicON's Privacy Policy",
-      );
-    });
-  }
-}
 
 class TermsPage extends StatefulWidget {
   final Object? args;
@@ -50,10 +36,19 @@ class TermsPage extends StatefulWidget {
 
 class _TermsPageState extends State<TermsPage>
     with TranslationMixin, ColorMixin {
-  final selections = <String>{};
-  final items = TermsInfo.items;
+  Legal? _legal;
 
-  bool get isApproved => items.every((i) => selections.contains(i.id));
+  Legal get legal {
+    if (_legal == null || _legal!.isEmpty) {
+      _legal = Legals.load().terms;
+    }
+    return _legal!;
+  }
+
+  final selections = <String>{};
+
+  bool get isApproved =>
+      legal.contents.every((i) => selections.contains(i.headline));
 
   void _accept() async {
     if (Settings.set(kSeenTerms, true)) {
@@ -86,8 +81,30 @@ class _TermsPageState extends State<TermsPage>
     setState(() {});
   }
 
+  void _learnDetails(BuildContext context, Terms terms) {
+    context.open(Routes.termsReader, arguments: terms);
+  }
+
+  void _listener() {
+    setState(() => _legal = Legals.load().terms);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Configs.i.addListener(_listener);
+  }
+
+  @override
+  void dispose() {
+    Configs.i.removeListener(_listener);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final dark = context.dark;
+    final primary = context.primary;
     final bg = context.light;
     return Scaffold(
       backgroundColor: bg,
@@ -113,13 +130,16 @@ class _TermsPageState extends State<TermsPage>
                         child: InAppColumn(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           spacing: 8,
-                          children: const [
+                          children: [
                             InAppText(
-                              "Terms Service and Conditions",
+                              legal.title,
                               style: TextStyle(fontSize: 24),
                             ),
                             InAppText(
-                              "Tap to learn more about each service, such as how to turn it on or off later. Data will be used according to PicON's Privacy Policy",
+                              legal.body?.replaceAll(
+                                "{APP_NAME}",
+                                AppConstants.name,
+                              ),
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w300,
@@ -132,52 +152,66 @@ class _TermsPageState extends State<TermsPage>
                     ColoredBox(
                       color: bg,
                       child: InAppColumn(
-                        children: List.generate(items.length, (index) {
-                          final item = items[index];
+                        children: List.generate(legal.contents.length, (i) {
+                          final item = legal.contents[i];
                           return CheckboxListTile(
                             enabled: !isTermsSeen,
                             value:
-                                selections.contains(item.id) ||
+                                selections.contains(item.headline) ||
                                 isTermsSeen ||
                                 isApproved,
                             activeColor: primary,
-                            fillColor: WidgetStateProperty.resolveWith((
-                              states,
-                            ) {
-                              if (states.contains(WidgetState.disabled)) {
-                                return dark.t20;
+                            overlayColor: WidgetStateProperty.all(primary.t10),
+                            side: WidgetStateBorderSide.resolveWith((states) {
+                              final color = isTermsSeen
+                                  ? iconColor.disable ?? grey
+                                  : primary;
+                              if (states.contains(WidgetState.selected)) {
+                                return BorderSide(
+                                  width: 2,
+                                  strokeAlign: BorderSide.strokeAlignCenter,
+                                  color: color,
+                                );
                               }
-                              return null;
+                              return BorderSide(
+                                color: color,
+                                width: 2,
+                                strokeAlign: BorderSide.strokeAlignCenter,
+                              );
                             }),
-                            checkboxScaleFactor: 1.2,
-                            side: BorderSide(
-                              color: primary,
-                              strokeAlign: BorderSide.strokeAlignInside,
-                              width: 1.5,
-                            ),
                             checkboxShape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),
                             ),
-                            contentPadding: const EdgeInsets.only(
+                            contentPadding: EdgeInsets.only(
                               left: 24,
                               right: 16,
                               top: 8,
                               bottom: 8,
-                            ).directional,
-                            title: Padding(
-                              padding: EdgeInsets.only(bottom: 12),
-                              child: InAppText(
-                                item.title,
-                                style: TextStyle(fontSize: 16),
+                            ),
+                            title: InAppText(
+                              item.headline,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: context.mediumFontWeight,
                               ),
                             ),
-                            subtitle: InAppText(
-                              item.subtitle,
-                              maxLines: 5,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: grey, fontSize: 14),
-                            ),
-                            onChanged: (b) => _checked(item.id),
+                            subtitle: item.body.use.isEmpty
+                                ? null
+                                : Padding(
+                                    padding: EdgeInsets.only(top: 8),
+                                    child: InAppText(
+                                      item.body,
+                                      suffix: " more",
+                                      onSuffixClick: (context) =>
+                                          _learnDetails(context, item),
+                                      suffixStyle: TextStyle(color: primary),
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: dark.t50,
+                                      ),
+                                    ),
+                                  ),
+                            onChanged: (value) => _checked(item.headline ?? ''),
                           );
                         }),
                       ),
