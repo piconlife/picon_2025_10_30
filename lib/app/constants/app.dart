@@ -23,7 +23,7 @@ class AppConstants {
       'https://play.google.com/store/apps/details?id=$bundleId';
   static const termsLink = 'https://techpek.com/kegelx/terms_and_conditions/';
   static const privacyLink = 'https://techpek.com/kegelx/privacy_policy/';
-  static const domainSuffix = 'techpek';
+  static const domainSuffix = 'picon';
   static const domainEndpoint = 'com';
   static const domain = '@$domainSuffix.$domainEndpoint';
 }

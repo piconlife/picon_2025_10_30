@@ -11,8 +11,8 @@ Map<String, RouteBuilder> get kAboutsRoutes {
   return {
     Routes.info: _info,
     Routes.privacy: _privacy,
-    Routes.terms: _terms,
-    Routes.termsReader: _termsReader,
+    Routes.termsAndConditions: _terms,
+    Routes.terms: _termsReader,
   };
 }
 

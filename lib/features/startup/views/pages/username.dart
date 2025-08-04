@@ -32,7 +32,7 @@ class UsernamePage extends StatefulWidget {
   State<UsernamePage> createState() => _UsernamePageState();
 }
 
-class _UsernamePageState extends State<UsernamePage> with ColorMixin{
+class _UsernamePageState extends State<UsernamePage> with ColorMixin {
   final etFullnameKey = GlobalKey<AndrossyFieldState>();
   final etShortnameKey = GlobalKey<AndrossyFieldState>();
   final btnSubmit = GlobalKey<InAppFilledButtonState>();
@@ -156,9 +156,7 @@ class _UsernamePageState extends State<UsernamePage> with ColorMixin{
                   vertical: dimen.dp(4),
                 ),
                 floatingVisibility: FloatingVisibility.always,
-                style: TextStyle(
-                  color: dark,
-                ),
+                style: TextStyle(color: dark),
                 onValid: (v) => btnSubmit.currentState?.setEnabled(v),
                 children: [
                   AndrossyField(

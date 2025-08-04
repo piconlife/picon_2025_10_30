@@ -54,7 +54,7 @@ class _TermsPageState extends State<TermsPage>
   void _accept() async {
     if (Settings.set(kSeenTerms, true)) {
       if (widget.isStartupMode) {
-        context.next(Routes.terms, arguments: true);
+        context.next(Routes.termsAndConditions, arguments: true);
       } else {
         context.close();
       }
@@ -83,7 +83,7 @@ class _TermsPageState extends State<TermsPage>
   }
 
   void _learnDetails(BuildContext context, Terms terms) {
-    context.open(Routes.termsReader, arguments: terms);
+    context.open(Routes.terms, arguments: terms);
   }
 
   void _listener() {

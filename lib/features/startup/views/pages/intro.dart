@@ -27,9 +27,10 @@ class _IntroPageState extends State<IntroPage>
     with TranslationMixin, ColorMixin {
   void _seePrivacy(BuildContext context) => context.open(Routes.privacy);
 
-  void _seeTerms(BuildContext context) => context.open(Routes.terms);
+  void _seeTerms(BuildContext context) =>
+      context.open(Routes.termsAndConditions);
 
-  void _register() => context.open(Routes.register);
+  void _register() => context.open(Routes.ongoing);
 
   void _login() => context.open(Routes.login);
 

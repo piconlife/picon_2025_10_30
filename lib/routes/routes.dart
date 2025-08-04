@@ -1,7 +1,7 @@
 part of '_imports.dart';
 
 class InAppRouter extends InAppRouteGenerator {
-  const InAppRouter._() : super(home: Routes.home);
+  const InAppRouter._() : super(home: Routes.main);
 
   static InAppRouter get I => const InAppRouter._();
 

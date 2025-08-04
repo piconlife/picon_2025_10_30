@@ -5,7 +5,7 @@ import '../../routes/paths.dart';
 import 'views/pages/main.dart';
 
 Map<String, RouteBuilder> get kMainRoutes {
-  return {Routes.home: _main};
+  return {Routes.main: _main};
 }
 
 Widget _main(BuildContext context, Object? args) {

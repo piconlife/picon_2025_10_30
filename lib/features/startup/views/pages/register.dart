@@ -26,7 +26,7 @@ class _RegisterPageState extends State<RegisterPage>
     with TranslationMixin, ColorMixin {
   void _signIn() => context.close();
 
-  void _next() => context.next(Routes.register, arguments: true);
+  void _next() => context.next(Routes.ongoing, arguments: true);
 
   @override
   Widget build(BuildContext context) {

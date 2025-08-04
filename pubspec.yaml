@@ -111,6 +111,7 @@ dependencies:
   flutter_terms_viewer: ^1.0.2
   async: ^2.13.0
   phone_numbers_parser: ^9.0.3
+  flutter_cupertino_datetime_picker: ^3.0.0
 
   # ------------------------------------------------------------------------------------------------
   # OTHER

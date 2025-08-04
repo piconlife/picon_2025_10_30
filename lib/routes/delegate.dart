@@ -5,7 +5,7 @@ import '../roots/preferences/preferences.dart';
 import 'paths.dart';
 
 class NavigatorDelegate extends InAppNavigatorDelegate {
-  const NavigatorDelegate() : super(defaultRoute: Routes.home);
+  const NavigatorDelegate() : super(defaultRoute: Routes.main);
 
   @override
   Object? get arguments => null;
@@ -25,17 +25,14 @@ class NavigatorDelegate extends InAppNavigatorDelegate {
     return [
       Routes.splash,
       Routes.intro,
-      // Routes.quiz,
-      // Routes.permission,
-      Routes.register,
-      Routes.terms,
+      Routes.ongoing,
+      Routes.termsAndConditions,
       Routes.privacy,
       Routes.username,
       Routes.birthday,
       Routes.gender,
       Routes.email,
       Routes.password,
-      Routes.final_,
     ];
   }
 

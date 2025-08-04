@@ -2,8 +2,18 @@ import 'package:flutter/material.dart';
 
 import '../../routes/builder.dart';
 import '../../routes/paths.dart';
+import 'views/pages/asq.dart';
+import 'views/pages/biometric.dart';
+import 'views/pages/birthday.dart';
+import 'views/pages/email.dart';
+import 'views/pages/forgot_password.dart';
+import 'views/pages/gender.dart';
 import 'views/pages/intro.dart';
-import 'views/pages/register.dart';
+import 'views/pages/login.dart';
+import 'views/pages/ongoing.dart';
+import 'views/pages/otp.dart';
+import 'views/pages/password.dart';
+import 'views/pages/reset_password.dart';
 import 'views/pages/splash.dart';
 import 'views/pages/username.dart';
 
@@ -11,12 +21,18 @@ Map<String, RouteBuilder> get kStartupRoutes {
   return {
     Routes.splash: _splash,
     Routes.intro: _intro,
+    Routes.asq: _asq,
+    Routes.biometric: _biometric,
+    Routes.birthday: _birthday,
+    Routes.email: _email,
+    Routes.forgotPassword: _forgotPassword,
+    Routes.gender: _gender,
     Routes.login: _login,
-    Routes.register: _register,
+    Routes.ongoing: _ongoing,
+    Routes.otp: _otp,
+    Routes.password: _password,
+    Routes.resetPassword: _resetPassword,
     Routes.username: _username,
-    Routes.quiz: _quiz,
-    Routes.permission: _permission,
-    Routes.final_: _final,
   };
 }
 
@@ -30,30 +46,50 @@ Widget _intro(BuildContext context, Object? args) {
   return IntroPage(args: args);
 }
 
-Widget _login(BuildContext context, Object? args) {
-  return SizedBox();
-  // return LoginPage(args: args);
+Widget _asq(BuildContext context, Object? data) {
+  return const AsqPage();
 }
 
-Widget _register(BuildContext context, Object? args) {
-  return RegisterPage(args: args);
+Widget _biometric(BuildContext context, Object? data) {
+  return const BiometricPage();
 }
 
-Widget _username(BuildContext context, Object? args) {
-  return UsernamePage(args: args);
+Widget _birthday(BuildContext context, Object? data) {
+  return const BirthdayPage();
 }
 
-Widget _quiz(BuildContext context, Object? args) {
-  return SizedBox();
-  // return QuizPage(args: args);
+Widget _email(BuildContext context, Object? data) {
+  return const EmailPage();
 }
 
-Widget _permission(BuildContext context, Object? args) {
-  return SizedBox();
-  // return PermissionPage(args: args);
+Widget _forgotPassword(BuildContext context, Object? data) {
+  return const ForgotPasswordPage();
 }
 
-Widget _final(BuildContext context, Object? args) {
-  return SizedBox();
-  // return FinalPage(args: args);
+Widget _gender(BuildContext context, Object? data) {
+  return const GenderPage();
+}
+
+Widget _login(BuildContext context, Object? data) {
+  return const LoginPage();
+}
+
+Widget _ongoing(BuildContext context, Object? data) {
+  return const OngoingPage();
+}
+
+Widget _otp(BuildContext context, Object? data) {
+  return OtpPage(args: data);
+}
+
+Widget _password(BuildContext context, Object? data) {
+  return const PasswordPage();
+}
+
+Widget _resetPassword(BuildContext context, Object? data) {
+  return ResetPasswordPage(args: data);
+}
+
+Widget _username(BuildContext context, Object? data) {
+  return const UsernamePage();
 }

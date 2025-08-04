@@ -83,7 +83,7 @@ class _PrivacyPageState extends State<PrivacyPage>
   }
 
   void _learnDetails(BuildContext context, Terms terms) {
-    context.open(Routes.termsReader, arguments: terms);
+    context.open(Routes.terms, arguments: terms);
   }
 
   void _listener() {

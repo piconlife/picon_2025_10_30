@@ -10,7 +10,7 @@ ThemeData get kDarkTheme {
   final secondary = colors.secondary ?? kBlue.dark;
   final tertiary = colors.tertiary ?? kOrange.dark;
   final error = colors.error ?? kRed.dark;
-  final disable = colors.disable ?? kGrey.dark;
+  final grey = colors.mid ?? kGrey.dark;
   final highlightColor = kHighlightColorsConfig.dark.primary ?? primary.t10;
   final hintColor = kHintColorsConfig.dark.primary ?? dark.t50;
   final scaffoldBackgroundColor = kScaffoldColorsConfig.dark.primary ?? light;
@@ -43,7 +43,13 @@ ThemeData get kDarkTheme {
     drawerTheme: DrawerThemeData(),
     iconTheme: IconThemeData(),
     snackBarTheme: SnackBarThemeData(),
-    textTheme: TextTheme(),
+    textTheme: TextTheme(
+      bodyLarge: TextStyle(color: light),
+      bodyMedium: TextStyle(color: light),
+      titleLarge: TextStyle(color: light),
+      titleMedium: TextStyle(color: light, fontSize: 16),
+      titleSmall: TextStyle(color: grey, fontSize: 14),
+    ),
     checkboxTheme: CheckboxThemeData(
       checkColor: WidgetStateProperty.all(light),
       overlayColor: WidgetStateProperty.all(primary.t10),

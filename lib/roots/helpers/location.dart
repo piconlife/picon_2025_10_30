@@ -2,20 +2,20 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-class DeviceLocation {
-  DeviceLocation._();
+class LocationHelper {
+  LocationHelper._();
 
   LocationInfo? info;
 
-  static DeviceLocation? _i;
+  static LocationHelper? _i;
 
-  static DeviceLocation get i => _i ??= DeviceLocation._();
+  static LocationHelper get i => _i ??= LocationHelper._();
 
   static Future<void> init() async {
-    i.info = await location();
+    i.info = await get();
   }
 
-  static Future<LocationInfo> location() async {
+  static Future<LocationInfo> get() async {
     try {
       final response = await http.post(
         Uri.parse("http://ip-api.com/json"),
