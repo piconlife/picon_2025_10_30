@@ -25,11 +25,16 @@ class NavigatorDelegate extends InAppNavigatorDelegate {
     return [
       Routes.splash,
       Routes.intro,
+      // Routes.quiz,
+      // Routes.permission,
       Routes.register,
       Routes.terms,
       Routes.privacy,
       Routes.username,
-      Routes.quiz,
+      Routes.birthday,
+      Routes.gender,
+      Routes.email,
+      Routes.password,
       Routes.final_,
     ];
   }

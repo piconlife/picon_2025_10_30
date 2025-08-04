@@ -54,7 +54,7 @@ class _PrivacyPageState extends State<PrivacyPage>
   void _accept() async {
     if (Settings.set(kSeenPrivacy, true)) {
       if (widget.isStartupMode) {
-        context.next(Routes.username, arguments: true);
+        context.next(Routes.privacy, arguments: true);
       } else {
         context.close();
       }
