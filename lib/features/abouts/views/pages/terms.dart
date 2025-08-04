@@ -189,7 +189,10 @@ class _TermsPageState extends State<TermsPage>
                               bottom: 8,
                             ),
                             title: InAppText(
-                              item.headline,
+                              item.headline?.replaceAll(
+                                "{APP_NAME}",
+                                AppConstants.name,
+                              ),
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: context.mediumFontWeight,
@@ -200,7 +203,10 @@ class _TermsPageState extends State<TermsPage>
                                 : Padding(
                                     padding: EdgeInsets.only(top: 8),
                                     child: InAppText(
-                                      item.body,
+                                      item.body?.replaceAll(
+                                        "{APP_NAME}",
+                                        AppConstants.name,
+                                      ),
                                       suffix: " more",
                                       onSuffixClick: (context) =>
                                           _learnDetails(context, item),
