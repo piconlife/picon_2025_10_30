@@ -39,53 +39,6 @@ dependencies:
   url_launcher: ^6.3.2
 
   # ------------------------------------------------------------------------------------------------
-  # IF NEEDED
-  # ------------------------------------------------------------------------------------------------
-
-  # DESIGN (WITHOUT NATIVE)
-  animated_text_kit: ^4.2.3
-  carousel_slider: ^5.1.1
-  lottie: ^3.3.1
-  modal_bottom_sheet: ^3.0.0
-  table_calendar: ^3.2.0
-
-  # DESIGN (WITH NATIVE)
-  image_cropper: ^9.1.0
-  image_picker: ^1.1.2
-  wakelock_plus: ^1.3.2
-
-  # LOGICS (WITHOUT NATIVE)
-  equatable: ^2.0.7
-  flutter_bloc: ^9.1.1
-  get_it: ^8.2.0
-
-  # LOGICS (WITH NATIVE)
-  flutter_native_splash: ^2.4.6
-  flutter_secure_storage: ^9.2.4
-  flutter_tts: ^4.2.3
-  path: ^1.9.1
-  path_provider: ^2.1.5
-  translator: ^1.0.3+1
-  video_player: ^2.10.0
-  web: ^1.1.1
-
-  # AUTHORIZATION (WITH NATIVE)
-  local_auth: ^2.3.0 # BIOMETRIC SIGN IN
-  google_sign_in: ^6.3.0 # GOOGLE SIGN IN
-  sign_in_with_apple: ^7.0.1 # APPLE SIGN IN
-
-  # FIREBASE (WITH NATIVE)
-  cloud_firestore: ^6.0.0
-  firebase_analytics: ^12.0.0
-  firebase_app_check: ^0.4.0
-  firebase_auth: ^6.0.0
-  firebase_core: ^4.0.0
-  firebase_crashlytics: ^5.0.0
-  firebase_database: ^12.0.0
-  firebase_remote_config: ^6.0.0
-  firebase_storage: ^13.0.0
-
-  # ------------------------------------------------------------------------------------------------
   # DEVELOPER CHOICE
   # ------------------------------------------------------------------------------------------------
 
@@ -109,9 +62,57 @@ dependencies:
   in_app_navigator: ^1.0.6
   in_app_purchaser: ^1.0.1
   flutter_terms_viewer: ^1.0.2
-  async: ^2.13.0
-  phone_numbers_parser: ^9.0.3
+
+  # ------------------------------------------------------------------------------------------------
+  # IF NEEDED
+  # ------------------------------------------------------------------------------------------------
+
+  # AUTHORIZATION (WITH NATIVE)
+  local_auth: ^2.3.0 # BIOMETRIC SIGN IN
+  local_auth_android: ^1.0.50 # BIOMETRIC SIGN IN
+  local_auth_darwin: ^1.5.0 # BIOMETRIC SIGN IN
+  local_auth_windows: ^1.0.11 # BIOMETRIC SIGN IN
+  #  google_sign_in: ^6.3.0 # GOOGLE SIGN IN
+  #  sign_in_with_apple: ^7.0.1 # APPLE SIGN IN
+
+  # FIREBASE (WITH NATIVE)
+  cloud_firestore: ^6.0.0
+  firebase_analytics: ^12.0.0
+  firebase_app_check: ^0.4.0
+  firebase_auth: ^6.0.0
+  firebase_core: ^4.0.0
+  firebase_crashlytics: ^5.0.0
+  firebase_database: ^12.0.0
+  firebase_remote_config: ^6.0.0
+  firebase_storage: ^13.0.0
+
+  # DESIGN (WITHOUT NATIVE)
+  animated_text_kit: ^4.2.3
+  carousel_slider: ^5.1.1
   flutter_cupertino_datetime_picker: ^3.0.0
+  lottie: ^3.3.1
+  modal_bottom_sheet: ^3.0.0
+  table_calendar: ^3.2.0
+
+  # DESIGN (WITH NATIVE)
+  image_cropper: ^9.1.0
+  image_picker: ^1.1.2
+
+  # LOGICS (WITHOUT NATIVE)
+  async: ^2.13.0
+  equatable: ^2.0.7
+  flutter_bloc: ^9.1.1
+  phone_numbers_parser: ^9.0.3
+  translator: ^1.0.3+1
+
+  # LOGICS (WITH NATIVE)
+  flutter_native_splash: ^2.4.6
+  flutter_secure_storage: ^9.2.4
+  flutter_tts: ^4.2.3
+  path: ^1.9.1
+  path_provider: ^2.1.5
+  video_player: ^2.10.0
+  wakelock_plus: ^1.3.2
 
   # ------------------------------------------------------------------------------------------------
   # OTHER
@@ -128,7 +129,7 @@ dev_dependencies:
   mockito: ^5.5.0
   build_runner: ^2.6.0
   flutter_lints: ^6.0.0
-#  hive_generator: ^2.0.1
+  #  hive_generator: ^2.0.1
 
   # ------------------------------------------------------------------------------------------------
   # OTHER

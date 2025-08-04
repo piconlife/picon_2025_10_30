@@ -37,8 +37,14 @@ class CountryPicker extends StatefulWidget {
       context: context,
       useSafeArea: true,
       isScrollControlled: true,
-      showDragHandle: true,
+      showDragHandle: false,
       useRootNavigator: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(context.dimens.dp(50)),
+          topRight: Radius.circular(context.dimens.dp(50)),
+        ),
+      ),
       builder: (context) => CountryPicker(type: type, locales: locales),
     );
   }
@@ -159,6 +165,18 @@ class _CountryPickerState extends State<CountryPicker> with TranslationMixin {
     );
   }
 
+  Widget _handler(DimenData dimen) {
+    return Container(
+      height: dimen.dp(4),
+      width: dimen.dp(36),
+      margin: EdgeInsets.only(left: 32, right: 32, top: 24, bottom: 20),
+      decoration: BoxDecoration(
+        color: context.dark.t15,
+        borderRadius: BorderRadius.circular(dimen.dp(2)),
+      ),
+    );
+  }
+
   Widget _header(DimenData dimen) {
     return Center(
       child: Text(
@@ -250,7 +268,12 @@ class _CountryPickerState extends State<CountryPicker> with TranslationMixin {
   }
 
   Widget _divider(DimenData dimen) {
-    return Divider(height: 0, indent: dimen.dp(16), endIndent: dimen.dp(16));
+    return Divider(
+      height: 0,
+      indent: dimen.dp(16),
+      endIndent: dimen.dp(16),
+      color: context.dark.t05,
+    );
   }
 
   Widget _items(DimenData dimen, [ScrollController? controller]) {
@@ -294,6 +317,7 @@ class _CountryPickerState extends State<CountryPicker> with TranslationMixin {
       builder: (context, controller) {
         return Column(
           children: [
+            _handler(dimen),
             _header(dimen),
             SizedBox(height: dimen.dp(16)),
             _searchBar(dimen),
@@ -307,7 +331,7 @@ class _CountryPickerState extends State<CountryPicker> with TranslationMixin {
                           dimen,
                           localize("recent", defaultValue: "Recent"),
                         ),
-                        const Divider(),
+                        Divider(color: context.dark.t05),
                         ListView.separated(
                           shrinkWrap: true,
                           reverse: true,
@@ -319,7 +343,7 @@ class _CountryPickerState extends State<CountryPicker> with TranslationMixin {
                           separatorBuilder: (context, index) => _divider(dimen),
                         ),
                         _label(dimen, localize("all", defaultValue: "All")),
-                        const Divider(),
+                        Divider(color: context.dark.t05),
                         _items(dimen),
                       ],
                     )

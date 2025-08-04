@@ -53,8 +53,6 @@ class _PasswordPageState extends State<PasswordPage> {
   final etPhone = TextEditingController();
   final etPassword = TextEditingController();
 
-  List<Country> countries = [];
-
   final codeNotifier = ValueNotifier(
     Country.fromCode(Startup.i.isoCode ?? Global.i.countryIsoCode.use),
   );
@@ -210,10 +208,6 @@ class _PasswordPageState extends State<PasswordPage> {
   @override
   void initState() {
     super.initState();
-    countries = Translation.i.supportedLocales
-        .map((e) => Country.fromCode(e.countryCode ?? e.languageCode))
-        .whereType<Country>()
-        .toList();
     etEmail.text = Startup.i.email.use;
     final isoCode = Startup.i.isoCode;
     final phone = Startup.i.phone;
@@ -306,8 +300,8 @@ class _PasswordPageState extends State<PasswordPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           InAppGesture(
-                            onTap: () => CountryPicker.phone(context, countries)
-                                ?.then((v) {
+                            onTap: () =>
+                                CountryPicker.phone(context)?.then((v) {
                                   if (v is Country) _changePhoneCode(v);
                                 }),
                             child: Container(

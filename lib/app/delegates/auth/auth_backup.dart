@@ -3,21 +3,21 @@ import 'dart:developer';
 import 'package:auth_management/auth_management.dart';
 import 'package:flutter_andomie/extensions.dart';
 
-import '../../app/helpers/user.dart';
-import '../../data/models/user.dart';
-import '../../data/use_cases/user/create.dart';
-import '../../data/use_cases/user/delete_user.dart';
-import '../../data/use_cases/user/get.dart';
-import '../../data/use_cases/user/update.dart';
-import '../../features/startup/preferences/startup.dart';
+import '../../../data/models/user.dart';
+import '../../../data/use_cases/user/create.dart';
+import '../../../data/use_cases/user/delete_user.dart';
+import '../../../data/use_cases/user/get.dart';
+import '../../../data/use_cases/user/update.dart';
+import '../../../features/startup/preferences/startup.dart';
+import '../../helpers/user.dart';
 
-class BackupAccountDelegate extends BackupDelegate<User> {
+class InAppAuthBackupDelegate extends BackupDelegate<User> {
   final _create = CreateUserUseCase.i;
   final _update = UpdateUserUseCase.i;
   final _delete = DeleteUserUseCase.i;
   final _fetch = GetUserUseCase.i;
 
-  BackupAccountDelegate()
+  InAppAuthBackupDelegate()
     : super(
         key: UserHelper.key,
         reader: UserHelper.read,

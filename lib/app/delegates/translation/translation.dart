@@ -2,9 +2,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/utils/translation.dart';
 
-import '../../app/res/listeners.dart';
-import '../../roots/preferences/preferences.dart';
-import '../dialogs/bsd_locale.dart';
+import '../../../roots/preferences/preferences.dart';
+import '../../dialogs/bsd_locale.dart';
+import '../../res/listeners.dart';
 
 class InAppTranslationDelegate extends TranslationDelegate {
   @override

@@ -691,11 +691,7 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
       initialCheck: LocalConfigs.authInitialCheck,
       authorizer: Authorizer(
         delegate: InAppAuthDelegate(),
-        backup: InAppAuthBackupDelegate(
-          key: UserHelper.key,
-          reader: UserHelper.read,
-          writer: UserHelper.write,
-        ),
+        backup: InAppAuthBackupDelegate(),
       ),
       child: child,
     );

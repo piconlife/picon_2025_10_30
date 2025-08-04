@@ -6,7 +6,7 @@ import 'package:flutter_andomie/utils/translation.dart';
 import 'package:flutter_andomie/utils/translator.dart';
 import 'package:translator/translator.dart' hide Translation;
 
-import '../../roots/preferences/preferences.dart';
+import '../../../roots/preferences/preferences.dart';
 
 const kTranslatorCache = "__translator_cache__";
 

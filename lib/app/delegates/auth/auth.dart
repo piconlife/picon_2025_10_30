@@ -1,26 +1,28 @@
 import 'package:auth_management/auth_management.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 
+import 'auth_apple.dart';
+import 'auth_biometric.dart';
+import 'auth_facebook.dart';
+import 'auth_google.dart';
+
 String? _toMail(String prefix, String suffix, [String type = "com"]) {
   return "$prefix@$suffix.$type";
 }
 
-class FirebaseAuthDelegate extends AuthDelegate {
+class InAppAuthDelegate extends AuthDelegate {
+  final FirebaseAuth firebaseAuth;
   final IAppleAuthDelegate? appleAuthDelegate;
   final IBiometricAuthDelegate? biometricAuthDelegate;
   final IFacebookAuthDelegate? facebookAuthDelegate;
   final IGoogleAuthDelegate? googleAuthDelegate;
-  final FirebaseAuth? _firebaseAuth;
 
-  const FirebaseAuthDelegate({
-    this.appleAuthDelegate,
-    this.biometricAuthDelegate,
-    this.facebookAuthDelegate,
-    this.googleAuthDelegate,
-    FirebaseAuth? firebaseAuth,
-  }) : _firebaseAuth = firebaseAuth;
-
-  FirebaseAuth get firebaseAuth => _firebaseAuth ?? FirebaseAuth.instance;
+  InAppAuthDelegate()
+    : firebaseAuth = FirebaseAuth.instance,
+      appleAuthDelegate = InAppAppleAuthDelegate(),
+      biometricAuthDelegate = InAppBiometricAuthDelegate(),
+      facebookAuthDelegate = InAppFacebookAuthDelegate(),
+      googleAuthDelegate = InAppGoogleAuthDelegate();
 
   IAppleAuthDelegate get appleAuth {
     if (appleAuthDelegate != null) {
