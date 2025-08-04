@@ -1,5 +1,5 @@
-import 'package:data_management/core.dart' show Checker, CheckerType;
-import 'package:flutter_entity/flutter_entity.dart';
+import 'package:data_management/core.dart';
+import 'package:flutter_entity/entity.dart';
 
 import '../../models/user.dart';
 import 'base.dart';

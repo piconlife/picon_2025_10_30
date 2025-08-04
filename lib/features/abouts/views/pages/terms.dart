@@ -11,6 +11,7 @@ import 'package:flutter_terms_viewer/flutter_terms_viewer.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/constants/app.dart';
+import '../../../../roots/contents/legals.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/column.dart';
 import '../../../../roots/widgets/filled_button.dart';
@@ -19,7 +20,6 @@ import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/stack.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../routes/paths.dart';
-import '../../data/legals.dart';
 
 const kSeenTerms = "seen_terms";
 

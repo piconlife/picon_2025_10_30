@@ -30,7 +30,7 @@ class _InAppUserBuilderState extends State<InAppUserBuilder> {
         return widget.builder(context, widget.initial!);
       }
       return FutureBuilder(
-        future: GetUserUseCase.i(uid: id),
+        future: GetUserUseCase.i(id),
         builder: (context, snapshot) =>
             widget.builder(context, snapshot.data?.data ?? User()),
       );

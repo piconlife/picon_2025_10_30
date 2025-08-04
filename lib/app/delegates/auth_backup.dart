@@ -25,14 +25,14 @@ class InAppAuthBackupDelegate extends BackupDelegate<User> {
 
   @override
   Future<User?> onFetchUser(String id) async {
-    final response = await GetUserUseCase.i(uid: id);
+    final response = await GetUserUseCase.i(id);
     if (!response.isValid) return null;
     return response.data;
   }
 
   @override
   Future<void> onUpdateUser(String id, Map<String, dynamic> data) async {
-    await UpdateUserUseCase.i(uid: id, data: data);
+    await UpdateUserUseCase.i(id, data);
   }
 
   @override

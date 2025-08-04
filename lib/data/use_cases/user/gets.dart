@@ -1,4 +1,4 @@
-import 'package:flutter_entity/flutter_entity.dart';
+import 'package:flutter_entity/entity.dart';
 
 import '../../models/user.dart';
 import 'base.dart';
@@ -10,7 +10,7 @@ class GetUsersUseCase extends BaseUserUseCase {
 
   static GetUsersUseCase get i => _i ??= GetUsersUseCase._();
 
-  Future<Response<User>> call() {
-    return repository.get();
+  Future<Response<User>> call({bool cached = true}) {
+    return repository.get(cached: cached);
   }
 }

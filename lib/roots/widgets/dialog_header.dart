@@ -30,7 +30,7 @@ class InAppDialogHeader extends StatelessWidget {
           ),
           SizedBox(width: dimen.dp(16)),
           InAppAction(
-            AppIcons.close.regular,
+            InAppIcons.close.regular,
             onTap: () => context.close(),
             primary: dark,
           ),

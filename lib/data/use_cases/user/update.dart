@@ -1,4 +1,4 @@
-import 'package:flutter_entity/flutter_entity.dart';
+import 'package:flutter_entity/entity.dart';
 
 import '../../models/user.dart';
 import 'base.dart';
@@ -10,10 +10,7 @@ class UpdateUserUseCase extends BaseUserUseCase {
 
   static UpdateUserUseCase get i => _i ??= UpdateUserUseCase._();
 
-  Future<Response<User>> call({
-    required String uid,
-    required Map<String, dynamic> data,
-  }) {
+  Future<Response<User>> call(String uid, Map<String, dynamic> data) {
     return repository.updateById(uid, data);
   }
 }

@@ -1,0 +1,288 @@
+import '../../app/helpers/user.dart';
+import '../constants/keys.dart';
+import '../enums/audience.dart';
+import '../enums/content.dart';
+import '../enums/privacy.dart';
+import 'content.dart';
+import 'photo.dart';
+import 'user.dart';
+
+List<String> _keys = [
+  // PUBLISHER
+  Keys.i.publisher,
+  Keys.i.publisherPhoto,
+  Keys.i.publisherName,
+  Keys.i.publisherShortName,
+  Keys.i.publisherTitle,
+
+  // OTHER
+  Keys.i.id,
+  Keys.i.timeMills,
+  Keys.i.title,
+  Keys.i.path,
+  Keys.i.photoUrl,
+  Keys.i.priority,
+  Keys.i.description,
+  Keys.i.url,
+  Keys.i.latitude,
+  Keys.i.link,
+  Keys.i.longitude,
+  Keys.i.verified,
+  Keys.i.content,
+  Keys.i.recent,
+  Keys.i.audience,
+  Keys.i.privacy,
+  Keys.i.type,
+  Keys.i.bookmarks,
+  Keys.i.contents,
+  Keys.i.comments,
+  Keys.i.likes,
+  Keys.i.photoUrls,
+  Keys.i.reports,
+  Keys.i.stars,
+  Keys.i.tags,
+  Keys.i.videoUrls,
+  Keys.i.views,
+  Keys.i.contents,
+];
+
+class UserNote extends Content {
+  UserNote({
+    // PUBLISHER
+    super.publisher,
+    super.publisherPhoto,
+    super.publisherName,
+    super.publisherShortName,
+    super.publisherTitle,
+
+    // OTHER
+    super.id,
+    super.timeMills,
+    super.title,
+    super.path,
+    super.photos,
+    super.priority,
+    super.description,
+    super.url,
+    super.latitude,
+    super.link,
+    super.longitude,
+    super.verified,
+    super.recent,
+    super.audience,
+    super.privacy,
+    super.type,
+    super.bookmarks,
+    super.contents,
+    super.commentCount,
+    super.comments,
+    super.likeCount,
+    super.likes,
+    super.reportCount,
+    super.reports,
+    super.starCount,
+    super.stars,
+    super.tags,
+    super.videos,
+    super.viewCount,
+    super.views,
+  });
+
+  factory UserNote.create({
+    User? publisher,
+    String? id,
+    int? timeMills,
+    String? title,
+    String? path,
+    String? parentId,
+    String? parentPath,
+    int? priority,
+    String? publisherId,
+    String? description,
+    String? url,
+    String? link,
+    bool? verified,
+    Content? recent,
+    Audience? audience,
+    Privacy? privacy,
+    ContentType? type,
+    int? commentCount,
+    double? latitude,
+    int? likeCount,
+    double? longitude,
+    int? reportCount,
+    int? starCount,
+    int? viewCount,
+    List<String>? bookmarks,
+    List<Content>? contents,
+    List<String>? comments,
+    List<String>? likes,
+    List<String>? reports,
+    List<String>? stars,
+    List<String>? tags,
+    List<String>? views,
+  }) {
+    publisher ??= UserHelper.user;
+    return UserNote(
+      // PUBLISHER
+      publisher: publisher.id,
+      publisherName: publisher.name,
+      publisherPhoto: publisher.photo,
+      publisherShortName: publisher.username,
+      publisherTitle: publisher.title,
+      // OTHER
+      id: id,
+      timeMills: timeMills,
+      title: title,
+      link: link,
+      path: path,
+      priority: priority,
+      description: description,
+      url: url,
+      verified: verified,
+      bookmarks: bookmarks,
+      contents: contents,
+      comments: comments,
+      latitude: latitude,
+      likes: likes,
+      longitude: longitude,
+      reports: reports,
+      stars: stars,
+      tags: tags,
+      views: views,
+      recent: recent,
+      audience: audience,
+      privacy: privacy,
+      type: type,
+    );
+  }
+
+  UserNote withUserNote({
+    // PUBLISHER
+    String? publisher,
+    String? publisherPhoto,
+    String? publisherName,
+    String? publisherShortName,
+    String? publisherTitle,
+
+    // OTHER
+    String? id,
+    int? timeMills,
+    String? title,
+    String? path,
+    String? parentId,
+    String? parentPath,
+    List<Photo>? photos,
+    int? priority,
+    String? publisherId,
+    String? description,
+    String? url,
+    String? link,
+    bool? verified,
+    Content? recent,
+    Audience? audience,
+    Privacy? privacy,
+    ContentType? type,
+    int? commentCount,
+    double? latitude,
+    int? likeCount,
+    double? longitude,
+    int? reportCount,
+    int? starCount,
+    int? viewCount,
+    List<String>? bookmarks,
+    List<Content>? contents,
+    List<String>? comments,
+    List<String>? likes,
+    List<String>? reports,
+    List<String>? stars,
+    List<String>? tags,
+    List<Content>? videos,
+    List<String>? views,
+  }) {
+    return UserNote(
+      // PUBLISHER
+      publisher: publisher ?? this.publisher,
+      publisherPhoto: publisherPhoto ?? this.publisherPhoto,
+      publisherName: publisherName ?? this.publisherName,
+      publisherShortName: publisherShortName ?? this.publisherShortName,
+      publisherTitle: publisherTitle ?? this.publisherTitle,
+      // OTHER
+      id: id ?? this.id,
+      timeMills: timeMills ?? this.timeMills,
+      title: title ?? this.title,
+      link: link ?? this.link,
+      path: path ?? this.path,
+      photos: photos ?? this.photos,
+      priority: priority ?? this.priority,
+      description: description ?? this.description,
+      url: url ?? this.url,
+      verified: verified ?? this.verified,
+      bookmarks: bookmarks ?? this.bookmarks,
+      contents: contents ?? this.contents,
+      commentCount: commentCount ?? this.commentCount,
+      comments: comments ?? this.comments,
+      latitude: latitude ?? this.latitude,
+      likeCount: likeCount ?? this.likeCount,
+      likes: likes ?? this.likes,
+      longitude: longitude ?? this.longitude,
+      reportCount: reportCount ?? this.reportCount,
+      reports: reports ?? this.reports,
+      starCount: starCount ?? this.starCount,
+      stars: stars ?? this.stars,
+      tags: tags ?? this.tags,
+      videos: videos ?? this.videos,
+      viewCount: viewCount ?? this.viewCount,
+      views: views ?? this.views,
+      recent: recent ?? this.recent,
+      audience: audience ?? this.audience,
+      privacy: privacy ?? this.privacy,
+      type: type ?? contentType,
+    );
+  }
+
+  factory UserNote.from(dynamic source) {
+    final data = Content.from(source);
+    return UserNote(
+      // PUBLISHER
+      publisher: data.publisher,
+      publisherPhoto: data.publisherPhoto,
+      publisherName: data.publisherName,
+      publisherShortName: data.publisherShortName,
+      publisherTitle: data.publisherTitle,
+
+      // OTHER
+      id: data.id,
+      timeMills: data.timeMills,
+      title: data.title,
+      link: data.link,
+      path: data.path,
+      photos: data.photos,
+      priority: data.priority,
+      description: data.description,
+      url: data.url,
+      verified: data.verified,
+      bookmarks: data.bookmarks,
+      contents: data.contents,
+      comments: data.comments,
+      latitude: data.latitude,
+      likes: data.likes,
+      longitude: data.longitude,
+      reports: data.reports,
+      stars: data.stars,
+      tags: data.tags,
+      videos: data.videos,
+      views: data.views,
+      recent: data.recent,
+      audience: data.audience,
+      privacy: data.privacy,
+      type: data.contentType,
+    );
+  }
+
+  @override
+  Map<String, dynamic> get source {
+    final data = super.source.entries.where((item) => _keys.contains(item.key));
+    return Map.fromEntries(data);
+  }
+}

@@ -109,6 +109,8 @@ dependencies:
   in_app_navigator: ^1.0.6
   in_app_purchaser: ^1.0.1
   flutter_terms_viewer: ^1.0.2
+  async: ^2.13.0
+  phone_numbers_parser: ^9.0.3
 
   # ------------------------------------------------------------------------------------------------
   # OTHER

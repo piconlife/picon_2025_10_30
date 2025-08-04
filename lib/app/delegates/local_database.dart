@@ -1,7 +1,7 @@
 import 'package:in_app_database/in_app_database.dart';
 
-import '../../app/constants/configs.dart';
 import '../../roots/hive/database.dart';
+import '../configs/local.dart';
 
 class LocalDatabaseDelegate extends InAppDatabaseDelegate {
   @override
@@ -29,7 +29,7 @@ class LocalDatabaseDelegate extends InAppDatabaseDelegate {
     return HiveDatabase.read(
       name,
       key,
-      ConfigsConstants.inAppDatabaseType == InAppDatabaseType.map,
+      LocalConfigs.inAppDatabaseType == InAppDatabaseType.map,
     );
   }
 

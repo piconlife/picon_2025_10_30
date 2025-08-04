@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../routes/builder.dart';
 import '../../routes/paths.dart';
-import 'views/pages/final.dart';
 import 'views/pages/intro.dart';
-import 'views/pages/login.dart';
-import 'views/pages/permission.dart';
-import 'views/pages/quiz.dart';
 import 'views/pages/register.dart';
 import 'views/pages/splash.dart';
 import 'views/pages/username.dart';
@@ -35,7 +31,8 @@ Widget _intro(BuildContext context, Object? args) {
 }
 
 Widget _login(BuildContext context, Object? args) {
-  return LoginPage(args: args);
+  return SizedBox();
+  // return LoginPage(args: args);
 }
 
 Widget _register(BuildContext context, Object? args) {
@@ -47,13 +44,16 @@ Widget _username(BuildContext context, Object? args) {
 }
 
 Widget _quiz(BuildContext context, Object? args) {
-  return QuizPage(args: args);
+  return SizedBox();
+  // return QuizPage(args: args);
 }
 
 Widget _permission(BuildContext context, Object? args) {
-  return PermissionPage(args: args);
+  return SizedBox();
+  // return PermissionPage(args: args);
 }
 
 Widget _final(BuildContext context, Object? args) {
-  return FinalPage(args: args);
+  return SizedBox();
+  // return FinalPage(args: args);
 }

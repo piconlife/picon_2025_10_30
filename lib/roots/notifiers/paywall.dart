@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import '../../app/res/settings.dart';
+import '../../app/settings/remote.dart';
 
 enum PaywallStatus {
   premium,

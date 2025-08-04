@@ -2,12 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter_andomie/utils/translation.dart';
 
-import '../../data/services/manager.dart';
 import '../../features/settings/views/pages/settings.dart';
 import '../../features/settings/views/widgets/remainder.dart';
 import '../../roots/services/notification.dart';
 import '../../roots/utils/speech.dart';
-import 'settings.dart';
+import '../settings/remote.dart';
 
 class InAppListeners {
   const InAppListeners._();
@@ -20,7 +19,6 @@ class InAppListeners {
 
   static void translationsLocaleChanged(Locale locale) async {
     await Speech.language(Translation.languageCode);
-    await ExerciseManager.init();
     await InAppNotifications.init(
       onReady: () async {
         if (RemoteSettings.isHourlyNotifications) {

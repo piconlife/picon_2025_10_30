@@ -2,8 +2,8 @@ import 'package:flutter_andomie/utils/icon.dart';
 
 import '../constants/icons.dart';
 
-class AppIcons {
-  const AppIcons._();
+class InAppIcons {
+  const InAppIcons._();
 
   static const leading = AndomieIcon(regular: IconConstants.arrowLeft);
   static const more = AndomieIcon(regular: IconConstants.more);

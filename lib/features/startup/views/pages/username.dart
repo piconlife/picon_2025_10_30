@@ -1,17 +1,27 @@
 import 'package:app_color/app_color.dart';
+import 'package:app_color/extension.dart';
+import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/utils/translation.dart';
+import 'package:flutter_andomie/extensions/spacing.dart';
+import 'package:flutter_andomie/extensions/string.dart';
+import 'package:flutter_androssy_dialogs/dialogs.dart';
+import 'package:flutter_androssy_kits/widgets.dart';
+import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
-import '../../../../app/constants/app.dart';
-import '../../../../roots/widgets/bottom.dart';
-import '../../../../roots/widgets/column.dart';
+import '../../../../app/constants/limitations.dart';
+import '../../../../app/res/icons.dart';
+import '../../../../data/parsers/errors.dart';
+import '../../../../data/parsers/validations.dart';
+import '../../../../data/use_cases/unifier/check_username.dart';
+import '../../../../data/use_cases/unifier/create_user_name.dart';
+import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/filled_button.dart';
-import '../../../../roots/widgets/gesture.dart';
+import '../../../../roots/widgets/logo_trailing.dart';
 import '../../../../roots/widgets/screen.dart';
-import '../../../../roots/widgets/system_overlay.dart';
-import '../../../../roots/widgets/text.dart';
 import '../../../../routes/paths.dart';
+import '../../preferences/startup.dart';
+import '../widgets/title_with_subtitle.dart';
 
 class UsernamePage extends StatefulWidget {
   final Object? args;
@@ -22,94 +32,186 @@ class UsernamePage extends StatefulWidget {
   State<UsernamePage> createState() => _UsernamePageState();
 }
 
-class _UsernamePageState extends State<UsernamePage>
-    with TranslationMixin, ColorMixin {
-  void _signIn() => context.close();
+class _UsernamePageState extends State<UsernamePage> {
+  final etFullnameKey = GlobalKey<AndrossyFieldState>();
+  final etShortnameKey = GlobalKey<AndrossyFieldState>();
+  final btnSubmit = GlobalKey<InAppFilledButtonState>();
+  final etFullname = TextEditingController();
+  final etShortname = TextEditingController();
 
-  void _next() => context.next(Routes.register, arguments: true);
+  String? get _username => Startup.i.shortname;
+
+  @override
+  void initState() {
+    super.initState();
+    etFullname.text = Startup.i.fullname.use;
+    etShortname.text = _username.use;
+  }
+
+  Future<AndrossyFieldError> _check(String value) async {
+    btnSubmit.currentState?.setEnabled(false);
+    final response = await CheckUsernameUseCase.i(value);
+    if (response.status.isNetworkError) return AndrossyFieldError.networkError;
+    final remote = response.result.firstOrNull;
+    if (remote?.value == null || remote?.value == _username) {
+      if (!(remote?.verified ?? false)) return AndrossyFieldError.none;
+    }
+    return AndrossyFieldError.alreadyFound;
+  }
+
+  void _next(BuildContext context) async {
+    final fullname = etFullname.text.trim();
+    if (!isValidFullname(fullname)) {
+      context.showWarningSnackBar("Fullname hasn't valid!");
+      return;
+    }
+
+    final shortname = etShortname.text.trim();
+    if (!isValidUsername(shortname)) {
+      context.showWarningSnackBar("Shortname hasn't valid!");
+      return;
+    }
+
+    if (!etShortnameKey.currentState!.isChecked) {
+      context.showWarningSnackBar("Shortname is unavailable!");
+      return;
+    }
+
+    if (shortname == _username) {
+      return _continue(fullname, shortname);
+    }
+
+    btnSubmit.currentState?.showLoading();
+    final value = await CreateUserNameUseCase.i(shortname);
+    btnSubmit.currentState?.hideLoading();
+    if (!value.status.isSuccessful) {
+      if (context.mounted) context.showErrorSnackBar(value.error);
+      return;
+    }
+    _continue(fullname, shortname);
+  }
+
+  void _continue(String fullname, String shortname) {
+    if (Startup.puts({
+      StartupKeys.fullname: fullname,
+      StartupKeys.shortname: shortname,
+    })) {
+      context.open(Routes.birthday);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return InAppSystemOverlay(
-      child: InAppScreen(
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: SizedBox.expand(
-            child: InAppColumn(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: InAppColumn(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      spacing: 24,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 24),
-                          child: InAppColumn(
-                            spacing: 8,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              InAppText(
-                                "Join with ${AppConstants.name}",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              InAppText(
-                                "We'll help you create a new account in a few easy steps.",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: grey, fontSize: 14),
-                              ),
-                            ],
-                          ),
-                        ),
-                        InAppFilledButton(text: "Next", onTap: _next),
-                      ],
-                    ),
-                  ),
-                ),
-                InAppBottom(
-                  child: InAppGesture(
-                    onTap: _signIn,
-                    child: ColoredBox(
-                      color: Colors.transparent,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: InAppColumn(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            spacing: 4,
-                            children: [
-                              InAppText(
-                                "Already have an account?",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: grey, fontSize: 14),
-                              ),
-                              InAppText(
-                                "Continue with Email",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: primary, fontSize: 14),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+    final dimen = context.dimens;
+    final primary = context.primary;
+    return InAppScreen(
+      child: Scaffold(
+        appBar: const InAppAppbar(
+          titleText: "Create username",
+          actions: [InAppLogoTrailing()],
+        ),
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: ListView(
+            padding: EdgeInsets.symmetric(
+              horizontal: dimen.dp(24),
+              vertical: dimen.dp(16),
             ),
+            children: [
+              AuthTitleWithSubtitle(
+                title: "What's your name?",
+                subtitle:
+                    "Please enter your details to receive a personalized experience.",
+                dimen: dimen,
+              ),
+              dimen.dp(24).h,
+              AndrossyForm(
+                primaryColor: context.primary,
+                secondaryColor: context.dark.t30,
+                errorColor: context.error,
+                animationDuration: const Duration(milliseconds: 300),
+                borderColor: const AndrossyFieldProperty.auto(),
+                borderRadius: AndrossyFieldProperty.all(
+                  BorderRadius.circular(dimen.dp(16)),
+                ),
+                contentPadding: EdgeInsets.all(dimen.dp(16)),
+                counterVisibility: FloatingVisibility.always,
+                drawableEndTint: AndrossyFieldProperty(
+                  enabled: context.iconColor.primary,
+                  disabled: context.iconColor.disable,
+                  error: context.iconColor.error,
+                  focused: primary,
+                ),
+                drawableStartTint: AndrossyFieldProperty(
+                  enabled: context.iconColor.primary,
+                  focused: primary,
+                  error: context.iconColor.error,
+                  disabled: context.iconColor.disable,
+                ),
+                drawableStartPadding: AndrossyFieldProperty(
+                  enabled: dimen.dp(12),
+                ),
+                drawableEndPadding: AndrossyFieldProperty(enabled: dimen.dp(4)),
+                floatingPadding: EdgeInsets.symmetric(
+                  horizontal: dimen.dp(12),
+                  vertical: dimen.dp(4),
+                ),
+                floatingVisibility: FloatingVisibility.always,
+                onValid: (v) => btnSubmit.currentState?.setEnabled(v),
+                children: [
+                  AndrossyField(
+                    key: etFullnameKey,
+                    controller: etFullname,
+                    hintText: "Fullname",
+                    inputAction: TextInputAction.next,
+                    inputType: TextInputType.name,
+                    drawableStart: AndrossyFieldProperty(
+                      enabled: InAppIcons.user.regular,
+                      focused: InAppIcons.user.solid,
+                    ),
+                    drawableEnd: AndrossyFieldProperty(
+                      valid: InAppIcons.nativeCheckMark.regular,
+                    ),
+                    maxCharacters: Limitations.maxFullname,
+                    minCharacters: Limitations.minFullname,
+                    onError: AuthErrors.fullname,
+                    onValidator: isValidFullname,
+                  ),
+                  dimen.dp(24).h,
+                  AndrossyField(
+                    key: etShortnameKey,
+                    controller: etShortname,
+                    hintText: "Shortname",
+                    inputAction: TextInputAction.done,
+                    inputType: TextInputType.name,
+                    characters: "1234567890_.abcdefghijklmnopqrstuvwxyz",
+                    drawableStart: AndrossyFieldProperty(
+                      enabled: InAppIcons.user.regular,
+                      focused: InAppIcons.user.solid,
+                    ),
+                    drawableEnd: AndrossyFieldProperty(
+                      valid: InAppIcons.nativeCheckMark.regular,
+                    ),
+                    maxCharacters: Limitations.maxUsername,
+                    minCharacters: Limitations.minUsername,
+                    onCheck: _check,
+                    onError: AuthErrors.shortname,
+                    onValidator: isValidUsername,
+                    onSubmitted: (value) => _next(context),
+                  ),
+                ],
+              ),
+              dimen.dp(32).h,
+              InAppFilledButton(
+                enabled: false,
+                key: btnSubmit,
+                text: "Next",
+                onTap: () => _next(context),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
-
-  @override
-  String get name => "startup:register";
 }

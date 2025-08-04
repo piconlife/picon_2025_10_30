@@ -6,7 +6,7 @@ import 'package:flutter_andomie/utils/configs.dart';
 import 'package:flutter_andomie/utils/hit_logger.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 
-import 'app/constants/configs.dart';
+import 'app/configs/local.dart';
 import 'firebase_options.dart';
 import 'roots/_imports.dart';
 import 'roots/services/analytics.dart';
@@ -24,7 +24,7 @@ Future<void> _initFirebase() {
 }
 
 Future<void> _initHitLogger() async {
-  if (!ConfigsConstants.hitLogger) return;
+  if (!LocalConfigs.hitLogger) return;
   HitLogger.init(
     onClientCheck: (value) {
       return true;

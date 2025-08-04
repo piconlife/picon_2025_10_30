@@ -1,5 +1,6 @@
 import 'package:auth_management/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_andomie/extensions/list.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_andomie/utils/validator.dart';
 
@@ -60,7 +61,7 @@ class UserHelper {
 
   static Future<User> get([BuildContext? context]) {
     if (context == null) {
-      return GetUserUseCase.i(uid: uid).then((value) {
+      return GetUserUseCase.i(uid).then((value) {
         return value.data ?? user;
       });
     }
@@ -92,4 +93,18 @@ class UserHelper {
   static Future<bool> deleteAccount(BuildContext context, [String? id]) {
     return RootListeners.deleteAccount(context, id);
   }
+
+  // ADDITIONAL PROPERTIES
+
+  static String get avatar => user.avatar.use;
+
+  static List<String> get approvals => user.approvals.use;
+
+  static List<String> get followers => user.followers.use;
+
+  static List<String> get followings => user.followings.use;
+
+  static List<String> get channels => user.interestedChannels.use;
+
+  static bool isFollowing(String? publisher) => followings.contains(publisher);
 }

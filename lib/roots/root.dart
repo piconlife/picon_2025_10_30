@@ -250,14 +250,14 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
 
   Future<void> _initConfigs() async {
     await Configs.init(
-      name: ConfigsConstants.configName,
+      name: LocalConfigs.configName,
       connected: Internet.i.value,
       delegate: InAppConfigDelegate(),
-      paths: {...kDefaultConfigPaths, ...ConfigsConstants.configPaths},
-      showLogs: ConfigsConstants.configLogs,
-      defaultPath: ConfigsConstants.configDefault,
-      platform: ConfigsConstants.configPlatform,
-      environment: ConfigsConstants.configEnvironment,
+      paths: {...kDefaultConfigPaths, ...LocalConfigs.configPaths},
+      showLogs: LocalConfigs.configLogs,
+      defaultPath: LocalConfigs.configDefault,
+      platform: LocalConfigs.configPlatform,
+      environment: LocalConfigs.configEnvironment,
     );
   }
 
@@ -307,10 +307,10 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
   void _initDatabase() {
     InAppDatabase.init(
       delegate: LocalDatabaseDelegate(),
-      name: ConfigsConstants.inAppDatabaseName,
-      showLogs: ConfigsConstants.inAppDatabaseLogs,
-      type: ConfigsConstants.inAppDatabaseType,
-      version: ConfigsConstants.inAppDatabaseVersion,
+      name: LocalConfigs.inAppDatabaseName,
+      showLogs: LocalConfigs.inAppDatabaseLogs,
+      type: LocalConfigs.inAppDatabaseType,
+      version: LocalConfigs.inAppDatabaseVersion,
     );
   }
 
@@ -538,7 +538,7 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
 
   void _initSplash() async {
     await Future.delayed(
-      const Duration(milliseconds: ConfigsConstants.splashTimeForNative),
+      const Duration(milliseconds: LocalConfigs.splashTimeForNative),
     );
     FlutterNativeSplash.remove();
   }
@@ -680,7 +680,7 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
 
   Widget _buildPurchaseProvider(Widget child) {
     return PurchaseProvider(
-      logEnabled: ConfigsConstants.purchaserLogEnabled,
+      logEnabled: LocalConfigs.purchaserLogEnabled,
       delegate: InAppPurchaseDelegate(),
       child: child,
     );
@@ -688,7 +688,7 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
 
   Widget _buildAuthProvider(Widget child) {
     return AuthProvider<User>(
-      initialCheck: ConfigsConstants.authInitialCheck,
+      initialCheck: LocalConfigs.authInitialCheck,
       authorizer: Authorizer(
         delegate: InAppAuthDelegate(),
         backup: InAppAuthBackupDelegate(

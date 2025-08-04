@@ -5,7 +5,7 @@ import 'package:flutter_andomie/utils/configs.dart';
 import 'package:flutter_network_status/flutter_network_status.dart';
 import 'package:http/http.dart';
 
-import '../../app/res/configs.dart';
+import '../../app/configs/local.dart';
 
 const kConnectivityChecking = "connectivity_checking";
 const kConnectivityTimeout = "connectivity_timeout";

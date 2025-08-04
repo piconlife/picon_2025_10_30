@@ -39,7 +39,7 @@ class InAppMenuButton<T> extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(dimen.dp(8)),
         child: InAppIcon(
-          icon ?? AppIcons.more.regular,
+          icon ?? InAppIcons.more.regular,
           size: dimen.dp(24),
           color: color.t50,
         ),

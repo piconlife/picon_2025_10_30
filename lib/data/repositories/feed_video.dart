@@ -1,0 +1,22 @@
+import 'package:data_management/core.dart';
+import 'package:in_app_database/in_app_database.dart';
+
+import '../../roots/helpers/connectivity.dart';
+import '../models/feed_video.dart';
+import '../sources/local/feed_video.dart';
+import '../sources/remote/feed_video.dart';
+
+class FeedVideoRepository extends RemoteDataRepository<FeedVideo> {
+  FeedVideoRepository({
+    required super.source,
+    super.backup,
+    super.connectivity = ConnectivityHelper.connection,
+  });
+
+  static FeedVideoRepository? _i;
+
+  static FeedVideoRepository get i => _i ??= FeedVideoRepository(
+    source: RemoteFeedVideoDataSource(),
+    backup: LocalFeedVideoDataSource(database: InAppDatabase.i),
+  );
+}

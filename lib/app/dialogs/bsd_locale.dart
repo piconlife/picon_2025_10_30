@@ -101,7 +101,7 @@ class _LocaleBsdState extends State<LocaleBsd>
             child: Container(
               padding: EdgeInsets.all(8).apply(dimen),
               child: InAppIcon(
-                AppIcons.close.regular,
+                InAppIcons.close.regular,
                 size: 28.0.dp(dimen),
                 color: context.dark,
               ),
@@ -199,7 +199,7 @@ class _LocaleBsdState extends State<LocaleBsd>
       ),
       padding: EdgeInsets.all(4).apply(dimen),
       child: InAppIcon(
-        AppIcons.check.regular,
+        InAppIcons.check.regular,
         color: context.lightAsFixed,
         size: 18.0.dp(dimen),
       ),

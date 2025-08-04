@@ -1,0 +1,373 @@
+import '../../app/helpers/user.dart';
+import '../constants/keys.dart';
+import '../enums/audience.dart';
+import '../enums/content.dart';
+import '../enums/privacy.dart';
+import 'content.dart';
+import 'user.dart';
+
+List<String> _keys = [
+  // PUBLISHER
+  Keys.i.publisher,
+  Keys.i.publisherPhoto,
+  Keys.i.publisherProfession,
+  Keys.i.publisherName,
+  Keys.i.publisherShortName,
+  Keys.i.publisherTitle,
+  Keys.i.publisherAge,
+  Keys.i.publisherProfilePath,
+  Keys.i.publisherProfileUrl,
+  Keys.i.publisherReligion,
+  Keys.i.publisherLatitude,
+  Keys.i.publisherLongitude,
+  Keys.i.publisherGender,
+
+  // REFERENCE
+  Keys.i.parentId,
+  Keys.i.parentPath,
+  Keys.i.recentId,
+  Keys.i.recentPath,
+  Keys.i.referenceId,
+  Keys.i.referencePath,
+
+  // BASE
+  Keys.i.id,
+  Keys.i.timeMills,
+  Keys.i.audience,
+  Keys.i.path,
+  Keys.i.priority,
+  Keys.i.privacy,
+  Keys.i.verified,
+  Keys.i.title,
+  Keys.i.path,
+  Keys.i.photoUrl,
+  Keys.i.priority,
+  Keys.i.description,
+  Keys.i.url,
+  Keys.i.latitude,
+  Keys.i.link,
+  Keys.i.longitude,
+  Keys.i.content,
+  Keys.i.type,
+  Keys.i.bookmarks,
+  Keys.i.contents,
+  Keys.i.comments,
+  Keys.i.likes,
+  Keys.i.photoUrls,
+  Keys.i.reports,
+  Keys.i.stars,
+  Keys.i.tags,
+  Keys.i.videoUrls,
+  Keys.i.views,
+  Keys.i.contents,
+  Keys.i.recent,
+];
+
+class Feed extends Content {
+  Feed({
+    // PUBLISHER
+    super.publisher,
+    super.publisherAge,
+    super.publisherPhoto,
+    super.publisherProfession,
+    super.publisherProfilePath,
+    super.publisherProfileUrl,
+    super.publisherName,
+    super.publisherShortName,
+    super.publisherTitle,
+    super.publisherRating,
+    super.publisherReligion,
+    super.publisherLatitude,
+    super.publisherLongitude,
+    super.publisherGender,
+
+    // BASE
+    super.id,
+    super.timeMills,
+    super.audience,
+    super.path,
+    super.priority,
+    super.privacy,
+    super.verified,
+
+    // REFERENCE
+    super.parentId,
+    super.parentPath,
+    super.recentId,
+    super.recentPath,
+    super.referenceId,
+    super.referencePath,
+
+    // OTHER
+    super.title,
+    super.photoUrl,
+    super.description,
+    super.url,
+    super.latitude,
+    super.link,
+    super.longitude,
+    super.type,
+    super.bookmarks,
+    super.contents,
+    super.commentCount,
+    super.comments,
+    super.likeCount,
+    super.likes,
+    super.photoUrls,
+    super.recent,
+    super.reportCount,
+    super.reports,
+    super.starCount,
+    super.stars,
+    super.tags,
+    super.videoUrls,
+    super.viewCount,
+    super.views,
+  });
+
+  factory Feed.create({
+    User? publisher,
+    // BASE
+    required ContentType type,
+    String? id,
+    int? timeMills,
+    Audience? audience,
+    String? path,
+    int? priority,
+    Privacy? privacy,
+    bool? verified,
+
+    // REFERENCE
+    String? parentId,
+    String? parentPath,
+    String? recentId,
+    String? recentPath,
+    String? referenceId,
+    String? referencePath,
+  }) {
+    publisher ??= UserHelper.user;
+    return Feed(
+      // PUBLISHER
+      publisher: publisher.id,
+      publisherAge: publisher.birthday,
+      publisherGender: publisher.gender.name,
+      publisherLatitude: publisher.latitude,
+      publisherLongitude: publisher.longitude,
+      publisherName: publisher.name,
+      publisherPhoto: publisher.photo,
+      publisherProfession: publisher.profession,
+      publisherProfilePath: publisher.profilePath,
+      publisherProfileUrl: publisher.profileUrl,
+      publisherReligion: publisher.religion,
+      publisherShortName: publisher.username,
+      publisherTitle: publisher.title,
+
+      // BASE
+      id: id,
+      timeMills: timeMills,
+      audience: audience,
+      path: path,
+      priority: priority,
+      privacy: privacy,
+      verified: verified,
+      type: type,
+
+      // REFERENCE
+      parentId: parentId,
+      parentPath: parentPath,
+      recentId: recentId,
+      recentPath: recentPath,
+      referenceId: referenceId,
+      referencePath: referencePath,
+    );
+  }
+
+  Feed withFeed({
+    // PUBLISHER
+    String? publisher,
+    int? publisherAge,
+    String? publisherPhoto,
+    String? publisherProfession,
+    String? publisherProfilePath,
+    String? publisherProfileUrl,
+    String? publisherName,
+    String? publisherShortName,
+    String? publisherTitle,
+    String? publisherReligion,
+    double? publisherLatitude,
+    double? publisherLongitude,
+    String? publisherGender,
+
+    // OTHER
+    String? id,
+    int? timeMills,
+    String? title,
+    String? path,
+    String? parentId,
+    String? parentPath,
+    String? photoUrl,
+    int? priority,
+    String? publisherId,
+    String? description,
+    String? url,
+    String? link,
+    bool? verified,
+    Audience? audience,
+    Privacy? privacy,
+    ContentType? type,
+    int? commentCount,
+    double? latitude,
+    int? likeCount,
+    double? longitude,
+    int? reportCount,
+    int? starCount,
+    int? viewCount,
+    List<String>? bookmarks,
+    List<Content>? contents,
+    List<String>? comments,
+    List<String>? likes,
+    List<String>? photoUrls,
+    List<String>? reports,
+    List<String>? stars,
+    List<String>? tags,
+    List<String>? videoUrls,
+    List<String>? views,
+  }) {
+    return Feed(
+      // PUBLISHER
+      publisher: publisher ?? this.publisher,
+      publisherAge: publisherAge ?? this.publisherAge,
+      publisherPhoto: publisherPhoto ?? this.publisherPhoto,
+      publisherProfession: publisherProfession ?? this.publisherProfession,
+      publisherProfilePath: publisherProfilePath ?? this.publisherProfilePath,
+      publisherProfileUrl: publisherProfileUrl ?? this.publisherProfileUrl,
+      publisherName: publisherName ?? this.publisherName,
+      publisherShortName: publisherShortName ?? this.publisherShortName,
+      publisherTitle: publisherTitle ?? this.publisherTitle,
+      publisherReligion: publisherReligion ?? this.publisherReligion,
+      publisherLatitude: publisherLatitude ?? this.publisherLatitude,
+      publisherLongitude: publisherLongitude ?? this.publisherLongitude,
+      publisherGender: publisherGender ?? this.publisherGender.name,
+      // OTHER
+      id: id ?? this.id,
+      timeMills: timeMills ?? this.timeMills,
+      title: title ?? this.title,
+      link: link ?? this.link,
+      path: path ?? this.path,
+      parentId: parentId ?? this.parentId,
+      parentPath: parentPath ?? this.parentPath,
+      photoUrl: photoUrl ?? this.photoUrl,
+      priority: priority ?? this.priority,
+      description: description ?? this.description,
+      url: url ?? this.url,
+      verified: verified ?? this.verified,
+      bookmarks: bookmarks ?? this.bookmarks,
+      contents: contents ?? this.contents,
+      commentCount: commentCount ?? this.commentCount,
+      comments: comments ?? this.comments,
+      latitude: latitude ?? this.latitude,
+      likeCount: likeCount ?? this.likeCount,
+      likes: likes ?? this.likes,
+      longitude: longitude ?? this.longitude,
+      photoUrls: photoUrls ?? this.photoUrls,
+      reportCount: reportCount ?? this.reportCount,
+      reports: reports ?? this.reports,
+      starCount: starCount ?? this.starCount,
+      stars: stars ?? this.stars,
+      tags: tags ?? this.tags,
+      videoUrls: videoUrls ?? this.videoUrls,
+      viewCount: viewCount ?? this.viewCount,
+      views: views ?? this.views,
+      audience: audience ?? this.audience,
+      privacy: privacy ?? this.privacy,
+      type: type ?? contentType,
+    );
+  }
+
+  factory Feed.from(dynamic source) {
+    final data = Content.from(source);
+    return Feed(
+      // PUBLISHER
+      publisher: data.publisher,
+      publisherAge: data.publisherAge,
+      publisherPhoto: data.publisherPhoto,
+      publisherProfession: data.publisherProfession,
+      publisherProfilePath: data.publisherProfilePath,
+      publisherProfileUrl: data.publisherProfileUrl,
+      publisherName: data.publisherName,
+      publisherShortName: data.publisherShortName,
+      publisherTitle: data.publisherTitle,
+      publisherReligion: data.publisherReligion,
+      publisherLatitude: data.publisherLatitude,
+      publisherLongitude: data.publisherLongitude,
+      publisherGender: data.publisherGender.name,
+
+      // OTHER
+      id: data.id,
+      timeMills: data.timeMills,
+      title: data.title,
+      link: data.link,
+      path: data.path,
+      parentId: data.parentId,
+      parentPath: data.parentPath,
+      photoUrl: data.photoUrl,
+      priority: data.priority,
+      description: data.description,
+      url: data.url,
+      verified: data.verified,
+      bookmarks: data.bookmarks,
+      contents: data.contents,
+      comments: data.comments,
+      latitude: data.latitude,
+      likes: data.likes,
+      longitude: data.longitude,
+      photoUrls: data.photoUrls,
+      reports: data.reports,
+      stars: data.stars,
+      tags: data.tags,
+      videoUrls: data.videoUrls,
+      views: data.views,
+      audience: data.audience,
+      privacy: data.privacy,
+      type: data.contentType,
+    );
+  }
+
+  factory Feed.fromReference(dynamic source) {
+    final data = Content.from(source);
+    return Feed(
+      // PUBLISHER
+      publisher: data.publisher,
+      publisherAge: data.publisherAge,
+      publisherPhoto: data.publisherPhoto,
+      publisherProfession: data.publisherProfession,
+      publisherProfilePath: data.publisherProfilePath,
+      publisherProfileUrl: data.publisherProfileUrl,
+      publisherName: data.publisherName,
+      publisherShortName: data.publisherShortName,
+      publisherTitle: data.publisherTitle,
+      publisherReligion: data.publisherReligion,
+      publisherLatitude: data.publisherLatitude,
+      publisherLongitude: data.publisherLongitude,
+      publisherGender: data.publisherGender.name,
+
+      // BASE
+      id: data.id,
+      timeMills: data.timeMills,
+      audience: data.audience,
+      path: data.path,
+      priority: data.priority,
+      privacy: data.privacy,
+      type: data.contentType,
+      verified: data.verified,
+
+      // REFERENCE
+      parentId: data.parentId,
+      parentPath: data.parentPath,
+      recentId: data.recentId,
+      recentPath: data.recentPath,
+      referenceId: data.referenceId,
+      referencePath: data.referencePath,
+    );
+  }
+}

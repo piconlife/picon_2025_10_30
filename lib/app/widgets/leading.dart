@@ -44,7 +44,7 @@ class InAppLeading extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: InAppIcon(
-                AppIcons.leading.regular,
+                InAppIcons.leading.regular,
                 color: context.dark.t95,
                 flipByTextDirection: true,
                 size: 24,

@@ -1,6 +1,5 @@
-import 'package:data_management/core.dart'
-    show DataQuery, DataSelection, DataSorting, DataPagingOptions;
-import 'package:flutter_entity/flutter_entity.dart';
+import 'package:data_management/core.dart';
+import 'package:flutter_entity/entity.dart';
 
 import '../../models/user.dart';
 import 'base.dart';
@@ -20,8 +19,10 @@ class GetSpecificUsersByPagingUseCase extends BaseUserUseCase {
     int fetchingSize = 15,
     int initialFetchingSize = 25,
     bool descending = true,
+    bool cached = true,
   }) {
     return repository.getByQuery(
+      cached: cached,
       queries: [DataQuery(UserKeys.i.id, whereIn: ids)],
       sorts: [DataSorting(UserKeys.i.id, descending: descending)],
       selections: [DataSelection.startAfterDocument(snapshot)],

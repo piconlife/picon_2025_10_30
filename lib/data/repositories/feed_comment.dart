@@ -1,0 +1,22 @@
+import 'package:data_management/core.dart';
+import 'package:in_app_database/in_app_database.dart';
+
+import '../../roots/helpers/connectivity.dart';
+import '../models/feed_comment.dart';
+import '../sources/local/feed_comment.dart';
+import '../sources/remote/feed_comment.dart';
+
+class FeedCommentRepository extends RemoteDataRepository<FeedComment> {
+  FeedCommentRepository({
+    required super.source,
+    super.backup,
+    super.connectivity = ConnectivityHelper.connection,
+  });
+
+  static FeedCommentRepository? _i;
+
+  static FeedCommentRepository get i => _i ??= FeedCommentRepository(
+    source: RemoteFeedCommentDataSource(),
+    backup: LocalFeedCommentDataSource(database: InAppDatabase.i),
+  );
+}

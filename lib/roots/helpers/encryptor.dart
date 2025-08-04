@@ -4,7 +4,7 @@ import '../utils/encryptor.dart';
 class EncryptorHelper extends InAppEncryptor {
   const EncryptorHelper._();
 
-  static InAppEncryptor? _encryptor(EncryptionSecrets? secrets) {
+  static InAppEncryptor? _encryptor(SecretData? secrets) {
     if (secrets == null) return null;
     final key = secrets.key ?? "";
     final iv = secrets.iv ?? "";
@@ -26,17 +26,19 @@ class EncryptorHelper extends InAppEncryptor {
     return x;
   }
 
-  static EncryptionSecrets? _version(String? version, Secret? secret) {
+  static SecretData? _version(String? version, Secret? secret) {
     version = version?.replaceAll("local.", "");
     if (version == null || version.isEmpty || secret == null) return null;
-    return secret.versions?[version];
+    return secret.versions[version];
   }
 
-  static InAppEncryptor? object(String? version) {
+  static InAppEncryptor? object([String? version]) {
+    version ??= Secrets.get.object?.active;
     return _encryptor(_version(version, Secrets.get.object));
   }
 
-  static InAppEncryptor? password(String? version) {
+  static InAppEncryptor? password([String? version]) {
+    version ??= Secrets.get.password?.active;
     return _encryptor(_version(version, Secrets.get.password));
   }
 }

@@ -1,24 +1,10 @@
+import 'dart:convert';
+
 import 'package:auth_management/auth_management.dart';
-import 'package:flutter_andomie/extensions/object.dart';
+import 'package:flutter_andomie/core.dart';
 
 import '../../app/constants/limitations.dart';
-import '../../data/extensions/map.dart';
-
-List<String> _keys = [
-  UserKeys.i.id,
-  UserKeys.i.idToken,
-  UserKeys.i.timeMills,
-  UserKeys.i.email,
-  UserKeys.i.loggedIn,
-  UserKeys.i.loggedInTime,
-  UserKeys.i.loggedOutTime,
-  UserKeys.i.name,
-  UserKeys.i.password,
-  UserKeys.i.phone,
-  UserKeys.i.photo,
-  UserKeys.i.username,
-  UserKeys.i.verified,
-];
+import '../../app/helpers/user.dart';
 
 class UserKeys extends AuthKeys {
   const UserKeys._();
@@ -27,51 +13,58 @@ class UserKeys extends AuthKeys {
 
   static UserKeys get i => _i ??= const UserKeys._();
 
-  // Information
+  // IN APP INFO
+
   final activeTime = "active_time";
-  final biography = "biography";
-  final birthday = "birthday";
-  final childhoodRemember = "childhood_remember";
-  final coverPhoto = "cover_photo";
-  final fatherName = "father_name";
-  final gender = "gender";
   final joiningTime = "joining_time";
-  final language = "language";
-  final latitude = "latitude";
-  final lifeStyle = "life_style";
-  final longitude = "longitude";
-  final maritalStatus = "marital_status";
-  final motherName = "mother_name";
-  final nationality = "nationality";
-  final profession = "profession";
-  final profilePath = "profile_path";
-  final profileUrl = "profile_url";
-  final rating = "rating";
-  final relationship = "relationship";
-  final religion = "religion";
-  final secondaryEmail = "secondary_email";
-  final secondaryPhone = "secondary_phone";
-  final title = "title";
-  final website = "website";
 
-  // Collections
-  final approvals = "approvals";
-  final favouritePlaces = "favourite_places";
-  final followers = "followers";
-  final followings = "followings";
-  final hobbies = "hobbies";
-  final interestedChannels = "interested_channels";
-  final interestedPlaces = "interested_places";
-  final interestedProfessions = "interested_professions";
-  final secondaryLanguages = "secondary_languages";
-
-  // Conditions
   final calling = "calling";
   final celebrity = "celebrity";
   final messaging = "messaging";
   final secureAccount = "secure_account";
 
-  // Object
+  final latitude = "latitude";
+  final longitude = "longitude";
+  final rating = "rating";
+
+  final biography = "biography";
+  final coverPhoto = "cover_photo";
+  final profilePath = "profile_path";
+  final profileUrl = "profile_url";
+  final secondaryEmail = "secondary_email";
+  final secondaryPhone = "secondary_phone";
+  final title = "title";
+
+  // UPDATING INFO
+  final reportCount = "report_count";
+  final approvals = "approvals";
+  final followers = "followers";
+  final followings = "followings";
+  final interestedChannels = "interested_channels";
+
+  // PERSONAL INFO
+  final birthday = "birthday";
+
+  final childhoodRemember = "childhood_remember";
+  final fatherName = "father_name";
+  final language = "language";
+  final motherName = "mother_name";
+  final nationality = "nationality";
+  final profession = "profession";
+  final religion = "religion";
+  final website = "website";
+
+  final gender = "gender";
+  final lifestyle = "lifestyle";
+  final maritalStatus = "marital_status";
+  final relationship = "relationship";
+
+  final hobbies = "hobbies";
+  final interestedPlaces = "interested_places";
+  final interestedProfessions = "interested_professions";
+  final secondaryLanguages = "secondary_languages";
+
+  // OBJECT KEYs
   final alternateInfo = "alternate_info";
   final primaryInfo = "primary_info";
   final secondaryInfo = "secondary_info";
@@ -91,47 +84,141 @@ class UserKeys extends AuthKeys {
 
   // CONTACT KEYs
   final contact = "contact";
+
+  @override
+  Iterable<String> get keys {
+    return [
+      // ROOT INFO
+      id,
+      idToken,
+      timeMills,
+      email,
+      loggedIn,
+      loggedInTime,
+      loggedOutTime,
+      name,
+      password,
+      phone,
+      photo,
+      username,
+      verified,
+
+      // IN APP INFO
+      activeTime,
+      joiningTime,
+      calling,
+      celebrity,
+      messaging,
+      secureAccount,
+      latitude,
+      longitude,
+      rating,
+      biography,
+      coverPhoto,
+      profilePath,
+      profileUrl,
+      secondaryEmail,
+      secondaryPhone,
+      title,
+
+      // UPDATING INFO
+      reportCount,
+      approvals,
+      followers,
+      followings,
+      interestedChannels,
+
+      // PERSONAL INFO
+      birthday,
+      childhoodRemember,
+      fatherName,
+      language,
+      motherName,
+      nationality,
+      profession,
+      religion,
+      website,
+      gender,
+      lifestyle,
+      maritalStatus,
+      relationship,
+      hobbies,
+      interestedPlaces,
+      interestedProfessions,
+      secondaryLanguages,
+
+      // OBJECT KEYs
+      alternateInfo,
+      primaryInfo,
+      secondaryInfo,
+
+      // ADDRESS KEYs
+      address,
+      area,
+      city,
+      country,
+      countryCode,
+      house,
+      policeStation,
+      postCode,
+      road,
+      section,
+      state,
+
+      // CONTACT KEYs
+      contact,
+    ];
+  }
 }
 
 class User extends Auth<UserKeys> {
   int? activeTime;
-  int? birthday;
   int? joiningTime;
+
   bool? calling;
   bool? celebrity;
   bool? messaging;
   bool? secureAccount;
 
-  double? _rating;
   double? latitude;
   double? longitude;
+  double? _rating;
 
   String? biography;
-  String? childhoodRemember;
   String? coverPhoto;
-  String? fatherName;
-  Gender? _gender;
-  String? language;
-  String? lifeStyle;
-  String? maritalStatus;
-  String? motherName;
-  String? nationality;
-  String? profession;
   String? profilePath;
   String? profileUrl;
-  String? relationship;
-  String? religion;
   String? secondaryEmail;
   String? secondaryPhone;
   String? title;
-  String? website;
+
+  // UPDATING INFO
+  int? reportCount;
 
   List<String>? approvals;
-  List<String>? favouritePlaces;
   List<String>? followers;
   List<String>? followings;
-  List<String>? hobbies;
   List<String>? interestedChannels;
+
+  // PERSONAL INFO
+  int? birthday;
+
+  String? childhoodRemember;
+  String? country;
+  String? fatherName;
+  String? language;
+  String? motherName;
+  String? nationality;
+  String? profession;
+  String? religion;
+  String? website;
+
+  Gender gender;
+  Lifestyle lifestyle;
+  MaritalStatus maritalStatus;
+  Relationship relationship;
+
+  List<String>? hobbies;
   List<String>? interestedPlaces;
   List<String>? interestedProfessions;
   List<String>? secondaryLanguages;
@@ -140,17 +227,9 @@ class User extends Auth<UserKeys> {
   UserInfo? _primaryInfo;
   UserInfo? _secondaryInfo;
 
-  String? get avatar => photo;
-
-  double get rating => _rating ?? Limitations.userRating;
-
   UserInfo get alternateInfo => _alternateInfo ?? const UserInfo();
 
   set alternateInfo(UserInfo? value) => _alternateInfo = value;
-
-  Gender get gender => _gender ?? Gender.male;
-
-  set gender(Gender value) => _gender = value;
 
   UserInfo get primaryInfo => _primaryInfo ?? const UserInfo();
 
@@ -158,8 +237,31 @@ class User extends Auth<UserKeys> {
 
   UserInfo get secondaryInfo => _secondaryInfo ?? const UserInfo();
 
+  String? get avatar => photo;
+
+  double get rating => _rating ?? Limitations.userRating;
+
+  bool get isRatedUser => rating >= 4;
+
+  bool get isCelebrityUser => rating >= 5;
+
+  bool get isHeartUser => !isCelebrityUser && rating >= 4;
+
+  bool get isCurrentUser => UserHelper.isCurrentUser(id);
+
+  bool get isOnline => true;
+
+  String get onlineStatus {
+    return 'Online';
+    final text = activeTime.toRealtime();
+    if (text.toLowerCase() == "now") {
+      return 'Online';
+    }
+    return text;
+  }
+
   User({
-    // PARENT
+    // ROOT
     super.id = "",
     super.timeMills,
     super.accessToken,
@@ -177,57 +279,65 @@ class User extends Auth<UserKeys> {
     super.provider,
     super.username,
     super.verified,
-    // CHILD
+    // IN APP INFO
     this.activeTime,
-    this.birthday,
     this.joiningTime,
     this.calling,
     this.celebrity,
     this.messaging,
     this.secureAccount,
-    double? rating,
     this.biography,
-    this.childhoodRemember,
     this.coverPhoto,
-    this.fatherName,
-    Gender? gender,
-    this.language,
     this.latitude,
-    this.lifeStyle,
     this.longitude,
-    this.maritalStatus,
-    this.motherName,
-    this.nationality,
-    this.profession,
     this.profilePath,
     this.profileUrl,
-    this.relationship,
-    this.religion,
     this.secondaryEmail,
     this.secondaryPhone,
     this.title,
-    this.website,
+
+    // UPDATING INFO
+    this.reportCount,
     this.approvals,
-    this.favouritePlaces,
     this.followers,
     this.followings,
-    this.hobbies,
     this.interestedChannels,
+    double? rating,
+
+    // PERSONAL INFO
+    this.birthday,
+    this.childhoodRemember,
+    this.country,
+    this.fatherName,
+    this.language,
+    this.motherName,
+    this.nationality,
+    this.profession,
+    this.religion,
+    this.website,
+    this.hobbies,
     this.interestedPlaces,
     this.interestedProfessions,
     this.secondaryLanguages,
+    Gender? gender,
+    Lifestyle? lifestyle,
+    MaritalStatus? maritalStatus,
+    Relationship? relationship,
     UserInfo? alternateInfo,
     UserInfo? primaryInfo,
     UserInfo? secondaryInfo,
-  }) : _alternateInfo = alternateInfo,
-       _gender = gender,
-       _primaryInfo = primaryInfo,
+  }) : gender = gender ?? Gender.male,
+       lifestyle = lifestyle ?? Lifestyle.normal,
+       maritalStatus = maritalStatus ?? MaritalStatus.unmarried,
+       relationship = relationship ?? Relationship.no,
        _rating = rating,
+       _alternateInfo = alternateInfo,
+       _primaryInfo = primaryInfo,
        _secondaryInfo = secondaryInfo;
 
   @override
   User copy({
-    // PARENT
+    // ROOT
     String? id,
     int? timeMills,
     String? accessToken,
@@ -245,9 +355,9 @@ class User extends Auth<UserKeys> {
     Provider? provider,
     String? username,
     bool? verified,
-    // CHILD
+
+    // IN APP INFO
     int? activeTime,
-    int? birthday,
     int? joiningTime,
     double? rating,
     bool? calling,
@@ -255,41 +365,47 @@ class User extends Auth<UserKeys> {
     bool? messaging,
     bool? secureAccount,
     String? biography,
-    String? childhoodRemember,
     String? coverPhoto,
-    String? fatherName,
-    Gender? gender,
-    String? language,
     double? latitude,
-    String? lifeStyle,
     double? longitude,
-    String? maritalStatus,
-    String? motherName,
-    String? nationality,
-    String? profession,
     String? profilePath,
     String? profileUrl,
-    String? relationship,
-    String? religion,
     String? secondaryEmail,
     String? secondaryPhone,
     String? title,
-    String? website,
+
+    // UPDATING INFO
+    int? reportCount,
     List<String>? approvals,
-    List<String>? favouritePlaces,
     List<String>? followers,
     List<String>? followings,
-    List<String>? hobbies,
     List<String>? interestedChannels,
+
+    // PERSONAL INFO
+    int? birthday,
+    String? country,
+    String? childhoodRemember,
+    String? fatherName,
+    String? language,
+    String? motherName,
+    String? nationality,
+    String? profession,
+    String? religion,
+    String? website,
+    List<String>? hobbies,
     List<String>? interestedPlaces,
     List<String>? interestedProfessions,
     List<String>? secondaryLanguages,
+    Gender? gender,
+    Lifestyle? lifestyle,
+    MaritalStatus? maritalStatus,
+    Relationship? relationship,
     UserInfo? alternateInfo,
     UserInfo? primaryInfo,
     UserInfo? secondaryInfo,
   }) {
     return User(
-      // PARENT
+      // ROOT
       id: id ?? this.id,
       timeMills: timeMills ?? this.timeMills,
       accessToken: accessToken ?? this.accessToken,
@@ -307,41 +423,47 @@ class User extends Auth<UserKeys> {
       provider: provider ?? this.provider,
       username: username ?? this.username,
       verified: verified ?? this.verified,
-      // CHILD
+
+      // IN APP INFO
       calling: calling ?? this.calling,
       celebrity: celebrity ?? this.celebrity,
       messaging: messaging ?? this.messaging,
       secureAccount: secureAccount ?? this.secureAccount,
       activeTime: activeTime ?? this.activeTime,
       biography: biography ?? this.biography,
+      coverPhoto: coverPhoto ?? this.coverPhoto,
+      joiningTime: joiningTime ?? this.joiningTime,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      profilePath: profilePath ?? this.profilePath,
+      profileUrl: profileUrl ?? this.profileUrl,
+      rating: rating ?? this.rating,
+      secondaryEmail: secondaryEmail ?? this.secondaryEmail,
+      secondaryPhone: secondaryPhone ?? this.secondaryPhone,
+      title: title ?? this.title,
+
+      // UPDATING INFO
+      reportCount: reportCount ?? this.reportCount,
+      approvals: approvals ?? this.approvals,
+      followers: followers ?? this.followers,
+      followings: followings ?? this.followings,
+      interestedChannels: interestedChannels ?? this.interestedChannels,
+
+      // PERSONAL INFO
       birthday: birthday ?? this.birthday,
       childhoodRemember: childhoodRemember ?? this.childhoodRemember,
-      coverPhoto: coverPhoto ?? this.coverPhoto,
+      country: country ?? this.country,
       fatherName: fatherName ?? this.fatherName,
       gender: gender ?? this.gender,
-      joiningTime: joiningTime ?? this.joiningTime,
       language: language ?? this.language,
-      latitude: latitude ?? this.latitude,
-      lifeStyle: lifeStyle ?? this.lifeStyle,
-      longitude: longitude ?? this.longitude,
+      lifestyle: lifestyle ?? this.lifestyle,
       maritalStatus: maritalStatus ?? this.maritalStatus,
       motherName: motherName ?? this.motherName,
       nationality: nationality ?? this.nationality,
       profession: profession ?? this.profession,
-      profilePath: profilePath ?? this.profilePath,
-      profileUrl: profileUrl ?? this.profileUrl,
-      rating: rating ?? this.rating,
       relationship: relationship ?? this.relationship,
       religion: religion ?? this.religion,
-      secondaryEmail: secondaryEmail ?? this.secondaryEmail,
-      secondaryPhone: secondaryPhone ?? this.secondaryPhone,
-      title: title ?? this.title,
-      approvals: approvals ?? this.approvals,
-      favouritePlaces: favouritePlaces ?? this.favouritePlaces,
-      followers: followers ?? this.followers,
-      followings: followings ?? this.followings,
       hobbies: hobbies ?? this.hobbies,
-      interestedChannels: interestedChannels ?? this.interestedChannels,
       interestedPlaces: interestedPlaces ?? this.interestedPlaces,
       interestedProfessions:
           interestedProfessions ?? this.interestedProfessions,
@@ -355,7 +477,7 @@ class User extends Auth<UserKeys> {
   factory User.from(Object? source) {
     final auth = Auth.from(source);
     return User(
-      // PARENT
+      // ROOT
       id: auth.id,
       timeMills: auth.timeMills,
       accessToken: auth.accessToken,
@@ -373,9 +495,9 @@ class User extends Auth<UserKeys> {
       username: auth.username,
       verified: auth.verified,
       extra: auth.extra,
-      // CHILD
+
+      // IN APP INFO
       activeTime: source.entityValue(UserKeys.i.activeTime),
-      birthday: source.entityValue(UserKeys.i.birthday),
       joiningTime: source.entityValue(UserKeys.i.joiningTime),
       rating: source.entityValue(UserKeys.i.rating),
       calling: source.entityValue(UserKeys.i.calling),
@@ -383,37 +505,49 @@ class User extends Auth<UserKeys> {
       messaging: source.entityValue(UserKeys.i.messaging),
       secureAccount: source.entityValue(UserKeys.i.secureAccount),
       biography: source.entityValue(UserKeys.i.biography),
-      childhoodRemember: source.entityValue(UserKeys.i.childhoodRemember),
       coverPhoto: source.entityValue(UserKeys.i.coverPhoto),
-      fatherName: source.entityValue(UserKeys.i.fatherName),
-      gender: source.entityValue(UserKeys.i.gender, Gender.from),
-      language: source.entityValue(UserKeys.i.language),
       latitude: source.entityValue(UserKeys.i.latitude),
-      lifeStyle: source.entityValue(UserKeys.i.lifeStyle),
       longitude: source.entityValue(UserKeys.i.longitude),
-      maritalStatus: source.entityValue(UserKeys.i.maritalStatus),
-      motherName: source.entityValue(UserKeys.i.motherName),
-      nationality: source.entityValue(UserKeys.i.nationality),
-      profession: source.entityValue(UserKeys.i.profession),
       profilePath: source.entityValue(UserKeys.i.profilePath),
       profileUrl: source.entityValue(UserKeys.i.profileUrl),
-      relationship: source.entityValue(UserKeys.i.relationship),
-      religion: source.entityValue(UserKeys.i.religion),
       secondaryEmail: source.entityValue(UserKeys.i.secondaryEmail),
       secondaryPhone: source.entityValue(UserKeys.i.secondaryPhone),
       title: source.entityValue(UserKeys.i.title),
-      website: source.entityValue(UserKeys.i.website),
+
+      // UPDATING INFO
+      reportCount: source.entityValue(UserKeys.i.reportCount),
       approvals: source.entityValues(UserKeys.i.approvals),
-      favouritePlaces: source.entityValues(UserKeys.i.favouritePlaces),
       followers: source.entityValues(UserKeys.i.followers),
       followings: source.entityValues(UserKeys.i.followings),
-      hobbies: source.entityValues(UserKeys.i.hobbies),
       interestedChannels: source.entityValues(UserKeys.i.interestedChannels),
+
+      // PERSONAL INFO
+      birthday: source.entityValue(UserKeys.i.birthday),
+      childhoodRemember: source.entityValue(UserKeys.i.childhoodRemember),
+      country: source.entityValue(UserKeys.i.country),
+      fatherName: source.entityValue(UserKeys.i.fatherName),
+      language: source.entityValue(UserKeys.i.language),
+      motherName: source.entityValue(UserKeys.i.motherName),
+      nationality: source.entityValue(UserKeys.i.nationality),
+      profession: source.entityValue(UserKeys.i.profession),
+      religion: source.entityValue(UserKeys.i.religion),
+      website: source.entityValue(UserKeys.i.website),
+      hobbies: source.entityValues(UserKeys.i.hobbies),
       interestedPlaces: source.entityValues(UserKeys.i.interestedPlaces),
       interestedProfessions: source.entityValues(
         UserKeys.i.interestedProfessions,
       ),
       secondaryLanguages: source.entityValues(UserKeys.i.secondaryLanguages),
+      gender: source.entityValue(UserKeys.i.gender, Gender.from),
+      lifestyle: source.entityValue(UserKeys.i.lifestyle, Lifestyle.from),
+      maritalStatus: source.entityValue(
+        UserKeys.i.maritalStatus,
+        MaritalStatus.from,
+      ),
+      relationship: source.entityValue(
+        UserKeys.i.relationship,
+        Relationship.from,
+      ),
       alternateInfo: source.entityValue(
         UserKeys.i.alternateInfo,
         UserInfo.from,
@@ -431,82 +565,157 @@ class User extends Auth<UserKeys> {
 
   @override
   bool isInsertable(String key, value) {
-    return _keys.contains(key) && value != null;
+    super.isInsertable(key, value);
+    return this.key.keys.contains(key) && value != null;
   }
 
   @override
   Map<String, dynamic> get source {
-    return super.source
-        .set(UserKeys.i.activeTime, activeTime)
-        .set(UserKeys.i.birthday, birthday)
-        .set(UserKeys.i.joiningTime, joiningTime)
-        .set(UserKeys.i.rating, rating)
-        .set(UserKeys.i.calling, calling)
-        .set(UserKeys.i.celebrity, celebrity)
-        .set(UserKeys.i.messaging, messaging)
-        .set(UserKeys.i.secureAccount, secureAccount)
-        .set(UserKeys.i.verified, verified)
-        .set(UserKeys.i.biography, biography)
-        .set(UserKeys.i.childhoodRemember, childhoodRemember)
-        .set(UserKeys.i.coverPhoto, coverPhoto)
-        .set(UserKeys.i.fatherName, fatherName)
-        .set(UserKeys.i.name, name)
-        .set(UserKeys.i.gender, _gender?.name)
-        .set(UserKeys.i.language, language)
-        .set(UserKeys.i.latitude, latitude)
-        .set(UserKeys.i.lifeStyle, lifeStyle)
-        .set(UserKeys.i.longitude, longitude)
-        .set(UserKeys.i.maritalStatus, maritalStatus)
-        .set(UserKeys.i.motherName, motherName)
-        .set(UserKeys.i.nationality, nationality)
-        .set(UserKeys.i.profession, profession)
-        .set(UserKeys.i.profilePath, profilePath)
-        .set(UserKeys.i.profileUrl, profileUrl)
-        .set(UserKeys.i.relationship, relationship)
-        .set(UserKeys.i.religion, religion)
-        .set(UserKeys.i.secondaryEmail, secondaryEmail)
-        .set(UserKeys.i.secondaryPhone, secondaryPhone)
-        .set(UserKeys.i.title, title)
-        .set(UserKeys.i.approvals, approvals)
-        .set(UserKeys.i.favouritePlaces, favouritePlaces)
-        .set(UserKeys.i.followers, followers)
-        .set(UserKeys.i.followings, followings)
-        .set(UserKeys.i.hobbies, hobbies)
-        .set(UserKeys.i.interestedChannels, interestedChannels)
-        .set(UserKeys.i.interestedPlaces, interestedPlaces)
-        .set(UserKeys.i.interestedProfessions, interestedProfessions)
-        .set(UserKeys.i.secondaryLanguages, secondaryLanguages)
-        .set(UserKeys.i.alternateInfo, _alternateInfo?.source)
-        .set(UserKeys.i.primaryInfo, _primaryInfo?.source)
-        .set(UserKeys.i.secondaryInfo, _secondaryInfo?.source);
+    return super.source..addAll({
+      // IN APP INFO
+      UserKeys.i.activeTime: activeTime,
+      UserKeys.i.joiningTime: joiningTime,
+
+      UserKeys.i.calling: calling,
+      UserKeys.i.messaging: messaging,
+      UserKeys.i.secureAccount: secureAccount,
+
+      UserKeys.i.rating: _rating,
+      UserKeys.i.latitude: latitude,
+      UserKeys.i.longitude: longitude,
+
+      UserKeys.i.biography: biography,
+      UserKeys.i.coverPhoto: coverPhoto,
+      UserKeys.i.profilePath: profilePath,
+      UserKeys.i.profileUrl: profileUrl,
+      UserKeys.i.secondaryEmail: secondaryEmail,
+      UserKeys.i.secondaryPhone: secondaryPhone,
+      UserKeys.i.title: title,
+
+      // UPDATING INFO
+      UserKeys.i.reportCount: reportCount,
+      UserKeys.i.approvals: approvals,
+      UserKeys.i.followers: followers,
+      UserKeys.i.followings: followings,
+      UserKeys.i.interestedChannels: interestedChannels,
+
+      // PERSONAL INFO
+      UserKeys.i.birthday: birthday,
+
+      UserKeys.i.childhoodRemember: childhoodRemember,
+      UserKeys.i.country: country,
+      UserKeys.i.fatherName: fatherName,
+      UserKeys.i.language: language,
+      UserKeys.i.motherName: motherName,
+      UserKeys.i.nationality: nationality,
+      UserKeys.i.profession: profession,
+      UserKeys.i.religion: religion,
+      UserKeys.i.website: website,
+
+      UserKeys.i.gender: gender.id,
+      UserKeys.i.lifestyle: lifestyle.id,
+      UserKeys.i.maritalStatus: maritalStatus.id,
+      UserKeys.i.relationship: relationship.id,
+
+      UserKeys.i.hobbies: hobbies,
+      UserKeys.i.interestedPlaces: interestedPlaces,
+      UserKeys.i.interestedProfessions: interestedProfessions,
+      UserKeys.i.secondaryLanguages: secondaryLanguages,
+
+      // OBJECT INFO
+      UserKeys.i.alternateInfo: _alternateInfo?.source,
+      UserKeys.i.primaryInfo: _primaryInfo?.source,
+      UserKeys.i.secondaryInfo: _secondaryInfo?.source,
+    });
   }
+
+  @override
+  String get json => jsonEncode(source);
+
+  @override
+  int get hashCode => json.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    return other is User && other.id == id && other.json == json;
+  }
+
+  @override
+  String toString() => "$User#$hashCode($json)";
 }
 
 enum Gender {
-  male("MALE", "Male"),
-  female("FEMALE", "Female"),
-  other("OTHER", "Other");
+  male(id: "male", name: "Male"),
+  female(id: "female", name: "Female"),
+  other(id: "other", name: "Other");
 
+  final String id;
   final String name;
-  final String value;
 
-  const Gender(this.name, this.value);
+  const Gender({required this.id, required this.name});
 
-  bool get isMale => this == male;
+  factory Gender.from(Object? source) {
+    if (source == null) return Gender.male;
+    return values.firstWhere(
+      (e) => e == source || e.id == source || e.name == source,
+      orElse: () => Gender.male,
+    );
+  }
+}
 
-  bool get isFemale => this == female;
+enum MaritalStatus {
+  married(id: "married", name: "Married"),
+  unmarried(id: "unmarried", name: "Unmarried"),
+  other(id: "other", name: "Other");
 
-  bool get isOther => this == other;
+  final String id;
+  final String name;
 
-  factory Gender.from(Object? value) {
-    final name = (value is String ? value : "").toUpperCase();
-    if (name == Gender.female.name) {
-      return Gender.female;
-    } else if (name == Gender.other.name) {
-      return Gender.other;
-    } else {
-      return Gender.male;
-    }
+  const MaritalStatus({required this.id, required this.name});
+
+  factory MaritalStatus.from(Object? source) {
+    if (source == null) return MaritalStatus.unmarried;
+    final x = values.firstWhere(
+      (e) => e == source || e.id == source || e.name == source,
+      orElse: () => MaritalStatus.unmarried,
+    );
+    return x;
+  }
+}
+
+enum Lifestyle {
+  modern(id: "modern", name: "Modern"),
+  normal(id: "normal", name: "Normal");
+
+  final String id;
+  final String name;
+
+  const Lifestyle({required this.id, required this.name});
+
+  factory Lifestyle.from(Object? source) {
+    if (source == null) return Lifestyle.normal;
+    return values.firstWhere(
+      (e) => e == source || e.id == source || e.name == source,
+      orElse: () => Lifestyle.normal,
+    );
+  }
+}
+
+enum Relationship {
+  yes(id: "YES", name: "Yes"),
+  no(id: "NO", name: "No");
+
+  final String id;
+  final String name;
+
+  const Relationship({required this.id, required this.name});
+
+  factory Relationship.from(Object? source) {
+    if (source == null) return Relationship.no;
+    return values.firstWhere(
+      (e) => e == source || e.id == source || e.name == source,
+      orElse: () => Relationship.no,
+    );
   }
 }
 
@@ -535,9 +744,26 @@ class UserInfo {
 
   Map<String, dynamic> get source {
     return {
-      if (address.source.isValid) UserKeys.i.address: _address,
-      if (contact.source.isValid) UserKeys.i.contact: _contact,
+      UserKeys.i.address: _address?.source,
+      UserKeys.i.contact: _contact?.source,
     };
+  }
+
+  String get json => jsonEncode(source);
+
+  @override
+  int get hashCode => address.hashCode ^ contact.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    return other is UserInfo &&
+        other.address == address &&
+        other.contact == contact;
+  }
+
+  @override
+  String toString() {
+    return "$UserInfo(address: $address, contact: $contact)";
   }
 }
 
@@ -609,17 +835,52 @@ class Address {
 
   Map<String, dynamic> get source {
     return {
-      if (area.isValid) UserKeys.i.area: area,
-      if (city.isValid) UserKeys.i.city: city,
-      if (country.isValid) UserKeys.i.country: country,
-      if (countryCode.isValid) UserKeys.i.countryCode: countryCode,
-      if (house.isValid) UserKeys.i.house: house,
-      if (policeStation.isValid) UserKeys.i.policeStation: policeStation,
-      if (postCode.isValid) UserKeys.i.postCode: postCode,
-      if (road.isValid) UserKeys.i.road: road,
-      if (section.isValid) UserKeys.i.section: section,
-      if (state.isValid) UserKeys.i.state: state,
+      UserKeys.i.area: area,
+      UserKeys.i.city: city,
+      UserKeys.i.country: country,
+      UserKeys.i.countryCode: countryCode,
+      UserKeys.i.house: house,
+      UserKeys.i.policeStation: policeStation,
+      UserKeys.i.postCode: postCode,
+      UserKeys.i.road: road,
+      UserKeys.i.section: section,
+      UserKeys.i.state: state,
     };
+  }
+
+  String get json => jsonEncode(source);
+
+  @override
+  int get hashCode =>
+      area.hashCode ^
+      city.hashCode ^
+      country.hashCode ^
+      countryCode.hashCode ^
+      house.hashCode ^
+      policeStation.hashCode ^
+      postCode.hashCode ^
+      road.hashCode ^
+      section.hashCode ^
+      state.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    return other is Address &&
+        other.area == area &&
+        other.city == city &&
+        other.country == country &&
+        other.countryCode == countryCode &&
+        other.house == house &&
+        other.policeStation == policeStation &&
+        other.postCode == postCode &&
+        other.road == road &&
+        other.section == section &&
+        other.state == state;
+  }
+
+  @override
+  String toString() {
+    return "$Address(area: $area, city: $city, country: $country, countryCode: $countryCode, house: $house, policeStation: $policeStation, postCode: $postCode, road: $road, section: $section, state: $state)";
   }
 }
 
@@ -648,9 +909,26 @@ class Contact {
 
   Map<String, dynamic> get source {
     return {
-      if (email.isValid) UserKeys.i.email: email,
-      if (phone.isValid) UserKeys.i.phone: phone,
-      if (website.isValid) UserKeys.i.website: website,
+      UserKeys.i.email: email,
+      UserKeys.i.phone: phone,
+      UserKeys.i.website: website,
     };
+  }
+
+  String get json => jsonEncode(source);
+
+  @override
+  int get hashCode => email.hashCode ^ phone.hashCode ^ website.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      other is Contact &&
+      other.email == email &&
+      other.phone == phone &&
+      other.website == website;
+
+  @override
+  String toString() {
+    return "$Contact(email: $email, phone: $phone, website: $website)";
   }
 }

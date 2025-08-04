@@ -34,7 +34,7 @@ class InAppAction extends StatelessWidget {
           primary: AndrossyGestureAnimation.scale(),
           secondary: AndrossyGestureAnimation.fade(),
         ),
-        icon: icon ?? AppIcons.leading.regular,
+        icon: icon ?? InAppIcons.leading.regular,
         iconSize: dimen.normalIcon,
         iconColor: AndrossyButtonProperty(enabled: color, disabled: color.t50),
         splashColor: color.t02,

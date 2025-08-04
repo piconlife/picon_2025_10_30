@@ -5,8 +5,8 @@ import 'package:flutter_androssy_kits/widgets/splash.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 import 'package:picon/roots/widgets/appbar.dart';
 
+import '../../../../app/configs/local.dart';
 import '../../../../app/constants/app.dart';
-import '../../../../app/constants/configs.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../roots/widgets/logo.dart';
 import '../../../../roots/widgets/screen.dart';
@@ -40,7 +40,7 @@ class SplashPage extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         body: AndrossySplash(
           onRoute: _next,
-          duration: ConfigsConstants.splashTime,
+          duration: LocalConfigs.splashTime,
           axisY: 5,
           content: const InAppLogo(),
           footer: Padding(
