@@ -165,29 +165,6 @@ class _PrivacyPageState extends State<PrivacyPage>
                                   isSeenPrivacy ||
                                   isApproved,
                               activeColor: primary,
-                              overlayColor: WidgetStateProperty.all(
-                                primary.t10,
-                              ),
-                              side: WidgetStateBorderSide.resolveWith((states) {
-                                final color = isSeenPrivacy
-                                    ? iconColor.disable ?? grey
-                                    : primary;
-                                if (states.contains(WidgetState.selected)) {
-                                  return BorderSide(
-                                    width: 2,
-                                    strokeAlign: BorderSide.strokeAlignCenter,
-                                    color: color,
-                                  );
-                                }
-                                return BorderSide(
-                                  color: color,
-                                  width: 2,
-                                  strokeAlign: BorderSide.strokeAlignCenter,
-                                );
-                              }),
-                              checkboxShape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
-                              ),
                               contentPadding: EdgeInsets.only(
                                 left: 24,
                                 right: 16,

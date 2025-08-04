@@ -32,7 +32,7 @@ class UsernamePage extends StatefulWidget {
   State<UsernamePage> createState() => _UsernamePageState();
 }
 
-class _UsernamePageState extends State<UsernamePage> {
+class _UsernamePageState extends State<UsernamePage> with ColorMixin{
   final etFullnameKey = GlobalKey<AndrossyFieldState>();
   final etShortnameKey = GlobalKey<AndrossyFieldState>();
   final btnSubmit = GlobalKey<InAppFilledButtonState>();
@@ -103,7 +103,6 @@ class _UsernamePageState extends State<UsernamePage> {
   @override
   Widget build(BuildContext context) {
     final dimen = context.dimens;
-    final primary = context.primary;
     return InAppScreen(
       child: Scaffold(
         appBar: const InAppAppbar(
@@ -126,9 +125,9 @@ class _UsernamePageState extends State<UsernamePage> {
               ),
               dimen.dp(24).h,
               AndrossyForm(
-                primaryColor: context.primary,
-                secondaryColor: context.dark.t30,
-                errorColor: context.error,
+                primaryColor: primary,
+                secondaryColor: dark.t30,
+                errorColor: error,
                 animationDuration: const Duration(milliseconds: 300),
                 borderColor: const AndrossyFieldProperty.auto(),
                 borderRadius: AndrossyFieldProperty.all(
@@ -137,16 +136,16 @@ class _UsernamePageState extends State<UsernamePage> {
                 contentPadding: EdgeInsets.all(dimen.dp(16)),
                 counterVisibility: FloatingVisibility.always,
                 drawableEndTint: AndrossyFieldProperty(
-                  enabled: context.iconColor.primary,
-                  disabled: context.iconColor.disable,
-                  error: context.iconColor.error,
+                  enabled: primary,
+                  disabled: iconColor.disable,
+                  error: iconColor.error,
                   focused: primary,
                 ),
                 drawableStartTint: AndrossyFieldProperty(
-                  enabled: context.iconColor.primary,
+                  enabled: primary,
                   focused: primary,
-                  error: context.iconColor.error,
-                  disabled: context.iconColor.disable,
+                  error: iconColor.error,
+                  disabled: iconColor.disable,
                 ),
                 drawableStartPadding: AndrossyFieldProperty(
                   enabled: dimen.dp(12),
@@ -157,6 +156,9 @@ class _UsernamePageState extends State<UsernamePage> {
                   vertical: dimen.dp(4),
                 ),
                 floatingVisibility: FloatingVisibility.always,
+                style: TextStyle(
+                  color: dark,
+                ),
                 onValid: (v) => btnSubmit.currentState?.setEnabled(v),
                 children: [
                   AndrossyField(
