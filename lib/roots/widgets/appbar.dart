@@ -45,15 +45,22 @@ class InAppAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final style = backgroundColor?.isDark ?? context.isDarkMode
+        ? SystemUiOverlayStyle.light.copyWith(
+            systemNavigationBarColor: Colors.black.withAlpha(0),
+            statusBarColor: Colors.black.withAlpha(0),
+          )
+        : SystemUiOverlayStyle.dark.copyWith(
+            systemNavigationBarColor: Colors.white.withAlpha(0),
+            statusBarColor: Colors.white.withAlpha(0),
+          );
     if (hide) {
       return AppBar(
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         toolbarHeight: 0,
         surfaceTintColor: Colors.transparent,
-        systemOverlayStyle: backgroundColor?.isDark ?? context.isDarkMode
-            ? SystemUiOverlayStyle.light
-            : SystemUiOverlayStyle.dark,
+        systemOverlayStyle: style,
       );
     }
     return InAppColumn(
@@ -70,6 +77,7 @@ class InAppAppbar extends StatelessWidget implements PreferredSizeWidget {
           elevation: 0,
           bottom: bottom,
           actions: actions.isNotEmpty ? [...actions, SizedBox(width: 8)] : null,
+          systemOverlayStyle: style,
         ),
         if (elevation > 0)
           Divider(

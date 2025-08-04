@@ -14,6 +14,7 @@ import '../../../../roots/services/analytics.dart';
 import '../../../../roots/widgets/align.dart';
 import '../../../../roots/widgets/layout.dart';
 import '../../../../roots/widgets/position.dart';
+import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/system_overlay.dart';
 import '../../../../routes/paths.dart';
 import '../../configs/onboard.dart';
@@ -26,7 +27,6 @@ import '../widgets/onboarding_image.dart';
 import '../widgets/onboarding_titled_body.dart';
 import '../widgets/onboarding_weight.dart';
 import '../widgets/options.dart';
-import '../widgets/startup_screen.dart';
 import '../widgets/tips.dart';
 
 class QuizPage extends StatefulWidget {
@@ -101,7 +101,7 @@ class _QuizPageState extends State<QuizPage> with TranslationMixin, ColorMixin {
     contents = gets(path: "onboarding_quizzes", parser: OnboardQuiz.from);
     content = contents.elementAtOrNull(step - 1) ?? OnboardQuiz();
     return InAppSystemOverlay(
-      child: OnboardScreen(
+      child: InAppScreen(
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: SafeArea(child: _buildLayout()),

@@ -11,6 +11,7 @@ import '../../../../roots/services/notification.dart';
 import '../../../../roots/widgets/align.dart';
 import '../../../../roots/widgets/layout.dart';
 import '../../../../roots/widgets/position.dart';
+import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/system_overlay.dart';
 import '../../../../routes/paths.dart';
 import '../../configs/onboard.dart';
@@ -19,7 +20,6 @@ import '../widgets/onboarding_appbar.dart';
 import '../widgets/onboarding_filled_button.dart';
 import '../widgets/onboarding_text_button.dart';
 import '../widgets/onboarding_titled_body.dart';
-import '../widgets/startup_screen.dart';
 
 class PermissionPage extends StatefulWidget {
   final Object? args;
@@ -72,7 +72,7 @@ class _PermissionPageState extends State<PermissionPage>
     String steps(String key) => stepsParser(key, total, step);
 
     return InAppSystemOverlay(
-      child: OnboardScreen(
+      child: InAppScreen(
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: SafeArea(

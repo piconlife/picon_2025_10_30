@@ -10,13 +10,12 @@ import '../../../../app/constants/app.dart';
 import '../../../../roots/widgets/align.dart';
 import '../../../../roots/widgets/layout.dart';
 import '../../../../roots/widgets/position.dart';
-import '../../../../roots/widgets/system_overlay.dart';
+import '../../../../roots/widgets/screen.dart';
 import '../../configs/onboard.dart';
 import '../utils/parser.dart';
 import '../widgets/generating.dart';
 import '../widgets/onboarding_appbar.dart';
 import '../widgets/onboarding_titled_body.dart';
-import '../widgets/startup_screen.dart';
 import 'splash.dart';
 
 class FinalPage extends StatefulWidget {
@@ -40,65 +39,62 @@ class _FinalPageState extends State<FinalPage>
 
     String steps(String key) => stepsParser(key, total, step);
 
-    return InAppSystemOverlay(
-      child: OnboardScreen(
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: SafeArea(
-            child: InAppLayout(
-              layout: LayoutType.stack,
-              children: [
-                InAppPositioned(
-                  left: 0,
-                  right: 0,
-                  top: 8,
-                  child: OnboardingAppbar(
-                    title: localize("title", defaultValue: ''),
-                    step: step,
-                    total: total,
-                    text: steps,
-                  ),
+    return InAppScreen(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: InAppLayout(
+            layout: LayoutType.stack,
+            children: [
+              InAppPositioned(
+                left: 0,
+                right: 0,
+                top: 8,
+                child: OnboardingAppbar(
+                  title: localize("title", defaultValue: ''),
+                  step: step,
+                  total: total,
+                  text: steps,
                 ),
-                InAppAlign(
-                  alignment: Alignment(0, -0.7),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                    ).apply(dimen),
-                    child: OnboardingTitledBody(
-                      configs: configs,
-                      body: localize(
-                        "description",
-                        defaultValue:
-                            "According to our data, {APP_NAME} users who receive notification are more likely achieve their goals",
-                        replace: (value) =>
-                            value.replaceAll("{APP_NAME}", AppConstants.name),
-                      ),
-                      title: localize(
-                        "title",
-                        defaultValue:
-                            "{PROGRESS}% more successful with notifications",
-                        applyNumber: true,
-                        replace: (value) =>
-                            value.replaceAll("{PROGRESS}", "87"),
-                      ),
+              ),
+              InAppAlign(
+                alignment: Alignment(0, -0.7),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                  ).apply(dimen),
+                  child: OnboardingTitledBody(
+                    configs: configs,
+                    body: localize(
+                      "description",
+                      defaultValue:
+                          "According to our data, {APP_NAME} users who receive notification are more likely achieve their goals",
+                      replace: (value) =>
+                          value.replaceAll("{APP_NAME}", AppConstants.name),
+                    ),
+                    title: localize(
+                      "title",
+                      defaultValue:
+                          "{PROGRESS}% more successful with notifications",
+                      applyNumber: true,
+                      replace: (value) => value.replaceAll("{PROGRESS}", "87"),
                     ),
                   ),
                 ),
-                InAppAlign(
-                  alignment: Alignment.center,
-                  child: OnboardingGenerating(
-                    label: localize("progress_text"),
-                    onStatus: (status) {
-                      if (status == AnimationStatus.completed) {
-                        Settings.set(kOnboardingComplete, true);
-                        context.home();
-                      }
-                    },
-                  ),
+              ),
+              InAppAlign(
+                alignment: Alignment.center,
+                child: OnboardingGenerating(
+                  label: localize("progress_text"),
+                  onStatus: (status) {
+                    if (status == AnimationStatus.completed) {
+                      Settings.set(kOnboardingComplete, true);
+                      context.home();
+                    }
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

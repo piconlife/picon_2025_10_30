@@ -15,6 +15,7 @@ import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/column.dart';
 import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/logo_trailing.dart';
+import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/stack.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../routes/paths.dart';
@@ -105,28 +106,33 @@ class _PrivacyPageState extends State<PrivacyPage>
   Widget build(BuildContext context) {
     final dark = context.dark;
     final primary = context.primary;
-    final bg = context.light;
-    return Scaffold(
-      backgroundColor: bg,
-      appBar: InAppAppbar(
-        titleText: "Privacy Policy",
-        centerTitle: true,
-        actions: [InAppLogoTrailing()],
-      ),
-      body: SafeArea(
-        child: SizedBox.expand(
-          child: InAppStack(
-            fit: StackFit.expand,
-            children: [
-              SingleChildScrollView(
-                padding: EdgeInsets.only(bottom: 100),
-                child: InAppColumn(
-                  spacing: 2,
-                  children: [
-                    ColoredBox(
-                      color: context.dark.t02,
-                      child: Padding(
+    return InAppScreen(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: InAppAppbar(
+          titleText: "Privacy Policy",
+          centerTitle: true,
+          actions: [InAppLogoTrailing()],
+        ),
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: SizedBox.expand(
+            child: InAppStack(
+              fit: StackFit.expand,
+              children: [
+                SingleChildScrollView(
+                  padding: EdgeInsets.only(bottom: 100),
+                  child: InAppColumn(
+                    spacing: 2,
+                    children: [
+                      Container(
                         padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: dark.t02,
+                          border: Border(
+                            bottom: BorderSide(color: dark.t05, width: 1),
+                          ),
+                        ),
                         child: InAppColumn(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           spacing: 8,
@@ -148,11 +154,8 @@ class _PrivacyPageState extends State<PrivacyPage>
                           ],
                         ),
                       ),
-                    ),
-                    if (legal.contents.isNotEmpty)
-                      ColoredBox(
-                        color: bg,
-                        child: InAppColumn(
+                      if (legal.contents.isNotEmpty)
+                        InAppColumn(
                           children: List.generate(legal.contents.length, (i) {
                             final item = legal.contents[i];
                             return CheckboxListTile(
@@ -225,34 +228,34 @@ class _PrivacyPageState extends State<PrivacyPage>
                             );
                           }),
                         ),
-                      ),
-                  ],
-                ),
-              ),
-              if (!isSeenPrivacy || widget.isStartupMode)
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    constraints: BoxConstraints(maxWidth: 500),
-                    padding: EdgeInsets.only(left: 50, right: 50, bottom: 24),
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 15,
-                          spreadRadius: 25,
-                          color: bg,
-                          offset: Offset.zero,
-                        ),
-                      ],
-                    ),
-                    child: InAppFilledButton(
-                      enabled: isApproved || widget.isStartupMode,
-                      text: widget.isStartupMode ? "Next" : "Accept",
-                      onTap: _accept,
-                    ),
+                    ],
                   ),
                 ),
-            ],
+                if (!isSeenPrivacy || widget.isStartupMode)
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      constraints: BoxConstraints(maxWidth: 500),
+                      padding: EdgeInsets.only(left: 50, right: 50, bottom: 24),
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 15,
+                            spreadRadius: 25,
+                            color: scaffoldColor.primary ?? light,
+                            offset: Offset.zero,
+                          ),
+                        ],
+                      ),
+                      child: InAppFilledButton(
+                        enabled: isApproved || widget.isStartupMode,
+                        text: widget.isStartupMode ? "Next" : "Accept",
+                        onTap: _accept,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
