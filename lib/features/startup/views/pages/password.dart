@@ -31,6 +31,7 @@ import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/logo_trailing.dart';
 import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/text.dart';
+import '../../../../routes/keys.dart';
 import '../../../../routes/paths.dart';
 import '../../preferences/global.dart';
 import '../../preferences/startup.dart';
@@ -201,7 +202,7 @@ class _PasswordPageState extends State<PasswordPage> {
     if (!context.mounted) return;
     context.clear(
       Routes.editUserProfilePhoto,
-      arguments: {"kRouteOnboardingMode": true},
+      arguments: {kRouteOnboardingMode: true},
     );
   }
 

@@ -9,8 +9,8 @@ import 'views/pages/terms_reader.dart';
 
 Map<String, RouteBuilder> get mAboutsRoutes {
   return {
-    Routes.aboutUs: _aboutUs,
-    Routes.privacyPolicy: _privacyPolicy,
+    Routes.info: _aboutUs,
+    Routes.privacy: _privacyPolicy,
     Routes.terms: _terms,
     Routes.termsAndConditions: _termsAndConditions,
   };
@@ -21,7 +21,7 @@ Widget _aboutUs(BuildContext context, Object? args) {
 }
 
 Widget _privacyPolicy(BuildContext context, Object? data) {
-  return PrivacyPage(args: data);
+  return PrivacyPage(args: data, isStartupMode: data is bool && data);
 }
 
 Widget _terms(BuildContext context, Object? data) {
@@ -29,5 +29,5 @@ Widget _terms(BuildContext context, Object? data) {
 }
 
 Widget _termsAndConditions(BuildContext context, Object? data) {
-  return TermsPage(args: data);
+  return TermsPage(args: data, isStartupMode: data is bool && data);
 }

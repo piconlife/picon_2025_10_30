@@ -49,6 +49,7 @@ class _TermsPageState extends State<TermsPage>
   final selections = <String>{};
 
   bool get isApproved =>
+      isTermsSeen ||
       legal.contents.every((i) => selections.contains(i.headline));
 
   void _accept() async {
@@ -160,7 +161,6 @@ class _TermsPageState extends State<TermsPage>
                             enabled: !isTermsSeen,
                             value:
                                 selections.contains(item.headline) ||
-                                isTermsSeen ||
                                 isApproved,
                             activeColor: primary,
                             contentPadding: EdgeInsets.only(
@@ -222,7 +222,7 @@ class _TermsPageState extends State<TermsPage>
                         ],
                       ),
                       child: InAppFilledButton(
-                        enabled: isApproved || widget.isStartupMode,
+                        enabled: isApproved,
                         text: widget.isStartupMode ? "Next" : "Accept",
                         onTap: _accept,
                       ),

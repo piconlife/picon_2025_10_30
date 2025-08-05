@@ -49,6 +49,7 @@ class _PrivacyPageState extends State<PrivacyPage>
   final selections = <String>{};
 
   bool get isApproved =>
+      isSeenPrivacy ||
       legal.contents.every((i) => selections.contains(i.headline));
 
   void _accept() async {
@@ -225,7 +226,7 @@ class _PrivacyPageState extends State<PrivacyPage>
                         ],
                       ),
                       child: InAppFilledButton(
-                        enabled: isApproved || widget.isStartupMode,
+                        enabled: isApproved,
                         text: widget.isStartupMode ? "Next" : "Accept",
                         onTap: _accept,
                       ),

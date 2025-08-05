@@ -21,6 +21,7 @@ class InAppAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String? titleText;
   final TextStyle titleTextStyle;
   final bool hide;
+  final bool useSystemUiOverlay;
 
   const InAppAppbar({
     super.key,
@@ -38,6 +39,7 @@ class InAppAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.titleText,
     this.titleTextStyle = const TextStyle(fontSize: 18),
     this.hide = false,
+    this.useSystemUiOverlay = true,
   });
 
   const InAppAppbar.hide({Key? key, Color? backgroundColor})
@@ -45,15 +47,18 @@ class InAppAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = backgroundColor?.isDark ?? context.isDarkMode
-        ? SystemUiOverlayStyle.light.copyWith(
-            systemNavigationBarColor: Colors.black.withAlpha(0),
-            statusBarColor: Colors.black.withAlpha(0),
-          )
-        : SystemUiOverlayStyle.dark.copyWith(
-            systemNavigationBarColor: Colors.white.withAlpha(0),
-            statusBarColor: Colors.white.withAlpha(0),
-          );
+    SystemUiOverlayStyle? style;
+    if (useSystemUiOverlay) {
+      style = backgroundColor?.isDark ?? context.isDarkMode
+          ? SystemUiOverlayStyle.light.copyWith(
+              systemNavigationBarColor: Colors.black.withAlpha(1),
+              statusBarColor: Colors.black.withAlpha(1),
+            )
+          : SystemUiOverlayStyle.dark.copyWith(
+              systemNavigationBarColor: Colors.white.withAlpha(1),
+              statusBarColor: Colors.white.withAlpha(1),
+            );
+    }
     if (hide) {
       return AppBar(
         backgroundColor: Colors.transparent,

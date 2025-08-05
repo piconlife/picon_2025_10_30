@@ -1,11 +1,13 @@
 class Routes {
   const Routes._();
 
+  // ROOT
   static const main = "/";
+  static const settings = "/settings";
 
   // LEGALS
   static const info = "/info";
-  static const privacy = "/privacy";
+  static const privacy = "/privacy_policy";
   static const terms = "/terms";
   static const termsAndConditions = "/terms_and_conditions";
 
@@ -24,7 +26,6 @@ class Routes {
   static const ongoing = "/ongoing";
   static const otp = "/otp";
   static const password = "/password";
-  static const privacyPolicy = "/privacy-policy";
   static const username = "/username";
 
   // USER
@@ -90,10 +91,6 @@ class Routes {
   static const searchProducts = "/search_products";
   static const searchVideos = "/search_videos";
 
-  // ROOT
-  static const aboutUs = "/about_us";
-  static const settings = "/settings";
-
   // SERVICES
   static const guideForStudent = "/guide_for_student";
   static const guideForTraveller = "/guide_for_traveller";
@@ -120,7 +117,4 @@ class Routes {
   // PREVIEW
   static const previewPhotos = '/preview_photos';
   static const previewVideos = '/preview_videos';
-
-  // PAYWALL
-  static const paywall = "/paywall";
 }

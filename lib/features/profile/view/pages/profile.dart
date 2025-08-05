@@ -31,7 +31,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   void _visitAboutUs(BuildContext context) {
-    context.open(Routes.aboutUs);
+    context.open(Routes.info);
   }
 
   void _visitProfile(BuildContext context, User? user) {

@@ -152,6 +152,7 @@ class InAppAlertDialog extends StatelessWidget {
                     width: dimen.dp(16),
                     indent: dimen.dp(6),
                     endIndent: dimen.dp(6),
+                    color: context.dark.t05,
                   ),
                   Expanded(
                     child: InAppTextButton(
