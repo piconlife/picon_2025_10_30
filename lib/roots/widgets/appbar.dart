@@ -21,6 +21,7 @@ class InAppAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String? titleText;
   final TextStyle titleTextStyle;
   final bool hide;
+  final bool useHero;
   final bool useSystemUiOverlay;
 
   const InAppAppbar({
@@ -39,6 +40,7 @@ class InAppAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.titleText,
     this.titleTextStyle = const TextStyle(fontSize: 18),
     this.hide = false,
+    this.useHero = true,
     this.useSystemUiOverlay = true,
   });
 
@@ -68,7 +70,7 @@ class InAppAppbar extends StatelessWidget implements PreferredSizeWidget {
         systemOverlayStyle: style,
       );
     }
-    return InAppColumn(
+    Widget child = InAppColumn(
       mainAxisSize: MainAxisSize.min,
       children: [
         AppBar(
@@ -91,6 +93,10 @@ class InAppAppbar extends StatelessWidget implements PreferredSizeWidget {
           ),
       ],
     );
+    if (useHero) {
+      child = Hero(tag: "appbar", child: child);
+    }
+    return child;
   }
 
   @override

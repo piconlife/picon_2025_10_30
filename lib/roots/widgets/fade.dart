@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
+import 'package:flutter_androssy_kits/widgets/fade.dart';
 
 class InAppFade extends StatelessWidget {
   final double fadeWidthFraction;
