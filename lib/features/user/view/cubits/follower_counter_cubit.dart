@@ -15,7 +15,7 @@ class UserFollowerCounterCubit extends DataCubit<int> {
       return emit(state.copy(status: Status.notFound));
     }
     emit(state.copy(status: Status.loading));
-    GetUserFollowerCountUseCase.i(uid).then(_attach).catchError((error, __) {
+    GetUserFollowerCountUseCase.i(uid).then(_attach).catchError((error, st) {
       emit(state.copy(status: Status.failure));
     });
   }

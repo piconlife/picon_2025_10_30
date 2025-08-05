@@ -1,10 +1,22 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
+import 'package:flutter_andomie/models/selection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 
 abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   DataCubit() : super(Response());
+
+  Timer? _timer;
+
+  void execute(Function() callback) {
+    _timer?.cancel();
+    _timer = Timer(const Duration(milliseconds: 100), () {
+      _timer?.cancel();
+      callback();
+    });
+  }
 
   int indexOf(String? id, [String Function(T data)? finder]) {
     if (id == null || id.isEmpty) return -1;
