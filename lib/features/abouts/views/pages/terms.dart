@@ -41,7 +41,7 @@ class _TermsPageState extends State<TermsPage>
 
   Legal get legal {
     if (_legal == null || _legal!.isEmpty) {
-      _legal = Legals.load().terms;
+      _legal = Legals.get.terms;
     }
     return _legal!;
   }
@@ -87,7 +87,7 @@ class _TermsPageState extends State<TermsPage>
   }
 
   void _listener() {
-    setState(() => _legal = Legals.load().terms);
+    setState(() => _legal = Legals.get.terms);
   }
 
   @override

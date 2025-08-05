@@ -2,11 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter_andomie/utils/translation.dart';
 
-import '../../features/settings/views/pages/settings.dart';
-import '../../features/settings/views/widgets/remainder.dart';
 import '../../roots/services/notification.dart';
 import '../../roots/utils/speech.dart';
-import '../settings/remote.dart';
 
 class InAppListeners {
   const InAppListeners._();
@@ -21,16 +18,6 @@ class InAppListeners {
     await Speech.language(Translation.languageCode);
     await InAppNotifications.init(
       onReady: () async {
-        if (RemoteSettings.isHourlyNotifications) {
-          await InAppNotifications.initHourlyNotifications(
-            perHour: RemoteSettings.hourlyNotificationsTime,
-            startHour: mHourlyNotificationStartTime,
-            endHour: mHourlyNotificationEndTime,
-          );
-        }
-        await InAppNotifications.initTimeOfDayNotifications(
-          timeOfDays: mTimeOfDays,
-        );
         await InAppNotifications.initWeeklyNotifications();
       },
     );

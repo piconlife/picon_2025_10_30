@@ -14,7 +14,7 @@ class GetUserReportsByPaginationUseCase extends BaseUserReportUseCase {
     return _i ??= GetUserReportsByPaginationUseCase._();
   }
 
-  Future<Response<Report>> call({
+  Future<Response<UserReport>> call({
     String? uid,
     int? initialSize,
     int? fetchingSize,

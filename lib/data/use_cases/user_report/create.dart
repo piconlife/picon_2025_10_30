@@ -10,7 +10,7 @@ class CreateUserReportUseCase extends BaseUserReportUseCase {
 
   static CreateUserReportUseCase get i => _i ??= CreateUserReportUseCase._();
 
-  Future<Response<Report>> call(Report data) {
+  Future<Response<UserReport>> call(UserReport data) {
     return repository.create(data, params: params);
   }
 }

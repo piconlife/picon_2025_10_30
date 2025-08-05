@@ -10,7 +10,7 @@ class DeleteUserReportUseCase extends BaseUserReportUseCase {
 
   static DeleteUserReportUseCase get i => _i ??= DeleteUserReportUseCase._();
 
-  Future<Response<Report>> call(String id) {
+  Future<Response<UserReport>> call(String id) {
     return repository.deleteById(id, params: params);
   }
 }

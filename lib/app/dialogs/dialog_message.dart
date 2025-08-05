@@ -2,9 +2,7 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/extensions/spacing.dart';
-import 'package:flutter_andomie/extensions/string.dart';
-import 'package:flutter_andomie/utils/translation.dart';
+import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 
 import '../../roots/widgets/text.dart';
@@ -53,15 +51,11 @@ class InAppMessageDialog extends StatelessWidget {
           dimen.dp(24).h,
           Divider(height: dimen.dp(1)),
           InAppTextButton(
-            "dialog_button_positive".trWithOption(
-              defaultValue: "OK",
-              name: "dialog_message",
-              replace: (value) => value.toUpperCase(),
-            ),
+            "OK",
             foregroundColor: context.primary,
             height: dimen.dp(54),
             width: double.infinity,
-            onTap: context.dismiss,
+            onTap: () => AndrossyDialog.dismiss(),
           ),
         ],
       ),

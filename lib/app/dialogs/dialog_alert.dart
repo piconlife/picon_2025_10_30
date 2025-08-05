@@ -4,9 +4,7 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 
-import '../../roots/widgets/column.dart';
 import '../../roots/widgets/icon.dart';
-import '../../roots/widgets/row.dart';
 import '../../roots/widgets/text.dart';
 import '../../roots/widgets/text_button.dart';
 
@@ -64,10 +62,9 @@ class InAppAlertDialog extends StatelessWidget {
     final isTitled = title.isNotEmpty || (titleSpans ?? []).isNotEmpty;
     final isSubtitled = subtitle.isNotEmpty || (subtitleSpans ?? []).isNotEmpty;
     return Dialog(
-      clipBehavior: Clip.antiAlias,
-      surfaceTintColor: Colors.transparent,
       backgroundColor: context.dialogColor.primary,
-      child: InAppColumn(
+      clipBehavior: Clip.antiAlias,
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(height: dimen.dp(32)),
@@ -77,7 +74,7 @@ class InAppAlertDialog extends StatelessWidget {
           ],
           Padding(
             padding: EdgeInsets.symmetric(horizontal: dimen.dp(32)),
-            child: InAppColumn(
+            child: Column(
               children: [
                 if (isTitled)
                   InAppText(
@@ -138,12 +135,12 @@ class InAppAlertDialog extends StatelessWidget {
             child: SizedBox(
               width: double.infinity,
               height: dimen.dp(40),
-              child: InAppRow(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
                     child: InAppTextButton(
-                      negativeButtonText ?? "Cancel",
+                      negativeButtonText ?? "CANCEL",
                       height: double.infinity,
                       padding: EdgeInsets.zero,
                       borderRadius: BorderRadius.circular(dimen.dp(50)),

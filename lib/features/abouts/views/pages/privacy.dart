@@ -41,7 +41,7 @@ class _PrivacyPageState extends State<PrivacyPage>
 
   Legal get legal {
     if (_legal == null || _legal!.isEmpty) {
-      _legal = Legals.load().privacy;
+      _legal = Legals.get.privacy;
     }
     return _legal!;
   }
@@ -87,7 +87,7 @@ class _PrivacyPageState extends State<PrivacyPage>
   }
 
   void _listener() {
-    setState(() => _legal = Legals.load().terms);
+    setState(() => _legal = Legals.get.terms);
   }
 
   @override

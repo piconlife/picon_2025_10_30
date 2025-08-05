@@ -2,15 +2,13 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/extensions/int.dart';
-import 'package:flutter_andomie/extensions/spacing.dart';
-import 'package:flutter_andomie/utils/translation.dart';
+import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 
-import '../../app/styles/fonts.dart';
 import '../../roots/widgets/text.dart';
 import '../../roots/widgets/text_button.dart';
+import '../styles/fonts.dart';
 
 const kMaxCharacters = "maxCharacters";
 
@@ -46,6 +44,7 @@ class InAppEditorDialog extends StatefulWidget {
 
 class _InAppEditorDialogState extends State<InAppEditorDialog> {
   final controller = TextEditingController();
+  final scrollController = ScrollController();
 
   String get text {
     return controller.text;
@@ -65,7 +64,7 @@ class _InAppEditorDialogState extends State<InAppEditorDialog> {
 
   void _submit(BuildContext context) {
     final value = text.trim();
-    context.dismiss(result: value.isNotEmpty ? value : null);
+    Navigator.pop(context, value.isNotEmpty ? value : null);
   }
 
   @override
@@ -75,6 +74,7 @@ class _InAppEditorDialogState extends State<InAppEditorDialog> {
     final primary = context.primary;
     final keyboardHeight = MediaQuery.viewInsetsOf(context).bottom;
     return Dialog(
+      backgroundColor: context.dialogColor.primary,
       clipBehavior: Clip.antiAlias,
       child: Container(
         width: double.infinity,
@@ -102,6 +102,7 @@ class _InAppEditorDialogState extends State<InAppEditorDialog> {
               margin: EdgeInsets.symmetric(horizontal: dimen.dp(8)),
               child: AndrossyField(
                 controller: controller,
+                scrollController: scrollController,
                 constraints: BoxConstraints(
                   maxHeight: keyboardHeight > 0
                       ? (context.screenHeight - keyboardHeight) * 0.5
@@ -139,10 +140,7 @@ class _InAppEditorDialogState extends State<InAppEditorDialog> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   InAppTextButton(
-                    "dialog_button_negative".trWithOption(
-                      defaultValue: "Cancel",
-                      name: "dialog_editor",
-                    ),
+                    "Cancel",
                     padding: EdgeInsets.zero,
                     textAllCaps: true,
                     width: dimen.dp(90),
@@ -150,7 +148,7 @@ class _InAppEditorDialogState extends State<InAppEditorDialog> {
                     foregroundColor: color.t50,
                     backgroundColor: color.t05,
                     borderRadius: BorderRadius.circular(dimen.dp(10)),
-                    onTap: context.dismiss,
+                    onTap: () => context.dismiss(),
                     style: TextStyle(
                       color: color.t50,
                       fontFamily: InAppFonts.secondary,
@@ -160,10 +158,7 @@ class _InAppEditorDialogState extends State<InAppEditorDialog> {
                   ),
                   SizedBox(width: dimen.dp(8)),
                   InAppTextButton(
-                    "dialog_button_positive".trWithOption(
-                      defaultValue: "Save",
-                      name: "dialog_editor",
-                    ),
+                    "Save",
                     padding: EdgeInsets.zero,
                     textAllCaps: true,
                     width: dimen.dp(70),

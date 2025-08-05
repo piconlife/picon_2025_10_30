@@ -18,7 +18,7 @@ class Legals {
 
   const Legals({this.privacy = const Legal(), this.terms = const Legal()});
 
-  factory Legals.load() {
+  static Legals get get {
     final x = Configs.load(name: _kLegals, parser: Legals.parse);
     return x ?? Legals();
   }
@@ -37,11 +37,6 @@ class Legals {
   Legals copy({Legal? privacy, Legal? terms}) {
     return Legals(privacy: privacy ?? this.privacy, terms: terms ?? this.terms);
   }
-
-  Map<String, dynamic> get json => {
-    _kPrivacy: privacy.json,
-    _kTerms: terms.json,
-  };
 
   @override
   String toString() => "$Legal($_kPrivacy: $privacy, $_kTerms: $terms)";

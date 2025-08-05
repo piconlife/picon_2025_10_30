@@ -2,15 +2,13 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/extensions/int.dart';
-import 'package:flutter_andomie/extensions/spacing.dart';
-import 'package:flutter_andomie/utils/translation.dart';
+import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 
-import '../../app/styles/fonts.dart';
 import '../../roots/widgets/text.dart';
 import '../../roots/widgets/text_button.dart';
+import '../styles/fonts.dart';
 
 const kMaxCharacters = "maxCharacters";
 
@@ -18,6 +16,8 @@ class InAppEditorBottomSheet extends StatefulWidget {
   final String? hint;
   final String? title;
   final String? text;
+  final String? positiveButtonText;
+  final String? negativeButtonText;
   final int? maxCharacters;
   final int? minCharacters;
   final int? maxLines;
@@ -37,6 +37,8 @@ class InAppEditorBottomSheet extends StatefulWidget {
     this.minLines,
     this.inputType,
     this.actionType,
+    this.positiveButtonText,
+    this.negativeButtonText,
     this.args,
   });
 
@@ -65,7 +67,7 @@ class _InAppEditorBottomSheetState extends State<InAppEditorBottomSheet> {
 
   void _submit(BuildContext context) {
     final value = text.trim();
-    context.dismiss(result: value.isNotEmpty ? value : null);
+    Navigator.pop(context, value.isNotEmpty ? value : null);
   }
 
   @override
@@ -76,6 +78,7 @@ class _InAppEditorBottomSheetState extends State<InAppEditorBottomSheet> {
     final keyboardHeight = MediaQuery.viewInsetsOf(context).bottom;
     return BottomSheet(
       constraints: BoxConstraints(minHeight: dimen.dp(300)),
+      backgroundColor: context.dialogColor.primary,
       clipBehavior: Clip.antiAlias,
       onClosing: context.dismiss,
       builder: (context) {
@@ -145,10 +148,7 @@ class _InAppEditorBottomSheetState extends State<InAppEditorBottomSheet> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     InAppTextButton(
-                      "dialog_button_negative".trWithOption(
-                        defaultValue: "Cancel",
-                        name: "bsd_editor",
-                      ),
+                      widget.negativeButtonText ?? "Cancel",
                       padding: EdgeInsets.zero,
                       textAllCaps: true,
                       width: dimen.dp(90),
@@ -156,7 +156,7 @@ class _InAppEditorBottomSheetState extends State<InAppEditorBottomSheet> {
                       foregroundColor: color.t50,
                       backgroundColor: color.t05,
                       borderRadius: BorderRadius.circular(dimen.dp(10)),
-                      onTap: context.dismiss,
+                      onTap: () => context.dismiss(),
                       style: TextStyle(
                         color: color.t50,
                         fontFamily: InAppFonts.secondary,
@@ -166,10 +166,7 @@ class _InAppEditorBottomSheetState extends State<InAppEditorBottomSheet> {
                     ),
                     SizedBox(width: dimen.dp(8)),
                     InAppTextButton(
-                      "dialog_button_positive".trWithOption(
-                        defaultValue: "Save",
-                        name: "bsd_editor",
-                      ),
+                      widget.positiveButtonText ?? "Save",
                       padding: EdgeInsets.zero,
                       textAllCaps: true,
                       width: dimen.dp(70),

@@ -1,0 +1,2969 @@
+{
+  "default": {
+    "3d_printing": {
+      "category": "General",
+      "key": "3d_printing",
+      "name": "3D printing"
+    },
+    "acroyoga": {
+      "category": "General",
+      "key": "acroyoga",
+      "name": "Acroyoga"
+    },
+    "acting": {
+      "category": "General",
+      "key": "acting",
+      "name": "Acting"
+    },
+    "action_figure": {
+      "category": "Indoors",
+      "key": "action_figure",
+      "name": "Action figure"
+    },
+    "aerospace": {
+      "category": "Educational",
+      "key": "aerospace",
+      "name": "Aerospace"
+    },
+    "air_hockey": {
+      "category": "Indoors",
+      "key": "air_hockey",
+      "name": "Air hockey"
+    },
+    "air_sports": {
+      "category": "Outdoors and Sports",
+      "key": "air_sports",
+      "name": "Air sports"
+    },
+    "aircraft_spotting": {
+      "category": "Outdoors",
+      "key": "aircraft_spotting",
+      "name": "Aircraft spotting"
+    },
+    "airsoft": {
+      "category": "Outdoors",
+      "key": "airsoft",
+      "name": "Airsoft"
+    },
+    "amateur_astronomy": {
+      "category": "Outdoors",
+      "key": "amateur_astronomy",
+      "name": "Amateur astronomy"
+    },
+    "amateur_geology": {
+      "category": "Outdoors and Sports",
+      "key": "amateur_geology",
+      "name": "Amateur geology"
+    },
+    "amusement_park_visiting": {
+      "category": "Outdoors and Sports",
+      "key": "amusement_park_visiting",
+      "name": "Amusement park visiting"
+    },
+    "animal_fancy": {
+      "category": "Indoors",
+      "key": "animal_fancy",
+      "name": "Animal fancy"
+    },
+    "animation": {
+      "category": "Educational",
+      "key": "animation",
+      "name": "Animation"
+    },
+    "anime": {
+      "category": "General",
+      "key": "anime",
+      "name": "Anime"
+    },
+    "ant_keeping": {
+      "category": "Indoors",
+      "key": "ant_keeping",
+      "name": "Ant-keeping"
+    },
+    "antiquing": {
+      "category": "Indoors",
+      "key": "antiquing",
+      "name": "Antiquing"
+    },
+    "antiquities": {
+      "category": "Outdoors",
+      "key": "antiquities",
+      "name": "Antiquities"
+    },
+    "aquascaping": {
+      "category": "General",
+      "key": "aquascaping",
+      "name": "Aquascaping"
+    },
+    "archaeology": {
+      "category": "Educational",
+      "key": "archaeology",
+      "name": "Archaeology"
+    },
+    "archery": {
+      "category": "Outdoors",
+      "key": "archery",
+      "name": "Archery"
+    },
+    "art": {
+      "category": "General",
+      "key": "art",
+      "name": "Art"
+    },
+    "art_collecting": {
+      "category": "Indoors",
+      "key": "art_collecting",
+      "name": "Art collecting"
+    },
+    "association_football": {
+      "category": "Outdoors",
+      "key": "association_football",
+      "name": "Association football"
+    },
+    "astrology": {
+      "category": "General",
+      "key": "astrology",
+      "name": "Astrology"
+    },
+    "astronomy": {
+      "category": "Educational",
+      "key": "astronomy",
+      "name": "Astronomy"
+    },
+    "audiophile": {
+      "category": "Indoors",
+      "key": "audiophile",
+      "name": "Audiophile"
+    },
+    "australian_rules_football": {
+      "category": "Outdoors",
+      "key": "australian_rules_football",
+      "name": "Australian rules football"
+    },
+    "auto_audiophilia": {
+      "category": "Outdoors",
+      "key": "auto_audiophilia",
+      "name": "Auto audiophilia"
+    },
+    "auto_detailing": {
+      "category": "Outdoors and Sports",
+      "key": "auto_detailing",
+      "name": "Auto detailing"
+    },
+    "auto_mobilism": {
+      "category": "Outdoors and Sports",
+      "key": "auto_mobilism",
+      "name": "Auto mobilism"
+    },
+    "auto_racing": {
+      "category": "Outdoors",
+      "key": "auto_racing",
+      "name": "Auto racing"
+    },
+    "axe_throwing": {
+      "category": "Indoors",
+      "key": "axe_throwing",
+      "name": "Axe throwing"
+    },
+    "backgammon": {
+      "category": "Indoors",
+      "key": "backgammon",
+      "name": "Backgammon"
+    },
+    "backpacking": {
+      "category": "Outdoors and Sports",
+      "key": "backpacking",
+      "name": "Backpacking"
+    },
+    "badminton": {
+      "category": "Indoors",
+      "key": "badminton",
+      "name": "Badminton"
+    },
+    "baking": {
+      "category": "Indoors",
+      "key": "baking",
+      "name": "Baking"
+    },
+    "ballet_dancing": {
+      "category": "Indoors",
+      "key": "ballet_dancing",
+      "name": "Ballet dancing"
+    },
+    "ballroom_dancing": {
+      "category": "Indoors",
+      "key": "ballroom_dancing",
+      "name": "Ballroom dancing"
+    },
+    "barbershop_music": {
+      "category": "General",
+      "key": "barbershop_music",
+      "name": "Barbershop Music"
+    },
+    "base_jumping": {
+      "category": "Outdoors and Sports",
+      "key": "base_jumping",
+      "name": "BASE jumping"
+    },
+    "baseball": {
+      "category": "Outdoors",
+      "key": "baseball",
+      "name": "Baseball"
+    },
+    "basketball": {
+      "category": "Outdoors and Sports",
+      "key": "basketball",
+      "name": "Basketball"
+    },
+    "baton_twirling": {
+      "category": "Indoors",
+      "key": "baton_twirling",
+      "name": "Baton twirling"
+    },
+    "beach_combing": {
+      "category": "Outdoors and Sports",
+      "key": "beach_combing",
+      "name": "Beach combing"
+    },
+    "beach_volleyball": {
+      "category": "Outdoors",
+      "key": "beach_volleyball",
+      "name": "Beach volleyball"
+    },
+    "beat_boxing": {
+      "category": "General",
+      "key": "beat_boxing",
+      "name": "Beat boxing"
+    },
+    "beauty_pageants": {
+      "category": "Indoors",
+      "key": "beauty_pageants",
+      "name": "Beauty pageants"
+    },
+    "beekeeping": {
+      "category": "Outdoors and Sports",
+      "key": "beekeeping",
+      "name": "Beekeeping"
+    },
+    "beer_tasting": {
+      "category": "General",
+      "key": "beer_tasting",
+      "name": "Beer tasting"
+    },
+    "bell_ringing": {
+      "category": "General",
+      "key": "bell_ringing",
+      "name": "Bell ringing"
+    },
+    "benchmarking": {
+      "category": "Outdoors",
+      "key": "benchmarking",
+      "name": "Benchmarking"
+    },
+    "billiards": {
+      "category": "Indoors",
+      "key": "billiards",
+      "name": "Billiards"
+    },
+    "binge_watching": {
+      "category": "General",
+      "key": "binge_watching",
+      "name": "Binge watching"
+    },
+    "biology": {
+      "category": "Educational",
+      "key": "biology",
+      "name": "Biology"
+    },
+    "birdwatching": {
+      "category": "Outdoors",
+      "key": "birdwatching",
+      "name": "Birdwatching"
+    },
+    "black_smithing": {
+      "category": "Outdoors and Sports",
+      "key": "black_smithing",
+      "name": "Black smithing"
+    },
+    "blogging": {
+      "category": "General",
+      "key": "blogging",
+      "name": "Blogging"
+    },
+    "bmx": {
+      "category": "Outdoors and Sports",
+      "key": "bmx",
+      "name": "BMX"
+    },
+    "board_or_tabletop_games": {
+      "category": "General",
+      "key": "board_or_tabletop_games",
+      "name": "Board or tabletop games"
+    },
+    "board_sports": {
+      "category": "Outdoors and Sports",
+      "key": "board_sports",
+      "name": "Board sports"
+    },
+    "bodybuilding": {
+      "category": "Outdoors and Sports",
+      "key": "bodybuilding",
+      "name": "Bodybuilding"
+    },
+    "bonsai": {
+      "category": "Outdoors and Sports",
+      "key": "bonsai",
+      "name": "Bonsai"
+    },
+    "book_collecting": {
+      "category": "Indoors",
+      "key": "book_collecting",
+      "name": "Book collecting"
+    },
+    "book_discussion_clubs": {
+      "category": "General",
+      "key": "book_discussion_clubs",
+      "name": "Book discussion clubs"
+    },
+    "book_folding": {
+      "category": "Indoors",
+      "key": "book_folding",
+      "name": "Book folding"
+    },
+    "book_restoration": {
+      "category": "General",
+      "key": "book_restoration",
+      "name": "Book restoration"
+    },
+    "botany": {
+      "category": "Educational",
+      "key": "botany",
+      "name": "Botany"
+    },
+    "bowling": {
+      "category": "Indoors",
+      "key": "bowling",
+      "name": "Bowling"
+    },
+    "boxing": {
+      "category": "Indoors",
+      "key": "boxing",
+      "name": "Boxing"
+    },
+    "brazilian_jiu_jitsu": {
+      "category": "General",
+      "key": "brazilian_jiu_jitsu",
+      "name": "Brazilian Jiu-Jitsu"
+    },
+    "bread_making": {
+      "category": "General",
+      "key": "bread_making",
+      "name": "Bread making"
+    },
+    "breakdancing": {
+      "category": "Outdoors",
+      "key": "breakdancing",
+      "name": "Breakdancing"
+    },
+    "bridge": {
+      "category": "Indoors",
+      "key": "bridge",
+      "name": "Bridge"
+    },
+    "bullet_journaling": {
+      "category": "General",
+      "key": "bullet_journaling",
+      "name": "Bullet journaling"
+    },
+    "bus_riding": {
+      "category": "Outdoors and Sports",
+      "key": "bus_riding",
+      "name": "Bus riding"
+    },
+    "bus_spotting": {
+      "category": "Outdoors",
+      "key": "bus_spotting",
+      "name": "Bus spotting"
+    },
+    "business": {
+      "category": "Educational",
+      "key": "business",
+      "name": "Business"
+    },
+    "butterfly_watching": {
+      "category": "Outdoors",
+      "key": "butterfly_watching",
+      "name": "Butterfly watching"
+    },
+    "button_collecting": {
+      "category": "Indoors",
+      "key": "button_collecting",
+      "name": "Button collecting"
+    },
+    "calligraphy": {
+      "category": "General",
+      "key": "calligraphy",
+      "name": "Calligraphy"
+    },
+    "camping": {
+      "category": "Outdoors and Sports",
+      "key": "camping",
+      "name": "Camping"
+    },
+    "candle_making": {
+      "category": "General",
+      "key": "candle_making",
+      "name": "Candle making"
+    },
+    "candy_making": {
+      "category": "General",
+      "key": "candy_making",
+      "name": "Candy making"
+    },
+    "canoeing": {
+      "category": "Outdoors and Sports",
+      "key": "canoeing",
+      "name": "Canoeing"
+    },
+    "canyoning": {
+      "category": "Outdoors and Sports",
+      "key": "canyoning",
+      "name": "Canyoning"
+    },
+    "car_fixing_with_building": {
+      "category": "General",
+      "key": "car_fixing_with_building",
+      "name": "Car fixing with building"
+    },
+    "car_riding": {
+      "category": "Outdoors and Sports",
+      "key": "car_riding",
+      "name": "Car riding"
+    },
+    "car_spotting": {
+      "category": "General",
+      "key": "car_spotting",
+      "name": "Car spotting"
+    },
+    "car_tuning": {
+      "category": "Outdoors and Sports",
+      "key": "car_tuning",
+      "name": "Car tuning"
+    },
+    "card_games": {
+      "category": "General",
+      "key": "card_games",
+      "name": "Card games"
+    },
+    "cardistry": {
+      "category": "General",
+      "key": "cardistry",
+      "name": "Cardistry"
+    },
+    "cartophily_card_collecting": {
+      "category": "Indoors",
+      "key": "cartophily_card_collecting",
+      "name": "Cartophily (card collecting)"
+    },
+    "caving": {
+      "category": "Outdoors and Sports",
+      "key": "caving",
+      "name": "Caving"
+    },
+    "ceramics": {
+      "category": "General",
+      "key": "ceramics",
+      "name": "Ceramics"
+    },
+    "chatting": {
+      "category": "General",
+      "key": "chatting",
+      "name": "Chatting"
+    },
+    "checkers_draughts": {
+      "category": "Indoors",
+      "key": "checkers_draughts",
+      "name": "Checkers (draughts)"
+    },
+    "cheerleading": {
+      "category": "Indoors",
+      "key": "cheerleading",
+      "name": "Cheerleading"
+    },
+    "cheese_making": {
+      "category": "General",
+      "key": "cheese_making",
+      "name": "Cheese making"
+    },
+    "chemistry": {
+      "category": "Educational",
+      "key": "chemistry",
+      "name": "Chemistry"
+    },
+    "chess": {
+      "category": "Indoors",
+      "key": "chess",
+      "name": "Chess"
+    },
+    "city_trip": {
+      "category": "Outdoors and Sports",
+      "key": "city_trip",
+      "name": "City trip"
+    },
+    "cleaning": {
+      "category": "General",
+      "key": "cleaning",
+      "name": "Cleaning"
+    },
+    "climbing": {
+      "category": "Outdoors",
+      "key": "climbing",
+      "name": "Climbing"
+    },
+    "clothes_making": {
+      "category": "General",
+      "key": "clothes_making",
+      "name": "Clothes making"
+    },
+    "coffee_roasting": {
+      "category": "General",
+      "key": "coffee_roasting",
+      "name": "Coffee roasting"
+    },
+    "coin_collecting": {
+      "category": "Indoors",
+      "key": "coin_collecting",
+      "name": "Coin collecting"
+    },
+    "collecting": {
+      "category": "General",
+      "key": "collecting",
+      "name": "Collecting"
+    },
+    "color_guard": {
+      "category": "Indoors",
+      "key": "color_guard",
+      "name": "Color guard"
+    },
+    "coloring": {
+      "category": "General",
+      "key": "coloring",
+      "name": "Coloring"
+    },
+    "comic_book_collecting": {
+      "category": "Indoors",
+      "key": "comic_book_collecting",
+      "name": "Comic book collecting"
+    },
+    "communication": {
+      "category": "General",
+      "key": "communication",
+      "name": "Communication"
+    },
+    "community_activism": {
+      "category": "General",
+      "key": "community_activism",
+      "name": "Community activism"
+    },
+    "compact_discs": {
+      "category": "Indoors",
+      "key": "compact_discs",
+      "name": "Compact discs"
+    },
+    "composting": {
+      "category": "Outdoors and Sports",
+      "key": "composting",
+      "name": "Composting"
+    },
+    "computer_programming": {
+      "category": "General",
+      "key": "computer_programming",
+      "name": "Computer programming"
+    },
+    "confectionery": {
+      "category": "General",
+      "key": "confectionery",
+      "name": "Confectionery"
+    },
+    "conlanging": {
+      "category": "General",
+      "key": "conlanging",
+      "name": "Conlanging"
+    },
+    "construction": {
+      "category": "General",
+      "key": "construction",
+      "name": "Construction"
+    },
+    "cooking": {
+      "category": "Indoors",
+      "key": "cooking",
+      "name": "Cooking"
+    },
+    "cornhole": {
+      "category": "Outdoors",
+      "key": "cornhole",
+      "name": "Cornhole"
+    },
+    "cos_playing": {
+      "category": "General",
+      "key": "cos_playing",
+      "name": "Cos playing"
+    },
+    "couponing": {
+      "category": "General",
+      "key": "couponing",
+      "name": "Couponing"
+    },
+    "craft": {
+      "category": "General",
+      "key": "craft",
+      "name": "Craft"
+    },
+    "creative_writing": {
+      "category": "General",
+      "key": "creative_writing",
+      "name": "Creative writing"
+    },
+    "cribbage": {
+      "category": "Indoors",
+      "key": "cribbage",
+      "name": "Cribbage"
+    },
+    "cricket": {
+      "category": "Outdoors",
+      "key": "cricket",
+      "name": "Cricket"
+    },
+    "crocheting": {
+      "category": "General",
+      "key": "crocheting",
+      "name": "Crocheting"
+    },
+    "croquet": {
+      "category": "Outdoors",
+      "key": "croquet",
+      "name": "Croquet"
+    },
+    "cross_stitch": {
+      "category": "General",
+      "key": "cross_stitch",
+      "name": "Cross-stitch"
+    },
+    "crossword_puzzles": {
+      "category": "General",
+      "key": "crossword_puzzles",
+      "name": "Crossword puzzles"
+    },
+    "cryptography": {
+      "category": "General",
+      "key": "cryptography",
+      "name": "Cryptography"
+    },
+    "crystals": {
+      "category": "Indoors",
+      "key": "crystals",
+      "name": "Crystals"
+    },
+    "cue_sports": {
+      "category": "General",
+      "key": "cue_sports",
+      "name": "Cue sports"
+    },
+    "curling": {
+      "category": "Indoors",
+      "key": "curling",
+      "name": "Curling"
+    },
+    "cycling": {
+      "category": "Outdoors",
+      "key": "cycling",
+      "name": "Cycling"
+    },
+    "dance": {
+      "category": "General",
+      "key": "dance",
+      "name": "Dance"
+    },
+    "dancing": {
+      "category": "Indoors",
+      "key": "dancing",
+      "name": "Dancing"
+    },
+    "dandyism": {
+      "category": "Outdoors and Sports",
+      "key": "dandyism",
+      "name": "Dandyism"
+    },
+    "darts": {
+      "category": "Indoors",
+      "key": "darts",
+      "name": "Darts"
+    },
+    "debate": {
+      "category": "Indoors",
+      "key": "debate",
+      "name": "Debate"
+    },
+    "decorating": {
+      "category": "General",
+      "key": "decorating",
+      "name": "Decorating"
+    },
+    "deltiology_postcard_collecting": {
+      "category": "Indoors",
+      "key": "deltiology_postcard_collecting",
+      "name": "Deltiology (postcard collecting)"
+    },
+    "die_cast_toy": {
+      "category": "Indoors",
+      "key": "die_cast_toy",
+      "name": "Die-cast toy"
+    },
+    "digital_arts": {
+      "category": "General",
+      "key": "digital_arts",
+      "name": "Digital arts"
+    },
+    "digital_hoarding": {
+      "category": "Indoors",
+      "key": "digital_hoarding",
+      "name": "Digital hoarding"
+    },
+    "dining": {
+      "category": "General",
+      "key": "dining",
+      "name": "Dining"
+    },
+    "diorama": {
+      "category": "General",
+      "key": "diorama",
+      "name": "Diorama"
+    },
+    "disc_golf": {
+      "category": "Outdoors",
+      "key": "disc_golf",
+      "name": "Disc golf"
+    },
+    "distro_hopping": {
+      "category": "General",
+      "key": "distro_hopping",
+      "name": "Distro hopping"
+    },
+    "diving": {
+      "category": "General",
+      "key": "diving",
+      "name": "Diving"
+    },
+    "djembe": {
+      "category": "General",
+      "key": "djembe",
+      "name": "Djembe"
+    },
+    "djing": {
+      "category": "General",
+      "key": "djing",
+      "name": "DJing"
+    },
+    "do_it_yourself": {
+      "category": "General",
+      "key": "do_it_yourself",
+      "name": "Do it yourself"
+    },
+    "dog_sport": {
+      "category": "Outdoors",
+      "key": "dog_sport",
+      "name": "Dog sport"
+    },
+    "dog_training": {
+      "category": "Outdoors and Sports",
+      "key": "dog_training",
+      "name": "Dog training"
+    },
+    "dog_walking": {
+      "category": "Outdoors and Sports",
+      "key": "dog_walking",
+      "name": "Dog walking"
+    },
+    "dolls": {
+      "category": "Indoors",
+      "key": "dolls",
+      "name": "Dolls"
+    },
+    "dominoes": {
+      "category": "Indoors",
+      "key": "dominoes",
+      "name": "Dominoes"
+    },
+    "dowsing": {
+      "category": "Outdoors and Sports",
+      "key": "dowsing",
+      "name": "Dowsing"
+    },
+    "drama": {
+      "category": "General",
+      "key": "drama",
+      "name": "Drama"
+    },
+    "drawing": {
+      "category": "General",
+      "key": "drawing",
+      "name": "Drawing"
+    },
+    "drink_mixing": {
+      "category": "General",
+      "key": "drink_mixing",
+      "name": "Drink mixing"
+    },
+    "driving": {
+      "category": "Outdoors and Sports",
+      "key": "driving",
+      "name": "Driving"
+    },
+    "eating": {
+      "category": "Indoors",
+      "key": "eating",
+      "name": "Eating"
+    },
+    "electronic_games": {
+      "category": "General",
+      "key": "electronic_games",
+      "name": "Electronic games"
+    },
+    "electronics": {
+      "category": "General",
+      "key": "electronics",
+      "name": "Electronics"
+    },
+    "element_collecting": {
+      "category": "Indoors",
+      "key": "element_collecting",
+      "name": "Element collecting"
+    },
+    "embroidery": {
+      "category": "General",
+      "key": "embroidery",
+      "name": "Embroidery"
+    },
+    "english": {
+      "category": "Educational",
+      "key": "english",
+      "name": "English"
+    },
+    "engraving": {
+      "category": "General",
+      "key": "engraving",
+      "name": "Engraving"
+    },
+    "entertaining": {
+      "category": "General",
+      "key": "entertaining",
+      "name": "Entertaining"
+    },
+    "entrepreneurship": {
+      "category": "Educational",
+      "key": "entrepreneurship",
+      "name": "Entrepreneurship"
+    },
+    "ephemera_collecting": {
+      "category": "Indoors",
+      "key": "ephemera_collecting",
+      "name": "Ephemera collecting"
+    },
+    "equestrianism": {
+      "category": "Outdoors",
+      "key": "equestrianism",
+      "name": "Equestrianism"
+    },
+    "esports": {
+      "category": "Indoors",
+      "key": "esports",
+      "name": "Esports"
+    },
+    "exhibition_drill": {
+      "category": "Outdoors",
+      "key": "exhibition_drill",
+      "name": "Exhibition drill"
+    },
+    "experimenting": {
+      "category": "General",
+      "key": "experimenting",
+      "name": "Experimenting"
+    },
+    "fantasy_sports": {
+      "category": "General",
+      "key": "fantasy_sports",
+      "name": "Fantasy sports"
+    },
+    "farming": {
+      "category": "Outdoors and Sports",
+      "key": "farming",
+      "name": "Farming"
+    },
+    "fashion": {
+      "category": "General",
+      "key": "fashion",
+      "name": "Fashion"
+    },
+    "fashion_design": {
+      "category": "General",
+      "key": "fashion_design",
+      "name": "Fashion design"
+    },
+    "fencing": {
+      "category": "Indoors",
+      "key": "fencing",
+      "name": "Fencing"
+    },
+    "feng_shui_decorating": {
+      "category": "General",
+      "key": "feng_shui_decorating",
+      "name": "Feng shui decorating"
+    },
+    "field_hockey": {
+      "category": "Outdoors",
+      "key": "field_hockey",
+      "name": "Field hockey"
+    },
+    "figure_skating": {
+      "category": "Outdoors",
+      "key": "figure_skating",
+      "name": "Figure skating"
+    },
+    "filmmaking": {
+      "category": "General",
+      "key": "filmmaking",
+      "name": "Filmmaking"
+    },
+    "films": {
+      "category": "Indoors",
+      "key": "films",
+      "name": "Films"
+    },
+    "finger_painting": {
+      "category": "General",
+      "key": "finger_painting",
+      "name": "Finger painting"
+    },
+    "fingerprint_collecting": {
+      "category": "Indoors",
+      "key": "fingerprint_collecting",
+      "name": "Fingerprint collecting"
+    },
+    "fish_farming": {
+      "category": "General",
+      "key": "fish_farming",
+      "name": "Fish farming"
+    },
+    "fish_keeping": {
+      "category": "General",
+      "key": "fish_keeping",
+      "name": "Fish keeping"
+    },
+    "fishing": {
+      "category": "Outdoors",
+      "key": "fishing",
+      "name": "Fishing"
+    },
+    "fishkeeping": {
+      "category": "Indoors",
+      "key": "fishkeeping",
+      "name": "Fishkeeping"
+    },
+    "fitness": {
+      "category": "Outdoors",
+      "key": "fitness",
+      "name": "Fitness"
+    },
+    "flag_football": {
+      "category": "Outdoors and Sports",
+      "key": "flag_football",
+      "name": "Flag football"
+    },
+    "flower_arranging": {
+      "category": "General",
+      "key": "flower_arranging",
+      "name": "Flower arranging"
+    },
+    "flower_collecting_and_pressing": {
+      "category": "Outdoors",
+      "key": "flower_collecting_and_pressing",
+      "name": "Flower collecting and pressing"
+    },
+    "flower_growing": {
+      "category": "Outdoors and Sports",
+      "key": "flower_growing",
+      "name": "Flower growing"
+    },
+    "fly_tying": {
+      "category": "General",
+      "key": "fly_tying",
+      "name": "Fly tying"
+    },
+    "flying": {
+      "category": "Outdoors and Sports",
+      "key": "flying",
+      "name": "Flying"
+    },
+    "flying_disc": {
+      "category": "Outdoors and Sports",
+      "key": "flying_disc",
+      "name": "Flying disc"
+    },
+    "flying_model_planes": {
+      "category": "Outdoors and Sports",
+      "key": "flying_model_planes",
+      "name": "Flying model planes"
+    },
+    "footbag": {
+      "category": "Outdoors",
+      "key": "footbag",
+      "name": "Footbag"
+    },
+    "foraging": {
+      "category": "Outdoors and Sports",
+      "key": "foraging",
+      "name": "Foraging"
+    },
+    "foreign_language_learning": {
+      "category": "General",
+      "key": "foreign_language_learning",
+      "name": "Foreign language learning"
+    },
+    "fossicking": {
+      "category": "Outdoors and Sports",
+      "key": "fossicking",
+      "name": "Fossicking"
+    },
+    "fossil_hunting": {
+      "category": "Outdoors",
+      "key": "fossil_hunting",
+      "name": "Fossil hunting"
+    },
+    "freestyle_football": {
+      "category": "Outdoors and Sports",
+      "key": "freestyle_football",
+      "name": "Freestyle football"
+    },
+    "frisbee": {
+      "category": "Outdoors",
+      "key": "frisbee",
+      "name": "Frisbee"
+    },
+    "fruit_picking": {
+      "category": "Outdoors and Sports",
+      "key": "fruit_picking",
+      "name": "Fruit picking"
+    },
+    "furniture_building": {
+      "category": "General",
+      "key": "furniture_building",
+      "name": "Furniture building"
+    },
+    "fusilately_phonecard_collecting": {
+      "category": "Indoors",
+      "key": "fusilately_phonecard_collecting",
+      "name": "Fusilately (phonecard collecting)"
+    },
+    "gaming": {
+      "category": "General",
+      "key": "gaming",
+      "name": "Gaming"
+    },
+    "gardening": {
+      "category": "Outdoors and Sports",
+      "key": "gardening",
+      "name": "Gardening"
+    },
+    "genealogy": {
+      "category": "General",
+      "key": "genealogy",
+      "name": "Genealogy"
+    },
+    "geocaching": {
+      "category": "Outdoors",
+      "key": "geocaching",
+      "name": "Geocaching"
+    },
+    "geography": {
+      "category": "Educational",
+      "key": "geography",
+      "name": "Geography"
+    },
+    "ghost_hunting": {
+      "category": "Outdoors and Sports",
+      "key": "ghost_hunting",
+      "name": "Ghost hunting"
+    },
+    "gingerbread_house_making": {
+      "category": "General",
+      "key": "gingerbread_house_making",
+      "name": "Gingerbread house making"
+    },
+    "giving_advice": {
+      "category": "General",
+      "key": "giving_advice",
+      "name": "Giving advice"
+    },
+    "glassblowing": {
+      "category": "General",
+      "key": "glassblowing",
+      "name": "Glassblowing"
+    },
+    "go": {
+      "category": "Indoors",
+      "key": "go",
+      "name": "Go"
+    },
+    "gold_prospecting": {
+      "category": "Outdoors and Sports",
+      "key": "gold_prospecting",
+      "name": "Gold prospecting"
+    },
+    "golfing": {
+      "category": "Outdoors",
+      "key": "golfing",
+      "name": "Golfing"
+    },
+    "gongfu_tea": {
+      "category": "General",
+      "key": "gongfu_tea",
+      "name": "Gongfu tea"
+    },
+    "gongoozling": {
+      "category": "Outdoors",
+      "key": "gongoozling",
+      "name": "Gongoozling"
+    },
+    "graffiti": {
+      "category": "Outdoors and Sports",
+      "key": "graffiti",
+      "name": "Graffiti"
+    },
+    "graphic_design": {
+      "category": "General",
+      "key": "graphic_design",
+      "name": "Graphic design"
+    },
+    "ground_hopping": {
+      "category": "Outdoors and Sports",
+      "key": "ground_hopping",
+      "name": "Ground hopping"
+    },
+    "guerrilla_gardening": {
+      "category": "Outdoors and Sports",
+      "key": "guerrilla_gardening",
+      "name": "Guerrilla gardening"
+    },
+    "gunsmithing": {
+      "category": "General",
+      "key": "gunsmithing",
+      "name": "Gunsmithing"
+    },
+    "gymnastics": {
+      "category": "Indoors",
+      "key": "gymnastics",
+      "name": "Gymnastics"
+    },
+    "hacking": {
+      "category": "General",
+      "key": "hacking",
+      "name": "Hacking"
+    },
+    "handball": {
+      "category": "Outdoors",
+      "key": "handball",
+      "name": "Handball"
+    },
+    "hardware": {
+      "category": "General",
+      "key": "hardware",
+      "name": "Hardware"
+    },
+    "herbalism": {
+      "category": "Outdoors and Sports",
+      "key": "herbalism",
+      "name": "Herbalism"
+    },
+    "herp_keeping": {
+      "category": "General",
+      "key": "herp_keeping",
+      "name": "Herp keeping"
+    },
+    "herping": {
+      "category": "Outdoors",
+      "key": "herping",
+      "name": "Herping"
+    },
+    "high_power_rocketry": {
+      "category": "Outdoors and Sports",
+      "key": "high_power_rocketry",
+      "name": "High-power rocketry"
+    },
+    "hiking": {
+      "category": "Outdoors and Sports",
+      "key": "hiking",
+      "name": "Hiking"
+    },
+    "hiking_or_backpacking": {
+      "category": "Outdoors",
+      "key": "hiking_or_backpacking",
+      "name": "Hiking or backpacking"
+    },
+    "history": {
+      "category": "Educational",
+      "key": "history",
+      "name": "History"
+    },
+    "hobby_horsing": {
+      "category": "Outdoors and Sports",
+      "key": "hobby_horsing",
+      "name": "Hobby horsing"
+    },
+    "hobby_tunneling": {
+      "category": "Outdoors and Sports",
+      "key": "hobby_tunneling",
+      "name": "Hobby tunneling"
+    },
+    "home_brewing": {
+      "category": "General",
+      "key": "home_brewing",
+      "name": "Home brewing"
+    },
+    "home_improvement": {
+      "category": "General",
+      "key": "home_improvement",
+      "name": "Home improvement"
+    },
+    "hooping": {
+      "category": "Outdoors and Sports",
+      "key": "hooping",
+      "name": "Hooping"
+    },
+    "horseback_riding": {
+      "category": "Outdoors",
+      "key": "horseback_riding",
+      "name": "Horseback riding"
+    },
+    "horsemanship": {
+      "category": "Outdoors",
+      "key": "horsemanship",
+      "name": "Horsemanship"
+    },
+    "horseshoes": {
+      "category": "Outdoors",
+      "key": "horseshoes",
+      "name": "Horseshoes"
+    },
+    "houseplant_care": {
+      "category": "General",
+      "key": "houseplant_care",
+      "name": "Houseplant care"
+    },
+    "hula_hooping": {
+      "category": "General",
+      "key": "hula_hooping",
+      "name": "Hula hooping"
+    },
+    "humor": {
+      "category": "General",
+      "key": "humor",
+      "name": "Humor"
+    },
+    "hunting": {
+      "category": "Outdoors and Sports",
+      "key": "hunting",
+      "name": "Hunting"
+    },
+    "hydrodipping": {
+      "category": "General",
+      "key": "hydrodipping",
+      "name": "Hydrodipping"
+    },
+    "hydroponics": {
+      "category": "General",
+      "key": "hydroponics",
+      "name": "Hydroponics"
+    },
+    "ice_hockey": {
+      "category": "Indoors",
+      "key": "ice_hockey",
+      "name": "Ice hockey"
+    },
+    "ice_skating": {
+      "category": "Indoors",
+      "key": "ice_skating",
+      "name": "Ice skating"
+    },
+    "iceboat_racing": {
+      "category": "Outdoors",
+      "key": "iceboat_racing",
+      "name": "Iceboat racing"
+    },
+    "inline_skating": {
+      "category": "Outdoors and Sports",
+      "key": "inline_skating",
+      "name": "Inline skating"
+    },
+    "insect_collecting": {
+      "category": "Outdoors",
+      "key": "insect_collecting",
+      "name": "Insect collecting"
+    },
+    "inventing": {
+      "category": "General",
+      "key": "inventing",
+      "name": "Inventing"
+    },
+    "jewelry_making": {
+      "category": "General",
+      "key": "jewelry_making",
+      "name": "Jewelry making"
+    },
+    "jigsaw_puzzles": {
+      "category": "General",
+      "key": "jigsaw_puzzles",
+      "name": "Jigsaw puzzles"
+    },
+    "jogging": {
+      "category": "Outdoors and Sports",
+      "key": "jogging",
+      "name": "Jogging"
+    },
+    "journaling": {
+      "category": "General",
+      "key": "journaling",
+      "name": "Journaling"
+    },
+    "judo": {
+      "category": "Indoors",
+      "key": "judo",
+      "name": "Judo"
+    },
+    "juggling": {
+      "category": "General",
+      "key": "juggling",
+      "name": "Juggling"
+    },
+    "jujitsu": {
+      "category": "Indoors",
+      "key": "jujitsu",
+      "name": "Jujitsu"
+    },
+    "jukskei": {
+      "category": "Outdoors",
+      "key": "jukskei",
+      "name": "Jukskei"
+    },
+    "jumping_rope": {
+      "category": "Outdoors and Sports",
+      "key": "jumping_rope",
+      "name": "Jumping rope"
+    },
+    "kabaddi": {
+      "category": "Indoors",
+      "key": "kabaddi",
+      "name": "Kabaddi"
+    },
+    "karaoke": {
+      "category": "General",
+      "key": "karaoke",
+      "name": "Karaoke"
+    },
+    "karate": {
+      "category": "General",
+      "key": "karate",
+      "name": "Karate"
+    },
+    "kart_racing": {
+      "category": "Outdoors",
+      "key": "kart_racing",
+      "name": "Kart racing"
+    },
+    "karting": {
+      "category": "Outdoors and Sports",
+      "key": "karting",
+      "name": "Karting"
+    },
+    "kayaking": {
+      "category": "Outdoors and Sports",
+      "key": "kayaking",
+      "name": "Kayaking"
+    },
+    "kendama": {
+      "category": "General",
+      "key": "kendama",
+      "name": "Kendama"
+    },
+    "kite_flying": {
+      "category": "Outdoors and Sports",
+      "key": "kite_flying",
+      "name": "Kite flying"
+    },
+    "kite_surfing": {
+      "category": "Outdoors and Sports",
+      "key": "kite_surfing",
+      "name": "Kite surfing"
+    },
+    "knife_collecting": {
+      "category": "Indoors",
+      "key": "knife_collecting",
+      "name": "Knife collecting"
+    },
+    "knife_making": {
+      "category": "General",
+      "key": "knife_making",
+      "name": "Knife making"
+    },
+    "knife_throwing": {
+      "category": "Outdoors",
+      "key": "knife_throwing",
+      "name": "Knife throwing"
+    },
+    "knitting": {
+      "category": "General",
+      "key": "knitting",
+      "name": "Knitting"
+    },
+    "knot_tying": {
+      "category": "General",
+      "key": "knot_tying",
+      "name": "Knot tying"
+    },
+    "knowledge_or_word_games": {
+      "category": "Indoors",
+      "key": "knowledge_or_word_games",
+      "name": "Knowledge or word games"
+    },
+    "kombucha_brewing": {
+      "category": "General",
+      "key": "kombucha_brewing",
+      "name": "Kombucha brewing"
+    },
+    "kung_fu": {
+      "category": "General",
+      "key": "kung_fu",
+      "name": "Kung fu"
+    },
+    "lace_making": {
+      "category": "General",
+      "key": "lace_making",
+      "name": "Lace making"
+    },
+    "lacrosse": {
+      "category": "Outdoors",
+      "key": "lacrosse",
+      "name": "Lacrosse"
+    },
+    "lapidary": {
+      "category": "General",
+      "key": "lapidary",
+      "name": "Lapidary"
+    },
+    "lar_ping": {
+      "category": "Outdoors and Sports",
+      "key": "lar_ping",
+      "name": "LAR Ping"
+    },
+    "laser_tag": {
+      "category": "Indoors",
+      "key": "laser_tag",
+      "name": "Laser tag"
+    },
+    "learning": {
+      "category": "Indoors",
+      "key": "learning",
+      "name": "Learning"
+    },
+    "leather_crafting": {
+      "category": "General",
+      "key": "leather_crafting",
+      "name": "Leather crafting"
+    },
+    "leaves": {
+      "category": "Outdoors",
+      "key": "leaves",
+      "name": "Leaves"
+    },
+    "lego_building": {
+      "category": "General",
+      "key": "lego_building",
+      "name": "Lego building"
+    },
+    "letter_boxing": {
+      "category": "Outdoors and Sports",
+      "key": "letter_boxing",
+      "name": "Letter boxing"
+    },
+    "life_science": {
+      "category": "Educational",
+      "key": "life_science",
+      "name": "Life science"
+    },
+    "linguistics": {
+      "category": "Educational",
+      "key": "linguistics",
+      "name": "Linguistics"
+    },
+    "listening_to_music": {
+      "category": "General",
+      "key": "listening_to_music",
+      "name": "Listening to music"
+    },
+    "listening_to_podcasts": {
+      "category": "General",
+      "key": "listening_to_podcasts",
+      "name": "Listening to podcasts"
+    },
+    "literature": {
+      "category": "Educational",
+      "key": "literature",
+      "name": "Literature"
+    },
+    "livestreaming": {
+      "category": "General",
+      "key": "livestreaming",
+      "name": "Livestreaming"
+    },
+    "lock_picking": {
+      "category": "General",
+      "key": "lock_picking",
+      "name": "Lock picking"
+    },
+    "lomography": {
+      "category": "Outdoors and Sports",
+      "key": "lomography",
+      "name": "Lomography"
+    },
+    "long_boarding": {
+      "category": "Outdoors and Sports",
+      "key": "long_boarding",
+      "name": "Long boarding"
+    },
+    "long_distance_running": {
+      "category": "Outdoors",
+      "key": "long_distance_running",
+      "name": "Long-distance running"
+    },
+    "longboarding": {
+      "category": "Outdoors",
+      "key": "longboarding",
+      "name": "Longboarding"
+    },
+    "lotology_lottery_ticket_collecting": {
+      "category": "Indoors",
+      "key": "lotology_lottery_ticket_collecting",
+      "name": "Lotology (lottery ticket collecting)"
+    },
+    "machining": {
+      "category": "General",
+      "key": "machining",
+      "name": "Machining"
+    },
+    "macrame": {
+      "category": "General",
+      "key": "macrame",
+      "name": "Macrame"
+    },
+    "magic": {
+      "category": "Indoors",
+      "key": "magic",
+      "name": "Magic"
+    },
+    "magnet_fishing": {
+      "category": "Outdoors",
+      "key": "magnet_fishing",
+      "name": "Magnet fishing"
+    },
+    "mahjong": {
+      "category": "Indoors",
+      "key": "mahjong",
+      "name": "Mahjong"
+    },
+    "makeup": {
+      "category": "General",
+      "key": "makeup",
+      "name": "Makeup"
+    },
+    "manga": {
+      "category": "General",
+      "key": "manga",
+      "name": "Manga"
+    },
+    "marbles": {
+      "category": "Indoors",
+      "key": "marbles",
+      "name": "Marbles"
+    },
+    "marching_band": {
+      "category": "Outdoors",
+      "key": "marching_band",
+      "name": "Marching band"
+    },
+    "martial_arts": {
+      "category": "Indoors",
+      "key": "martial_arts",
+      "name": "Martial arts"
+    },
+    "massaging": {
+      "category": "General",
+      "key": "massaging",
+      "name": "Massaging"
+    },
+    "mathematics": {
+      "category": "Educational",
+      "key": "mathematics",
+      "name": "Mathematics"
+    },
+    "mazes": {
+      "category": "General",
+      "key": "mazes",
+      "name": "Mazes"
+    },
+    "mechanics": {
+      "category": "General",
+      "key": "mechanics",
+      "name": "Mechanics"
+    },
+    "medical_science": {
+      "category": "Educational",
+      "key": "medical_science",
+      "name": "Medical science"
+    },
+    "meditation": {
+      "category": "Indoors",
+      "key": "meditation",
+      "name": "Meditation"
+    },
+    "memory_training": {
+      "category": "General",
+      "key": "memory_training",
+      "name": "Memory training"
+    },
+    "metal_detecting": {
+      "category": "Outdoors",
+      "key": "metal_detecting",
+      "name": "Metal detecting"
+    },
+    "metalworking": {
+      "category": "General",
+      "key": "metalworking",
+      "name": "Metalworking"
+    },
+    "meteorology": {
+      "category": "Outdoors",
+      "key": "meteorology",
+      "name": "Meteorology"
+    },
+    "microbiology": {
+      "category": "Educational",
+      "key": "microbiology",
+      "name": "Microbiology"
+    },
+    "microscopy": {
+      "category": "Indoors",
+      "key": "microscopy",
+      "name": "Microscopy"
+    },
+    "mineral_collecting": {
+      "category": "Outdoors",
+      "key": "mineral_collecting",
+      "name": "Mineral collecting"
+    },
+    "mini_golf": {
+      "category": "Outdoors",
+      "key": "mini_golf",
+      "name": "Mini golf"
+    },
+    "miniature_art": {
+      "category": "General",
+      "key": "miniature_art",
+      "name": "Miniature art"
+    },
+    "minimalism": {
+      "category": "General",
+      "key": "minimalism",
+      "name": "Minimalism"
+    },
+    "model_aircraft": {
+      "category": "Outdoors",
+      "key": "model_aircraft",
+      "name": "Model aircraft"
+    },
+    "model_building": {
+      "category": "General",
+      "key": "model_building",
+      "name": "Model building"
+    },
+    "model_engineering": {
+      "category": "General",
+      "key": "model_engineering",
+      "name": "Model engineering"
+    },
+    "model_racing": {
+      "category": "Indoors",
+      "key": "model_racing",
+      "name": "Model racing"
+    },
+    "model_trains": {
+      "category": "Outdoors and Sports",
+      "key": "model_trains",
+      "name": "Model trains"
+    },
+    "model_united_nations": {
+      "category": "Indoors",
+      "key": "model_united_nations",
+      "name": "Model united nations"
+    },
+    "modeling": {
+      "category": "General",
+      "key": "modeling",
+      "name": "Modeling"
+    },
+    "motor_sports": {
+      "category": "Outdoors and Sports",
+      "key": "motor_sports",
+      "name": "Motor sports"
+    },
+    "motorcycling": {
+      "category": "Outdoors and Sports",
+      "key": "motorcycling",
+      "name": "Motorcycling"
+    },
+    "mountain_biking": {
+      "category": "Outdoors and Sports",
+      "key": "mountain_biking",
+      "name": "Mountain biking"
+    },
+    "mountaineering": {
+      "category": "Outdoors and Sports",
+      "key": "mountaineering",
+      "name": "Mountaineering"
+    },
+    "movie_memorabilia_collecting": {
+      "category": "Indoors",
+      "key": "movie_memorabilia_collecting",
+      "name": "Movie memorabilia collecting"
+    },
+    "museum_visiting": {
+      "category": "Outdoors and Sports",
+      "key": "museum_visiting",
+      "name": "Museum visiting"
+    },
+    "mushroom_hunting_or_mycology": {
+      "category": "Outdoors and Sports",
+      "key": "mushroom_hunting_or_mycology",
+      "name": "Mushroom hunting or mycology"
+    },
+    "music": {
+      "category": "General",
+      "key": "music",
+      "name": "Music"
+    },
+    "mycology": {
+      "category": "Educational",
+      "key": "mycology",
+      "name": "Mycology"
+    },
+    "nail_art": {
+      "category": "General",
+      "key": "nail_art",
+      "name": "Nail art"
+    },
+    "needlepoint": {
+      "category": "General",
+      "key": "needlepoint",
+      "name": "Needlepoint"
+    },
+    "netball": {
+      "category": "Outdoors and Sports",
+      "key": "netball",
+      "name": "Netball"
+    },
+    "neuroscience": {
+      "category": "Educational",
+      "key": "neuroscience",
+      "name": "Neuroscience"
+    },
+    "noodling": {
+      "category": "Outdoors and Sports",
+      "key": "noodling",
+      "name": "Noodling"
+    },
+    "nordic_skating": {
+      "category": "Outdoors and Sports",
+      "key": "nordic_skating",
+      "name": "Nordic skating"
+    },
+    "orienteering": {
+      "category": "Outdoors",
+      "key": "orienteering",
+      "name": "Orienteering"
+    },
+    "origami": {
+      "category": "General",
+      "key": "origami",
+      "name": "Origami"
+    },
+    "paintball": {
+      "category": "Outdoors and Sports",
+      "key": "paintball",
+      "name": "Paintball"
+    },
+    "painting": {
+      "category": "General",
+      "key": "painting",
+      "name": "Painting"
+    },
+    "paragliding": {
+      "category": "Outdoors and Sports",
+      "key": "paragliding",
+      "name": "Paragliding"
+    },
+    "parkour": {
+      "category": "Outdoors and Sports",
+      "key": "parkour",
+      "name": "Parkour"
+    },
+    "pen_spinning": {
+      "category": "General",
+      "key": "pen_spinning",
+      "name": "Pen Spinning"
+    },
+    "people_watching": {
+      "category": "Outdoors",
+      "key": "people_watching",
+      "name": "People-watching"
+    },
+    "performance": {
+      "category": "General",
+      "key": "performance",
+      "name": "Performance"
+    },
+    "perfume": {
+      "category": "Indoors",
+      "key": "perfume",
+      "name": "Perfume"
+    },
+    "pet_sitting": {
+      "category": "General",
+      "key": "pet_sitting",
+      "name": "Pet sitting"
+    },
+    "philately": {
+      "category": "Indoors",
+      "key": "philately",
+      "name": "Philately"
+    },
+    "phillumeny": {
+      "category": "Indoors",
+      "key": "phillumeny",
+      "name": "Phillumeny"
+    },
+    "philosophy": {
+      "category": "Educational",
+      "key": "philosophy",
+      "name": "Philosophy"
+    },
+    "photography": {
+      "category": "Outdoors",
+      "key": "photography",
+      "name": "Photography"
+    },
+    "physics": {
+      "category": "Educational",
+      "key": "physics",
+      "name": "Physics"
+    },
+    "pickle_ball": {
+      "category": "Outdoors and Sports",
+      "key": "pickle_ball",
+      "name": "Pickle ball"
+    },
+    "pickleball": {
+      "category": "Outdoors",
+      "key": "pickleball",
+      "name": "Pickleball"
+    },
+    "picnicking": {
+      "category": "Outdoors and Sports",
+      "key": "picnicking",
+      "name": "Picnicking"
+    },
+    "pilates": {
+      "category": "General",
+      "key": "pilates",
+      "name": "Pilates"
+    },
+    "pin_lapel": {
+      "category": "Indoors",
+      "key": "pin_lapel",
+      "name": "Pin (lapel)"
+    },
+    "planning": {
+      "category": "General",
+      "key": "planning",
+      "name": "Planning"
+    },
+    "plastic_art": {
+      "category": "General",
+      "key": "plastic_art",
+      "name": "Plastic art"
+    },
+    "playing_musical_instruments": {
+      "category": "General",
+      "key": "playing_musical_instruments",
+      "name": "Playing musical instruments"
+    },
+    "plush_collecting": {
+      "category": "Indoors",
+      "key": "plush_collecting",
+      "name": "plush collecting"
+    },
+    "podcast_hosting": {
+      "category": "Outdoors and Sports",
+      "key": "podcast_hosting",
+      "name": "Podcast hosting"
+    },
+    "poetry": {
+      "category": "General",
+      "key": "poetry",
+      "name": "Poetry"
+    },
+    "poi": {
+      "category": "General",
+      "key": "poi",
+      "name": "Poi"
+    },
+    "poker": {
+      "category": "Indoors",
+      "key": "poker",
+      "name": "Poker"
+    },
+    "pole_dancing": {
+      "category": "Indoors",
+      "key": "pole_dancing",
+      "name": "Pole dancing"
+    },
+    "polo": {
+      "category": "Outdoors and Sports",
+      "key": "polo",
+      "name": "Polo"
+    },
+    "pool": {
+      "category": "Indoors",
+      "key": "pool",
+      "name": "Pool"
+    },
+    "post_crossing": {
+      "category": "General",
+      "key": "post_crossing",
+      "name": "Post crossing"
+    },
+    "pottery": {
+      "category": "General",
+      "key": "pottery",
+      "name": "Pottery"
+    },
+    "powerboat_racing": {
+      "category": "Outdoors",
+      "key": "powerboat_racing",
+      "name": "Powerboat racing"
+    },
+    "powerlifting": {
+      "category": "Outdoors and Sports",
+      "key": "powerlifting",
+      "name": "Powerlifting"
+    },
+    "practical_jokes": {
+      "category": "General",
+      "key": "practical_jokes",
+      "name": "Practical jokes"
+    },
+    "pressed_flower_craft": {
+      "category": "General",
+      "key": "pressed_flower_craft",
+      "name": "Pressed flower craft"
+    },
+    "proofreading_with_editing": {
+      "category": "General",
+      "key": "proofreading_with_editing",
+      "name": "Proofreading with editing"
+    },
+    "proverbs": {
+      "category": "General",
+      "key": "proverbs",
+      "name": "Proverbs"
+    },
+    "psychology": {
+      "category": "Educational",
+      "key": "psychology",
+      "name": "Psychology"
+    },
+    "public_speaking": {
+      "category": "General",
+      "key": "public_speaking",
+      "name": "Public speaking"
+    },
+    "public_transport_riding": {
+      "category": "Outdoors and Sports",
+      "key": "public_transport_riding",
+      "name": "Public transport riding"
+    },
+    "puppetry": {
+      "category": "General",
+      "key": "puppetry",
+      "name": "Puppetry"
+    },
+    "puzzles": {
+      "category": "General",
+      "key": "puzzles",
+      "name": "Puzzles"
+    },
+    "pyrography": {
+      "category": "General",
+      "key": "pyrography",
+      "name": "Pyrography"
+    },
+    "qi_gong": {
+      "category": "Outdoors and Sports",
+      "key": "qi_gong",
+      "name": "Qi gong"
+    },
+    "quidditch": {
+      "category": "Outdoors",
+      "key": "quidditch",
+      "name": "Quidditch"
+    },
+    "quilling": {
+      "category": "General",
+      "key": "quilling",
+      "name": "Quilling"
+    },
+    "quilting": {
+      "category": "General",
+      "key": "quilting",
+      "name": "Quilting"
+    },
+    "quizzes": {
+      "category": "General",
+      "key": "quizzes",
+      "name": "Quizzes"
+    },
+    "race_walking": {
+      "category": "Outdoors",
+      "key": "race_walking",
+      "name": "Race walking"
+    },
+    "racquetball": {
+      "category": "Outdoors",
+      "key": "racquetball",
+      "name": "Racquetball"
+    },
+    "radio_controlled_car_racing": {
+      "category": "Outdoors",
+      "key": "radio_controlled_car_racing",
+      "name": "Radio-controlled car racing"
+    },
+    "radio_controlled_model_collecting": {
+      "category": "Indoors",
+      "key": "radio_controlled_model_collecting",
+      "name": "Radio-controlled model collecting"
+    },
+    "radio_controlled_model_playing": {
+      "category": "Outdoors",
+      "key": "radio_controlled_model_playing",
+      "name": "Radio-controlled model playing"
+    },
+    "rafting": {
+      "category": "Outdoors and Sports",
+      "key": "rafting",
+      "name": "Rafting"
+    },
+    "rail_transport_modeling": {
+      "category": "General",
+      "key": "rail_transport_modeling",
+      "name": "Rail transport modeling"
+    },
+    "rail_transport_modelling": {
+      "category": "Indoors",
+      "key": "rail_transport_modelling",
+      "name": "Rail transport modelling"
+    },
+    "railway_journeys": {
+      "category": "Outdoors and Sports",
+      "key": "railway_journeys",
+      "name": "Railway journeys"
+    },
+    "railway_studies": {
+      "category": "Educational",
+      "key": "railway_studies",
+      "name": "Railway studies"
+    },
+    "rappelling": {
+      "category": "Outdoors and Sports",
+      "key": "rappelling",
+      "name": "Rappelling"
+    },
+    "rapping": {
+      "category": "General",
+      "key": "rapping",
+      "name": "Rapping"
+    },
+    "reading": {
+      "category": "Indoors",
+      "key": "reading",
+      "name": "Reading"
+    },
+    "recipe_creation": {
+      "category": "General",
+      "key": "recipe_creation",
+      "name": "Recipe creation"
+    },
+    "record_collecting": {
+      "category": "Indoors",
+      "key": "record_collecting",
+      "name": "Record collecting"
+    },
+    "refinishing": {
+      "category": "General",
+      "key": "refinishing",
+      "name": "Refinishing"
+    },
+    "reiki": {
+      "category": "General",
+      "key": "reiki",
+      "name": "Reiki"
+    },
+    "renaissance_fair": {
+      "category": "Outdoors and Sports",
+      "key": "renaissance_fair",
+      "name": "Renaissance fair"
+    },
+    "renovating": {
+      "category": "Outdoors and Sports",
+      "key": "renovating",
+      "name": "Renovating"
+    },
+    "research": {
+      "category": "Indoors",
+      "key": "research",
+      "name": "Research"
+    },
+    "reviewing_gadgets": {
+      "category": "General",
+      "key": "reviewing_gadgets",
+      "name": "Reviewing gadgets"
+    },
+    "road_biking": {
+      "category": "Outdoors and Sports",
+      "key": "road_biking",
+      "name": "Road biking"
+    },
+    "robot_combat": {
+      "category": "General",
+      "key": "robot_combat",
+      "name": "Robot combat"
+    },
+    "rock_balancing": {
+      "category": "Outdoors",
+      "key": "rock_balancing",
+      "name": "Rock balancing"
+    },
+    "rock_climbing": {
+      "category": "Outdoors and Sports",
+      "key": "rock_climbing",
+      "name": "Rock climbing"
+    },
+    "rock_painting": {
+      "category": "Outdoors and Sports",
+      "key": "rock_painting",
+      "name": "Rock painting"
+    },
+    "rock_tumbling": {
+      "category": "Indoors",
+      "key": "rock_tumbling",
+      "name": "Rock tumbling"
+    },
+    "role_playing_games": {
+      "category": "Indoors",
+      "key": "role_playing_games",
+      "name": "Role-playing games"
+    },
+    "roller_derby": {
+      "category": "Outdoors",
+      "key": "roller_derby",
+      "name": "Roller derby"
+    },
+    "roller_skating": {
+      "category": "Outdoors and Sports",
+      "key": "roller_skating",
+      "name": "Roller skating"
+    },
+    "rubik_s_cube": {
+      "category": "General",
+      "key": "rubik_s_cube",
+      "name": "Rubik's cube"
+    },
+    "rug_hooking": {
+      "category": "Indoors",
+      "key": "rug_hooking",
+      "name": "Rug hooking"
+    },
+    "rugby": {
+      "category": "Outdoors and Sports",
+      "key": "rugby",
+      "name": "Rugby"
+    },
+    "rugby_league_football": {
+      "category": "Outdoors",
+      "key": "rugby_league_football",
+      "name": "Rugby league football"
+    },
+    "running": {
+      "category": "Outdoors and Sports",
+      "key": "running",
+      "name": "Running"
+    },
+    "safari": {
+      "category": "Outdoors and Sports",
+      "key": "safari",
+      "name": "Safari"
+    },
+    "sailing": {
+      "category": "Outdoors and Sports",
+      "key": "sailing",
+      "name": "Sailing"
+    },
+    "sand_art": {
+      "category": "Outdoors and Sports",
+      "key": "sand_art",
+      "name": "Sand art"
+    },
+    "satellite_watching": {
+      "category": "Outdoors",
+      "key": "satellite_watching",
+      "name": "Satellite watching"
+    },
+    "science_and_technology_studies": {
+      "category": "Educational",
+      "key": "science_and_technology_studies",
+      "name": "Science and technology studies"
+    },
+    "scouting": {
+      "category": "Outdoors and Sports",
+      "key": "scouting",
+      "name": "Scouting"
+    },
+    "scrap_booking": {
+      "category": "General",
+      "key": "scrap_booking",
+      "name": "Scrap booking"
+    },
+    "scuba_diving": {
+      "category": "Outdoors and Sports",
+      "key": "scuba_diving",
+      "name": "Scuba diving"
+    },
+    "sculling_or_rowing": {
+      "category": "Outdoors",
+      "key": "sculling_or_rowing",
+      "name": "Sculling or rowing"
+    },
+    "sculpting": {
+      "category": "General",
+      "key": "sculpting",
+      "name": "Sculpting"
+    },
+    "scutelliphily": {
+      "category": "Indoors",
+      "key": "scutelliphily",
+      "name": "Scutelliphily"
+    },
+    "sea_glass_collecting": {
+      "category": "Outdoors",
+      "key": "sea_glass_collecting",
+      "name": "Sea glass collecting"
+    },
+    "seashell_collecting": {
+      "category": "Outdoors",
+      "key": "seashell_collecting",
+      "name": "Seashell collecting"
+    },
+    "sewing": {
+      "category": "General",
+      "key": "sewing",
+      "name": "Sewing"
+    },
+    "shoe_making": {
+      "category": "General",
+      "key": "shoe_making",
+      "name": "Shoe making"
+    },
+    "shoes": {
+      "category": "Indoors",
+      "key": "shoes",
+      "name": "Shoes"
+    },
+    "shogi": {
+      "category": "Indoors",
+      "key": "shogi",
+      "name": "Shogi"
+    },
+    "shooting": {
+      "category": "Outdoors and Sports",
+      "key": "shooting",
+      "name": "Shooting"
+    },
+    "shooting_sports": {
+      "category": "Outdoors",
+      "key": "shooting_sports",
+      "name": "Shooting sports"
+    },
+    "shopping": {
+      "category": "Outdoors and Sports",
+      "key": "shopping",
+      "name": "Shopping"
+    },
+    "shortwave_listening": {
+      "category": "Indoors",
+      "key": "shortwave_listening",
+      "name": "Shortwave listening"
+    },
+    "shuffle_board": {
+      "category": "Outdoors and Sports",
+      "key": "shuffle_board",
+      "name": "Shuffle board"
+    },
+    "singing": {
+      "category": "General",
+      "key": "singing",
+      "name": "Singing"
+    },
+    "skate_boarding": {
+      "category": "Outdoors and Sports",
+      "key": "skate_boarding",
+      "name": "Skate boarding"
+    },
+    "skateboarding": {
+      "category": "Outdoors",
+      "key": "skateboarding",
+      "name": "Skateboarding"
+    },
+    "sketching": {
+      "category": "General",
+      "key": "sketching",
+      "name": "Sketching"
+    },
+    "skiing": {
+      "category": "Outdoors",
+      "key": "skiing",
+      "name": "Skiing"
+    },
+    "skim_boarding": {
+      "category": "Outdoors and Sports",
+      "key": "skim_boarding",
+      "name": "Skim boarding"
+    },
+    "skipping_rope": {
+      "category": "General",
+      "key": "skipping_rope",
+      "name": "Skipping rope"
+    },
+    "skydiving": {
+      "category": "Outdoors and Sports",
+      "key": "skydiving",
+      "name": "Skydiving"
+    },
+    "slack_lining": {
+      "category": "Outdoors and Sports",
+      "key": "slack_lining",
+      "name": "Slack lining"
+    },
+    "sled_dog_racing": {
+      "category": "Outdoors",
+      "key": "sled_dog_racing",
+      "name": "Sled dog racing"
+    },
+    "sledding": {
+      "category": "Outdoors and Sports",
+      "key": "sledding",
+      "name": "Sledding"
+    },
+    "slot_car": {
+      "category": "Indoors",
+      "key": "slot_car",
+      "name": "Slot car"
+    },
+    "slot_car_racing": {
+      "category": "Indoors",
+      "key": "slot_car_racing",
+      "name": "Slot car racing"
+    },
+    "snorkeling": {
+      "category": "Outdoors and Sports",
+      "key": "snorkeling",
+      "name": "Snorkeling"
+    },
+    "snowboarding": {
+      "category": "Outdoors and Sports",
+      "key": "snowboarding",
+      "name": "Snowboarding"
+    },
+    "snowmobiling": {
+      "category": "Outdoors and Sports",
+      "key": "snowmobiling",
+      "name": "Snowmobiling"
+    },
+    "snowshoeing": {
+      "category": "Outdoors and Sports",
+      "key": "snowshoeing",
+      "name": "Snowshoeing"
+    },
+    "soap_making": {
+      "category": "General",
+      "key": "soap_making",
+      "name": "Soap making"
+    },
+    "soccer": {
+      "category": "Outdoors and Sports",
+      "key": "soccer",
+      "name": "Soccer"
+    },
+    "social_media": {
+      "category": "General",
+      "key": "social_media",
+      "name": "Social media"
+    },
+    "social_studies": {
+      "category": "Educational",
+      "key": "social_studies",
+      "name": "Social studies"
+    },
+    "sociology": {
+      "category": "Educational",
+      "key": "sociology",
+      "name": "Sociology"
+    },
+    "softball": {
+      "category": "Outdoors",
+      "key": "softball",
+      "name": "Softball"
+    },
+    "speed_cubing": {
+      "category": "Indoors",
+      "key": "speed_cubing",
+      "name": "Speed cubing"
+    },
+    "speed_skating": {
+      "category": "Outdoors",
+      "key": "speed_skating",
+      "name": "Speed skating"
+    },
+    "sport_stacking": {
+      "category": "Indoors",
+      "key": "sport_stacking",
+      "name": "Sport stacking"
+    },
+    "sports_memorabilia": {
+      "category": "Indoors",
+      "key": "sports_memorabilia",
+      "name": "Sports memorabilia"
+    },
+    "sports_science": {
+      "category": "Educational",
+      "key": "sports_science",
+      "name": "Sports science"
+    },
+    "spreadsheets": {
+      "category": "General",
+      "key": "spreadsheets",
+      "name": "Spreadsheets"
+    },
+    "squash": {
+      "category": "Outdoors",
+      "key": "squash",
+      "name": "Squash"
+    },
+    "stamp_collecting": {
+      "category": "Indoors",
+      "key": "stamp_collecting",
+      "name": "Stamp collecting"
+    },
+    "stand_up_comedy": {
+      "category": "General",
+      "key": "stand_up_comedy",
+      "name": "Stand-up comedy"
+    },
+    "stone_collecting": {
+      "category": "Outdoors",
+      "key": "stone_collecting",
+      "name": "Stone collecting"
+    },
+    "stone_skipping": {
+      "category": "Outdoors and Sports",
+      "key": "stone_skipping",
+      "name": "Stone skipping"
+    },
+    "storm_chasing": {
+      "category": "Outdoors and Sports",
+      "key": "storm_chasing",
+      "name": "Storm chasing"
+    },
+    "story_telling": {
+      "category": "General",
+      "key": "story_telling",
+      "name": "Story telling"
+    },
+    "story_writing": {
+      "category": "Educational",
+      "key": "story_writing",
+      "name": "Story writing"
+    },
+    "stretching": {
+      "category": "General",
+      "key": "stretching",
+      "name": "Stretching"
+    },
+    "stripping": {
+      "category": "General",
+      "key": "stripping",
+      "name": "Stripping"
+    },
+    "stuffed_toy_collecting": {
+      "category": "Indoors",
+      "key": "stuffed_toy_collecting",
+      "name": "Stuffed toy collecting"
+    },
+    "sudoku": {
+      "category": "General",
+      "key": "sudoku",
+      "name": "Sudoku"
+    },
+    "sun": {
+      "category": "Outdoors and Sports",
+      "key": "sun",
+      "name": "Sun"
+    },
+    "surfing": {
+      "category": "Outdoors",
+      "key": "surfing",
+      "name": "Surfing"
+    },
+    "survivalism": {
+      "category": "Outdoors and Sports",
+      "key": "survivalism",
+      "name": "Survivalism"
+    },
+    "swimming": {
+      "category": "Outdoors",
+      "key": "swimming",
+      "name": "Swimming"
+    },
+    "table_football": {
+      "category": "Indoors",
+      "key": "table_football",
+      "name": "Table football"
+    },
+    "table_tennis": {
+      "category": "Outdoors",
+      "key": "table_tennis",
+      "name": "Table tennis"
+    },
+    "table_tennis_playing": {
+      "category": "Outdoors and Sports",
+      "key": "table_tennis_playing",
+      "name": "Table tennis playing"
+    },
+    "taekwondo": {
+      "category": "Outdoors and Sports",
+      "key": "taekwondo",
+      "name": "Taekwondo"
+    },
+    "tai_chi": {
+      "category": "Outdoors and Sports",
+      "key": "tai_chi",
+      "name": "Tai chi"
+    },
+    "talking": {
+      "category": "General",
+      "key": "talking",
+      "name": "Talking"
+    },
+    "tapestry": {
+      "category": "General",
+      "key": "tapestry",
+      "name": "Tapestry"
+    },
+    "tarot": {
+      "category": "General",
+      "key": "tarot",
+      "name": "Tarot"
+    },
+    "tatebanko_or_diorama": {
+      "category": "General",
+      "key": "tatebanko_or_diorama",
+      "name": "Tatebanko or diorama"
+    },
+    "tattooing": {
+      "category": "General",
+      "key": "tattooing",
+      "name": "Tattooing"
+    },
+    "taxidermy": {
+      "category": "General",
+      "key": "taxidermy",
+      "name": "Taxidermy"
+    },
+    "tea_bag_collecting": {
+      "category": "Indoors",
+      "key": "tea_bag_collecting",
+      "name": "Tea bag collecting"
+    },
+    "teaching": {
+      "category": "Educational",
+      "key": "teaching",
+      "name": "Teaching"
+    },
+    "telling_jokes": {
+      "category": "General",
+      "key": "telling_jokes",
+      "name": "Telling jokes"
+    },
+    "tennis": {
+      "category": "Outdoors",
+      "key": "tennis",
+      "name": "Tennis"
+    },
+    "tennis_polo": {
+      "category": "Outdoors",
+      "key": "tennis_polo",
+      "name": "Tennis polo"
+    },
+    "tether_car": {
+      "category": "Outdoors",
+      "key": "tether_car",
+      "name": "Tether car"
+    },
+    "thrifting": {
+      "category": "General",
+      "key": "thrifting",
+      "name": "Thrifting"
+    },
+    "thru_hiking": {
+      "category": "Outdoors and Sports",
+      "key": "thru_hiking",
+      "name": "Thru-hiking"
+    },
+    "ticket_collecting": {
+      "category": "Indoors",
+      "key": "ticket_collecting",
+      "name": "Ticket collecting"
+    },
+    "topiary": {
+      "category": "Outdoors and Sports",
+      "key": "topiary",
+      "name": "Topiary"
+    },
+    "tour_skating": {
+      "category": "Outdoors",
+      "key": "tour_skating",
+      "name": "Tour skating"
+    },
+    "tourism": {
+      "category": "Outdoors",
+      "key": "tourism",
+      "name": "Tourism"
+    },
+    "trade_fair_visiting": {
+      "category": "Outdoors and Sports",
+      "key": "trade_fair_visiting",
+      "name": "Trade fair visiting"
+    },
+    "trainspotting": {
+      "category": "Outdoors",
+      "key": "trainspotting",
+      "name": "Trainspotting"
+    },
+    "transit_map_collecting": {
+      "category": "Indoors",
+      "key": "transit_map_collecting",
+      "name": "Transit map collecting"
+    },
+    "trapshooting": {
+      "category": "Outdoors",
+      "key": "trapshooting",
+      "name": "Trapshooting"
+    },
+    "travel": {
+      "category": "Outdoors and Sports",
+      "key": "travel",
+      "name": "Travel"
+    },
+    "triathlon": {
+      "category": "Outdoors",
+      "key": "triathlon",
+      "name": "Triathlon"
+    },
+    "ultimate_frisbee": {
+      "category": "Outdoors",
+      "key": "ultimate_frisbee",
+      "name": "Ultimate frisbee"
+    },
+    "uni_cycling": {
+      "category": "Outdoors and Sports",
+      "key": "uni_cycling",
+      "name": "Uni cycling"
+    },
+    "up_cycling": {
+      "category": "General",
+      "key": "up_cycling",
+      "name": "Up cycling"
+    },
+    "urban_exploration": {
+      "category": "Outdoors and Sports",
+      "key": "urban_exploration",
+      "name": "Urban exploration"
+    },
+    "vacation": {
+      "category": "Outdoors and Sports",
+      "key": "vacation",
+      "name": "Vacation"
+    },
+    "vegetable_farming": {
+      "category": "Outdoors and Sports",
+      "key": "vegetable_farming",
+      "name": "Vegetable farming"
+    },
+    "vehicle_restoration": {
+      "category": "Outdoors and Sports",
+      "key": "vehicle_restoration",
+      "name": "Vehicle restoration"
+    },
+    "video_editing": {
+      "category": "General",
+      "key": "video_editing",
+      "name": "Video editing"
+    },
+    "video_game_collecting": {
+      "category": "Indoors",
+      "key": "video_game_collecting",
+      "name": "Video game collecting"
+    },
+    "video_game_developing": {
+      "category": "General",
+      "key": "video_game_developing",
+      "name": "Video game developing"
+    },
+    "video_gaming": {
+      "category": "Indoors",
+      "key": "video_gaming",
+      "name": "Video gaming"
+    },
+    "video_making": {
+      "category": "General",
+      "key": "video_making",
+      "name": "Video making"
+    },
+    "videography": {
+      "category": "Outdoors and Sports",
+      "key": "videography",
+      "name": "Videography"
+    },
+    "vintage_cars": {
+      "category": "Indoors",
+      "key": "vintage_cars",
+      "name": "Vintage cars"
+    },
+    "vintage_clothing": {
+      "category": "Indoors",
+      "key": "vintage_clothing",
+      "name": "Vintage clothing"
+    },
+    "vinyl_records": {
+      "category": "Indoors",
+      "key": "vinyl_records",
+      "name": "Vinyl Records"
+    },
+    "volleyball": {
+      "category": "Outdoors",
+      "key": "volleyball",
+      "name": "Volleyball"
+    },
+    "volunteering": {
+      "category": "Outdoors and Sports",
+      "key": "volunteering",
+      "name": "Volunteering"
+    },
+    "vr_gaming": {
+      "category": "Indoors",
+      "key": "vr_gaming",
+      "name": "VR Gaming"
+    },
+    "walking": {
+      "category": "Outdoors and Sports",
+      "key": "walking",
+      "name": "Walking"
+    },
+    "war_gaming": {
+      "category": "General",
+      "key": "war_gaming",
+      "name": "War gaming"
+    },
+    "watch_making": {
+      "category": "General",
+      "key": "watch_making",
+      "name": "Watch making"
+    },
+    "watching_documentaries": {
+      "category": "General",
+      "key": "watching_documentaries",
+      "name": "Watching documentaries"
+    },
+    "watching_movies": {
+      "category": "General",
+      "key": "watching_movies",
+      "name": "Watching movies"
+    },
+    "watching_television": {
+      "category": "General",
+      "key": "watching_television",
+      "name": "Watching television"
+    },
+    "water_polo": {
+      "category": "Outdoors",
+      "key": "water_polo",
+      "name": "Water polo"
+    },
+    "water_sports": {
+      "category": "Outdoors and Sports",
+      "key": "water_sports",
+      "name": "Water sports"
+    },
+    "wax_sealing": {
+      "category": "General",
+      "key": "wax_sealing",
+      "name": "Wax sealing"
+    },
+    "waxing": {
+      "category": "General",
+      "key": "waxing",
+      "name": "Waxing"
+    },
+    "weaving": {
+      "category": "General",
+      "key": "weaving",
+      "name": "Weaving"
+    },
+    "web_design": {
+      "category": "Educational",
+      "key": "web_design",
+      "name": "Web design"
+    },
+    "webtooning": {
+      "category": "General",
+      "key": "webtooning",
+      "name": "Webtooning"
+    },
+    "weight_training": {
+      "category": "General",
+      "key": "weight_training",
+      "name": "Weight training"
+    },
+    "weightlifting": {
+      "category": "Indoors",
+      "key": "weightlifting",
+      "name": "Weightlifting"
+    },
+    "welding": {
+      "category": "General",
+      "key": "welding",
+      "name": "Welding"
+    },
+    "whale_watching": {
+      "category": "Outdoors",
+      "key": "whale_watching",
+      "name": "Whale watching"
+    },
+    "whittling": {
+      "category": "General",
+      "key": "whittling",
+      "name": "Whittling"
+    },
+    "wikipedia_editing": {
+      "category": "Indoors",
+      "key": "wikipedia_editing",
+      "name": "Wikipedia editing"
+    },
+    "wine_tasting": {
+      "category": "General",
+      "key": "wine_tasting",
+      "name": "Wine tasting"
+    },
+    "winemaking": {
+      "category": "General",
+      "key": "winemaking",
+      "name": "Winemaking"
+    },
+    "witchcraft": {
+      "category": "General",
+      "key": "witchcraft",
+      "name": "Witchcraft"
+    },
+    "wood_carving": {
+      "category": "General",
+      "key": "wood_carving",
+      "name": "Wood carving"
+    },
+    "woodworking": {
+      "category": "General",
+      "key": "woodworking",
+      "name": "Woodworking"
+    },
+    "word_searches": {
+      "category": "General",
+      "key": "word_searches",
+      "name": "Word searches"
+    },
+    "world_building": {
+      "category": "General",
+      "key": "world_building",
+      "name": "World building"
+    },
+    "wrestling": {
+      "category": "Indoors",
+      "key": "wrestling",
+      "name": "Wrestling"
+    },
+    "writing": {
+      "category": "General",
+      "key": "writing",
+      "name": "Writing"
+    },
+    "writing_music": {
+      "category": "General",
+      "key": "writing_music",
+      "name": "Writing music"
+    },
+    "yo_yoing": {
+      "category": "General",
+      "key": "yo_yoing",
+      "name": "Yo-yoing"
+    },
+    "yoga": {
+      "category": "General",
+      "key": "yoga",
+      "name": "Yoga"
+    },
+    "zoo_visiting": {
+      "category": "Outdoors and Sports",
+      "key": "zoo_visiting",
+      "name": "Zoo visiting"
+    },
+    "zumba": {
+      "category": "General",
+      "key": "zumba",
+      "name": "Zumba"
+    }
+  }
+}

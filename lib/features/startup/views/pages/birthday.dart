@@ -8,6 +8,7 @@ import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/constants/limitations.dart';
+import '../../../../app/dialogs/dialog_date_picker.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/gesture.dart';
@@ -16,7 +17,6 @@ import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../routes/paths.dart';
 import '../../preferences/startup.dart';
-import '../dialogs/dialog_date_picker.dart';
 import '../widgets/title_with_subtitle.dart';
 
 class BirthdayPage extends StatefulWidget {

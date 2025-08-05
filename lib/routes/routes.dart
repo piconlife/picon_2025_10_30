@@ -27,11 +27,19 @@ class InAppRouter extends InAppRouteGenerator {
   @override
   Map<String, RouteBuilder> pages() {
     return {
-      ...kAboutsRoutes,
-      ...kStartupRoutes,
-      ...kPaywallRoutes,
-      ...kMainRoutes,
-      ...kSettingsRoutes,
+      ...mAboutsRoutes,
+      ...mChannelRoutes,
+      ...mChooserRoutes,
+      ...mMainRoutes,
+      ...mPreviewRoutes,
+      ...mProfileRoutes,
+      ...mServiceRoutes,
+      ...mSettingsRoutes,
+      ...mShopRoutes,
+      ...mStoreRoutes,
+      ...mSocialRoutes,
+      ...mStartupRoutes,
+      ...mUserRoutes,
     };
   }
 }

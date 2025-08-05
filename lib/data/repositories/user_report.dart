@@ -7,7 +7,7 @@ import '../models/user_report.dart';
 import '../sources/local/user_report.dart';
 import '../sources/remote/user_report.dart';
 
-class UserReportRepository extends RemoteDataRepository<Report> {
+class UserReportRepository extends RemoteDataRepository<UserReport> {
   UserReportRepository({
     required super.source,
     super.backup,
@@ -22,7 +22,7 @@ class UserReportRepository extends RemoteDataRepository<Report> {
   );
 
   @override
-  Future<Response<Report>> get({
+  Future<Response<UserReport>> get({
     DataFieldParams? params,
     Object? args,
     bool? lazy,
@@ -32,7 +32,7 @@ class UserReportRepository extends RemoteDataRepository<Report> {
   }
 
   @override
-  Future<Response<Report>> getById(
+  Future<Response<UserReport>> getById(
     String id, {
     DataFieldParams? params,
     Object? args,
@@ -45,7 +45,7 @@ class UserReportRepository extends RemoteDataRepository<Report> {
   }
 
   @override
-  Future<Response<Report>> getByIds(
+  Future<Response<UserReport>> getByIds(
     List<String> ids, {
     DataFieldParams? params,
     Object? args,
@@ -56,7 +56,7 @@ class UserReportRepository extends RemoteDataRepository<Report> {
   }
 
   @override
-  Future<Response<Report>> getByQuery({
+  Future<Response<UserReport>> getByQuery({
     DataFieldParams? params,
     List<DataQuery> queries = const [],
     List<DataSelection> selections = const [],
@@ -78,15 +78,15 @@ class UserReportRepository extends RemoteDataRepository<Report> {
         .then(_modify);
   }
 
-  Future<Response<Report>> _modify(
-    Response<Report> value, [
+  Future<Response<UserReport>> _modify(
+    Response<UserReport> value, [
     bool singleMode = false,
   ]) async {
     if (value.isSuccessful) {
       if (singleMode) {
         return value.copy(data: await _value(value.data));
       } else {
-        List<Report> list = [];
+        List<UserReport> list = [];
         for (var i in value.result) {
           final data = await _value(i);
           if (data != null) list.add(data);
@@ -98,7 +98,7 @@ class UserReportRepository extends RemoteDataRepository<Report> {
     }
   }
 
-  Future<Report?> _value(Report? i) async {
+  Future<UserReport?> _value(UserReport? i) async {
     return i;
   }
 }

@@ -536,6 +536,13 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
     );
   }
 
+  void _initStorage() {
+    StorageService.init(
+      delegate: InAppStorageDelegate(),
+      connectionStatus: ConnectivityHelper.isConnected,
+    );
+  }
+
   void _initSplash() async {
     await Future.delayed(
       const Duration(milliseconds: LocalConfigs.splashTimeForNative),
@@ -603,6 +610,7 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
       _initDialogs();
       _initNavigator();
       _initNotifications();
+      _initStorage();
       _initSplash();
     });
   }

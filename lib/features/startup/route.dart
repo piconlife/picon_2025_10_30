@@ -17,7 +17,7 @@ import 'views/pages/reset_password.dart';
 import 'views/pages/splash.dart';
 import 'views/pages/username.dart';
 
-Map<String, RouteBuilder> get kStartupRoutes {
+Map<String, RouteBuilder> get mStartupRoutes {
   return {
     Routes.splash: _splash,
     Routes.intro: _intro,

@@ -10,7 +10,7 @@ class GetUserReportUseCase extends BaseUserReportUseCase {
 
   static GetUserReportUseCase get i => _i ??= GetUserReportUseCase._();
 
-  Future<Response<Report>> call({required String id, String? uid}) {
+  Future<Response<UserReport>> call({required String id, String? uid}) {
     return repository.getById(id, params: getParams(uid));
   }
 }

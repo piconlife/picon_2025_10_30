@@ -4,9 +4,7 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 
 class InAppLoadingDialog extends StatelessWidget {
-  final String? id;
-
-  const InAppLoadingDialog({super.key, this.id});
+  const InAppLoadingDialog({super.key});
 
   @override
   Widget build(BuildContext context) {

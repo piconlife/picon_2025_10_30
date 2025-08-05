@@ -14,7 +14,7 @@ class ReportKeys {
   static const category = "category";
 }
 
-class Report extends Entity {
+class UserReport extends Entity {
   final String? reporter;
   final String? publisher;
   final String? path;
@@ -23,7 +23,7 @@ class Report extends Entity {
   final String? feedback;
   final String? category;
 
-  Report({
+  UserReport({
     super.id,
     super.timeMills,
     this.reporter,
@@ -35,8 +35,8 @@ class Report extends Entity {
     this.category,
   });
 
-  factory Report.from(Object? source) {
-    return Report(
+  factory UserReport.from(Object? source) {
+    return UserReport(
       id: source.entityValue(ReportKeys.id),
       timeMills: source.entityValue(ReportKeys.timeMills),
       reporter: source.entityValue(ReportKeys.reporter),
@@ -49,7 +49,7 @@ class Report extends Entity {
     );
   }
 
-  Report copy({
+  UserReport copy({
     String? id,
     int? timeMills,
     String? reporter,
@@ -60,7 +60,7 @@ class Report extends Entity {
     String? feedback,
     String? category,
   }) {
-    return Report(
+    return UserReport(
       id: id ?? this.id,
       timeMills: timeMills ?? this.timeMills,
       reporter: reporter ?? this.reporter,

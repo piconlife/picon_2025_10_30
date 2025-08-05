@@ -2,11 +2,12 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 
+import '../../roots/widgets/action.dart';
 import '../../roots/widgets/text.dart';
 import '../../roots/widgets/text_button.dart';
+import '../res/icons.dart';
 
 class InAppOptionBottomSheet extends StatelessWidget {
   final String? title;
@@ -27,6 +28,7 @@ class InAppOptionBottomSheet extends StatelessWidget {
     final dimen = context.dimens;
     final color = context.dark;
     return BottomSheet(
+      backgroundColor: context.dialogColor.primary,
       clipBehavior: Clip.antiAlias,
       onClosing: context.dismiss,
       constraints: BoxConstraints(minHeight: dimen.height * 0.45),
@@ -58,6 +60,15 @@ class InAppOptionBottomSheet extends StatelessWidget {
                         ),
                       ),
                     ),
+                    if (false)
+                      Positioned(
+                        right: dimen.dp(12),
+                        child: InAppAction(
+                          InAppIcons.nativeClose.regular,
+                          primary: color,
+                          onTap: AndrossyDialog.dismiss,
+                        ),
+                      ),
                   ],
                 ),
               );
@@ -66,12 +77,7 @@ class InAppOptionBottomSheet extends StatelessWidget {
             return Padding(
               padding: EdgeInsets.only(bottom: cancel ? dimen.dp(8) : 0),
               child: InAppTextButton(
-                cancel
-                    ? "dialog_button_negative".trWithOption(
-                        defaultValue: "Cancel",
-                        name: "bsd_options",
-                      )
-                    : options.elementAt(index - 1),
+                cancel ? "Cancel" : options.elementAt(index - 1),
                 style: TextStyle(
                   fontSize: dimen.dp(16),
                   fontWeight: cancel ? FontWeight.bold : FontWeight.normal,

@@ -20,7 +20,15 @@ class LocalConfigs {
   static const configDefault = "application";
   static const configPlatform = PlatformType.system;
   static const configEnvironment = EnvironmentType.system;
-  static const configPaths = <String>{"legals"};
+  static const configPaths = <String>{
+    "legals",
+    "countries",
+    "languages",
+    "hobbies",
+    "professions",
+    "religions",
+    "reports",
+  };
   static const configLogs = true;
 
   // IN_APP_DATABASE

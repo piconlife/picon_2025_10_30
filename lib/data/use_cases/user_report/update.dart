@@ -10,7 +10,7 @@ class UpdateUserReportUseCase extends BaseUserReportUseCase {
 
   static UpdateUserReportUseCase get i => _i ??= UpdateUserReportUseCase._();
 
-  Future<Response<Report>> call(String id, Map<String, dynamic> data) {
+  Future<Response<UserReport>> call(String id, Map<String, dynamic> data) {
     return repository.updateById(id, data, params: params);
   }
 }

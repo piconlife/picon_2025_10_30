@@ -1,33 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_navigator/app_navigator.dart';
 
-import '../../routes/builder.dart';
 import '../../routes/paths.dart';
-import '../abouts/views/pages/privacy.dart';
-import '../abouts/views/pages/terms.dart';
 import 'views/pages/info.dart';
+import 'views/pages/privacy.dart';
+import 'views/pages/terms.dart';
 import 'views/pages/terms_reader.dart';
 
-Map<String, RouteBuilder> get kAboutsRoutes {
+Map<String, RouteBuilder> get mAboutsRoutes {
   return {
-    Routes.info: _info,
-    Routes.privacy: _privacy,
-    Routes.termsAndConditions: _terms,
-    Routes.terms: _termsReader,
+    Routes.aboutUs: _aboutUs,
+    Routes.privacyPolicy: _privacyPolicy,
+    Routes.terms: _terms,
+    Routes.termsAndConditions: _termsAndConditions,
   };
 }
 
-Widget _info(BuildContext context, Object? args) {
+Widget _aboutUs(BuildContext context, Object? args) {
   return InfoPage(args: args);
 }
 
-Widget _privacy(BuildContext context, Object? args) {
-  return PrivacyPage(args: args, isStartupMode: args == true);
+Widget _privacyPolicy(BuildContext context, Object? data) {
+  return PrivacyPage(args: data);
 }
 
-Widget _terms(BuildContext context, Object? args) {
-  return TermsPage(args: args, isStartupMode: args == true);
+Widget _terms(BuildContext context, Object? data) {
+  return TermsReaderPage(args: data);
 }
 
-Widget _termsReader(BuildContext context, Object? args) {
-  return TermsReaderPage(args: args);
+Widget _termsAndConditions(BuildContext context, Object? data) {
+  return TermsPage(args: data);
 }

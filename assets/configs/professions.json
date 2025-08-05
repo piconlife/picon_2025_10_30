@@ -1,0 +1,88 @@
+{
+  "default": {
+    "businessman": {
+      "key": "businessman",
+      "name": "Businessman"
+    },
+    "developer": {
+      "key": "developer",
+      "name": "Developer"
+    },
+    "director": {
+      "key": "director",
+      "name": "Director"
+    },
+    "doctor": {
+      "key": "doctor",
+      "name": "Doctor"
+    },
+    "driver": {
+      "key": "driver",
+      "name": "Driver"
+    },
+    "engineer": {
+      "key": "engineer",
+      "name": "Engineer"
+    },
+    "executor": {
+      "key": "executor",
+      "name": "Executor"
+    },
+    "farmer": {
+      "key": "farmer",
+      "name": "Farmer"
+    },
+    "freelancer": {
+      "key": "freelancer",
+      "name": "Freelancer"
+    },
+    "housewife": {
+      "key": "housewife",
+      "name": "Housewife"
+    },
+    "labour": {
+      "key": "labour",
+      "name": "Labour"
+    },
+    "manager": {
+      "key": "manager",
+      "name": "Manager"
+    },
+    "minister": {
+      "key": "minister",
+      "name": "Minister"
+    },
+    "officer": {
+      "key": "officer",
+      "name": "Officer"
+    },
+    "other": {
+      "key": "other",
+      "name": "Other"
+    },
+    "president": {
+      "key": "president",
+      "name": "President"
+    },
+    "professor": {
+      "key": "professor",
+      "name": "Professor"
+    },
+    "programmer": {
+      "key": "programmer",
+      "name": "Programmer"
+    },
+    "student": {
+      "key": "student",
+      "name": "Student"
+    },
+    "teacher": {
+      "key": "teacher",
+      "name": "Teacher"
+    },
+    "worker": {
+      "key": "worker",
+      "name": "Worker"
+    }
+  }
+}
