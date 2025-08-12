@@ -3,37 +3,37 @@
     "buddhism": {
       "key": "buddhism",
       "name": "Buddhism",
-      "photo": "https://firebasestorage.googleapis.com/v0/b/picon-co.appspot.com/o/religious%2Fbuddhism.jpeg?alt=media&token=474b3eb6-5c11-4eb0-a2eb-8732c203b1a0",
+      "photo": "https://firebasestorage.googleapis.com/v0/b/picon-co.appspot.com/o/app%2Freligions%2Fbuddhism.jpeg?alt=media&token=1aa6653b-103e-48f1-935e-51c0b57bb50e",
       "priority": 4
     },
     "christianity": {
       "key": "christianity",
       "name": "Christianity",
-      "photo": "https://firebasestorage.googleapis.com/v0/b/picon-co.appspot.com/o/religious%2Fchristianity.jpeg?alt=media&token=aea36c00-558f-435d-b62a-a2717d90299a",
+      "photo": "https://firebasestorage.googleapis.com/v0/b/picon-co.appspot.com/o/app%2Freligions%2Fchristianity.jpeg?alt=media&token=026a4fe0-590a-4fee-94c6-2c879cc83f31",
       "priority": 1
     },
     "ethnic": {
       "key": "ethnic",
       "name": "Ethnic",
-      "photo": "https://firebasestorage.googleapis.com/v0/b/picon-co.appspot.com/o/religious%2Fethnic.jpeg?alt=media&token=931f1c8b-ff5b-40df-a36a-772e01d71441",
+      "photo": "https://firebasestorage.googleapis.com/v0/b/picon-co.appspot.com/o/app%2Freligions%2Fethnic.jpeg?alt=media&token=0dddb69c-a731-4edd-86b7-ae710cf6635b",
       "priority": 5
     },
     "hinduism": {
       "key": "hinduism",
       "name": "Hinduism",
-      "photo": "https://firebasestorage.googleapis.com/v0/b/picon-co.appspot.com/o/religious%2Fhinduism.jpeg?alt=media&token=c851a807-e5b0-48b4-a330-51e233a91747",
+      "photo": "https://firebasestorage.googleapis.com/v0/b/picon-co.appspot.com/o/app%2Freligions%2Fhinduism.jpeg?alt=media&token=55a2d9af-29b5-4655-9ac0-f06d29ab0524",
       "priority": 3
     },
     "islam": {
       "key": "islam",
       "name": "Islam",
-      "photo": "https://firebasestorage.googleapis.com/v0/b/picon-co.appspot.com/o/religious%2Fislam.jpeg?alt=media&token=779c5374-cf22-4b6e-a564-d094413802cf",
+      "photo": "https://firebasestorage.googleapis.com/v0/b/picon-co.appspot.com/o/app%2Freligions%2Fislam.jpeg?alt=media&token=dbc104c9-d920-44d3-912d-ea9f4f78a38b",
       "priority": 2
     },
     "other": {
       "key": "other",
       "name": "Other",
-      "photo": "https://firebasestorage.googleapis.com/v0/b/picon-co.appspot.com/o/religious%2Fother.jpg?alt=media&token=76c6de55-fe00-4a93-b321-aa8c6f9b3be9",
+      "photo": "https://firebasestorage.googleapis.com/v0/b/picon-co.appspot.com/o/app%2Freligions%2Fother.jpeg?alt=media&token=0156b5ce-0a63-4cbe-bbc1-5889d15cac03",
       "priority": 6
     }
   }
