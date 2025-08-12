@@ -81,28 +81,8 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
           errorListener: config.errorListener,
           errorWidget:
               config.errorWidget ??
-              (context, a, b) {
-                return AspectRatio(
-                  aspectRatio: 3 / 2,
-                  child: Center(
-                    child: FittedBox(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          InAppIcon(Icons.error_outline, color: Colors.grey),
-                          SizedBox(height: 8),
-                          InAppText(
-                            "title".trWithOption(
-                              name: "network_image_error",
-                              defaultValue: "This image couldn't be loaded!",
-                            ),
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
+              (context, url, error) {
+                return InAppCachedNetworkImageError(url: url, error: error);
               },
           fit: config.fit,
           fadeInCurve: config.fadeInCurve,
@@ -127,13 +107,12 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
           placeholderFadeInDuration: config.placeholderFadeInDuration,
           progressIndicatorBuilder:
               config.progressIndicatorBuilder ??
-              (context, a, b) {
-                return AndrossyShimmer(
-                  child: Container(
-                    width: config.width,
-                    height: config.height,
-                    color: context.dark.t05,
-                  ),
+              (context, url, progress) {
+                return InAppCachedNetworkImageProgress(
+                  url: url,
+                  progress: progress,
+                  width: config.width,
+                  height: config.height,
                 );
               },
           repeat: config.repeat,

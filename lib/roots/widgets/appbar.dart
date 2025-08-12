@@ -40,7 +40,7 @@ class InAppAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.titleText,
     this.titleTextStyle = const TextStyle(fontSize: 18),
     this.hide = false,
-    this.useHero = true,
+    this.useHero = false,
     this.useSystemUiOverlay = true,
   });
 
@@ -70,28 +70,36 @@ class InAppAppbar extends StatelessWidget implements PreferredSizeWidget {
         systemOverlayStyle: style,
       );
     }
-    Widget child = InAppColumn(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        AppBar(
-          automaticallyImplyLeading: automaticallyImplyLeading,
-          surfaceTintColor: Colors.transparent,
-          backgroundColor: backgroundColor ?? context.light,
-          centerTitle: centerTitle,
-          titleSpacing: titleSpacing,
-          leading: leading ?? InAppLeading(),
-          title: title ?? Text(titleText ?? "", style: titleTextStyle),
-          elevation: 0,
-          bottom: bottom,
-          actions: actions.isNotEmpty ? [...actions, SizedBox(width: 8)] : null,
-          systemOverlayStyle: style,
-        ),
-        if (elevation > 0)
-          Divider(
-            height: elevation,
-            color: elevationColor ?? context.dark.withValues(alpha: 0.05),
+    Widget child = Material(
+      clipBehavior: Clip.antiAlias,
+      color: Colors.transparent,
+      surfaceTintColor: Colors.transparent,
+      child: InAppColumn(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AppBar(
+            toolbarHeight: height,
+            automaticallyImplyLeading: automaticallyImplyLeading,
+            surfaceTintColor: Colors.transparent,
+            backgroundColor: backgroundColor ?? context.light,
+            centerTitle: centerTitle,
+            titleSpacing: titleSpacing,
+            leading: leading ?? InAppLeading(),
+            title: title ?? Text(titleText ?? "", style: titleTextStyle),
+            elevation: 0,
+            bottom: bottom,
+            actions: actions.isNotEmpty
+                ? [...actions, SizedBox(width: 8)]
+                : null,
+            systemOverlayStyle: style,
           ),
-      ],
+          if (elevation > 0)
+            Divider(
+              height: elevation,
+              color: elevationColor ?? context.dark.withValues(alpha: 0.05),
+            ),
+        ],
+      ),
     );
     if (useHero) {
       child = Hero(tag: "appbar", child: child);

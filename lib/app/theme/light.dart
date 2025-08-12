@@ -3,6 +3,8 @@ import 'package:app_color/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../styles/fonts.dart';
+
 ThemeData get kLightTheme {
   final colors = kColorsConfig.light;
   final primary = colors.primary ?? kGreen.light;
@@ -12,17 +14,13 @@ ThemeData get kLightTheme {
   final secondary = colors.secondary ?? kBlue.light;
   final tertiary = colors.tertiary ?? kOrange.light;
   final error = colors.error ?? kRed.light;
-  final highlightColor = kHighlightColorsConfig.light.primary ?? primary.t10;
+  final highlightColor = kHighlightColorsConfig.light.primary ?? dark.t10;
   final hintColor = kHintColorsConfig.light.primary ?? dark.t50;
+  final dividerColor = kDividerColorsConfig.light.primary ?? dark.t05;
   final scaffoldBackgroundColor = kScaffoldColorsConfig.light.primary ?? light;
-  final splashColor = kSplashColorsConfig.light.primary ?? primary.t10;
-  final shadowColor = kShadowColorsConfig.light.primary ?? dark.t10;
-  final surface = kSurfaceColorsConfig.light.primary ?? Colors.transparent;
+  final splashColor = kSplashColorsConfig.light.primary ?? dark.t05;
+  final shadowColor = kShadowColorsConfig.light.primary ?? dark.t05;
   final dialogBackgroundColor = kDialogColorsConfig.light.primary ?? light;
-  final bottomAppbarBackgroundColor =
-      kBottomColorsConfig.light.primary ?? light;
-  final dividerColor = kDividerColorsConfig.light.primary ?? dark.t10;
-  final iconColor = kIconColorsConfig.light.primary ?? dark;
 
   final bnbUnselectedIconTheme = IconThemeData(size: 24, color: grey);
 
@@ -32,32 +30,31 @@ ThemeData get kLightTheme {
     color: grey,
   );
 
-  return ThemeData.light().copyWith(
+  return ThemeData.from(
+    useMaterial3: true,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: primary,
+      primary: primary,
+      secondary: secondary,
+      tertiary: tertiary,
+      error: error,
+    ),
+  ).copyWith(
     highlightColor: highlightColor,
     hintColor: hintColor,
     primaryColor: primary,
     scaffoldBackgroundColor: scaffoldBackgroundColor,
     splashColor: splashColor,
     shadowColor: shadowColor,
-    colorScheme: ColorScheme.light(
-      primary: primary,
-      onPrimary: light,
-      secondary: secondary,
-      onSecondary: light,
-      tertiary: tertiary,
-      onTertiary: light,
-      error: error,
-      surface: surface,
-    ),
     appBarTheme: AppBarTheme(
       elevation: 0,
-      backgroundColor: light,
+      backgroundColor: scaffoldBackgroundColor,
       surfaceTintColor: Colors.transparent,
-      iconTheme: IconThemeData(color: dark, size: 24),
+      iconTheme: IconThemeData(color: grey, size: 24),
       titleTextStyle: TextStyle(
         color: dark,
         fontSize: 18,
-        fontWeight: FontWeight.w600,
+        fontFamily: InAppFonts.primary,
       ),
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: light.withValues(alpha: 0.002),
@@ -72,7 +69,7 @@ ThemeData get kLightTheme {
     ),
     bottomAppBarTheme: BottomAppBarTheme(
       elevation: 0.5,
-      color: bottomAppbarBackgroundColor,
+      color: light,
       surfaceTintColor: Colors.transparent,
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
@@ -87,15 +84,15 @@ ThemeData get kLightTheme {
       backgroundColor: dialogBackgroundColor,
       surfaceTintColor: Colors.transparent,
     ),
-    dividerTheme: DividerThemeData(color: dividerColor),
     dialogTheme: DialogThemeData(
       backgroundColor: dialogBackgroundColor,
       surfaceTintColor: Colors.transparent,
       titleTextStyle: TextStyle(color: dark),
       contentTextStyle: TextStyle(color: dark.t50),
     ),
+    dividerTheme: DividerThemeData(color: dividerColor.t10),
     drawerTheme: DrawerThemeData(backgroundColor: dialogBackgroundColor),
-    iconTheme: IconThemeData(color: iconColor),
+    iconTheme: IconThemeData(color: dark),
     snackBarTheme: SnackBarThemeData(
       backgroundColor: dialogBackgroundColor,
       elevation: 0,

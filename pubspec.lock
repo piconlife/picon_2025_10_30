@@ -758,6 +758,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.0"
+  flutter_local_storage:
+    dependency: "direct main"
+    description:
+      name: flutter_local_storage
+      sha256: a32ad47d466347c3d9b44c7a97af006942d5b8644623b9cc8ad2df95c0a48cf3
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   flutter_native_splash:
     dependency: "direct main"
     description:

@@ -1,40 +1,6 @@
 {
   "default": {
     "themeMode": "light",
-    "base": {
-      "light": {
-        "primary": "ff2eca7f",
-        "secondary": "ff19a4fa",
-        "tertiary": "ffffc107",
-        "error": "fff44336",
-        "warning": "ffffab40",
-        "disable": "fffafafa",
-        "light": "ffffffff",
-        "lightAsFixed": "ffffffff",
-        "dark": "ff000000",
-        "darkAsFixed": "ff000000",
-        "mid": "ff808080",
-        "holo": "fff2f2f2",
-        "soft": "fffafafa",
-        "deep": "fffafafa"
-      },
-      "dark": {
-        "primary": "ff2eca7f",
-        "secondary": "ff001333",
-        "tertiary": "ffffc107",
-        "error": "fff44336",
-        "warning": "ffff6e40",
-        "disable": "ff212121",
-        "light": "ff000000",
-        "lightAsFixed": "ffffffff",
-        "dark": "ffffffff",
-        "darkAsFixed": "ff000000",
-        "mid": "ff424242",
-        "holo": "ff131313",
-        "soft": "ff181c1f",
-        "deep": "ff181c1f"
-      }
-    },
     "appbar": {
       "light": {
         "primary": "ffffffff",
@@ -57,6 +23,40 @@
         "primary": "ff808080",
         "secondary": "ff131313",
         "tertiary": "ff151515"
+      }
+    },
+    "base": {
+      "light": {
+        "primary": "ff2eca7f",
+        "secondary": "ff19a4fa",
+        "tertiary": "ffffc107",
+        "disable": "fffafafa",
+        "error": "fff44336",
+        "mid": "ff808080",
+        "holo": "fff2f2f2",
+        "deep": "fffafafa",
+        "soft": "fffafafa",
+        "warning": "ffffab40",
+        "light": "ffffffff",
+        "lightAsFixed": "ffffffff",
+        "dark": "ff000000",
+        "darkAsFixed": "ff000000"
+      },
+      "dark": {
+        "primary": "ff2eca7f",
+        "secondary": "ff001333",
+        "tertiary": "ffffc107",
+        "disable": "ff212121",
+        "error": "fff44336",
+        "mid": "ff424242",
+        "holo": "ff131313",
+        "deep": "ff181c1f",
+        "soft": "ff181c1f",
+        "warning": "ffff6e40",
+        "light": "ff000000",
+        "lightAsFixed": "ffffffff",
+        "dark": "ffffffff",
+        "darkAsFixed": "ff000000"
       }
     },
     "bottom": {
@@ -89,20 +89,12 @@
     },
     "icon": {
       "light": {
-        "primary": "ff808080"
+        "primary": "ff808080",
+        "disable": "80808080"
       },
       "dark": {
-        "primary": "ff808080"
-      }
-    },
-    "scaffold": {
-      "light": {
-        "primary": "ffffffff",
-        "secondary": "fff2f2f2"
-      },
-      "dark": {
-        "primary": "ff000000",
-        "secondary": "ff121212"
+        "primary": "ff808080",
+        "disable": "80808080"
       }
     },
     "text": {

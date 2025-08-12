@@ -118,6 +118,7 @@ dependencies:
   remixicon: ^1.4.1
   fading_edge_scrollview: ^4.1.1
   marquee: ^2.3.0
+  flutter_local_storage: ^0.0.1
 
   # ------------------------------------------------------------------------------------------------
   # OTHER
