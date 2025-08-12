@@ -10,7 +10,6 @@ import '../../../../app/res/icons.dart';
 import '../../../../app/styles/fonts.dart';
 import '../../../../roots/widgets/coordinator.dart';
 import '../../../../roots/widgets/exception.dart';
-import '../../../../roots/widgets/fade.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/selection.dart';
@@ -150,29 +149,34 @@ class _ChooseReligionPageState extends State<ChooseReligionPage> {
                 ],
               ),
               toolbarHeight: kToolbarHeight + dimen.dp(16),
-              toolbar: InAppFade(
-                child: Container(
-                  width: double.infinity,
-                  height: kToolbarHeight,
-                  alignment: Alignment.center,
-                  color: light,
-                  padding: EdgeInsets.symmetric(horizontal: dimen.dp(16)),
-                  child: TextField(
-                    controller: _controller,
-                    cursorColor: primary,
-                    style: TextStyle(fontSize: dimen.dp(18)),
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: dimen.dp(24),
-                        vertical: dimen.dp(12),
-                      ),
-                      filled: true,
-                      fillColor: primary.t10,
-                      hintText: "Search here",
-                      border: border,
-                      enabledBorder: border,
-                      focusedBorder: border,
+              toolbar: Container(
+                width: double.infinity,
+                height: kToolbarHeight,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: [0.85, 1],
+                    colors: [light, light.withAlpha(0)],
+                  ),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: dimen.dp(16)),
+                child: TextField(
+                  controller: _controller,
+                  cursorColor: primary,
+                  style: TextStyle(fontSize: dimen.dp(18)),
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: dimen.dp(24),
+                      vertical: dimen.dp(12),
                     ),
+                    filled: true,
+                    fillColor: primary.t10,
+                    hintText: "Search here",
+                    border: border,
+                    enabledBorder: border,
+                    focusedBorder: border,
                   ),
                 ),
               ),
@@ -202,47 +206,50 @@ class _ChooseReligionPageState extends State<ChooseReligionPage> {
                       onTap: instance.call,
                       backgroundColor: selected ? primary : primary.t10,
                       splashBorderRadius: BorderRadius.circular((15)),
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          if (isValidPhoto)
-                            InAppImage(
-                              item.photo,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: double.infinity,
-                            ),
-                          Container(
-                            color: isValidPhoto
-                                ? selected
-                                      ? Colors.white.withValues(alpha: 0.9)
-                                      : Colors.black26
-                                : null,
-                            alignment: Alignment.center,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: dimen.dp(16),
-                                vertical: dimen.dp(8),
+                      child: ColoredBox(
+                        color: Colors.transparent,
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            if (isValidPhoto)
+                              InAppImage(
+                                item.photo,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
                               ),
-                              child: InAppText(
-                                item.label,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: isValidPhoto
-                                      ? selected
-                                            ? Colors.black
-                                            : Colors.white
-                                      : selected
-                                      ? Colors.white
-                                      : primary,
-                                  fontWeight: dimen.boldFontWeight,
-                                  fontSize: dimen.dp(18),
-                                  fontFamily: InAppFonts.secondary,
+                            Container(
+                              color: isValidPhoto
+                                  ? selected
+                                        ? Colors.white.withValues(alpha: 0.9)
+                                        : Colors.black26
+                                  : null,
+                              alignment: Alignment.center,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: dimen.dp(16),
+                                  vertical: dimen.dp(8),
+                                ),
+                                child: InAppText(
+                                  item.label,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: isValidPhoto
+                                        ? selected
+                                              ? Colors.black
+                                              : Colors.white
+                                        : selected
+                                        ? Colors.white
+                                        : primary,
+                                    fontWeight: dimen.boldFontWeight,
+                                    fontSize: dimen.dp(18),
+                                    fontFamily: InAppFonts.secondary,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   },

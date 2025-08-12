@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter_andomie/utils/configs.dart';
 
+const kLanguages = "languages";
+
 class InAppLanguage {
   final String? id;
   final String? label;

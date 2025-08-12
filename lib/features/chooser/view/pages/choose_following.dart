@@ -14,7 +14,6 @@ import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/button.dart';
 import '../../../../roots/widgets/coordinator.dart';
 import '../../../../roots/widgets/exception.dart';
-import '../../../../roots/widgets/fade.dart';
 import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/selection.dart';
 import '../../../../roots/widgets/stack_button.dart';
@@ -141,41 +140,46 @@ class _ChooseFollowingPageState extends State<ChooseFollowingPage> {
                 ],
               ),
               toolbarHeight: kToolbarHeight + dimen.dp(16),
-              toolbar: InAppFade(
-                child: Container(
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  color: light,
-                  padding: EdgeInsets.symmetric(horizontal: dimen.dp(16)),
-                  child: AndrossyField(
-                    controller: _controller,
-                    primaryColor: primary,
-                    secondaryColor: context.dark.t30,
-                    errorColor: context.error,
-                    height: kToolbarHeight * 0.95,
-                    animationDuration: const Duration(milliseconds: 300),
-                    borderColor: AndrossyFieldProperty(enabled: primary.t25),
-                    hintColor: dark.t60,
-                    borderRadius: AndrossyFieldProperty.all(
-                      BorderRadius.circular(dimen.dp(16)),
-                    ),
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: dimen.dp(16),
-                    ),
-                    drawableEndTint: AndrossyFieldProperty(
-                      enabled: context.mid,
-                      validFocused: primary,
-                    ),
-                    drawableStartPadding: AndrossyFieldProperty(
-                      enabled: dimen.dp(12),
-                    ),
-                    drawableEndPadding: AndrossyFieldProperty(
-                      enabled: dimen.dp(4),
-                    ),
-                    hintText: "Search here",
-                    inputAction: TextInputAction.search,
-                    inputType: TextInputType.text,
+              toolbar: Container(
+                width: double.infinity,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: [0.85, 1],
+                    colors: [light, light.withAlpha(0)],
                   ),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: dimen.dp(16)),
+                child: AndrossyField(
+                  controller: _controller,
+                  primaryColor: primary,
+                  secondaryColor: context.dark.t30,
+                  errorColor: context.error,
+                  height: kToolbarHeight * 0.95,
+                  animationDuration: const Duration(milliseconds: 300),
+                  borderColor: AndrossyFieldProperty(enabled: primary.t25),
+                  hintColor: dark.t60,
+                  borderRadius: AndrossyFieldProperty.all(
+                    BorderRadius.circular(dimen.dp(16)),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: dimen.dp(16),
+                  ),
+                  drawableEndTint: AndrossyFieldProperty(
+                    enabled: context.mid,
+                    validFocused: primary,
+                  ),
+                  drawableStartPadding: AndrossyFieldProperty(
+                    enabled: dimen.dp(12),
+                  ),
+                  drawableEndPadding: AndrossyFieldProperty(
+                    enabled: dimen.dp(4),
+                  ),
+                  hintText: "Search here",
+                  inputAction: TextInputAction.search,
+                  inputType: TextInputType.text,
                 ),
               ),
               child:

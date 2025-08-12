@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter_andomie/utils/configs.dart';
 
+const kReligions = "religions";
+
 class InAppReligion {
   final String? id;
   final String? label;
@@ -38,7 +40,7 @@ class InAppReligion {
   }
 
   static List<InAppReligion> get items {
-    final data = Configs.load(name: "religions");
+    final data = Configs.load(name: kReligions);
     if (data is List && data.isNotEmpty) {
       return data.map(InAppReligion.parse).toList();
     }

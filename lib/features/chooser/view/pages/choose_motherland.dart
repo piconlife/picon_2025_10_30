@@ -9,7 +9,6 @@ import 'package:in_app_navigator/in_app_navigator.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../roots/widgets/coordinator.dart';
 import '../../../../roots/widgets/exception.dart';
-import '../../../../roots/widgets/fade.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/selection.dart';
@@ -150,29 +149,34 @@ class _ChooseMotherlandPageState extends State<ChooseMotherlandPage> {
                 ],
               ),
               toolbarHeight: kToolbarHeight + dimen.dp(16),
-              toolbar: InAppFade(
-                child: Container(
-                  width: double.infinity,
-                  height: kToolbarHeight,
-                  alignment: Alignment.center,
-                  color: light,
-                  padding: EdgeInsets.symmetric(horizontal: dimen.dp(16)),
-                  child: TextField(
-                    controller: _controller,
-                    cursorColor: primary,
-                    style: TextStyle(fontSize: dimen.dp(18)),
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: dimen.dp(24),
-                        vertical: dimen.dp(12),
-                      ),
-                      filled: true,
-                      fillColor: primary.t10,
-                      hintText: "Search here",
-                      border: border,
-                      enabledBorder: border,
-                      focusedBorder: border,
+              toolbar: Container(
+                width: double.infinity,
+                height: kToolbarHeight,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: [0.85, 1],
+                    colors: [light, light.withAlpha(0)],
+                  ),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: dimen.dp(16)),
+                child: TextField(
+                  controller: _controller,
+                  cursorColor: primary,
+                  style: TextStyle(fontSize: dimen.dp(18)),
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: dimen.dp(24),
+                      vertical: dimen.dp(12),
                     ),
+                    filled: true,
+                    fillColor: primary.t10,
+                    hintText: "Search here",
+                    border: border,
+                    enabledBorder: border,
+                    focusedBorder: border,
                   ),
                 ),
               ),

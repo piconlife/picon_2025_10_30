@@ -39,7 +39,7 @@ class _ProfileAboutsSegmentState extends State<ProfileAboutsSegment> {
             "title": "Father's Name",
             "body": user.fatherName,
             "value": user.fatherName,
-            "editable": true ?? user.fatherName.isNotValid,
+            "editable": user.fatherName.isNotValid,
           },
           {
             "key": UserKeys.i.motherName,
@@ -47,7 +47,7 @@ class _ProfileAboutsSegmentState extends State<ProfileAboutsSegment> {
             "title": "Mother's Name",
             "body": user.motherName,
             "value": user.motherName,
-            "editable": true ?? user.motherName.isNotValid,
+            "editable": user.motherName.isNotValid,
           },
           {
             "key": UserKeys.i.birthday,
@@ -55,7 +55,7 @@ class _ProfileAboutsSegmentState extends State<ProfileAboutsSegment> {
             "title": "Date of birth",
             "body": user.birthday.toDate(),
             "value": user.birthday,
-            "editable": true,
+            "editable": user.birthday.isNotValid,
           },
           {
             "key": UserKeys.i.maritalStatus,
@@ -63,8 +63,7 @@ class _ProfileAboutsSegmentState extends State<ProfileAboutsSegment> {
             "title": "Marital Status",
             "body": user.maritalStatus.name,
             "value": user.maritalStatus.id,
-            "editable":
-                true ?? user.maritalStatus.id == MaritalStatus.unmarried.id,
+            "editable": user.maritalStatus.id != MaritalStatus.married.id,
           },
           {
             "key": UserKeys.i.religion,

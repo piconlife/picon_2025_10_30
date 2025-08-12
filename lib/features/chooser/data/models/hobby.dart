@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter_andomie/utils/configs.dart';
 
+const kHobbies = "hobbies";
+
 class InAppHobby {
   final String? id;
   final String? label;
@@ -35,7 +37,7 @@ class InAppHobby {
   }
 
   static List<InAppHobby> get items {
-    final data = Configs.load(name: "hobbies");
+    final data = Configs.load(name: kHobbies);
     if (data is List && data.isNotEmpty) {
       return data.map(InAppHobby.parse).toList();
     }
