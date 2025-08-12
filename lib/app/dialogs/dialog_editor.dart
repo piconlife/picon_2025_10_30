@@ -106,7 +106,7 @@ class _InAppEditorDialogState extends State<InAppEditorDialog> {
                 constraints: BoxConstraints(
                   maxHeight: keyboardHeight > 0
                       ? (context.screenHeight - keyboardHeight) * 0.5
-                      : double.infinity,
+                      : (context.screenHeight - keyboardHeight) * 0.65,
                 ),
                 text: widget.text,
                 style: TextStyle(color: color),

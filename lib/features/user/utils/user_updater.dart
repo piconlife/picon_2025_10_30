@@ -30,33 +30,54 @@ class UserInfoUpdater {
 
   /// EDITS
 
-  Future<String?> _edit(String title, String? value) async {
+  Future<String?> _edit(
+    String title,
+    String? value, {
+    bool multiline = true,
+    int? minLines,
+    int? maxLines,
+    int? minCharacters,
+    int? maxCharacters,
+    TextInputType? inputType,
+    EditableDialogContent? content,
+  }) async {
+    content ??= EditableDialogContent(
+      minLines: multiline ? minLines : minLines ?? 1,
+      maxLines: multiline ? maxLines : maxLines ?? 1,
+      inputType: multiline ? inputType : inputType ?? TextInputType.text,
+      actionType: multiline ? null : TextInputAction.done,
+      minCharacters: minCharacters,
+      maxCharacters: maxCharacters,
+    );
     final feedback = await context.showEditor(
       title: title,
       text: value,
       hint: value ?? title,
-      content: const EditableDialogContent(
-        minLines: 1,
-        maxLines: 1,
-        inputType: TextInputType.text,
-        actionType: TextInputAction.done,
-      ),
+      content: content,
     );
     return feedback ?? value;
   }
 
   void updateFullname(String name) async {
-    final feedback = await _edit(name, user.name);
+    final feedback = await _edit(name, user.name, multiline: false);
     _update(keys.name, feedback);
   }
 
   void updateTitle(String title) async {
-    final feedback = await _edit(title, user.title);
+    final feedback = await _edit(
+      title,
+      user.title,
+      maxCharacters: Limitations.maxTitle,
+    );
     _update(keys.title, feedback);
   }
 
   void updateBiography(String biography) async {
-    final feedback = await _edit(biography, user.biography);
+    final feedback = await _edit(
+      biography,
+      user.biography,
+      maxCharacters: Limitations.maxBio,
+    );
     _update(keys.biography, feedback);
   }
 
@@ -66,7 +87,7 @@ class UserInfoUpdater {
   }
 
   void updateFatherName(String title) async {
-    final feedback = await _edit(title, user.fatherName);
+    final feedback = await _edit(title, user.fatherName, multiline: false);
     _update(keys.fatherName, feedback);
   }
 
@@ -81,7 +102,7 @@ class UserInfoUpdater {
   }
 
   void updateMotherName(String title) async {
-    final feedback = await _edit(title, user.motherName);
+    final feedback = await _edit(title, user.motherName, multiline: false);
     _update(keys.motherName, feedback);
   }
 

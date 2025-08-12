@@ -18,4 +18,6 @@ class Limitations {
   static const groceryRating = 5.0;
   static const marketRating = 5.0;
   static const userRating = 3.0;
+  static const maxTitle = 80;
+  static const maxBio = 120;
 }

@@ -71,7 +71,7 @@ class _ProfileAboutsSegmentState extends State<ProfileAboutsSegment> {
             "title": "Religion",
             "body": InAppReligion.of(user.religion)?.label,
             "value": user.religion,
-            "editable": true ?? user.religion.isNotValid,
+            "editable": user.religion.isNotValid,
           },
           {
             "key": UserKeys.i.language,
