@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:picon/app/dialogs/dialog_image_cropper.dart';
 
+import '../../../../app/dialogs/dialog_image_cropper.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../app/res/placeholders.dart';
 import '../../../../app/utils/media_picker.dart';

@@ -78,7 +78,7 @@ class EditablePhoto {
   final Object? _data;
 
   Object? get data => _data is MediaData
-      ? (_data).data
+      ? _data.data
       : _data is Photo
       ? (_data).photoUrl
       : _data is String

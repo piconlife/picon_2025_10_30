@@ -151,10 +151,10 @@ class MediaData {
 
   /// Getter methods to determine the type of media data
   Object? get data {
-    if (!kIsWeb && isFile) {
-      return File(path!);
-    } else if (isByte) {
+    if (isByte) {
       return bytes;
+    } else if (!kIsWeb && isFile) {
+      return File(path!);
     } else {
       return blob;
     }

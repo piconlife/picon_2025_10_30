@@ -55,7 +55,7 @@ class MediaPicker {
   }) {
     return _picker.pickImage(source: source).then(_filePick).then((v) {
       if (context.mounted && crop && v != null && v.isByte) {
-        return cropImage(context, v.bytes, options: cropOptions);
+        return cropImage(context, v.bytes, original: v, options: cropOptions);
       } else {
         return v;
       }
