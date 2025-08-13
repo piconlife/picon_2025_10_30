@@ -233,13 +233,15 @@ class _PasswordPageState extends State<PasswordPage> {
       onLoading: (context, value) => btnSubmit.currentState?.setLoading(value),
       onMessage: (context, value) => context.showSnackBar(value),
       onChanges: _finally,
-      child: Scaffold(
-        appBar: const InAppAppbar(
-          titleText: "Password",
-          actions: [InAppLogoTrailing()],
-        ),
-        body: InAppScreen(
-          child: ListView(
+      child: InAppScreen(
+        unfocusMode: true,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: const InAppAppbar(
+            titleText: "Password",
+            actions: [InAppLogoTrailing()],
+          ),
+          body: ListView(
             padding: EdgeInsets.symmetric(
               horizontal: dimen.dp(32),
               vertical: dimen.dp(24),

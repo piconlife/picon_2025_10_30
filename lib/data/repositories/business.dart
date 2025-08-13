@@ -1,4 +1,4 @@
-import 'package:data_management/core.dart';
+import 'package:data_management/data_management.dart';
 import 'package:in_app_database/in_app_database.dart';
 
 import '../../roots/helpers/connectivity.dart';

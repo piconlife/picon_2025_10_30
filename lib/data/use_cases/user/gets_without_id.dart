@@ -11,9 +11,12 @@ class GetUsersWithoutIdUseCase extends BaseUserUseCase {
 
   static GetUsersWithoutIdUseCase get i => _i ??= GetUsersWithoutIdUseCase._();
 
-  Future<Response<User>> call({required String uid, bool cached = true}) {
+  Future<Response<User>> call({
+    required String uid,
+    bool singletonMode = true,
+  }) {
     return repository.getByQuery(
-      cached: cached,
+      singletonMode: singletonMode,
       queries: [DataQuery(UserKeys.i.id, isNotEqualTo: uid)],
     );
   }

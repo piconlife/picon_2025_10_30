@@ -23,19 +23,19 @@ dependencies:
   flutter_cache_manager: ^3.4.1
 
   # LOGICS (WITHOUT NATIVE)
-  http: ^1.4.0
+  http: ^1.5.0
   intl: ^0.20.2
 
   # LOGICS (WITH NATIVE)
   awesome_notifications: ^0.10.1
   awesome_notifications_core: ^0.10.1
-  connectivity_plus: ^6.1.4
+  connectivity_plus: ^6.1.5
   device_info_plus: ^11.5.0
   hive_flutter: ^1.1.0
   in_app_review: ^2.0.10
-  package_info_plus: ^8.3.0
+  package_info_plus: ^8.3.1
   permission_handler: ^12.0.1
-  share_plus: ^11.0.0
+  share_plus: ^11.1.0
   url_launcher: ^6.3.2
 
   # ------------------------------------------------------------------------------------------------
@@ -50,7 +50,7 @@ dependencies:
   app_color: ^1.1.2
   app_dimen: ^1.0.11
   auth_management: ^3.0.2
-  data_management: ^2.1.9
+  data_management: ^2.2.1
   data_management_local_delegate: ^1.0.7
   flutter_andomie: ^0.6.40
   flutter_app_navigator: ^1.0.1
@@ -79,7 +79,7 @@ dependencies:
   cloud_firestore: ^6.0.0
   firebase_analytics: ^12.0.0
   firebase_app_check: ^0.4.0
-  firebase_auth: ^6.0.0
+  firebase_auth: ^6.0.1
   firebase_core: ^4.0.0
   firebase_crashlytics: ^5.0.0
   firebase_database: ^12.0.0
@@ -89,6 +89,7 @@ dependencies:
   # DESIGN (WITHOUT NATIVE)
   animated_text_kit: ^4.2.3
   carousel_slider: ^5.1.1
+  crop_your_image: ^2.0.0
   flutter_cupertino_datetime_picker: ^3.0.0
   lottie: ^3.3.1
   modal_bottom_sheet: ^3.0.0
@@ -96,7 +97,6 @@ dependencies:
 
   # DESIGN (WITH NATIVE)
   image_picker: ^1.1.2
-  crop_your_image: ^2.0.0
 
   # LOGICS (WITHOUT NATIVE)
   async: ^2.13.0

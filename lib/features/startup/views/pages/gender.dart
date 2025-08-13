@@ -48,13 +48,14 @@ class _GenderPageState extends State<GenderPage> {
     final primary = context.primary;
     final dimen = context.dimens;
     final color = context.isDarkMode ? Colors.white : primary;
-    return Scaffold(
-      appBar: const InAppAppbar(
-        titleText: "Gender",
-        actions: [InAppLogoTrailing()],
-      ),
-      body: InAppScreen(
-        child: Padding(
+    return InAppScreen(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: const InAppAppbar(
+          titleText: "Gender",
+          actions: [InAppLogoTrailing()],
+        ),
+        body: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: dimen.dp(32),
             vertical: dimen.dp(24),

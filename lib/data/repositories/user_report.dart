@@ -1,4 +1,4 @@
-import 'package:data_management/core.dart';
+import 'package:data_management/data_management.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_database/in_app_database.dart';
 
@@ -22,68 +22,36 @@ class UserReportRepository extends RemoteDataRepository<UserReport> {
   );
 
   @override
-  Future<Response<UserReport>> get({
-    DataFieldParams? params,
-    Object? args,
-    bool? lazy,
-    bool? cached,
-  }) {
-    return super.get(cached: cached, params: params).then(_modify);
+  Future<Response<UserReport>> modifier(
+    Response<UserReport> value,
+    DataModifiers modifier,
+  ) async {
+    switch (modifier) {
+      case DataModifiers.get:
+      case DataModifiers.getById:
+      case DataModifiers.getByIds:
+      case DataModifiers.getByQuery:
+      case DataModifiers.listen:
+      case DataModifiers.listenById:
+      case DataModifiers.listenByIds:
+      case DataModifiers.listenByQuery:
+        return _modify(value);
+      case DataModifiers.checkById:
+      case DataModifiers.clear:
+      case DataModifiers.create:
+      case DataModifiers.creates:
+      case DataModifiers.deleteById:
+      case DataModifiers.deleteByIds:
+      case DataModifiers.search:
+      case DataModifiers.updateById:
+      case DataModifiers.updateByIds:
+        return value;
+    }
   }
 
-  @override
-  Future<Response<UserReport>> getById(
-    String id, {
-    DataFieldParams? params,
-    Object? args,
-    bool? lazy,
-    bool? cached,
-  }) {
-    return super
-        .getById(id, cached: cached, params: params)
-        .then((v) => _modify(v, true));
-  }
-
-  @override
-  Future<Response<UserReport>> getByIds(
-    List<String> ids, {
-    DataFieldParams? params,
-    Object? args,
-    bool? lazy,
-    bool? cached,
-  }) {
-    return super.getByIds(ids, cached: cached, params: params).then(_modify);
-  }
-
-  @override
-  Future<Response<UserReport>> getByQuery({
-    DataFieldParams? params,
-    List<DataQuery> queries = const [],
-    List<DataSelection> selections = const [],
-    List<DataSorting> sorts = const [],
-    DataPagingOptions options = const DataPagingOptions(),
-    Object? args,
-    bool? lazy,
-    bool? cached,
-  }) {
-    return super
-        .getByQuery(
-          cached: cached,
-          params: params,
-          queries: queries,
-          selections: selections,
-          sorts: sorts,
-          options: options,
-        )
-        .then(_modify);
-  }
-
-  Future<Response<UserReport>> _modify(
-    Response<UserReport> value, [
-    bool singleMode = false,
-  ]) async {
-    if (value.isSuccessful) {
-      if (singleMode) {
+  Future<Response<UserReport>> _modify(Response<UserReport> value) async {
+    if (value.isValid) {
+      if (value.result.length == 1) {
         return value.copy(data: await _value(value.data));
       } else {
         List<UserReport> list = [];

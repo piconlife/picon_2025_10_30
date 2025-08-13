@@ -31,6 +31,9 @@ abstract class Unifier extends Entity<UnifierKeys> {
   UnifierKeys makeKey() => UnifierKeys.i;
 
   @override
+  bool isInsertable(String key, value) => true;
+
+  @override
   Map<String, dynamic> get source {
     return {
       key.timeMills: timeMills,

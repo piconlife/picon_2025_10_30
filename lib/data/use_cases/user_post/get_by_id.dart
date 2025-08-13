@@ -13,8 +13,12 @@ class GetUserPostUseCase extends BaseUserPostUseCase {
   Future<Response<UserPost>> call({
     required String id,
     String? uid,
-    bool cached = true,
+    bool singletonMode = true,
   }) {
-    return repository.getById(id, cached: cached, params: getParams(uid));
+    return repository.getById(
+      id,
+      singletonMode: singletonMode,
+      params: getParams(uid),
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as fdb;
 import 'package:data_management/data_management.dart';
+import 'package:flutter_entity/entity.dart';
 
 abstract class FirestoreDataSource<T extends Entity>
     extends RemoteDataSource<T> {

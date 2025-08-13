@@ -52,7 +52,8 @@ class _EmailPageState extends State<EmailPage> {
     return AndrossyFieldError.alreadyFound;
   }
 
-  void _continue(String? email) {
+  void _continue(String? prefix) {
+    final email = UserParser.asEmail(prefix);
     if (Startup.puts({StartupKeys.email: email})) {
       context.open(Routes.password);
     }
@@ -70,12 +71,6 @@ class _EmailPageState extends State<EmailPage> {
       return;
     }
 
-    final email = UserParser.asEmail(prefix);
-    if (email == Startup.i.email) {
-      _continue(email);
-      return;
-    }
-
     btnSubmit.currentState?.showLoading();
     final value = await CreateUserPrefixUseCase.i(prefix);
     btnSubmit.currentState?.hideLoading();
@@ -83,7 +78,7 @@ class _EmailPageState extends State<EmailPage> {
       if (context.mounted) context.showErrorSnackBar(value.error);
       return;
     }
-    _continue(email);
+    _continue(prefix);
   }
 
   void _buildEmail(String value) {
@@ -94,13 +89,15 @@ class _EmailPageState extends State<EmailPage> {
   Widget build(BuildContext context) {
     final primary = context.primary;
     final dimen = context.dimens;
-    return Scaffold(
-      appBar: const InAppAppbar(
-        titleText: "Email",
-        actions: [InAppLogoTrailing()],
-      ),
-      body: InAppScreen(
-        child: Padding(
+    return InAppScreen(
+      unfocusMode: true,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: const InAppAppbar(
+          titleText: "Email",
+          actions: [InAppLogoTrailing()],
+        ),
+        body: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: dimen.dp(32),
             vertical: dimen.dp(24),

@@ -19,10 +19,10 @@ class GetFeedPhotosByPaginationUseCase extends PhotoBaseUseCase {
     int? initialSize,
     int? fetchingSize,
     Object? snapshot,
-    bool cached = true,
+    bool singletonMode = true,
   }) {
     return repository.getByQuery(
-      cached: cached,
+      singletonMode: singletonMode,
       params: getParams(referencePath),
       sorts: [DataSorting(Keys.i.timeMills, descending: true)],
       selections: [

@@ -77,10 +77,6 @@ class _UsernamePageState extends State<UsernamePage> with ColorMixin {
       return;
     }
 
-    if (shortname == _username) {
-      return _continue(fullname, shortname);
-    }
-
     btnSubmit.currentState?.showLoading();
     final value = await CreateUserNameUseCase.i(shortname);
     btnSubmit.currentState?.hideLoading();
@@ -104,6 +100,7 @@ class _UsernamePageState extends State<UsernamePage> with ColorMixin {
   Widget build(BuildContext context) {
     final dimen = context.dimens;
     return InAppScreen(
+      unfocusMode: true,
       child: Scaffold(
         appBar: const InAppAppbar(
           titleText: "Create username",
@@ -197,7 +194,6 @@ class _UsernamePageState extends State<UsernamePage> with ColorMixin {
                     onCheck: _check,
                     onError: AuthErrors.shortname,
                     onValidator: isValidUsername,
-                    onSubmitted: (value) => _next(context),
                   ),
                 ],
               ),

@@ -19,11 +19,11 @@ class GetUserPostsByPaginationUseCase extends BaseUserPostUseCase {
     int? initialSize,
     int? fetchingSize,
     Object? snapshot,
-    bool cached = true,
+    bool singletonMode = true,
   }) {
     return repository.getByQuery(
       params: getParams(uid),
-      cached: cached,
+      singletonMode: singletonMode,
       sorts: [DataSorting(Keys.i.timeMills, descending: true)],
       selections: [
         if (snapshot != null) DataSelection.startAfterDocument(snapshot),

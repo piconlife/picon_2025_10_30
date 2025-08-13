@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:data_management/data_management.dart';
+import 'package:flutter_entity/entity.dart';
 import 'package:in_app_database/in_app_database.dart' as fdb;
 
 ///

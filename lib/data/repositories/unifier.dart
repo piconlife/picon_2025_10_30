@@ -1,9 +1,7 @@
-import 'package:data_management/core.dart';
-import 'package:in_app_database/in_app_database.dart';
+import 'package:data_management/data_management.dart';
 
 import '../../roots/helpers/connectivity.dart';
 import '../models/unifier.dart';
-import '../sources/local/unifier.dart';
 import '../sources/remote/unifier.dart';
 
 class NameUnifierRepository extends RemoteDataRepository<NameUnifier> {
@@ -11,14 +9,13 @@ class NameUnifierRepository extends RemoteDataRepository<NameUnifier> {
     required super.source,
     super.backup,
     super.connectivity = ConnectivityHelper.connection,
+    super.singletonMode = false,
   });
 
   static NameUnifierRepository? _i;
 
-  static NameUnifierRepository get i => _i ??= NameUnifierRepository(
-    source: RemoteNameUnifierDataSource(),
-    backup: LocalNameUnifierDataSource(database: InAppDatabase.i),
-  );
+  static NameUnifierRepository get i =>
+      _i ??= NameUnifierRepository(source: RemoteNameUnifierDataSource());
 }
 
 class PhoneUnifierRepository extends RemoteDataRepository<PhoneUnifier> {
@@ -26,14 +23,13 @@ class PhoneUnifierRepository extends RemoteDataRepository<PhoneUnifier> {
     required super.source,
     super.backup,
     super.connectivity = ConnectivityHelper.connection,
+    super.singletonMode = false,
   });
 
   static PhoneUnifierRepository? _i;
 
-  static PhoneUnifierRepository get i => _i ??= PhoneUnifierRepository(
-    source: RemotePhoneUnifierDataSource(),
-    backup: LocalPhoneUnifierDataSource(database: InAppDatabase.i),
-  );
+  static PhoneUnifierRepository get i =>
+      _i ??= PhoneUnifierRepository(source: RemotePhoneUnifierDataSource());
 }
 
 class PrefixUnifierRepository extends RemoteDataRepository<PrefixUnifier> {
@@ -41,12 +37,11 @@ class PrefixUnifierRepository extends RemoteDataRepository<PrefixUnifier> {
     required super.source,
     super.backup,
     super.connectivity = ConnectivityHelper.connection,
+    super.singletonMode = false,
   });
 
   static PrefixUnifierRepository? _i;
 
-  static PrefixUnifierRepository get i => _i ??= PrefixUnifierRepository(
-    source: RemotePrefixUnifierDataSource(),
-    backup: LocalPrefixUnifierDataSource(database: InAppDatabase.i),
-  );
+  static PrefixUnifierRepository get i =>
+      _i ??= PrefixUnifierRepository(source: RemotePrefixUnifierDataSource());
 }

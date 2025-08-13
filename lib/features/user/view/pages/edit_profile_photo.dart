@@ -316,7 +316,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
                   valueListenable: loading,
                   builder: (context, value, child) {
                     return EditableAvatar(
-                      isUploading: value,
+                      isUploading: !value,
                       isAlreadyUploaded: isValidUrl,
                       image: photoUrl ?? user?.photo,
                       imageChosen: _upload,

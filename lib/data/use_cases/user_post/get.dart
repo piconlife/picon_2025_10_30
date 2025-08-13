@@ -10,7 +10,7 @@ class GetUserPostsUseCase extends BaseUserPostUseCase {
 
   static GetUserPostsUseCase get i => _i ??= GetUserPostsUseCase._();
 
-  Future<Response<UserPost>> call({String? uid, bool cached = true}) {
-    return repository.get(cached: cached, params: getParams(uid));
+  Future<Response<UserPost>> call({String? uid, bool singletonMode = true}) {
+    return repository.get(singletonMode: singletonMode, params: getParams(uid));
   }
 }

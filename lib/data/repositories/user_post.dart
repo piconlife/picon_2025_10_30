@@ -1,4 +1,4 @@
-import 'package:data_management/core.dart';
+import 'package:data_management/data_management.dart';
 import 'package:flutter_andomie/core.dart' hide Selection;
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_database/in_app_database.dart';
@@ -24,68 +24,36 @@ class UserPostRepository extends RemoteDataRepository<UserPost> {
   );
 
   @override
-  Future<Response<UserPost>> get({
-    DataFieldParams? params,
-    Object? args,
-    bool? lazy,
-    bool? cached,
-  }) {
-    return super.get(cached: cached, params: params).then(_modify);
+  Future<Response<UserPost>> modifier(
+    Response<UserPost> value,
+    DataModifiers modifier,
+  ) async {
+    switch (modifier) {
+      case DataModifiers.get:
+      case DataModifiers.getById:
+      case DataModifiers.getByIds:
+      case DataModifiers.getByQuery:
+      case DataModifiers.listen:
+      case DataModifiers.listenById:
+      case DataModifiers.listenByIds:
+      case DataModifiers.listenByQuery:
+        return _modify(value);
+      case DataModifiers.checkById:
+      case DataModifiers.clear:
+      case DataModifiers.create:
+      case DataModifiers.creates:
+      case DataModifiers.deleteById:
+      case DataModifiers.deleteByIds:
+      case DataModifiers.search:
+      case DataModifiers.updateById:
+      case DataModifiers.updateByIds:
+        return value;
+    }
   }
 
-  @override
-  Future<Response<UserPost>> getById(
-    String id, {
-    DataFieldParams? params,
-    Object? args,
-    bool? lazy,
-    bool? cached,
-  }) {
-    return super
-        .getById(id, cached: cached, params: params)
-        .then((v) => _modify(v, true));
-  }
-
-  @override
-  Future<Response<UserPost>> getByIds(
-    List<String> ids, {
-    DataFieldParams? params,
-    Object? args,
-    bool? lazy,
-    bool? cached,
-  }) {
-    return super.getByIds(ids, cached: cached, params: params).then(_modify);
-  }
-
-  @override
-  Future<Response<UserPost>> getByQuery({
-    DataFieldParams? params,
-    List<DataQuery> queries = const [],
-    List<DataSelection> selections = const [],
-    List<DataSorting> sorts = const [],
-    DataPagingOptions options = const DataPagingOptions(),
-    Object? args,
-    bool? lazy,
-    bool? cached,
-  }) {
-    return super
-        .getByQuery(
-          cached: cached,
-          params: params,
-          queries: queries,
-          selections: selections,
-          sorts: sorts,
-          options: options,
-        )
-        .then(_modify);
-  }
-
-  Future<Response<UserPost>> _modify(
-    Response<UserPost> value, [
-    bool singleMode = false,
-  ]) async {
-    if (value.isSuccessful) {
-      if (singleMode) {
+  Future<Response<UserPost>> _modify(Response<UserPost> value) async {
+    if (value.isValid) {
+      if (value.result.length == 1) {
         return value.copy(data: await _value(value.data));
       } else {
         List<UserPost> list = [];

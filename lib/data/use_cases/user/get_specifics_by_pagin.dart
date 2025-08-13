@@ -19,10 +19,10 @@ class GetSpecificUsersByPagingUseCase extends BaseUserUseCase {
     int fetchingSize = 15,
     int initialFetchingSize = 25,
     bool descending = true,
-    bool cached = true,
+    bool singletonMode = true,
   }) {
     return repository.getByQuery(
-      cached: cached,
+      singletonMode: singletonMode,
       queries: [DataQuery(UserKeys.i.id, whereIn: ids)],
       sorts: [DataSorting(UserKeys.i.id, descending: descending)],
       selections: [DataSelection.startAfterDocument(snapshot)],

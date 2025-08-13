@@ -10,7 +10,13 @@ class GetPhotosUseCase extends PhotoBaseUseCase {
 
   static GetPhotosUseCase get i => _i ??= GetPhotosUseCase._();
 
-  Future<Response<Photo>> call(String referencePath, {bool cached = true}) {
-    return repository.get(cached: cached, params: getParams(referencePath));
+  Future<Response<Photo>> call(
+    String referencePath, {
+    bool singletonMode = true,
+  }) {
+    return repository.get(
+      singletonMode: singletonMode,
+      params: getParams(referencePath),
+    );
   }
 }

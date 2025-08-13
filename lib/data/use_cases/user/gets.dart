@@ -10,7 +10,7 @@ class GetUsersUseCase extends BaseUserUseCase {
 
   static GetUsersUseCase get i => _i ??= GetUsersUseCase._();
 
-  Future<Response<User>> call({bool cached = true}) {
-    return repository.get(cached: cached);
+  Future<Response<User>> call({bool singletonMode = true}) {
+    return repository.get(singletonMode: singletonMode);
   }
 }

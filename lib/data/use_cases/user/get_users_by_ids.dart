@@ -11,9 +11,12 @@ class GetUsersByIdsUseCase extends BaseUserUseCase {
 
   static GetUsersByIdsUseCase get i => _i ??= GetUsersByIdsUseCase._();
 
-  Future<Response<User>> call(Iterable<String> ids, {bool cached = true}) {
+  Future<Response<User>> call(
+    Iterable<String> ids, {
+    bool singletonMode = true,
+  }) {
     return repository.getByQuery(
-      cached: cached,
+      singletonMode: singletonMode,
       queries: [DataQuery(UserKeys.i.id, whereIn: ids)],
     );
   }

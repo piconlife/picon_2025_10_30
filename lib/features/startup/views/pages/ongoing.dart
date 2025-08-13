@@ -28,60 +28,62 @@ class OngoingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dimen = context.dimens;
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      resizeToAvoidBottomInset: false,
-      appBar: const InAppAppbar(
-        titleText: "Create account",
-        elevation: 0,
-        actions: [],
-      ),
-      body: InAppScreen(
-        child: Padding(
-          padding: EdgeInsets.all(dimen.dp(24)),
-          child: Stack(
-            children: [
-              const Align(alignment: Alignment(0, -0.35), child: InAppLogo()),
-              const Align(
-                alignment: Alignment(0, 0),
-                child: AuthTitleAndBody(
-                  title: "Join with ${AppConstants.name}",
-                  subtitle:
-                      "We'll help you create a new account \nin a few easy steps.",
-                  strongTitle: true,
-                ),
-              ),
-              Align(
-                alignment: const Alignment(0, 0.25),
-                child: InAppFilledButton(
-                  text: "Next",
-                  onTap: () => _next(context),
-                ),
-              ),
-              Align(
-                alignment: const Alignment(0, 1),
-                child: InAppGesture(
-                  onTap: () => _signIn(context),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      InAppText(
-                        "Already have an account?",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: context.textColor.mid),
-                      ),
-                      context.smallMargin.h,
-                      InAppText(
-                        "Continue with Email",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: context.primary),
-                      ),
-                    ],
+    return InAppScreen(
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        resizeToAvoidBottomInset: false,
+        appBar: const InAppAppbar(
+          titleText: "Create account",
+          elevation: 0,
+          actions: [],
+        ),
+        body: InAppScreen(
+          child: Padding(
+            padding: EdgeInsets.all(dimen.dp(24)),
+            child: Stack(
+              children: [
+                const Align(alignment: Alignment(0, -0.35), child: InAppLogo()),
+                const Align(
+                  alignment: Alignment(0, 0),
+                  child: AuthTitleAndBody(
+                    title: "Join with ${AppConstants.name}",
+                    subtitle:
+                        "We'll help you create a new account \nin a few easy steps.",
+                    strongTitle: true,
                   ),
                 ),
-              ),
-            ],
+                Align(
+                  alignment: const Alignment(0, 0.25),
+                  child: InAppFilledButton(
+                    text: "Next",
+                    onTap: () => _next(context),
+                  ),
+                ),
+                Align(
+                  alignment: const Alignment(0, 1),
+                  child: InAppGesture(
+                    onTap: () => _signIn(context),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        InAppText(
+                          "Already have an account?",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: context.textColor.mid),
+                        ),
+                        context.smallMargin.h,
+                        InAppText(
+                          "Continue with Email",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: context.primary),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

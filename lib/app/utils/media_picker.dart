@@ -91,7 +91,7 @@ class MediaPicker {
   }) {
     return InAppImageCropper.crop(context, data, options: options).then((v) {
       if (v == null) return null;
-      return (original ?? MediaData()).copy(bytes: v.cropped);
+      return (original ?? MediaData()).copy(bytes: v.cropped, extension: "jpg");
     });
   }
 }

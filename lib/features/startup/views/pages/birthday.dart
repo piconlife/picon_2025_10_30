@@ -195,13 +195,15 @@ class _BirthdayPageState extends State<BirthdayPage> {
   Widget build(BuildContext context) {
     final primary = context.primary;
     final dimen = context.dimens;
-    return Scaffold(
-      appBar: const InAppAppbar(
-        titleText: "Birthday",
-        actions: [InAppLogoTrailing()],
-      ),
-      body: InAppScreen(
-        child: Padding(
+    return InAppScreen(
+      unfocusMode: true,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: const InAppAppbar(
+          titleText: "Birthday",
+          actions: [InAppLogoTrailing()],
+        ),
+        body: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: dimen.dp(32),
             vertical: dimen.dp(24),
@@ -293,7 +295,6 @@ class _BirthdayPageState extends State<BirthdayPage> {
                         maxCharactersAsLimit: true,
                         onChanged: _changeYear,
                         onValidator: isValidYear,
-                        onSubmitted: (value) => _next(context),
                       ),
                     ),
                   ],

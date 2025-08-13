@@ -20,11 +20,11 @@ class GetUserNotesByPaginationUseCase extends BaseUserPostUseCase {
     int? initialSize,
     int? fetchingSize,
     Object? snapshot,
-    bool cached = true,
+    bool singletonMode = true,
   }) {
     return repository.getByQuery(
       params: getParams(uid),
-      cached: cached,
+      singletonMode: singletonMode,
       queries: [DataQuery(Keys.i.type, isEqualTo: ContentType.none.name)],
       sorts: [DataSorting(Keys.i.timeMills, descending: true)],
       selections: [

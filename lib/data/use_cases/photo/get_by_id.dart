@@ -13,11 +13,11 @@ class GetFeedPhotoUseCase extends PhotoBaseUseCase {
   Future<Response<Photo>> call({
     required String id,
     required String referencePath,
-    bool cached = true,
+    bool singletonMode = true,
   }) {
     return repository.getById(
       id,
-      cached: cached,
+      singletonMode: singletonMode,
       params: getParams(referencePath),
     );
   }
