@@ -100,7 +100,7 @@ abstract class FirestoreDataSource<T extends Entity>
     return execute(() {
       final ref = source(params).doc(data.id);
       if (isEncryptor) {
-        return encryptor.input(data.source).then((raw) {
+        return encryptor.input(data.filtered).then((raw) {
           if (raw.isEmpty) {
             return Response(status: Status.error, error: "Encryption error!");
           }
@@ -110,7 +110,7 @@ abstract class FirestoreDataSource<T extends Entity>
         });
       } else {
         final options = fdb.SetOptions(merge: true);
-        return ref.set(data.source, options).then((value) {
+        return ref.set(data.filtered, options).then((value) {
           return Response(status: Status.ok, data: data);
         });
       }
@@ -627,7 +627,7 @@ abstract class FirestoreDataSource<T extends Entity>
         return ref.update(data).then((value) => Response(status: Status.ok));
       }
       return getById(id, params: params, args: args).then((value) {
-        final x = value.data?.source ?? {};
+        final x = value.data?.filtered ?? {};
         x.addAll(data);
         return encryptor.input(x).then((v) {
           if (v.isEmpty) return Response(status: Status.nullable);

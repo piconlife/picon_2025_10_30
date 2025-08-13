@@ -8,20 +8,24 @@ import '../../roots/widgets/icon.dart';
 import '../res/icons.dart';
 
 class InAppLeading extends StatelessWidget {
+  final dynamic icon;
   final BorderRadius? borderRadius;
   final Color? backgroundColor;
   final Color? highlightColor;
   final Color? splashColor;
+  final Color? color;
   final Widget? child;
   final VoidCallback? onTap;
 
   const InAppLeading({
     super.key,
     this.child,
+    this.icon,
     this.borderRadius,
     this.backgroundColor,
     this.highlightColor,
     this.splashColor,
+    this.color,
     this.onTap,
   });
 
@@ -44,8 +48,8 @@ class InAppLeading extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: InAppIcon(
-                InAppIcons.leading.regular,
-                color: context.dark.t95,
+                icon ?? InAppIcons.leading.regular,
+                color: color ?? context.dark.t95,
                 flipByTextDirection: true,
                 size: 24,
               ),

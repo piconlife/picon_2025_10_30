@@ -564,12 +564,6 @@ class User extends Auth<UserKeys> {
   UserKeys makeKey() => UserKeys.i;
 
   @override
-  bool isInsertable(String key, value) {
-    super.isInsertable(key, value);
-    return this.key.keys.contains(key) && value != null;
-  }
-
-  @override
   Map<String, dynamic> get source {
     return super.source..addAll({
       // IN APP INFO
@@ -657,7 +651,11 @@ enum Gender {
   factory Gender.from(Object? source) {
     if (source == null) return Gender.male;
     return values.firstWhere(
-      (e) => e == source || e.id == source || e.name == source,
+      (e) =>
+          e == source ||
+          e.index == source ||
+          e.id == source ||
+          e.name == source,
       orElse: () => Gender.male,
     );
   }

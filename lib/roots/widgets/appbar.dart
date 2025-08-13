@@ -49,9 +49,10 @@ class InAppAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = backgroundColor?.isDark ?? context.isDarkMode;
     SystemUiOverlayStyle? style;
     if (useSystemUiOverlay) {
-      style = backgroundColor?.isDark ?? context.isDarkMode
+      style = isDark
           ? SystemUiOverlayStyle.light.copyWith(
               systemNavigationBarColor: Colors.black.withAlpha(1),
               statusBarColor: Colors.black.withAlpha(1),
@@ -84,7 +85,9 @@ class InAppAppbar extends StatelessWidget implements PreferredSizeWidget {
             backgroundColor: backgroundColor ?? context.light,
             centerTitle: centerTitle,
             titleSpacing: titleSpacing,
-            leading: leading ?? InAppLeading(),
+            leading:
+                leading ??
+                InAppLeading(color: isDark ? context.light : context.dark.t95),
             title: title ?? Text(titleText ?? "", style: titleTextStyle),
             elevation: 0,
             bottom: bottom,

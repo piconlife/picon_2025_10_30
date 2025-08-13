@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_andomie/utils/key_generator.dart';
 
@@ -41,12 +42,16 @@ class EditablePhotoProvider extends ChangeNotifier {
     notify(() => status = EditablePhotoProviderStatus.done);
   }
 
-  void crop(int index) async {
+  void crop(BuildContext context, int index) async {
     final item = photos[index];
     final data = item.rootData;
     if (item.editable && data is MediaData) {
       notify(() => status = EditablePhotoProviderStatus.loading);
-      final feedback = await MediaPicker.I.cropImage(path: data.path ?? "");
+      final feedback = await MediaPicker.I.cropImage(
+        context,
+        data.bytes,
+        original: data,
+      );
       if (feedback != null) {
         final current = photos.removeAt(index);
         photos.insert(index, current.copy(feedback));

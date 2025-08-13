@@ -76,7 +76,7 @@ class _ChoosePhotoPageState extends State<ChoosePhotoPage> {
                   final item = value.elementAtOrNull(index);
                   return ChoosingEditableImage(
                     photo: item,
-                    onCropped: () => provider.crop(index),
+                    onCropped: () => provider.crop(context, index),
                     onRemoved: () => provider.remove(index),
                   );
                 },

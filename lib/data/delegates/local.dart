@@ -99,7 +99,7 @@ abstract class InAppDataSource<T extends Entity> extends LocalDataSource<T> {
     return execute(() {
       final ref = source(params).doc(data.id);
       if (isEncryptor) {
-        return encryptor.input(data.source).then((raw) {
+        return encryptor.input(data.filtered).then((raw) {
           if (raw.isEmpty) {
             return Response(status: Status.error, error: "Encryption error!");
           }
@@ -112,7 +112,7 @@ abstract class InAppDataSource<T extends Entity> extends LocalDataSource<T> {
         });
       } else {
         final options = const fdb.InAppSetOptions(merge: true);
-        return ref.set(data.source, options).then((value) {
+        return ref.set(data.filtered, options).then((value) {
           return Response(
             status: value == null ? Status.error : Status.ok,
             data: value == null ? null : build(value.data),
@@ -632,7 +632,7 @@ abstract class InAppDataSource<T extends Entity> extends LocalDataSource<T> {
         return ref.update(data).then((value) => Response(status: Status.ok));
       }
       return getById(id, params: params).then((value) async {
-        final x = value.data?.source ?? {};
+        final x = value.data?.filtered ?? {};
         x.addAll(data);
         final v = await encryptor.input(x);
         if (v.isEmpty) return Response(status: Status.nullable);

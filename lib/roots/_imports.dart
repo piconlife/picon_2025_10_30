@@ -1,5 +1,4 @@
 import 'package:app_color/app_color.dart';
-import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:auth_management/auth_management.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -16,7 +15,6 @@ import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_androssy_kits/flutter_androssy_kits.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_device_config/flutter_device_config.dart';
-import 'package:flutter_local_storage/local_storage.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_network_status/network_status.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -65,7 +63,5 @@ import 'services/storage.dart';
 import 'services/zotlo_subscription.dart';
 import 'utils/system_ui.dart';
 import 'widgets/cover.dart';
-import 'widgets/icon.dart';
-import 'widgets/text.dart';
 
 part 'root.dart';

@@ -1,7 +1,7 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
+import 'package:picon/app/dialogs/dialog_image_cropper.dart';
 
 import '../../../../app/res/icons.dart';
 import '../../../../app/res/placeholders.dart';
@@ -34,21 +34,13 @@ class _EditableCoverState extends State<EditableCover> {
   MediaData? _data;
 
   void _choose(BuildContext context) async {
-    const background = Colors.black;
-    final options = CropOptions(
-      aspectRatio: const CropAspectRatio(ratioY: 1, ratioX: 1),
-      title: "Cover photo",
-      uiSettingsAndroid: AndroidUiSettings(
-        toolbarColor: background,
-        toolbarTitle: "Cover photo",
-        statusBarColor: background,
-        toolbarWidgetColor: context.light,
-        hideBottomControls: true,
-      ),
-    );
     final value = await MediaPicker.I.chooseImage(
+      context,
       crop: true,
-      cropOptions: options,
+      cropOptions: InAppImageCropperOptions(
+        title: "Cover photo",
+        withAspectRatio: 1,
+      ),
     );
     if (!context.mounted) return;
     _data = value ?? _data;

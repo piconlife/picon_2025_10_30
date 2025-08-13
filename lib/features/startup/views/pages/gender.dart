@@ -38,7 +38,7 @@ class _GenderPageState extends State<GenderPage> {
       return;
     }
 
-    if (Startup.puts({StartupKeys.gender: gender.id})) {
+    if (Startup.put(StartupKeys.gender, gender.index)) {
       context.open(Routes.email);
     }
   }

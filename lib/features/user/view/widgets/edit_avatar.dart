@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
+import 'package:picon/app/dialogs/dialog_image_cropper.dart';
 
 import '../../../../app/res/icons.dart';
 import '../../../../app/res/placeholders.dart';
@@ -32,23 +32,14 @@ class _EditableAvatarState extends State<EditableAvatar> {
   MediaData? _data;
 
   void _choose(BuildContext context) async {
-    const background = Colors.black;
-    final options = CropOptions(
-      aspectRatio: const CropAspectRatio(ratioY: 1, ratioX: 1),
-      cropStyle: CropStyle.circle,
-      title: "Avatar",
-      uiSettingsAndroid: AndroidUiSettings(
-        toolbarColor: background,
-        toolbarTitle: "Avatar",
-        statusBarColor: background,
-        toolbarWidgetColor: Colors.white,
-        hideBottomControls: true,
-        cropStyle: CropStyle.circle,
-      ),
-    );
     final value = await MediaPicker.I.chooseImage(
+      context,
       crop: true,
-      cropOptions: options,
+      cropOptions: InAppImageCropperOptions(
+        title: "Avatar",
+        withCircleShape: true,
+        withAspectRatio: 1,
+      ),
     );
     if (!context.mounted) return;
     _data = value ?? _data;

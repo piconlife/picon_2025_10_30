@@ -95,8 +95,8 @@ dependencies:
   table_calendar: ^3.2.0
 
   # DESIGN (WITH NATIVE)
-  image_cropper: ^9.1.0
   image_picker: ^1.1.2
+  crop_your_image: ^2.0.0
 
   # LOGICS (WITHOUT NATIVE)
   async: ^2.13.0
