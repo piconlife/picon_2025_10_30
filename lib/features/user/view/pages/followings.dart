@@ -11,7 +11,7 @@ import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/exception.dart';
 import '../../../../roots/widgets/scaffold_shimmer.dart';
 import '../cubits/following_cubit.dart';
-import '../templates/item_user_following.dart';
+import '../templates2/item_user_following.dart';
 
 class UserFollowingsPage extends StatefulWidget {
   final Object? args;

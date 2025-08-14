@@ -5,52 +5,58 @@ import 'package:flutter_entity/entity.dart';
 import '../../app/helpers/user.dart';
 import '../enums/content.dart';
 import '../enums/privacy.dart';
+import 'content.dart';
 import 'photo.dart';
 
-class UserPostKeys {
+class UserPostKeys extends EntityKey {
   const UserPostKeys._();
 
-  static const timeMills = "time_mills";
-  static const commentCount = "comment_count";
-  static const likeCount = "like_count";
-  static const reportCount = "report_count";
-  static const starCount = "star_count";
-  static const viewCount = "view_count";
+  static const UserPostKeys i = UserPostKeys._();
 
-  static const id = "id";
-  static const publisher = "publisher";
-  static const path = "path";
-  static const description = "description";
-  static const title = "title";
-  static const audience = "audience";
-  static const privacy = "privacy";
-  static const type = "type";
+  final path = "path";
+  final pid = "pid";
+  final ref = "ref";
+  final type = "type";
 
-  static const tags = "tags";
+  @override
+  Iterable<String> get keys => [id, path, pid, ref, timeMills, type];
 }
 
-class UserPost extends Entity {
-  // RAW DATA
+class UserPost extends Entity<UserPostKeys> {
+  // RAW FIELDS
+  String? publisher;
+  String? path;
+  String? reference;
+  ContentType? _type;
+
+  ContentType get contentType => _type ?? ContentType.none;
+
+  // MODIFIABLE FIELDS
+  String? description;
+  List<String> photoUrls = [];
+  List<String> comments = [];
+  List<String> likes = [];
+  List<String> stars = [];
+
+  List<Content> contents = [];
+
   int? commentCount;
   int? likeCount;
   int? reportCount;
   int? starCount;
   int? viewCount;
 
-  String? publisher;
-  String? path;
-  String? description;
   String? title;
   String? audience;
-  String? privacy;
-  String? type;
-
+  Privacy? privacy;
   List<String>? tags;
 
-  // TEMPORARY DATA
+  // TEMPORARY FIELDS
   String? translatedTitle;
   String? translatedDescription;
   List<Photo>? photos;
+
+  String? get photoUrl => photoUrls.firstOrNull;
 
   bool get isPublisher => publisher == UserHelper.uid;
 
@@ -64,42 +70,34 @@ class UserPost extends Entity {
     return (translatedTitle ?? translatedDescription ?? '').isNotEmpty;
   }
 
-  bool get isShareMode => isPublisher || privacy == Privacy.everyone.name;
+  bool get isShareMode => isPublisher || privacy == Privacy.everyone;
 
-  bool get isPhotoMode => type == ContentType.photo.name;
+  bool get isPhotoMode => _type == ContentType.photo;
 
-  bool get isVideoMode => type == ContentType.video.name;
-
-  List<String> get photoUrls {
-    return photos
-            ?.map((e) => e.photoUrl ?? '')
-            .where((e) => e.isNotEmpty)
-            .toList() ??
-        [];
-  }
+  bool get isVideoMode => _type == ContentType.video;
 
   UserPost({
-    // RAW DATA
     super.id,
     super.timeMills,
-    this.publisher,
-    this.title,
     this.path,
+    this.publisher,
+    this.reference,
+    ContentType? type,
+
+    this.title,
     this.description,
     this.audience,
     this.privacy,
-    this.type,
     this.commentCount,
     this.likeCount,
     this.reportCount,
     this.starCount,
     this.viewCount,
     this.tags,
-    // TEMPORARY DATA
     this.translatedTitle,
     this.translatedDescription,
     this.photos,
-  });
+  }) : _type = type;
 
   UserPost.create({
     required super.id,
@@ -110,48 +108,51 @@ class UserPost extends Entity {
     required this.description,
     required this.audience,
     required this.privacy,
-    required this.type,
+    required ContentType? type,
     required this.tags,
-  });
+  }) : _type = type;
 
-  factory UserPost.from(Object? source) {
+  UserPost.createForAvatar({
+    required super.id,
+    required super.timeMills,
+    required this.publisher,
+    required this.path,
+    required this.reference,
+  }) : _type = ContentType.avatar;
+
+  UserPost.createForCover({
+    required super.id,
+    required super.timeMills,
+    required this.publisher,
+    required this.path,
+    required this.reference,
+  }) : _type = ContentType.cover;
+
+  factory UserPost.parse(Object? source) {
+    final key = UserPostKeys.i;
+    if (source is! Map) return UserPost();
     return UserPost(
-      id: source.entityValue(UserPostKeys.id),
-      timeMills: source.entityValue(UserPostKeys.timeMills),
-      publisher: source.entityValue(UserPostKeys.publisher),
-      title: source.entityValue(UserPostKeys.title),
-      path: source.entityValue(UserPostKeys.path),
-      description: source.entityValue(UserPostKeys.description),
-      audience: source.entityValue(UserPostKeys.audience),
-      privacy: source.entityValue(UserPostKeys.privacy),
-      type: source.entityValue(UserPostKeys.type),
-      commentCount: source.entityValue(UserPostKeys.commentCount),
-      likeCount: source.entityValue(UserPostKeys.likeCount),
-      reportCount: source.entityValue(UserPostKeys.reportCount),
-      starCount: source.entityValue(UserPostKeys.starCount),
-      viewCount: source.entityValue(UserPostKeys.viewCount),
-      tags: source.entityValue(UserPostKeys.tags),
+      id: source.entityValue(key.id),
+      path: source.entityValue(key.path),
+      publisher: source.entityValue(key.pid),
+      reference: source.entityValue(key.ref),
+      timeMills: source.entityValue(key.timeMills),
+      type: source.entityValue(key.type, ContentType.parse),
     );
   }
 
   @override
+  UserPostKeys makeKey() => UserPostKeys.i;
+
+  @override
   Map<String, dynamic> get source {
     return {
-      UserPostKeys.id: id,
-      UserPostKeys.timeMills: timeMills,
-      UserPostKeys.publisher: publisher,
-      UserPostKeys.title: title,
-      UserPostKeys.path: path,
-      UserPostKeys.description: description,
-      UserPostKeys.audience: audience,
-      UserPostKeys.privacy: privacy,
-      UserPostKeys.type: type,
-      UserPostKeys.commentCount: commentCount,
-      UserPostKeys.likeCount: likeCount,
-      UserPostKeys.reportCount: reportCount,
-      UserPostKeys.starCount: starCount,
-      UserPostKeys.viewCount: viewCount,
-      UserPostKeys.tags: tags,
+      key.id: id,
+      key.path: path,
+      key.pid: publisher,
+      key.ref: reference,
+      key.timeMills: timeMills,
+      key.type: _type?.name,
     };
   }
 
@@ -161,39 +162,21 @@ class UserPost extends Entity {
   @override
   int get hashCode =>
       id.hashCode ^
-      timeMills.hashCode ^
-      publisher.hashCode ^
-      title.hashCode ^
       path.hashCode ^
-      description.hashCode ^
-      audience.hashCode ^
-      privacy.hashCode ^
-      type.hashCode ^
-      commentCount.hashCode ^
-      likeCount.hashCode ^
-      reportCount.hashCode ^
-      starCount.hashCode ^
-      viewCount.hashCode ^
-      tags.hashCode;
+      publisher.hashCode ^
+      reference.hashCode ^
+      timeMills.hashCode ^
+      _type.hashCode;
 
   @override
   bool operator ==(Object other) {
     return other is UserPost &&
         other.id == id &&
-        other.timeMills == timeMills &&
-        other.publisher == publisher &&
-        other.title == title &&
         other.path == path &&
-        other.description == description &&
-        other.audience == audience &&
-        other.privacy == privacy &&
-        other.type == type &&
-        other.commentCount == commentCount &&
-        other.likeCount == likeCount &&
-        other.reportCount == reportCount &&
-        other.starCount == starCount &&
-        other.viewCount == viewCount &&
-        other.tags == tags;
+        other.publisher == publisher &&
+        other.reference == reference &&
+        other.timeMills == timeMills &&
+        other._type == _type;
   }
 
   @override

@@ -9,5 +9,5 @@ class LocalUserPostDataSource extends InAppDataSource<UserPost> {
   });
 
   @override
-  UserPost build(Object? source) => UserPost.from(source);
+  UserPost build(Object? source) => UserPost.parse(source);
 }

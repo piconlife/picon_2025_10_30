@@ -8,8 +8,10 @@ import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/res/placeholders.dart';
 import '../../../../data/models/feed.dart';
+import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/text.dart';
+import '../../../../roots/widgets/user_builder.dart';
 import 'feed_footer_recent.dart';
 import 'feed_header.dart';
 import 'stared_feed_footer.dart';
@@ -25,16 +27,12 @@ class ItemFeedVideo extends StatefulWidget {
 }
 
 class _ItemFeedVideoState extends State<ItemFeedVideo> {
-  String? get title {
-    return widget.item.publisherShortName;
-  }
-
-  String? get subtitle {
+  String? _subtitle(User user) {
     return widget.item.title.isNotValid
         ? DateHelper.toRealtime(widget.item.timeMills)
-        : widget.item.publisherTitle.isValid
-        ? widget.item.publisherTitle
-        : widget.item.publisherProfession;
+        : user.title.isValid
+        ? user.title
+        : user.profession;
   }
 
   @override
@@ -44,11 +42,16 @@ class _ItemFeedVideoState extends State<ItemFeedVideo> {
       color: context.light,
       child: Column(
         children: [
-          FeedHeader(
-            avatar: widget.item.publisherPhoto,
-            title: title,
-            subtitle: subtitle,
-            actions: [FeedHeaderMoreAction(onClick: () {})],
+          InAppUserBuilder(
+            id: widget.item.publisher,
+            builder: (context, user) {
+              return FeedHeader(
+                title: user.username,
+                subtitle: _subtitle(user),
+                avatar: user.photo,
+                actions: [FeedHeaderMoreAction()],
+              );
+            },
           ),
           _Body(item: widget.item),
           StaredFeedFooter(
@@ -66,7 +69,7 @@ class _ItemFeedVideoState extends State<ItemFeedVideo> {
             InAppGesture(
               onTap: () {},
               child: FooterRecentFeed(
-                image: widget.item.recent.photoUrlAt,
+                image: widget.item.recent.photoUrl,
                 title: widget.item.recent.title,
                 description: widget.item.recent.description,
               ),
@@ -92,7 +95,7 @@ class _Body extends StatelessWidget {
       children: [
         if (item.photoUrls.use.isNotEmpty)
           AndrossyThumbnail(
-            item.photoUrlAt ?? InAppPlaceholders.image,
+            item.photoUrl ?? InAppPlaceholders.image,
             frameColor: dark.t02,
             buttonBackgroundColor: context.light,
             buttonForegroundColor: context.primary,

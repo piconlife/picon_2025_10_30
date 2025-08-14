@@ -9,21 +9,21 @@ import '../../../../data/models/user_post.dart';
 import '../../../../routes/keys.dart';
 import '../../../../routes/paths.dart';
 import '../cubits/post_cubit.dart';
-import 'feed_body.dart';
-import 'stared_feed_footer.dart';
-import 'user_post_header.dart';
+import '../templates2/feed_body.dart';
+import '../templates2/stared_feed_footer.dart';
+import '../templates2/user_post_header.dart';
 
-class ItemUserPost extends StatefulWidget {
+class ItemUserFeedPost extends StatefulWidget {
   final UserPost item;
   final Function(BuildContext context, UserPost item)? onClick;
 
-  const ItemUserPost({super.key, required this.item, this.onClick});
+  const ItemUserFeedPost({super.key, required this.item, this.onClick});
 
   @override
-  State<ItemUserPost> createState() => _ItemUserPostState();
+  State<ItemUserFeedPost> createState() => _ItemUserFeedPostState();
 }
 
-class _ItemUserPostState extends State<ItemUserPost> {
+class _ItemUserFeedPostState extends State<ItemUserFeedPost> {
   late UserPost item = widget.item;
 
   Future<void> _translate() async {
@@ -60,7 +60,7 @@ class _ItemUserPostState extends State<ItemUserPost> {
       child: Column(
         children: [
           UserPostHeader(item: item, onTranslate: _translate),
-          if (item.photoUrls.isEmpty)
+          if (item.photoUrls.use.isEmpty)
             Divider(height: 1, indent: dimen.dp(16), endIndent: dimen.dp(16)),
           UserFeedImageBody(
             description: description,

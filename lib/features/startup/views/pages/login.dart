@@ -181,13 +181,15 @@ class _LoginPageState extends State<LoginPage> {
       onLoading: (_, value) => btnSubmitKey.currentState?.setLoading(value),
       onMessage: (context, value) => context.showSnackBar(value),
       onChanges: _finally,
-      child: Scaffold(
-        appBar: const InAppAppbar(
-          titleText: "Sign in",
-          actions: [InAppLogoTrailing()],
-        ),
-        body: InAppScreen(
-          child: SafeArea(
+      child: InAppScreen(
+        unfocusMode: true,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: const InAppAppbar(
+            titleText: "Sign in",
+            actions: [InAppLogoTrailing()],
+          ),
+          body: SafeArea(
             child: ListView(
               padding: EdgeInsets.all(dimen.dp(24)).copyWith(top: dimen.dp(16)),
               children: [

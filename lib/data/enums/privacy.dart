@@ -43,7 +43,7 @@ enum Privacy {
     String? subtitle,
   }) : subtitle = subtitle ?? title;
 
-  factory Privacy.from(Object? value) {
+  factory Privacy.parse(Object? value) {
     return values.where((e) {
           return e == value || e.name == value || e.title == value;
         }).firstOrNull ??

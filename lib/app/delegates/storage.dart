@@ -47,24 +47,23 @@ class InAppStorageDelegate extends StorageDelegate {
     UploadDataType? type,
   }) {
     final mType = type ?? UploadDataType.from(data);
-    if (mType.isBlob) {
-      return reference.putBlob(data, metadata);
-    } else if (mType.isString) {
-      return reference.putString(
-        data,
-        format:
-            PutStringFormat.values
-                .where((e) => e.name == format.name)
-                .firstOrNull ??
-            PutStringFormat.raw,
-        metadata: metadata,
-      );
-    } else {
-      if (kIsWeb) {
+    switch (mType) {
+      case UploadDataType.blob:
+        return reference.putBlob(data, metadata);
+      case UploadDataType.bytes:
         return reference.putData(data, metadata);
-      } else {
+      case UploadDataType.file:
         return reference.putFile(data, metadata);
-      }
+      case UploadDataType.string:
+        return reference.putString(
+          data,
+          format:
+              PutStringFormat.values
+                  .where((e) => e.name == format.name)
+                  .firstOrNull ??
+              PutStringFormat.raw,
+          metadata: metadata,
+        );
     }
   }
 

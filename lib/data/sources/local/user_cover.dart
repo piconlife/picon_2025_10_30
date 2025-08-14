@@ -9,5 +9,5 @@ class LocalUserCoverDataSource extends InAppDataSource<UserCover> {
   });
 
   @override
-  UserCover build(Object? source) => UserCover.from(source);
+  UserCover build(Object? source) => UserCover.parse(source);
 }

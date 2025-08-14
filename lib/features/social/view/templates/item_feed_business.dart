@@ -15,6 +15,7 @@ import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/text.dart';
+import '../../../../roots/widgets/user_builder.dart';
 import 'feed_footer.dart';
 import 'feed_header.dart';
 
@@ -36,11 +37,16 @@ class _ItemFeedBusinessState extends State<ItemFeedBusiness> {
       color: context.light,
       child: Column(
         children: [
-          FeedHeader(
-            avatar: widget.item.publisherPhoto,
-            title: widget.item.publisherName,
-            subtitle: ContentType.business.value,
-            actions: [FeedHeaderMoreAction(onClick: () {})],
+          InAppUserBuilder(
+            id: widget.item.publisher,
+            builder: (context, user) {
+              return FeedHeader(
+                avatar: user.photo,
+                title: user.name,
+                subtitle: ContentType.business.value,
+                actions: [FeedHeaderMoreAction(onClick: () {})],
+              );
+            },
           ),
           _Body(item: widget.item),
           FeedFooter(item: widget.item, onLiked: (value) {}),

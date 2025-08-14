@@ -12,6 +12,7 @@ import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/text.dart';
+import '../../../../roots/widgets/user_builder.dart';
 import 'feed_footer.dart';
 import 'feed_header.dart';
 
@@ -26,12 +27,12 @@ class ItemFeedMemory extends StatefulWidget {
 }
 
 class _ItemFeedMemoryState extends State<ItemFeedMemory> {
-  String get title {
+  String _title(User user) {
     final date = DateHelper.toRealtime(widget.item.timeMills);
     if (widget.item.isPublisher) {
       return "Updated your memory story at $date";
     } else {
-      if (widget.item.publisherGender == Gender.male) {
+      if (user.gender == Gender.male) {
         return "Update his memorable story at $date";
       } else {
         return "Update her memorable story at $date";
@@ -39,12 +40,12 @@ class _ItemFeedMemoryState extends State<ItemFeedMemory> {
     }
   }
 
-  String? get subtitle {
+  String? _subtitle(User user) {
     return !widget.item.title.isValid
         ? DateHelper.toRealtime(widget.item.timeMills)
         : widget.item.title.isValid
-        ? widget.item.publisherTitle
-        : widget.item.publisherProfession;
+        ? user.title
+        : user.profession;
   }
 
   @override
@@ -53,11 +54,18 @@ class _ItemFeedMemoryState extends State<ItemFeedMemory> {
       color: context.light,
       child: Column(
         children: [
-          FeedHeader(
-            title: title,
-            subtitle: subtitle,
-            avatar: widget.item.publisherPhoto,
-            actions: [FeedHeaderFollowButton(publisher: widget.item.publisher)],
+          InAppUserBuilder(
+            id: widget.item.publisher,
+            builder: (context, user) {
+              return FeedHeader(
+                title: _title(user),
+                subtitle: _subtitle(user),
+                avatar: user.photo,
+                actions: [
+                  FeedHeaderFollowButton(publisher: widget.item.publisher),
+                ],
+              );
+            },
           ),
           _Body(item: widget.item),
           FeedFooter(item: widget.item, onLiked: (value) {}),

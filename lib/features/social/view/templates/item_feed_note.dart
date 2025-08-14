@@ -8,6 +8,7 @@ import 'package:flutter_androssy_kits/widgets.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../roots/widgets/icon.dart';
+import '../../../../roots/widgets/user_builder.dart';
 import 'feed_footer.dart';
 import 'feed_header.dart';
 
@@ -28,11 +29,16 @@ class _ItemFeedNoteState extends State<ItemFeedNote> {
       color: context.light,
       child: Column(
         children: [
-          FeedHeader(
-            avatar: widget.item.publisherPhoto,
-            title: widget.item.publisherName,
-            subtitle: widget.item.timeMills.toRealtime(),
-            actions: [FeedHeaderMoreAction(onClick: () {})],
+          InAppUserBuilder(
+            id: widget.item.publisher,
+            builder: (context, user) {
+              return FeedHeader(
+                title: user.name,
+                subtitle: widget.item.timeMills.toRealtime(),
+                avatar: user.photo,
+                actions: [FeedHeaderMoreAction()],
+              );
+            },
           ),
           _Body(item: widget.item),
           FeedFooter(item: widget.item, onLiked: (value) {}),

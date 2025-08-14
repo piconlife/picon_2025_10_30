@@ -18,7 +18,7 @@ import '../../../../../roots/widgets/scaffold_shimmer.dart';
 import '../../../../../roots/widgets/text.dart';
 import '../../../../../routes/paths.dart';
 import '../../cubits/photo_cubit.dart';
-import '../../templates/nullable_body.dart';
+import '../../templates2/nullable_body.dart';
 
 class ProfilePhotosSegment extends StatefulWidget {
   final String? uid;
@@ -99,7 +99,7 @@ class _ProfilePhotosSegmentState extends State<ProfilePhotosSegment> {
                 fit: StackFit.expand,
                 children: [
                   InAppImage(
-                    item.photoUrls.firstOrNull,
+                    item.photoUrl,
                     width: double.infinity,
                     height: double.infinity,
                     fit: BoxFit.cover,
@@ -118,7 +118,7 @@ class _ProfilePhotosSegmentState extends State<ProfilePhotosSegment> {
                           vertical: dimen.dp(2),
                         ),
                         child: InAppText(
-                          item.photoUrls.length.toString(),
+                          item.photoUrls.use.length.toString(),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: dimen.dp(12),

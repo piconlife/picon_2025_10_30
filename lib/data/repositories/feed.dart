@@ -77,12 +77,12 @@ class FeedRepository extends RemoteDataRepository<Feed> {
   Future<Feed?> _convert(Feed? e) async {
     if (e == null) return null;
     final uid = e.publisher ?? '';
-    final id = e.referenceId ?? '';
+    final id = e.reference ?? '';
     final type = e.contentType;
     if (uid.isEmpty || id.isEmpty) return null;
     return _reference(type, uid, id).then((value) {
       if (!value.isValid) return null;
-      return Feed.from(e.source..addAll(value.data?.source ?? {}));
+      return Feed.parse(e.source..addAll(value.data?.source ?? {}));
     });
   }
 

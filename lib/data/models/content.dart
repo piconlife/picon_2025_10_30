@@ -44,6 +44,7 @@ class Content extends Entity<Keys> {
   final String? parentId;
   final String? parentLink;
   final String? parentPath;
+  final String? reference;
   final String? parentUrl;
   final String? path;
   final List<Photo>? photos;
@@ -160,6 +161,7 @@ class Content extends Entity<Keys> {
     this.parentLink,
     this.parentPath,
     this.parentUrl,
+    this.reference,
     this.photos,
     this.photoIds,
     this.photoUrl,
@@ -399,8 +401,8 @@ class Content extends Entity<Keys> {
       stars: source.entityValues(key.stars),
       tags: source.entityValues(key.tags),
       audience: source.entityValue(key.audience, Audience.from),
-      privacy: source.entityValue(key.privacy, Privacy.from),
-      type: source.entityValue(key.type, ContentType.from),
+      privacy: source.entityValue(key.privacy, Privacy.parse),
+      type: source.entityValue(key.type, ContentType.parse),
       recent: source.entityValue(key.recent, Content.from),
     );
   }

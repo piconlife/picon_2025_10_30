@@ -6,5 +6,5 @@ class RemoteFeedDataSource extends FirestoreDataSource<Feed> {
   RemoteFeedDataSource({super.path = Paths.feeds});
 
   @override
-  Feed build(Object? source) => Feed.fromReference(source);
+  Feed build(Object? source) => Feed.parse(source);
 }

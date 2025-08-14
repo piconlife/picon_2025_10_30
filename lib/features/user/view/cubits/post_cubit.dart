@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_andomie/extensions/list.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_andomie/helpers/clipboard_helper.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
@@ -9,7 +10,6 @@ import 'package:picon/roots/services/storage.dart';
 
 import '../../../../app/helpers/user.dart';
 import '../../../../data/constants/paths.dart';
-import '../../../../data/models/photo.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../data/models/user_report.dart';
 import '../../../../data/use_cases/feed_comment/delete.dart';
@@ -68,12 +68,10 @@ class UserPostCubit extends Cubit<Response<UserPost>> {
     );
   }
 
-  Future<Response<UserPost>> create(UserPost data, List<Photo> photos) {
+  Future<Response<UserPost>> create(UserPost data) {
     return CreateUserPostUseCase.i(data).then((value) {
       if (value.isSuccessful) {
-        emit(
-          state.copy(result: state.result..insert(0, data..photos = photos)),
-        );
+        emit(state.copy(result: state.result..insert(0, data)));
       }
       return value;
     });
@@ -92,7 +90,7 @@ class UserPostCubit extends Cubit<Response<UserPost>> {
         emit(state.copy(result: state.result..insert(index, data)));
         return;
       }
-      StorageService.i.deletes(data.photoUrls, lazy: true);
+      StorageService.i.deletes(data.photoUrls.use, lazy: true);
       if (data.path == null || data.path!.isEmpty) return;
       GetPhotosUseCase.i(data.path ?? '').then((value) {
         for (var i in value.result) {

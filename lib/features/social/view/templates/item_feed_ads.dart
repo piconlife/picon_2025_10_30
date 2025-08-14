@@ -12,6 +12,7 @@ import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/text.dart';
+import '../../../../roots/widgets/user_builder.dart';
 import 'feed_footer.dart';
 import 'feed_header.dart';
 
@@ -32,11 +33,16 @@ class _ItemFeedAdsState extends State<ItemFeedAds> {
       color: context.light,
       child: Column(
         children: [
-          FeedHeader(
-            avatar: widget.item.publisherPhoto,
-            title: widget.item.publisherName,
-            subtitle: ContentType.ads.value,
-            actions: [FeedHeaderMoreAction(onClick: () {})],
+          InAppUserBuilder(
+            id: widget.item.publisher,
+            builder: (context, user) {
+              return FeedHeader(
+                avatar: user.photo,
+                title: user.name,
+                subtitle: ContentType.ads.value,
+                actions: [FeedHeaderMoreAction(onClick: () {})],
+              );
+            },
           ),
           _Body(item: widget.item),
           FeedFooter(item: widget.item, onLiked: (value) {}),
@@ -60,7 +66,7 @@ class _Body extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (item.photoUrls.isValid)
+        if (item.photoUrls.isNotEmpty)
           AndrossySlider(
             frameRatio: 9 / 9,
             itemCount: item.photoUrls.use.length,

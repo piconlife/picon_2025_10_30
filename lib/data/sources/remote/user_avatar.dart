@@ -6,5 +6,5 @@ class RemoteUserAvatarDataSource extends FirestoreDataSource<UserAvatar> {
   RemoteUserAvatarDataSource({super.path = Paths.userAvatars});
 
   @override
-  UserAvatar build(Object? source) => UserAvatar.from(source);
+  UserAvatar build(Object? source) => UserAvatar.parse(source);
 }

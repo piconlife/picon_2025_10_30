@@ -9,5 +9,5 @@ class LocalFeedDataSource extends InAppDataSource<Feed> {
   });
 
   @override
-  Feed build(Object? source) => Feed.from(source);
+  Feed build(Object? source) => Feed.parse(source);
 }

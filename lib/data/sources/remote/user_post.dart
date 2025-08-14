@@ -6,5 +6,5 @@ class RemoteUserPostDataSource extends FirestoreDataSource<UserPost> {
   RemoteUserPostDataSource({super.path = Paths.userPosts});
 
   @override
-  UserPost build(Object? source) => UserPost.from(source);
+  UserPost build(Object? source) => UserPost.parse(source);
 }

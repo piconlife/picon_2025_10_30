@@ -80,6 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               children: [
                 InAppUserBuilder(
+                  currentUser: true,
                   builder: (context, user) {
                     return InAppGesture(
                       onTap: () => _visitProfile(context, user),

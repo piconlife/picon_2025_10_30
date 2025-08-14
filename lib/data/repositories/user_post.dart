@@ -1,13 +1,15 @@
 import 'package:data_management/data_management.dart';
-import 'package:flutter_andomie/core.dart' hide Selection;
+import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_database/in_app_database.dart';
+import 'package:picon/data/enums/content.dart';
 
 import '../../roots/helpers/connectivity.dart';
 import '../models/user_post.dart';
 import '../sources/local/user_post.dart';
 import '../sources/remote/user_post.dart';
-import '../use_cases/photo/get.dart';
+import '../use_cases/user_avatar/get_by_id.dart';
+import '../use_cases/user_cover/get_by_id.dart';
 
 class UserPostRepository extends RemoteDataRepository<UserPost> {
   UserPostRepository({
@@ -52,28 +54,56 @@ class UserPostRepository extends RemoteDataRepository<UserPost> {
   }
 
   Future<Response<UserPost>> _modify(Response<UserPost> value) async {
-    if (value.isValid) {
-      if (value.result.length == 1) {
-        return value.copy(data: await _value(value.data));
-      } else {
-        List<UserPost> list = [];
-        for (var i in value.result) {
-          final data = await _value(i);
-          if (data != null) list.add(data);
-        }
-        return value.copy(result: list);
-      }
-    } else {
-      return value;
+    if (!value.isValid) return value;
+    if (value.result.length == 1) {
+      if (value.data == null) return value;
+      return value.copy(data: await _value(value.data!));
     }
+    final result = await Future.wait(value.result.map(_value));
+    return value.copy(result: result);
   }
 
-  Future<UserPost?> _value(UserPost? i) async {
-    if (i == null) return i;
-    if (i.isPhotoMode) {
-      final value = await GetPhotosUseCase.i(i.path.use);
-      if (value.isValid) i = i..photos = value.result;
+  Future<UserPost> _value(UserPost i) async {
+    if (i.reference != null && i.reference!.isNotEmpty) {
+      return _filter(i);
     }
     return i;
+  }
+
+  Future<UserPost> _filter(UserPost i) async {
+    switch (i.contentType) {
+      case ContentType.avatar:
+        final feedback = await GetUserAvatarUseCase.i(
+          id: i.id,
+          uid: i.publisher,
+        );
+        final data = feedback.data;
+        if (data == null || data.isEmpty) return i;
+        return i
+          ..description = data.description
+          ..photoUrls = data.photoUrl.isValid ? [data.photoUrl!] : []
+          ..privacy = data.privacy;
+      case ContentType.cover:
+        final feedback = await GetUserCoverUseCase.i(
+          id: i.id,
+          uid: i.publisher,
+        );
+        final data = feedback.data;
+        if (data == null) return i;
+        return i
+          ..description = data.description
+          ..photoUrls = data.photoUrl.isValid ? [data.photoUrl!] : []
+          ..privacy = data.privacy;
+      case ContentType.none:
+      case ContentType.ads:
+      case ContentType.business:
+      case ContentType.note:
+      case ContentType.photo:
+      case ContentType.sponsored:
+      case ContentType.memory:
+      case ContentType.post:
+      case ContentType.video:
+        return i;
+    }
   }
 }

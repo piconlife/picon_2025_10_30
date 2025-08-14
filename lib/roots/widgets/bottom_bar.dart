@@ -2,33 +2,88 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:flutter/material.dart';
 
+import 'bottom.dart';
+import 'padding.dart';
+
 class InAppBottomBar extends StatelessWidget {
-  final Color? color;
+  final Color? backgroundColor;
+  final double elevation;
+  final Color? elevationColor;
   final double? height;
+  final bool ignoreBackgroundColor;
+  final bool ignoreSystemPadding;
+  final EdgeInsets padding;
+  final double shadowBlurRadius;
+  final Color? shadowColor;
   final Widget child;
 
   const InAppBottomBar({
     super.key,
-    this.color,
+    this.backgroundColor,
+    this.elevation = 1,
+    this.elevationColor,
     this.height,
+    this.ignoreBackgroundColor = false,
+    this.ignoreSystemPadding = false,
+    this.padding = EdgeInsets.zero,
+    this.shadowBlurRadius = 50,
+    this.shadowColor,
+    required this.child,
+  });
+
+  const InAppBottomBar.minimalist({
+    super.key,
+    this.backgroundColor,
+    this.elevation = 0,
+    this.elevationColor,
+    this.height,
+    this.ignoreBackgroundColor = true,
+    this.ignoreSystemPadding = false,
+    this.padding = EdgeInsets.zero,
+    this.shadowBlurRadius = 0,
+    this.shadowColor,
     required this.child,
   });
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: color ?? context.bottomColor.primary,
-        border: Border(top: BorderSide(color: context.grey.t25, width: 1)),
-        boxShadow: [BoxShadow(color: context.dark.t10, blurRadius: 50)],
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(
-          top: 8,
-          bottom: MediaQuery.maybePaddingOf(context)?.bottom ?? 4,
+    Widget child = this.child;
+    if (height != null && height! > 0) {
+      child = SizedBox(height: height, child: child);
+    }
+    if (padding != EdgeInsets.zero) {
+      child = InAppPadding(
+        padding: padding.copyWith(bottom: context.isBottom ? 0 : null),
+        child: child,
+      );
+    }
+    if (!ignoreBackgroundColor || elevation > 0 || shadowBlurRadius > 0) {
+      child = DecoratedBox(
+        decoration: BoxDecoration(
+          color: backgroundColor ?? context.bottomColor.primary,
+          border: elevation > 0
+              ? Border(
+                  top: BorderSide(
+                    color: elevationColor ?? context.grey.t25,
+                    width: elevation,
+                  ),
+                )
+              : null,
+          boxShadow: shadowBlurRadius > 0
+              ? [
+                  BoxShadow(
+                    color: shadowColor ?? context.dark.t10,
+                    blurRadius: shadowBlurRadius,
+                  ),
+                ]
+              : null,
         ),
-        child: SizedBox(height: height, child: child),
-      ),
-    );
+        child: child,
+      );
+    }
+    if (!ignoreSystemPadding) {
+      child = InAppBottom(child: child);
+    }
+    return child;
   }
 }

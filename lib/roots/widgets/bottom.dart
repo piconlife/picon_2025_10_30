@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
 class InAppBottom extends StatelessWidget {
-  final bool enabled;
   final Widget child;
 
-  const InAppBottom({super.key, this.enabled = true, required this.child});
+  const InAppBottom({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -15,4 +14,10 @@ class InAppBottom extends StatelessWidget {
       child: child,
     );
   }
+}
+
+extension BottomPaddingHelper on BuildContext {
+  EdgeInsets get _ => MediaQuery.maybePaddingOf(this) ?? EdgeInsets.zero;
+
+  bool get isBottom => _.bottom > 0;
 }

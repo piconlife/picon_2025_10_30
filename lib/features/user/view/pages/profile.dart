@@ -11,6 +11,7 @@ import '../../../../data/models/user.dart';
 import '../../../../roots/preferences/preferences.dart';
 import '../../../../roots/widgets/action.dart';
 import '../../../../roots/widgets/appbar.dart';
+import '../../../../roots/widgets/screen.dart';
 import '../widgets/profile_details_bar.dart';
 import 'profile/abouts.dart';
 import 'profile/notes.dart';
@@ -69,70 +70,73 @@ class _UserProfilePageState extends State<UserProfilePage>
   Widget build(context) {
     final dimen = context.dimens;
     final dark = context.dark;
-    return Scaffold(
-      appBar: InAppAppbar(
-        titleText: UserHelper.username,
-        actions: [
-          InAppAction(
-            InAppIcons.nativeMenuWithDot.regular,
-            onTap: () => _menu(context),
-          ),
-        ],
-      ),
-      body: NestedScrollView(
-        headerSliverBuilder: (context, isNestedScrolling) {
-          return [
-            SliverToBoxAdapter(
-              child: ProfileDetailsBar(uid: uid, user: user),
+    return InAppScreen(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: InAppAppbar(
+          titleText: UserHelper.username,
+          actions: [
+            InAppAction(
+              InAppIcons.nativeMenuWithDot.regular,
+              onTap: () => _menu(context),
             ),
-            SliverAppBar(
-              elevation: 0.0,
-              titleSpacing: 0,
-              floating: true,
-              primary: false,
-              pinned: true,
-              automaticallyImplyLeading: false,
-              title: TabBar(
-                controller: controller,
-                dividerHeight: 0,
-                isScrollable: true,
-                tabAlignment: TabAlignment.center,
-                padding: EdgeInsets.symmetric(horizontal: dimen.dp(8)),
-                indicatorWeight: 3,
-                splashBorderRadius: BorderRadius.circular(dimen.dp(16)),
-                onTap: (index) {
-                  if (!isCurrentUser) return;
-                  Preferences.setInt(_kProfileTabIndex, index);
-                },
-                labelStyle: TextStyle(
-                  color: dark,
-                  fontWeight: dimen.semiBoldFontWeight,
-                  fontSize: dimen.dp(15),
-                  fontFamily: InAppFonts.secondary,
-                ),
-                unselectedLabelStyle: TextStyle(
-                  color: dark.t50,
-                  fontWeight: dimen.semiBoldFontWeight,
-                  fontSize: dimen.dp(15),
-                  fontFamily: InAppFonts.secondary,
-                ),
-                tabs: _tabs.map((e) {
-                  return Tab(text: e);
-                }).toList(),
-              ),
-            ),
-          ];
-        },
-        body: TabBarView(
-          controller: controller,
-          children: [
-            ProfilePostsSegment(uid: user?.id),
-            ProfilePhotosSegment(uid: user?.id),
-            ProfileNotesSegment(uid: user?.id),
-            ProfileStoriesSegment(uid: user?.id),
-            ProfileVideosSegment(uid: user?.id),
-            ProfileAboutsSegment(user: user),
           ],
+        ),
+        body: NestedScrollView(
+          headerSliverBuilder: (context, isNestedScrolling) {
+            return [
+              SliverToBoxAdapter(
+                child: ProfileDetailsBar(uid: uid, user: user),
+              ),
+              SliverAppBar(
+                elevation: 0.0,
+                titleSpacing: 0,
+                floating: true,
+                primary: false,
+                pinned: true,
+                automaticallyImplyLeading: false,
+                title: TabBar(
+                  controller: controller,
+                  dividerHeight: 0,
+                  isScrollable: true,
+                  tabAlignment: TabAlignment.center,
+                  padding: EdgeInsets.symmetric(horizontal: dimen.dp(8)),
+                  indicatorWeight: 3,
+                  splashBorderRadius: BorderRadius.circular(dimen.dp(16)),
+                  onTap: (index) {
+                    if (!isCurrentUser) return;
+                    Preferences.setInt(_kProfileTabIndex, index);
+                  },
+                  labelStyle: TextStyle(
+                    color: dark,
+                    fontWeight: dimen.semiBoldFontWeight,
+                    fontSize: dimen.dp(15),
+                    fontFamily: InAppFonts.secondary,
+                  ),
+                  unselectedLabelStyle: TextStyle(
+                    color: dark.t50,
+                    fontWeight: dimen.semiBoldFontWeight,
+                    fontSize: dimen.dp(15),
+                    fontFamily: InAppFonts.secondary,
+                  ),
+                  tabs: _tabs.map((e) {
+                    return Tab(text: e);
+                  }).toList(),
+                ),
+              ),
+            ];
+          },
+          body: TabBarView(
+            controller: controller,
+            children: [
+              ProfilePostsSegment(uid: user?.id),
+              ProfilePhotosSegment(uid: user?.id),
+              ProfileNotesSegment(uid: user?.id),
+              ProfileStoriesSegment(uid: user?.id),
+              ProfileVideosSegment(uid: user?.id),
+              ProfileAboutsSegment(user: user),
+            ],
+          ),
         ),
       ),
     );

@@ -88,9 +88,9 @@ class _CreateUserPostPageState extends State<CreateUserPostPage> {
     old = data?.findOrNull(key: "$UserPost");
     if (old != null) {
       id = old!.id;
-      type = ContentType.from(old?.type);
+      type = ContentType.parse(old?.contentType);
       photos.set(old!.photos.use.map(EditablePhoto.photo).toList());
-      privacy.set(Privacy.from(old?.privacy));
+      privacy.set(Privacy.parse(old?.privacy));
     } else {
       id = KeyGenerator.generateKey(
         timeMills: Entity.generateTimeMills,
@@ -328,16 +328,17 @@ class _CreateUserPostPageState extends State<CreateUserPostPage> {
   void _createFeedForGlobal(BuildContext context, UserPost feed) {
     final id = feed.id;
     final path = PathProvider.generatePath(Paths.feeds, id);
-    final global = Feed.create(
+    final global = Feed.createForPost(
       id: id,
-      type: ContentType.post,
       timeMills: feed.timeMills,
       // audience: feed.audience,
       path: path,
+      reference: "",
+      publisher: '',
       // priority: feed.priority,
       // privacy: feed.privacy,
-      referenceId: feed.id,
-      referencePath: feed.path,
+      // referenceId: feed.id,
+      // referencePath: feed.path,
     );
     CreateFeedUseCase.i(global).then((value) {
       if (!context.mounted) return;
@@ -363,7 +364,7 @@ class _CreateUserPostPageState extends State<CreateUserPostPage> {
         .map((e) => e.rootData)
         .whereType<Photo>()
         .toList();
-    context.read<UserPostCubit>().create(feed, mPhotos).then((value) {
+    context.read<UserPostCubit>().create(feed).then((value) {
       if (!context.mounted) return;
       if (value.isSuccessful) {
         context.read<UserPostCounterCubit?>()?.increment(1);
@@ -398,10 +399,10 @@ class _CreateUserPostPageState extends State<CreateUserPostPage> {
       publisher: UserHelper.uid,
       path: path,
       audience: audience.value.name,
-      privacy: privacy.value.name,
+      privacy: privacy.value,
       title: title.isEmpty ? null : title,
       description: description.isEmpty ? null : description,
-      type: currentPhotoUrls.isNotEmpty ? ContentType.photo.name : null,
+      type: currentPhotoUrls.isNotEmpty ? ContentType.photo : null,
       tags: tags.value,
     );
     _createPost(context, data);

@@ -9,5 +9,5 @@ class LocalUserAvatarDataSource extends InAppDataSource<UserAvatar> {
   });
 
   @override
-  UserAvatar build(Object? source) => UserAvatar.from(source);
+  UserAvatar build(Object? source) => UserAvatar.parse(source);
 }

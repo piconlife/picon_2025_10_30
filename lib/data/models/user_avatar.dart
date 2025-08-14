@@ -1,64 +1,90 @@
-import '../constants/keys.dart';
+import 'package:flutter_entity/entity.dart';
+
 import '../enums/privacy.dart';
-import 'content.dart';
 
-List<String> _keys = [
-  Keys.i.publisher,
-  Keys.i.id,
-  Keys.i.path,
-  Keys.i.timeMills,
-  Keys.i.description,
-  Keys.i.photoUrl,
-  Keys.i.privacy,
-];
+class UserAvatarKeys extends EntityKey {
+  UserAvatarKeys._();
 
-class UserAvatar extends Content {
+  static final i = UserAvatarKeys._();
+  final publisher = "publisher";
+  final path = "path";
+  final description = "description";
+  final photoUrl = "photo_url";
+  final privacy = "privacy";
+
+  @override
+  Iterable<String> get keys => [
+    id,
+    timeMills,
+    publisher,
+    path,
+    description,
+    photoUrl,
+    privacy,
+  ];
+}
+
+class UserAvatar extends Entity<UserAvatarKeys> {
+  String? description;
+  String? path;
+  String? photoUrl;
+  Privacy? privacy;
+  String? publisher;
+
+  bool get isEmpty => filtered.isEmpty;
+
+  bool get isNotEmpty => !isEmpty;
+
   UserAvatar({
-    super.publisher,
     super.id,
     super.timeMills,
-    super.description,
-    super.path,
-    super.photoUrl,
-    super.privacy,
+    this.description,
+    this.path,
+    this.photoUrl,
+    this.privacy,
+    this.publisher,
   });
 
-  UserAvatar withAvatar({
-    String? publisher,
-    String? id,
-    int? timeMills,
-    String? description,
-    String? path,
-    String? photoUrl,
-    Privacy? privacy,
-  }) {
+  factory UserAvatar.parse(Object? source) {
+    if (source is! Map) return UserAvatar();
+    final key = UserAvatarKeys.i;
     return UserAvatar(
-      publisher: publisher ?? this.publisher,
-      id: id ?? this.id,
-      timeMills: timeMills ?? this.timeMills,
-      description: description ?? this.description,
-      path: path ?? this.path,
-      photoUrl: photoUrl ?? this.photoUrl,
-      privacy: privacy ?? this.privacy,
-    );
-  }
-
-  factory UserAvatar.from(Object? source) {
-    final data = Content.from(source);
-    return UserAvatar(
-      publisher: data.publisher,
-      id: data.id,
-      timeMills: data.timeMills,
-      description: data.description,
-      path: data.path,
-      photoUrl: data.photoUrl,
-      privacy: data.privacy,
+      id: source.entityValue(key.id),
+      timeMills: source.entityValue(key.timeMills),
+      description: source.entityValue(key.description),
+      path: source.entityValue(key.path),
+      photoUrl: source.entityValue(key.photoUrl),
+      privacy: source.entityValue(key.privacy, Privacy.parse),
+      publisher: source.entityValue(key.publisher),
     );
   }
 
   @override
+  UserAvatarKeys makeKey() => UserAvatarKeys.i;
+
+  @override
   Map<String, dynamic> get source {
-    final data = super.source.entries.where((item) => _keys.contains(item.key));
-    return Map.fromEntries(data);
+    return {
+      key.id: id,
+      key.timeMills: timeMills,
+      key.description: description,
+      key.path: path,
+      key.photoUrl: photoUrl,
+      key.privacy: privacy?.name,
+      key.publisher: publisher,
+    };
   }
+
+  @override
+  int get hashCode => source.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UserAvatar) return false;
+    return source == other.source;
+  }
+
+  @override
+  String toString() => "$UserAvatar#$hashCode($source)";
 }

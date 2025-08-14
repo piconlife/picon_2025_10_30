@@ -11,8 +11,8 @@ import '../../../../roots/widgets/complete_text.dart';
 import '../../../../roots/widgets/exception.dart';
 import '../../../../roots/widgets/scaffold_shimmer.dart';
 import '../cubits/post_cubit.dart';
-import '../templates/item_feed_placeholder.dart';
-import '../templates/item_user_post.dart';
+import '../templates/item_feed.dart';
+import '../templates2/item_feed_placeholder.dart';
 
 class UserPostsPage extends StatelessWidget {
   final Object? args;
@@ -51,7 +51,7 @@ class UserPostsPage extends StatelessWidget {
               if (item == null) {
                 return const ItemUserFeedPlaceholder();
               } else {
-                return ItemUserPost(item: item);
+                return ItemUserFeed(item: item);
               }
             },
             separatorBuilder: (context, index) {

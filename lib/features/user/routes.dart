@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/user.dart';
 import '../../routes/paths.dart';
+import '../social/view/cubits/feed_home_cubit.dart';
 import '../social/view/cubits/follower_cubit.dart';
 import 'view/cubits/avatar_cubit.dart';
 import 'view/cubits/cover_cubit.dart';
@@ -71,11 +72,19 @@ Widget _createUserPost(BuildContext context, Object? args) {
 
 Widget _editUserProfilePhoto(BuildContext context, Object? args) {
   UserAvatarCubit? avatarCubit = args.findOrNull(key: "$UserAvatarCubit");
+  UserPostCubit? userPostCubit = args.findOrNull(key: "$UserPostCubit");
+  FeedHomeCubit? feedHomeCubit = args.findOrNull(key: "$FeedHomeCubit");
   return MultiBlocProvider(
     providers: [
       avatarCubit != null
           ? BlocProvider.value(value: avatarCubit)
           : BlocProvider(create: (context) => UserAvatarCubit()),
+      userPostCubit != null
+          ? BlocProvider.value(value: userPostCubit)
+          : BlocProvider(create: (context) => UserPostCubit()),
+      feedHomeCubit != null
+          ? BlocProvider.value(value: feedHomeCubit)
+          : BlocProvider(create: (context) => FeedHomeCubit()),
     ],
     child: EditUserProfilePhotoPage(args: args),
   );

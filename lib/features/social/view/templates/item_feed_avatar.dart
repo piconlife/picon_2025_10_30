@@ -12,6 +12,7 @@ import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/avatar.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/text.dart';
+import '../../../../roots/widgets/user_builder.dart';
 import 'feed_footer.dart';
 import 'feed_header.dart';
 
@@ -26,31 +27,12 @@ class ItemFeedAvatar extends StatefulWidget {
 }
 
 class _ItemFeedAvatarState extends State<ItemFeedAvatar> {
-  @override
-  Widget build(BuildContext context) {
-    return ColoredBox(
-      color: context.light,
-      child: Column(
-        children: [
-          FeedHeader(
-            title: title,
-            subtitle: subtitle,
-            avatar: widget.item.publisherPhoto,
-            actions: [FeedHeaderFollowButton(publisher: widget.item.publisher)],
-          ),
-          _Body(item: widget.item),
-          FeedFooter(item: widget.item, onLiked: (value) {}),
-        ],
-      ),
-    );
-  }
-
-  String get title {
+  String _title(User user) {
     final date = DateHelper.toRealtime(widget.item.timeMills);
     if (widget.item.isPublisher) {
       return "Updated your profile photo at $date";
     } else {
-      if (widget.item.publisherGender == Gender.male) {
+      if (user.gender == Gender.male) {
         return "Update his profile photo at $date";
       } else {
         return "Update her profile photo at $date";
@@ -58,12 +40,38 @@ class _ItemFeedAvatarState extends State<ItemFeedAvatar> {
     }
   }
 
-  String? get subtitle {
+  String? _subtitle(User user) {
     return !widget.item.title.isValid
         ? DateHelper.toRealtime(widget.item.timeMills)
         : widget.item.title.isValid
-        ? widget.item.publisherTitle
-        : widget.item.publisherProfession;
+        ? user.title
+        : user.profession;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: context.light,
+      child: Column(
+        children: [
+          InAppUserBuilder(
+            id: widget.item.publisher,
+            builder: (context, user) {
+              return FeedHeader(
+                title: _title(user),
+                subtitle: _subtitle(user),
+                avatar: user.photo,
+                actions: [
+                  FeedHeaderFollowButton(publisher: widget.item.publisher),
+                ],
+              );
+            },
+          ),
+          _Body(item: widget.item),
+          FeedFooter(item: widget.item, onLiked: (value) {}),
+        ],
+      ),
+    );
   }
 }
 
@@ -158,7 +166,7 @@ class _Body extends StatelessWidget {
                 child: InAppGesture(
                   onTap: () {},
                   child: InAppAvatar(
-                    item.photoUrlAt ?? InAppPlaceholders.image,
+                    item.photoUrl ?? InAppPlaceholders.image,
                     borderColor: Colors.white,
                     borderSize: dimen.dp(4),
                     backgroundColor: dark.t01,

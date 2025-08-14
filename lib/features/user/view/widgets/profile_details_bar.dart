@@ -222,6 +222,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
     final light = context.light;
     return InAppUserBuilder(
       initial: widget.user,
+      currentUser: true,
       builder: (context, user) {
         final isCurrentUser = user.isCurrentUser;
         final isFollowing =

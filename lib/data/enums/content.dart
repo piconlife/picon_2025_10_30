@@ -36,9 +36,13 @@ enum ContentType {
 
   const ContentType(this.name, this.value);
 
-  factory ContentType.from(Object? value) {
+  factory ContentType.parse(Object? value) {
     return values.where((e) {
-          return e == value || e.name == value || e.value == value;
+          return e == value ||
+              e.toString().toLowerCase() == value.toString().toLowerCase() ||
+              e.index == value ||
+              e.name == value ||
+              e.value == value;
         }).firstOrNull ??
         ContentType.none;
   }

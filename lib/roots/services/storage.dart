@@ -17,12 +17,12 @@ enum UploadDataType {
   bool get isString => this == string;
 
   factory UploadDataType.from(dynamic data) {
-    if (data is String) {
-      return UploadDataType.string;
-    } else if (data is Uint8List || data is List<int>) {
+    if (data is Uint8List || data is List<int>) {
       return UploadDataType.bytes;
     } else if (data is File) {
       return UploadDataType.file;
+    } else if (data is String) {
+      return UploadDataType.string;
     } else {
       return UploadDataType.blob;
     }
@@ -264,6 +264,9 @@ class StorageService {
     List<String> urls, {
     bool lazy = false,
   }) {
+    if (urls.isEmpty) {
+      return Future.value(const StorageResponse(error: "Empty list!"));
+    }
     return isConnected.then((connected) async {
       if (connected) {
         _tempUrls.clear();
