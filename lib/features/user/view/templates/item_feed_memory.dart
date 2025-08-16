@@ -57,7 +57,7 @@ class _ItemUserFeedMemoryState extends State<ItemUserFeedMemory> {
           InAppUserBuilder(
             id: widget.item.publisher,
             builder: (context, user) {
-              return FeedHeader(
+              return UserFeedHeader(
                 title: _title(user),
                 subtitle: _subtitle(user),
                 avatar: user.photo,

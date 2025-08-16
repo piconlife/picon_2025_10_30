@@ -270,14 +270,15 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
 
     _createFeedForGlobal(
       context,
-      cover,
-      Feed.createForCover(
-        id: cover.id,
-        timeMills: Entity.generateTimeMills,
-        publisher: cover.publisher,
-        reference: cover.path,
-        path: Paths.feeds,
-      ),
+      cover,Feed.empty(),
+      // Feed(
+      //   id: cover.id,
+      //   timeMills: Entity.generateTimeMills,
+      //   publisher: cover.publisher,
+      //   publisherAge: user.,
+      //   reference: cover.path,
+      //   path: Paths.feeds,
+      // ),
     );
   }
 

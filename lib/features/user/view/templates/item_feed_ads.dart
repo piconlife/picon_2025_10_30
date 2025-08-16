@@ -36,7 +36,7 @@ class _ItemUserFeedAdsState extends State<ItemUserFeedAds> {
           InAppUserBuilder(
             id: widget.item.publisher,
             builder: (context, user) {
-              return FeedHeader(
+              return UserFeedHeader(
                 avatar: user.photo,
                 title: user.name,
                 subtitle: ContentType.ads.value,

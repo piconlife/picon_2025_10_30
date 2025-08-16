@@ -36,7 +36,7 @@ class _ItemUserFeedSponsoredState extends State<ItemUserFeedSponsored> {
           InAppUserBuilder(
             id: widget.item.publisher,
             builder: (context, user) {
-              return FeedHeader(
+              return UserFeedHeader(
                 title: user.name,
                 subtitle: ContentType.sponsored.value,
                 avatar: user.photo,

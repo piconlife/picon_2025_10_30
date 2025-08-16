@@ -7,7 +7,7 @@ import '../../../../roots/widgets/button.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/text.dart';
 
-class InAppNullableBody extends StatelessWidget {
+class UserNullableBody extends StatelessWidget {
   final EdgeInsets? contentPadding;
   final double? contentSpacing;
   final dynamic icon;
@@ -28,7 +28,7 @@ class InAppNullableBody extends StatelessWidget {
   final TextStyle buttonTextStyle;
   final VoidCallback? onButtonClick;
 
-  const InAppNullableBody({
+  const UserNullableBody({
     super.key,
     this.contentPadding,
     this.contentSpacing,

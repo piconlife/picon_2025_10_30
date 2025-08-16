@@ -274,13 +274,14 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
     _createFeedForGlobal(
       context,
       avatar,
-      Feed.createForAvatar(
-        id: avatar.id,
-        timeMills: Entity.generateTimeMills,
-        publisher: avatar.publisher,
-        reference: avatar.path,
-        path: Paths.feeds,
-      ),
+      Feed.empty(),
+      // Feed.createForAvatar(
+      //   id: avatar.id,
+      //   timeMills: Entity.generateTimeMills,
+      //   publisher: avatar.publisher,
+      //   reference: avatar.path,
+      //   path: Paths.feeds,
+      // ),
     );
   }
 

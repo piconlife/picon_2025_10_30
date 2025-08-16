@@ -40,7 +40,7 @@ class _ItemUserFeedBusinessState extends State<ItemUserFeedBusiness> {
           InAppUserBuilder(
             id: widget.item.publisher,
             builder: (context, user) {
-              return FeedHeader(
+              return UserFeedHeader(
                 avatar: user.photo,
                 title: user.name,
                 subtitle: ContentType.business.value,

@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 
 import '../../../../roots/widgets/text.dart';
 
-class FeedCommentBox extends StatelessWidget {
+class UserFeedCommentBox extends StatelessWidget {
   final String id;
   final String path;
 
-  const FeedCommentBox({super.key, required this.id, required this.path});
+  const UserFeedCommentBox({super.key, required this.id, required this.path});
 
   @override
   Widget build(BuildContext context) {

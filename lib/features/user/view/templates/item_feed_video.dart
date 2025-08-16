@@ -42,7 +42,7 @@ class _ItemUserFeedVideoState extends State<ItemUserFeedVideo> {
           InAppUserBuilder(
             id: widget.item.publisher,
             builder: (context, user) {
-              return FeedHeader(
+              return UserFeedHeader(
                 title: user.username,
                 subtitle: _subtitle(user),
                 avatar: user.photo,
@@ -51,7 +51,7 @@ class _ItemUserFeedVideoState extends State<ItemUserFeedVideo> {
             },
           ),
           _Body(item: widget.item),
-          StaredFeedFooter(
+          UserStaredFeedFooter(
             id: widget.item.id,
             path: widget.item.path.use,
             likes: widget.item.likes,

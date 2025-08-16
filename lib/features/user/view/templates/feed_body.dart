@@ -9,12 +9,17 @@ import '../../../../app/res/placeholders.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/image.dart';
 
-class FeedImageBody extends StatelessWidget {
+class UserFeedImageBody extends StatelessWidget {
   final String? description;
   final List? photos;
   final ValueChanged<int>? onTap;
 
-  const FeedImageBody({super.key, this.description, this.photos, this.onTap});
+  const UserFeedImageBody({
+    super.key,
+    this.description,
+    this.photos,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {

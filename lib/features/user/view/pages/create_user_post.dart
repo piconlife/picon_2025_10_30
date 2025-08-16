@@ -328,18 +328,19 @@ class _CreateUserPostPageState extends State<CreateUserPostPage> {
   void _createFeedForGlobal(BuildContext context, UserPost feed) {
     final id = feed.id;
     final path = PathProvider.generatePath(Paths.feeds, id);
-    final global = Feed.createForPost(
-      id: id,
-      timeMills: feed.timeMills,
-      // audience: feed.audience,
-      path: path,
-      reference: "",
-      publisher: '',
-      // priority: feed.priority,
-      // privacy: feed.privacy,
-      // referenceId: feed.id,
-      // referencePath: feed.path,
-    );
+    final global = Feed.empty();
+    // final global = Feed(
+    //   id: id,
+    //   timeMills: feed.timeMills,
+    //   // audience: feed.audience,
+    //   path: path,
+    //   reference: "",
+    //   publisher: '',
+    //   // priority: feed.priority,
+    //   // privacy: feed.privacy,
+    //   // referenceId: feed.id,
+    //   // referencePath: feed.path,
+    // );
     CreateFeedUseCase.i(global).then((value) {
       if (!context.mounted) return;
       if (value.isSuccessful) {

@@ -32,7 +32,7 @@ class _ItemUserFeedNoteState extends State<ItemUserFeedNote> {
           InAppUserBuilder(
             id: widget.item.publisher,
             builder: (context, user) {
-              return FeedHeader(
+              return UserFeedHeader(
                 title: user.name,
                 subtitle: widget.item.timeMills.toRealtime(),
                 avatar: user.photo,

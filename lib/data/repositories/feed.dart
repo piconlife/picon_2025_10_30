@@ -1,4 +1,5 @@
 import 'package:data_management/data_management.dart';
+import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_database/in_app_database.dart';
 
@@ -7,15 +8,8 @@ import '../enums/content.dart';
 import '../models/feed.dart';
 import '../sources/local/feed.dart';
 import '../sources/remote/feed.dart';
-import '../use_cases/business_ad/get_by_id.dart';
-import '../use_cases/business_sponsor/get_by_id.dart';
 import '../use_cases/user_avatar/get_by_id.dart';
-import '../use_cases/user_business/get_by_id.dart';
 import '../use_cases/user_cover/get_by_id.dart';
-import '../use_cases/user_memory/get_by_id.dart';
-import '../use_cases/user_note/get_by_id.dart';
-import '../use_cases/user_post/get_by_id.dart';
-import '../use_cases/user_video/get_by_id.dart';
 
 class FeedRepository extends RemoteDataRepository<Feed> {
   FeedRepository({
@@ -62,53 +56,54 @@ class FeedRepository extends RemoteDataRepository<Feed> {
   Future<Response<Feed>> _modify(Response<Feed> value) async {
     if (!value.isValid) return value;
     if (value.result.length == 1) {
-      final x = await _convert(value.data);
-      if (x == null) return Response(status: Status.invalid);
-      return Response(data: x);
+      if (value.data == null) return value;
+      return value.copy(data: await _value(value.data!));
     }
-    final futures = value.result.map(_convert).toList();
-    final x = await Future.wait(futures).then((value) {
-      return value.whereType<Feed>().toList();
-    });
-    if (x.isEmpty) return Response(status: Status.notFound);
-    return Response(result: x);
+    final result = await Future.wait(value.result.map(_value));
+    return value.copy(result: result);
   }
 
-  Future<Feed?> _convert(Feed? e) async {
-    if (e == null) return null;
-    final uid = e.publisher ?? '';
-    final id = e.reference ?? '';
-    final type = e.contentType;
-    if (uid.isEmpty || id.isEmpty) return null;
-    return _reference(type, uid, id).then((value) {
-      if (!value.isValid) return null;
-      return Feed.parse(e.source..addAll(value.data?.source ?? {}));
-    });
+  Future<Feed> _value(Feed i) async {
+    if (i.reference != null && i.reference!.isNotEmpty) {
+      return _filter(i);
+    }
+    return i;
   }
 
-  Future<Response<Entity>> _reference(ContentType type, String uid, String id) {
-    switch (type) {
-      case ContentType.ads:
-        return GetBusinessAdUseCase.i(id: id, uid: uid);
+  Future<Feed> _filter(Feed i) async {
+    switch (i.contentType) {
       case ContentType.avatar:
-        return GetUserAvatarUseCase.i(id: id, uid: uid);
-      case ContentType.business:
-        return GetUserBusinessUseCase.i(id: id, uid: uid);
+        final feedback = await GetUserAvatarUseCase.i(
+          id: i.id,
+          uid: i.publisher,
+        );
+        final data = feedback.data;
+        if (data == null || data.isEmpty) return i;
+        return i
+          ..description = data.description
+          ..photoUrls = data.photoUrl.isValid ? [data.photoUrl!] : []
+          ..privacy = data.privacy;
       case ContentType.cover:
-        return GetUserCoverUseCase.i(id: id, uid: uid);
-      case ContentType.note:
-        return GetUserNoteUseCase.i(id: id, uid: uid);
-      case ContentType.sponsored:
-        return GetBusinessSponsorUseCase.i(id: id, uid: uid);
-      case ContentType.memory:
-        return GetUserMemoryUseCase.i(id: id, uid: uid);
-      case ContentType.photo:
-      case ContentType.post:
-        return GetUserPostUseCase.i(id: id, uid: uid);
-      case ContentType.video:
-        return GetUserVideoUseCase.i(id: id, uid: uid);
+        final feedback = await GetUserCoverUseCase.i(
+          id: i.id,
+          uid: i.publisher,
+        );
+        final data = feedback.data;
+        if (data == null) return i;
+        return i
+          ..description = data.description
+          ..photoUrls = data.photoUrl.isValid ? [data.photoUrl!] : []
+          ..privacy = data.privacy;
       case ContentType.none:
-        return Future.value(Response(status: Status.invalid));
+      case ContentType.ads:
+      case ContentType.business:
+      case ContentType.note:
+      case ContentType.photo:
+      case ContentType.sponsored:
+      case ContentType.memory:
+      case ContentType.post:
+      case ContentType.video:
+        return i;
     }
   }
 }

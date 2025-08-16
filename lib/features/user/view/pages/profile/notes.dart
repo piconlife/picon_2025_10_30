@@ -14,7 +14,7 @@ import '../../../../../roots/widgets/scaffold_shimmer.dart';
 import '../../../../../roots/widgets/text.dart';
 import '../../../../../routes/paths.dart';
 import '../../cubits/note_cubit.dart';
-import '../../templates2/nullable_body.dart';
+import '../../templates/nullable_body.dart';
 
 class ProfileNotesSegment extends StatefulWidget {
   final String? uid;

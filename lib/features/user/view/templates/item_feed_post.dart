@@ -9,9 +9,9 @@ import '../../../../data/models/user_post.dart';
 import '../../../../routes/keys.dart';
 import '../../../../routes/paths.dart';
 import '../cubits/post_cubit.dart';
-import '../templates2/feed_body.dart';
-import '../templates2/stared_feed_footer.dart';
-import '../templates2/user_post_header.dart';
+import 'feed_body.dart';
+import 'stared_feed_footer.dart';
+import 'user_post_header.dart';
 
 class ItemUserFeedPost extends StatefulWidget {
   final UserPost item;

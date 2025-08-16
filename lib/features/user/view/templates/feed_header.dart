@@ -12,13 +12,13 @@ import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/text.dart';
 
-class FeedHeader extends StatelessWidget {
+class UserFeedHeader extends StatelessWidget {
   final String? avatar;
   final String? title;
   final String? subtitle;
   final List<Widget> actions;
 
-  const FeedHeader({
+  const UserFeedHeader({
     super.key,
     required this.avatar,
     required this.title,

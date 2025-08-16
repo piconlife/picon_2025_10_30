@@ -24,7 +24,7 @@ import '../../../../roots/widgets/pleasure_button.dart';
 import '../../../../roots/widgets/text.dart';
 import 'feed_comment_box.dart';
 
-class StaredFeedFooter extends StatefulWidget {
+class UserStaredFeedFooter extends StatefulWidget {
   final String id;
   final String path;
   final List<String>? likes;
@@ -33,7 +33,7 @@ class StaredFeedFooter extends StatefulWidget {
   final void Function(List<String> likes) onLiked;
   final void Function(List<String> stars) onStared;
 
-  const StaredFeedFooter({
+  const UserStaredFeedFooter({
     super.key,
     required this.id,
     required this.path,
@@ -45,10 +45,10 @@ class StaredFeedFooter extends StatefulWidget {
   });
 
   @override
-  State<StaredFeedFooter> createState() => _StaredFeedFooterState();
+  State<UserStaredFeedFooter> createState() => _UserStaredFeedFooterState();
 }
 
-class _StaredFeedFooterState extends State<StaredFeedFooter> {
+class _UserStaredFeedFooterState extends State<UserStaredFeedFooter> {
   late final _observerLikes = widget.likes.use.obx;
   late final _observerStars = widget.stars.use.obx;
 
@@ -230,7 +230,7 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
             Expanded(
               child: InAppGesture(
                 onTap: () {},
-                child: FeedCommentBox(id: widget.id, path: widget.path),
+                child: UserFeedCommentBox(id: widget.id, path: widget.path),
               ),
             ),
             SizedBox(width: dimen.dp(16)),

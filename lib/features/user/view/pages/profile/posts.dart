@@ -16,8 +16,8 @@ import '../../../../../roots/widgets/text.dart';
 import '../../../../../routes/paths.dart';
 import '../../cubits/post_cubit.dart';
 import '../../templates/item_feed.dart';
-import '../../templates2/item_feed_placeholder.dart';
-import '../../templates2/nullable_body.dart';
+import '../../templates/item_feed_placeholder.dart';
+import '../../templates/nullable_body.dart';
 
 class ProfilePostsSegment extends StatefulWidget {
   final String? uid;

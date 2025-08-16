@@ -365,10 +365,10 @@ packages:
     dependency: "direct main"
     description:
       name: data_management
-      sha256: "618b7f26464abeaa0cab63befe422113053ba356e5200ec0bfe5480b046f3c13"
+      sha256: "55792d085161c99c0f3b15e9ed51edbbdde5f39c21935a947b90283071ef92e2"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.1"
+    version: "2.2.2"
   data_management_local_delegate:
     dependency: "direct main"
     description:
