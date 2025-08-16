@@ -20,10 +20,10 @@ import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/logo_trailing.dart';
-import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../routes/paths.dart';
 import '../../preferences/startup.dart';
+import '../widgets/screen.dart';
 import '../widgets/title_with_subtitle.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
@@ -149,13 +149,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   Widget build(BuildContext context) {
     final primary = context.primary;
     final dimen = context.dimens;
-    return Scaffold(
-      appBar: const InAppAppbar(
-        titleText: "Forgot Password",
-        actions: [InAppLogoTrailing()],
-      ),
-      body: InAppScreen(
-        child: SafeArea(
+    return StartupScreen(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: const InAppAppbar(
+          titleText: "Forgot Password",
+          actions: [InAppLogoTrailing()],
+        ),
+        body: SafeArea(
           child: ListView(
             padding: EdgeInsets.all(dimen.dp(24)),
             children: [

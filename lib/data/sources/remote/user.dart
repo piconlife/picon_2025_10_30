@@ -6,5 +6,5 @@ class RemoteUserDataSource extends FirestoreDataSource<User> {
   RemoteUserDataSource({super.path = Paths.users});
 
   @override
-  User build(Object? source) => User.from(source);
+  User build(Object? source) => User.parse(source);
 }

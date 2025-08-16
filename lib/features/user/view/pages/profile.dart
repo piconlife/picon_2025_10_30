@@ -71,6 +71,7 @@ class _UserProfilePageState extends State<UserProfilePage>
     final dimen = context.dimens;
     final dark = context.dark;
     return InAppScreen(
+      theme: ThemeType.secondary,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: InAppAppbar(
@@ -92,36 +93,48 @@ class _UserProfilePageState extends State<UserProfilePage>
                 elevation: 0.0,
                 titleSpacing: 0,
                 floating: true,
+                toolbarHeight: kToolbarHeight - 5,
                 primary: false,
                 pinned: true,
                 automaticallyImplyLeading: false,
-                title: TabBar(
-                  controller: controller,
-                  dividerHeight: 0,
-                  isScrollable: true,
-                  tabAlignment: TabAlignment.center,
-                  padding: EdgeInsets.symmetric(horizontal: dimen.dp(8)),
-                  indicatorWeight: 3,
-                  splashBorderRadius: BorderRadius.circular(dimen.dp(16)),
-                  onTap: (index) {
-                    if (!isCurrentUser) return;
-                    Preferences.setInt(_kProfileTabIndex, index);
-                  },
-                  labelStyle: TextStyle(
-                    color: dark,
-                    fontWeight: dimen.semiBoldFontWeight,
-                    fontSize: dimen.dp(15),
-                    fontFamily: InAppFonts.secondary,
+                backgroundColor: Colors.red,
+                scrolledUnderElevation: 0,
+                title: Container(
+                  height: kToolbarHeight - 5,
+                  decoration: BoxDecoration(
+                    color: context.scaffoldColor.secondary,
                   ),
-                  unselectedLabelStyle: TextStyle(
-                    color: dark.t50,
-                    fontWeight: dimen.semiBoldFontWeight,
-                    fontSize: dimen.dp(15),
-                    fontFamily: InAppFonts.secondary,
+                  child: TabBar(
+                    controller: controller,
+                    dividerHeight: 1,
+                    dividerColor: context.dark.t05,
+                    isScrollable: true,
+                    tabAlignment: TabAlignment.center,
+                    padding: EdgeInsets.symmetric(horizontal: dimen.dp(8)),
+                    indicatorPadding: EdgeInsets.zero,
+                    indicatorSize: TabBarIndicatorSize.label,
+                    indicatorWeight: 3,
+                    splashBorderRadius: BorderRadius.circular(dimen.dp(16)),
+                    onTap: (index) {
+                      if (!isCurrentUser) return;
+                      Preferences.setInt(_kProfileTabIndex, index);
+                    },
+                    labelStyle: TextStyle(
+                      color: dark,
+                      fontWeight: dimen.semiBoldFontWeight,
+                      fontSize: dimen.dp(15),
+                      fontFamily: InAppFonts.secondary,
+                    ),
+                    unselectedLabelStyle: TextStyle(
+                      color: dark.t50,
+                      fontWeight: dimen.semiBoldFontWeight,
+                      fontSize: dimen.dp(15),
+                      fontFamily: InAppFonts.secondary,
+                    ),
+                    tabs: _tabs.map((e) {
+                      return Tab(text: e);
+                    }).toList(),
                   ),
-                  tabs: _tabs.map((e) {
-                    return Tab(text: e);
-                  }).toList(),
                 ),
               ),
             ];

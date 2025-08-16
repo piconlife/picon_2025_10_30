@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:auth_management/auth_management.dart';
-import 'package:flutter_andomie/core.dart';
+import 'package:flutter_andomie/utils/date_helper.dart';
 
 import '../../app/constants/limitations.dart';
 import '../../app/helpers/user.dart';
@@ -227,6 +227,11 @@ class User extends Auth<UserKeys> {
   UserInfo? _primaryInfo;
   UserInfo? _secondaryInfo;
 
+  int get age {
+    final x = DateTime.fromMillisecondsSinceEpoch(birthday ?? 0);
+    return DateTime.now().difference(x).inDays ~/ 365;
+  }
+
   UserInfo get alternateInfo => _alternateInfo ?? const UserInfo();
 
   set alternateInfo(UserInfo? value) => _alternateInfo = value;
@@ -252,7 +257,6 @@ class User extends Auth<UserKeys> {
   bool get isOnline => true;
 
   String get onlineStatus {
-    return 'Online';
     final text = activeTime.toRealtime();
     if (text.toLowerCase() == "now") {
       return 'Online';
@@ -474,7 +478,7 @@ class User extends Auth<UserKeys> {
     );
   }
 
-  factory User.from(Object? source) {
+  factory User.parse(Object? source) {
     final auth = Auth.from(source);
     return User(
       // ROOT

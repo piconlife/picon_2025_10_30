@@ -18,9 +18,9 @@ import '../../../../data/use_cases/unifier/create_user_name.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/logo_trailing.dart';
-import '../../../../roots/widgets/screen.dart';
 import '../../../../routes/paths.dart';
 import '../../preferences/startup.dart';
+import '../widgets/screen.dart';
 import '../widgets/title_with_subtitle.dart';
 
 class UsernamePage extends StatefulWidget {
@@ -99,14 +99,13 @@ class _UsernamePageState extends State<UsernamePage> with ColorMixin {
   @override
   Widget build(BuildContext context) {
     final dimen = context.dimens;
-    return InAppScreen(
-      unfocusMode: true,
+    return StartupScreen(
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         appBar: const InAppAppbar(
           titleText: "Create username",
           actions: [InAppLogoTrailing()],
         ),
-        backgroundColor: Colors.transparent,
         body: SafeArea(
           child: ListView(
             padding: EdgeInsets.symmetric(

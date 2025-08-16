@@ -13,6 +13,7 @@ import '../../../../roots/preferences/preferences.dart';
 import '../../../../roots/widgets/bottom_bar.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
+import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/system_overlay.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../routes/paths.dart';
@@ -54,13 +55,14 @@ class _MainPageState extends State<MainPage> {
       },
       onMessage: (context, value) => context.showSnackBar(value),
       onStatus: (context, value) {
-        if (value.isUnauthenticated) context.clear(Routes.info);
+        if (value.isUnauthenticated) context.clear(Routes.intro);
       },
       child: InAppSystemOverlay(
-        child: Scaffold(
-          bottomNavigationBar: InAppBottomBar(
-            child: Visibility(
-              visible: false,
+        child: InAppScreen(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            bottomNavigationBar: InAppBottomBar(
+              enabled: false,
               child: _NavBar(
                 index: index,
                 dimen: dimen,
@@ -89,15 +91,15 @@ class _MainPageState extends State<MainPage> {
                 ],
               ),
             ),
-          ),
-          body: IndexedStack(
-            index: index,
-            children: const [
-              FeedPage(),
-              MarketPage(),
-              GroceryPage(),
-              MetubePage(),
-            ],
+            body: IndexedStack(
+              index: index,
+              children: const [
+                FeedPage(),
+                MarketPage(),
+                GroceryPage(),
+                MetubePage(),
+              ],
+            ),
           ),
         ),
       ),

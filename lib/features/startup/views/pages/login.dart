@@ -21,11 +21,11 @@ import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/logo_trailing.dart';
-import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../routes/paths.dart';
 import '../../preferences/startup.dart';
 import '../widgets/or_text.dart';
+import '../widgets/screen.dart';
 import '../widgets/title_with_subtitle.dart';
 
 class LoginPage extends StatefulWidget {
@@ -181,8 +181,7 @@ class _LoginPageState extends State<LoginPage> {
       onLoading: (_, value) => btnSubmitKey.currentState?.setLoading(value),
       onMessage: (context, value) => context.showSnackBar(value),
       onChanges: _finally,
-      child: InAppScreen(
-        unfocusMode: true,
+      child: StartupScreen(
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: const InAppAppbar(

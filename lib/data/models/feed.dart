@@ -1,64 +1,89 @@
 import 'dart:convert';
 
 import 'package:flutter_entity/entity.dart';
+import 'package:picon/app/extensions/string.dart';
 
 import '../../app/helpers/user.dart';
+import '../../features/chooser/data/models/country.dart';
+import '../../features/chooser/data/models/profession.dart';
+import '../../features/chooser/data/models/religion.dart';
+import '../../roots/helpers/location.dart';
 import '../enums/content.dart';
 import '../enums/privacy.dart';
 import 'content.dart';
 import 'photo.dart';
+import 'user.dart';
 
 class FeedKeys extends EntityKey {
   const FeedKeys._();
 
   static const FeedKeys i = FeedKeys._();
 
+  // PUBLISHER
   final publisher = "publisher";
   final publisherAge = "publisher_age";
   final publisherGender = "publisher_gender";
   final publisherProfession = "publisher_profession";
   final publisherReligion = "publisher_religion";
   final publisherRating = "publisher_rating";
-  final publisherTitle = "publisher_title";
 
+  // LOCATION
+  final city = "city";
+  final country = "country";
   final lat = "lat";
   final lon = "lon";
+  final region = "region";
+  final zip = "zip";
+
+  // REFERENCE
   final path = "path";
   final ref = "ref";
   final type = "type";
 
   @override
-  Iterable<String> get keys => [
-    id,
-    timeMills,
-    publisher,
-    publisherAge,
-    publisherGender,
-    publisherProfession,
-    publisherReligion,
-    publisherRating,
-    publisherTitle,
-    lat,
-    lon,
-    path,
-    ref,
-    type,
-  ];
+  Iterable<String> get keys {
+    return [
+      id,
+      timeMills,
+      // PUBLISHER
+      publisher,
+      publisherAge,
+      publisherGender,
+      publisherProfession,
+      publisherReligion,
+      publisherRating,
+      // LOCATION
+      city,
+      country,
+      lat,
+      lon,
+      region,
+      zip,
+      // REFERENCE
+      path,
+      ref,
+      type,
+    ];
+  }
 }
 
 class Feed extends Entity<FeedKeys> {
   // PUBLISHER
   String? publisher;
   int? publisherAge;
-  double? publisherGender;
+  String? publisherGender;
   String? publisherProfession;
   String? publisherReligion;
-  String? publisherRating;
-  String? publisherTitle;
+  double? publisherRating;
 
-  // RAW FIELDS
+  // LOCATION
+  String? city;
+  String? country;
   double? lat;
   double? lon;
+  String? region;
+  int? zip;
+
   String? path;
   String? reference;
   ContentType? _type;
@@ -116,36 +141,58 @@ class Feed extends Entity<FeedKeys> {
   Feed._({
     super.id,
     super.timeMills,
+    // PUBLISHER
     this.publisher,
     this.publisherAge,
     this.publisherGender,
     this.publisherProfession,
     this.publisherReligion,
     this.publisherRating,
-    this.publisherTitle,
+    // LOCATION
+    this.city,
+    this.country,
     this.lat,
     this.lon,
+    this.region,
+    this.zip,
+    // REFERENCES
     this.path,
     this.reference,
     ContentType? type,
   }) : _type = type;
 
-  Feed({
+  Feed.create({
     required super.id,
     required super.timeMills,
-    required this.publisher,
-    required this.publisherAge,
-    required this.publisherGender,
-    required this.publisherProfession,
-    required this.publisherReligion,
-    required this.publisherRating,
-    required this.publisherTitle,
-    required this.lat,
-    required this.lon,
+    required ContentType type,
     required this.path,
     required this.reference,
-    required ContentType? type,
-  }) : _type = type;
+    User? publisher,
+  }) : _type = type,
+       // PUBLISHER
+       publisher = publisher?.id ?? UserHelper.uid,
+       publisherAge = publisher?.age ?? UserHelper.user.age,
+       publisherGender = publisher?.gender.id ?? UserHelper.user.gender.id,
+       publisherProfession =
+           InAppProfession.of(
+             publisher?.profession ?? UserHelper.user.profession,
+           )?.id ??
+           (publisher?.profession ?? UserHelper.user.profession)?.asKey,
+       publisherRating = publisher?.rating ?? UserHelper.user.rating,
+       publisherReligion =
+           InAppReligion.of(
+             publisher?.religion ?? UserHelper.user.religion,
+           )?.id ??
+           (publisher?.religion ?? UserHelper.user.religion)?.asKey,
+       // LOCATION
+       city = LocationInfo.i.city?.asKey,
+       country =
+           InAppCountry.of(LocationInfo.i.countryCode?.asKey)?.id ??
+           LocationInfo.i.countryCode?.asKey,
+       lat = LocationInfo.i.lat,
+       lon = LocationInfo.i.lon,
+       region = LocationInfo.i.region?.asKey,
+       zip = LocationInfo.i.zip;
 
   factory Feed.parse(Object? source) {
     final key = FeedKeys.i;
@@ -153,15 +200,21 @@ class Feed extends Entity<FeedKeys> {
     return Feed._(
       id: source.entityValue(key.id),
       timeMills: source.entityValue(key.timeMills),
+      // PUBLISHER
       publisher: source.entityValue(key.publisher),
       publisherAge: source.entityValue(key.publisherAge),
       publisherGender: source.entityValue(key.publisherGender),
       publisherProfession: source.entityValue(key.publisherProfession),
       publisherReligion: source.entityValue(key.publisherReligion),
       publisherRating: source.entityValue(key.publisherRating),
-      publisherTitle: source.entityValue(key.publisherTitle),
+      // LOCATION
+      city: source.entityValue(key.city),
+      country: source.entityValue(key.country),
       lat: source.entityValue(key.lat),
       lon: source.entityValue(key.lon),
+      region: source.entityValue(key.region),
+      zip: source.entityValue(key.zip),
+      // REFERENCES
       path: source.entityValue(key.path),
       reference: source.entityValue(key.ref),
       type: source.entityValue(key.type, ContentType.parse),
@@ -176,15 +229,21 @@ class Feed extends Entity<FeedKeys> {
     return {
       key.id: id,
       key.timeMills: timeMills,
+      // PUBLISHER
       key.publisher: publisher,
       key.publisherAge: publisherAge,
       key.publisherGender: publisherGender,
       key.publisherProfession: publisherProfession,
       key.publisherReligion: publisherReligion,
       key.publisherRating: publisherRating,
-      key.publisherTitle: publisherTitle,
+      // LOCATION
+      key.city: city,
+      key.country: country,
       key.lat: lat,
       key.lon: lon,
+      key.region: region,
+      key.zip: zip,
+      // REFERENCES
       key.path: path,
       key.ref: reference,
       key.type: _type?.name,
@@ -198,15 +257,21 @@ class Feed extends Entity<FeedKeys> {
   int get hashCode =>
       id.hashCode ^
       timeMills.hashCode ^
+      // PUBLISHER
       publisher.hashCode ^
       publisherAge.hashCode ^
       publisherGender.hashCode ^
       publisherProfession.hashCode ^
       publisherReligion.hashCode ^
       publisherRating.hashCode ^
-      publisherTitle.hashCode ^
+      // LOCATION
+      city.hashCode ^
+      country.hashCode ^
       lat.hashCode ^
       lon.hashCode ^
+      region.hashCode ^
+      zip.hashCode ^
+      // REFERENCES
       path.hashCode ^
       reference.hashCode ^
       _type.hashCode;
@@ -216,15 +281,21 @@ class Feed extends Entity<FeedKeys> {
     return other is Feed &&
         other.id == id &&
         other.timeMills == timeMills &&
+        // PUBLISHER
         other.publisher == publisher &&
         other.publisherAge == publisherAge &&
         other.publisherGender == publisherGender &&
         other.publisherProfession == publisherProfession &&
         other.publisherReligion == publisherReligion &&
         other.publisherRating == publisherRating &&
-        other.publisherTitle == publisherTitle &&
+        // LOCATION
+        other.city == city &&
+        other.country == country &&
         other.lat == lat &&
         other.lon == lon &&
+        other.region == region &&
+        other.zip == zip &&
+        // REFERENCES
         other.path == path &&
         other.reference == reference &&
         other._type == _type;

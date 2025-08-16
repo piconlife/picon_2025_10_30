@@ -529,6 +529,10 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
     FlutterNativeSplash.remove();
   }
 
+  Future<void> _initLocation() async {
+    await LocationHelper.init();
+  }
+
   Future<void> _initTranslation() async {
     await Translation.init(
       connected: Internet.i.value,
@@ -580,6 +584,7 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
       await _initConfigs();
       await _initSettings();
       await _initCustomizers();
+      await _initLocation();
       await _initTranslation();
       await _initZotlo();
       _initAndomie();

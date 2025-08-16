@@ -6,6 +6,7 @@ import 'bottom.dart';
 import 'padding.dart';
 
 class InAppBottomBar extends StatelessWidget {
+  final bool enabled;
   final Color? backgroundColor;
   final double elevation;
   final Color? elevationColor;
@@ -19,6 +20,7 @@ class InAppBottomBar extends StatelessWidget {
 
   const InAppBottomBar({
     super.key,
+    this.enabled = true,
     this.backgroundColor,
     this.elevation = 1,
     this.elevationColor,
@@ -33,6 +35,7 @@ class InAppBottomBar extends StatelessWidget {
 
   const InAppBottomBar.minimalist({
     super.key,
+    this.enabled = true,
     this.backgroundColor,
     this.elevation = 0,
     this.elevationColor,
@@ -47,6 +50,7 @@ class InAppBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (!enabled) return const SizedBox();
     Widget child = this.child;
     if (height != null && height! > 0) {
       child = SizedBox(height: height, child: child);
@@ -56,6 +60,9 @@ class InAppBottomBar extends StatelessWidget {
         padding: padding.copyWith(bottom: context.isBottom ? 0 : null),
         child: child,
       );
+    }
+    if (!ignoreSystemPadding) {
+      child = InAppBottom(child: child);
     }
     if (!ignoreBackgroundColor || elevation > 0 || shadowBlurRadius > 0) {
       child = DecoratedBox(
@@ -80,9 +87,6 @@ class InAppBottomBar extends StatelessWidget {
         ),
         child: child,
       );
-    }
-    if (!ignoreSystemPadding) {
-      child = InAppBottom(child: child);
     }
     return child;
   }

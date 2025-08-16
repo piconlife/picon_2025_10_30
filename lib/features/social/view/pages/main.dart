@@ -2,7 +2,6 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/extensions/spacing.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
@@ -11,6 +10,7 @@ import '../../../../app/devs/nav_content.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../roots/widgets/floating_action_button.dart';
 import '../../../../roots/widgets/icon.dart';
+import '../../../../roots/widgets/row.dart';
 import '../../../../roots/widgets/user_avatar.dart';
 import '../../../../routes/paths.dart';
 import '../../../main/views/widgets/search_box.dart';
@@ -107,6 +107,7 @@ class _FeedPageState extends State<FeedPage>
     final secondary = context.iconColor.mid;
     final dimen = context.dimens;
     return Scaffold(
+      backgroundColor: Colors.transparent,
       floatingActionButton: ValueListenableBuilder(
         valueListenable: floatingBtnScale,
         builder: (context, value, child) {
@@ -131,14 +132,14 @@ class _FeedPageState extends State<FeedPage>
           height: kToolbarHeight,
           padding: EdgeInsets.symmetric(horizontal: dimen.dp(16)),
           width: double.infinity,
-          child: Row(
+          child: InAppRow(
             crossAxisAlignment: CrossAxisAlignment.center,
+            spacing: dimen.dp(8),
             children: [
               MainSearchBox(
                 text: "Search feeds",
                 onSearch: () => _visitSearch(context),
               ),
-              dimen.dp(8).w,
               InAppUserAvatar(isLocal: true, onTap: () => _visitMenu(context)),
             ],
           ),

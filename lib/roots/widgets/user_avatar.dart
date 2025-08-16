@@ -1,5 +1,6 @@
 import 'package:auth_management/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_androssy_kits/core/cached_network_image.dart';
 
 import '../../app/res/placeholders.dart';
 import '../../data/models/user.dart';
@@ -122,7 +123,15 @@ class InAppUserAvatar extends StatelessWidget {
         size: size,
         shadow: shadow,
         fadeWidthFraction: fadeWidthFraction,
-        child: InAppImage(url, fit: BoxFit.cover),
+        child: InAppImage(
+          url,
+          fit: BoxFit.cover,
+          networkImageConfig: AndrossyNetworkImageConfig(
+            errorWidget: (context, url, error) {
+              return InAppImage(InAppPlaceholders.user, fit: BoxFit.cover);
+            },
+          ),
+        ),
       ),
     );
   }

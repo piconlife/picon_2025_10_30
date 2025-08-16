@@ -18,10 +18,10 @@ import '../../../../data/use_cases/unifier/create_user_prefix.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/logo_trailing.dart';
-import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../routes/paths.dart';
 import '../../preferences/startup.dart';
+import '../widgets/screen.dart';
 import '../widgets/title_with_subtitle.dart';
 
 class EmailPage extends StatefulWidget {
@@ -89,8 +89,7 @@ class _EmailPageState extends State<EmailPage> {
   Widget build(BuildContext context) {
     final primary = context.primary;
     final dimen = context.dimens;
-    return InAppScreen(
-      unfocusMode: true,
+    return StartupScreen(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: const InAppAppbar(

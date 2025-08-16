@@ -15,7 +15,7 @@ class UserHelper {
 
   static String key = "__local_user__";
 
-  static User get user => User.from(Preferences.getOrNull(key));
+  static User get user => User.parse(Preferences.getOrNull(key));
 
   static String get uid => user.id;
 

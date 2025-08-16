@@ -14,6 +14,7 @@ import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
+import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/styled_button.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/tiled_button.dart';
@@ -71,139 +72,142 @@ class _ProfilePageState extends State<ProfilePage> {
     final primary = context.primary;
     final color = context.dark;
     final bg = context.isDarkMode ? Colors.white.t05 : Colors.white;
-    return Scaffold(
-      appBar: const InAppAppbar(titleText: "Me"),
-      body: ListView(
-        children: [
-          ColoredBox(
-            color: bg,
-            child: Column(
-              children: [
-                InAppUserBuilder(
-                  currentUser: true,
-                  builder: (context, user) {
-                    return InAppGesture(
-                      onTap: () => _visitProfile(context, user),
-                      child: Container(
-                        color: Colors.transparent,
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: dimen.dp(16),
-                          vertical: dimen.dp(12),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            InAppUserAvatar(
-                              url: user.avatar,
-                              size: InAppSizes.avatarSizeMedium,
-                              border: dimen.dp(2),
-                              borderColor: context.light,
-                              onTap: () => _visitProfile(context, user),
-                            ),
-                            dimen.dp(16).w,
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  InAppText(
-                                    user.name ?? "Unknown name",
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: TextStyle(fontSize: dimen.dp(18)),
-                                  ),
-                                  InAppText(
-                                    user.email ?? "support@picon.com",
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      color: color.t50,
-                                      fontSize: dimen.dp(14),
-                                    ),
-                                  ),
-                                ],
+    return InAppScreen(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: const InAppAppbar(titleText: "Me"),
+        body: ListView(
+          children: [
+            ColoredBox(
+              color: bg,
+              child: Column(
+                children: [
+                  InAppUserBuilder(
+                    currentUser: true,
+                    builder: (context, user) {
+                      return InAppGesture(
+                        onTap: () => _visitProfile(context, user),
+                        child: Container(
+                          color: Colors.transparent,
+                          width: double.infinity,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: dimen.dp(16),
+                            vertical: dimen.dp(12),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              InAppUserAvatar(
+                                url: user.avatar,
+                                size: InAppSizes.avatarSizeMedium,
+                                border: dimen.dp(2),
+                                borderColor: context.light,
+                                onTap: () => _visitProfile(context, user),
                               ),
-                            ),
-                            if (user.verified.use) ...[
                               dimen.dp(16).w,
-                              InAppIcon(
-                                InAppIcons.shieldCheck.bold,
-                                color: primary,
-                                size: dimen.dp(24),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    InAppText(
+                                      user.name ?? "Unknown name",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: TextStyle(fontSize: dimen.dp(18)),
+                                    ),
+                                    InAppText(
+                                      user.email ?? "support@picon.com",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                        color: color.t50,
+                                        fontSize: dimen.dp(14),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
+                              if (user.verified.use) ...[
+                                dimen.dp(16).w,
+                                InAppIcon(
+                                  InAppIcons.shieldCheck.bold,
+                                  color: primary,
+                                  size: dimen.dp(24),
+                                ),
+                              ],
                             ],
-                          ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: dimen.dp(8)),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: InAppStyledButton(
-                          text: "Store",
-                          background: primary,
-                          onTap: () => _visitStore(context),
-                        ),
-                      ),
-                      Expanded(
-                        child: InAppStyledButton(
-                          text: "Shop",
-                          background: context.secondary,
-                          onTap: () => _visitShop(context),
-                        ),
-                      ),
-                    ],
+                      );
+                    },
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: dimen.dp(8)),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: InAppStyledButton(
+                            text: "Store",
+                            background: primary,
+                            onTap: () => _visitStore(context),
+                          ),
+                        ),
+                        Expanded(
+                          child: InAppStyledButton(
+                            text: "Shop",
+                            background: context.secondary,
+                            onTap: () => _visitShop(context),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          dimen.dp(8).h,
-          ColoredBox(
-            color: bg,
-            child: Column(
-              children: List.generate(MeIconContent.items.length, (i) {
-                final e = MeIconContent.items.elementAt(i);
-                return InAppTiledButton(
-                  icon: e.icon,
-                  iconBackgroundColor: e.iconBackgroundColor,
-                  iconColor: e.iconColor,
-                  text: e.text,
-                  onTap: () => _visitByName(context, e.route),
-                );
-              }),
+            dimen.dp(8).h,
+            ColoredBox(
+              color: bg,
+              child: Column(
+                children: List.generate(MeIconContent.items.length, (i) {
+                  final e = MeIconContent.items.elementAt(i);
+                  return InAppTiledButton(
+                    icon: e.icon,
+                    iconBackgroundColor: e.iconBackgroundColor,
+                    iconColor: e.iconColor,
+                    text: e.text,
+                    onTap: () => _visitByName(context, e.route),
+                  );
+                }),
+              ),
             ),
-          ),
-          dimen.dp(8).h,
-          ColoredBox(
-            color: bg,
-            child: Column(
-              children: [
-                InAppTiledButton(
-                  text: "About of ${AppConstants.name}",
-                  extra: AppConstants.website,
-                  icon: InAppIcons.about.regular,
-                  onTap: () => _visitAboutUs(context),
-                ),
-                InAppTiledButton(
-                  text: "Settings",
-                  icon: InAppIcons.nativeSettings.regular,
-                  onTap: () => _visitSettings(context),
-                ),
-                InAppTiledButton(
-                  text: "Logout",
-                  icon: InAppIcons.logout.regular,
-                  onTap: () => _logout(context),
-                ),
-              ],
+            dimen.dp(8).h,
+            ColoredBox(
+              color: bg,
+              child: Column(
+                children: [
+                  InAppTiledButton(
+                    text: "About of ${AppConstants.name}",
+                    extra: AppConstants.website,
+                    icon: InAppIcons.about.regular,
+                    onTap: () => _visitAboutUs(context),
+                  ),
+                  InAppTiledButton(
+                    text: "Settings",
+                    icon: InAppIcons.nativeSettings.regular,
+                    onTap: () => _visitSettings(context),
+                  ),
+                  InAppTiledButton(
+                    text: "Logout",
+                    icon: InAppIcons.logout.regular,
+                    onTap: () => _logout(context),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

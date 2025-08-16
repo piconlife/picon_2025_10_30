@@ -9,6 +9,7 @@ import 'package:flutter_terms_viewer/flutter_terms_viewer.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/logo_trailing.dart';
 import '../../../../roots/widgets/screen.dart';
+import '../widgets/screen.dart';
 
 class TermsReaderPage extends StatelessWidget {
   final Object? args;
@@ -58,21 +59,24 @@ class TermsReaderPage extends StatelessWidget {
       },
     );
     if (isViewMode) return child;
-    return Scaffold(
-      appBar: InAppAppbar(
-        titleText: terms.headline,
-        actions: const [InAppLogoTrailing()],
-      ),
-      body: InAppScreen(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: dimen.dp(24),
-              right: dimen.dp(24),
-              top: dimen.dp(16),
-              bottom: dimen.dp(120),
+    return InfoScreen(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: InAppAppbar(
+          titleText: terms.headline,
+          actions: const [InAppLogoTrailing()],
+        ),
+        body: InAppScreen(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: dimen.dp(24),
+                right: dimen.dp(24),
+                top: dimen.dp(16),
+                bottom: dimen.dp(120),
+              ),
+              child: child,
             ),
-            child: child,
           ),
         ),
       ),

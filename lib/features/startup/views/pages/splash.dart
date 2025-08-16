@@ -9,9 +9,9 @@ import '../../../../app/configs/local.dart';
 import '../../../../app/constants/app.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../roots/widgets/logo.dart';
-import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../routes/paths.dart';
+import '../widgets/screen.dart';
 
 const kOnboardingComplete = "onboarding_complete";
 
@@ -32,10 +32,10 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InAppScreen(
+    return StartupScreen(
       child: Scaffold(
-        appBar: InAppAppbar.hide(),
         backgroundColor: Colors.transparent,
+        appBar: InAppAppbar.hide(),
         extendBodyBehindAppBar: true,
         resizeToAvoidBottomInset: false,
         body: AndrossySplash(

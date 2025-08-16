@@ -23,6 +23,7 @@ class FeedVerifiedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final dimen = context.dimens;
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: BlocBuilder<VerifiedFeedCubit, Response<Feed>>(
         buildWhen: (previous, current) => current.requestCode == 0,
         builder: (context, state) {

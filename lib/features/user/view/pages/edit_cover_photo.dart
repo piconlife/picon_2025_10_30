@@ -16,6 +16,7 @@ import '../../../../app/helpers/user.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../app/res/labels.dart';
 import '../../../../data/constants/paths.dart';
+import '../../../../data/enums/content.dart';
 import '../../../../data/enums/privacy.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/user.dart';
@@ -23,6 +24,7 @@ import '../../../../data/models/user_cover.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../data/use_cases/feed/create.dart';
 import '../../../../roots/contents/media.dart';
+import '../../../../roots/helpers/connectivity.dart';
 import '../../../../roots/services/path_provider.dart';
 import '../../../../roots/services/storage.dart';
 import '../../../../roots/widgets/appbar.dart';
@@ -128,7 +130,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
       return;
     }
 
-    final path = PathReplacer.replaceByIterable(Paths.userAvatars, [
+    final path = PathReplacer.replaceByIterable(Paths.userCovers, [
       UserHelper.uid,
     ]);
     loading.value = true;
@@ -167,11 +169,19 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
 
   void _update(BuildContext context) async {
     if (!isValidUrl) {
-      context.showWarningSnackBar("UUser cover photo isn't valid!");
+      context.showWarningSnackBar("User cover photo isn't valid!");
       return;
     }
 
     context.showLoader();
+    if (await ConnectivityHelper.isDisconnected) {
+      if (!context.mounted) return;
+      context.hideLoader();
+      context.showWarningSnackBar(ResponseMessages.internetDisconnected);
+      return;
+    }
+
+    if (!context.mounted) return;
     final updateAccountResponse = await context.updateAccount<User>({
       UserKeys.i.coverPhoto: photoUrl,
     });
@@ -215,7 +225,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
         privacy: privacy.value,
         publisher: user.id,
         path: PathReplacer.replaceByIterable(
-          PathProvider.generatePath(Paths.userAvatars, id),
+          PathProvider.generatePath(Paths.userCovers, id),
           [UserHelper.uid],
         ),
       ),
@@ -270,15 +280,15 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
 
     _createFeedForGlobal(
       context,
-      cover,Feed.empty(),
-      // Feed(
-      //   id: cover.id,
-      //   timeMills: Entity.generateTimeMills,
-      //   publisher: cover.publisher,
-      //   publisherAge: user.,
-      //   reference: cover.path,
-      //   path: Paths.feeds,
-      // ),
+      cover,
+      Feed.create(
+        id: cover.id,
+        timeMills: Entity.generateTimeMills,
+        publisher: user,
+        reference: cover.path,
+        path: Paths.feeds,
+        type: ContentType.cover,
+      ),
     );
   }
 
@@ -344,6 +354,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
     final dimen = context.dimens;
     return InAppScreen(
       unfocusMode: true,
+      theme: ThemeType.secondary,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: InAppAppbar(

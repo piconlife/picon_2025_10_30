@@ -92,11 +92,19 @@ Widget _editUserProfilePhoto(BuildContext context, Object? args) {
 
 Widget _editUserCoverPhoto(BuildContext context, Object? args) {
   UserCoverCubit? coversCubit = args.findOrNull(key: "$UserCoverCubit");
+  UserPostCubit? userPostCubit = args.findOrNull(key: "$UserPostCubit");
+  FeedHomeCubit? feedHomeCubit = args.findOrNull(key: "$FeedHomeCubit");
   return MultiBlocProvider(
     providers: [
       coversCubit != null
           ? BlocProvider.value(value: coversCubit)
           : BlocProvider(create: (context) => UserCoverCubit()),
+      userPostCubit != null
+          ? BlocProvider.value(value: userPostCubit)
+          : BlocProvider(create: (context) => UserPostCubit()),
+      feedHomeCubit != null
+          ? BlocProvider.value(value: feedHomeCubit)
+          : BlocProvider(create: (context) => FeedHomeCubit()),
     ],
     child: EditUserCoverPhotoPage(args: args),
   );

@@ -5,7 +5,7 @@ import 'package:flutter_andomie/extensions.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/logo_trailing.dart';
-import '../../../../roots/widgets/screen.dart';
+import '../widgets/screen.dart';
 import '../widgets/title_with_subtitle.dart';
 
 class AsqPage extends StatelessWidget {
@@ -14,13 +14,14 @@ class AsqPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dimen = context.dimens;
-    return Scaffold(
-      appBar: const InAppAppbar(
-        titleText: "Add Security Questions",
-        actions: [InAppLogoTrailing()],
-      ),
-      body: InAppScreen(
-        child: SafeArea(
+    return StartupScreen(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: const InAppAppbar(
+          titleText: "Add Security Questions",
+          actions: [InAppLogoTrailing()],
+        ),
+        body: SafeArea(
           child: ListView(
             padding: EdgeInsets.all(dimen.dp(24)),
             children: [

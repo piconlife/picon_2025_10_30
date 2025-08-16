@@ -15,9 +15,9 @@ import '../../../../data/parsers/validations.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/logo_trailing.dart';
-import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../preferences/startup.dart';
+import '../widgets/screen.dart';
 
 const _kOtpTimeout = Duration(minutes: 2);
 
@@ -107,14 +107,15 @@ class _OtpPageState extends State<OtpPage> {
   Widget build(BuildContext context) {
     final primary = context.primary;
     final dimen = context.dimens;
-    return Scaffold(
-      appBar: const InAppAppbar(
-        titleText: "Verification",
-        elevation: 0,
-        actions: [InAppLogoTrailing()],
-      ),
-      body: SafeArea(
-        child: InAppScreen(
+    return StartupScreen(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: const InAppAppbar(
+          titleText: "Verification",
+          elevation: 0,
+          actions: [InAppLogoTrailing()],
+        ),
+        body: SafeArea(
           child: ListView(
             padding: EdgeInsets.symmetric(
               horizontal: dimen.dp(32),

@@ -23,6 +23,7 @@ class FeedHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final dimen = context.dimens;
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: BlocBuilder<FeedHomeCubit, Response<Feed>>(
         buildWhen: (previous, current) => current.requestCode == 0,
         builder: (context, state) {
@@ -45,6 +46,7 @@ class FeedHomePage extends StatelessWidget {
 
           return ListView.separated(
             shrinkWrap: true,
+            padding: EdgeInsets.only(top: 2, bottom: 50),
             itemBuilder: (context, index) {
               if (state.status.isResultNotFound) {
                 return Center(
@@ -60,7 +62,9 @@ class FeedHomePage extends StatelessWidget {
               }
               return ItemFeed(item: result.elementAt(index));
             },
-            separatorBuilder: (context, index) => SizedBox(height: dimen.dp(4)),
+            separatorBuilder: (context, index) {
+              return SizedBox(height: dimen.dp(4));
+            },
             itemCount: result.length,
           );
         },

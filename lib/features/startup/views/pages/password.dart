@@ -29,12 +29,12 @@ import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/logo_trailing.dart';
-import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../routes/keys.dart';
 import '../../../../routes/paths.dart';
 import '../../preferences/global.dart';
 import '../../preferences/startup.dart';
+import '../widgets/screen.dart';
 import '../widgets/title_with_subtitle.dart';
 
 class PasswordPage extends StatefulWidget {
@@ -233,8 +233,7 @@ class _PasswordPageState extends State<PasswordPage> {
       onLoading: (context, value) => btnSubmit.currentState?.setLoading(value),
       onMessage: (context, value) => context.showSnackBar(value),
       onChanges: _finally,
-      child: InAppScreen(
-        unfocusMode: true,
+      child: StartupScreen(
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: const InAppAppbar(

@@ -9,5 +9,5 @@ class LocalUserDataSource extends InAppDataSource<User> {
   });
 
   @override
-  User build(Object? source) => User.from(source);
+  User build(Object? source) => User.parse(source);
 }

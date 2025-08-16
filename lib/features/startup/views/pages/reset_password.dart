@@ -16,8 +16,8 @@ import '../../../../data/use_cases/unifier/update_user_password.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/logo_trailing.dart';
-import '../../../../roots/widgets/screen.dart';
 import '../../../../routes/paths.dart';
+import '../widgets/screen.dart';
 import '../widgets/title_with_subtitle.dart';
 
 class ResetPasswordPage extends StatefulWidget {
@@ -76,13 +76,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   Widget build(BuildContext context) {
     final dimen = context.dimens;
     final primary = context.primary;
-    return Scaffold(
-      appBar: const InAppAppbar(
-        titleText: "Reset Password",
-        actions: [InAppLogoTrailing()],
-      ),
-      body: InAppScreen(
-        child: SafeArea(
+    return StartupScreen(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: const InAppAppbar(
+          titleText: "Reset Password",
+          actions: [InAppLogoTrailing()],
+        ),
+        body: SafeArea(
           child: ListView(
             padding: EdgeInsets.all(dimen.dp(24)),
             children: [

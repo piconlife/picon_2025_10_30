@@ -11,10 +11,10 @@ import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/logo_trailing.dart';
-import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../routes/paths.dart';
 import '../../preferences/startup.dart';
+import '../widgets/screen.dart';
 import '../widgets/title_with_subtitle.dart';
 
 class GenderPage extends StatefulWidget {
@@ -48,7 +48,7 @@ class _GenderPageState extends State<GenderPage> {
     final primary = context.primary;
     final dimen = context.dimens;
     final color = context.isDarkMode ? Colors.white : primary;
-    return InAppScreen(
+    return StartupScreen(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: const InAppAppbar(

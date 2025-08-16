@@ -10,9 +10,9 @@ import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/logo.dart';
 import '../../../../roots/widgets/outlined_button.dart';
 import '../../../../roots/widgets/padding.dart';
-import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../routes/paths.dart';
+import '../widgets/screen.dart';
 
 class IntroPage extends StatefulWidget {
   final Object? args;
@@ -36,10 +36,10 @@ class _IntroPageState extends State<IntroPage>
 
   @override
   Widget build(BuildContext context) {
-    return InAppScreen(
+    return StartupScreen(
       child: Scaffold(
-        appBar: InAppAppbar.hide(),
         backgroundColor: Colors.transparent,
+        appBar: InAppAppbar.hide(),
         extendBodyBehindAppBar: true,
         resizeToAvoidBottomInset: false,
         body: InAppColumn(

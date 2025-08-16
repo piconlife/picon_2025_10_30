@@ -4,6 +4,7 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
+import 'package:flutter_androssy_kits/core/cached_network_image.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
@@ -60,7 +61,10 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
     if (option == 0) {
       context.open(
         Routes.editUserCoverPhoto,
-        arguments: {"$UserCoverCubit": context.read<UserCoverCubit>()},
+        arguments: {
+          "$UserCoverCubit": context.read<UserCoverCubit>(),
+          "$UserPostCubit": context.read<UserPostCubit>(),
+        },
       );
     } else if (option == 1) {
       _loadCoverPhotos(context, user);
@@ -91,7 +95,10 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
     if (option == 0) {
       context.open(
         Routes.editUserProfilePhoto,
-        arguments: {"$UserAvatarCubit": context.read<UserAvatarCubit>()},
+        arguments: {
+          "$UserAvatarCubit": context.read<UserAvatarCubit>(),
+          "$UserPostCubit": context.read<UserPostCubit>(),
+        },
       );
     } else if (option == 1) {
       _loadAvatars(context, user);
@@ -234,294 +241,300 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
 
         final primary = context.primary;
 
-        return ColoredBox(
-          color: context.scaffoldColor.primary ?? Colors.transparent,
-          child: Column(
-            children: [
-              AspectRatio(
-                aspectRatio: 1,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    InAppGesture(
-                      scalerLowerBound: 1,
-                      onTap: () => _seeCoverPhoto(context, user),
-                      child: Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          color: (user.coverPhoto ?? user.photo ?? '').isEmpty
-                              ? Colors.grey
-                              : null,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(dimen.dp(25)),
-                            topRight: Radius.circular(dimen.dp(25)),
-                          ),
+        return Column(
+          children: [
+            AspectRatio(
+              aspectRatio: 1,
+              child: Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  InAppGesture(
+                    scalerLowerBound: 1,
+                    onTap: () => _seeCoverPhoto(context, user),
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        color: (user.coverPhoto ?? user.photo ?? '').isEmpty
+                            ? Colors.grey
+                            : null,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(dimen.dp(25)),
+                          topRight: Radius.circular(dimen.dp(25)),
                         ),
-                        foregroundDecoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [light.t01, light.t05, light],
-                          ),
+                      ),
+                      foregroundDecoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [light.t01, light.t05, light],
                         ),
-                        child: InAppImage(
-                          user.coverPhoto ??
-                              user.photo ??
+                      ),
+                      child: InAppImage(
+                        user.coverPhoto ??
+                            user.photo ??
+                            InAppPlaceholders.image,
+                        fit: BoxFit.cover,
+                        networkImageConfig: AndrossyNetworkImageConfig(
+                          errorWidget: (context, url, error) {
+                            return InAppImage(
                               InAppPlaceholders.image,
-                          fit: BoxFit.cover,
+                              fit: BoxFit.cover,
+                            );
+                          },
                         ),
                       ),
                     ),
-                    if (isCurrentUser)
-                      Positioned(
-                        top: dimen.dp(16),
-                        right: dimen.dp(16),
-                        child: InAppIconButton(
-                          InAppIcons.nativeEdit.regular,
-                          size: dimen.dp(40),
-                          primaryColor: Colors.black.t10,
-                          iconColor: Colors.white,
-                          onTap: () => _editCoverPhoto(context, user),
-                        ),
-                      ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: dimen.dp(16)),
-                      child: InAppAvatar(
-                        user.avatar,
-                        fadeLowerBound: 1,
-                        size: dimen.dp(160),
-                        borderSize: dimen.dp(4),
-                        borderColor: Colors.white,
-                        onTap: () => _seeProfilePhoto(context, user),
-                      ),
-                    ),
+                  ),
+                  if (isCurrentUser)
                     Positioned(
-                      bottom: isRatedUser ? 0 : dimen.dp(8),
-                      child: isRatedUser
-                          ? InAppIconButton(
-                              user.isHeartUser
-                                  ? InAppIcons.heart.solid
-                                  : InAppIcons.star.solid,
-                              size: dimen.dp(40),
-                              iconScale: 1.2,
-                              primaryColor: user.isCelebrityUser
-                                  ? context.yellow
-                                  : context.red,
-                              iconColor: Colors.white,
-                              onTap: () => _seeProfileStatus(context, user),
-                            )
-                          : InAppButton(
-                              height: dimen.dp(30),
-                              width: dimen.dp(50),
-                              fadeLowerBound: 1,
-                              borderRadius: BorderRadius.circular(dimen.dp(25)),
-                              text: user.rating.toStringAsFixed(1),
-                              backgroundColor: Colors.white,
-                              textStyle: TextStyle(
-                                color: Colors.black,
-                                fontWeight: dimen.mediumFontWeight,
-                                fontSize: dimen.dp(16),
-                              ),
-                              elevation: 2,
-                              elevationColor: dark.t25,
-                              onTap: () => _seeProfileStatus(context, user),
-                            ),
+                      top: dimen.dp(16),
+                      right: dimen.dp(16),
+                      child: InAppIconButton(
+                        InAppIcons.nativeEdit.regular,
+                        size: dimen.dp(40),
+                        primaryColor: Colors.black.t10,
+                        iconColor: Colors.white,
+                        onTap: () => _editCoverPhoto(context, user),
+                      ),
                     ),
-                  ],
-                ),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: dimen.dp(16)),
+                    child: InAppAvatar(
+                      user.avatar,
+                      fadeLowerBound: 1,
+                      size: dimen.dp(160),
+                      borderSize: dimen.dp(4),
+                      borderColor: Colors.white,
+                      onTap: () => _seeProfilePhoto(context, user),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: isRatedUser ? 0 : dimen.dp(8),
+                    child: isRatedUser
+                        ? InAppIconButton(
+                            user.isHeartUser
+                                ? InAppIcons.heart.solid
+                                : InAppIcons.star.solid,
+                            size: dimen.dp(40),
+                            iconScale: 1.2,
+                            primaryColor: user.isCelebrityUser
+                                ? context.yellow
+                                : context.red,
+                            iconColor: Colors.white,
+                            onTap: () => _seeProfileStatus(context, user),
+                          )
+                        : InAppButton(
+                            height: dimen.dp(30),
+                            width: dimen.dp(50),
+                            fadeLowerBound: 1,
+                            padding: EdgeInsets.zero,
+                            borderRadius: BorderRadius.circular(dimen.dp(25)),
+                            text: user.rating.toStringAsFixed(1),
+                            backgroundColor: Colors.white,
+                            textStyle: TextStyle(
+                              color: Colors.black,
+                              fontWeight: dimen.mediumFontWeight,
+                              fontSize: dimen.dp(16),
+                            ),
+                            elevation: 2,
+                            elevationColor: dark.t25,
+                            onTap: () => _seeProfileStatus(context, user),
+                          ),
+                  ),
+                ],
               ),
-              dimen.dp(16).h,
-              InAppButton(
-                scalerLowerBound: 1,
-                backgroundColor: isFollowing ? primary.t10 : primary,
-                text: isCurrentUser
-                    ? "Edit"
-                    : isFollowing
-                    ? "Following"
-                    : "Follow",
-                textAllCaps: true,
-                textStyle: TextStyle(
-                  color: isFollowing ? primary : Colors.white,
-                  fontSize: dimen.dp(14),
-                  fontWeight: FontWeight.bold,
-                  fontFamily: InAppFonts.secondary,
-                ),
-                onTap: isCurrentUser ? () => _editAvatar(context, user) : null,
-                onToggle: !isCurrentUser
-                    ? (value) => _makeAFollower(context, value)
-                    : null,
-                minWidth: 100,
-                padding: EdgeInsets.symmetric(
-                  horizontal: dimen.dp(16),
-                  vertical: dimen.dp(8),
-                ),
-                borderRadius: BorderRadius.circular(dimen.dp(25)),
+            ),
+            dimen.dp(16).h,
+            InAppButton(
+              scalerLowerBound: 1,
+              backgroundColor: isFollowing ? primary.t10 : primary,
+              text: isCurrentUser
+                  ? "Edit"
+                  : isFollowing
+                  ? "Following"
+                  : "Follow",
+              textAllCaps: true,
+              textStyle: TextStyle(
+                color: isFollowing ? primary : Colors.white,
+                fontSize: dimen.dp(14),
+                fontWeight: FontWeight.bold,
+                fontFamily: InAppFonts.secondary,
               ),
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(dimen.dp(16)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
+              onTap: isCurrentUser ? () => _editAvatar(context, user) : null,
+              onToggle: !isCurrentUser
+                  ? (value) => _makeAFollower(context, value)
+                  : null,
+              minWidth: 100,
+              padding: EdgeInsets.symmetric(
+                horizontal: dimen.dp(16),
+                vertical: dimen.dp(8),
+              ),
+              borderRadius: BorderRadius.circular(dimen.dp(25)),
+            ),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(dimen.dp(16)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  InAppGesture(
+                    onTap: isCurrentUser
+                        ? () => _editProfileName(context, user)
+                        : null,
+                    child: Padding(
+                      padding: EdgeInsets.all(dimen.dp(4)),
+                      child: InAppText(
+                        user.name ??
+                            (isCurrentUser
+                                ? "Add your family name"
+                                : user.username ?? "Unknown"),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: user.name.isNotValid ? dark.t50 : dark,
+                          fontWeight: dimen.boldFontWeight,
+                          fontSize: dimen.dp(24),
+                        ),
+                      ),
+                    ),
+                  ),
+                  if (isCurrentUser || user.title.isValid)
                     InAppGesture(
                       onTap: isCurrentUser
-                          ? () => _editProfileName(context, user)
+                          ? () => _editTitle(context, user)
                           : null,
                       child: Padding(
                         padding: EdgeInsets.all(dimen.dp(4)),
                         child: InAppText(
-                          user.name ??
-                              (isCurrentUser
-                                  ? "Add your family name"
-                                  : user.username ?? "Unknown"),
+                          user.title ?? "Add your title",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: user.name.isNotValid ? dark.t50 : dark,
-                            fontWeight: dimen.boldFontWeight,
-                            fontSize: dimen.dp(24),
+                            color: user.title.isValid && isCurrentUser
+                                ? dark.t50
+                                : dark.t75,
+                            fontWeight: dimen.mediumFontWeight,
+                            fontSize: dimen.dp(16),
+                            height: 1.5,
                           ),
                         ),
                       ),
                     ),
-                    if (isCurrentUser || user.title.isValid)
-                      InAppGesture(
-                        onTap: isCurrentUser
-                            ? () => _editTitle(context, user)
-                            : null,
-                        child: Padding(
-                          padding: EdgeInsets.all(dimen.dp(4)),
-                          child: InAppText(
-                            user.title ?? "Add your title",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: user.title.isValid && isCurrentUser
-                                  ? dark.t50
-                                  : dark.t75,
-                              fontWeight: dimen.mediumFontWeight,
-                              fontSize: dimen.dp(16),
-                              height: 1.5,
-                            ),
+                  if ((isCurrentUser || user.biography.isValid))
+                    InAppGesture(
+                      onTap: isCurrentUser
+                          ? () => _editBio(context, user)
+                          : null,
+                      child: Padding(
+                        padding: EdgeInsets.all(dimen.dp(4)),
+                        child: InAppText(
+                          user.biography ?? "Create your Biography",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: dark.t50,
+                            fontSize: dimen.dp(14),
+                            height: 1.5,
                           ),
                         ),
                       ),
-                    if ((isCurrentUser || user.biography.isValid))
-                      InAppGesture(
-                        onTap: isCurrentUser
-                            ? () => _editBio(context, user)
-                            : null,
-                        child: Padding(
-                          padding: EdgeInsets.all(dimen.dp(4)),
-                          child: InAppText(
-                            user.biography ?? "Create your Biography",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: dark.t50,
-                              fontSize: dimen.dp(14),
-                              height: 1.5,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
+                    ),
+                ],
               ),
-              Padding(
-                padding: EdgeInsets.all(dimen.dp(16)),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    BlocBuilder<UserReportCounterCubit, Response<int>>(
-                      builder: (context, response) {
-                        return _Counter(
-                          text: "Reports",
-                          primary: primary,
-                          counter: response.data.toReadableNumber.text,
-                          onClick: () => _seeReports(context, user),
-                        );
-                      },
-                    ),
-                    BlocBuilder<UserPostCounterCubit, Response<int>>(
-                      builder: (context, response) {
-                        return _Counter(
-                          text: "Feeds",
-                          primary: primary,
-                          counter: response.data.toReadableNumber.text,
-                          onClick: () => _seePosts(context, user),
-                        );
-                      },
-                    ),
-                    BlocBuilder<UserFollowerCounterCubit, Response<int>>(
-                      builder: (context, response) {
-                        return _Counter(
-                          text: "Followers",
-                          primary: primary,
-                          counter: response.data.toReadableNumber.text,
-                          onClick: () => _seeFollowers(context, user),
-                        );
-                      },
-                    ),
-                    BlocBuilder<UserFollowerCounterCubit, Response<int>>(
-                      builder: (context, response) {
-                        return _Counter(
-                          text: "Followings",
-                          primary: primary,
-                          counter: response.data.toReadableNumber.text,
-                          onClick: () => _seeFollowings(context, user),
-                        );
-                      },
-                    ),
-                  ],
-                ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(dimen.dp(16)),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  BlocBuilder<UserReportCounterCubit, Response<int>>(
+                    builder: (context, response) {
+                      return _Counter(
+                        text: "Reports",
+                        primary: primary,
+                        counter: response.data.toReadableNumber.text,
+                        onClick: () => _seeReports(context, user),
+                      );
+                    },
+                  ),
+                  BlocBuilder<UserPostCounterCubit, Response<int>>(
+                    builder: (context, response) {
+                      return _Counter(
+                        text: "Feeds",
+                        primary: primary,
+                        counter: response.data.toReadableNumber.text,
+                        onClick: () => _seePosts(context, user),
+                      );
+                    },
+                  ),
+                  BlocBuilder<UserFollowerCounterCubit, Response<int>>(
+                    builder: (context, response) {
+                      return _Counter(
+                        text: "Followers",
+                        primary: primary,
+                        counter: response.data.toReadableNumber.text,
+                        onClick: () => _seeFollowers(context, user),
+                      );
+                    },
+                  ),
+                  BlocBuilder<UserFollowerCounterCubit, Response<int>>(
+                    builder: (context, response) {
+                      return _Counter(
+                        text: "Followings",
+                        primary: primary,
+                        counter: response.data.toReadableNumber.text,
+                        onClick: () => _seeFollowings(context, user),
+                      );
+                    },
+                  ),
+                ],
               ),
-              Container(
-                width: double.infinity,
-                height: dimen.dp(50),
-                margin: EdgeInsets.symmetric(horizontal: dimen.dp(16)),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: primary.t10,
-                  borderRadius: BorderRadius.circular(dimen.dp(10)),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    if (isCurrentUser)
-                      _Button(
-                        icon: InAppIcons.camera.solid,
-                        primary: primary,
-                        onClick: () => _createStory(context),
-                      ),
-                    if (isCurrentUser)
-                      _Button(
-                        icon: InAppIcons.editNote.solid,
-                        primary: primary,
-                        onClick: () => _createPost(context),
-                      ),
-                    if (isCurrentUser || isCalling)
-                      _Button(
-                        icon: InAppIcons.phone.solid,
-                        primary: primary,
-                        onClick: () => _makeACall(context, user),
-                      ),
-                    if (isCurrentUser || isMessaging)
-                      _Button(
-                        icon: InAppIcons.message.solid,
-                        primary: primary,
-                        onClick: () => _makeAConversation(context, user),
-                      ),
-                    if (!isCurrentUser)
-                      _Button(
-                        icon: InAppIcons.feedback.solid,
-                        primary: primary,
-                        onClick: () => _makeAReport(context),
-                      ),
-                  ],
-                ),
+            ),
+            Container(
+              width: double.infinity,
+              height: dimen.dp(50),
+              margin: EdgeInsets.symmetric(horizontal: dimen.dp(16)),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: primary.t10,
+                borderRadius: BorderRadius.circular(dimen.dp(10)),
               ),
-            ],
-          ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (isCurrentUser)
+                    _Button(
+                      icon: InAppIcons.camera.solid,
+                      primary: primary,
+                      onClick: () => _createStory(context),
+                    ),
+                  if (isCurrentUser)
+                    _Button(
+                      icon: InAppIcons.editNote.solid,
+                      primary: primary,
+                      onClick: () => _createPost(context),
+                    ),
+                  if (isCurrentUser || isCalling)
+                    _Button(
+                      icon: InAppIcons.phone.solid,
+                      primary: primary,
+                      onClick: () => _makeACall(context, user),
+                    ),
+                  if (isCurrentUser || isMessaging)
+                    _Button(
+                      icon: InAppIcons.message.solid,
+                      primary: primary,
+                      onClick: () => _makeAConversation(context, user),
+                    ),
+                  if (!isCurrentUser)
+                    _Button(
+                      icon: InAppIcons.feedback.solid,
+                      primary: primary,
+                      onClick: () => _makeAReport(context),
+                    ),
+                ],
+              ),
+            ),
+          ],
         );
       },
     );

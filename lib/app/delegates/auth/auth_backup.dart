@@ -25,7 +25,7 @@ class InAppAuthBackupDelegate extends BackupDelegate<User> {
       );
 
   @override
-  User build(Map<String, dynamic> source) => User.from(source);
+  User build(Map<String, dynamic> source) => User.parse(source);
 
   @override
   Future<void> onCreateUser(User data) async {
@@ -45,7 +45,7 @@ class InAppAuthBackupDelegate extends BackupDelegate<User> {
       UserKeys.i.longitude: Startup.i.longitude,
       UserKeys.i.provider: Startup.i.provider,
     });
-    final user = User.from(current);
+    final user = User.parse(current);
     await _create(user: user);
 
     log("USER_CREATED");

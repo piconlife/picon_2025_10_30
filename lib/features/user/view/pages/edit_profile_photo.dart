@@ -18,12 +18,14 @@ import '../../../../app/helpers/user.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../app/res/labels.dart';
 import '../../../../data/constants/paths.dart';
+import '../../../../data/enums/content.dart';
 import '../../../../data/enums/privacy.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/user.dart';
 import '../../../../data/models/user_avatar.dart';
 import '../../../../data/use_cases/feed/create.dart';
 import '../../../../roots/contents/media.dart';
+import '../../../../roots/helpers/connectivity.dart';
 import '../../../../roots/services/path_provider.dart';
 import '../../../../roots/services/storage.dart';
 import '../../../../roots/widgets/appbar.dart';
@@ -175,6 +177,14 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
     }
 
     context.showLoader();
+    if (await ConnectivityHelper.isDisconnected) {
+      if (!context.mounted) return;
+      context.hideLoader();
+      context.showWarningSnackBar(ResponseMessages.internetDisconnected);
+      return;
+    }
+
+    if (!context.mounted) return;
     final updateAccountResponse = await context.updateAccount<User>({
       UserKeys.i.photo: photoUrl,
     });
@@ -274,14 +284,14 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
     _createFeedForGlobal(
       context,
       avatar,
-      Feed.empty(),
-      // Feed.createForAvatar(
-      //   id: avatar.id,
-      //   timeMills: Entity.generateTimeMills,
-      //   publisher: avatar.publisher,
-      //   reference: avatar.path,
-      //   path: Paths.feeds,
-      // ),
+      Feed.create(
+        id: avatar.id,
+        timeMills: Entity.generateTimeMills,
+        publisher: user,
+        reference: avatar.path,
+        path: Paths.feeds,
+        type: ContentType.avatar,
+      ),
     );
   }
 
@@ -347,6 +357,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
     final dimen = context.dimens;
     return InAppScreen(
       unfocusMode: true,
+      theme: ThemeType.secondary,
       child: Scaffold(
         appBar: InAppAppbar(
           titleText: "Update profile photo",

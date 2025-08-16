@@ -16,10 +16,10 @@ import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/column.dart';
 import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/logo_trailing.dart';
-import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/stack.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../routes/paths.dart';
+import '../widgets/screen.dart';
 
 const kSeenTerms = "seen_terms";
 
@@ -107,7 +107,7 @@ class _TermsPageState extends State<TermsPage>
   Widget build(BuildContext context) {
     final dark = context.dark;
     final primary = context.primary;
-    return InAppScreen(
+    return InfoScreen(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: InAppAppbar(

@@ -56,6 +56,7 @@ import '../data/models/user.dart';
 import '../routes/delegate.dart';
 import '../runner.dart';
 import 'helpers/connectivity.dart';
+import 'helpers/location.dart';
 import 'hive/initializer.dart';
 import 'services/analytics.dart';
 import 'services/notification.dart';

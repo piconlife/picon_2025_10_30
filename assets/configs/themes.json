@@ -35,6 +35,16 @@
         "darkAsFixed": "ff000000"
       }
     },
+    "scaffold": {
+      "light": {
+        "primary": "fff2f2f2",
+        "secondary": "ffffffff"
+      },
+      "dark": {
+        "primary": "ff808080",
+        "secondary": "ff000000"
+      }
+    },
     "dialog": {
       "light": {
         "primary": "ffffffff"

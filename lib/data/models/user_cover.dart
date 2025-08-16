@@ -9,7 +9,7 @@ class UserCoverKeys extends EntityKey {
   final publisher = "publisher";
   final path = "path";
   final description = "description";
-  final photoUrl = "photoUrl";
+  final photoUrl = "photo_url";
   final privacy = "privacy";
 
   @override
@@ -42,7 +42,7 @@ class UserCover extends Entity<UserCoverKeys> {
   });
 
   factory UserCover.parse(Object? source) {
-    if (source! is Map) return UserCover();
+    if (source is! Map) return UserCover();
     final key = UserCoverKeys.i;
     return UserCover(
       id: source.entityValue(key.id),
@@ -54,6 +54,9 @@ class UserCover extends Entity<UserCoverKeys> {
       publisher: source.entityValue(key.publisher),
     );
   }
+
+  @override
+  UserCoverKeys makeKey() => UserCoverKeys.i;
 
   @override
   Map<String, dynamic> get source {
