@@ -2,7 +2,7 @@ import 'package:data_management/core.dart';
 import 'package:flutter_entity/entity.dart';
 
 import '../../constants/keys.dart';
-import '../../enums/content.dart';
+import '../../enums/feed_type.dart';
 import '../../models/user_post.dart';
 import 'base.dart';
 
@@ -25,7 +25,7 @@ class GetUserPhotosByPaginationUseCase extends BaseUserPostUseCase {
     return repository.getByQuery(
       singletonMode: singletonMode,
       params: getParams(uid),
-      queries: [DataQuery(Keys.i.type, isEqualTo: ContentType.photo.name)],
+      queries: [DataQuery(Keys.i.type, isEqualTo: FeedType.photo.name)],
       sorts: [DataSorting(Keys.i.timeMills, descending: true)],
       selections: [
         if (snapshot != null) DataSelection.startAfterDocument(snapshot),

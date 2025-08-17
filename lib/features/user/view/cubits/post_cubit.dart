@@ -12,10 +12,6 @@ import '../../../../app/helpers/user.dart';
 import '../../../../data/constants/paths.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../data/models/user_report.dart';
-import '../../../../data/use_cases/feed_comment/delete.dart';
-import '../../../../data/use_cases/feed_comment/get.dart';
-import '../../../../data/use_cases/feed_like/delete.dart';
-import '../../../../data/use_cases/feed_like/get.dart';
 import '../../../../data/use_cases/feed_star/delete.dart';
 import '../../../../data/use_cases/feed_star/get.dart';
 import '../../../../data/use_cases/feed_video/delete.dart';
@@ -98,24 +94,24 @@ class UserPostCubit extends Cubit<Response<UserPost>> {
           DeletePhotoUseCase.i(id: i.id, path: i.parentPath!);
         }
       });
-      GetLikesUseCase.i(data.path ?? '').then((value) {
-        for (var i in value.result) {
-          if (i.parentPath != null || i.parentPath!.isEmpty) return null;
-          DeleteFeedLikeUseCase.i(id: i.id, path: i.parentPath!);
-        }
-      });
+      // GetLikesUseCase.i(data.path ?? '').then((value) {
+      //   for (var i in value.result) {
+      //     if (i.parentPath != null || i.parentPath!.isEmpty) return null;
+      //     DeleteFeedLikeUseCase.i(id: i.id, path: i.parentPath!);
+      //   }
+      // });
       GetStarsUseCase.i(data.path ?? '').then((value) {
         for (var i in value.result) {
           if (i.parentPath != null || i.parentPath!.isEmpty) return null;
           DeleteFeedStarUseCase.i(id: i.id, path: i.parentPath!);
         }
       });
-      GetCommentsUseCase.i(data.path ?? '').then((value) {
-        for (var i in value.result) {
-          if (i.parentPath != null || i.parentPath!.isEmpty) return null;
-          DeleteFeedCommentUseCase.i(id: i.id, path: i.parentPath!);
-        }
-      });
+      // GetCommentsUseCase.i(data.path ?? '').then((value) {
+      //   for (var i in value.result) {
+      //     if (i.parentPath != null || i.parentPath!.isEmpty) return null;
+      //     DeleteFeedCommentUseCase.i(id: i.id, path: i.parentPath!);
+      //   }
+      // });
       GetVideosUseCase.i(data.path ?? '').then((value) {
         for (var i in value.result) {
           if (i.parentPath != null || i.parentPath!.isEmpty) return null;

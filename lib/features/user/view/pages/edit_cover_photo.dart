@@ -11,12 +11,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
+import '../../../../app/dialogs/bsd_privacy.dart';
 import '../../../../app/dialogs/dialog_alert.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../app/res/labels.dart';
 import '../../../../data/constants/paths.dart';
-import '../../../../data/enums/content.dart';
+import '../../../../data/enums/feed_type.dart';
 import '../../../../data/enums/privacy.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/user.dart';
@@ -38,7 +39,6 @@ import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/texted_action.dart';
 import '../../../../routes/keys.dart';
 import '../../../../routes/paths.dart';
-import '../../../social/view/dialogs/bsd_privacy.dart';
 import '../cubits/cover_cubit.dart';
 import '../cubits/post_cubit.dart';
 import '../widgets/edit_cover.dart';
@@ -221,7 +221,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
         id: id,
         timeMills: Entity.generateTimeMills,
         description: etText.text.isNotEmpty ? etText.text : null,
-        photoUrl: photoUrl,
+        photo: photoUrl,
         privacy: privacy.value,
         publisher: user.id,
         path: PathReplacer.replaceByIterable(
@@ -287,7 +287,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
         publisher: user,
         reference: cover.path,
         path: Paths.feeds,
-        type: ContentType.cover,
+        type: FeedType.cover,
       ),
     );
   }

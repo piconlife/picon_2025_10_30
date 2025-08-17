@@ -11,6 +11,6 @@ class CreateFeedCommentUseCase extends BaseFeedCommentUseCase {
   static CreateFeedCommentUseCase get i => _i ??= CreateFeedCommentUseCase._();
 
   Future<Response<FeedComment>> call(FeedComment data) {
-    return repository.create(data, params: getParams(data.parentPath ?? ""));
+    return repository.create(data, params: getParams(data.reference ?? ""));
   }
 }

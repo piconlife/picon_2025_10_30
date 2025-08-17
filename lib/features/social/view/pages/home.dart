@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/flutter_entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
-import '../../../../../data/enums/content.dart';
+import '../../../../../data/enums/feed_type.dart';
 import '../../../../../data/models/feed.dart';
 import '../../../../../routes/paths.dart';
 import '../../../../app/res/icons.dart';
@@ -37,10 +37,8 @@ class FeedHomePage extends StatelessWidget {
               header: "No posts yet",
               body: "Currently no posts available.",
               buttonText: "Take a new post",
-              onButtonClick: () => context.open(
-                Routes.createUserPost,
-                arguments: ContentType.post,
-              ),
+              onButtonClick: () =>
+                  context.open(Routes.createUserPost, arguments: FeedType.post),
             );
           }
 

@@ -80,7 +80,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
   void _loadCoverPhotos(BuildContext context, User user) {
     UserProfileCoversBSD.show(context, user).then((value) {
       if (value is UserCover && context.mounted) {
-        _changeCoverPhoto(context, value.photoUrl);
+        _changeCoverPhoto(context, value.photo);
       }
     });
   }
@@ -114,7 +114,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
   void _loadAvatars(BuildContext context, User user) async {
     UserProfileAvatarsBSD.show(context, user).then((value) {
       if (value is UserAvatar && context.mounted) {
-        _changeAvatar(context, value.photoUrl);
+        _changeAvatar(context, value.photo);
       }
     });
   }

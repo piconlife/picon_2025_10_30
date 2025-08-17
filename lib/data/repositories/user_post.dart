@@ -2,7 +2,7 @@ import 'package:data_management/data_management.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_database/in_app_database.dart';
-import 'package:picon/data/enums/content.dart';
+import 'package:picon/data/enums/feed_type.dart';
 
 import '../../roots/helpers/connectivity.dart';
 import '../models/user_post.dart';
@@ -72,7 +72,7 @@ class UserPostRepository extends RemoteDataRepository<UserPost> {
 
   Future<UserPost> _filter(UserPost i) async {
     switch (i.contentType) {
-      case ContentType.avatar:
+      case FeedType.avatar:
         final feedback = await GetUserAvatarUseCase.i(
           id: i.id,
           uid: i.publisher,
@@ -81,9 +81,9 @@ class UserPostRepository extends RemoteDataRepository<UserPost> {
         if (data == null || data.isEmpty) return i;
         return i
           ..description = data.description
-          ..photoUrls = data.photoUrl.isValid ? [data.photoUrl!] : []
+          ..photoUrls = data.photo.isValid ? [data.photo!] : []
           ..privacy = data.privacy;
-      case ContentType.cover:
+      case FeedType.cover:
         final feedback = await GetUserCoverUseCase.i(
           id: i.id,
           uid: i.publisher,
@@ -92,17 +92,17 @@ class UserPostRepository extends RemoteDataRepository<UserPost> {
         if (data == null) return i;
         return i
           ..description = data.description
-          ..photoUrls = data.photoUrl.isValid ? [data.photoUrl!] : []
+          ..photoUrls = data.photo.isValid ? [data.photo!] : []
           ..privacy = data.privacy;
-      case ContentType.none:
-      case ContentType.ads:
-      case ContentType.business:
-      case ContentType.note:
-      case ContentType.photo:
-      case ContentType.sponsored:
-      case ContentType.memory:
-      case ContentType.post:
-      case ContentType.video:
+      case FeedType.none:
+      case FeedType.ads:
+      case FeedType.business:
+      case FeedType.note:
+      case FeedType.photo:
+      case FeedType.sponsored:
+      case FeedType.memory:
+      case FeedType.post:
+      case FeedType.video:
         return i;
     }
   }

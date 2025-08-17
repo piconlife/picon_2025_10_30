@@ -9,7 +9,7 @@ class UserCoverKeys extends EntityKey {
   final publisher = "publisher";
   final path = "path";
   final description = "description";
-  final photoUrl = "photo_url";
+  final photo = "photo";
   final privacy = "privacy";
 
   @override
@@ -19,7 +19,7 @@ class UserCoverKeys extends EntityKey {
     publisher,
     path,
     description,
-    photoUrl,
+    photo,
     privacy,
   ];
 }
@@ -27,7 +27,7 @@ class UserCoverKeys extends EntityKey {
 class UserCover extends Entity<UserCoverKeys> {
   String? description;
   String? path;
-  String? photoUrl;
+  String? photo;
   Privacy? privacy;
   String? publisher;
 
@@ -36,7 +36,7 @@ class UserCover extends Entity<UserCoverKeys> {
     super.timeMills,
     this.description,
     this.path,
-    this.photoUrl,
+    this.photo,
     this.privacy,
     this.publisher,
   });
@@ -49,7 +49,7 @@ class UserCover extends Entity<UserCoverKeys> {
       timeMills: source.entityValue(key.timeMills),
       description: source.entityValue(key.description),
       path: source.entityValue(key.path),
-      photoUrl: source.entityValue(key.photoUrl),
+      photo: source.entityValue(key.photo),
       privacy: source.entityValue(key.privacy, Privacy.parse),
       publisher: source.entityValue(key.publisher),
     );
@@ -65,7 +65,7 @@ class UserCover extends Entity<UserCoverKeys> {
       key.timeMills: timeMills,
       key.description: description,
       key.path: path,
-      key.photoUrl: photoUrl,
+      key.photo: photo,
       key.privacy: privacy?.name,
       key.publisher: publisher,
     };

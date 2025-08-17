@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_andomie/extensions/object.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../data/enums/content.dart';
+import '../../../../data/enums/feed_type.dart';
 import '../../../../data/models/feed.dart';
+import '../cubits/comment_cubit.dart';
+import '../cubits/like_cubit.dart';
 import 'item_feed_ads.dart';
 import 'item_feed_avatar.dart';
 import 'item_feed_business.dart';
@@ -19,26 +23,47 @@ class ItemFeed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (item.reference.isNotValid) return SizedBox();
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) {
+            return FeedLikeCubit(item.reference!)
+              ..count()
+              ..fetchByMe();
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            return FeedCommentCubit(item.reference!)..count();
+          },
+        ),
+      ],
+      child: _buildLayout(context),
+    );
+  }
+
+  Widget _buildLayout(BuildContext context) {
     switch (item.contentType) {
-      case ContentType.none:
-      case ContentType.photo:
-      case ContentType.post:
+      case FeedType.none:
+      case FeedType.photo:
+      case FeedType.post:
         return ItemFeedPost(item: item);
-      case ContentType.ads:
+      case FeedType.ads:
         return ItemFeedAds(item: item);
-      case ContentType.avatar:
+      case FeedType.avatar:
         return ItemFeedAvatar(item: item);
-      case ContentType.business:
+      case FeedType.business:
         return ItemFeedBusiness(item: item);
-      case ContentType.cover:
+      case FeedType.cover:
         return ItemFeedCover(item: item);
-      case ContentType.note:
+      case FeedType.note:
         return ItemFeedNote(item: item);
-      case ContentType.sponsored:
+      case FeedType.sponsored:
         return ItemFeedSponsored(item: item);
-      case ContentType.memory:
+      case FeedType.memory:
         return ItemFeedMemory(item: item);
-      case ContentType.video:
+      case FeedType.video:
         return ItemFeedVideo(item: item);
     }
   }

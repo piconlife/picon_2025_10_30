@@ -8,7 +8,7 @@ import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../../app/helpers/user.dart';
 import '../../../../../app/res/icons.dart';
-import '../../../../../data/enums/content.dart';
+import '../../../../../data/enums/feed_type.dart';
 import '../../../../../data/models/user_video.dart';
 import '../../../../../roots/widgets/scaffold_shimmer.dart';
 import '../../../../../roots/widgets/text.dart';
@@ -49,7 +49,7 @@ class _ProfileVideosSegmentState extends State<ProfileVideosSegment> {
             buttonText: isCurrentUser ? "Upload a video" : null,
             onButtonClick: () => context.open(
               Routes.createAVideo,
-              arguments: {"$ContentType": ContentType.video},
+              arguments: {"$FeedType": FeedType.video},
             ),
           );
         }

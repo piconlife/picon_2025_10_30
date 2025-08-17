@@ -12,10 +12,7 @@ import '../../../../app/helpers/user.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../data/constants/keys.dart';
 import '../../../../data/enums/privacy.dart';
-import '../../../../data/models/feed_like.dart';
 import '../../../../data/models/feed_star.dart';
-import '../../../../data/use_cases/feed_like/create.dart';
-import '../../../../data/use_cases/feed_like/delete.dart';
 import '../../../../data/use_cases/feed_star/create.dart';
 import '../../../../data/use_cases/feed_star/delete.dart';
 import '../../../../data/use_cases/user_post/update.dart';
@@ -53,41 +50,7 @@ class _UserStaredFeedFooterState extends State<UserStaredFeedFooter> {
   late final _observerStars = widget.stars.use.obx;
 
   Future<bool> _like(bool like) async {
-    if (!like) {
-      return CreateFeedLikeUseCase.i(
-        FeedLike.create(
-          id: UserHelper.uid,
-          parentId: widget.id,
-          parentPath: widget.path,
-          privacy: Privacy.everyone,
-        ),
-      ).then((value) {
-        if (value.isSuccessful) {
-          return UpdateUserPostUseCase.i(widget.id, {
-            Keys.i.likes: DataFieldValue.arrayUnion([UserHelper.uid]),
-          }).then((value) {
-            return value.isSuccessful;
-          });
-        } else {
-          return false;
-        }
-      });
-    } else {
-      return DeleteFeedLikeUseCase.i(
-        id: UserHelper.uid,
-        path: widget.path.use,
-      ).then((value) {
-        if (value.isSuccessful) {
-          return UpdateUserPostUseCase.i(widget.id, {
-            Keys.i.likes: DataFieldValue.arrayRemove([UserHelper.uid]),
-          }).then((value) {
-            return value.isSuccessful;
-          });
-        } else {
-          return false;
-        }
-      });
-    }
+    return false;
   }
 
   Future<bool> _star(bool value) {

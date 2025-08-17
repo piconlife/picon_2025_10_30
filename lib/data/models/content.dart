@@ -4,7 +4,7 @@ import 'package:flutter_entity/flutter_entity.dart';
 import '../../app/helpers/user.dart';
 import '../constants/keys.dart';
 import '../enums/audience.dart';
-import '../enums/content.dart';
+import '../enums/feed_type.dart';
 import '../enums/privacy.dart';
 import 'photo.dart';
 import 'user.dart';
@@ -65,7 +65,7 @@ class Content extends Entity<Keys> {
   final List<String>? tags;
   final String? text;
   final String? title;
-  final ContentType? _type;
+  final FeedType? _type;
   final String? url;
   final bool? verified;
   final List<Content>? videos;
@@ -120,7 +120,7 @@ class Content extends Entity<Keys> {
 
   Privacy get privacy => _privacy ?? Privacy.everyone;
 
-  ContentType get contentType => _type ?? ContentType.none;
+  FeedType get type => _type ?? FeedType.none;
 
   Content get recent => _recent ?? Content();
 
@@ -181,7 +181,7 @@ class Content extends Entity<Keys> {
     this.tags,
     this.text,
     this.title,
-    ContentType? type,
+    FeedType? type,
     this.url,
     this.verified,
     this.videos,
@@ -264,7 +264,7 @@ class Content extends Entity<Keys> {
     Audience? audience,
     Privacy? privacy,
     String? publisherId,
-    ContentType? type,
+    FeedType? type,
 
     // LOCAL INFO
     // LOCAL INFO
@@ -402,7 +402,7 @@ class Content extends Entity<Keys> {
       tags: source.entityValues(key.tags),
       audience: source.entityValue(key.audience, Audience.from),
       privacy: source.entityValue(key.privacy, Privacy.parse),
-      type: source.entityValue(key.type, ContentType.parse),
+      type: source.entityValue(key.type, FeedType.parse),
       recent: source.entityValue(key.recent, Content.from),
     );
   }

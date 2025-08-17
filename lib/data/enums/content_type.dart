@@ -1,36 +1,21 @@
 enum ContentType {
   none("NONE", ""),
-  ads("ADS", "Ads"),
-  avatar("AVATAR", "Avatar"),
-  business("BUSINESS", "Business"),
-  cover("COVER", "Cover"),
-  note("NOTE", "Note"),
+  text("TEXT", "Text"),
+  emoji("EMOJI", "Emoji"),
+  gif("GIF", "Gif"),
   photo("PHOTO", "Photo"),
-  sponsored("SPONSORED", "Sponsored"),
-  memory("MEMORY", "Memory"),
-  post("POST", "Post"),
   video("VIDEO", "Video");
 
   final String name;
   final String value;
 
-  bool get isAds => this == ads;
+  bool get isText => this == text;
 
-  bool get isAvatar => this == avatar;
+  bool get isEmoji => this == emoji;
 
-  bool get isBusiness => this == business;
-
-  bool get isCover => this == cover;
-
-  bool get isMemory => this == memory;
-
-  bool get isNote => this == note;
+  bool get isGif => this == gif;
 
   bool get isPhoto => this == photo;
-
-  bool get isPost => this == post;
-
-  bool get isSponsored => this == sponsored;
 
   bool get isVideo => this == video;
 

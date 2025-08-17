@@ -8,7 +8,7 @@ import '../../features/chooser/data/models/country.dart';
 import '../../features/chooser/data/models/profession.dart';
 import '../../features/chooser/data/models/religion.dart';
 import '../../roots/helpers/location.dart';
-import '../enums/content.dart';
+import '../enums/feed_type.dart';
 import '../enums/privacy.dart';
 import 'content.dart';
 import 'photo.dart';
@@ -86,25 +86,20 @@ class Feed extends Entity<FeedKeys> {
 
   String? path;
   String? reference;
-  ContentType? _type;
+  FeedType? _type;
 
-  ContentType get contentType => _type ?? ContentType.none;
+  FeedType get contentType => _type ?? FeedType.none;
 
   // MODIFIABLE FIELDS
+  int reportCount = 0;
+  int starCount = 0;
+  int viewCount = 0;
+
   String? description;
   List<String> photoUrls = [];
-  List<String> comments = [];
-  List<String> likes = [];
-  List<String> stars = [];
 
   Content recent = Content();
   List<Content> contents = [];
-
-  int? commentCount;
-  int? likeCount;
-  int? reportCount;
-  int? starCount;
-  int? viewCount;
 
   String? title;
   String? audience;
@@ -132,9 +127,9 @@ class Feed extends Entity<FeedKeys> {
 
   bool get isShareMode => isPublisher || privacy == Privacy.everyone;
 
-  bool get isPhotoMode => _type == ContentType.photo;
+  bool get isPhotoMode => _type == FeedType.photo;
 
-  bool get isVideoMode => _type == ContentType.video;
+  bool get isVideoMode => _type == FeedType.video;
 
   Feed.empty() : this._();
 
@@ -158,13 +153,13 @@ class Feed extends Entity<FeedKeys> {
     // REFERENCES
     this.path,
     this.reference,
-    ContentType? type,
+    FeedType? type,
   }) : _type = type;
 
   Feed.create({
     required super.id,
     required super.timeMills,
-    required ContentType type,
+    required FeedType type,
     required this.path,
     required this.reference,
     User? publisher,
@@ -217,7 +212,7 @@ class Feed extends Entity<FeedKeys> {
       // REFERENCES
       path: source.entityValue(key.path),
       reference: source.entityValue(key.ref),
-      type: source.entityValue(key.type, ContentType.parse),
+      type: source.entityValue(key.type, FeedType.parse),
     );
   }
 

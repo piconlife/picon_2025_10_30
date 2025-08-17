@@ -9,7 +9,7 @@ import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../../app/helpers/user.dart';
 import '../../../../../app/res/icons.dart';
-import '../../../../../data/enums/content.dart';
+import '../../../../../data/enums/feed_type.dart';
 import '../../../../../data/models/user_post.dart';
 import '../../../../../roots/widgets/scaffold_shimmer.dart';
 import '../../../../../roots/widgets/text.dart';
@@ -53,7 +53,7 @@ class _ProfilePostsSegmentState extends State<ProfilePostsSegment> {
             buttonText: isCurrentUser ? "Take a new post" : null,
             onButtonClick: () => context.open(
               Routes.createUserPost,
-              arguments: {"$ContentType": ContentType.post},
+              arguments: {"$FeedType": FeedType.post},
             ),
           );
         }

@@ -6,5 +6,5 @@ class RemoteFeedLikeDataSource extends FirestoreDataSource<FeedLike> {
   RemoteFeedLikeDataSource({super.path = Paths.feedLikes});
 
   @override
-  FeedLike build(Object? source) => FeedLike.from(source);
+  FeedLike build(Object? source) => FeedLike.parse(source);
 }

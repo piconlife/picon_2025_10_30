@@ -41,7 +41,7 @@ class _ItemFeedNoteState extends State<ItemFeedNote> {
             },
           ),
           _Body(item: widget.item),
-          FeedFooter(item: widget.item, onLiked: (value) {}),
+          FeedFooter(item: widget.item),
         ],
       ),
     );

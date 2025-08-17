@@ -4,6 +4,7 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../roots/widgets/button.dart';
+import '../../../../roots/widgets/column.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/text.dart';
 
@@ -57,58 +58,60 @@ class InAppNullableBody extends StatelessWidget {
     final dark = context.dark;
     final dimen = context.dimens;
     final spacing = contentSpacing ?? dimen.dp(12);
-    return ListView(
+    return SingleChildScrollView(
       padding: contentPadding ?? EdgeInsets.symmetric(vertical: dimen.dp(50)),
-      children: [
-        if (icon != null) ...[
-          InAppIcon(
-            icon,
-            size: iconSize ?? dimen.dp(60),
-            color: iconColor ?? primary,
-          ),
-          if ((header ?? body ?? buttonText ?? '').isNotEmpty)
-            SizedBox(height: iconSpacing ?? spacing * 1.5),
-        ],
-        if ((header ?? '').isNotEmpty)
-          InAppText(
-            header,
-            textAlign: TextAlign.center,
-            style: headerStyle.copyWith(
-              fontWeight: headerStyle.fontWeight ?? FontWeight.w500,
-              color: headerStyle.color ?? dark,
-              fontSize: headerStyle.fontSize ?? dimen.dp(24),
+      child: InAppColumn(
+        children: [
+          if (icon != null) ...[
+            InAppIcon(
+              icon,
+              size: iconSize ?? dimen.dp(60),
+              color: iconColor ?? primary,
             ),
-          ),
-        if ((body ?? '').isNotEmpty) ...[
+            if ((header ?? body ?? buttonText ?? '').isNotEmpty)
+              SizedBox(height: iconSpacing ?? spacing * 1.5),
+          ],
           if ((header ?? '').isNotEmpty)
-            SizedBox(height: buttonSpacing ?? spacing),
-          InAppText(
-            body,
-            textAlign: TextAlign.center,
-            style: bodyStyle.copyWith(
-              color: bodyStyle.color ?? context.dark.t50,
-              fontSize: bodyStyle.fontSize ?? dimen.dp(16),
-            ),
-          ),
-        ],
-        if ((buttonText ?? '').isNotEmpty) ...[
-          if ((header ?? body ?? '').isNotEmpty)
-            SizedBox(height: buttonSpacing ?? spacing * 3),
-          Center(
-            child: InAppButton(
-              backgroundColor: buttonColor ?? primary,
-              minWidth: buttonWidth ?? dimen.dp(180),
-              height: buttonHeight ?? dimen.dp(45),
-              onTap: onButtonClick,
-              text: buttonText,
-              textStyle: buttonTextStyle.copyWith(
-                fontSize: buttonTextStyle.fontSize ?? dimen.dp(16),
-                fontWeight: buttonTextStyle.fontWeight ?? FontWeight.w600,
+            InAppText(
+              header,
+              textAlign: TextAlign.center,
+              style: headerStyle.copyWith(
+                fontWeight: headerStyle.fontWeight ?? FontWeight.w500,
+                color: headerStyle.color ?? dark,
+                fontSize: headerStyle.fontSize ?? dimen.dp(24),
               ),
             ),
-          ),
+          if ((body ?? '').isNotEmpty) ...[
+            if ((header ?? '').isNotEmpty)
+              SizedBox(height: buttonSpacing ?? spacing),
+            InAppText(
+              body,
+              textAlign: TextAlign.center,
+              style: bodyStyle.copyWith(
+                color: bodyStyle.color ?? context.dark.t50,
+                fontSize: bodyStyle.fontSize ?? dimen.dp(16),
+              ),
+            ),
+          ],
+          if ((buttonText ?? '').isNotEmpty) ...[
+            if ((header ?? body ?? '').isNotEmpty)
+              SizedBox(height: buttonSpacing ?? spacing * 3),
+            Center(
+              child: InAppButton(
+                backgroundColor: buttonColor ?? primary,
+                minWidth: buttonWidth ?? dimen.dp(180),
+                height: buttonHeight ?? dimen.dp(45),
+                onTap: onButtonClick,
+                text: buttonText,
+                textStyle: buttonTextStyle.copyWith(
+                  fontSize: buttonTextStyle.fontSize ?? dimen.dp(16),
+                  fontWeight: buttonTextStyle.fontWeight ?? FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
         ],
-      ],
+      ),
     );
   }
 }

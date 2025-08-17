@@ -15,12 +15,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/flutter_entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
+import '../../../../app/dialogs/bsd_audience.dart';
+import '../../../../app/dialogs/bsd_privacy.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../data/constants/keys.dart';
 import '../../../../data/constants/paths.dart';
 import '../../../../data/enums/audience.dart';
-import '../../../../data/enums/content.dart';
+import '../../../../data/enums/feed_type.dart';
 import '../../../../data/enums/privacy.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/photo.dart';
@@ -36,14 +38,13 @@ import '../../../../roots/utils/image_provider.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/bottom_bar.dart';
 import '../../../../roots/widgets/icon_button.dart';
+import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/texted_action.dart';
 import '../../../../routes/paths.dart';
-import '../../../social/view/dialogs/bsd_audience.dart';
-import '../../../social/view/dialogs/bsd_privacy.dart';
-import '../cubits/photo_cubit.dart';
-import '../cubits/post_counter_cubit.dart';
-import '../cubits/post_cubit.dart';
-import '../widgets/uploading_image.dart';
+import '../../../user/view/cubits/photo_cubit.dart';
+import '../../../user/view/cubits/post_counter_cubit.dart';
+import '../../../user/view/cubits/post_cubit.dart';
+import '../../../user/view/widgets/uploading_image.dart';
 
 class CreateUserPostPage extends StatefulWidget {
   final Object? args;
@@ -72,7 +73,7 @@ class _CreateUserPostPageState extends State<CreateUserPostPage> {
   final Map<int, UploadingSnapshot> _pendingSnapshots = {};
 
   UserPost? old;
-  ContentType type = ContentType.post;
+  FeedType type = FeedType.post;
 
   String get title => etHeader.text;
 
@@ -88,7 +89,7 @@ class _CreateUserPostPageState extends State<CreateUserPostPage> {
     old = data?.findOrNull(key: "$UserPost");
     if (old != null) {
       id = old!.id;
-      type = ContentType.parse(old?.contentType);
+      type = FeedType.parse(old?.contentType);
       photos.set(old!.photos.use.map(EditablePhoto.photo).toList());
       privacy.set(Privacy.parse(old?.privacy));
     } else {
@@ -96,7 +97,7 @@ class _CreateUserPostPageState extends State<CreateUserPostPage> {
         timeMills: Entity.generateTimeMills,
         extraKeySize: 5,
       );
-      type = data.findByKey("$ContentType", defaultValue: ContentType.post);
+      type = data.findByKey("$FeedType", defaultValue: FeedType.post);
       if (type.isPhoto) {
         _pickPhotos(data.findOrNull(key: "$EditablePhotoFeedback"));
       }
@@ -403,7 +404,7 @@ class _CreateUserPostPageState extends State<CreateUserPostPage> {
       privacy: privacy.value,
       title: title.isEmpty ? null : title,
       description: description.isEmpty ? null : description,
-      type: currentPhotoUrls.isNotEmpty ? ContentType.photo : null,
+      type: currentPhotoUrls.isNotEmpty ? FeedType.photo : null,
       tags: tags.value,
     );
     _createPost(context, data);
@@ -454,168 +455,175 @@ class _CreateUserPostPageState extends State<CreateUserPostPage> {
     final dimen = context.dimens;
     final light = context.light;
     final dark = context.dark;
-    return Scaffold(
-      appBar: InAppAppbar(
-        titleText: isUpdateMode ? "Update post" : "Add a new post",
-        actions: [
-          InAppTextedAction(
-            isUpdateMode ? "Update" : "Post",
-            onTap: () => _submit(context),
-          ),
-        ],
-      ),
-      bottomNavigationBar: InAppBottomBar(
-        height: kToolbarHeight,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            InAppIconButton(
-              InAppIcons.tagMultiple.regular,
-              primaryColor: Colors.transparent,
-              iconColor: CupertinoColors.activeGreen,
-              iconScale: 1.5,
-              onTap: () => _changeTags(context),
+    return InAppScreen(
+      theme: ThemeType.secondary,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: InAppAppbar(
+          titleText: isUpdateMode ? "Update post" : "Add a new post",
+          actions: [
+            InAppTextedAction(
+              isUpdateMode ? "Update" : "Post",
+              onTap: () => _submit(context),
             ),
-            InAppIconButton(
-              InAppIcons.audience.regular,
-              primaryColor: Colors.transparent,
-              iconColor: CupertinoColors.systemBlue,
-              iconScale: 1.5,
-              onTap: () => _changeAudience(context),
-            ),
-            InAppIconButton(
-              InAppIcons.addPhoto.solid,
-              iconColor: Colors.white,
-              size: 50,
-              iconScale: 1.2,
-              onTap: () => _choosePhoto(context),
-            ),
-            InAppIconButton(
-              InAppIcons.public.regular,
-              primaryColor: Colors.transparent,
-              iconColor: CupertinoColors.systemBlue,
-              iconScale: 1.5,
-              onTap: () => _changePrivacy(context),
-            ),
-            InAppIconButton(
-              InAppIcons.moreX.regular,
-              primaryColor: CupertinoColors.systemGreen.t10,
-              iconColor: CupertinoColors.systemGreen,
-              iconScale: 1.5,
-              onTap: () => _changeMore(context),
-            ),
-            // SizedBox(width: dimen.dp(8)),
-            // AndrossyObserver(
-            //   observer: privacy,
-            //   builder: (context, value) {
-            //     return InAppTextButton(
-            //       value.title,
-            //       highlightColor: dark.t05,
-            //       borderRadius: BorderRadius.circular(dimen.dp(10)),
-            //       style: TextStyle(
-            //         color: dark,
-            //         fontSize: dimen.dp(14),
-            //         fontWeight: FontWeight.bold,
-            //       ),
-            //       onTap: () => _changePrivacy(context),
-            //     );
-            //   },
-            // ),
-            // VerticalDivider(
-            //   color: dark.t05,
-            //   indent: dimen.dp(12),
-            //   endIndent: dimen.dp(12),
-            // ),
-            // InAppTextButton(
-            //   "Photo",
-            //   highlightColor: dark.t05,
-            //   borderRadius: BorderRadius.circular(dimen.dp(10)),
-            //   style: TextStyle(
-            //     color: dark,
-            //     fontSize: dimen.dp(14),
-            //     fontWeight: FontWeight.bold,
-            //   ),
-            //   onTap: () => _choosePhoto(context),
-            // ),
-            // SizedBox(width: dimen.dp(8)),
           ],
         ),
-      ),
-      body: Container(
-        width: double.infinity,
-        margin: EdgeInsets.only(top: dimen.dp(0.5)),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [light, light.t75],
-          ),
-        ),
-        child: ListView(
-          children: [
-            AndrossyObserver(
-              observer: photos,
-              builder: (context, base) {
-                return ReorderableList(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: base.length,
-                  itemBuilder: (context, index) {
-                    final item = base.elementAt(index);
-                    Widget child = _ItemPhoto(
-                      key: ValueKey(item.id),
-                      photo: item,
-                      path: photosPath,
-                      onProcessing: (context, value) =>
-                          _upload(context, index, value),
-                    );
-                    return ReorderableDelayedDragStartListener(
-                      index: index,
-                      key: ValueKey(item.id),
-                      child: Container(
-                        margin: EdgeInsets.only(bottom: dimen.dp(4)),
-                        width: double.infinity,
-                        child: child,
-                      ),
-                    );
-                  },
-                  onReorder: _updatePosition,
-                );
-              },
-            ),
-            Padding(
-              padding: EdgeInsets.all(dimen.dp(24)),
-              child: Column(
-                children: [
-                  AndrossyField(
-                    controller: etHeader,
-                    text: old?.title,
-                    hintText: "Header",
-                    maxCharacters: 100,
-                    hintColor: dark.t25,
-                    counterVisibility: FloatingVisibility.auto,
-                    underlineColor: AndrossyFieldProperty(enabled: dark.t10),
-                    onTapOutside: (_) {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                    },
-                  ),
-                  AndrossyField(
-                    minLines: 10,
-                    text: old?.description,
-                    hintText: "Write something...",
-                    hintColor: dark.t25,
-                    controller: etDescription,
-                    underlineColor: const AndrossyFieldProperty.none(),
-                    inputType: TextInputType.multiline,
-                    onTapOutside: (_) {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                    },
-                  ),
-                ],
+        bottomNavigationBar: InAppBottomBar(
+          height: kToolbarHeight,
+          shadowBlurRadius: 50,
+          shadowColor: dark.t05,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              InAppIconButton(
+                InAppIcons.tagMultiple.regular,
+                primaryColor: Colors.transparent,
+                iconColor: CupertinoColors.activeGreen,
+                iconScale: 1.5,
+                onTap: () => _changeTags(context),
               ),
+              InAppIconButton(
+                InAppIcons.audience.regular,
+                primaryColor: Colors.transparent,
+                iconColor: CupertinoColors.systemBlue,
+                iconScale: 1.5,
+                onTap: () => _changeAudience(context),
+              ),
+              InAppIconButton(
+                InAppIcons.addPhoto.solid,
+                iconColor: context.primary,
+                primaryColor: Colors.transparent,
+                size: 50,
+                iconScale: 1.5,
+                onTap: () => _choosePhoto(context),
+              ),
+              InAppIconButton(
+                InAppIcons.public.regular,
+                primaryColor: Colors.transparent,
+                iconColor: CupertinoColors.systemBlue,
+                iconScale: 1.5,
+                onTap: () => _changePrivacy(context),
+              ),
+              InAppIconButton(
+                InAppIcons.moreX.regular,
+                primaryColor: CupertinoColors.systemGreen.t10,
+                iconColor: CupertinoColors.systemGreen,
+                iconScale: 1.5,
+                onTap: () => _changeMore(context),
+              ),
+              // SizedBox(width: dimen.dp(8)),
+              // AndrossyObserver(
+              //   observer: privacy,
+              //   builder: (context, value) {
+              //     return InAppTextButton(
+              //       value.title,
+              //       highlightColor: dark.t05,
+              //       borderRadius: BorderRadius.circular(dimen.dp(10)),
+              //       style: TextStyle(
+              //         color: dark,
+              //         fontSize: dimen.dp(14),
+              //         fontWeight: FontWeight.bold,
+              //       ),
+              //       onTap: () => _changePrivacy(context),
+              //     );
+              //   },
+              // ),
+              // VerticalDivider(
+              //   color: dark.t05,
+              //   indent: dimen.dp(12),
+              //   endIndent: dimen.dp(12),
+              // ),
+              // InAppTextButton(
+              //   "Photo",
+              //   highlightColor: dark.t05,
+              //   borderRadius: BorderRadius.circular(dimen.dp(10)),
+              //   style: TextStyle(
+              //     color: dark,
+              //     fontSize: dimen.dp(14),
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              //   onTap: () => _choosePhoto(context),
+              // ),
+              // SizedBox(width: dimen.dp(8)),
+            ],
+          ),
+        ),
+        body: Container(
+          width: double.infinity,
+          margin: EdgeInsets.only(top: dimen.dp(0.5)),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [light, light.t75],
             ),
-          ],
+          ),
+          child: ListView(
+            children: [
+              AndrossyObserver(
+                observer: photos,
+                builder: (context, base) {
+                  return ReorderableList(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: base.length,
+                    itemBuilder: (context, index) {
+                      final item = base.elementAt(index);
+                      Widget child = _ItemPhoto(
+                        key: ValueKey(item.id),
+                        photo: item,
+                        path: photosPath,
+                        onProcessing: (context, value) =>
+                            _upload(context, index, value),
+                      );
+                      return ReorderableDelayedDragStartListener(
+                        index: index,
+                        key: ValueKey(item.id),
+                        child: Container(
+                          margin: EdgeInsets.only(bottom: dimen.dp(4)),
+                          width: double.infinity,
+                          child: child,
+                        ),
+                      );
+                    },
+                    onReorder: _updatePosition,
+                  );
+                },
+              ),
+              Padding(
+                padding: EdgeInsets.all(dimen.dp(24)),
+                child: Column(
+                  children: [
+                    AndrossyField(
+                      controller: etHeader,
+                      text: old?.title,
+                      hintText: "Header",
+                      maxCharacters: 100,
+                      hintColor: dark.t25,
+                      counterVisibility: FloatingVisibility.auto,
+                      underlineColor: AndrossyFieldProperty(enabled: dark.t10),
+                      onTapOutside: (_) {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      },
+                    ),
+                    AndrossyField(
+                      minLines: 10,
+                      text: old?.description,
+                      hintText: "Write something...",
+                      hintColor: dark.t25,
+                      controller: etDescription,
+                      underlineColor: const AndrossyFieldProperty.none(),
+                      inputType: TextInputType.multiline,
+                      onTapOutside: (_) {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

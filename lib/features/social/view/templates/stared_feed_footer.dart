@@ -12,10 +12,7 @@ import '../../../../app/helpers/user.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../data/constants/keys.dart';
 import '../../../../data/enums/privacy.dart';
-import '../../../../data/models/feed_like.dart';
 import '../../../../data/models/feed_star.dart';
-import '../../../../data/use_cases/feed_like/create.dart';
-import '../../../../data/use_cases/feed_like/delete.dart';
 import '../../../../data/use_cases/feed_star/create.dart';
 import '../../../../data/use_cases/feed_star/delete.dart';
 import '../../../../data/use_cases/user_post/update.dart';
@@ -27,7 +24,7 @@ import 'feed_comment_box.dart';
 class StaredFeedFooter extends StatefulWidget {
   final String id;
   final String path;
-  final List<String>? likes;
+  final int? likes;
   final List<String>? stars;
   final List<String>? comments;
   final void Function(List<String> likes) onLiked;
@@ -53,41 +50,7 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
   late final _observerStars = widget.stars.use.obx;
 
   Future<bool> _like(bool like) async {
-    if (!like) {
-      return CreateFeedLikeUseCase.i(
-        FeedLike.create(
-          id: UserHelper.uid,
-          parentId: widget.id,
-          parentPath: widget.path,
-          privacy: Privacy.everyone,
-        ),
-      ).then((value) {
-        if (value.isSuccessful) {
-          return UpdateUserPostUseCase.i(widget.id, {
-            Keys.i.likes: DataFieldValue.arrayUnion([UserHelper.uid]),
-          }).then((value) {
-            return value.isSuccessful;
-          });
-        } else {
-          return false;
-        }
-      });
-    } else {
-      return DeleteFeedLikeUseCase.i(
-        id: UserHelper.uid,
-        path: widget.path.use,
-      ).then((value) {
-        if (value.isSuccessful) {
-          return UpdateUserPostUseCase.i(widget.id, {
-            Keys.i.likes: DataFieldValue.arrayRemove([UserHelper.uid]),
-          }).then((value) {
-            return value.isSuccessful;
-          });
-        } else {
-          return false;
-        }
-      });
-    }
+    return false;
   }
 
   Future<bool> _star(bool value) {
@@ -129,8 +92,6 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
   }
 
   void _updateLikes(BuildContext context, bool selected) async {
-    _observerLikes.toggle(UserHelper.uid, selected);
-    widget.onLiked(_observerLikes.value);
     _like(selected);
   }
 
@@ -163,7 +124,7 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
               observer: _observerLikes,
               builder: (context, value) {
                 return InAppText(
-                  Converter.toKMBFromList(value, "Like", "Likes"),
+                  Converter.toKMB(value, "Like", "Likes"),
                   style: counterStyle,
                 );
               },
@@ -201,7 +162,7 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
             AndrossyObserver(
               observer: _observerLikes,
               builder: (context, value) {
-                final activated = Validator.isChecked(UserHelper.uid, value);
+                final activated = false;
                 return InAppPleasureButton(
                   icon: activated
                       ? InAppIcons.heart.solid

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_entity/entity.dart';
 
 import '../../app/helpers/user.dart';
-import '../enums/content.dart';
+import '../enums/feed_type.dart';
 import '../enums/privacy.dart';
 import 'content.dart';
 import 'photo.dart';
@@ -27,9 +27,9 @@ class UserPost extends Entity<UserPostKeys> {
   String? publisher;
   String? path;
   String? reference;
-  ContentType? _type;
+  FeedType? _type;
 
-  ContentType get contentType => _type ?? ContentType.none;
+  FeedType get contentType => _type ?? FeedType.none;
 
   // MODIFIABLE FIELDS
   String? description;
@@ -72,9 +72,9 @@ class UserPost extends Entity<UserPostKeys> {
 
   bool get isShareMode => isPublisher || privacy == Privacy.everyone;
 
-  bool get isPhotoMode => _type == ContentType.photo;
+  bool get isPhotoMode => _type == FeedType.photo;
 
-  bool get isVideoMode => _type == ContentType.video;
+  bool get isVideoMode => _type == FeedType.video;
 
   UserPost({
     super.id,
@@ -82,7 +82,7 @@ class UserPost extends Entity<UserPostKeys> {
     this.path,
     this.publisher,
     this.reference,
-    ContentType? type,
+    FeedType? type,
 
     this.title,
     this.description,
@@ -108,7 +108,7 @@ class UserPost extends Entity<UserPostKeys> {
     required this.description,
     required this.audience,
     required this.privacy,
-    required ContentType? type,
+    required FeedType? type,
     required this.tags,
   }) : _type = type;
 
@@ -118,7 +118,7 @@ class UserPost extends Entity<UserPostKeys> {
     required this.publisher,
     required this.path,
     required this.reference,
-  }) : _type = ContentType.avatar;
+  }) : _type = FeedType.avatar;
 
   UserPost.createForCover({
     required super.id,
@@ -126,7 +126,7 @@ class UserPost extends Entity<UserPostKeys> {
     required this.publisher,
     required this.path,
     required this.reference,
-  }) : _type = ContentType.cover;
+  }) : _type = FeedType.cover;
 
   factory UserPost.parse(Object? source) {
     final key = UserPostKeys.i;
@@ -137,7 +137,7 @@ class UserPost extends Entity<UserPostKeys> {
       publisher: source.entityValue(key.pid),
       reference: source.entityValue(key.ref),
       timeMills: source.entityValue(key.timeMills),
-      type: source.entityValue(key.type, ContentType.parse),
+      type: source.entityValue(key.type, FeedType.parse),
     );
   }
 

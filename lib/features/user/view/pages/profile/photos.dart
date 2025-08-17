@@ -10,7 +10,7 @@ import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../../app/helpers/user.dart';
 import '../../../../../app/res/icons.dart';
-import '../../../../../data/enums/content.dart';
+import '../../../../../data/enums/feed_type.dart';
 import '../../../../../data/models/user_post.dart';
 import '../../../../../roots/utils/image_provider.dart';
 import '../../../../../roots/widgets/image.dart';
@@ -40,7 +40,7 @@ class _ProfilePhotosSegmentState extends State<ProfilePhotosSegment> {
     context.open(
       Routes.createUserPost,
       arguments: {
-        "$ContentType": ContentType.photo,
+        "$FeedType": FeedType.photo,
         "$EditablePhotoFeedback": feedback,
       },
     );

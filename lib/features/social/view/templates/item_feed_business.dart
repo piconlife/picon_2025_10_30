@@ -8,7 +8,7 @@ import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/res/icons.dart';
 import '../../../../app/res/placeholders.dart';
-import '../../../../data/enums/content.dart';
+import '../../../../data/enums/feed_type.dart';
 import '../../../../data/models/content.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../roots/widgets/gesture.dart';
@@ -43,13 +43,13 @@ class _ItemFeedBusinessState extends State<ItemFeedBusiness> {
               return FeedHeader(
                 avatar: user.photo,
                 title: user.name,
-                subtitle: ContentType.business.value,
+                subtitle: FeedType.business.value,
                 actions: [FeedHeaderMoreAction(onClick: () {})],
               );
             },
           ),
           _Body(item: widget.item),
-          FeedFooter(item: widget.item, onLiked: (value) {}),
+          FeedFooter(item: widget.item),
         ],
       ),
     );

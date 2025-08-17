@@ -52,7 +52,7 @@ dependencies:
   auth_management: ^3.0.2
   data_management: ^2.2.2
   data_management_local_delegate: ^1.0.7
-  flutter_andomie: ^0.6.40
+  flutter_andomie: ^0.6.41
   flutter_app_navigator: ^1.0.1
   flutter_device_config: ^1.0.3
   flutter_entity: ^1.2.0
@@ -69,8 +69,8 @@ dependencies:
 
   # AUTHORIZATION (WITH NATIVE)
   local_auth: ^2.3.0 # BIOMETRIC SIGN IN
-  local_auth_android: ^1.0.50 # BIOMETRIC SIGN IN
-  local_auth_darwin: ^1.5.0 # BIOMETRIC SIGN IN
+  local_auth_android: ^1.0.51 # BIOMETRIC SIGN IN
+  local_auth_darwin: ^1.6.0 # BIOMETRIC SIGN IN
   local_auth_windows: ^1.0.11 # BIOMETRIC SIGN IN
   #  google_sign_in: ^6.3.0 # GOOGLE SIGN IN
   #  sign_in_with_apple: ^7.0.1 # APPLE SIGN IN
@@ -96,7 +96,7 @@ dependencies:
   table_calendar: ^3.2.0
 
   # DESIGN (WITH NATIVE)
-  image_picker: ^1.1.2
+  image_picker: ^1.2.0
 
   # LOGICS (WITHOUT NATIVE)
   async: ^2.13.0
@@ -133,7 +133,7 @@ dev_dependencies:
     sdk: flutter
 
   mockito: ^5.5.0
-  build_runner: ^2.6.0
+  build_runner: ^2.7.0
   flutter_lints: ^6.0.0
   #  hive_generator: ^2.0.1
 

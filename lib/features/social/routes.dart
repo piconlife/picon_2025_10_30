@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_andomie/extensions/object.dart';
 import 'package:flutter_app_navigator/app_navigator.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../routes/paths.dart';
+import 'view/cubits/comment_cubit.dart';
+import 'view/pages/comments.dart';
 import 'view/pages/create_a_memory.dart';
 import 'view/pages/create_a_note.dart';
 import 'view/pages/create_a_story.dart';
@@ -15,6 +19,7 @@ Map<String, RouteBuilder> get mSocialRoutes {
     Routes.createAStory: _createAStory,
     Routes.createAVideo: _createAVideo,
     Routes.searchFeeds: _searchFeeds,
+    Routes.comments: _comments,
   };
 }
 
@@ -36,4 +41,18 @@ Widget _createAVideo(BuildContext context, Object? args) {
 
 Widget _searchFeeds(BuildContext context, Object? args) {
   return const SearchFeedsPage();
+}
+
+Widget _comments(BuildContext context, Object? args) {
+  final commentCubit = args.findOrNull<FeedCommentCubit>(
+    key: "$FeedCommentCubit",
+  );
+  return MultiBlocProvider(
+    providers: [
+      commentCubit != null
+          ? BlocProvider.value(value: commentCubit..fetch())
+          : BlocProvider(create: (context) => FeedCommentCubit('')..fetch()),
+    ],
+    child: CommentsPage(args: args),
+  );
 }

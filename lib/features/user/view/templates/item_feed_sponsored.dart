@@ -6,7 +6,7 @@ import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/res/icons.dart';
-import '../../../../data/enums/content.dart';
+import '../../../../data/enums/feed_type.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
@@ -38,7 +38,7 @@ class _ItemUserFeedSponsoredState extends State<ItemUserFeedSponsored> {
             builder: (context, user) {
               return UserFeedHeader(
                 title: user.name,
-                subtitle: ContentType.sponsored.value,
+                subtitle: FeedType.sponsored.value,
                 avatar: user.photo,
                 actions: [FeedHeaderMoreAction()],
               );

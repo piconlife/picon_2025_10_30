@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../data/enums/content.dart';
+import '../../../../data/enums/feed_type.dart';
 import '../../../../data/models/user_post.dart';
 import 'item_feed_ads.dart';
 import 'item_feed_avatar.dart';
@@ -20,25 +20,25 @@ class ItemUserFeed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (item.contentType) {
-      case ContentType.none:
-      case ContentType.photo:
-      case ContentType.post:
+      case FeedType.none:
+      case FeedType.photo:
+      case FeedType.post:
         return ItemUserFeedPost(item: item);
-      case ContentType.ads:
+      case FeedType.ads:
         return ItemUserFeedAds(item: item);
-      case ContentType.avatar:
+      case FeedType.avatar:
         return ItemUserFeedAvatar(item: item);
-      case ContentType.business:
+      case FeedType.business:
         return ItemUserFeedBusiness(item: item);
-      case ContentType.cover:
+      case FeedType.cover:
         return ItemUserFeedCover(item: item);
-      case ContentType.note:
+      case FeedType.note:
         return ItemUserFeedNote(item: item);
-      case ContentType.sponsored:
+      case FeedType.sponsored:
         return ItemUserFeedSponsored(item: item);
-      case ContentType.memory:
+      case FeedType.memory:
         return ItemUserFeedMemory(item: item);
-      case ContentType.video:
+      case FeedType.video:
         return ItemUserFeedVideo(item: item);
     }
   }

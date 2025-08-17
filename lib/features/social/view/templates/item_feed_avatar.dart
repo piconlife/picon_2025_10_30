@@ -68,7 +68,7 @@ class _ItemFeedAvatarState extends State<ItemFeedAvatar> {
             },
           ),
           _Body(item: widget.item),
-          FeedFooter(item: widget.item, onLiked: (value) {}),
+          FeedFooter(item: widget.item),
         ],
       ),
     );

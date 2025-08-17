@@ -68,7 +68,7 @@ class _ItemFeedMemoryState extends State<ItemFeedMemory> {
             },
           ),
           _Body(item: widget.item),
-          FeedFooter(item: widget.item, onLiked: (value) {}),
+          FeedFooter(item: widget.item),
         ],
       ),
     );

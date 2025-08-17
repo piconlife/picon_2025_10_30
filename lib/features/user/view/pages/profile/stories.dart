@@ -8,7 +8,7 @@ import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../../app/helpers/user.dart';
 import '../../../../../app/res/icons.dart';
-import '../../../../../data/enums/content.dart';
+import '../../../../../data/enums/feed_type.dart';
 import '../../../../../data/models/user_memory.dart';
 import '../../../../../roots/widgets/scaffold_shimmer.dart';
 import '../../../../../roots/widgets/text.dart';
@@ -49,7 +49,7 @@ class _ProfileStoriesSegmentState extends State<ProfileStoriesSegment> {
             buttonText: isCurrentUser ? "Create a new story" : null,
             onButtonClick: () => context.open(
               Routes.createAMemory,
-              arguments: {"$ContentType": ContentType.memory},
+              arguments: {"$FeedType": FeedType.memory},
             ),
           );
         }

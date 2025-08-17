@@ -13,12 +13,13 @@ import 'package:in_app_navigator/in_app_navigator.dart';
 import 'package:picon/data/models/user_post.dart';
 import 'package:picon/roots/widgets/gesture.dart';
 
+import '../../../../app/dialogs/bsd_privacy.dart';
 import '../../../../app/dialogs/dialog_alert.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../app/res/labels.dart';
 import '../../../../data/constants/paths.dart';
-import '../../../../data/enums/content.dart';
+import '../../../../data/enums/feed_type.dart';
 import '../../../../data/enums/privacy.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/user.dart';
@@ -39,7 +40,6 @@ import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/texted_action.dart';
 import '../../../../routes/keys.dart';
 import '../../../../routes/paths.dart';
-import '../../../social/view/dialogs/bsd_privacy.dart';
 import '../cubits/avatar_cubit.dart';
 import '../cubits/post_cubit.dart';
 import '../widgets/edit_avatar.dart';
@@ -224,7 +224,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
         id: id,
         timeMills: Entity.generateTimeMills,
         description: etText.text.isNotEmpty ? etText.text : null,
-        photoUrl: photoUrl,
+        photo: photoUrl,
         privacy: privacy.value,
         publisher: user.id,
         path: PathReplacer.replaceByIterable(
@@ -290,7 +290,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
         publisher: user,
         reference: avatar.path,
         path: Paths.feeds,
-        type: ContentType.avatar,
+        type: FeedType.avatar,
       ),
     );
   }

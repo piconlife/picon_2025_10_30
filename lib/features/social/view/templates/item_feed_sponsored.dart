@@ -6,7 +6,7 @@ import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/res/icons.dart';
-import '../../../../data/enums/content.dart';
+import '../../../../data/enums/feed_type.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
@@ -38,14 +38,14 @@ class _ItemFeedSponsoredState extends State<ItemFeedSponsored> {
             builder: (context, user) {
               return FeedHeader(
                 title: user.name,
-                subtitle: ContentType.sponsored.value,
+                subtitle: FeedType.sponsored.value,
                 avatar: user.photo,
                 actions: [FeedHeaderMoreAction()],
               );
             },
           ),
           _Body(item: widget.item),
-          FeedFooter(item: widget.item, onLiked: (value) {}),
+          FeedFooter(item: widget.item),
         ],
       ),
     );

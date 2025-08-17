@@ -68,7 +68,7 @@ class _ItemFeedCoverState extends State<ItemFeedCover> {
             },
           ),
           _Body(item: widget.item),
-          FeedFooter(item: widget.item, onLiked: (value) {}),
+          FeedFooter(item: widget.item),
         ],
       ),
     );

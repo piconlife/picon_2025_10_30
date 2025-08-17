@@ -9,5 +9,5 @@ class LocalFeedCommentDataSource extends InAppDataSource<FeedComment> {
   });
 
   @override
-  FeedComment build(Object? source) => FeedComment.from(source);
+  FeedComment build(Object? source) => FeedComment.parse(source);
 }

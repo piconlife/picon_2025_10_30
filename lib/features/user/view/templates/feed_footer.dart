@@ -1,20 +1,13 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
-import 'package:data_management/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/helpers/user.dart';
 import '../../../../app/res/icons.dart';
-import '../../../../data/constants/keys.dart';
-import '../../../../data/enums/privacy.dart';
-import '../../../../data/models/feed_like.dart';
 import '../../../../data/models/user_post.dart';
-import '../../../../data/use_cases/feed_like/create.dart';
-import '../../../../data/use_cases/feed_like/delete.dart';
-import '../../../../data/use_cases/user_post/update.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/pleasure_button.dart';
@@ -34,41 +27,7 @@ class _UserFeedFooterState extends State<UserFeedFooter> {
   late final _observerLikes = widget.item.likes.use.obx;
 
   Future<bool> _like(bool like) async {
-    if (!like) {
-      return CreateFeedLikeUseCase.i(
-        FeedLike.create(
-          id: UserHelper.uid,
-          parentId: widget.item.id,
-          parentPath: widget.item.path,
-          privacy: Privacy.everyone,
-        ),
-      ).then((value) {
-        if (value.isSuccessful) {
-          return UpdateUserPostUseCase.i(widget.item.id, {
-            Keys.i.likes: DataFieldValue.arrayUnion([UserHelper.uid]),
-          }).then((value) {
-            return value.isSuccessful;
-          });
-        } else {
-          return false;
-        }
-      });
-    } else {
-      return DeleteFeedLikeUseCase.i(
-        id: UserHelper.uid,
-        path: widget.item.path.use,
-      ).then((value) {
-        if (value.isSuccessful) {
-          return UpdateUserPostUseCase.i(widget.item.id, {
-            Keys.i.likes: DataFieldValue.arrayRemove([UserHelper.uid]),
-          }).then((value) {
-            return value.isSuccessful;
-          });
-        } else {
-          return false;
-        }
-      });
-    }
+    return false;
   }
 
   void _updateLikes(BuildContext context, bool selected) async {

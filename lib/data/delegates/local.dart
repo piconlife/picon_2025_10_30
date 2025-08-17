@@ -629,6 +629,7 @@ abstract class InAppDataSource<T extends Entity> extends LocalDataSource<T> {
     if (id.isEmpty || data.isEmpty) return Response(status: Status.invalid);
     return execute(() {
       final ref = source(params).doc(id);
+      data = _QHelper.props(data);
       if (!isEncryptor) {
         return ref.update(data).then((value) => Response(status: Status.ok));
       }
@@ -686,6 +687,32 @@ class _Limitations {
 
 class _QHelper {
   const _QHelper._();
+
+  static fdb.InAppFieldValue? _fieldValue(DataFieldValue value) {
+    switch (value.type) {
+      case DataFieldValues.arrayUnion:
+        return fdb.InAppFieldValue.arrayUnion(value.value as List);
+      case DataFieldValues.arrayRemove:
+        return fdb.InAppFieldValue.arrayRemove(value.value as List);
+      case DataFieldValues.delete:
+        return fdb.InAppFieldValue.delete();
+      case DataFieldValues.serverTimestamp:
+        return fdb.InAppFieldValue.timestamp();
+      case DataFieldValues.increment:
+        return fdb.InAppFieldValue.increment(value.value as num);
+      case DataFieldValues.none:
+        return null;
+    }
+  }
+
+  static Map<String, Object?> props(Map<String, Object?> props) {
+    return props.map((key, value) {
+      if (value is DataFieldValue) {
+        return MapEntry(key, _fieldValue(value));
+      }
+      return MapEntry(key, value);
+    });
+  }
 
   static fdb.InAppQueryReference search(
     fdb.InAppQueryReference ref,

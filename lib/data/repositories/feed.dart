@@ -4,7 +4,7 @@ import 'package:flutter_entity/entity.dart';
 import 'package:in_app_database/in_app_database.dart';
 
 import '../../roots/helpers/connectivity.dart';
-import '../enums/content.dart';
+import '../enums/feed_type.dart';
 import '../models/feed.dart';
 import '../sources/local/feed.dart';
 import '../sources/remote/feed.dart';
@@ -72,7 +72,7 @@ class FeedRepository extends RemoteDataRepository<Feed> {
 
   Future<Feed> _filter(Feed i) async {
     switch (i.contentType) {
-      case ContentType.avatar:
+      case FeedType.avatar:
         final feedback = await GetUserAvatarUseCase.i(
           id: i.id,
           uid: i.publisher,
@@ -81,9 +81,9 @@ class FeedRepository extends RemoteDataRepository<Feed> {
         if (data == null || data.isEmpty) return i;
         return i
           ..description = data.description
-          ..photoUrls = data.photoUrl.isValid ? [data.photoUrl!] : []
+          ..photoUrls = data.photo.isValid ? [data.photo!] : []
           ..privacy = data.privacy;
-      case ContentType.cover:
+      case FeedType.cover:
         final feedback = await GetUserCoverUseCase.i(
           id: i.id,
           uid: i.publisher,
@@ -92,17 +92,17 @@ class FeedRepository extends RemoteDataRepository<Feed> {
         if (data == null) return i;
         return i
           ..description = data.description
-          ..photoUrls = data.photoUrl.isValid ? [data.photoUrl!] : []
+          ..photoUrls = data.photo.isValid ? [data.photo!] : []
           ..privacy = data.privacy;
-      case ContentType.none:
-      case ContentType.ads:
-      case ContentType.business:
-      case ContentType.note:
-      case ContentType.photo:
-      case ContentType.sponsored:
-      case ContentType.memory:
-      case ContentType.post:
-      case ContentType.video:
+      case FeedType.none:
+      case FeedType.ads:
+      case FeedType.business:
+      case FeedType.note:
+      case FeedType.photo:
+      case FeedType.sponsored:
+      case FeedType.memory:
+      case FeedType.post:
+      case FeedType.video:
         return i;
     }
   }

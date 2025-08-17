@@ -624,6 +624,7 @@ abstract class FirestoreDataSource<T extends Entity>
     if (id.isEmpty || data.isEmpty) return Response(status: Status.invalid);
     return execute(() {
       final ref = source(params).doc(id);
+      data = _QHelper.props(data);
       if (!isEncryptor) {
         return ref.update(data).then((value) => Response(status: Status.ok));
       }
@@ -682,6 +683,32 @@ class _Limitations {
 
 class _QHelper {
   const _QHelper._();
+
+  static fdb.FieldValue? _fieldValue(DataFieldValue value) {
+    switch (value.type) {
+      case DataFieldValues.arrayUnion:
+        return fdb.FieldValue.arrayUnion(value.value as List);
+      case DataFieldValues.arrayRemove:
+        return fdb.FieldValue.arrayRemove(value.value as List);
+      case DataFieldValues.delete:
+        return fdb.FieldValue.delete();
+      case DataFieldValues.serverTimestamp:
+        return fdb.FieldValue.serverTimestamp();
+      case DataFieldValues.increment:
+        return fdb.FieldValue.increment(value.value as num);
+      case DataFieldValues.none:
+        return null;
+    }
+  }
+
+  static Map<String, Object?> props(Map<String, Object?> props) {
+    return props.map((key, value) {
+      if (value is DataFieldValue) {
+        return MapEntry(key, _fieldValue(value));
+      }
+      return MapEntry(key, value);
+    });
+  }
 
   static fdb.Query<T> search<T extends Object?>(
     fdb.Query<T> ref,

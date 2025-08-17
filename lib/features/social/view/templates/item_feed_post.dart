@@ -58,9 +58,6 @@ class _ItemFeedPostState extends State<ItemFeedPost> {
           StaredFeedFooter(
             id: widget.item.id,
             path: widget.item.path.use,
-            likes: widget.item.likes,
-            stars: widget.item.stars,
-            comments: widget.item.comments,
             onLiked: (value) {},
             onStared: (value) {},
           ),

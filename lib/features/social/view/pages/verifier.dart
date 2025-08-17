@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/flutter_entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
-import '../../../../../data/enums/content.dart';
+import '../../../../../data/enums/feed_type.dart';
 import '../../../../../data/models/user.dart';
 import '../../../../../routes/paths.dart';
 import '../../../../app/res/icons.dart';
@@ -37,10 +37,8 @@ class FeedVerifierPage extends StatelessWidget {
               header: "No friends yet",
               body: "Currently no friends yet.",
               buttonText: "Make a friends",
-              onButtonClick: () => context.open(
-                Routes.createUserPost,
-                arguments: ContentType.post,
-              ),
+              onButtonClick: () =>
+                  context.open(Routes.createUserPost, arguments: FeedType.post),
             );
           }
           if (result.isEmpty && state.status.isResultNotFound) {
@@ -49,10 +47,8 @@ class FeedVerifierPage extends StatelessWidget {
               header: "No friends yet",
               body: "Currently no friends yet.",
               buttonText: "Make a friends",
-              onButtonClick: () => context.open(
-                Routes.createUserPost,
-                arguments: ContentType.post,
-              ),
+              onButtonClick: () =>
+                  context.open(Routes.createUserPost, arguments: FeedType.post),
             );
           }
 

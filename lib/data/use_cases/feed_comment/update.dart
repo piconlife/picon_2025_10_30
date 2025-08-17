@@ -11,10 +11,10 @@ class UpdateFeedCommentUseCase extends BaseFeedCommentUseCase {
   static UpdateFeedCommentUseCase get i => _i ??= UpdateFeedCommentUseCase._();
 
   Future<Response<FeedComment>> call({
-    required String referencePath,
-    required String id,
+    required String reference,
     required Map<String, dynamic> data,
   }) {
-    return repository.updateById(id, data, params: getParams(referencePath));
+    final id = "";
+    return repository.updateById(id, data, params: getParams(reference));
   }
 }

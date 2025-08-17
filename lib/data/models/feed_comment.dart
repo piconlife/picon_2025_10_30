@@ -1,88 +1,115 @@
-import '../../app/helpers/user.dart';
-import '../constants/keys.dart';
+import 'package:flutter_entity/entity.dart';
+
+import '../enums/comment_type.dart';
 import '../enums/privacy.dart';
-import 'content.dart';
-import 'user.dart';
 
-List<String> _keys = [
-  Keys.i.publisher,
-  Keys.i.id,
-  Keys.i.timeMills,
-  Keys.i.parentId,
-  Keys.i.parentPath,
-  Keys.i.privacy,
-  Keys.i.text,
-];
+class FeedCommentKeys extends EntityKey {
+  const FeedCommentKeys._();
 
-class FeedComment extends Content {
-  FeedComment({
-    super.publisher,
+  static const FeedCommentKeys i = FeedCommentKeys._();
+
+  final content = "content";
+  final path = "path";
+  final pid = "pid";
+  final privacy = "privacy";
+  final ref = "ref";
+  final type = "type";
+}
+
+class FeedComment extends Entity<FeedCommentKeys> {
+  String? content;
+  String? path;
+  String? publisher;
+  Privacy? _privacy;
+  String? reference;
+  CommentType? _type;
+
+  Privacy get privacy => _privacy ?? Privacy.everyone;
+
+  CommentType get type => _type ?? CommentType.none;
+
+  FeedComment.empty();
+
+  FeedComment._({
     super.id,
     super.timeMills,
-    super.parentId,
-    super.parentPath,
-    super.privacy,
-    super.text,
+    this.content,
+    this.path,
+    this.publisher,
+    this.reference,
+    CommentType? type,
+    Privacy? privacy,
+  }) : _type = type,
+       _privacy = privacy;
+
+  FeedComment.create({
+    required super.id,
+    required super.timeMills,
+    required this.content,
+    required this.path,
+    required this.publisher,
+    required this.reference,
+    required CommentType type,
+    required Privacy privacy,
   });
 
-  factory FeedComment.create({
-    User? publisher,
-    String? id,
-    int? timeMills,
-    String? parentId,
-    String? parentPath,
-    Privacy? privacy,
-    String? text,
-  }) {
-    publisher ??= UserHelper.user;
-    return FeedComment(
-      publisher: publisher.id,
-      id: id,
-      timeMills: timeMills,
-      parentId: parentId,
-      parentPath: parentPath,
-      privacy: privacy,
-      text: text,
-    );
-  }
-
-  factory FeedComment.from(Object? source) {
-    final data = Content.from(source);
-    return FeedComment(
-      publisher: data.publisher,
-      id: data.id,
-      timeMills: data.timeMills,
-      parentId: data.parentId,
-      parentPath: data.parentPath,
-      privacy: data.privacy,
-      text: data.text,
-    );
-  }
-
-  FeedComment withFeedComment({
-    String? publisher,
-    String? id,
-    int? timeMills,
-    String? parentId,
-    String? parentPath,
-    String? photoUrl,
-    Privacy? privacy,
-    String? text,
-  }) {
-    return FeedComment(
-      publisher: publisher ?? this.publisher,
-      id: id ?? this.id,
-      timeMills: timeMills ?? this.timeMills,
-      parentId: parentId ?? this.parentId,
-      parentPath: parentPath ?? this.parentPath,
-      privacy: privacy ?? this.privacy,
-      text: text ?? this.text,
+  factory FeedComment.parse(Object? source) {
+    if (source is! Map) return FeedComment.empty();
+    final key = FeedCommentKeys.i;
+    return FeedComment._(
+      id: source.entityValue(key.id),
+      timeMills: source.entityValue(key.timeMills),
+      content: source.entityValue(key.content),
+      path: source.entityValue(key.path),
+      publisher: source.entityValue(key.pid),
+      reference: source.entityValue(key.ref),
+      privacy: source.entityValue(key.privacy, Privacy.parse),
+      type: source.entityValue(key.type, CommentType.parse),
     );
   }
 
   @override
+  FeedCommentKeys makeKey() => FeedCommentKeys.i;
+
+  @override
   Map<String, dynamic> get source {
-    final data = super.source.entries.where((item) => _keys.contains(item.key));
-    return Map.fromEntries(data);
+    return {
+      key.id: id,
+      key.timeMills: timeMills,
+      key.content: content,
+      key.path: path,
+      key.pid: publisher,
+      key.ref: reference,
+      key.privacy: privacy,
+      key.type: type,
+    };
   }
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      timeMills.hashCode ^
+      content.hashCode ^
+      path.hashCode ^
+      publisher.hashCode ^
+      reference.hashCode ^
+      privacy.hashCode ^
+      type.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! FeedComment) return false;
+    return id == other.id &&
+        timeMills == other.timeMills &&
+        content == other.content &&
+        path == other.path &&
+        publisher == other.publisher &&
+        reference == other.reference &&
+        privacy == other.privacy &&
+        type == other.type;
+  }
+
+  @override
+  String toString() => "$FeedComment#$hashCode($filtered)";
 }

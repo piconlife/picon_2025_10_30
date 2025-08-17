@@ -8,7 +8,7 @@ import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../../app/helpers/user.dart';
 import '../../../../../app/res/icons.dart';
-import '../../../../../data/enums/content.dart';
+import '../../../../../data/enums/feed_type.dart';
 import '../../../../../data/models/user_note.dart';
 import '../../../../../roots/widgets/scaffold_shimmer.dart';
 import '../../../../../roots/widgets/text.dart';
@@ -49,7 +49,7 @@ class _ProfileNotesSegmentState extends State<ProfileNotesSegment> {
             buttonText: isCurrentUser ? "Create a new note" : null,
             onButtonClick: () => context.open(
               Routes.createANote,
-              arguments: {"$ContentType": ContentType.note},
+              arguments: {"$FeedType": FeedType.note},
             ),
           );
         }

@@ -1,7 +1,7 @@
 import '../../app/helpers/user.dart';
 import '../constants/keys.dart';
 import '../enums/audience.dart';
-import '../enums/content.dart';
+import '../enums/feed_type.dart';
 import '../enums/privacy.dart';
 import 'content.dart';
 import 'photo.dart';
@@ -106,7 +106,7 @@ class UserMemory extends Content {
     Content? recent,
     Audience? audience,
     Privacy? privacy,
-    ContentType? type,
+    FeedType? type,
     int? commentCount,
     double? latitude,
     int? likeCount,
@@ -186,7 +186,7 @@ class UserMemory extends Content {
     Content? recent,
     Audience? audience,
     Privacy? privacy,
-    ContentType? type,
+    FeedType? type,
     int? commentCount,
     double? latitude,
     int? likeCount,
@@ -241,7 +241,7 @@ class UserMemory extends Content {
       recent: recent ?? this.recent,
       audience: audience ?? this.audience,
       privacy: privacy ?? this.privacy,
-      type: type ?? contentType,
+      type: type ?? this.type,
     );
   }
 
@@ -280,7 +280,7 @@ class UserMemory extends Content {
       recent: data.recent,
       audience: data.audience,
       privacy: data.privacy,
-      type: data.contentType,
+      type: data.type,
     );
   }
 

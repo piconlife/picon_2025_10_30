@@ -6,7 +6,7 @@ import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/res/icons.dart';
-import '../../../../data/enums/content.dart';
+import '../../../../data/enums/feed_type.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
@@ -39,7 +39,7 @@ class _ItemUserFeedAdsState extends State<ItemUserFeedAds> {
               return UserFeedHeader(
                 avatar: user.photo,
                 title: user.name,
-                subtitle: ContentType.ads.value,
+                subtitle: FeedType.ads.value,
                 actions: [FeedHeaderMoreAction(onClick: () {})],
               );
             },

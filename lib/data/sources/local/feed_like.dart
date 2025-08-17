@@ -9,5 +9,5 @@ class LocalFeedLikeDataSource extends InAppDataSource<FeedLike> {
   });
 
   @override
-  FeedLike build(Object? source) => FeedLike.from(source);
+  FeedLike build(Object? source) => FeedLike.parse(source);
 }

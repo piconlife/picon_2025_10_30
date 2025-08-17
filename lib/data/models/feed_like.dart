@@ -1,81 +1,64 @@
+import 'package:flutter_entity/entity.dart';
+
 import '../../app/helpers/user.dart';
-import '../constants/keys.dart';
-import '../enums/privacy.dart';
-import 'content.dart';
-import 'user.dart';
+import '../enums/like_type.dart';
 
-List<String> _keys = [
-  Keys.i.publisher,
-  Keys.i.id,
-  Keys.i.timeMills,
-  Keys.i.parentId,
-  Keys.i.parentPath,
-  Keys.i.privacy,
-];
+class FeedLikeKeys extends EntityKey {
+  const FeedLikeKeys._();
 
-class FeedLike extends Content {
-  FeedLike({
-    super.publisher,
-    super.id,
-    super.timeMills,
-    super.parentId,
-    super.parentPath,
-    super.privacy,
-  });
+  static const FeedLikeKeys i = FeedLikeKeys._();
 
-  factory FeedLike.create({
-    User? publisher,
-    String? id,
-    int? timeMills,
-    String? parentId,
-    String? parentPath,
-    Privacy? privacy,
-  }) {
-    publisher ??= UserHelper.user;
-    return FeedLike(
-      publisher: publisher.id,
-      id: id,
-      timeMills: timeMills,
-      parentId: parentId,
-      parentPath: parentPath,
-      privacy: privacy,
-    );
-  }
+  final type = "type";
 
-  factory FeedLike.from(Object? source) {
-    final data = Content.from(source);
-    return FeedLike(
-      publisher: data.publisher,
-      id: data.id,
-      timeMills: data.timeMills,
-      parentId: data.parentId,
-      parentPath: data.parentPath,
-      privacy: data.privacy,
-    );
-  }
+  @override
+  Iterable<String> get keys => [id, timeMills, type];
+}
 
-  FeedLike withFeedLike({
-    String? publisher,
-    String? id,
-    int? timeMills,
-    String? parentId,
-    String? parentPath,
-    String? photoUrl,
-    Privacy? privacy,
-  }) {
-    return FeedLike(
-      publisher: publisher ?? this.publisher,
-      id: id ?? this.id,
-      timeMills: timeMills ?? this.timeMills,
-      parentId: parentId ?? this.parentId,
-      parentPath: parentPath ?? this.parentPath,
-      privacy: privacy ?? this.privacy,
+class FeedLike extends Entity<FeedLikeKeys> {
+  LikeType? _type;
+
+  String get publisher => id;
+
+  LikeType get type => _type ?? LikeType.like;
+
+  bool get isMe => id == UserHelper.uid;
+
+  FeedLike.empty();
+
+  FeedLike._({super.id, super.timeMills, LikeType? type}) : _type = type;
+
+  FeedLike.create({super.timeMills, LikeType? type})
+    : _type = type,
+      super.auto(id: UserHelper.uid);
+
+  factory FeedLike.parse(Object? source) {
+    if (source is! Map) return FeedLike.empty();
+    final key = FeedLikeKeys.i;
+    return FeedLike._(
+      id: source.entityValue(key.id),
+      timeMills: source.entityValue(key.timeMills),
+      type: source.entityValue(key.type, LikeType.parse),
     );
   }
 
   @override
+  FeedLikeKeys makeKey() => FeedLikeKeys.i;
+
+  @override
   Map<String, dynamic> get source {
-    final data = super.source.entries.where((item) => _keys.contains(item.key));
-    return Map.fromEntries(data);
+    return {key.id: id, key.timeMills: timeMills, key.type: _type?.name};
   }
+
+  @override
+  int get hashCode => id.hashCode ^ timeMills.hashCode ^ type.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! FeedLike) return false;
+    return id == other.id && timeMills == other.timeMills && type == other.type;
+  }
+
+  @override
+  String toString() => "$FeedLike#$hashCode($filtered)";
 }
