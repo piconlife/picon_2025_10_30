@@ -2,15 +2,14 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/utils/validator.dart';
 
-import '../../../../app/helpers/user.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../app/res/placeholders.dart';
 import '../../../../roots/widgets/avatar.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/text.dart';
+import '../widgets/follow_button.dart';
 
 class FeedHeader extends StatelessWidget {
   final String? avatar;
@@ -100,50 +99,39 @@ class FeedHeaderMoreAction extends StatelessWidget {
   }
 }
 
-class FeedHeaderFollowButton extends StatefulWidget {
+class FeedHeaderFollowButton extends StatelessWidget {
   final String? publisher;
 
   const FeedHeaderFollowButton({super.key, required this.publisher});
 
   @override
-  State<FeedHeaderFollowButton> createState() => _FeedHeaderFollowButtonState();
-}
-
-class _FeedHeaderFollowButtonState extends State<FeedHeaderFollowButton> {
-  late bool _following = Validator.isChecked(
-    widget.publisher,
-    UserHelper.followings,
-  );
-
-  void _follow(BuildContext context) {}
-
-  void _toggle(BuildContext context) {
-    setState(() => _following = !_following);
-    _follow(context);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    if (publisher == null || publisher!.isEmpty) return SizedBox();
     final dimen = context.dimens;
     final dark = context.dark;
     final primary = context.primary;
-    final splashColor = _following ? dark.t05 : primary.t05;
-    return InAppGesture(
-      splashColor: splashColor,
-      highlightColor: splashColor,
-      backgroundColor: Colors.transparent,
-      splashBorderRadius: BorderRadius.circular(dimen.dp(50)),
-      onTap: () => _toggle(context),
-      child: Padding(
-        padding: EdgeInsets.all(dimen.dp(8)),
-        child: InAppIcon(
-          _following
-              ? InAppIcons.alreadyFollow.regular
-              : InAppIcons.addFollow.regular,
-          color: _following ? dark.t25 : context.primary,
-          size: dimen.dp(24),
-        ),
-      ),
+    return InAppFollowBuilder(
+      id: publisher!,
+      builder: (context, isFollowing, callback) {
+        final splashColor = isFollowing ? dark.t05 : primary.t05;
+        return InAppGesture(
+          splashColor: splashColor,
+          highlightColor: splashColor,
+          backgroundColor: Colors.transparent,
+          splashBorderRadius: BorderRadius.circular(dimen.dp(50)),
+          onTap: callback,
+          child: Padding(
+            padding: EdgeInsets.all(dimen.dp(8)),
+            child: InAppIcon(
+              isFollowing
+                  ? InAppIcons.alreadyFollow.regular
+                  : InAppIcons.addFollow.regular,
+              color: isFollowing ? dark.t25 : context.primary,
+              size: dimen.dp(24),
+            ),
+          ),
+        );
+      },
     );
   }
 }
