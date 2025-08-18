@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
-import 'package:picon/app/helpers/user.dart';
 
 import '../../../../app/base/countable_response.dart';
+import '../../../../app/helpers/user.dart';
 import '../../../../data/enums/like_type.dart';
 import '../../../../data/models/feed_like.dart';
 import '../../../../data/use_cases/feed_like/count.dart';
@@ -42,6 +42,18 @@ class FeedLikeCubit extends Cubit<CountableResponse<FeedLike>> {
       snapshot: state.snapshot,
     ).then(_attach).catchError((error, stackTrace) {
       emit(state.copy(status: Status.failure));
+    });
+  }
+
+  void refresh({int initialSize = 30, int fetchingSize = 15}) {
+    if (reference.isEmpty) return;
+    emit(state.copy(status: Status.loading));
+    GetFeedLikesByPaginationUseCase.i(
+      referencePath: reference,
+      initialSize: initialSize,
+      fetchingSize: fetchingSize,
+    ).then((response) {
+      emit(CountableResponse.from(response));
     });
   }
 

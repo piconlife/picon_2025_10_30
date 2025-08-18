@@ -1,96 +1,73 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_andomie/models/selection.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 
-import '../../../../app/base/data_cubit.dart';
+import '../../../../app/base/countable_response.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../data/models/user_following.dart';
 import '../../../../data/use_cases/user_following/create.dart';
 import '../../../../data/use_cases/user_following/delete.dart';
 import '../../../../data/use_cases/user_following/get.dart';
-import '../../../../data/use_cases/user_following/update.dart';
 
-class UserFollowingCubit extends DataCubit<Selection<UserFollowing>> {
-  final String? uid;
+class UserFollowingCubit extends Cubit<CountableResponse<UserFollowing>> {
+  final String uid;
 
-  UserFollowingCubit([String? uid]) : uid = uid ?? UserHelper.uid;
+  UserFollowingCubit([String? uid])
+    : uid = uid ?? UserHelper.uid,
+      super(CountableResponse(count: 0));
 
-  @override
-  void fetch() async {
-    if (uid == null || uid!.isEmpty) {
-      return emit(state.copy(status: Status.notFound));
-    }
+  void fetch({int initialSize = 30, int fetchingSize = 15}) {
+    if (uid.isEmpty) return;
     emit(state.copy(status: Status.loading));
-    GetUserFollowingsUseCase.i().then(_attach).catchError((error, st) {
+    GetUserFollowingsUseCase.i().then(_attach).catchError((error, stackTrace) {
       emit(state.copy(status: Status.failure));
     });
   }
 
-  @override
-  void insert(BuildContext context, Selection<UserFollowing> data) {
-    emit(state.copy(result: put(data, 0)));
-    CreateUserFollowingUseCase.i(data.data).then((value) {
-      if (value.isSuccessful) return;
-      emit(state.copy(result: pop(data.id)));
-    });
-  }
-
-  @override
-  void delete(BuildContext context, String id) {
-    emit(state.copy(result: change(id, (e) => e.copy(loading: true))));
-    DeleteUserFollowingUseCase.i(id).then((value) {
-      if (value.isSuccessful) {
-        emit(state.copy(result: remove(id)));
-        return;
-      }
-      emit(state.copy(result: change(id, (e) => e.copy(loading: false))));
-    });
-  }
-
-  @override
-  void update(BuildContext context, String id, Map<String, dynamic> updates) {
-    emit(
-      state.copy(
-        result: change(id, (e) {
-          return e.copy(loading: true);
-        }),
-      ),
-    );
-    UpdateUserFollowingUseCase.i(id, updates).then((value) {
-      if (value.isSuccessful) {
-        emit(
-          state.copy(
-            result: change(id, (e) {
-              return e.copy(loading: false, data: value.data);
-            }),
-          ),
-        );
-        return;
-      }
-      emit(state.copy(result: change(id, (e) => e.copy(loading: false))));
-    });
-  }
-
   void _attach(Response<UserFollowing> response) {
-    final data = state.result;
-    if (response.result.isNotEmpty) {
-      data.addAll(
-        response.result.map((e) {
-          return Selection(
-            id: e.id,
-            data: e,
-            selected: UserHelper.followings.contains(e.id),
-          );
-        }),
-      );
-    }
     emit(
       state.copy(
         status: response.status,
         snapshot: response.snapshot,
-        result: data,
+        result: response.result,
         requestCode: 0,
       ),
     );
+  }
+
+  UserFollowing? following(String uid) => state.elementOf((e) => e.id == uid);
+
+  void toggle(String uid, [UserFollowing? data]) {
+    if (data != null) {
+      unfollow(data);
+    } else {
+      follow(uid);
+    }
+  }
+
+  void follow(String uid) {
+    if (uid.isEmpty) return;
+    final data = UserFollowing.create(uid: uid);
+    emit(
+      state.copy(result: state.result..insert(0, data), count: state.count + 1),
+    );
+    CreateUserFollowingUseCase.i(data).then((value) {
+      if (!value.isSuccessful) {
+        emit(state.copy(result: state.result..remove(data)));
+      }
+      return value;
+    });
+  }
+
+  void unfollow(UserFollowing data) {
+    if (data.id.isEmpty) return;
+    emit(
+      state.copy(result: state.result..remove(data), count: state.count - 1),
+    );
+    DeleteUserFollowingUseCase.i(data.id).then((value) {
+      if (!value.isSuccessful) {
+        emit(state.copy(result: state.result..insert(0, data)));
+      }
+      return value;
+    });
   }
 }

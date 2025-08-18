@@ -1,6 +1,6 @@
 import 'package:flutter_entity/entity.dart';
 
-class CountableResponse<T extends Entity> extends Response<T> {
+class CountableResponse<T extends Object> extends Response<T> {
   final int count;
   final List<T> resultByMe;
 
@@ -30,6 +30,41 @@ class CountableResponse<T extends Entity> extends Response<T> {
     this.count = 0,
     List<T>? resultByMe,
   }) : resultByMe = resultByMe ?? [];
+
+  factory CountableResponse.from(Response<T> response) {
+    return CountableResponse(
+      requestCode: response.requestCode,
+      data: response.data,
+      backups: response.backups,
+      ignores: response.ignores,
+      result: response.result,
+      progress: response.progress,
+      status: response.status,
+      error: response.error,
+      message: response.message,
+      feedback: response.feedback,
+      snapshot: response.snapshot,
+    );
+  }
+
+  static CountableResponse<E> convert<E extends Object, T extends Object>(
+    Response<T> response,
+    E Function(T) converter,
+  ) {
+    return CountableResponse<E>(
+      requestCode: response.requestCode,
+      data: response.data != null ? converter(response.data!) : null,
+      backups: response.backups.map(converter).toList(),
+      ignores: response.ignores.map(converter).toList(),
+      result: response.result.map(converter).toList(),
+      progress: response.progress,
+      status: response.status,
+      error: response.error,
+      message: response.message,
+      feedback: response.feedback,
+      snapshot: response.snapshot,
+    );
+  }
 
   @override
   CountableResponse<T> copy({

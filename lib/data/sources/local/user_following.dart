@@ -9,5 +9,5 @@ class LocalUserFollowingDataSource extends InAppDataSource<UserFollowing> {
   });
 
   @override
-  UserFollowing build(Object? source) => UserFollowing.from(source);
+  UserFollowing build(Object? source) => UserFollowing.parse(source);
 }

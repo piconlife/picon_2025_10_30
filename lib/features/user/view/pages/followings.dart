@@ -1,6 +1,5 @@
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 
@@ -33,7 +32,7 @@ class _UserFollowingsPageState extends State<UserFollowingsPage> {
             ? "${widget.user?.username ?? ""}'s followings"
             : "Followings",
       ),
-      body: BlocBuilder<UserFollowingCubit, Response<Selection<UserFollowing>>>(
+      body: BlocBuilder<UserFollowingCubit, Response<UserFollowing>>(
         builder: (context, response) {
           if (response.isLoading) {
             return InAppScaffoldShimmer();
@@ -53,7 +52,7 @@ class _UserFollowingsPageState extends State<UserFollowingsPage> {
             itemCount: response.result.length,
             itemBuilder: (context, index) {
               final item = response.result.elementAt(index);
-              return ItemUserFollowing(selection: item);
+              return ItemUserFollowing(data: item);
             },
           );
         },

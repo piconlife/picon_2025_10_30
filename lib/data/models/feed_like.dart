@@ -23,6 +23,8 @@ class FeedLike extends Entity<FeedLikeKeys> {
 
   bool get isMe => id == UserHelper.uid;
 
+  bool get isEmpty => id.isEmpty;
+
   FeedLike.empty();
 
   FeedLike._({super.id, super.timeMills, LikeType? type}) : _type = type;

@@ -12,7 +12,6 @@ import 'view/cubits/avatar_cubit.dart';
 import 'view/cubits/cover_cubit.dart';
 import 'view/cubits/follower_counter_cubit.dart';
 import 'view/cubits/follower_cubit.dart';
-import 'view/cubits/following_counter_cubit.dart';
 import 'view/cubits/following_cubit.dart';
 import 'view/cubits/memory_cubit.dart';
 import 'view/cubits/note_cubit.dart';
@@ -147,9 +146,6 @@ Widget _profile(BuildContext context, Object? args) {
   UserFollowerCounterCubit? followerCounterCubit = args.findOrNull(
     key: "$UserFollowerCounterCubit",
   );
-  UserFollowingCounterCubit? followingCounterCubit = args.findOrNull(
-    key: "$UserFollowingCounterCubit",
-  );
   return MultiBlocProvider(
     providers: [
       if (followerCubit != null) BlocProvider.value(value: followerCubit),
@@ -208,13 +204,6 @@ Widget _profile(BuildContext context, Object? args) {
           : BlocProvider(
               create: (context) {
                 return UserFollowerCounterCubit(uid)..fetch();
-              },
-            ),
-      followingCounterCubit != null
-          ? BlocProvider.value(value: followingCounterCubit)
-          : BlocProvider(
-              create: (context) {
-                return UserFollowingCounterCubit(uid)..fetch();
               },
             ),
     ],
@@ -304,25 +293,11 @@ Widget _profileFollowings(BuildContext context, Object? args) {
   UserFollowingCubit? followingCubit = args.findOrNull(
     key: "$UserFollowingCubit",
   );
-  UserFollowingCounterCubit? followingCounterCubit = args.findOrNull(
-    key: "$UserFollowingCounterCubit",
-  );
   return MultiBlocProvider(
     providers: [
       followingCubit != null
           ? BlocProvider.value(value: followingCubit)
-          : BlocProvider(
-              create: (context) {
-                return UserFollowingCubit(user?.id)..fetch();
-              },
-            ),
-      followingCounterCubit != null
-          ? BlocProvider.value(value: followingCounterCubit)
-          : BlocProvider(
-              create: (context) {
-                return UserFollowingCounterCubit(user?.id)..fetch();
-              },
-            ),
+          : BlocProvider(create: (context) => UserFollowingCubit(user?.id)),
     ],
     child: UserFollowingsPage(args: args, user: user),
   );

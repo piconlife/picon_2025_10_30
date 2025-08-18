@@ -246,6 +246,14 @@ class User extends Auth<UserKeys> {
 
   double get rating => _rating ?? Limitations.userRating;
 
+  String? get protectedBio => biography;
+
+  String? get protectedName => name;
+
+  String? get protectedProfession => profession;
+
+  String? get protectedTitle => title;
+
   bool get isRatedUser => rating >= 4;
 
   bool get isCelebrityUser => rating >= 5;
@@ -639,7 +647,7 @@ class User extends Auth<UserKeys> {
   }
 
   @override
-  String toString() => "$User#$hashCode($json)";
+  String toString() => "$User#$hashCode($filteredJson)";
 }
 
 enum Gender {

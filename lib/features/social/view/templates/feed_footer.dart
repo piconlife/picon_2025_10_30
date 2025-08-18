@@ -16,6 +16,7 @@ import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/pleasure_button.dart';
 import '../../../../roots/widgets/text.dart';
+import '../../../user/view/cubits/following_cubit.dart';
 import '../cubits/comment_cubit.dart';
 import '../cubits/like_cubit.dart';
 
@@ -34,12 +35,23 @@ class _FeedFooterState extends State<FeedFooter> {
 
   void _like() => likeCubit.toggle();
 
-  void _seeLikes() {}
+  void _seeLikes() {
+    context.open(
+      Routes.likes,
+      arguments: {
+        "$FeedLikeCubit": context.read<FeedLikeCubit>(),
+        "$UserFollowingCubit": context.read<UserFollowingCubit>(),
+      },
+    );
+  }
 
   void _seeComments() {
     context.open(
       Routes.comments,
-      arguments: {"$FeedCommentCubit": context.read<FeedCommentCubit>()},
+      arguments: {
+        "$FeedCommentCubit": context.read<FeedCommentCubit>(),
+        "$UserFollowingCubit": context.read<UserFollowingCubit>(),
+      },
     );
   }
 

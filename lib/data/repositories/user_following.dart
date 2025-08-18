@@ -70,7 +70,8 @@ class UserFollowingRepository extends RemoteDataRepository<UserFollowing> {
   Future<UserFollowing?> _value(UserFollowing? i) async {
     if (i == null) return null;
     return GetUserUseCase.i(i.id).then((value) {
-      return i.copy(user: value.data);
+      if (!value.isValid) return i;
+      return i..content = value.data!;
     });
   }
 }

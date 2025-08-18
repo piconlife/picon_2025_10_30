@@ -6,5 +6,5 @@ class RemoteUserFollowingDataSource extends FirestoreDataSource<UserFollowing> {
   RemoteUserFollowingDataSource({super.path = Paths.userFollowings});
 
   @override
-  UserFollowing build(Object? source) => UserFollowing.from(source);
+  UserFollowing build(Object? source) => UserFollowing.parse(source);
 }
