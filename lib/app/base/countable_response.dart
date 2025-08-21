@@ -2,9 +2,12 @@ import 'package:flutter_entity/entity.dart';
 
 class CountableResponse<T extends Object> extends Response<T> {
   final int count;
+  final List<String> selections;
   final List<T> resultByMe;
 
   bool get isExistByMe => resultByMe.isNotEmpty;
+
+  bool isExist(String id) => selections.contains(id);
 
   T? elementOf(bool Function(T) test, [int? index]) {
     try {
@@ -29,9 +32,14 @@ class CountableResponse<T extends Object> extends Response<T> {
     super.snapshot,
     this.count = 0,
     List<T>? resultByMe,
-  }) : resultByMe = resultByMe ?? [];
+    List<String>? selections,
+  }) : resultByMe = resultByMe ?? [],
+       selections = selections ?? [];
 
-  factory CountableResponse.from(Response<T> response) {
+  factory CountableResponse.from(
+    Response<T> response,
+    String Function(T) test,
+  ) {
     return CountableResponse(
       requestCode: response.requestCode,
       data: response.data,
@@ -44,6 +52,7 @@ class CountableResponse<T extends Object> extends Response<T> {
       message: response.message,
       feedback: response.feedback,
       snapshot: response.snapshot,
+      selections: response.result.map(test).toList(),
     );
   }
 
@@ -81,6 +90,7 @@ class CountableResponse<T extends Object> extends Response<T> {
     snapshot,
     int? count,
     List<T>? resultByMe,
+    List<String>? selections,
   }) {
     return CountableResponse(
       requestCode: requestCode ?? this.requestCode,
@@ -96,6 +106,7 @@ class CountableResponse<T extends Object> extends Response<T> {
       snapshot: snapshot ?? this.snapshot,
       count: count ?? this.count,
       resultByMe: resultByMe ?? this.resultByMe,
+      selections: selections ?? this.selections,
     );
   }
 }

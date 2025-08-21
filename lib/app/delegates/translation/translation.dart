@@ -1,12 +1,19 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_andomie/utils/settings.dart';
 import 'package:flutter_andomie/utils/translation.dart';
 
 import '../../../roots/preferences/preferences.dart';
 import '../../dialogs/bsd_locale.dart';
 import '../../res/listeners.dart';
+import '../../settings/remote.dart';
 
 class InAppTranslationDelegate extends TranslationDelegate {
+  @override
+  Future<Object?> get defaultLocale async {
+    return RemoteSettings.translationSavedLocale;
+  }
+
   @override
   Future<Map?> cache(String name, String path) async {
     path = "$name/$path";
@@ -53,6 +60,7 @@ class InAppTranslationDelegate extends TranslationDelegate {
 
   @override
   Future<void> changed(Locale locale) async {
+    Settings.set(kTranslationSavedLocale, locale.toString());
     InAppListeners.translationsLocaleChanged(locale);
   }
 

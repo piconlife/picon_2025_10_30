@@ -1,5 +1,4 @@
 import 'package:data_management/data_management.dart';
-import 'package:in_app_database/in_app_database.dart';
 
 import '../../roots/helpers/connectivity.dart';
 import '../models/photo.dart';
@@ -17,6 +16,6 @@ class PhotoRepository extends RemoteDataRepository<Photo> {
 
   static PhotoRepository get i => _i ??= PhotoRepository(
     source: RemotePhotoDataSource(),
-    backup: LocalPhotoDataSource(database: InAppDatabase.i),
+    backup: LocalPhotoDataSource(),
   );
 }

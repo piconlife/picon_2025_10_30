@@ -1,5 +1,4 @@
 import 'package:data_management/data_management.dart';
-import 'package:in_app_database/in_app_database.dart';
 
 import '../../roots/helpers/connectivity.dart';
 import '../models/feed_like.dart';
@@ -17,6 +16,6 @@ class FeedLikeRepository extends RemoteDataRepository<FeedLike> {
 
   static FeedLikeRepository get i => _i ??= FeedLikeRepository(
     source: RemoteFeedLikeDataSource(),
-    backup: LocalFeedLikeDataSource(database: InAppDatabase.i),
+    backup: LocalFeedLikeDataSource(),
   );
 }

@@ -1,723 +1,199 @@
-import 'dart:async';
+import 'package:data_management/core.dart';
+import 'package:in_app_database/in_app_database.dart';
 
-import 'package:async/async.dart';
-import 'package:data_management/data_management.dart';
-import 'package:flutter_entity/entity.dart';
-import 'package:in_app_database/in_app_database.dart' as fdb;
+class LocalWriteBatch extends DataWriteBatch {
+  late InAppWriteBatch batch;
+  final InAppDatabase db;
 
-///
-/// You can use base class [Data] without [Entity]
-///
-abstract class InAppDataSource<T extends Entity> extends LocalDataSource<T> {
-  final fdb.InAppDatabase database;
+  LocalWriteBatch(this.db);
 
-  const InAppDataSource({
-    required super.path,
-    required this.database,
-    super.reloadDuration,
-  });
-
-  fdb.InAppQueryReference source(DataFieldParams? params) {
-    return database.collection(params.generate(path));
-  }
-
-  /// Method to check data by ID with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// repository.checkById(
-  ///   'userId123',
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   @override
-  Future<Response<T>> checkById(
-    String id, {
-    DataFieldParams? params,
-    Object? args,
-  }) {
-    return execute(() {
-      return source(params).doc(id).get().then((value) async {
-        if (!value.exists) return Response(status: Status.notFound);
-        final v = isEncryptor ? await encryptor.output(value.data) : value.data;
-        return Response(status: Status.ok, data: build(v), snapshot: value);
-      });
-    });
-  }
-
-  /// Method to clear data with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// repository.clear(
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
-  @override
-  Future<Response<T>> clear({DataFieldParams? params, Object? args}) {
-    return execute(() {
-      return source(params).get().then((value) {
-        if (!value.exists) return Response(status: Status.notFound);
-        final ids = value.docs.map((e) => e.id).toList();
-        if (ids.isEmpty) return Response(status: Status.notFound);
-        return deleteByIds(ids, params: params).then((deleted) {
-          return deleted.copy(
-            backups: value.docs.map((e) => build(e.data)).toList(),
-            snapshot: value,
-            status: Status.ok,
-          );
-        });
-      });
-    });
+  void init() {
+    batch = db.batch();
   }
 
   @override
-  Future<Response<int>> count({DataFieldParams? params, Object? args}) {
-    return execute(() {
-      return source(params).count().get().then((value) {
-        return Response(status: Status.ok, data: value.count);
-      });
-    });
+  Future<void> commit() async {
+    await batch.commit();
   }
 
-  /// Method to create data with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// T newData = //...;
-  /// repository.create(
-  ///   newData,
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   @override
-  Future<Response<T>> create(
-    T data, {
-    DataFieldParams? params,
-    Object? args,
-  }) async {
-    if (data.id.isEmpty) return Response(status: Status.invalidId);
-    return execute(() {
-      final ref = source(params).doc(data.id);
-      if (isEncryptor) {
-        return encryptor.input(data.filtered).then((raw) {
-          if (raw.isEmpty) {
-            return Response(status: Status.error, error: "Encryption error!");
-          }
-          return ref.set(raw).then((value) {
-            return Response(
-              status: value == null ? Status.error : Status.ok,
-              data: value == null ? null : build(value.data),
-            );
-          });
-        });
-      } else {
-        final options = const fdb.InAppSetOptions(merge: true);
-        return ref.set(data.filtered, options).then((value) {
-          return Response(
-            status: value == null ? Status.error : Status.ok,
-            data: value == null ? null : build(value.data),
-          );
-        });
-      }
-    });
+  void delete(String path) {
+    batch.delete(db.doc(path));
   }
 
-  /// Method to create multiple data entries with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// List<T> newDataList = //...;
-  /// repository.creates(
-  ///   newDataList,
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   @override
-  Future<Response<T>> creates(
-    List<T> data, {
-    DataFieldParams? params,
-    Object? args,
-  }) async {
-    if (data.isEmpty) return Response(status: Status.invalid);
-    return execute(() {
-      final callbacks = data.map((e) => create(e, params: params));
-      return Future.wait(callbacks).then((value) {
-        final x = value.where((e) => e.isSuccessful);
-        return Response(
-          status: x.length == data.length ? Status.ok : Status.canceled,
-          snapshot: value,
-        );
-      });
-    });
+  void set(String path, Object data, [bool merge = true]) {
+    batch.set(db.doc(path), data, InAppSetOptions(merge: merge));
   }
 
-  /// Method to delete data by ID with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// repository.deleteById(
-  ///   'userId123',
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   @override
-  Future<Response<T>> deleteById(
-    String id, {
-    DataFieldParams? params,
-    Object? args,
-  }) async {
-    if (id.isEmpty) return Response(status: Status.invalidId);
-    return execute(() {
-      return getById(id).then((old) {
-        if (!old.isValid) return old;
-        return source(params).doc(id).delete().then((value) {
-          return Response(
-            status: value ? Status.ok : Status.canceled,
-            backups: [old.data!],
-          );
-        });
-      });
-    });
-  }
-
-  /// Method to delete data by multiple IDs with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// List<String> idsToDelete = ['userId1', 'userId2'];
-  /// repository.deleteByIds(
-  ///   idsToDelete,
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
-  @override
-  Future<Response<T>> deleteByIds(
-    List<String> ids, {
-    DataFieldParams? params,
-    Object? args,
-  }) async {
-    if (ids.isEmpty) return Response(status: Status.invalid);
-    return execute(() {
-      final callbacks = ids.map((e) => deleteById(e, params: params));
-      return Future.wait(callbacks).then((value) {
-        final x = value.where((e) => e.isSuccessful);
-        return Response(
-          status: x.length == ids.length ? Status.ok : Status.canceled,
-          snapshot: value,
-          backups: value.map((e) => e.data).whereType<T>().toList(),
-        );
-      });
-    });
-  }
-
-  /// Method to get data with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// repository.get(
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
-  @override
-  Future<Response<T>> get({
-    DataFieldParams? params,
-    Object? args,
-    bool onlyUpdates = false,
-  }) async {
-    return execute(() {
-      List<T> result = [];
-      List<fdb.InAppDocumentSnapshot> docs = [];
-      return source(params).get().then((event) async {
-        if (event.docs.isEmpty && event.docChanges.isEmpty) {
-          return Response(status: Status.notFound);
-        }
-        result.clear();
-        docs.clear();
-        docs = onlyUpdates
-            ? event.docChanges.map((e) => e.doc).toList()
-            : event.docs;
-        for (var i in docs) {
-          if (!i.exists) continue;
-          final v = isEncryptor ? await encryptor.output(i.data) : i.data;
-          result.add(build(v));
-        }
-        if (result.isEmpty) return Response(status: Status.notFound);
-        return Response(result: result, snapshot: docs, status: Status.ok);
-      });
-    });
-  }
-
-  /// Method to get data by ID with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// repository.getById(
-  ///   'userId123',
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
-  @override
-  Future<Response<T>> getById(
-    String id, {
-    DataFieldParams? params,
-    Object? args,
-  }) async {
-    if (id.isEmpty) return Response(status: Status.invalidId);
-    return execute(() {
-      return source(params).doc(id).get().then((event) async {
-        if (!event.exists) return Response(status: Status.notFound);
-        final data = event.data;
-        final v = isEncryptor ? await encryptor.output(data) : data;
-        return Response(status: Status.ok, data: build(v), snapshot: event);
-      });
-    });
-  }
-
-  /// Method to get data by multiple IDs with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// List<String> idsToRetrieve = ['userId1', 'userId2'];
-  /// repository.getByIds(
-  ///   idsToRetrieve,
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
-  @override
-  Future<Response<T>> getByIds(
-    List<String> ids, {
-    DataFieldParams? params,
-    Object? args,
-  }) async {
-    if (ids.isEmpty) return Response(status: Status.invalid);
-    return execute(() {
-      if (ids.length > _Limitations.whereIn) {
-        final callbacks = ids.map((e) => getById(e, params: params));
-        return Future.wait(callbacks).then((value) {
-          final x = value.where((e) => e.isSuccessful);
-          return Response(
-            status: x.length == ids.length ? Status.ok : Status.canceled,
-            snapshot: fdb.InAppQuerySnapshot(
-              path,
-              value
-                  .map((e) => e.snapshot)
-                  .whereType<fdb.InAppDocumentSnapshot>()
-                  .toList(),
-            ),
-            result: value.map((e) => e.data).whereType<T>().toList(),
-          );
-        });
-      } else {
-        List<T> result = [];
-        return source(
-          params,
-        ).where(DataFieldPath.documentId, whereIn: ids).get().then((
-          event,
-        ) async {
-          if (!event.exists) return Response(status: Status.notFound);
-          result.clear();
-          for (var i in event.docs) {
-            if (i.exists) {
-              var data = i.data;
-              var v = isEncryptor ? await encryptor.output(data) : data;
-              result.add(build(v));
-            }
-          }
-          if (result.isEmpty) return Response(status: Status.notFound);
-          return Response(status: Status.ok, result: result, snapshot: event);
-        });
-      }
-    });
-  }
-
-  /// Method to get data by query with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// List<Query> queries = [Query.field('name', 'John')];
-  /// repository.getByQuery(
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  ///   queries: queries,
-  /// );
-  /// ```
-  @override
-  Future<Response<T>> getByQuery({
-    DataFieldParams? params,
-    List<DataQuery> queries = const [],
-    List<DataSelection> selections = const [],
-    List<DataSorting> sorts = const [],
-    DataPagingOptions options = const DataPagingOptions(),
-    Object? args,
-    bool onlyUpdates = false,
-  }) async {
-    return execute(() {
-      List<T> result = [];
-      List<fdb.InAppDocumentSnapshot> docs = [];
-      return _QHelper.query(
-        reference: source(params),
-        queries: queries,
-        sorts: sorts,
-        selections: selections,
-        options: options,
-      ).get().then((event) async {
-        if (event.docs.isEmpty && event.docChanges.isEmpty) {
-          return Response(status: Status.notFound);
-        }
-        result.clear();
-        docs.clear();
-        docs = onlyUpdates
-            ? event.docChanges.map((e) => e.doc).toList()
-            : event.docs;
-        for (var i in docs) {
-          if (!i.exists) continue;
-          final v = isEncryptor ? await encryptor.output(i.data) : i.data;
-          result.add(build(v));
-        }
-        if (result.isEmpty) return Response(status: Status.notFound);
-        return Response(result: result, snapshot: docs, status: Status.ok);
-      });
-    });
-  }
-
-  /// Stream method to listen for data changes with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// repository.listen(
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
-  @override
-  Stream<Response<T>> listen({
-    DataFieldParams? params,
-    Object? args,
-    bool onlyUpdates = false,
-  }) {
-    return executeStream(() {
-      List<T> result = [];
-      List<fdb.InAppDocumentSnapshot> docs = [];
-      return source(params).snapshots().asyncMap((event) async {
-        if (event.docs.isEmpty && event.docChanges.isEmpty) {
-          return Response(status: Status.notFound);
-        }
-        result.clear();
-        docs.clear();
-        docs = onlyUpdates
-            ? event.docChanges.map((e) => e.doc).toList()
-            : event.docs;
-        for (var i in docs) {
-          if (!i.exists) continue;
-          final v = isEncryptor ? await encryptor.output(i.data) : i.data;
-          result.add(build(v));
-        }
-        if (result.isEmpty) return Response(status: Status.notFound);
-        return Response(result: result, snapshot: docs, status: Status.ok);
-      });
-    });
-  }
-
-  /// Method to listenCount data with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// repository.listenCount(
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
-  @override
-  Stream<Response<int>> listenCount({DataFieldParams? params, Object? args}) {
-    return executeStream(() {
-      return source(params).count().snapshots().map((e) {
-        return Response(data: e.count, status: Status.ok);
-      });
-    });
-  }
-
-  /// Stream method to listen for data changes by ID with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// repository.listenById(
-  ///   'userId123',
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
-  @override
-  Stream<Response<T>> listenById(
-    String id, {
-    DataFieldParams? params,
-    Object? args,
-  }) {
-    if (id.isEmpty) return Stream.value(Response(status: Status.invalidId));
-    return executeStream(() {
-      return source(params).doc(id).snapshots().asyncMap((event) async {
-        if (!event.exists) return Response(status: Status.notFound);
-        var data = event.data;
-        final v = isEncryptor ? await encryptor.output(data) : data;
-        return Response(status: Status.ok, data: build(v), snapshot: event);
-      });
-    });
-  }
-
-  /// Stream method to listen for data changes by multiple IDs with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// List<String> idsToListen = ['userId1', 'userId2'];
-  /// repository.listenByIds(
-  ///   idsToListen,
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
-  @override
-  Stream<Response<T>> listenByIds(
-    List<String> ids, {
-    DataFieldParams? params,
-    Object? args,
-  }) {
-    if (ids.isEmpty) return Stream.value(Response(status: Status.invalid));
-    return executeStream(() {
-      if (ids.length > _Limitations.whereIn) {
-        Map<String, T> map = {};
-        Map<String, fdb.InAppDocumentSnapshot> snaps = {};
-        return StreamGroup.merge(
-          ids.map((e) {
-            return listenById(e, params: params);
-          }),
-        ).map((event) {
-          final data = event.data;
-          final snap = event.snapshot;
-          if (data != null) map[data.id] = data;
-          if (snap is fdb.InAppDocumentSnapshot) snaps[snap.id] = snap;
-          if (map.isEmpty) return Response(status: Status.notFound);
-          return Response(
-            result: map.values.toList(),
-            snapshot: snaps.values.toList(),
-            status: Status.ok,
-          );
-        });
-      } else {
-        List<T> result = [];
-        return source(params)
-            .where(DataFieldPath.documentId, whereIn: ids)
-            .snapshots()
-            .asyncMap((event) async {
-              result.clear();
-              if (event.docs.isNotEmpty) {
-                for (final i in event.docs) {
-                  final data = i.data;
-                  if (i.exists) {
-                    final v = isEncryptor ? await encryptor.output(data) : data;
-                    result.add(build(v));
-                  }
-                }
-                if (result.isEmpty) return Response(status: Status.notFound);
-                return Response(
-                  status: Status.ok,
-                  result: result,
-                  snapshot: event.docs,
-                );
-              }
-              return Response(status: Status.notFound);
-            });
-      }
-    });
-  }
-
-  /// Stream method to listen for data changes by query with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// List<Query> queries = [Query.field('name', 'John')];
-  /// repository.listenByQuery(
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  ///   queries: queries,
-  /// );
-  /// ```
-  @override
-  Stream<Response<T>> listenByQuery({
-    DataFieldParams? params,
-    List<DataQuery> queries = const [],
-    List<DataSelection> selections = const [],
-    List<DataSorting> sorts = const [],
-    DataPagingOptions options = const DataPagingOptions(),
-    Object? args,
-    bool onlyUpdates = false,
-  }) {
-    return executeStream(() {
-      List<T> result = [];
-      List<fdb.InAppDocumentSnapshot> docs = [];
-      return _QHelper.query(
-        reference: source(params),
-        queries: queries,
-        sorts: sorts,
-        selections: selections,
-        options: options,
-      ).snapshots().asyncMap((event) async {
-        if (event.docs.isEmpty && event.docChanges.isEmpty) {
-          return Response(status: Status.notFound);
-        }
-        result.clear();
-        docs.clear();
-        docs = onlyUpdates
-            ? event.docChanges.map((e) => e.doc).toList()
-            : event.docs;
-        for (var i in docs) {
-          if (!i.exists) continue;
-          final v = isEncryptor ? await encryptor.output(i.data) : i.data;
-          result.add(build(v));
-        }
-        if (result.isEmpty) return Response(status: Status.notFound);
-        return Response(result: result, snapshot: docs, status: Status.ok);
-      });
-    });
-  }
-
-  /// Method to check data by query with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// Checker checker = Checker(field: 'status', value: 'active');
-  /// repository.search(
-  ///   checker,
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
-  @override
-  Future<Response<T>> search(
-    Checker checker, {
-    DataFieldParams? params,
-    Object? args,
-  }) async {
-    if (checker.field.isEmpty) return Response(status: Status.invalid);
-    return execute(() {
-      List<T> result = [];
-      return _QHelper.search(source(params), checker).get().then((event) async {
-        if (!event.exists) return Response(status: Status.notFound);
-        result.clear();
-        for (final i in event.docs) {
-          if (i.exists) {
-            final data = i.data;
-            final v = isEncryptor ? await encryptor.output(data) : data;
-            result.add(build(v));
-          }
-        }
-        if (result.isEmpty) return Response(status: Status.notFound);
-        return Response(status: Status.ok, result: result, snapshot: event);
-      });
-    });
-  }
-
-  /// Method to update data by ID with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// repository.updateById(
-  ///   'userId123',
-  ///   {'status': 'inactive'},
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
-  @override
-  Future<Response<T>> updateById(
-    String id,
-    Map<String, dynamic> data, {
-    DataFieldParams? params,
-    Object? args,
-  }) async {
-    if (id.isEmpty || data.isEmpty) return Response(status: Status.invalid);
-    return execute(() {
-      final ref = source(params).doc(id);
-      data = _QHelper.props(data);
-      if (!isEncryptor) {
-        return ref.update(data).then((value) => Response(status: Status.ok));
-      }
-      return getById(id, params: params).then((value) async {
-        final x = value.data?.filtered ?? {};
-        x.addAll(data);
-        final v = await encryptor.input(x);
-        if (v.isEmpty) return Response(status: Status.nullable);
-        return ref.update(v).then((value) => Response(status: Status.ok));
-      });
-    });
-  }
-
-  /// Method to update data by multiple IDs with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// List<UpdatingInfo> updates = [
-  ///   UpdatingInfo('userId1', {'status': 'inactive'}),
-  ///   UpdatingInfo('userId2', {'status': 'active'}),
-  /// ];
-  /// repository.updateByIds(
-  ///   updates,
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
-  @override
-  Future<Response<T>> updateByIds(
-    List<UpdatingInfo> updates, {
-    DataFieldParams? params,
-    Object? args,
-  }) async {
-    if (updates.isEmpty) return Response(status: Status.invalid);
-    return execute(() {
-      final callbacks = updates.map((e) {
-        return updateById(e.id, e.data, params: params);
-      });
-      return Future.wait(callbacks).then((value) {
-        final x = value.where((e) => e.isSuccessful);
-        return Response(
-          status: x.length == updates.length ? Status.ok : Status.canceled,
-          snapshot: value,
-          backups: value.map((e) => e.data).whereType<T>().toList(),
-        );
-      });
-    });
+  void update(String path, Map<String, dynamic> data) {
+    batch.update(db.doc(path), data);
   }
 }
 
-class _Limitations {
-  const _Limitations._();
+class LocalDataDelegate extends DataDelegate {
+  final InAppDatabase _db;
 
-  static const whereIn = 10;
-}
+  const LocalDataDelegate._(this._db);
 
-class _QHelper {
-  const _QHelper._();
+  static LocalDataDelegate? _i;
 
-  static fdb.InAppFieldValue? _fieldValue(DataFieldValue value) {
+  static LocalDataDelegate get i => instance;
+
+  static LocalDataDelegate get instance {
+    return _i ??= LocalDataDelegate._(InAppDatabase.instance);
+  }
+
+  @override
+  DataWriteBatch batch() => LocalWriteBatch(_db);
+
+  @override
+  Future<int?> count(String path) {
+    return _db.collection(path).count().get().then((snapshot) {
+      return snapshot.count;
+    });
+  }
+
+  @override
+  Future<void> create(
+    String path,
+    Map<String, dynamic> data, [
+    bool merge = true,
+  ]) {
+    return _db.doc(path).set(data, InAppSetOptions(merge: merge));
+  }
+
+  @override
+  Future<void> delete(String path) {
+    return _db.doc(path).delete();
+  }
+
+  @override
+  Future<DataGetsSnapshot> get(String path) {
+    return _db.collection(path).get().then((snapshot) {
+      return DataGetsSnapshot(
+        snapshot: snapshot,
+        docs: snapshot.docs.map((e) => e.data).whereType(),
+        docChanges: snapshot.docChanges.map((e) => e.doc.data).whereType(),
+      );
+    });
+  }
+
+  @override
+  Future<DataGetSnapshot> getById(String path) {
+    return _db.doc(path).get().then((snapshot) {
+      return DataGetSnapshot(snapshot: snapshot, doc: snapshot.data);
+    });
+  }
+
+  @override
+  Future<DataGetsSnapshot> getByQuery(
+    String path, {
+    Iterable<DataQuery> queries = const [],
+    Iterable<DataSelection> selections = const [],
+    Iterable<DataSorting> sorts = const [],
+    DataPagingOptions options = const DataPagingOptions(),
+  }) {
+    return LocalQueryHelper.query(
+      _db.collection(path),
+      queries: queries,
+      selections: selections,
+      sorts: sorts,
+      options: options,
+    ).get().then((snapshot) {
+      return DataGetsSnapshot(
+        snapshot: snapshot,
+        docs: snapshot.docs.map((e) => e.data).whereType(),
+        docChanges: snapshot.docChanges.map((e) => e.doc.data).whereType(),
+      );
+    });
+  }
+
+  @override
+  Stream<DataGetsSnapshot> listen(String path) {
+    return _db.collection(path).snapshots().map((snapshot) {
+      return DataGetsSnapshot(
+        snapshot: snapshot,
+        docs: snapshot.docs.map((e) => e.data).whereType(),
+        docChanges: snapshot.docChanges.map((e) => e.doc.data).whereType(),
+      );
+    });
+  }
+
+  @override
+  Stream<DataGetSnapshot> listenById(String path) {
+    return _db.doc(path).snapshots().map((snapshot) {
+      return DataGetSnapshot(snapshot: snapshot, doc: snapshot.data);
+    });
+  }
+
+  @override
+  Stream<DataGetsSnapshot> listenByQuery(
+    String path, {
+    Iterable<DataQuery> queries = const [],
+    Iterable<DataSelection> selections = const [],
+    Iterable<DataSorting> sorts = const [],
+    DataPagingOptions options = const DataPagingOptions(),
+  }) {
+    return LocalQueryHelper.query(
+      _db.collection(path),
+      queries: queries,
+      selections: selections,
+      sorts: sorts,
+      options: options,
+    ).snapshots().map((snapshot) {
+      return DataGetsSnapshot(
+        snapshot: snapshot,
+        docs: snapshot.docs.map((e) => e.data).whereType(),
+        docChanges: snapshot.docChanges.map((e) => e.doc.data).whereType(),
+      );
+    });
+  }
+
+  @override
+  Future<DataGetsSnapshot> search(String path, Checker checker) {
+    return LocalQueryHelper.search(_db.collection(path), checker).get().then((
+      snapshot,
+    ) {
+      return DataGetsSnapshot(
+        snapshot: snapshot,
+        docs: snapshot.docs.map((e) => e.data).whereType(),
+        docChanges: snapshot.docChanges.map((e) => e.doc.data).whereType(),
+      );
+    });
+  }
+
+  @override
+  Future<void> update(String path, Map<String, dynamic> data) {
+    return _db.doc(path).update(data);
+  }
+
+  @override
+  Object? updatingFieldValue(Object? value) {
+    if (value is! DataFieldValue) return value;
     switch (value.type) {
       case DataFieldValues.arrayUnion:
-        return fdb.InAppFieldValue.arrayUnion(value.value as List);
+        return InAppFieldValue.arrayUnion(value.value as List);
       case DataFieldValues.arrayRemove:
-        return fdb.InAppFieldValue.arrayRemove(value.value as List);
+        return InAppFieldValue.arrayRemove(value.value as List);
       case DataFieldValues.delete:
-        return fdb.InAppFieldValue.delete();
+        return InAppFieldValue.delete();
       case DataFieldValues.serverTimestamp:
-        return fdb.InAppFieldValue.timestamp();
+        return InAppFieldValue.timestamp();
       case DataFieldValues.increment:
-        return fdb.InAppFieldValue.increment(value.value as num);
+        return InAppFieldValue.increment(value.value as num);
       case DataFieldValues.none:
-        return null;
+        return value;
     }
   }
+}
 
-  static Map<String, Object?> props(Map<String, Object?> props) {
-    return props.map((key, value) {
-      if (value is DataFieldValue) {
-        return MapEntry(key, _fieldValue(value));
-      }
-      return MapEntry(key, value);
-    });
-  }
+class LocalQueryHelper {
+  const LocalQueryHelper._();
 
-  static fdb.InAppQueryReference search(
-    fdb.InAppQueryReference ref,
-    Checker checker,
-  ) {
+  static InAppQueryReference search(InAppQueryReference ref, Checker checker) {
     final field = checker.field;
     final value = checker.value;
     final type = checker.type;
@@ -733,11 +209,11 @@ class _QHelper {
     return ref;
   }
 
-  static fdb.InAppQueryReference query({
-    required fdb.InAppQueryReference reference,
-    List<DataQuery> queries = const [],
-    List<DataSelection> selections = const [],
-    List<DataSorting> sorts = const [],
+  static InAppQueryReference query(
+    InAppQueryReference ref, {
+    Iterable<DataQuery> queries = const [],
+    Iterable<DataSelection> selections = const [],
+    Iterable<DataSorting> sorts = const [],
     DataPagingOptions options = const DataPagingOptions(),
   }) {
     var isFetchingMode = true;
@@ -747,7 +223,7 @@ class _QHelper {
 
     if (queries.isNotEmpty) {
       for (final i in queries) {
-        reference = reference.where(
+        ref = ref.where(
           i.field,
           arrayContains: i.arrayContains,
           arrayNotContains: i.arrayNotContains,
@@ -768,7 +244,7 @@ class _QHelper {
 
     if (sorts.isNotEmpty) {
       for (final i in sorts) {
-        reference = reference.orderBy(i.field, descending: i.descending);
+        ref = ref.orderBy(i.field, descending: i.descending);
       }
     }
 
@@ -778,27 +254,27 @@ class _QHelper {
         final value = i.value;
         final values = i.values;
         final isValidValues = values != null && values.isNotEmpty;
-        final isValidSnapshot = value is fdb.InAppDocumentSnapshot;
+        final isValidSnapshot = value is InAppDocumentSnapshot;
         isFetchingMode = (isValidValues || isValidSnapshot) && !type.isNone;
         if (isValidValues) {
           if (type.isEndAt) {
-            reference = reference.endAt(values);
+            ref = ref.endAt(values);
           } else if (type.isEndBefore) {
-            reference = reference.endBefore(values);
+            ref = ref.endBefore(values);
           } else if (type.isStartAfter) {
-            reference = reference.startAfter(values);
+            ref = ref.startAfter(values);
           } else if (type.isStartAt) {
-            reference = reference.startAt(values);
+            ref = ref.startAt(values);
           }
         } else if (isValidSnapshot) {
           if (type.isEndAtDocument) {
-            reference = reference.endAtDocument(value);
+            ref = ref.endAtDocument(value);
           } else if (type.isEndBeforeDocument) {
-            reference = reference.endBeforeDocument(value);
+            ref = ref.endBeforeDocument(value);
           } else if (type.isStartAfterDocument) {
-            reference = reference.startAfterDocument(value);
+            ref = ref.startAfterDocument(value);
           } else if (type.isStartAtDocument) {
-            reference = reference.startAtDocument(value);
+            ref = ref.startAtDocument(value);
           }
         }
       }
@@ -807,18 +283,18 @@ class _QHelper {
     if (isValidLimit) {
       if (options.fetchFromLast) {
         if (isFetchingMode) {
-          reference = reference.limitToLast(fetchingSize);
+          ref = ref.limitToLast(fetchingSize);
         } else {
-          reference = reference.limitToLast(fetchingSizeInit);
+          ref = ref.limitToLast(fetchingSizeInit);
         }
       } else {
         if (isFetchingMode) {
-          reference = reference.limit(fetchingSize);
+          ref = ref.limit(fetchingSize);
         } else {
-          reference = reference.limit(fetchingSizeInit);
+          ref = ref.limit(fetchingSizeInit);
         }
       }
     }
-    return reference;
+    return ref;
   }
 }

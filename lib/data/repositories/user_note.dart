@@ -1,7 +1,6 @@
 import 'package:data_management/data_management.dart';
 import 'package:flutter_andomie/core.dart' hide Selection;
 import 'package:flutter_entity/entity.dart';
-import 'package:in_app_database/in_app_database.dart';
 
 import '../../roots/helpers/connectivity.dart';
 import '../models/user_note.dart';
@@ -21,7 +20,7 @@ class UserNoteRepository extends RemoteDataRepository<UserNote> {
 
   static UserNoteRepository get i => _i ??= UserNoteRepository(
     source: RemoteUserNoteDataSource(),
-    backup: LocalUserNoteDataSource(database: InAppDatabase.i),
+    backup: LocalUserNoteDataSource(),
   );
 
   @override
@@ -49,6 +48,12 @@ class UserNoteRepository extends RemoteDataRepository<UserNote> {
       case DataModifiers.updateById:
       case DataModifiers.updateByIds:
         return value;
+      case DataModifiers.count:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case DataModifiers.listenCount:
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
   }
 

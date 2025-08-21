@@ -1,6 +1,5 @@
 import 'package:data_management/data_management.dart';
 import 'package:flutter_entity/entity.dart';
-import 'package:in_app_database/in_app_database.dart';
 
 import '../../roots/helpers/connectivity.dart';
 import '../models/user_following.dart';
@@ -19,7 +18,7 @@ class UserFollowingRepository extends RemoteDataRepository<UserFollowing> {
 
   static UserFollowingRepository get i => _i ??= UserFollowingRepository(
     source: RemoteUserFollowingDataSource(),
-    backup: LocalUserFollowingDataSource(database: InAppDatabase.i),
+    backup: LocalUserFollowingDataSource(),
   );
 
   @override
@@ -47,6 +46,12 @@ class UserFollowingRepository extends RemoteDataRepository<UserFollowing> {
       case DataModifiers.updateById:
       case DataModifiers.updateByIds:
         return value;
+      case DataModifiers.count:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case DataModifiers.listenCount:
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
   }
 

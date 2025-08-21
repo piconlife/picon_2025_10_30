@@ -1,7 +1,6 @@
 import 'package:data_management/data_management.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_entity/entity.dart';
-import 'package:in_app_database/in_app_database.dart';
 
 import '../../roots/helpers/connectivity.dart';
 import '../enums/feed_type.dart';
@@ -22,7 +21,7 @@ class FeedRepository extends RemoteDataRepository<Feed> {
 
   static FeedRepository get i => _i ??= FeedRepository(
     source: RemoteFeedDataSource(),
-    backup: LocalFeedDataSource(database: InAppDatabase.i),
+    backup: LocalFeedDataSource(),
   );
 
   @override
@@ -50,6 +49,12 @@ class FeedRepository extends RemoteDataRepository<Feed> {
       case DataModifiers.updateById:
       case DataModifiers.updateByIds:
         return value;
+      case DataModifiers.count:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case DataModifiers.listenCount:
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
   }
 

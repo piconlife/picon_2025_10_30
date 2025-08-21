@@ -8,7 +8,6 @@ import '../../roots/preferences/preferences.dart';
 class InAppConfigDelegate extends ConfigsDelegate {
   @override
   Future<String> asset(String name, String path) async {
-    // TODO: implement asset
     final a = await super.asset(name, path);
     return a;
   }

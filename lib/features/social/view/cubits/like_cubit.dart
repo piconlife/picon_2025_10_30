@@ -5,7 +5,7 @@ import '../../../../app/base/countable_response.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../data/enums/like_type.dart';
 import '../../../../data/models/feed_like.dart';
-import '../../../../data/use_cases/feed_like/count.dart';
+import '../../../../data/use_cases/feed_like/counter.dart';
 import '../../../../data/use_cases/feed_like/create.dart';
 import '../../../../data/use_cases/feed_like/delete.dart';
 import '../../../../data/use_cases/feed_like/get_by_id.dart';
@@ -18,7 +18,7 @@ class FeedLikeCubit extends Cubit<CountableResponse<FeedLike>> {
 
   void count() {
     if (reference.isEmpty) return;
-    GetFeedLikesCountUseCase.i(reference).then((value) {
+    ListenFeedLikesCountUseCase.i(reference).listen((value) {
       emit(state.copy(count: value.data));
     });
   }
@@ -53,7 +53,7 @@ class FeedLikeCubit extends Cubit<CountableResponse<FeedLike>> {
       initialSize: initialSize,
       fetchingSize: fetchingSize,
     ).then((response) {
-      emit(CountableResponse.from(response));
+      emit(CountableResponse.from(response, (e) => e.id));
     });
   }
 
@@ -68,7 +68,6 @@ class FeedLikeCubit extends Cubit<CountableResponse<FeedLike>> {
         status: response.status,
         snapshot: response.snapshot,
         result: response.result,
-        requestCode: 0,
       ),
     );
   }
@@ -77,19 +76,19 @@ class FeedLikeCubit extends Cubit<CountableResponse<FeedLike>> {
     if (reference.isEmpty) return;
     final data = state.resultByMe.firstOrNull;
     if (data != null) {
-      delete(data);
+      unlike(data);
     } else {
-      create(type);
+      like(type);
     }
   }
 
-  void create([LikeType? type]) {
+  void like([LikeType? type]) {
     if (reference.isEmpty) return;
     final data = FeedLike.create(type: type);
     emit(
       state.copy(
+        // count: state.count + 1,
         result: state.result..insert(0, data),
-        count: state.count + 1,
         resultByMe: state.resultByMe..insert(0, data),
       ),
     );
@@ -97,6 +96,7 @@ class FeedLikeCubit extends Cubit<CountableResponse<FeedLike>> {
       if (!value.isSuccessful) {
         emit(
           state.copy(
+            // count: state.count - 1,
             result: state.result..remove(data),
             resultByMe: state.resultByMe..remove(data),
           ),
@@ -106,12 +106,12 @@ class FeedLikeCubit extends Cubit<CountableResponse<FeedLike>> {
     });
   }
 
-  void delete(FeedLike data) {
+  void unlike(FeedLike data) {
     if (reference.isEmpty) return;
     emit(
       state.copy(
+        // count: state.count - 1,
         result: state.result..remove(data),
-        count: state.count - 1,
         resultByMe: state.resultByMe..remove(data),
       ),
     );
@@ -119,6 +119,7 @@ class FeedLikeCubit extends Cubit<CountableResponse<FeedLike>> {
       if (!value.isSuccessful) {
         emit(
           state.copy(
+            // count: state.count + 1,
             result: state.result..insert(0, data),
             resultByMe: state.resultByMe..insert(0, data),
           ),

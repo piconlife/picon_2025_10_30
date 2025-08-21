@@ -1,7 +1,6 @@
 import 'package:data_management/data_management.dart';
 import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_entity/entity.dart';
-import 'package:in_app_database/in_app_database.dart';
 
 import '../../roots/helpers/connectivity.dart';
 import '../models/business_sponsor.dart';
@@ -21,7 +20,7 @@ class BusinessSponsorRepository extends RemoteDataRepository<BusinessSponsor> {
 
   static BusinessSponsorRepository get i => _i ??= BusinessSponsorRepository(
     source: RemoteBusinessSponsorDataSource(),
-    backup: LocalBusinessSponsorDataSource(database: InAppDatabase.i),
+    backup: LocalBusinessSponsorDataSource(),
   );
 
   @override
@@ -49,6 +48,12 @@ class BusinessSponsorRepository extends RemoteDataRepository<BusinessSponsor> {
       case DataModifiers.updateById:
       case DataModifiers.updateByIds:
         return value;
+      case DataModifiers.count:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case DataModifiers.listenCount:
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
   }
 

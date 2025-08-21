@@ -1,7 +1,6 @@
 import 'package:data_management/data_management.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_entity/entity.dart';
-import 'package:in_app_database/in_app_database.dart';
 
 import '../../roots/helpers/connectivity.dart';
 import '../models/business_ad.dart';
@@ -21,7 +20,7 @@ class BusinessAdRepository extends RemoteDataRepository<BusinessAd> {
 
   static BusinessAdRepository get i => _i ??= BusinessAdRepository(
     source: RemoteBusinessAdDataSource(),
-    backup: LocalBusinessAdDataSource(database: InAppDatabase.i),
+    backup: LocalBusinessAdDataSource(),
   );
 
   @override
@@ -49,6 +48,12 @@ class BusinessAdRepository extends RemoteDataRepository<BusinessAd> {
       case DataModifiers.updateById:
       case DataModifiers.updateByIds:
         return value;
+      case DataModifiers.count:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case DataModifiers.listenCount:
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
   }
 

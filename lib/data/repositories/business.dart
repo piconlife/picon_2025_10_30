@@ -1,5 +1,4 @@
 import 'package:data_management/data_management.dart';
-import 'package:in_app_database/in_app_database.dart';
 
 import '../../roots/helpers/connectivity.dart';
 import '../models/business.dart';
@@ -17,6 +16,6 @@ class BusinessRepository extends RemoteDataRepository<Business> {
 
   static BusinessRepository get i => _i ??= BusinessRepository(
     source: RemoteBusinessDataSource(),
-    backup: LocalBusinessDataSource(database: InAppDatabase.i),
+    backup: LocalBusinessDataSource(),
   );
 }

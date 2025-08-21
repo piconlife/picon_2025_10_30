@@ -1,5 +1,4 @@
 import 'package:data_management/data_management.dart';
-import 'package:in_app_database/in_app_database.dart';
 
 import '../../roots/helpers/connectivity.dart';
 import '../models/user_cover.dart';
@@ -17,6 +16,6 @@ class UserCoverRepository extends RemoteDataRepository<UserCover> {
 
   static UserCoverRepository get i => _i ??= UserCoverRepository(
     source: RemoteUserCoverDataSource(),
-    backup: LocalUserCoverDataSource(database: InAppDatabase.i),
+    backup: LocalUserCoverDataSource(),
   );
 }

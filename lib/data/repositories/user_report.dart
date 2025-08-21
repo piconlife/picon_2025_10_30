@@ -1,6 +1,5 @@
 import 'package:data_management/data_management.dart';
 import 'package:flutter_entity/entity.dart';
-import 'package:in_app_database/in_app_database.dart';
 
 import '../../roots/helpers/connectivity.dart';
 import '../models/user_report.dart';
@@ -18,7 +17,7 @@ class UserReportRepository extends RemoteDataRepository<UserReport> {
 
   static UserReportRepository get i => _i ??= UserReportRepository(
     source: RemoteUserReportDataSource(),
-    backup: LocalUserReportDataSource(database: InAppDatabase.i),
+    backup: LocalUserReportDataSource(),
   );
 
   @override
@@ -46,6 +45,12 @@ class UserReportRepository extends RemoteDataRepository<UserReport> {
       case DataModifiers.updateById:
       case DataModifiers.updateByIds:
         return value;
+      case DataModifiers.count:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case DataModifiers.listenCount:
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
   }
 

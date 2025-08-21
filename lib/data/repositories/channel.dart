@@ -1,5 +1,4 @@
 import 'package:data_management/data_management.dart';
-import 'package:in_app_database/in_app_database.dart';
 
 import '../../roots/helpers/connectivity.dart';
 import '../models/channel.dart';
@@ -17,6 +16,6 @@ class ChannelRepository extends RemoteDataRepository<Channel> {
 
   static ChannelRepository get i => _i ??= ChannelRepository(
     source: RemoteChannelDataSource(),
-    backup: LocalChannelDataSource(database: InAppDatabase.i),
+    backup: LocalChannelDataSource(),
   );
 }

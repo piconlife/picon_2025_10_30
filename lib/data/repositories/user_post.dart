@@ -1,7 +1,6 @@
 import 'package:data_management/data_management.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_entity/entity.dart';
-import 'package:in_app_database/in_app_database.dart';
 import 'package:picon/data/enums/feed_type.dart';
 
 import '../../roots/helpers/connectivity.dart';
@@ -22,7 +21,7 @@ class UserPostRepository extends RemoteDataRepository<UserPost> {
 
   static UserPostRepository get i => _i ??= UserPostRepository(
     source: RemoteUserPostDataSource(),
-    backup: LocalUserPostDataSource(database: InAppDatabase.i),
+    backup: LocalUserPostDataSource(),
   );
 
   @override
@@ -50,6 +49,12 @@ class UserPostRepository extends RemoteDataRepository<UserPost> {
       case DataModifiers.updateById:
       case DataModifiers.updateByIds:
         return value;
+      case DataModifiers.count:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case DataModifiers.listenCount:
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
   }
 

@@ -1,5 +1,4 @@
 import 'package:data_management/data_management.dart';
-import 'package:in_app_database/in_app_database.dart';
 
 import '../../roots/helpers/connectivity.dart';
 import '../models/feed_star.dart';
@@ -17,6 +16,6 @@ class FeedStarRepository extends RemoteDataRepository<FeedStar> {
 
   static FeedStarRepository get i => _i ??= FeedStarRepository(
     source: RemoteFeedStarDataSource(),
-    backup: LocalFeedStarDataSource(database: InAppDatabase.i),
+    backup: LocalFeedStarDataSource(),
   );
 }

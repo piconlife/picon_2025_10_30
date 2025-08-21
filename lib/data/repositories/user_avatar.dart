@@ -1,5 +1,4 @@
 import 'package:data_management/data_management.dart';
-import 'package:in_app_database/in_app_database.dart';
 
 import '../../roots/helpers/connectivity.dart';
 import '../models/user_avatar.dart';
@@ -17,6 +16,6 @@ class UserAvatarRepository extends RemoteDataRepository<UserAvatar> {
 
   static UserAvatarRepository get i => _i ??= UserAvatarRepository(
     source: RemoteUserAvatarDataSource(),
-    backup: LocalUserAvatarDataSource(database: InAppDatabase.i),
+    backup: LocalUserAvatarDataSource(),
   );
 }
