@@ -4,6 +4,7 @@ import 'package:flutter_entity/entity.dart';
 
 import '../../../app/helpers/user.dart';
 import '../../../app/utils/geo_pointer.dart';
+import '../../constants/keys.dart';
 import '../../models/feed.dart';
 import 'base.dart';
 
@@ -31,7 +32,7 @@ class GetStarFeedsByPaginationUseCase extends BaseFeedUseCase {
     Response<Feed> response = Response();
     final filtered = await GeoPointer(lat, lon).future(
       radiusKm: radiusKm,
-      pointer: (e) => GeoPoint(e.lat ?? 0, e.lon ?? 0),
+      pointer: (e) => GeoPoint(e.latitude ?? 0, e.longitude ?? 0),
       callback: (minLat, maxLat) async {
         response = await callback(minLat, maxLat);
         return response.result;
@@ -50,6 +51,7 @@ class GetStarFeedsByPaginationUseCase extends BaseFeedUseCase {
       radiusKm: nearbyMode ? null : 0,
       callback: (minLat, maxLat) {
         return repository.getByQuery(
+          resolveRefs: true,
           queries: [
             // final publisherAge = "pAge";
             // final publisherGender = "pGender";
@@ -57,10 +59,10 @@ class GetStarFeedsByPaginationUseCase extends BaseFeedUseCase {
             // final publisherReligion = "pReligion";
             // final publisherRating = "pRating";
             //     final publisherTitle = "pTitle";
-            DataQuery(FeedKeys.i.publisherRating, isGreaterThanOrEqualTo: 2),
+            DataQuery(Keys.i.publisherRating, isGreaterThanOrEqualTo: 2),
             if (minLat > 0 && maxLat > 0) ...[
-              DataQuery(FeedKeys.i.lat, isGreaterThanOrEqualTo: minLat),
-              DataQuery(FeedKeys.i.lat, isLessThanOrEqualTo: maxLat),
+              DataQuery(Keys.i.lat, isGreaterThanOrEqualTo: minLat),
+              DataQuery(Keys.i.lat, isLessThanOrEqualTo: maxLat),
             ],
           ],
           selections: [
@@ -68,8 +70,8 @@ class GetStarFeedsByPaginationUseCase extends BaseFeedUseCase {
               DataSelection.startAfterDocument(snapshot.firstOrNull),
           ],
           sorts: [
-            DataSorting(FeedKeys.i.timeMills, descending: true),
-            DataSorting(FeedKeys.i.publisherRating, descending: true),
+            DataSorting(Keys.i.timeMills, descending: true),
+            DataSorting(Keys.i.publisherRating, descending: true),
           ],
           options: DataPagingOptions(
             initialFetchSize: initialSize,

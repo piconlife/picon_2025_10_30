@@ -11,7 +11,7 @@ class Country extends Content {
   }
 
   factory Country.from(Object? source) {
-    final data = Content.from(source);
+    final data = Content.parse(source);
     return Country(id: data.id, name: data.name);
   }
 

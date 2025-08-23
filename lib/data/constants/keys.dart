@@ -1,14 +1,15 @@
 import 'package:flutter_entity/flutter_entity.dart';
 
 class Keys extends EntityKey {
-  const Keys._();
+  const Keys();
 
   static Keys? _i;
 
-  static Keys get i => _i ??= const Keys._();
+  static Keys get i => _i ??= const Keys();
 
   // PUBLISHER
   final publisher = "publisher";
+  final publisherRef = "@publisher";
   final publisherAge = "publisher_age";
   final publisherPhoto = "publisher_photo";
   final publisherProfession = "publisher_profession";
@@ -23,12 +24,21 @@ class Keys extends EntityKey {
   final publisherLongitude = "publisher_longitude";
   final publisherGender = "publisher_gender";
 
+  // LOCATION
+  final city = "city";
+  final country = "country";
+  final lat = "lat";
+  final lon = "lon";
+  final region = "region";
+  final zip = "zip";
+
   // CONTENT
   final audience = "audience";
   final bookmarks = "bookmarks";
   final commentCount = "comment_count";
   final comments = "comments";
   final content = "content";
+  final contentRef = "@content";
   final contents = "contents";
   final description = "description";
   final descriptions = "descriptions";
@@ -50,13 +60,14 @@ class Keys extends EntityKey {
   final priority = "priority";
   final privacy = "privacy";
   final recent = "recent";
+  final recentRef = "@recent";
   final recentId = "recent_id";
   final recentPath = "recent_path";
   final referenceId = "reference_id";
   final referencePath = "reference_path";
   final reportCount = "report_count";
   final reports = "reports";
-  final starCount = "starCount";
+  final starCount = "star_count";
   final stars = "stars";
   final tags = "tags";
   final text = "text";
@@ -70,7 +81,7 @@ class Keys extends EntityKey {
   final videoIds = "video_ids";
   final videoUrl = "video_url";
   final videoUrls = "video_urls";
-  final viewCount = "viewCount";
+  final viewCount = "view_count";
   final views = "views";
 
   @override

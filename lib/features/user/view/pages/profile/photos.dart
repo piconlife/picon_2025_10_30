@@ -2,6 +2,7 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_andomie/extensions/list.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -118,7 +119,7 @@ class _ProfilePhotosSegmentState extends State<ProfilePhotosSegment> {
                           vertical: dimen.dp(2),
                         ),
                         child: InAppText(
-                          item.photoUrls.use.length.toString(),
+                          item.photoUrls?.length.toString(),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: dimen.dp(12),

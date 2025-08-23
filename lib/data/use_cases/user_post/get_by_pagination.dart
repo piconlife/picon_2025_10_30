@@ -22,6 +22,7 @@ class GetUserPostsByPaginationUseCase extends BaseUserPostUseCase {
     bool singletonMode = true,
   }) {
     return repository.getByQuery(
+      resolveRefs: true,
       params: getParams(uid),
       singletonMode: singletonMode,
       sorts: [DataSorting(Keys.i.timeMills, descending: true)],

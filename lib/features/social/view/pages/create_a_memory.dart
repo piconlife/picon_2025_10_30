@@ -89,7 +89,7 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
     old = data?.findOrNull(key: "$UserPost");
     if (old != null) {
       id = old!.id;
-      type = FeedType.parse(old?.contentType);
+      type = old?.type ?? FeedType.none;
       photos.set(old!.photos.use.map(EditablePhoto.photo).toList());
       privacy.set(Privacy.parse(old?.privacy));
     } else {
@@ -398,9 +398,9 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
     final data = UserPost.create(
       id: id,
       timeMills: Entity.generateTimeMills,
-      publisher: UserHelper.uid,
+      publisherId: UserHelper.uid,
       path: path,
-      audience: audience.value.name,
+      audience: audience.value,
       privacy: privacy.value,
       title: title.isEmpty ? null : title,
       description: description.isEmpty ? null : description,

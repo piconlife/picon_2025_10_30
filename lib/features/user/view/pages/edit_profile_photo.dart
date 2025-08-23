@@ -254,7 +254,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
       UserPost.createForAvatar(
         id: data.id,
         timeMills: Entity.generateTimeMills,
-        publisher: data.publisher,
+        publisherId: data.publisher,
         reference: data.path,
         path: PathReplacer.replaceByIterable(
           PathProvider.generatePath(Paths.userPosts, data.id),

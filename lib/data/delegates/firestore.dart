@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_management/core.dart';
 
@@ -50,8 +52,8 @@ class FirestoreDataDelegate extends DataDelegate {
   DataWriteBatch batch() => FirestoreWriteBatch(_db);
 
   @override
-  Future<int?> count(String path) {
-    return _db.collection(path).count().get().then((snapshot) {
+  Future<int?> count(String path) async {
+    return _db.collection("$path/").count().get().then((snapshot) {
       return snapshot.count;
     });
   }

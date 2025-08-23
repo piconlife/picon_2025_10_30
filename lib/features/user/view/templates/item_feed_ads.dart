@@ -34,7 +34,7 @@ class _ItemUserFeedAdsState extends State<ItemUserFeedAds> {
       child: Column(
         children: [
           InAppUserBuilder(
-            id: widget.item.publisher,
+            id: widget.item.publisherId,
             builder: (context, user) {
               return UserFeedHeader(
                 avatar: user.photo,
@@ -75,7 +75,7 @@ class _Body extends StatelessWidget {
                 onTap: () {},
                 scalerLowerBound: 1,
                 child: InAppImage(
-                  item.photoUrls.use.elementAt(index),
+                  item.photoUrls?.elementAt(index),
                   width: double.infinity,
                   height: double.infinity,
                   fit: BoxFit.cover,

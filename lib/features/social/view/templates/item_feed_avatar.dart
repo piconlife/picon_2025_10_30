@@ -55,14 +55,14 @@ class _ItemFeedAvatarState extends State<ItemFeedAvatar> {
       child: Column(
         children: [
           InAppUserBuilder(
-            id: widget.item.publisher,
+            id: widget.item.publisherId,
             builder: (context, user) {
               return FeedHeader(
                 title: _title(user),
                 subtitle: _subtitle(user),
                 avatar: user.photo,
                 actions: [
-                  FeedHeaderFollowButton(publisher: widget.item.publisher),
+                  FeedHeaderFollowButton(publisher: widget.item.publisherId),
                 ],
               );
             },
@@ -166,7 +166,7 @@ class _Body extends StatelessWidget {
                 child: InAppGesture(
                   onTap: () {},
                   child: InAppAvatar(
-                    item.photoUrl ?? InAppPlaceholders.image,
+                    item.photoUrlAt ?? InAppPlaceholders.image,
                     borderColor: Colors.white,
                     borderSize: dimen.dp(4),
                     backgroundColor: dark.t01,

@@ -34,7 +34,7 @@ class _ItemFeedAdsState extends State<ItemFeedAds> {
       child: Column(
         children: [
           InAppUserBuilder(
-            id: widget.item.publisher,
+            id: widget.item.publisherId,
             builder: (context, user) {
               return FeedHeader(
                 avatar: user.photo,
@@ -66,7 +66,7 @@ class _Body extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (item.photoUrls.isNotEmpty)
+        if (item.photoUrls.use.isNotEmpty)
           AndrossySlider(
             frameRatio: 9 / 9,
             itemCount: item.photoUrls.use.length,

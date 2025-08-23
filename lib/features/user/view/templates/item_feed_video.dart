@@ -40,7 +40,7 @@ class _ItemUserFeedVideoState extends State<ItemUserFeedVideo> {
       child: Column(
         children: [
           InAppUserBuilder(
-            id: widget.item.publisher,
+            id: widget.item.publisherId,
             builder: (context, user) {
               return UserFeedHeader(
                 title: user.username,

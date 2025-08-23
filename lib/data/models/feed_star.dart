@@ -15,7 +15,7 @@ List<String> _keys = [
 
 class FeedStar extends Content {
   FeedStar({
-    super.publisher,
+    super.publisherId,
     super.id,
     super.timeMills,
     super.parentId,
@@ -33,7 +33,7 @@ class FeedStar extends Content {
   }) {
     publisher ??= UserHelper.user;
     return FeedStar(
-      publisher: publisher.id,
+      publisherId: publisher.id,
       id: id,
       timeMills: timeMills,
       parentId: parentId,
@@ -43,9 +43,9 @@ class FeedStar extends Content {
   }
 
   factory FeedStar.from(Object? source) {
-    final data = Content.from(source);
+    final data = Content.parse(source);
     return FeedStar(
-      publisher: data.publisher,
+      publisherId: data.publisherId,
       id: data.id,
       timeMills: data.timeMills,
       parentId: data.parentId,
@@ -64,7 +64,7 @@ class FeedStar extends Content {
     Privacy? privacy,
   }) {
     return FeedStar(
-      publisher: publisher ?? this.publisher,
+      publisherId: publisher ?? this.publisherId,
       id: id ?? this.id,
       timeMills: timeMills ?? this.timeMills,
       parentId: parentId ?? this.parentId,

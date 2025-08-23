@@ -15,7 +15,7 @@ List<String> _keys = [
 
 class FeedVideo extends Content {
   FeedVideo({
-    super.publisher,
+    super.publisherId,
     super.id,
     super.timeMills,
     super.parentId,
@@ -37,15 +37,15 @@ class FeedVideo extends Content {
       timeMills: timeMills,
       parentId: parentId,
       privacy: privacy,
-      publisher: publisher.id,
+      publisherId: publisher.id,
       videoUrl: videoUrl,
     );
   }
 
   factory FeedVideo.from(Object? source) {
-    final data = Content.from(source);
+    final data = Content.parse(source);
     return FeedVideo(
-      publisher: data.publisher,
+      publisherId: data.publisherId,
       id: data.id,
       timeMills: data.timeMills,
       parentId: data.parentId,
@@ -63,7 +63,7 @@ class FeedVideo extends Content {
     String? videoUrl,
   }) {
     return FeedVideo(
-      publisher: publisher ?? this.publisher,
+      publisherId: publisher ?? this.publisherId,
       id: id ?? this.id,
       timeMills: timeMills ?? this.timeMills,
       parentId: parentId ?? this.parentId,

@@ -55,14 +55,14 @@ class _ItemFeedMemoryState extends State<ItemFeedMemory> {
       child: Column(
         children: [
           InAppUserBuilder(
-            id: widget.item.publisher,
+            id: widget.item.publisherId,
             builder: (context, user) {
               return FeedHeader(
                 title: _title(user),
                 subtitle: _subtitle(user),
                 avatar: user.photo,
                 actions: [
-                  FeedHeaderFollowButton(publisher: widget.item.publisher),
+                  FeedHeaderFollowButton(publisher: widget.item.publisherId),
                 ],
               );
             },

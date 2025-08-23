@@ -38,7 +38,7 @@ class _ItemFeedBusinessState extends State<ItemFeedBusiness> {
       child: Column(
         children: [
           InAppUserBuilder(
-            id: widget.item.publisher,
+            id: widget.item.publisherId,
             builder: (context, user) {
               return FeedHeader(
                 avatar: user.photo,

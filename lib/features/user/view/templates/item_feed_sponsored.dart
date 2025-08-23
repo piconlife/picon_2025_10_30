@@ -34,7 +34,7 @@ class _ItemUserFeedSponsoredState extends State<ItemUserFeedSponsored> {
       child: Column(
         children: [
           InAppUserBuilder(
-            id: widget.item.publisher,
+            id: widget.item.publisherId,
             builder: (context, user) {
               return UserFeedHeader(
                 title: user.name,

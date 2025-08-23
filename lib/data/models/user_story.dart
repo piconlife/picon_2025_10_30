@@ -48,7 +48,7 @@ List<String> _keys = [
 class UserStory extends Content {
   UserStory({
     // PUBLISHER
-    super.publisher,
+    super.publisherId,
     super.publisherPhoto,
     super.publisherName,
     super.publisherShortName,
@@ -128,7 +128,7 @@ class UserStory extends Content {
     publisher ??= UserHelper.user;
     return UserStory(
       // PUBLISHER
-      publisher: publisher.id,
+      publisherId: publisher.id,
       publisherName: publisher.name,
       publisherPhoto: publisher.photo,
       publisherShortName: publisher.username,
@@ -209,7 +209,7 @@ class UserStory extends Content {
   }) {
     return UserStory(
       // PUBLISHER
-      publisher: publisher ?? this.publisher,
+      publisherId: publisher ?? this.publisherId,
       publisherPhoto: publisherPhoto ?? this.publisherPhoto,
       publisherName: publisherName ?? this.publisherName,
       publisherShortName: publisherShortName ?? this.publisherShortName,
@@ -250,10 +250,10 @@ class UserStory extends Content {
   }
 
   factory UserStory.from(dynamic source) {
-    final data = Content.from(source);
+    final data = Content.parse(source);
     return UserStory(
       // PUBLISHER
-      publisher: data.publisher,
+      publisherId: data.publisherId,
       publisherPhoto: data.publisherPhoto,
       publisherName: data.publisherName,
       publisherShortName: data.publisherShortName,

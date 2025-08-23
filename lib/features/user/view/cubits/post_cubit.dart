@@ -210,7 +210,7 @@ class UserPostCubit extends Cubit<Response<UserPost>> {
     final report = UserReport(
       id: mId,
       reporter: UserHelper.uid,
-      publisher: data.publisher,
+      publisher: data.publisherId,
       path: path,
       parentId: data.id,
       parentPath: data.path,

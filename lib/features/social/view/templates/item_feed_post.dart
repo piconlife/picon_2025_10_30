@@ -44,7 +44,7 @@ class _ItemFeedPostState extends State<ItemFeedPost> {
       child: Column(
         children: [
           InAppUserBuilder(
-            id: widget.item.publisher,
+            id: widget.item.publisherId,
             builder: (context, user) {
               return FeedHeader(
                 title: user.username,
@@ -116,13 +116,13 @@ class _Body extends StatelessWidget {
             ),
           ),
         ],
-        if (item.photoUrls.isNotEmpty) ...[
+        if (item.photoUrls.use.isNotEmpty) ...[
           Divider(height: dimen.dp(1)),
           AndrossyImageGrid(
             itemBackground: dark.t05,
-            itemCount: item.photoUrls.length,
+            itemCount: item.photoUrls.use.length,
             itemBuilder: (context, index) {
-              final image = item.photoUrls.elementAtOrNull(index);
+              final image = item.photoUrls.use.elementAtOrNull(index);
               return InAppGesture(
                 onTap: () {},
                 child: InAppImage(

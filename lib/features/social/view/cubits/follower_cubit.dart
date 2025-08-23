@@ -25,8 +25,8 @@ class FollowerCubit extends DataCubit<Selection<UserFollower>> {
       return emit(state.copy(status: Status.notFound));
     }
     emit(state.copy(status: Status.loading));
-    GetUserFollowersUseCase.i().then(_attach).catchError((e, st) {
-      emit(state.copy(status: Status.failure));
-    });
+    // GetUserFollowersUseCase.i().then(_attach).catchError((e, st) {
+    //   emit(state.copy(status: Status.failure));
+    // });
   }
 }

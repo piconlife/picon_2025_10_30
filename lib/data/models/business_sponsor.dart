@@ -48,7 +48,7 @@ List<String> _keys = [
 class BusinessSponsor extends Content {
   BusinessSponsor({
     // PUBLISHER
-    super.publisher,
+    super.publisherId,
     super.publisherPhoto,
     super.publisherName,
     super.publisherShortName,
@@ -126,7 +126,7 @@ class BusinessSponsor extends Content {
     publisher ??= UserHelper.user;
     return BusinessSponsor(
       // PUBLISHER
-      publisher: publisher.id,
+      publisherId: publisher.id,
       publisherName: publisher.name,
       publisherPhoto: publisher.photo,
       publisherShortName: publisher.username,
@@ -204,7 +204,7 @@ class BusinessSponsor extends Content {
   }) {
     return BusinessSponsor(
       // PUBLISHER
-      publisher: publisher ?? this.publisher,
+      publisherId: publisher ?? this.publisherId,
       publisherPhoto: publisherPhoto ?? this.publisherPhoto,
       publisherName: publisherName ?? this.publisherName,
       publisherShortName: publisherShortName ?? this.publisherShortName,
@@ -244,10 +244,10 @@ class BusinessSponsor extends Content {
   }
 
   factory BusinessSponsor.from(dynamic source) {
-    final data = Content.from(source);
+    final data = Content.parse(source);
     return BusinessSponsor(
       // PUBLISHER
-      publisher: data.publisher,
+      publisherId: data.publisherId,
       publisherPhoto: data.publisherPhoto,
       publisherName: data.publisherName,
       publisherShortName: data.publisherShortName,

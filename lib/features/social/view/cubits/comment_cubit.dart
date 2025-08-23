@@ -15,9 +15,9 @@ class FeedCommentCubit extends Cubit<CountableResponse<FeedComment>> {
 
   void count() {
     if (reference.isEmpty) return;
-    GetFeedCommentsCountUseCase.i(reference).then((value) {
-      emit(state.copy(count: value.data));
-    });
+    // GetFeedCommentsCountUseCase.i(reference).then((value) {
+    //   emit(state.copy(count: value.data));
+    // });
   }
 
   void fetch({int initialSize = 30, int fetchingSize = 15}) {

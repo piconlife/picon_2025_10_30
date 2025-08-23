@@ -31,7 +31,7 @@ List<String> _keys = [
 class Comment extends Content {
   Comment({
     // PUBLISHER
-    super.publisher,
+    super.publisherId,
     super.publisherAge,
     super.publisherPhoto,
     super.publisherProfession,
@@ -82,7 +82,7 @@ class Comment extends Content {
   }) {
     return Comment(
       // PUBLISHER
-      publisher: publisher ?? this.publisher,
+      publisherId: publisher ?? this.publisherId,
       publisherAge: publisherAge ?? this.publisherAge,
       publisherPhoto: publisherPhoto ?? this.publisherPhoto,
       publisherProfession: publisherProfession ?? this.publisherProfession,
@@ -107,10 +107,10 @@ class Comment extends Content {
   }
 
   factory Comment.from(dynamic source) {
-    final data = Content.from(source);
+    final data = Content.parse(source);
     return Comment(
       // PUBLISHER
-      publisher: data.publisher,
+      publisherId: data.publisherId,
       publisherAge: data.publisherAge,
       publisherPhoto: data.publisherPhoto,
       publisherProfession: data.publisherProfession,

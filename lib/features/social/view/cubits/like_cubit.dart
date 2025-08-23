@@ -25,11 +25,11 @@ class FeedLikeCubit extends Cubit<CountableResponse<FeedLike>> {
 
   void fetchByMe() {
     if (reference.isEmpty) return;
-    GetFeedLikeUseCase.i(referencePath: reference, id: UserHelper.uid).then((
-      value,
-    ) {
-      emit(state.copy(resultByMe: value.data != null ? [value.data!] : null));
-    });
+    // GetFeedLikeUseCase.i(referencePath: reference, id: UserHelper.uid).then((
+    //   value,
+    // ) {
+    //   emit(state.copy(resultByMe: value.data != null ? [value.data!] : null));
+    // });
   }
 
   void fetch({int initialSize = 30, int fetchingSize = 15}) {

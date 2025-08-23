@@ -101,7 +101,7 @@ class _UserPostHeaderState extends State<UserPostHeader> {
       width: double.infinity,
       padding: EdgeInsets.symmetric(vertical: dimen.dp(12)),
       child: InAppUserBuilder(
-        id: widget.item.publisher,
+        id: widget.item.publisherId,
         builder: (context, user) {
           final title =
               (widget.item.title.isValid

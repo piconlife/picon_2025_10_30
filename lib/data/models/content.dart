@@ -1,4 +1,4 @@
-import 'package:flutter_andomie/utils.dart';
+import 'package:flutter_andomie/utils/key_generator.dart';
 import 'package:flutter_entity/flutter_entity.dart';
 
 import '../../app/helpers/user.dart';
@@ -11,74 +11,84 @@ import 'user.dart';
 
 class Content extends Entity<Keys> {
   // PUBLISHER
+  String? _publisherId;
+  int? publisherAge;
+  String? publisherPhoto;
+  String? publisherProfession;
+  String? publisherProfilePath;
+  String? publisherProfileUrl;
+  String? publisherName;
+  String? publisherShortName;
+  String? publisherTitle;
+  double? publisherRating;
+  String? publisherReligion;
+  double? publisherLatitude;
+  double? publisherLongitude;
+  String? _publisherGender;
 
-  final String? publisher;
-  final int? publisherAge;
-  final String? publisherPhoto;
-  final String? publisherProfession;
-  final String? publisherProfilePath;
-  final String? publisherProfileUrl;
-  final String? publisherName;
-  final String? publisherShortName;
-  final String? publisherTitle;
-  final double? publisherRating;
-  final String? publisherReligion;
-  final double? publisherLatitude;
-  final double? publisherLongitude;
-  final String? _publisherGender;
+  // LOCATION
+  String? city;
+  String? country;
+  double? latitude;
+  double? longitude;
+  String? region;
+  int? zip;
 
   // CONTENT
-  final Audience? _audience;
-  final List<String>? bookmarks;
-  final List<Content>? contents;
-  final List<String>? comments;
-  final int? commentCount;
-  final String? _description;
-  final List<String>? _descriptions;
-  final double? latitude;
-  final double? longitude;
-  final List<String>? likes;
-  final int? likeCount;
-  final String? link;
-  final String? name;
-  final String? parentId;
-  final String? parentLink;
-  final String? parentPath;
-  final String? reference;
-  final String? parentUrl;
-  final String? path;
-  final List<Photo>? photos;
-  final List<String>? photoIds;
-  final String? photoUrl;
-  final List<String>? photoUrls;
-  final int? priority;
-  final Privacy? _privacy;
-  final Content? _recent;
-  final String? recentId;
-  final String? recentPath;
-  final String? referenceId;
-  final String? referencePath;
-  final int? reportCount;
-  final List<String>? reports;
-  final int? starCount;
-  final List<String>? stars;
-  final List<String>? tags;
-  final String? text;
-  final String? title;
-  final FeedType? _type;
-  final String? url;
-  final bool? verified;
-  final List<Content>? videos;
-  final List<String>? videoIds;
-  final String? videoUrl;
-  final List<String>? videoUrls;
-  final int? viewCount;
-  final List<String>? views;
+  Audience? _audience;
+  List<String>? bookmarks;
+  Content? _content;
+  List<Content>? contents;
+  List<String>? comments;
+  int? commentCount;
+  String? _description;
+  List<String>? _descriptions;
+  List<String>? likes;
+  int? likeCount;
+  String? link;
+  String? name;
+  String? parentId;
+  String? parentLink;
+  String? parentPath;
+  String? reference;
+  String? parentUrl;
+  String? path;
+  List<Photo>? photos;
+  List<String>? photoIds;
+  String? photoUrl;
+  List<String>? _photoUrls;
+  int? priority;
+  Privacy? _privacy;
+  Content? _recent;
+  String? recentId;
+  String? recentPath;
+  String? referenceId;
+  String? referencePath;
+  int? reportCount;
+  List<String>? reports;
+  int? starCount;
+  List<String>? stars;
+  List<String>? tags;
+  String? text;
+  String? title;
+  FeedType? _type;
+  String? url;
+  bool? verified;
+  List<Content>? videos;
+  List<String>? videoIds;
+  String? videoUrl;
+  List<String>? videoUrls;
+  int? viewCount;
+  List<String>? views;
 
   // LOCAL INFO
-  final String? translatedTitle;
-  final String? translatedDescription;
-  final List<String>? translatedDescriptions;
+  String? translatedTitle;
+  String? translatedDescription;
+  List<String>? translatedDescriptions;
+
+  String? get publisherId => _publisherId ?? _content?._publisherId;
+
+  Content get content => _content ?? Content();
 
   bool get isTranslated {
     return (translatedTitle ??
@@ -88,13 +98,18 @@ class Content extends Entity<Keys> {
         .isNotEmpty;
   }
 
-  String? get description => _description ?? _descriptions?.firstOrNull;
-
-  List<String>? get descriptions {
-    return _descriptions ?? (_description != null ? [_description] : null);
+  String? get description {
+    return _description ??
+        _descriptions?.firstOrNull ??
+        content._description ??
+        content._descriptions?.firstOrNull;
   }
 
-  bool get isPublisher => publisher != UserHelper.uid;
+  List<String>? get descriptions {
+    return _descriptions ?? (_description != null ? [_description!] : null);
+  }
+
+  bool get isPublisher => publisherId != UserHelper.uid;
 
   bool get isReported => reports?.contains(UserHelper.uid) ?? false;
 
@@ -114,7 +129,16 @@ class Content extends Entity<Keys> {
 
   Gender get publisherGender => Gender.from(_publisherGender);
 
-  String? get photoUrlAt => photoUrl ?? photoUrls?.firstOrNull;
+  String? get photoUrlAt {
+    return photoUrl ??
+        _photoUrls?.firstOrNull ??
+        content.photoUrl ??
+        content._photoUrls?.firstOrNull;
+  }
+
+  List<String> get photoUrls {
+    return _photoUrls ?? [if (photoUrl != null) photoUrl!];
+  }
 
   Audience get audience => _audience ?? Audience.everyone;
 
@@ -126,7 +150,6 @@ class Content extends Entity<Keys> {
 
   Content({
     // PUBLISHER
-    this.publisher,
     this.publisherAge,
     this.publisherPhoto,
     this.publisherProfession,
@@ -139,9 +162,24 @@ class Content extends Entity<Keys> {
     this.publisherReligion,
     this.publisherLatitude,
     this.publisherLongitude,
+    String? publisherId,
     String? publisherGender,
 
-    // CONTENT
+    // LOCATION
+    this.city,
+    this.country,
+    this.latitude,
+    this.longitude,
+    this.region,
+    this.zip,
+
+    // REFERENCES
+    this.path,
+    this.reference,
+    Content? content,
+    FeedType? type,
+
+    // OTHERS
     String? id,
     super.timeMills,
     Audience? audience,
@@ -151,22 +189,18 @@ class Content extends Entity<Keys> {
     this.comments,
     String? description,
     List<String>? descriptions,
-    this.latitude,
     this.likeCount,
     this.likes,
     this.link,
-    this.longitude,
     this.name,
     this.parentId,
     this.parentLink,
     this.parentPath,
     this.parentUrl,
-    this.reference,
     this.photos,
     this.photoIds,
     this.photoUrl,
-    this.photoUrls,
-    this.path,
+    Iterable<String>? photoUrls,
     this.priority,
     Privacy? privacy,
     Content? recent,
@@ -181,7 +215,6 @@ class Content extends Entity<Keys> {
     this.tags,
     this.text,
     this.title,
-    FeedType? type,
     this.url,
     this.verified,
     this.videos,
@@ -194,8 +227,11 @@ class Content extends Entity<Keys> {
     this.translatedTitle,
     this.translatedDescription,
     this.translatedDescriptions,
-  }) : _publisherGender = publisherGender,
+  }) : _publisherId = publisherId,
+       _publisherGender = publisherGender,
+       _photoUrls = photoUrls?.toList(),
        _audience = audience,
+       _content = content,
        _privacy = privacy,
        _type = type,
        _recent = recent,
@@ -203,150 +239,11 @@ class Content extends Entity<Keys> {
        _descriptions = descriptions,
        super(id: id ?? KeyGenerator.generateKey(extraKeySize: 8));
 
-  Content withContent({
-    // PUBLISHER
-    String? publisher,
-    int? publisherAge,
-    String? publisherPhoto,
-    String? publisherProfession,
-    String? publisherProfilePath,
-    String? publisherProfileUrl,
-    String? publisherName,
-    String? publisherShortName,
-    String? publisherTitle,
-    double? publisherRating,
-    String? publisherReligion,
-    double? publisherLatitude,
-    double? publisherLongitude,
-    String? publisherGender,
-
-    // CONTENT
-    String? id,
-    int? timeMills,
-    String? description,
-    List<String>? descriptions,
-    String? text,
-    String? title,
-    String? link,
-    String? path,
-    String? parentId,
-    String? parentPath,
-    List<Photo>? photos,
-    List<String>? photoIds,
-    String? photoUrl,
-    List<String>? photoUrls,
-    int? priority,
-    Content? recent,
-    String? recentId,
-    String? recentPath,
-    String? referenceId,
-    String? referencePath,
-    String? url,
-    bool? verified,
-    List<Content>? videos,
-    List<String>? videoIds,
-    String? videoUrl,
-    List<String>? videoUrls,
-    List<String>? views,
-    int? viewCount,
-    List<String>? bookmarks,
-    List<Content>? contents,
-    int? commentCount,
-    List<String>? comments,
-    int? likeCount,
-    List<String>? likes,
-    String? name,
-    int? reportCount,
-    List<String>? reports,
-    int? starCount,
-    List<String>? stars,
-    List<String>? tags,
-    Audience? audience,
-    Privacy? privacy,
-    String? publisherId,
-    FeedType? type,
-
-    // LOCAL INFO
-    // LOCAL INFO
-    String? translatedTitle,
-    String? translatedDescription,
-    List<String>? translatedDescriptions,
-  }) {
-    return Content(
-      // PUBLISHER
-      publisher: publisher ?? this.publisher,
-      publisherAge: publisherAge ?? this.publisherAge,
-      publisherPhoto: publisherPhoto ?? this.publisherPhoto,
-      publisherProfession: publisherProfession ?? this.publisherProfession,
-      publisherProfilePath: publisherProfilePath ?? this.publisherProfilePath,
-      publisherProfileUrl: publisherProfileUrl ?? this.publisherProfileUrl,
-      publisherName: publisherName ?? this.publisherName,
-      publisherShortName: publisherShortName ?? this.publisherShortName,
-      publisherTitle: publisherTitle ?? this.publisherTitle,
-      publisherRating: publisherRating ?? this.publisherRating,
-      publisherReligion: publisherReligion ?? this.publisherReligion,
-      publisherLatitude: publisherLatitude ?? this.publisherLatitude,
-      publisherLongitude: publisherLongitude ?? this.publisherLongitude,
-      publisherGender: publisherGender ?? _publisherGender,
-      // CONTENT
-      id: id ?? this.id,
-      timeMills: timeMills ?? this.timeMills,
-      text: text ?? this.text,
-      title: title ?? this.title,
-      link: link ?? this.link,
-      path: path ?? this.path,
-      parentId: parentId ?? this.parentId,
-      parentPath: parentPath ?? this.parentPath,
-      photos: photos ?? this.photos,
-      photoIds: photoIds ?? this.photoIds,
-      photoUrl: photoUrl ?? this.photoUrl,
-      photoUrls: photoUrls ?? this.photoUrls,
-      priority: priority ?? this.priority,
-      recentId: recentId ?? this.recentId,
-      recentPath: recentPath ?? this.recentPath,
-      referenceId: referenceId ?? this.referenceId,
-      referencePath: referencePath ?? this.referencePath,
-      description: description ?? this.description,
-      descriptions: descriptions ?? this.descriptions,
-      url: url ?? this.url,
-      verified: verified ?? this.verified,
-      videos: videos ?? this.videos,
-      videoIds: videoIds ?? this.videoIds,
-      videoUrl: videoUrl ?? this.videoUrl,
-      videoUrls: videoUrls ?? this.videoUrls,
-      views: views ?? this.views,
-      viewCount: viewCount ?? this.viewCount,
-      bookmarks: bookmarks ?? this.bookmarks,
-      contents: contents ?? this.contents,
-      commentCount: commentCount ?? this.commentCount,
-      comments: comments ?? this.comments,
-      likeCount: likeCount ?? this.likeCount,
-      likes: likes ?? this.likes,
-      name: name ?? this.name,
-      reportCount: reportCount ?? this.reportCount,
-      reports: reports ?? this.reports,
-      starCount: starCount ?? this.starCount,
-      stars: stars ?? this.stars,
-      tags: tags ?? this.tags,
-      recent: recent ?? _recent,
-      audience: audience ?? _audience,
-      privacy: privacy ?? _privacy,
-      type: type ?? _type,
-
-      // LOCAL INFO
-      translatedTitle: translatedTitle ?? this.translatedTitle,
-      translatedDescription:
-          translatedDescription ?? this.translatedDescription,
-      translatedDescriptions:
-          translatedDescriptions ?? this.translatedDescriptions,
-    );
-  }
-
-  factory Content.from(Object? source) {
+  factory Content.parse(Object? source) {
     final key = Keys.i;
     return Content(
       // PUBLISHER
-      publisher: source.entityValue(key.publisher),
+      publisherId: source.entityValue(key.publisher),
       publisherAge: source.entityValue(key.publisherAge),
       publisherPhoto: source.entityValue(key.publisherPhoto),
       publisherProfession: source.entityValue(key.publisherProfession),
@@ -382,14 +279,15 @@ class Content extends Entity<Keys> {
       descriptions: source.entityValues(key.descriptions),
       url: source.entityValue(key.url),
       verified: source.entityValue(key.verified),
-      videos: source.entityValues(key.videos, Content.from),
+      videos: source.entityValues(key.videos, Content.parse),
       videoIds: source.entityValues(key.videoIds),
       videoUrl: source.entityValue(key.videoUrl),
       videoUrls: source.entityValues(key.videoUrls),
       views: source.entityValues(key.views),
       viewCount: source.entityValue(key.viewCount),
       bookmarks: source.entityValues(key.bookmarks),
-      contents: source.entityValues(key.contents, Content.from),
+      content: source.entityValue(key.content, Content.parse),
+      contents: source.entityValues(key.contents, Content.parse),
       commentCount: source.entityValue(key.commentCount),
       comments: source.entityValues(key.comments),
       likeCount: source.entityValue(key.likeCount),
@@ -403,21 +301,23 @@ class Content extends Entity<Keys> {
       audience: source.entityValue(key.audience, Audience.from),
       privacy: source.entityValue(key.privacy, Privacy.parse),
       type: source.entityValue(key.type, FeedType.parse),
-      recent: source.entityValue(key.recent, Content.from),
+      recent: source.entityValue(key.recent, Content.parse),
     );
   }
 
   @override
-  Keys makeKey() => Keys.i;
+  bool isInsertable(String key, value) {
+    return value != null && keys.contains(key);
+  }
 
-  @override
-  bool isInsertable(String key, value) => this.key.keys.contains(key);
+  Iterable<String> get keys => key.keys;
 
   @override
   Map<String, dynamic> get source {
     final entries = {
       // PUBLISHER INFO
-      key.publisher: publisher,
+      key.publisher: _publisherId,
+      // key.publisherRef: publisher,
       key.publisherAge: publisherAge,
       key.publisherPhoto: publisherPhoto,
       key.publisherProfession: publisherProfession,

@@ -44,7 +44,7 @@ class ItemFeed extends StatelessWidget {
   }
 
   Widget _buildLayout(BuildContext context) {
-    switch (item.contentType) {
+    switch (item.type) {
       case FeedType.none:
       case FeedType.photo:
       case FeedType.post:

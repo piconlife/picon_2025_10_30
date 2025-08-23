@@ -49,7 +49,7 @@ List<String> _keys = [
 class UserMemory extends Content {
   UserMemory({
     // PUBLISHER
-    super.publisher,
+    super.publisherId,
     super.publisherPhoto,
     super.publisherName,
     super.publisherShortName,
@@ -127,7 +127,7 @@ class UserMemory extends Content {
     publisher ??= UserHelper.user;
     return UserMemory(
       // PUBLISHER
-      publisher: publisher.id,
+      publisherId: publisher.id,
       publisherName: publisher.name,
       publisherPhoto: publisher.photo,
       publisherShortName: publisher.username,
@@ -206,7 +206,7 @@ class UserMemory extends Content {
   }) {
     return UserMemory(
       // PUBLISHER
-      publisher: publisher ?? this.publisher,
+      publisherId: publisher ?? this.publisherId,
       publisherPhoto: publisherPhoto ?? this.publisherPhoto,
       publisherName: publisherName ?? this.publisherName,
       publisherShortName: publisherShortName ?? this.publisherShortName,
@@ -246,10 +246,10 @@ class UserMemory extends Content {
   }
 
   factory UserMemory.from(dynamic source) {
-    final data = Content.from(source);
+    final data = Content.parse(source);
     return UserMemory(
       // PUBLISHER
-      publisher: data.publisher,
+      publisherId: data.publisherId,
       publisherPhoto: data.publisherPhoto,
       publisherName: data.publisherName,
       publisherShortName: data.publisherShortName,

@@ -19,7 +19,7 @@ class ItemUserFeed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (item.contentType) {
+    switch (item.type) {
       case FeedType.none:
       case FeedType.photo:
       case FeedType.post:

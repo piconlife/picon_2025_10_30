@@ -30,7 +30,7 @@ class _ItemUserFeedNoteState extends State<ItemUserFeedNote> {
       child: Column(
         children: [
           InAppUserBuilder(
-            id: widget.item.publisher,
+            id: widget.item.publisherId,
             builder: (context, user) {
               return UserFeedHeader(
                 title: user.name,
