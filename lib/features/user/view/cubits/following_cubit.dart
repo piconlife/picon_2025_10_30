@@ -4,6 +4,7 @@ import 'package:flutter_entity/entity.dart';
 import '../../../../app/base/countable_response.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../data/models/user_following.dart';
+import '../../../../data/use_cases/user_following/count.dart';
 import '../../../../data/use_cases/user_following/create.dart';
 import '../../../../data/use_cases/user_following/delete.dart';
 import '../../../../data/use_cases/user_following/get.dart';
@@ -14,6 +15,12 @@ class UserFollowingCubit extends Cubit<CountableResponse<UserFollowing>> {
   UserFollowingCubit([String? uid])
     : uid = uid ?? UserHelper.uid,
       super(CountableResponse(count: 0));
+
+  void count() {
+    GetUserFollowingCountUseCase.i(uid).then((value) {
+      emit(state.copy(count: value.data));
+    });
+  }
 
   void fetch({int initialSize = 30, int fetchingSize = 15}) {
     if (uid.isEmpty) return;

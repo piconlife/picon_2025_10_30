@@ -2,12 +2,12 @@ import 'package:flutter_entity/entity.dart';
 
 import 'base.dart';
 
-class GetUserPostCountUseCase extends BaseUserPostUseCase {
-  GetUserPostCountUseCase._();
+class GetUserFeedCountUseCase extends BaseUserPostUseCase {
+  GetUserFeedCountUseCase._();
 
-  static GetUserPostCountUseCase? _i;
+  static GetUserFeedCountUseCase? _i;
 
-  static GetUserPostCountUseCase get i => _i ??= GetUserPostCountUseCase._();
+  static GetUserFeedCountUseCase get i => _i ??= GetUserFeedCountUseCase._();
 
   Future<Response<int>> call([String? uid]) {
     return repository.count(params: getParams(uid));

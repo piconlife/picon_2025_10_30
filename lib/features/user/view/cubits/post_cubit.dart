@@ -6,8 +6,10 @@ import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:picon/data/use_cases/user_post/count.dart';
 import 'package:picon/roots/services/storage.dart';
 
+import '../../../../app/base/countable_response.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../data/constants/paths.dart';
 import '../../../../data/models/user_post.dart';
@@ -27,10 +29,18 @@ import '../../../../roots/utils/utils.dart';
 import '../../../../routes/paths.dart';
 import '../../../chooser/data/models/report.dart';
 
-class UserPostCubit extends Cubit<Response<UserPost>> {
+class UserPostCubit extends Cubit<CountableResponse<UserPost>> {
   final String uid;
 
-  UserPostCubit([String? uid]) : uid = uid ?? UserHelper.uid, super(Response());
+  UserPostCubit([String? uid])
+    : uid = uid ?? UserHelper.uid,
+      super(CountableResponse());
+
+  void count() {
+    GetUserFeedCountUseCase.i(uid).then((value) {
+      emit(state.copy(count: value.data));
+    });
+  }
 
   void fetch({int initialSize = 10, int fetchingSize = 5}) {
     emit(state.copy(status: Status.loading));

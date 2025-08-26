@@ -2,7 +2,6 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
 
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/user_follower.dart';
@@ -10,15 +9,12 @@ import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/text.dart';
+import '../../../social/view/widgets/follow_button.dart';
 
 class ItemUserFollower extends StatelessWidget {
-  final Selection<UserFollower> selection;
+  final UserFollower data;
 
-  const ItemUserFollower({super.key, required this.selection});
-
-  void _update(BuildContext context) {
-    // context.read<UserFollowerCubit>().update(context, selection.reverse);
-  }
+  const ItemUserFollower({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +22,6 @@ class ItemUserFollower extends StatelessWidget {
     final dark = context.dark;
     final light = context.light;
     final primary = context.secondary;
-    final item = selection.data;
     return Container(
       width: double.infinity,
       color: light,
@@ -52,10 +47,10 @@ class ItemUserFollower extends StatelessWidget {
                     right: dimen.margin.smallest,
                     bottom: dimen.margin.smallest,
                   ),
-                  child: InAppImage(item.user?.avatar, fit: BoxFit.cover),
+                  child: InAppImage(data.user?.avatar, fit: BoxFit.cover),
                 ),
-                if ((item.user?.isHeartUser ?? false) ||
-                    (item.user?.isCelebrityUser ?? false))
+                if ((data.user?.isHeartUser ?? false) ||
+                    (data.user?.isCelebrityUser ?? false))
                   Positioned(
                     bottom: 0,
                     right: 0,
@@ -67,12 +62,12 @@ class ItemUserFollower extends StatelessWidget {
                         color: light,
                       ),
                       child: InAppIcon(
-                        ((item.user?.isHeartUser ?? false)
+                        ((data.user?.isHeartUser ?? false)
                                 ? InAppIcons.heart
                                 : InAppIcons.star)
                             .solid,
                         size: dimen.smallerIcon,
-                        color: (item.user?.isHeartUser ?? false)
+                        color: (data.user?.isHeartUser ?? false)
                             ? context.red
                             : context.yellow,
                       ),
@@ -87,7 +82,7 @@ class ItemUserFollower extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 InAppText(
-                  item.user?.name,
+                  data.user?.name,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: TextStyle(
@@ -98,7 +93,7 @@ class ItemUserFollower extends StatelessWidget {
                 ),
                 SizedBox(height: dimen.margin.smaller),
                 InAppText(
-                  item.user?.username,
+                  data.user?.username,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: TextStyle(
@@ -110,28 +105,33 @@ class ItemUserFollower extends StatelessWidget {
             ),
           ),
           SizedBox(width: dimen.smallMargin),
-          InAppGesture(
-            onTap: () => _update(context),
-            scalerLowerBound: 1,
-            fadeLowerBound: 1,
-            child: Container(
-              width: dimen.dp(90),
-              height: dimen.dp(35),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: selection.selected ? primary.t10 : primary,
-                borderRadius: BorderRadius.circular(dimen.largeCorner),
-              ),
-              child: InAppText(
-                selection.selected ? "Remove" : "Add",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: selection.selected ? primary : light,
-                  fontSize: dimen.fontSize.normal,
-                  fontWeight: dimen.mediumFontWeight,
+          InAppFollowBuilder(
+            id: data.id,
+            builder: (context, isFollowing, callback) {
+              return InAppGesture(
+                onTap: callback,
+                scalerLowerBound: 1,
+                fadeLowerBound: 1,
+                child: Container(
+                  width: dimen.dp(90),
+                  height: dimen.dp(35),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: isFollowing ? primary.t10 : primary,
+                    borderRadius: BorderRadius.circular(dimen.largeCorner),
+                  ),
+                  child: InAppText(
+                    isFollowing ? "Remove" : "Add",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: isFollowing ? primary : light,
+                      fontSize: dimen.fontSize.normal,
+                      fontWeight: dimen.mediumFontWeight,
+                    ),
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ],
       ),

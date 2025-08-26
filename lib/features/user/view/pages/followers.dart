@@ -1,9 +1,8 @@
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_entity/entity.dart';
 
+import '../../../../app/base/countable_response.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/user.dart';
 import '../../../../data/models/user_follower.dart';
@@ -33,7 +32,7 @@ class _UserFollowersPageState extends State<UserFollowersPage> {
             ? "${widget.user?.username ?? ""}'s followers"
             : "Followers",
       ),
-      body: BlocBuilder<UserFollowerCubit, Response<Selection<UserFollower>>>(
+      body: BlocBuilder<UserFollowerCubit, CountableResponse<UserFollower>>(
         builder: (context, response) {
           if (response.isLoading) {
             return InAppScaffoldShimmer();
@@ -52,7 +51,7 @@ class _UserFollowersPageState extends State<UserFollowersPage> {
             itemCount: response.result.length,
             itemBuilder: (context, index) {
               final item = response.result.elementAt(index);
-              return ItemUserFollower(selection: item);
+              return ItemUserFollower(data: item);
             },
           );
         },

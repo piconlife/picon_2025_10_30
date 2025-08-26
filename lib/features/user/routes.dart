@@ -10,15 +10,12 @@ import '../social/view/cubits/follower_cubit.dart';
 import '../social/view/pages/create_post.dart';
 import 'view/cubits/avatar_cubit.dart';
 import 'view/cubits/cover_cubit.dart';
-import 'view/cubits/follower_counter_cubit.dart';
 import 'view/cubits/follower_cubit.dart';
 import 'view/cubits/following_cubit.dart';
 import 'view/cubits/memory_cubit.dart';
 import 'view/cubits/note_cubit.dart';
 import 'view/cubits/photo_cubit.dart';
-import 'view/cubits/post_counter_cubit.dart';
 import 'view/cubits/post_cubit.dart';
-import 'view/cubits/report_counter_cubit.dart';
 import 'view/cubits/report_cubit.dart';
 import 'view/cubits/story_cubit.dart';
 import 'view/cubits/user_cubit.dart';
@@ -50,9 +47,6 @@ Map<String, RouteBuilder> get mUserRoutes {
 Widget _createUserPost(BuildContext context, Object? args) {
   UserPostCubit? postCubit = args.findOrNull(key: "$UserPostCubit");
   UserPhotoCubit? photoCubit = args.findOrNull(key: "$UserPhotoCubit");
-  UserPostCounterCubit? postCounterCubit = args.findOrNull(
-    key: "$UserPostCounterCubit",
-  );
   return MultiBlocProvider(
     providers: [
       postCubit != null
@@ -61,9 +55,6 @@ Widget _createUserPost(BuildContext context, Object? args) {
       photoCubit != null
           ? BlocProvider.value(value: photoCubit)
           : BlocProvider(create: (context) => UserPhotoCubit()),
-      postCounterCubit != null
-          ? BlocProvider.value(value: postCounterCubit)
-          : BlocProvider(create: (context) => UserPostCounterCubit()),
     ],
     child: CreatePostPage(args: args),
   );
@@ -137,15 +128,6 @@ Widget _profile(BuildContext context, Object? args) {
   UserVideoCubit? videoCubit = args.findOrNull(key: "$UserVideoCubit");
   UserAvatarCubit? avatarsCubit = args.findOrNull(key: "$UserAvatarCubit");
   UserCoverCubit? coversCubit = args.findOrNull(key: "$UserCoverCubit");
-  UserReportCounterCubit? reportCounterCubit = args.findOrNull(
-    key: "$UserReportCounterCubit",
-  );
-  UserPostCounterCubit? postCounterCubit = args.findOrNull(
-    key: "$UserPostCounterCubit",
-  );
-  UserFollowerCounterCubit? followerCounterCubit = args.findOrNull(
-    key: "$UserFollowerCounterCubit",
-  );
   return MultiBlocProvider(
     providers: [
       if (followerCubit != null) BlocProvider.value(value: followerCubit),
@@ -168,8 +150,12 @@ Widget _profile(BuildContext context, Object? args) {
           ? BlocProvider.value(value: photoCubit)
           : BlocProvider(create: (context) => UserPhotoCubit(uid)..fetch()),
       postCubit != null
-          ? BlocProvider.value(value: postCubit)
-          : BlocProvider(create: (context) => UserPostCubit(uid)..fetch()),
+          ? BlocProvider.value(value: postCubit..count())
+          : BlocProvider(
+              create: (context) => UserPostCubit(uid)
+                ..fetch()
+                ..count(),
+            ),
       storyCubit != null
           ? BlocProvider.value(value: storyCubit)
           : BlocProvider(create: (context) => UserStoryCubit(uid)..fetch()),
@@ -177,35 +163,18 @@ Widget _profile(BuildContext context, Object? args) {
           ? BlocProvider.value(value: videoCubit)
           : BlocProvider(create: (context) => UserVideoCubit(uid)..fetch()),
       reportCubit != null
-          ? BlocProvider.value(value: reportCubit)
-          : BlocProvider(create: (context) => UserReportCubit(uid)..fetch()),
+          ? BlocProvider.value(value: reportCubit..count())
+          : BlocProvider(
+              create: (context) => UserReportCubit(uid)
+                ..fetch()
+                ..count(),
+            ),
       userFollowerCubit != null
-          ? BlocProvider.value(value: userFollowerCubit)
-          : BlocProvider(create: (context) => UserFollowerCubit(uid)),
+          ? BlocProvider.value(value: userFollowerCubit..count())
+          : BlocProvider(create: (context) => UserFollowerCubit(uid)..count()),
       userFollowingCubit != null
           ? BlocProvider.value(value: userFollowingCubit)
           : BlocProvider(create: (context) => UserFollowingCubit(uid)),
-      reportCounterCubit != null
-          ? BlocProvider.value(value: reportCounterCubit)
-          : BlocProvider(
-              create: (context) {
-                return UserReportCounterCubit(uid)..fetch();
-              },
-            ),
-      postCounterCubit != null
-          ? BlocProvider.value(value: postCounterCubit)
-          : BlocProvider(
-              create: (context) {
-                return UserPostCounterCubit(uid)..fetch();
-              },
-            ),
-      followerCounterCubit != null
-          ? BlocProvider.value(value: followerCounterCubit)
-          : BlocProvider(
-              create: (context) {
-                return UserFollowerCounterCubit(uid)..fetch();
-              },
-            ),
     ],
     child: UserProfilePage(args: args),
   );
@@ -214,9 +183,6 @@ Widget _profile(BuildContext context, Object? args) {
 Widget _profileReports(BuildContext context, Object? args) {
   User? user = args.findOrNull(key: "$User");
   UserReportCubit? reportCubit = args.findOrNull(key: "$UserReportCubit");
-  UserReportCounterCubit? reportCounterCubit = args.findOrNull(
-    key: "$UserReportCounterCubit",
-  );
   return MultiBlocProvider(
     providers: [
       reportCubit != null
@@ -224,13 +190,6 @@ Widget _profileReports(BuildContext context, Object? args) {
           : BlocProvider(
               create: (context) {
                 return UserReportCubit(user?.id)..fetch();
-              },
-            ),
-      reportCounterCubit != null
-          ? BlocProvider.value(value: reportCounterCubit)
-          : BlocProvider(
-              create: (context) {
-                return UserReportCounterCubit(user?.id)..fetch();
               },
             ),
     ],
@@ -241,21 +200,11 @@ Widget _profileReports(BuildContext context, Object? args) {
 Widget _profileFeeds(BuildContext context, Object? args) {
   User? user = args.findOrNull(key: "$User");
   UserPostCubit? postCubit = args.findOrNull(key: "$UserPostCubit");
-  UserPostCounterCubit? postCounterCubit = args.findOrNull(
-    key: "$UserPostCounterCubit",
-  );
   return MultiBlocProvider(
     providers: [
       postCubit != null
           ? BlocProvider.value(value: postCubit)
           : BlocProvider(create: (context) => UserPostCubit(user?.id)..fetch()),
-      postCounterCubit != null
-          ? BlocProvider.value(value: postCounterCubit)
-          : BlocProvider(
-              create: (context) {
-                return UserPostCounterCubit(user?.id)..fetch();
-              },
-            ),
     ],
     child: UserPostsPage(args: args, user: user),
   );
@@ -264,9 +213,6 @@ Widget _profileFeeds(BuildContext context, Object? args) {
 Widget _profileFollowers(BuildContext context, Object? args) {
   User? user = args.findOrNull(key: "$User");
   UserFollowerCubit? followerCubit = args.findOrNull(key: "$UserFollowerCubit");
-  UserFollowerCounterCubit? followerCounterCubit = args.findOrNull(
-    key: "$UserFollowerCounterCubit",
-  );
   return MultiBlocProvider(
     providers: [
       followerCubit != null
@@ -274,13 +220,6 @@ Widget _profileFollowers(BuildContext context, Object? args) {
           : BlocProvider(
               create: (context) {
                 return UserFollowerCubit(user?.id)..fetch();
-              },
-            ),
-      followerCounterCubit != null
-          ? BlocProvider.value(value: followerCounterCubit)
-          : BlocProvider(
-              create: (context) {
-                return UserFollowerCounterCubit(user?.id)..fetch();
               },
             ),
     ],

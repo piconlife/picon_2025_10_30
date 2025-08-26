@@ -42,7 +42,6 @@ import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/texted_action.dart';
 import '../../../../routes/paths.dart';
 import '../../../user/view/cubits/photo_cubit.dart';
-import '../../../user/view/cubits/post_counter_cubit.dart';
 import '../../../user/view/cubits/post_cubit.dart';
 import '../../../user/view/widgets/uploading_image.dart';
 
@@ -369,7 +368,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
     context.read<UserPostCubit>().create(feed).then((value) {
       if (!context.mounted) return;
       if (value.isSuccessful) {
-        context.read<UserPostCounterCubit?>()?.increment(1);
         context.read<UserPhotoCubit?>()?.add(feed..photos = mPhotos);
         _createFeedForGlobal(context, feed);
       } else {

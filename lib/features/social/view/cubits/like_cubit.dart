@@ -2,13 +2,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 
 import '../../../../app/base/countable_response.dart';
-import '../../../../app/helpers/user.dart';
 import '../../../../data/enums/like_type.dart';
 import '../../../../data/models/feed_like.dart';
 import '../../../../data/use_cases/feed_like/counter.dart';
 import '../../../../data/use_cases/feed_like/create.dart';
 import '../../../../data/use_cases/feed_like/delete.dart';
-import '../../../../data/use_cases/feed_like/get_by_id.dart';
 import '../../../../data/use_cases/feed_like/get_by_pagination.dart';
 
 class FeedLikeCubit extends Cubit<CountableResponse<FeedLike>> {

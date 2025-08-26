@@ -7,9 +7,9 @@ import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_androssy_kits/core/cached_network_image.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
+import '../../../../app/base/countable_response.dart';
 import '../../../../app/dialogs/dialog_big_photo.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../app/res/icons.dart';
@@ -18,6 +18,10 @@ import '../../../../app/styles/fonts.dart';
 import '../../../../data/models/user.dart';
 import '../../../../data/models/user_avatar.dart';
 import '../../../../data/models/user_cover.dart';
+import '../../../../data/models/user_follower.dart';
+import '../../../../data/models/user_following.dart';
+import '../../../../data/models/user_post.dart';
+import '../../../../data/models/user_report.dart';
 import '../../../../roots/widgets/avatar.dart';
 import '../../../../roots/widgets/button.dart';
 import '../../../../roots/widgets/gesture.dart';
@@ -31,11 +35,11 @@ import '../../../social/view/dialogs/bsd_feed_format.dart';
 import '../../utils/user_updater.dart';
 import '../cubits/avatar_cubit.dart';
 import '../cubits/cover_cubit.dart';
-import '../cubits/follower_counter_cubit.dart';
+import '../cubits/follower_cubit.dart';
+import '../cubits/following_cubit.dart';
 import '../cubits/photo_cubit.dart';
-import '../cubits/post_counter_cubit.dart';
 import '../cubits/post_cubit.dart';
-import '../cubits/report_counter_cubit.dart';
+import '../cubits/report_cubit.dart';
 import '../dialogs/bsd_user_profile_avatars.dart';
 import '../dialogs/bsd_user_profile_covers.dart';
 import '../dialogs/bsd_user_profile_rating.dart';
@@ -151,7 +155,6 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
         arguments: {
           "$UserPostCubit": context.read<UserPostCubit>(),
           "$UserPhotoCubit": context.read<UserPhotoCubit>(),
-          "$UserPostCounterCubit": context.read<UserPostCounterCubit>(),
         },
       );
       return;
@@ -446,42 +449,48 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  BlocBuilder<UserReportCounterCubit, Response<int>>(
+                  BlocBuilder<UserReportCubit, CountableResponse<UserReport>>(
                     builder: (context, response) {
                       return _Counter(
                         text: "Reports",
                         primary: primary,
-                        counter: response.data.toReadableNumber.text,
+                        counter: response.count.toReadableNumber.text,
                         onClick: () => _seeReports(context, user),
                       );
                     },
                   ),
-                  BlocBuilder<UserPostCounterCubit, Response<int>>(
+                  BlocBuilder<UserPostCubit, CountableResponse<UserPost>>(
                     builder: (context, response) {
                       return _Counter(
                         text: "Feeds",
                         primary: primary,
-                        counter: response.data.toReadableNumber.text,
+                        counter: response.count.toReadableNumber.text,
                         onClick: () => _seePosts(context, user),
                       );
                     },
                   ),
-                  BlocBuilder<UserFollowerCounterCubit, Response<int>>(
+                  BlocBuilder<
+                    UserFollowerCubit,
+                    CountableResponse<UserFollower>
+                  >(
                     builder: (context, response) {
                       return _Counter(
                         text: "Followers",
                         primary: primary,
-                        counter: response.data.toReadableNumber.text,
+                        counter: response.count.toReadableNumber.text,
                         onClick: () => _seeFollowers(context, user),
                       );
                     },
                   ),
-                  BlocBuilder<UserFollowerCounterCubit, Response<int>>(
+                  BlocBuilder<
+                    UserFollowingCubit,
+                    CountableResponse<UserFollowing>
+                  >(
                     builder: (context, response) {
                       return _Counter(
                         text: "Followings",
                         primary: primary,
-                        counter: response.data.toReadableNumber.text,
+                        counter: response.count.toReadableNumber.text,
                         onClick: () => _seeFollowings(context, user),
                       );
                     },
