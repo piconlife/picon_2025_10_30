@@ -16,17 +16,17 @@ class FollowerCubit extends DataCubit<Selection<UserFollower>> {
     if (response.result.isNotEmpty) {
       data.addAll(response.result.map((e) => Selection(id: e.id, data: e)));
     }
-    emit(state.copy(status: response.status, result: data));
+    emit(state.copyWith(status: response.status, result: data));
   }
 
   @override
   void fetch() async {
     if (uid == null || uid!.isEmpty) {
-      return emit(state.copy(status: Status.notFound));
+      return emit(state.copyWith(status: Status.notFound));
     }
-    emit(state.copy(status: Status.loading));
+    emit(state.copyWith(status: Status.loading));
     GetUserFollowersUseCase.i().then(_attach).catchError((error, __) {
-      emit(state.copy(status: Status.failure));
+      emit(state.copyWith(status: Status.failure));
     });
   }
 }

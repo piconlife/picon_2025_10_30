@@ -1,8 +1,8 @@
 import 'package:app_color/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_entity/entity.dart';
 
-import '../../../../app/base/countable_response.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/feed_like.dart';
 import '../../../../data/models/user.dart';
@@ -44,7 +44,7 @@ class _LikesPageState extends State<LikesPage> with ColorMixin {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: InAppAppbar(titleText: "Likes"),
-        body: BlocBuilder<FeedLikeCubit, CountableResponse<FeedLike>>(
+        body: BlocBuilder<FeedLikeCubit, Response<FeedLike>>(
           builder: (context, response) {
             if (response.isLoading) {
               return InAppScaffoldShimmer();

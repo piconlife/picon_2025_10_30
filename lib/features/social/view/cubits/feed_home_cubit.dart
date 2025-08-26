@@ -8,13 +8,13 @@ class FeedHomeCubit extends Cubit<Response<Feed>> {
   FeedHomeCubit() : super(Response());
 
   void fetch({int initialSize = 10, int fetchingSize = 5}) {
-    emit(state.copy(status: Status.loading));
+    emit(state.copyWith(status: Status.loading));
     GetStarFeedsByPaginationUseCase.i(
       initialSize: initialSize,
       fetchingSize: fetchingSize,
       snapshot: state.snapshot,
     ).then(_attach).catchError((e, st) {
-      emit(state.copy(status: Status.failure));
+      emit(state.copyWith(status: Status.failure));
     });
   }
 
@@ -23,13 +23,13 @@ class FeedHomeCubit extends Cubit<Response<Feed>> {
     if (index >= 0) {
       state.result.removeAt(index);
       state.result.insert(index, value);
-      emit(state.copy(data: value, result: state.result, requestCode: 202));
+      emit(state.copyWith(data: value, result: state.result, requestCode: 202));
     }
   }
 
   void _attach(Response<Feed> response) {
     emit(
-      state.copy(
+      state.copyWith(
         status: response.status,
         snapshot: response.snapshot,
         result: state.result..addAll(response.result),

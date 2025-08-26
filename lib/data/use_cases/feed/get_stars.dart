@@ -38,7 +38,7 @@ class GetStarFeedsByPaginationUseCase extends BaseFeedUseCase {
         return response.result;
       },
     );
-    return response.copy(result: filtered);
+    return response.copyWith(result: filtered);
   }
 
   Future<Response<Feed>> call({

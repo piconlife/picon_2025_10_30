@@ -4,7 +4,6 @@ import 'package:flutter_entity/entity.dart';
 import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../data/models/user_follower.dart';
-import '../../../../data/use_cases/user_follower/get.dart';
 
 class FollowerCubit extends DataCubit<Selection<UserFollower>> {
   final String? uid;
@@ -16,17 +15,17 @@ class FollowerCubit extends DataCubit<Selection<UserFollower>> {
     if (response.result.isNotEmpty) {
       data.addAll(response.result.map((e) => Selection(id: e.id, data: e)));
     }
-    emit(state.copy(status: response.status, result: data));
+    emit(state.copyWith(status: response.status, result: data));
   }
 
   @override
   void fetch() async {
     if (uid == null || uid!.isEmpty) {
-      return emit(state.copy(status: Status.notFound));
+      return emit(state.copyWith(status: Status.notFound));
     }
-    emit(state.copy(status: Status.loading));
+    emit(state.copyWith(status: Status.loading));
     // GetUserFollowersUseCase.i().then(_attach).catchError((e, st) {
-    //   emit(state.copy(status: Status.failure));
+    //   emit(state.copyWith(status: Status.failure));
     // });
   }
 }

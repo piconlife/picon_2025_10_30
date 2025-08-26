@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 
-import '../../../../app/base/countable_response.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../data/models/user_following.dart';
 import '../../../../data/use_cases/user_following/count.dart';
@@ -9,30 +8,30 @@ import '../../../../data/use_cases/user_following/create.dart';
 import '../../../../data/use_cases/user_following/delete.dart';
 import '../../../../data/use_cases/user_following/get.dart';
 
-class UserFollowingCubit extends Cubit<CountableResponse<UserFollowing>> {
+class UserFollowingCubit extends Cubit<Response<UserFollowing>> {
   final String uid;
 
   UserFollowingCubit([String? uid])
     : uid = uid ?? UserHelper.uid,
-      super(CountableResponse(count: 0));
+      super(Response(count: 0));
 
   void count() {
     GetUserFollowingCountUseCase.i(uid).then((value) {
-      emit(state.copy(count: value.data));
+      emit(state.copyWith(count: value.data));
     });
   }
 
   void fetch({int initialSize = 30, int fetchingSize = 15}) {
     if (uid.isEmpty) return;
-    emit(state.copy(status: Status.loading));
+    emit(state.copyWith(status: Status.loading));
     GetUserFollowingsUseCase.i().then(_attach).catchError((error, stackTrace) {
-      emit(state.copy(status: Status.failure));
+      emit(state.copyWith(status: Status.failure));
     });
   }
 
   void _attach(Response<UserFollowing> response) {
     emit(
-      state.copy(
+      state.copyWith(
         status: response.status,
         snapshot: response.snapshot,
         result: response.result,
@@ -55,11 +54,14 @@ class UserFollowingCubit extends Cubit<CountableResponse<UserFollowing>> {
     if (uid.isEmpty) return;
     final data = UserFollowing.create(uid: uid);
     emit(
-      state.copy(result: state.result..insert(0, data), count: state.count + 1),
+      state.copyWith(
+        result: state.result..insert(0, data),
+        count: state.count + 1,
+      ),
     );
     CreateUserFollowingUseCase.i(data).then((value) {
       if (!value.isSuccessful) {
-        emit(state.copy(result: state.result..remove(data)));
+        emit(state.copyWith(result: state.result..remove(data)));
       }
       return value;
     });
@@ -68,11 +70,14 @@ class UserFollowingCubit extends Cubit<CountableResponse<UserFollowing>> {
   void unfollow(UserFollowing data) {
     if (data.id.isEmpty) return;
     emit(
-      state.copy(result: state.result..remove(data), count: state.count - 1),
+      state.copyWith(
+        result: state.result..remove(data),
+        count: state.count - 1,
+      ),
     );
     DeleteUserFollowingUseCase.i(data.id).then((value) {
       if (!value.isSuccessful) {
-        emit(state.copy(result: state.result..insert(0, data)));
+        emit(state.copyWith(result: state.result..insert(0, data)));
       }
       return value;
     });

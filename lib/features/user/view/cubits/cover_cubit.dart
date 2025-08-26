@@ -15,22 +15,22 @@ class UserCoverCubit extends Cubit<Response<UserCover>> {
       super(Response());
 
   void fetch({int initialSize = 10, int fetchingSize = 5}) {
-    emit(state.copy(status: Status.loading));
+    emit(state.copyWith(status: Status.loading));
     GetUserCoversByPaginationUseCase.i().then(_attach).catchError((
       error,
       stackTrace,
     ) {
-      emit(state.copy(status: Status.failure));
+      emit(state.copyWith(status: Status.failure));
     });
   }
 
   void update(UserCover value) {
-    emit(state.copy(data: value, requestCode: 202));
+    emit(state.copyWith(data: value, requestCode: 202));
   }
 
   void _attach(Response<UserCover> response) {
     emit(
-      state.copy(
+      state.copyWith(
         status: response.status,
         snapshot: response.snapshot,
         result: response.result,
@@ -42,7 +42,7 @@ class UserCoverCubit extends Cubit<Response<UserCover>> {
   Future<Response<UserCover>> create(UserCover data) {
     return CreateUserCoverUseCase.i(data).then((value) {
       if (value.isSuccessful) {
-        emit(state.copy(result: state.result..insert(0, data)));
+        emit(state.copyWith(result: state.result..insert(0, data)));
       }
       return value;
     });
@@ -52,7 +52,7 @@ class UserCoverCubit extends Cubit<Response<UserCover>> {
     return DeleteUserCoverUseCase.i(id).then((value) {
       if (value.isSuccessful) {
         emit(
-          state.copy(
+          state.copyWith(
             result: state.result
               ..removeWhere((e) {
                 return e.id == id;

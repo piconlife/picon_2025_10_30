@@ -7,9 +7,9 @@ import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_androssy_kits/core/cached_network_image.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
-import '../../../../app/base/countable_response.dart';
 import '../../../../app/dialogs/dialog_big_photo.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../app/res/icons.dart';
@@ -449,7 +449,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  BlocBuilder<UserReportCubit, CountableResponse<UserReport>>(
+                  BlocBuilder<UserReportCubit, Response<UserReport>>(
                     builder: (context, response) {
                       return _Counter(
                         text: "Reports",
@@ -459,7 +459,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
                       );
                     },
                   ),
-                  BlocBuilder<UserPostCubit, CountableResponse<UserPost>>(
+                  BlocBuilder<UserPostCubit, Response<UserPost>>(
                     builder: (context, response) {
                       return _Counter(
                         text: "Feeds",
@@ -469,10 +469,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
                       );
                     },
                   ),
-                  BlocBuilder<
-                    UserFollowerCubit,
-                    CountableResponse<UserFollower>
-                  >(
+                  BlocBuilder<UserFollowerCubit, Response<UserFollower>>(
                     builder: (context, response) {
                       return _Counter(
                         text: "Followers",
@@ -482,10 +479,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
                       );
                     },
                   ),
-                  BlocBuilder<
-                    UserFollowingCubit,
-                    CountableResponse<UserFollowing>
-                  >(
+                  BlocBuilder<UserFollowingCubit, Response<UserFollowing>>(
                     builder: (context, response) {
                       return _Counter(
                         text: "Followings",

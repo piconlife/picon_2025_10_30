@@ -59,14 +59,14 @@ class UserVideoRepository extends RemoteDataRepository<UserVideo> {
   Future<Response<UserVideo>> _modify(Response<UserVideo> value) async {
     if (value.isValid) {
       if (value.result.length == 1) {
-        return value.copy(data: await _value(value.data));
+        return value.copyWith(data: await _value(value.data));
       } else {
         List<UserVideo> list = [];
         for (var i in value.result) {
           final data = await _value(i);
           if (data != null) list.add(data);
         }
-        return value.copy(result: list);
+        return value.copyWith(result: list);
       }
     } else {
       return value;

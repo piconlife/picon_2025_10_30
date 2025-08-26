@@ -14,16 +14,16 @@ class VerifiedUsersCubit extends Cubit<Response<Selection<User>>> {
 
   void fetch() async {
     final ids = UserHelper.followings;
-    if (ids.isEmpty) return emit(state.copy(status: Status.notFound));
-    emit(state.copy(status: Status.loading));
+    if (ids.isEmpty) return emit(state.copyWith(status: Status.notFound));
+    emit(state.copyWith(status: Status.loading));
     GetUsersByIdsUseCase.i(ids).then(_attach).catchError((e, st) {
-      emit(state.copy(status: Status.failure));
+      emit(state.copyWith(status: Status.failure));
     });
   }
 
   void update(BuildContext context, Selection<User> value) {
     emit(
-      state.copy(
+      state.copyWith(
         result: state.result.change(value, (e) {
           return e.data.id == value.data.id;
         }),
@@ -52,7 +52,7 @@ class VerifiedUsersCubit extends Cubit<Response<Selection<User>>> {
       );
     }
     emit(
-      state.copy(
+      state.copyWith(
         status: response.status,
         snapshot: response.snapshot,
         result: data,

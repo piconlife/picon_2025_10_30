@@ -17,7 +17,7 @@ class SuggestedChannelsCubit extends Cubit<Response<Selection<Channel>>> {
   SuggestedChannelsCubit() : super(Response());
 
   void fetch({int initialSize = 25, int fetchingSize = 50}) async {
-    emit(state.copy(status: Status.loading));
+    emit(state.copyWith(status: Status.loading));
     Future.delayed(Duration(seconds: 3), () {
       final faker = Faker();
       final result = List.generate(
@@ -47,7 +47,7 @@ class SuggestedChannelsCubit extends Cubit<Response<Selection<Channel>>> {
 
   void update(BuildContext context, Selection<Channel> value) {
     emit(
-      state.copy(
+      state.copyWith(
         result: state.result.change(value, (e) {
           return e.data.id == value.data.id;
         }),
@@ -74,7 +74,7 @@ class SuggestedChannelsCubit extends Cubit<Response<Selection<Channel>>> {
       );
     }
     emit(
-      state.copy(
+      state.copyWith(
         status: response.status,
         snapshot: response.snapshot,
         result: data,

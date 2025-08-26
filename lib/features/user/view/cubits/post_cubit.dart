@@ -6,10 +6,7 @@ import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
-import 'package:picon/data/use_cases/user_post/count.dart';
-import 'package:picon/roots/services/storage.dart';
 
-import '../../../../app/base/countable_response.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../data/constants/paths.dart';
 import '../../../../data/models/user_post.dart';
@@ -20,37 +17,37 @@ import '../../../../data/use_cases/feed_video/delete.dart';
 import '../../../../data/use_cases/feed_video/get.dart';
 import '../../../../data/use_cases/photo/delete.dart';
 import '../../../../data/use_cases/photo/get.dart';
+import '../../../../data/use_cases/user_post/count.dart';
 import '../../../../data/use_cases/user_post/create.dart';
 import '../../../../data/use_cases/user_post/delete.dart';
 import '../../../../data/use_cases/user_post/get_by_pagination.dart';
 import '../../../../roots/services/path_provider.dart';
+import '../../../../roots/services/storage.dart';
 import '../../../../roots/services/translator.dart';
 import '../../../../roots/utils/utils.dart';
 import '../../../../routes/paths.dart';
 import '../../../chooser/data/models/report.dart';
 
-class UserPostCubit extends Cubit<CountableResponse<UserPost>> {
+class UserPostCubit extends Cubit<Response<UserPost>> {
   final String uid;
 
-  UserPostCubit([String? uid])
-    : uid = uid ?? UserHelper.uid,
-      super(CountableResponse());
+  UserPostCubit([String? uid]) : uid = uid ?? UserHelper.uid, super(Response());
 
   void count() {
     GetUserFeedCountUseCase.i(uid).then((value) {
-      emit(state.copy(count: value.data));
+      emit(state.copyWith(count: value.data));
     });
   }
 
   void fetch({int initialSize = 10, int fetchingSize = 5}) {
-    emit(state.copy(status: Status.loading));
+    emit(state.copyWith(status: Status.loading));
     GetUserPostsByPaginationUseCase.i(
       uid: uid,
       initialSize: initialSize,
       fetchingSize: fetchingSize,
       snapshot: state.snapshot,
     ).then(_attach).catchError((error, st) {
-      emit(state.copy(status: Status.failure));
+      emit(state.copyWith(status: Status.failure));
     });
   }
 
@@ -59,13 +56,13 @@ class UserPostCubit extends Cubit<CountableResponse<UserPost>> {
     if (index >= 0) {
       state.result.removeAt(index);
       state.result.insert(index, value);
-      emit(state.copy(data: value, result: state.result, requestCode: 202));
+      emit(state.copyWith(data: value, result: state.result, requestCode: 202));
     }
   }
 
   void _attach(Response<UserPost> response) {
     emit(
-      state.copy(
+      state.copyWith(
         status: response.status,
         snapshot: response.snapshot,
         result: state.result..addAll(response.result),
@@ -77,7 +74,7 @@ class UserPostCubit extends Cubit<CountableResponse<UserPost>> {
   Future<Response<UserPost>> create(UserPost data) {
     return CreateUserPostUseCase.i(data).then((value) {
       if (value.isSuccessful) {
-        emit(state.copy(result: state.result..insert(0, data)));
+        emit(state.copyWith(result: state.result..insert(0, data)));
       }
       return value;
     });
@@ -88,12 +85,12 @@ class UserPostCubit extends Cubit<CountableResponse<UserPost>> {
     if (index < 0) return;
     final data = state.result.elementAtOrNull(index);
     if (data == null || data.id != id) return;
-    emit(state.copy(result: state.result..removeAt(index)));
+    emit(state.copyWith(result: state.result..removeAt(index)));
     DeleteUserPostUseCase.i(id).then((feedback) {
       if (!context.mounted) return;
       if (!feedback.isSuccessful) {
         context.showErrorSnackBar(feedback.status.error);
-        emit(state.copy(result: state.result..insert(index, data)));
+        emit(state.copyWith(result: state.result..insert(index, data)));
         return;
       }
       StorageService.i.deletes(data.photoUrls.use, lazy: true);
@@ -142,7 +139,7 @@ class UserPostCubit extends Cubit<CountableResponse<UserPost>> {
     );
     if (feedback is! UserPost) return;
     emit(
-      state.copy(
+      state.copyWith(
         result: state.result
           ..removeAt(index)
           ..insert(index, feedback),

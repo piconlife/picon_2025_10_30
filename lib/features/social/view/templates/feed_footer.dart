@@ -4,10 +4,9 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
-import 'package:picon/routes/paths.dart';
 
-import '../../../../app/base/countable_response.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/feed_comment.dart';
@@ -16,6 +15,7 @@ import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/pleasure_button.dart';
 import '../../../../roots/widgets/text.dart';
+import '../../../../routes/paths.dart';
 import '../../../user/view/cubits/following_cubit.dart';
 import '../cubits/comment_cubit.dart';
 import '../cubits/like_cubit.dart';
@@ -70,9 +70,9 @@ class _FeedFooterState extends State<FeedFooter> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          BlocBuilder<FeedLikeCubit, CountableResponse<FeedLike>>(
+          BlocBuilder<FeedLikeCubit, Response<FeedLike>>(
             builder: (context, value) {
-              final activated = value.isExistByMe;
+              final activated = value.resultByMe.isNotEmpty;
               return InAppPleasureButton(
                 icon: activated
                     ? InAppIcons.heart.solid
@@ -96,7 +96,7 @@ class _FeedFooterState extends State<FeedFooter> {
             ),
           ),
           SizedBox(width: dimen.dp(8)),
-          BlocBuilder<FeedLikeCubit, CountableResponse<FeedLike>>(
+          BlocBuilder<FeedLikeCubit, Response<FeedLike>>(
             builder: (context, value) {
               return InAppGesture(
                 onTap: _seeLikes,
@@ -110,7 +110,7 @@ class _FeedFooterState extends State<FeedFooter> {
           SizedBox(width: dimen.dp(8)),
           InAppText("&", style: counterStyle),
           SizedBox(width: dimen.dp(8)),
-          BlocBuilder<FeedCommentCubit, CountableResponse<FeedComment>>(
+          BlocBuilder<FeedCommentCubit, Response<FeedComment>>(
             builder: (context, value) {
               return InAppGesture(
                 onTap: _seeComments,

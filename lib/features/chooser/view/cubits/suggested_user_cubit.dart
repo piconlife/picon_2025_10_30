@@ -15,7 +15,7 @@ class SuggestedUsersCubit extends Cubit<Response<Selection<User>>> {
   SuggestedUsersCubit() : super(Response());
 
   void fetch({int initialSize = 25, int fetchingSize = 50}) async {
-    emit(state.copy(status: Status.loading));
+    emit(state.copyWith(status: Status.loading));
     Future.delayed(Duration(seconds: 3), () {
       final faker = Faker();
       final result = List.generate(
@@ -46,7 +46,7 @@ class SuggestedUsersCubit extends Cubit<Response<Selection<User>>> {
 
   void update(BuildContext context, Selection<User> value) {
     emit(
-      state.copy(
+      state.copyWith(
         result: state.result.change(value, (e) {
           return e.data.id == value.data.id;
         }),
@@ -73,7 +73,7 @@ class SuggestedUsersCubit extends Cubit<Response<Selection<User>>> {
       );
     }
     emit(
-      state.copy(
+      state.copyWith(
         status: response.status,
         snapshot: response.snapshot,
         result: data,

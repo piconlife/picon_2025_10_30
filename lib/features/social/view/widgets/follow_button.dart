@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_entity/entity.dart';
 
-import '../../../../app/base/countable_response.dart';
 import '../../../../data/models/user_following.dart';
 import '../../../user/view/cubits/following_cubit.dart';
 
@@ -29,7 +29,7 @@ class _InAppFollowBuilderState extends State<InAppFollowBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserFollowingCubit, CountableResponse<UserFollowing>>(
+    return BlocBuilder<UserFollowingCubit, Response<UserFollowing>>(
       builder: (context, state) {
         final data = state.elementOf((e) => e.id == widget.id);
         return widget.builder(

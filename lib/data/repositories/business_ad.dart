@@ -60,14 +60,14 @@ class BusinessAdRepository extends RemoteDataRepository<BusinessAd> {
   Future<Response<BusinessAd>> _modify(Response<BusinessAd> value) async {
     if (value.isValid) {
       if (value.result.length == 1) {
-        return value.copy(data: await _value(value.data));
+        return value.copyWith(data: await _value(value.data));
       } else {
         List<BusinessAd> list = [];
         for (var i in value.result) {
           final data = await _value(i);
           if (data != null) list.add(data);
         }
-        return value.copy(result: list);
+        return value.copyWith(result: list);
       }
     } else {
       return value;
