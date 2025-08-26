@@ -7,7 +7,7 @@ import '../../data/models/user.dart';
 import '../../routes/paths.dart';
 import '../social/view/cubits/feed_home_cubit.dart';
 import '../social/view/cubits/follower_cubit.dart';
-import '../social/view/pages/create_user_post.dart';
+import '../social/view/pages/create_post.dart';
 import 'view/cubits/avatar_cubit.dart';
 import 'view/cubits/cover_cubit.dart';
 import 'view/cubits/follower_counter_cubit.dart';
@@ -65,7 +65,7 @@ Widget _createUserPost(BuildContext context, Object? args) {
           ? BlocProvider.value(value: postCounterCubit)
           : BlocProvider(create: (context) => UserPostCounterCubit()),
     ],
-    child: CreateUserPostPage(args: args),
+    child: CreatePostPage(args: args),
   );
 }
 

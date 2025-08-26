@@ -46,16 +46,16 @@ import '../../../user/view/cubits/post_counter_cubit.dart';
 import '../../../user/view/cubits/post_cubit.dart';
 import '../../../user/view/widgets/uploading_image.dart';
 
-class CreateUserPostPage extends StatefulWidget {
+class CreatePostPage extends StatefulWidget {
   final Object? args;
 
-  const CreateUserPostPage({super.key, this.args});
+  const CreatePostPage({super.key, this.args});
 
   @override
-  State<CreateUserPostPage> createState() => _CreateUserPostPageState();
+  State<CreatePostPage> createState() => _CreatePostPageState();
 }
 
-class _CreateUserPostPageState extends State<CreateUserPostPage> {
+class _CreatePostPageState extends State<CreatePostPage> {
   late Object? data = widget.args;
 
   late String id;

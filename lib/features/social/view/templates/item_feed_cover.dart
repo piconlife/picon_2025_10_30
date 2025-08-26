@@ -42,7 +42,7 @@ class _ItemFeedCoverState extends State<ItemFeedCover> {
 
   String? _subtitle(User user) {
     return !widget.item.title.isValid
-        ? DateHelper.toRealtime(widget.item.timeMills)
+        ? null
         : widget.item.title.isValid
         ? user.title
         : user.profession;

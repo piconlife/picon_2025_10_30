@@ -109,7 +109,7 @@ class Content extends Entity<Keys> {
     return _descriptions ?? (_description != null ? [_description!] : null);
   }
 
-  bool get isPublisher => publisherId != UserHelper.uid;
+  bool get isPublisher => publisherId == UserHelper.uid;
 
   bool get isReported => reports?.contains(UserHelper.uid) ?? false;
 

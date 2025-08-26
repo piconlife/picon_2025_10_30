@@ -62,7 +62,10 @@ class _ItemUserFeedAvatarState extends State<ItemUserFeedAvatar> {
                 subtitle: _subtitle(user),
                 avatar: user.photo,
                 actions: [
-                  FeedHeaderFollowButton(publisher: widget.item.publisherId),
+                  if (widget.item.isPublisher)
+                    FeedHeaderMoreAction()
+                  else
+                    FeedHeaderFollowButton(publisher: widget.item.publisherId),
                 ],
               );
             },
