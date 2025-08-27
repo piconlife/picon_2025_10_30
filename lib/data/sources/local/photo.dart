@@ -9,5 +9,5 @@ class LocalPhotoDataSource extends LocalDataSource<Photo> {
     : super(delegate: LocalDataDelegate.i, path: Paths.refPhotos);
 
   @override
-  Photo build(Object? source) => Photo.from(source);
+  Photo build(Object? source) => Photo.parse(source);
 }

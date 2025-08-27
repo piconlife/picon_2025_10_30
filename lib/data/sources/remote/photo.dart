@@ -9,5 +9,5 @@ class RemotePhotoDataSource extends RemoteDataSource<Photo> {
     : super(delegate: FirestoreDataDelegate.i, path: Paths.refPhotos);
 
   @override
-  Photo build(Object? source) => Photo.from(source);
+  Photo build(Object? source) => Photo.parse(source);
 }

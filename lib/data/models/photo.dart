@@ -70,7 +70,7 @@ class Photo extends Entity {
     required Privacy? privacy,
   }) : _privacy = privacy;
 
-  factory Photo.from(Object? source) {
+  factory Photo.parse(Object? source) {
     return Photo(
       id: source.entityValue(PhotoKeys.id),
       timeMills: source.entityValue(PhotoKeys.timeMills),

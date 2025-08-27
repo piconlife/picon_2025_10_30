@@ -269,7 +269,7 @@ class Content extends Entity<Keys> {
       parentPath: source.entityValue(key.parentPath),
       photoUrl: source.entityValue(key.photoUrl),
       photoUrls: source.entityValues(key.photoUrls),
-      photos: source.entityValues(key.photos, Photo.from),
+      photos: source.entityValues(key.photos, Photo.parse),
       priority: source.entityValue(key.priority),
       recentId: source.entityValue(key.recentId),
       recentPath: source.entityValue(key.recentPath),
