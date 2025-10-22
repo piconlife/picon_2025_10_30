@@ -4,18 +4,19 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.8.1
+  sdk: ^3.7.0
 
 dependencies:
-  # ------------------------------------------------------------------------------------------------
-  # CORE
-  # ------------------------------------------------------------------------------------------------
 
   flutter:
     sdk: flutter
 
+  # ------------------------------------------------------------------------------------------------
+  # CORE
+  # ------------------------------------------------------------------------------------------------
+
   # DESIGN (WITHOUT NATIVE)
-  flutter_svg: ^2.2.0
+  flutter_svg: ^2.2.1
 
   # DESIGN (WITH NATIVE)
   cached_network_image: ^3.4.1
@@ -30,12 +31,12 @@ dependencies:
   awesome_notifications: ^0.10.1
   awesome_notifications_core: ^0.10.1
   connectivity_plus: ^6.1.5
-  device_info_plus: ^11.5.0
+  device_info_plus: ^12.2.0
   hive_flutter: ^1.1.0
-  in_app_review: ^2.0.10
-  package_info_plus: ^8.3.1
+  in_app_review: ^2.0.11
+  package_info_plus: ^9.0.0
   permission_handler: ^12.0.1
-  share_plus: ^11.1.0
+  share_plus: ^12.0.1
   url_launcher: ^6.3.2
 
   # ------------------------------------------------------------------------------------------------
@@ -50,17 +51,26 @@ dependencies:
   app_color: ^1.1.2
   app_dimen: ^1.0.11
   auth_management: ^3.0.2
-  data_management: ^2.3.2
+  data_management: 2.3.4
   data_management_local_delegate: ^1.0.7
-  flutter_andomie: ^0.6.43
+  flutter_andomie: ^0.7.0
   flutter_app_navigator: ^1.0.1
   flutter_device_config: ^1.0.3
   flutter_entity: ^1.2.2
   #  flutter_local_storage: ^0.0.1
   flutter_network_status: ^1.0.0
+  flutter_text_parser: ^1.0.2
+  data_type_detector: ^1.0.0
+  in_app_analytics: ^1.0.9
+  in_app_configs: ^1.0.2
   in_app_database: ^1.3.5
-  in_app_navigator: ^1.0.6
-  in_app_purchaser: ^1.0.1
+  in_app_navigator: ^1.0.7
+  in_app_purchaser: ^2.2.4-alpha2
+  in_app_remote: ^1.0.1
+  in_app_settings: ^1.0.1
+  in_app_translation: ^1.0.1
+  in_app_translator: ^1.0.2
+  object_finder: ^1.0.0
   flutter_terms_viewer: ^1.0.2
 
   # ------------------------------------------------------------------------------------------------
@@ -68,61 +78,75 @@ dependencies:
   # ------------------------------------------------------------------------------------------------
 
   # AUTHORIZATION (WITH NATIVE)
-  local_auth: ^2.3.0 # BIOMETRIC SIGN IN
-  local_auth_android: ^1.0.52 # BIOMETRIC SIGN IN
-  local_auth_darwin: ^1.6.0 # BIOMETRIC SIGN IN
-  local_auth_windows: ^1.0.11 # BIOMETRIC SIGN IN
+  local_auth: ^3.0.0 # BIOMETRIC SIGN IN
+  local_auth_android: ^2.0.0 # BIOMETRIC SIGN IN
+  local_auth_darwin: ^2.0.0 # BIOMETRIC SIGN IN
+  local_auth_windows: ^2.0.0 # BIOMETRIC SIGN IN
   #  google_sign_in: ^6.3.0 # GOOGLE SIGN IN
   #  sign_in_with_apple: ^7.0.1 # APPLE SIGN IN
 
   # FIREBASE (WITH NATIVE)
-  cloud_firestore: ^6.0.0
-  firebase_analytics: ^12.0.0
-  firebase_app_check: ^0.4.0
-  firebase_auth: ^6.0.1
-  firebase_core: ^4.0.0
-  firebase_crashlytics: ^5.0.0
-  firebase_database: ^12.0.0
-  firebase_remote_config: ^6.0.0
-  firebase_storage: ^13.0.0
+  cloud_firestore: ^6.0.3
+  firebase_analytics: ^12.0.3
+  firebase_app_check: ^0.4.1+1
+  firebase_auth: ^6.1.1
+  firebase_core: ^4.2.0
+  firebase_crashlytics: ^5.0.3
+  firebase_database: ^12.0.3
+  firebase_remote_config: ^6.1.0
+  firebase_storage: ^13.0.3
+
+  # PURCHASE AND SUBSCRIPTIONS
+  #  adapty_flutter: ^3.11.2
+  #  purchases_flutter: ^9.8.0
+  #  superwallkit_flutter: ^2.4.1
 
   # DESIGN (WITHOUT NATIVE)
-  animated_text_kit: ^4.2.3
+  animated_text_kit: ^4.3.0
   carousel_slider: ^5.1.1
   crop_your_image: ^2.0.0
   flutter_cupertino_datetime_picker: ^3.0.0
-  lottie: ^3.3.1
+  device_preview: ^1.3.1
+  lottie: ^3.3.2
   modal_bottom_sheet: ^3.0.0
   table_calendar: ^3.2.0
+  toastification: ^3.0.3
 
   # DESIGN (WITH NATIVE)
-  image_picker: ^1.2.0
+  #  image_cropper: ^9.0.0
+  #  image_picker: ^1.1.2
 
   # LOGICS (WITHOUT NATIVE)
   async: ^2.13.0
   equatable: ^2.0.7
   flutter_bloc: ^9.1.1
-  phone_numbers_parser: ^9.0.11
-  translator: ^1.0.3+1
+  get_ip_address: ^0.0.7
+  encrypt: ^5.0.3
+  #  get_it: ^8.0.3
+#  phone_numbers_parser: ^9.0.11
+  translator: ^1.0.4+1
+  uuid: ^4.5.1
 
   # LOGICS (WITH NATIVE)
-  flutter_native_splash: ^2.4.6
+  flutter_native_splash: ^2.4.7
   flutter_secure_storage: ^9.2.4
   flutter_tts: ^4.2.3
   path: ^1.9.1
   path_provider: ^2.1.5
+  upgrader: ^12.1.0
   video_player: ^2.10.0
-  wakelock_plus: ^1.3.2
+  web: ^1.1.1
+  wakelock_plus: ^1.4.0
+
+  # ------------------------------------------------------------------------------------------------
+  # OTHER
+  # ------------------------------------------------------------------------------------------------
   faker: ^2.2.0
   random_avatar: ^0.0.8
   remixicon: ^1.4.1
   fading_edge_scrollview: ^4.1.1
   marquee: ^2.3.0
   flutter_local_storage: ^0.0.1
-
-  # ------------------------------------------------------------------------------------------------
-  # OTHER
-  # ------------------------------------------------------------------------------------------------
 
 dev_dependencies:
   # ------------------------------------------------------------------------------------------------
@@ -132,10 +156,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  mockito: ^5.5.0
-  build_runner: ^2.7.0
+  build_runner: ^2.10.0
   flutter_lints: ^6.0.0
   #  hive_generator: ^2.0.1
+  mockito: ^5.5.1
 
   # ------------------------------------------------------------------------------------------------
   # OTHER

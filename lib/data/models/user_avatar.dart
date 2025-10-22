@@ -7,6 +7,8 @@ class UserAvatarKeys extends EntityKey {
 
   static final i = UserAvatarKeys._();
   final publisher = "publisher";
+  final publisherId = "publisherId";
+  final publisherRef = "@publisher";
   final path = "path";
   final description = "description";
   final photo = "photo";
@@ -16,7 +18,7 @@ class UserAvatarKeys extends EntityKey {
   Iterable<String> get keys => [
     id,
     timeMills,
-    publisher,
+    publisherId,
     path,
     description,
     photo,
@@ -55,7 +57,7 @@ class UserAvatar extends Entity<UserAvatarKeys> {
       path: source.entityValue(key.path),
       photo: source.entityValue(key.photo),
       privacy: source.entityValue(key.privacy, Privacy.parse),
-      publisher: source.entityValue(key.publisher),
+      publisher: source.entityValue(key.publisherId),
     );
   }
 
@@ -71,7 +73,7 @@ class UserAvatar extends Entity<UserAvatarKeys> {
       key.path: path,
       key.photo: photo,
       key.privacy: privacy?.name,
-      key.publisher: publisher,
+      key.publisherId: publisher,
     };
   }
 

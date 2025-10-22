@@ -54,7 +54,7 @@ import '../app/widgets/cached_network_image_error.dart';
 import '../app/widgets/cached_network_image_progress.dart';
 import '../data/models/user.dart';
 import '../routes/delegate.dart';
-import '../runner.dart';
+import 'runner.dart';
 import 'helpers/connectivity.dart';
 import 'helpers/location.dart';
 import 'hive/initializer.dart';

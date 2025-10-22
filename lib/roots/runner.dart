@@ -7,21 +7,21 @@ import 'package:flutter_andomie/utils/configs.dart';
 import 'package:flutter_andomie/utils/hit_logger.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 
-import 'app/configs/local.dart';
-import 'app/dialogs/bsd_audience.dart';
-import 'app/dialogs/bsd_privacy.dart';
-import 'app/dialogs/dialog_big_photo.dart';
-import 'data/enums/audience.dart';
-import 'data/enums/privacy.dart';
-import 'features/channel/view/dialogs/bsd_metube_format.dart';
-import 'features/shop/view/dialogs/bsd_market_format.dart';
-import 'features/shore/view/dialogs/bsd_grocery_format.dart';
-import 'features/social/view/dialogs/bsd_feed_format.dart';
-import 'features/startup/views/dialogs/auth_biometric_permission.dart';
-import 'firebase_options.dart';
-import 'roots/_imports.dart';
-import 'roots/services/analytics.dart';
-import 'roots/services/unique_id.dart';
+import '../app/configs/local.dart';
+import '../app/dialogs/bsd_audience.dart';
+import '../app/dialogs/bsd_privacy.dart';
+import '../app/dialogs/dialog_big_photo.dart';
+import '../data/enums/audience.dart';
+import '../data/enums/privacy.dart';
+import '../features/channel/view/dialogs/bsd_metube_format.dart';
+import '../features/shop/view/dialogs/bsd_market_format.dart';
+import '../features/shore/view/dialogs/bsd_grocery_format.dart';
+import '../features/social/view/dialogs/bsd_feed_format.dart';
+import '../features/startup/views/dialogs/auth_biometric_permission.dart';
+import '../firebase_options.dart';
+import '_imports.dart';
+import 'services/analytics.dart';
+import 'services/unique_id.dart';
 
 const kAssetsPreloads = <String>[];
 final Map<String, DialogConfigBuilder<DialogConfig>> kDialogConfigs = {
