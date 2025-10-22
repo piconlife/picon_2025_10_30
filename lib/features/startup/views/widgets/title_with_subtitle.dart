@@ -20,9 +20,8 @@ class AuthTitleWithSubtitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: centerMode
-          ? CrossAxisAlignment.center
-          : CrossAxisAlignment.start,
+      crossAxisAlignment:
+          centerMode ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       spacing: dimen.dp(8),
       children: [
         InAppText(

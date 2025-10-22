@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_andomie/extensions.dart';
+import 'package:object_finder/object_finder.dart';
 
 class InAppNotificationSchedule {
   static NotificationSchedule? tryParseSchedule(Object? source) {
@@ -56,9 +57,10 @@ class InAppNotificationSchedule {
         repeats: repeats ?? false,
         allowWhileIdle: allowWhileIdle ?? false,
         preciseAlarm: preciseAlarm ?? true,
-        interval: interval.verified != null
-            ? Duration(milliseconds: interval!)
-            : null,
+        interval:
+            interval.verified != null
+                ? Duration(milliseconds: interval!)
+                : null,
       );
     } else if (type == "crontab" && !kIsWeb && Platform.isAndroid) {
       String? crontabExpression = source.getOrNull("crontab_expression");
@@ -77,26 +79,28 @@ class InAppNotificationSchedule {
       initialDateTime ??= source.getOrNull("initialDateTime");
       initialDateTime = initialDateTime.verified;
 
-      Iterable<DateTime>? preciseSchedules = source
-          .findsByKey(
-            "precise_schedules",
-            builder: (value) {
-              if (value is! String) return null;
-              return DateTime.tryParse(value);
-            },
-          )
-          .whereType<DateTime>();
-      preciseSchedules = preciseSchedules.isEmpty
-          ? source
-                .findsByKey(
-                  "preciseSchedules",
-                  builder: (value) {
-                    if (value is! String) return null;
-                    return DateTime.tryParse(value);
-                  },
-                )
-                .whereType<DateTime>()
-          : preciseSchedules;
+      Iterable<DateTime>? preciseSchedules =
+          source
+              .findsByKey(
+                "precise_schedules",
+                builder: (value) {
+                  if (value is! String) return null;
+                  return DateTime.tryParse(value);
+                },
+              )
+              .whereType<DateTime>();
+      preciseSchedules =
+          preciseSchedules.isEmpty
+              ? source
+                  .findsByKey(
+                    "preciseSchedules",
+                    builder: (value) {
+                      if (value is! String) return null;
+                      return DateTime.tryParse(value);
+                    },
+                  )
+                  .whereType<DateTime>()
+              : preciseSchedules;
       preciseSchedules = preciseSchedules.verified;
 
       return NotificationAndroidCrontab(
@@ -106,12 +110,12 @@ class InAppNotificationSchedule {
         preciseAlarm: preciseAlarm ?? true,
         preciseSchedules: preciseSchedules?.toList(),
         crontabExpression: crontabExpression,
-        expirationDateTime: expirationDateTime == null
-            ? null
-            : DateTime.tryParse(expirationDateTime),
-        initialDateTime: initialDateTime == null
-            ? null
-            : DateTime.tryParse(initialDateTime),
+        expirationDateTime:
+            expirationDateTime == null
+                ? null
+                : DateTime.tryParse(expirationDateTime),
+        initialDateTime:
+            initialDateTime == null ? null : DateTime.tryParse(initialDateTime),
       );
     }
     return null;

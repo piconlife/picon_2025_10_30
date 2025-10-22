@@ -23,9 +23,8 @@ class UserReportsPage extends StatelessWidget {
     final dimen = context.dimens;
     return Scaffold(
       appBar: InAppAppbar(
-        titleText: user != null
-            ? "${user?.username ?? ""}'s reports"
-            : "Reports",
+        titleText:
+            user != null ? "${user?.username ?? ""}'s reports" : "Reports",
       ),
       body: BlocBuilder<UserReportCubit, Response<UserReport>>(
         builder: (context, response) {

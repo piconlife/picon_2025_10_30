@@ -2,11 +2,11 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/extensions/object.dart';
 import 'package:flutter_andomie/extensions/spacing.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/res/icons.dart';
 import '../../../../roots/widgets/appbar.dart';
@@ -59,9 +59,8 @@ class _EditUserAddressPageState extends State<EditUserAddressPage> {
       context.close();
       return;
     }
-    final target = widget.primary
-        ? Routes.editUserSecondaryAddress
-        : Routes.chooseCountry;
+    final target =
+        widget.primary ? Routes.editUserSecondaryAddress : Routes.chooseCountry;
     if (InAppNavigator.isNotVisited(target)) {
       context.clear(
         target,
@@ -132,27 +131,35 @@ class _EditUserAddressPageState extends State<EditUserAddressPage> {
                     final isPrimary = widget.primary;
                     final primary = user.primaryInfo.address;
                     final secondary = user.secondaryInfo.address;
-                    etHouse.text = isPrimary
-                        ? primary.house.use
-                        : secondary.house ?? primary.house.use;
-                    etRoad.text = isPrimary
-                        ? primary.road.use
-                        : secondary.road ?? primary.road.use;
-                    etArea.text = isPrimary
-                        ? primary.area.use
-                        : secondary.area ?? primary.area.use;
-                    etSection.text = isPrimary
-                        ? primary.section.use
-                        : secondary.section ?? primary.section.use;
-                    etPostCode.text = isPrimary
-                        ? primary.postCode.use
-                        : secondary.postCode ?? primary.postCode.use;
-                    etPoliceStation.text = isPrimary
-                        ? primary.policeStation.use
-                        : secondary.policeStation ?? primary.policeStation.use;
-                    etCity.text = isPrimary
-                        ? primary.city.use
-                        : secondary.city ?? primary.city.use;
+                    etHouse.text =
+                        isPrimary
+                            ? primary.house.use
+                            : secondary.house ?? primary.house.use;
+                    etRoad.text =
+                        isPrimary
+                            ? primary.road.use
+                            : secondary.road ?? primary.road.use;
+                    etArea.text =
+                        isPrimary
+                            ? primary.area.use
+                            : secondary.area ?? primary.area.use;
+                    etSection.text =
+                        isPrimary
+                            ? primary.section.use
+                            : secondary.section ?? primary.section.use;
+                    etPostCode.text =
+                        isPrimary
+                            ? primary.postCode.use
+                            : secondary.postCode ?? primary.postCode.use;
+                    etPoliceStation.text =
+                        isPrimary
+                            ? primary.policeStation.use
+                            : secondary.policeStation ??
+                                primary.policeStation.use;
+                    etCity.text =
+                        isPrimary
+                            ? primary.city.use
+                            : secondary.city ?? primary.city.use;
                     return AndrossyForm(
                       primaryColor: context.primary,
                       secondaryColor: context.dark.t30,

@@ -88,17 +88,18 @@ class _Option extends StatelessWidget {
           vertical: dimen.dp(8),
           horizontal: dimen.dp(24),
         ),
-        decoration: isSelected
-            ? BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: context.primary,
-                    width: dimen.dp(2),
+        decoration:
+            isSelected
+                ? BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: context.primary,
+                      width: dimen.dp(2),
+                    ),
                   ),
-                ),
-                borderRadius: BorderRadius.circular(dimen.dp(12)),
-              )
-            : null,
+                  borderRadius: BorderRadius.circular(dimen.dp(12)),
+                )
+                : null,
         child: InAppText(
           audience.title,
           style: TextStyle(color: dark, fontSize: dimen.dp(18)),

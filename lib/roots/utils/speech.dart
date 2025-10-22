@@ -1,8 +1,8 @@
 import 'dart:developer';
 
-import 'package:flutter_andomie/utils/configs.dart';
-import 'package:flutter_andomie/utils/settings.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:in_app_configs/configs.dart';
+import 'package:in_app_settings/settings.dart';
 
 const kSpeechOn = "speech_mode";
 

@@ -141,20 +141,21 @@ class ItemVerifiedUser extends StatelessWidget {
                             dimen.largeCorner,
                           ),
                         ),
-                        child: selection.selected
-                            ? InAppIcon(
-                                InAppIcons.nativeCheckMark.regular,
-                                color: secondary,
-                              )
-                            : InAppText(
-                                "Add",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: light,
-                                  fontSize: dimen.fontSize.normal,
-                                  fontWeight: dimen.mediumFontWeight,
+                        child:
+                            selection.selected
+                                ? InAppIcon(
+                                  InAppIcons.nativeCheckMark.regular,
+                                  color: secondary,
+                                )
+                                : InAppText(
+                                  "Add",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: light,
+                                    fontSize: dimen.fontSize.normal,
+                                    fontWeight: dimen.mediumFontWeight,
+                                  ),
                                 ),
-                              ),
                       ),
                     ),
                   ],

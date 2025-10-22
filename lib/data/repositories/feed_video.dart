@@ -14,8 +14,9 @@ class FeedVideoRepository extends RemoteDataRepository<FeedVideo> {
 
   static FeedVideoRepository? _i;
 
-  static FeedVideoRepository get i => _i ??= FeedVideoRepository(
-    source: RemoteFeedVideoDataSource(),
-    backup: LocalFeedVideoDataSource(),
-  );
+  static FeedVideoRepository get i =>
+      _i ??= FeedVideoRepository(
+        source: RemoteFeedVideoDataSource(),
+        backup: LocalFeedVideoDataSource(),
+      );
 }

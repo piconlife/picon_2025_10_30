@@ -104,9 +104,10 @@ class _InAppEditorDialogState extends State<InAppEditorDialog> {
                 controller: controller,
                 scrollController: scrollController,
                 constraints: BoxConstraints(
-                  maxHeight: keyboardHeight > 0
-                      ? (context.screenHeight - keyboardHeight) * 0.5
-                      : (context.screenHeight - keyboardHeight) * 0.65,
+                  maxHeight:
+                      keyboardHeight > 0
+                          ? (context.screenHeight - keyboardHeight) * 0.5
+                          : (context.screenHeight - keyboardHeight) * 0.65,
                 ),
                 text: widget.text,
                 style: TextStyle(color: color),
@@ -120,15 +121,17 @@ class _InAppEditorDialogState extends State<InAppEditorDialog> {
                 maxCharacters: widget.maxCharacters,
                 minCharacters: widget.minCharacters,
                 maxCharactersAsLimit: true,
-                counterVisibility: widget.maxCharacters.isValid
-                    ? FloatingVisibility.auto
-                    : FloatingVisibility.hide,
+                counterVisibility:
+                    widget.maxCharacters.isValid
+                        ? FloatingVisibility.auto
+                        : FloatingVisibility.hide,
                 counterStyle: AndrossyFieldProperty.all(
                   TextStyle(color: color.t25),
                 ),
-                onSubmitted: widget.actionType == TextInputAction.done
-                    ? (value) => _submit(context)
-                    : null,
+                onSubmitted:
+                    widget.actionType == TextInputAction.done
+                        ? (value) => _submit(context)
+                        : null,
               ),
             ),
             dimen.dp(24).h,

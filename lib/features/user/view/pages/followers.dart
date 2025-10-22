@@ -28,9 +28,10 @@ class _UserFollowersPageState extends State<UserFollowersPage> {
     final dimen = context.dimens;
     return Scaffold(
       appBar: InAppAppbar(
-        titleText: widget.user != null
-            ? "${widget.user?.username ?? ""}'s followers"
-            : "Followers",
+        titleText:
+            widget.user != null
+                ? "${widget.user?.username ?? ""}'s followers"
+                : "Followers",
       ),
       body: BlocBuilder<UserFollowerCubit, Response<UserFollower>>(
         builder: (context, response) {

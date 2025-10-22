@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_andomie/utils/configs.dart';
+import 'package:in_app_configs/configs.dart';
 
 const kLanguages = "languages";
 
@@ -37,7 +37,7 @@ class InAppLanguage {
   }
 
   static List<InAppLanguage> get items {
-    final data = Configs.load(name: "languages");
+    final data = Configs.getByName("languages");
     if (data is List && data.isNotEmpty) {
       return data.map(InAppLanguage.parse).toList();
     }

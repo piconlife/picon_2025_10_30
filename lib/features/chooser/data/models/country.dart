@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_andomie/utils/configs.dart';
+import 'package:in_app_configs/configs.dart';
 
 const kCountries = "countries";
 
@@ -37,7 +37,7 @@ class InAppCountry {
   }
 
   static List<InAppCountry> get items {
-    final data = Configs.load(name: kCountries);
+    final data = Configs.getByName(kCountries);
     if (data is List && data.isNotEmpty) {
       return data.map(InAppCountry.parse).toList();
     }

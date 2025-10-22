@@ -138,20 +138,21 @@ class ItemSuggestedUser extends StatelessWidget {
                             dimen.largeCorner,
                           ),
                         ),
-                        child: selection.selected
-                            ? InAppIcon(
-                                InAppIcons.nativeCheckMark.regular,
-                                color: secondary,
-                              )
-                            : InAppText(
-                                "Follow",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: light,
-                                  fontSize: dimen.fontSize.normal,
-                                  fontWeight: dimen.mediumFontWeight,
+                        child:
+                            selection.selected
+                                ? InAppIcon(
+                                  InAppIcons.nativeCheckMark.regular,
+                                  color: secondary,
+                                )
+                                : InAppText(
+                                  "Follow",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: light,
+                                    fontSize: dimen.fontSize.normal,
+                                    fontWeight: dimen.mediumFontWeight,
+                                  ),
                                 ),
-                              ),
                       ),
                     ),
                   ],

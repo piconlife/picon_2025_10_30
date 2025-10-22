@@ -197,89 +197,89 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               dimen.dp(8).h,
               isPhoneMode
                   ? AndrossyField(
-                      key: etPhoneKey,
-                      controller: etPhone,
-                      autoDisposeMode: false,
-                      hintText: "Phone Number",
-                      characters: "+1234567890",
-                      inputType: TextInputType.phone,
-                      inputAction: TextInputAction.done,
-                      drawableStart: AndrossyFieldProperty(
-                        focused: InAppIcons.phone.solid,
-                        enabled: InAppIcons.phone.regular,
-                      ),
-                      onValidator: isValidNumber,
-                      primaryColor: context.primary,
-                      secondaryColor: context.dark.t30,
-                      errorColor: ColorThemeHelper(context).error,
-                      animationDuration: const Duration(milliseconds: 300),
-                      borderColor: AndrossyFieldProperty(
-                        enabled: context.isDarkMode ? primary.t25 : null,
-                      ),
-                      borderRadius: AndrossyFieldProperty.all(
-                        BorderRadius.circular(dimen.dp(16)),
-                      ),
-                      contentPadding: EdgeInsets.all(dimen.dp(16)),
-                      counterVisibility: FloatingVisibility.hide,
-                      drawableStartTint: AndrossyFieldProperty(
-                        enabled: context.iconColor.primary,
-                        disabled: context.iconColor.disable,
-                      ),
-                      drawableStartPadding: AndrossyFieldProperty.all(
-                        dimen.dp(12),
-                      ),
-                      floatingVisibility: FloatingVisibility.hide,
-                      onValid: (v) => btnSubmitKey.currentState?.setEnabled(v),
-                      onSubmitted: (_) => _next(context),
-                    )
-                  : AndrossyField(
-                      key: etEmailKey,
-                      controller: etEmail,
-                      autoDisposeMode: false,
-                      hintText: "Email or Prefix",
-                      characters: "_.@1234567890abcdefghijklmnopqrstuvwxyz",
-                      inputType: TextInputType.emailAddress,
-                      inputAction: TextInputAction.done,
-                      drawableStart: AndrossyFieldProperty(
-                        focused: InAppIcons.email.solid,
-                        enabled: InAppIcons.email.regular,
-                      ),
-                      drawableEndBuilder: (context, controller) {
-                        if (etEmail.text.contains("@")) {
-                          return const SizedBox();
-                        }
-                        return InAppText(
-                          AppConstants.domain,
-                          style: TextStyle(
-                            color: context.mid,
-                            fontSize: dimen.dp(18),
-                          ),
-                        );
-                      },
-                      onValidator: isValidPrefixOrEmail,
-                      primaryColor: context.primary,
-                      secondaryColor: context.dark.t30,
-                      errorColor: ColorThemeHelper(context).error,
-                      animationDuration: const Duration(milliseconds: 300),
-                      borderColor: AndrossyFieldProperty(
-                        enabled: context.isDarkMode ? primary.t25 : null,
-                      ),
-                      borderRadius: AndrossyFieldProperty.all(
-                        BorderRadius.circular(dimen.dp(16)),
-                      ),
-                      contentPadding: EdgeInsets.all(dimen.dp(16)),
-                      counterVisibility: FloatingVisibility.hide,
-                      drawableStartTint: AndrossyFieldProperty(
-                        enabled: context.iconColor.primary,
-                        disabled: context.iconColor.disable,
-                      ),
-                      drawableStartPadding: AndrossyFieldProperty.all(
-                        dimen.dp(12),
-                      ),
-                      floatingVisibility: FloatingVisibility.hide,
-                      onValid: (v) => btnSubmitKey.currentState?.setEnabled(v),
-                      onSubmitted: (_) => _next(context),
+                    key: etPhoneKey,
+                    controller: etPhone,
+                    autoDisposeMode: false,
+                    hintText: "Phone Number",
+                    characters: "+1234567890",
+                    inputType: TextInputType.phone,
+                    inputAction: TextInputAction.done,
+                    drawableStart: AndrossyFieldProperty(
+                      focused: InAppIcons.phone.solid,
+                      enabled: InAppIcons.phone.regular,
                     ),
+                    onValidator: isValidNumber,
+                    primaryColor: context.primary,
+                    secondaryColor: context.dark.t30,
+                    errorColor: ColorThemeHelper(context).error,
+                    animationDuration: const Duration(milliseconds: 300),
+                    borderColor: AndrossyFieldProperty(
+                      enabled: context.isDarkMode ? primary.t25 : null,
+                    ),
+                    borderRadius: AndrossyFieldProperty.all(
+                      BorderRadius.circular(dimen.dp(16)),
+                    ),
+                    contentPadding: EdgeInsets.all(dimen.dp(16)),
+                    counterVisibility: FloatingVisibility.hide,
+                    drawableStartTint: AndrossyFieldProperty(
+                      enabled: context.iconColor.primary,
+                      disabled: context.iconColor.disable,
+                    ),
+                    drawableStartPadding: AndrossyFieldProperty.all(
+                      dimen.dp(12),
+                    ),
+                    floatingVisibility: FloatingVisibility.hide,
+                    onValid: (v) => btnSubmitKey.currentState?.setEnabled(v),
+                    onSubmitted: (_) => _next(context),
+                  )
+                  : AndrossyField(
+                    key: etEmailKey,
+                    controller: etEmail,
+                    autoDisposeMode: false,
+                    hintText: "Email or Prefix",
+                    characters: "_.@1234567890abcdefghijklmnopqrstuvwxyz",
+                    inputType: TextInputType.emailAddress,
+                    inputAction: TextInputAction.done,
+                    drawableStart: AndrossyFieldProperty(
+                      focused: InAppIcons.email.solid,
+                      enabled: InAppIcons.email.regular,
+                    ),
+                    drawableEndBuilder: (context, controller) {
+                      if (etEmail.text.contains("@")) {
+                        return const SizedBox();
+                      }
+                      return InAppText(
+                        AppConstants.domain,
+                        style: TextStyle(
+                          color: context.mid,
+                          fontSize: dimen.dp(18),
+                        ),
+                      );
+                    },
+                    onValidator: isValidPrefixOrEmail,
+                    primaryColor: context.primary,
+                    secondaryColor: context.dark.t30,
+                    errorColor: ColorThemeHelper(context).error,
+                    animationDuration: const Duration(milliseconds: 300),
+                    borderColor: AndrossyFieldProperty(
+                      enabled: context.isDarkMode ? primary.t25 : null,
+                    ),
+                    borderRadius: AndrossyFieldProperty.all(
+                      BorderRadius.circular(dimen.dp(16)),
+                    ),
+                    contentPadding: EdgeInsets.all(dimen.dp(16)),
+                    counterVisibility: FloatingVisibility.hide,
+                    drawableStartTint: AndrossyFieldProperty(
+                      enabled: context.iconColor.primary,
+                      disabled: context.iconColor.disable,
+                    ),
+                    drawableStartPadding: AndrossyFieldProperty.all(
+                      dimen.dp(12),
+                    ),
+                    floatingVisibility: FloatingVisibility.hide,
+                    onValid: (v) => btnSubmitKey.currentState?.setEnabled(v),
+                    onSubmitted: (_) => _next(context),
+                  ),
               dimen.dp(32).h,
               AuthTitleWithSubtitle(
                 title: "Forgot Password",

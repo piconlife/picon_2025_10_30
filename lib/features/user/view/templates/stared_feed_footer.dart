@@ -166,9 +166,10 @@ class _UserStaredFeedFooterState extends State<UserStaredFeedFooter> {
               builder: (context, value) {
                 final activated = Validator.isChecked(UserHelper.uid, value);
                 return InAppPleasureButton(
-                  icon: activated
-                      ? InAppIcons.heart.solid
-                      : InAppIcons.heart.regular,
+                  icon:
+                      activated
+                          ? InAppIcons.heart.solid
+                          : InAppIcons.heart.regular,
                   iconSize: dimen.dp(28),
                   iconColor: activated ? context.red : dark.t50,
                   onTap: () => _updateLikes(context, activated),
@@ -180,9 +181,10 @@ class _UserStaredFeedFooterState extends State<UserStaredFeedFooter> {
               builder: (context, value) {
                 final activated = Validator.isChecked(UserHelper.uid, value);
                 return InAppPleasureButton(
-                  icon: activated
-                      ? InAppIcons.star.solid
-                      : InAppIcons.star.regular,
+                  icon:
+                      activated
+                          ? InAppIcons.star.solid
+                          : InAppIcons.star.regular,
                   iconSize: dimen.dp(28),
                   iconColor: activated ? context.yellow : dark.t50,
                   onTap: () => _updateStars(context, activated),

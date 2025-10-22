@@ -363,24 +363,25 @@ class InAppAuthDelegate extends AuthDelegate {
       firebaseAuth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
         forceResendingToken: forceResendingToken,
-        multiFactorInfo: multiFactorInfo is PhoneMultiFactorInfo
-            ? multiFactorInfo
-            : null,
-        multiFactorSession: multiFactorSession is MultiFactorSession
-            ? multiFactorSession
-            : null,
+        multiFactorInfo:
+            multiFactorInfo is PhoneMultiFactorInfo ? multiFactorInfo : null,
+        multiFactorSession:
+            multiFactorSession is MultiFactorSession
+                ? multiFactorSession
+                : null,
         timeout: timeout,
-        verificationCompleted: (credential) => onComplete(
-          Credential(
-            providerId: credential.providerId,
-            verificationId: credential.verificationId,
-            signInMethod: credential.signInMethod,
-            smsCode: credential.smsCode,
-            accessToken: credential.token.toString(),
-          ),
-        ),
-        verificationFailed: (e) =>
-            onFailed(AuthException(e.message ?? "", e.code)),
+        verificationCompleted:
+            (credential) => onComplete(
+              Credential(
+                providerId: credential.providerId,
+                verificationId: credential.verificationId,
+                signInMethod: credential.signInMethod,
+                smsCode: credential.smsCode,
+                accessToken: credential.token.toString(),
+              ),
+            ),
+        verificationFailed:
+            (e) => onFailed(AuthException(e.message ?? "", e.code)),
         codeSent: onCodeSent,
         codeAutoRetrievalTimeout: onCodeAutoRetrievalTimeout,
       );
@@ -432,11 +433,12 @@ class InAppAuthDelegate extends AuthDelegate {
       final token = await facebookAuth.accessToken;
       IFacebookLoginResult? result;
 
-      result = token == null
-          ? await facebookAuth.login(
-              permissions: ['publicerrorprofile', 'email'],
-            )
-          : null;
+      result =
+          token == null
+              ? await facebookAuth.login(
+                permissions: ['publicerrorprofile', 'email'],
+              )
+              : null;
 
       final status = result?.status ?? IFacebookLoginStatus.failed;
 
@@ -517,41 +519,44 @@ extension on UserCredential {
     final meta = user?.metadata;
     return Credential(
       accessToken: credential?.accessToken,
-      additionalUserInfo: ai != null
-          ? AdditionalInfo(
-              isNewUser: ai.isNewUser,
-              authorizationCode: ai.authorizationCode,
-              profile: ai.profile,
-              providerId: ai.providerId,
-              username: ai.username,
-            )
-          : null,
+      additionalUserInfo:
+          ai != null
+              ? AdditionalInfo(
+                isNewUser: ai.isNewUser,
+                authorizationCode: ai.authorizationCode,
+                profile: ai.profile,
+                providerId: ai.providerId,
+                username: ai.username,
+              )
+              : null,
       credential: credential,
       displayName: user?.displayName,
       email: user?.email,
       emailVerified: user?.emailVerified,
       idToken: credential?.token.toString(),
       isAnonymous: user?.isAnonymous,
-      metadata: meta != null
-          ? Metadata(
-              creationTime: meta.creationTime,
-              lastSignInTime: meta.lastSignInTime,
-            )
-          : null,
+      metadata:
+          meta != null
+              ? Metadata(
+                creationTime: meta.creationTime,
+                lastSignInTime: meta.lastSignInTime,
+              )
+              : null,
       multiFactor: user?.multiFactor,
       phoneNumber: user?.phoneNumber,
       photoURL: user?.photoURL,
       providerId: credential?.providerId,
-      providerData: user?.providerData.map((e) {
-        return Info(
-          providerId: e.providerId,
-          displayName: e.displayName,
-          email: e.email,
-          phoneNumber: e.phoneNumber,
-          photoURL: e.photoURL,
-          uid: e.uid,
-        );
-      }).toList(),
+      providerData:
+          user?.providerData.map((e) {
+            return Info(
+              providerId: e.providerId,
+              displayName: e.displayName,
+              email: e.email,
+              phoneNumber: e.phoneNumber,
+              photoURL: e.photoURL,
+              uid: e.uid,
+            );
+          }).toList(),
       refreshToken: user?.refreshToken,
       tenantId: user?.tenantId,
       uid: user?.uid ?? '',

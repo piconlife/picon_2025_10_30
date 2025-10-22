@@ -39,18 +39,20 @@ class InAppAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AndrossyGesture(
       clickEffect: AndrossyGestureEffect(
-        primary: scalerLowerBound < 1
-            ? AndrossyGestureAnimation.scale(
-                lowerBound: scalerLowerBound,
-                upperBound: scalerUpperBound,
-              )
-            : null,
-        secondary: fadeLowerBound < 1
-            ? AndrossyGestureAnimation.fade(
-                lowerBound: fadeLowerBound,
-                upperBound: fadeUpperBound,
-              )
-            : null,
+        primary:
+            scalerLowerBound < 1
+                ? AndrossyGestureAnimation.scale(
+                  lowerBound: scalerLowerBound,
+                  upperBound: scalerUpperBound,
+                )
+                : null,
+        secondary:
+            fadeLowerBound < 1
+                ? AndrossyGestureAnimation.fade(
+                  lowerBound: fadeLowerBound,
+                  upperBound: fadeUpperBound,
+                )
+                : null,
       ),
       onTap: onTap,
       child: AndrossyAvatar(
@@ -59,9 +61,13 @@ class InAppAvatar extends StatelessWidget {
         backgroundColor:
             backgroundColor ??
             (context.isDarkMode ? context.mid.shade(.5) : context.mid.tint(.5)),
-        border: borderSize > 0
-            ? Border.all(color: borderColor ?? context.dark, width: borderSize)
-            : null,
+        border:
+            borderSize > 0
+                ? Border.all(
+                  color: borderColor ?? context.dark,
+                  width: borderSize,
+                )
+                : null,
         shadow: BoxShadow(
           color:
               shadowColor ?? context.shadowColor.primary ?? Colors.transparent,

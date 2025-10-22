@@ -62,9 +62,10 @@ class SuggestedUsersCubit extends Cubit<Response<Selection<User>>> {
   }
 
   void _attach(Response<User> response) {
-    final data = state.result.where((e) {
-      return !UserHelper.followings.contains(e.id);
-    }).toList();
+    final data =
+        state.result.where((e) {
+          return !UserHelper.followings.contains(e.id);
+        }).toList();
     if (response.result.isNotEmpty) {
       data.addAll(
         response.result.map((e) {

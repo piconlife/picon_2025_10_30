@@ -1,9 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/utils/internet.dart';
-import 'package:flutter_andomie/utils/translation.dart';
-import 'package:flutter_andomie/utils/translator.dart';
+import 'package:in_app_translation/extensions.dart';
+import 'package:in_app_translator/delegate.dart';
 import 'package:translator/translator.dart' hide Translation;
 
 import '../../../roots/preferences/preferences.dart';
@@ -30,10 +28,5 @@ class InAppTranslatorDelegate extends TranslatorDelegate {
   }
 
   @override
-  void translated(TranslationCache value) {
-    Preferences.setString(kTranslatorCache, jsonEncode(value));
-  }
-
-  @override
-  void save(String value) => Preferences.setString(kTranslatorCache, value);
+  void save(String source) => Preferences.setString(kTranslatorCache, source);
 }

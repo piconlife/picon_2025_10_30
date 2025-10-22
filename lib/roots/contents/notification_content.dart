@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter_andomie/extensions.dart';
+import 'package:object_finder/object_finder.dart';
 
 import '../services/notification.dart';
 
@@ -533,23 +534,21 @@ class InAppNotificationContent {
       notificationLayout:
           _tryParseNotificationLayout(notificationLayout) ??
           NotificationLayout.Default,
-      payload: payload is Map
-          ? payload.map((k, v) => MapEntry(k.toString(), v.toString()))
-          : null,
+      payload:
+          payload is Map
+              ? payload.map((k, v) => MapEntry(k.toString(), v.toString()))
+              : null,
       category: _tryParseNotificationCategory(category),
-      hideLargeIconOnExpand: hideLargeIconOnExpand is bool
-          ? hideLargeIconOnExpand
-          : false,
+      hideLargeIconOnExpand:
+          hideLargeIconOnExpand is bool ? hideLargeIconOnExpand : false,
       locked: locked is bool ? locked : false,
       progress: progress is num ? progress.toDouble() : null,
       badge: badge is num ? badge.toInt() : null,
       ticker: ticker is String ? ticker : null,
-      displayOnForeground: displayOnForeground is bool
-          ? displayOnForeground
-          : true,
-      displayOnBackground: displayOnBackground is bool
-          ? displayOnBackground
-          : true,
+      displayOnForeground:
+          displayOnForeground is bool ? displayOnForeground : true,
+      displayOnBackground:
+          displayOnBackground is bool ? displayOnBackground : true,
       duration: duration is int ? duration.duration : null,
       playState: _tryParseNotificationPlayState(playState),
       playbackSpeed: playbackSpeed is num ? playbackSpeed.toDouble() : null,
@@ -559,20 +558,16 @@ class InAppNotificationContent {
   static List<InAppNotificationContent> tryParses(Object? source) {
     if (source == null) return [];
     if (source is! Iterable) return [];
-    final a = source
-        .map(tryParse)
-        .whereType<InAppNotificationContent>()
-        .toList();
+    final a =
+        source.map(tryParse).whereType<InAppNotificationContent>().toList();
     return a;
   }
 
   static List<List<InAppNotificationContent>> parses(Iterable? source) {
     if (source == null) return [];
     final a = source.whereType<Iterable>();
-    final b = a
-        .map(tryParses)
-        .whereType<List<InAppNotificationContent>>()
-        .toList();
+    final b =
+        a.map(tryParses).whereType<List<InAppNotificationContent>>().toList();
     return b;
   }
 

@@ -1,9 +1,9 @@
 import 'package:auth_management/auth_management.dart' hide AuthStatus;
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_andomie/utils/configs.dart';
-import 'package:flutter_andomie/utils/settings.dart';
-import 'package:flutter_andomie/utils/translation.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
+import 'package:in_app_configs/configs.dart';
+import 'package:in_app_settings/settings.dart';
+import 'package:in_app_translation/in_app_translation.dart';
 
 import '../../app/res/listeners.dart';
 import '../../data/models/user.dart';

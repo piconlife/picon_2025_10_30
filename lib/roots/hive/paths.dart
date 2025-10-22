@@ -1,7 +1,7 @@
-class HivePaths {
-  const HivePaths._();
-
+abstract final class HivePaths {
   static const preferences = "preferences";
-  static const strings = "strings";
+  static const booleans = "booleans";
+  static const doubles = "doubles";
   static const ints = "ints";
+  static const strings = "strings";
 }

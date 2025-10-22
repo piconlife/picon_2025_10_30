@@ -2,11 +2,8 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/contents/country_flags.dart';
-import 'package:flutter_andomie/models/language.dart';
-import 'package:flutter_andomie/models/locales.dart';
-import 'package:flutter_andomie/utils/translation.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_translation/in_app_translation.dart';
 
 import '../../app/res/icons.dart';
 import '../../roots/widgets/auto_scroll.dart';
@@ -42,13 +39,13 @@ class _LocaleBsdState extends State<LocaleBsd>
 
   late double itemHeight = 65.0.dpOf(context);
 
-  late List<Locale> locales = supportedLocales
-    ..remove(Translation.i.defaultLocale)
-    ..insert(0, Translation.i.defaultLocale);
+  late List<Locale> locales =
+      supportedLocales
+        ..remove(Translation.i.defaultLocale)
+        ..insert(0, Translation.i.defaultLocale);
 
-  late List<Locale> downloadableLocales = kFilteredLocales
-      .where((e) => !locales.contains(e))
-      .toList();
+  late List<Locale> downloadableLocales =
+      kFilteredLocales.where((e) => !locales.contains(e)).toList();
 
   @override
   Widget build(BuildContext context) {
@@ -128,9 +125,10 @@ class _LocaleBsdState extends State<LocaleBsd>
     }
     return ListView.separated(
       shrinkWrap: controller == null,
-      physics: controller != null
-          ? BouncingScrollPhysics()
-          : const NeverScrollableScrollPhysics(),
+      physics:
+          controller != null
+              ? BouncingScrollPhysics()
+              : const NeverScrollableScrollPhysics(),
       controller: controller,
       padding: EdgeInsets.only(left: 20, right: 20, bottom: 50),
       itemCount: locales.length,

@@ -72,9 +72,8 @@ class InAppStackButton extends StatelessWidget {
               text: text,
               width: width ?? (dimen.width * .75),
               height: height ?? dimen.button.normal?.height ?? dimen.dp(45),
-              backgroundColor: activated
-                  ? primary.withValues(alpha: 0.1)
-                  : primary,
+              backgroundColor:
+                  activated ? primary.withValues(alpha: 0.1) : primary,
               textStyle: style.copyWith(
                 color: style.color ?? (activated ? primary : Colors.white),
                 fontWeight:

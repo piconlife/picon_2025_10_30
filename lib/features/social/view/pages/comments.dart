@@ -61,22 +61,23 @@ class _CommentsPageState extends State<CommentsPage> with ColorMixin {
             Expanded(
               child: RefreshIndicator(
                 onRefresh: _refreshComments,
-                child: comments.isNotEmpty
-                    ? ListView.builder(
-                        itemCount: comments.length,
-                        itemBuilder: (context, index) {
-                          return ItemFeedComment(data: comments[index]);
-                        },
-                      )
-                    : Center(
-                        child: InAppNullableBody(
-                          header: "No comments yet",
-                          icon: InAppIcons.comment.regular,
-                          iconColor: dark.t10,
-                          iconSize: 100,
-                          body: "Be the first to comment.",
+                child:
+                    comments.isNotEmpty
+                        ? ListView.builder(
+                          itemCount: comments.length,
+                          itemBuilder: (context, index) {
+                            return ItemFeedComment(data: comments[index]);
+                          },
+                        )
+                        : Center(
+                          child: InAppNullableBody(
+                            header: "No comments yet",
+                            icon: InAppIcons.comment.regular,
+                            iconColor: dark.t10,
+                            iconSize: 100,
+                            body: "Be the first to comment.",
+                          ),
                         ),
-                      ),
               ),
             ),
             InAppBottomBar(

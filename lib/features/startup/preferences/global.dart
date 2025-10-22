@@ -1,4 +1,4 @@
-import 'package:flutter_andomie/extensions/object.dart';
+import 'package:object_finder/object_finder.dart';
 
 import '../../../roots/preferences/preferences.dart';
 

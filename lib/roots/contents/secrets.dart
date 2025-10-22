@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_andomie/utils/configs.dart';
+import 'package:in_app_configs/configs.dart';
 
 const _kSecrets = "secrets";
 const _kObject = 'object';
@@ -19,7 +19,7 @@ class Secrets extends Equatable {
   const Secrets({this.object, this.password});
 
   static Secrets get get {
-    final x = Configs.load(name: _kSecrets, parser: Secrets.parse);
+    final x = Configs.getByName(_kSecrets, parser: Secrets.parse);
     return x ?? Secrets();
   }
 
@@ -59,24 +59,25 @@ class Secret extends Equatable {
       fallback,
       defaultValue: defaultValue?.fallback,
     );
-    final entries = versions is Map && versions.isNotEmpty
-        ? versions.entries.map((e) {
-            if (e.value is! Map) return null;
-            return MapEntry(
-              e.key.toString(),
-              SecretData.parse(e.key, e.value, defaultValue: mFallback),
-            );
-          }).whereType<MapEntry<String, SecretData>>()
-        : null;
+    final entries =
+        versions is Map && versions.isNotEmpty
+            ? versions.entries.map((e) {
+              if (e.value is! Map) return null;
+              return MapEntry(
+                e.key.toString(),
+                SecretData.parse(e.key, e.value, defaultValue: mFallback),
+              );
+            }).whereType<MapEntry<String, SecretData>>()
+            : null;
 
     return Secret(
-      active: active is String && active.isNotEmpty
-          ? active
-          : defaultValue?.active,
+      active:
+          active is String && active.isNotEmpty ? active : defaultValue?.active,
       fallback: mFallback,
-      versions: entries != null && entries.isNotEmpty
-          ? Map.fromEntries(entries)
-          : defaultValue?.versions ?? {},
+      versions:
+          entries != null && entries.isNotEmpty
+              ? Map.fromEntries(entries)
+              : defaultValue?.versions ?? {},
     );
   }
 
@@ -108,9 +109,8 @@ class SecretData extends Equatable {
       version: version,
       iv: iv is String && iv.isNotEmpty ? iv : defaultValue?.iv,
       key: key is String && key.isNotEmpty ? key : defaultValue?.key,
-      secret: secret is String && secret.isNotEmpty
-          ? secret
-          : defaultValue?.secret,
+      secret:
+          secret is String && secret.isNotEmpty ? secret : defaultValue?.secret,
     );
   }
 

@@ -1,7 +1,7 @@
 import 'package:app_color/app_color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/utils/settings.dart';
-import 'package:flutter_andomie/utils/translation.dart';
+import 'package:in_app_settings/settings.dart';
+import 'package:in_app_translation/in_app_translation.dart';
 
 class InAppTabs extends StatefulWidget {
   final TabController? controller;

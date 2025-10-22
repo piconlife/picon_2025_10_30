@@ -40,17 +40,19 @@ class _ProfileNotesSegmentState extends State<ProfileNotesSegment> {
         if (result.isEmpty && state.status.isResultNotFound) {
           return UserNullableBody(
             contentSpacing: 8,
-            icon: isCurrentUser
-                ? InAppIcons.write.solid
-                : InAppIcons.notes.regular,
+            icon:
+                isCurrentUser
+                    ? InAppIcons.write.solid
+                    : InAppIcons.notes.regular,
             iconColor: isCurrentUser ? null : context.dark.t25,
             header: "No notes yet",
             body: "Currently no notes available.",
             buttonText: isCurrentUser ? "Create a new note" : null,
-            onButtonClick: () => context.open(
-              Routes.createANote,
-              arguments: {"$FeedType": FeedType.note},
-            ),
+            onButtonClick:
+                () => context.open(
+                  Routes.createANote,
+                  arguments: {"$FeedType": FeedType.note},
+                ),
           );
         }
 

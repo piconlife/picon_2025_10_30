@@ -78,8 +78,8 @@ class InAppBiometricPermissionDialog extends StatelessWidget {
                   borderRadius: BorderRadius.zero,
                   height: dimen.dp(54),
                   foregroundColor: context.primary,
-                  onTap: () =>
-                      Navigator.pop(context, BiometricStatus.activated),
+                  onTap:
+                      () => Navigator.pop(context, BiometricStatus.activated),
                 ),
               ),
             ],

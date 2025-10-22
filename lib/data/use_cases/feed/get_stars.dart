@@ -1,6 +1,6 @@
 import 'package:data_management/data_management.dart';
-import 'package:flutter_andomie/utils/configs.dart';
 import 'package:flutter_entity/entity.dart';
+import 'package:in_app_configs/configs.dart';
 
 import '../../../app/helpers/user.dart';
 import '../../../app/utils/geo_pointer.dart';

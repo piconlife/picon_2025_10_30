@@ -19,10 +19,7 @@ class InAppCloner extends StatelessWidget {
     if (opacity == 1) return child;
     return Stack(
       fit: StackFit.expand,
-      children: [
-        InAppImage(data),
-        Opacity(opacity: opacity, child: child),
-      ],
+      children: [InAppImage(data), Opacity(opacity: opacity, child: child)],
     );
   }
 }

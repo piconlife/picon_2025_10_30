@@ -1,4 +1,4 @@
-import 'package:flutter_andomie/utils/configs.dart';
+import 'package:in_app_configs/configs.dart';
 
 const kAuthorizationMode = "authorization_mode";
 
@@ -17,13 +17,14 @@ enum AuthorizationMode {
   bool get isNormal => this == normal;
 
   factory AuthorizationMode.parse(Object? source) {
-    final x = values.where((e) {
-      if (e.index == source) return true;
-      final y = source.toString().trim().toLowerCase();
-      if (e.name.toLowerCase() == y) return true;
-      if (e.toString().toLowerCase() == y) return true;
-      return false;
-    }).firstOrNull;
+    final x =
+        values.where((e) {
+          if (e.index == source) return true;
+          final y = source.toString().trim().toLowerCase();
+          if (e.name.toLowerCase() == y) return true;
+          if (e.toString().toLowerCase() == y) return true;
+          return false;
+        }).firstOrNull;
 
     return x ?? AuthorizationMode.none;
   }

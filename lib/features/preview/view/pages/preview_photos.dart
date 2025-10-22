@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/extensions/object.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_entity/entity.dart';
+import 'package:object_finder/object_finder.dart';
 
 import '../../../../data/enums/privacy.dart';
 import '../../../../data/models/photo.dart';

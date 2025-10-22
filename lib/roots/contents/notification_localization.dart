@@ -1,5 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter_andomie/extensions.dart';
+import 'package:object_finder/object_finder.dart';
 
 class InAppNotificationLocalization {
   static NotificationLocalization? tryParseLocalization(Object? source) {
@@ -43,11 +44,12 @@ class InAppNotificationLocalization {
     if (source == null) return null;
     if (source is Map<String, NotificationLocalization>) return source;
     if (source is! Map) return null;
-    final entries = source.entries.map((e) {
-      final value = tryParseLocalization(e.value);
-      if (e.key is! String || value == null) return null;
-      return value;
-    }).whereType<MapEntry<String, NotificationLocalization>>();
+    final entries =
+        source.entries.map((e) {
+          final value = tryParseLocalization(e.value);
+          if (e.key is! String || value == null) return null;
+          return value;
+        }).whereType<MapEntry<String, NotificationLocalization>>();
     if (entries.isEmpty) return null;
     return Map.fromEntries(entries);
   }

@@ -40,17 +40,19 @@ class _ProfileStoriesSegmentState extends State<ProfileStoriesSegment> {
         if (result.isEmpty && state.status.isResultNotFound) {
           return UserNullableBody(
             contentSpacing: 8,
-            icon: isCurrentUser
-                ? InAppIcons.write.solid
-                : InAppIcons.feedPublic.regular,
+            icon:
+                isCurrentUser
+                    ? InAppIcons.write.solid
+                    : InAppIcons.feedPublic.regular,
             iconColor: isCurrentUser ? null : context.dark.t25,
             header: "No stories yet",
             body: "Currently no stories available.",
             buttonText: isCurrentUser ? "Create a new story" : null,
-            onButtonClick: () => context.open(
-              Routes.createAMemory,
-              arguments: {"$FeedType": FeedType.memory},
-            ),
+            onButtonClick:
+                () => context.open(
+                  Routes.createAMemory,
+                  arguments: {"$FeedType": FeedType.memory},
+                ),
           );
         }
 

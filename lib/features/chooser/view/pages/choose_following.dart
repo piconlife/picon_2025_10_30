@@ -2,12 +2,12 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_andomie/models/selection.dart';
 import 'package:flutter_androssy_kits/widgets/field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/user.dart';
@@ -246,10 +246,11 @@ class _ChooseFollowingPageState extends State<ChooseFollowingPage> {
                           }
                           return ItemSuggestedUser(
                             selection: item.copy(selected: instance.selected),
-                            onTap: () => context.open(
-                              Routes.userProfile,
-                              arguments: {"$User": item.data},
-                            ),
+                            onTap:
+                                () => context.open(
+                                  Routes.userProfile,
+                                  arguments: {"$User": item.data},
+                                ),
                             onFollow: instance.call,
                           );
                         },
@@ -302,8 +303,8 @@ class _ChooseFollowingPageState extends State<ChooseFollowingPage> {
                 return InAppStackButton(
                   value.isEmpty
                       ? isOnboardingMode
-                            ? "Skip"
-                            : "Cancel"
+                          ? "Skip"
+                          : "Cancel"
                       : "Selected ${value.length} ${value.length > 1 ? "channels" : "channel"}",
                   onTap: () => _submit(context),
                 );

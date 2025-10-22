@@ -40,17 +40,19 @@ class _ProfileVideosSegmentState extends State<ProfileVideosSegment> {
         if (result.isEmpty && state.status.isResultNotFound) {
           return UserNullableBody(
             contentSpacing: 8,
-            icon: isCurrentUser
-                ? InAppIcons.write.solid
-                : InAppIcons.feedPublic.regular,
+            icon:
+                isCurrentUser
+                    ? InAppIcons.write.solid
+                    : InAppIcons.feedPublic.regular,
             iconColor: isCurrentUser ? null : context.dark.t25,
             header: "No videos yet",
             body: "Currently no videos available.",
             buttonText: isCurrentUser ? "Upload a video" : null,
-            onButtonClick: () => context.open(
-              Routes.createAVideo,
-              arguments: {"$FeedType": FeedType.video},
-            ),
+            onButtonClick:
+                () => context.open(
+                  Routes.createAVideo,
+                  arguments: {"$FeedType": FeedType.video},
+                ),
           );
         }
 

@@ -85,9 +85,10 @@ class InAppFilledButtonState extends State<InAppFilledButton> {
           widget.textStyle.color ?? Colors.grey,
         ),
         centerText: widget.icon != null,
-        padding: widget.icon != null
-            ? EdgeInsets.symmetric(horizontal: 24)
-            : EdgeInsets.all(8),
+        padding:
+            widget.icon != null
+                ? EdgeInsets.symmetric(horizontal: 24)
+                : EdgeInsets.all(8),
         iconOrIndicatorFlexible: widget.icon != null,
         borderRadius: widget.borderRadius ?? BorderRadius.circular(50),
         text: widget.text,

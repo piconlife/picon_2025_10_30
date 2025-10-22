@@ -1,7 +1,7 @@
 import 'package:app_color/app_color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/utils/translation.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_translation/in_app_translation.dart';
 import 'package:picon/app/constants/app.dart';
 import 'package:picon/roots/widgets/appbar.dart';
 

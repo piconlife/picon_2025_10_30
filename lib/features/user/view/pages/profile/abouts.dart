@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
+import 'package:in_app_translation/contents.dart';
 
 import '../../../../../app/res/icons.dart';
 import '../../../../../app/styles/fonts.dart';
@@ -130,9 +131,10 @@ class _ProfileAboutsSegmentState extends State<ProfileAboutsSegment> {
             "key": UserKeys.i.secondaryLanguages,
             "icon": InAppIcons.language.regular,
             "title": "Other Languages",
-            "body": user.secondaryLanguages.use.map((e) {
-              return kLanguageNamesInEnglish[e].use;
-            }).text,
+            "body":
+                user.secondaryLanguages.use.map((e) {
+                  return kLanguageNamesInEnglish[e].use;
+                }).text,
             "value": user.secondaryLanguages,
             "editable": true,
           },
@@ -247,113 +249,125 @@ class _ProfileAboutsSegmentState extends State<ProfileAboutsSegment> {
               }
               return ListView(
                 padding: EdgeInsets.only(bottom: dimen.dp(100)),
-                children: map.map((e) {
-                  final category = e["title"] as String;
-                  final contents = e["contents"] as List<Map<String, dynamic>>;
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(dimen.dp(16)),
-                        child: InAppText(
-                          category,
-                          style: TextStyle(
-                            color: primary,
-                            fontWeight: dimen.mediumFontWeight,
-                            fontSize: dimen.dp(18),
-                          ),
-                        ),
-                      ),
-                      ...contents.map((e) {
-                        final key = e["key"] as String;
-                        final icon = e["icon"];
-                        final title = e["title"] as String;
-                        final body = e["body"] as String?;
-                        final editable = e["editable"] as bool;
-                        return Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: dimen.dp(16),
-                            vertical: dimen.dp(12),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(
-                                  top: dimen.dp(8),
-                                  right: dimen.dp(24),
-                                ),
-                                padding: EdgeInsets.all(dimen.dp(8)),
-                                decoration: BoxDecoration(
-                                  color: dark.t05,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: InAppIcon(
-                                  icon,
-                                  color: dark,
-                                  size: dimen.dp(24),
-                                ),
+                children:
+                    map.map((e) {
+                      final category = e["title"] as String;
+                      final contents =
+                          e["contents"] as List<Map<String, dynamic>>;
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(dimen.dp(16)),
+                            child: InAppText(
+                              category,
+                              style: TextStyle(
+                                color: primary,
+                                fontWeight: dimen.mediumFontWeight,
+                                fontSize: dimen.dp(18),
                               ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
+                            ),
+                          ),
+                          ...contents.map((e) {
+                            final key = e["key"] as String;
+                            final icon = e["icon"];
+                            final title = e["title"] as String;
+                            final body = e["body"] as String?;
+                            final editable = e["editable"] as bool;
+                            return Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: dimen.dp(16),
+                                vertical: dimen.dp(12),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                      top: dimen.dp(8),
+                                      right: dimen.dp(24),
+                                    ),
+                                    padding: EdgeInsets.all(dimen.dp(8)),
+                                    decoration: BoxDecoration(
+                                      color: dark.t05,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: InAppIcon(
+                                      icon,
+                                      color: dark,
+                                      size: dimen.dp(24),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Expanded(
-                                          child: InAppText(
-                                            title,
-                                            style: TextStyle(
-                                              color: dark.t50,
-                                              fontSize: dimen.dp(16),
-                                              fontWeight: dimen.boldFontWeight,
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: InAppText(
+                                                title,
+                                                style: TextStyle(
+                                                  color: dark.t50,
+                                                  fontSize: dimen.dp(16),
+                                                  fontWeight:
+                                                      dimen.boldFontWeight,
+                                                ),
+                                              ),
                                             ),
+                                            if (currentUid &&
+                                                (body.isNotValid || editable))
+                                              InAppTextButton(
+                                                body.isValid ? "Edit" : "Add",
+                                                onTap:
+                                                    () => _update(
+                                                      key,
+                                                      title,
+                                                      user,
+                                                    ),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                      dimen.dp(10),
+                                                    ),
+                                                backgroundColor: primary.t05,
+                                                style: TextStyle(
+                                                  fontWeight:
+                                                      dimen.semiBoldFontWeight,
+                                                  fontFamily:
+                                                      InAppFonts.secondary,
+                                                ),
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: dimen.dp(16),
+                                                  vertical: dimen.dp(4),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                        InAppText(
+                                          body.isValid
+                                              ? body
+                                              : currentUid
+                                              ? "Apply your document"
+                                              : "No data found",
+                                          style: TextStyle(
+                                            color:
+                                                body.isValid ? dark : dark.t25,
+                                            fontWeight:
+                                                dimen.semiBoldFontWeight,
+                                            fontFamily: InAppFonts.secondary,
+                                            fontSize: dimen.dp(16),
                                           ),
                                         ),
-                                        if (currentUid &&
-                                            (body.isNotValid || editable))
-                                          InAppTextButton(
-                                            body.isValid ? "Edit" : "Add",
-                                            onTap: () =>
-                                                _update(key, title, user),
-                                            borderRadius: BorderRadius.circular(
-                                              dimen.dp(10),
-                                            ),
-                                            backgroundColor: primary.t05,
-                                            style: TextStyle(
-                                              fontWeight:
-                                                  dimen.semiBoldFontWeight,
-                                              fontFamily: InAppFonts.secondary,
-                                            ),
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: dimen.dp(16),
-                                              vertical: dimen.dp(4),
-                                            ),
-                                          ),
                                       ],
                                     ),
-                                    InAppText(
-                                      body.isValid
-                                          ? body
-                                          : currentUid
-                                          ? "Apply your document"
-                                          : "No data found",
-                                      style: TextStyle(
-                                        color: body.isValid ? dark : dark.t25,
-                                        fontWeight: dimen.semiBoldFontWeight,
-                                        fontFamily: InAppFonts.secondary,
-                                        fontSize: dimen.dp(16),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        );
-                      }),
-                    ],
-                  );
-                }).toList(),
+                            );
+                          }),
+                        ],
+                      );
+                    }).toList(),
               );
             },
           ),

@@ -62,9 +62,8 @@ class InAppOptionDialog extends StatelessWidget {
                 horizontal: dimen.dp(24),
                 vertical: dimen.dp(12),
               ),
-              foregroundColor: index == options.length + 1
-                  ? context.error
-                  : color,
+              foregroundColor:
+                  index == options.length + 1 ? context.error : color,
               backgroundColor: Colors.transparent,
               onTap: () => context.dismiss(result: index - 1),
             ),

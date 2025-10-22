@@ -18,10 +18,11 @@ class UserMemoryRepository extends RemoteDataRepository<UserMemory> {
 
   static UserMemoryRepository? _i;
 
-  static UserMemoryRepository get i => _i ??= UserMemoryRepository(
-    source: RemoteUserMemoryDataSource(),
-    backup: LocalUserMemoryDataSource(),
-  );
+  static UserMemoryRepository get i =>
+      _i ??= UserMemoryRepository(
+        source: RemoteUserMemoryDataSource(),
+        backup: LocalUserMemoryDataSource(),
+      );
 
   @override
   Future<Response<UserMemory>> modifier(

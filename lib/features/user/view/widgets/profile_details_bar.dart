@@ -259,9 +259,10 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
                       height: double.infinity,
                       clipBehavior: Clip.antiAlias,
                       decoration: BoxDecoration(
-                        color: (user.coverPhoto ?? user.photo ?? '').isEmpty
-                            ? Colors.grey
-                            : null,
+                        color:
+                            (user.coverPhoto ?? user.photo ?? '').isEmpty
+                                ? Colors.grey
+                                : null,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(dimen.dp(25)),
                           topRight: Radius.circular(dimen.dp(25)),
@@ -315,36 +316,38 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
                   ),
                   Positioned(
                     bottom: isRatedUser ? 0 : dimen.dp(8),
-                    child: isRatedUser
-                        ? InAppIconButton(
-                            user.isHeartUser
-                                ? InAppIcons.heart.solid
-                                : InAppIcons.star.solid,
-                            size: dimen.dp(40),
-                            iconScale: 1.2,
-                            primaryColor: user.isCelebrityUser
-                                ? context.yellow
-                                : context.red,
-                            iconColor: Colors.white,
-                            onTap: () => _seeProfileStatus(context, user),
-                          )
-                        : InAppButton(
-                            height: dimen.dp(30),
-                            width: dimen.dp(50),
-                            fadeLowerBound: 1,
-                            padding: EdgeInsets.zero,
-                            borderRadius: BorderRadius.circular(dimen.dp(25)),
-                            text: user.rating.toStringAsFixed(1),
-                            backgroundColor: Colors.white,
-                            textStyle: TextStyle(
-                              color: Colors.black,
-                              fontWeight: dimen.mediumFontWeight,
-                              fontSize: dimen.dp(16),
+                    child:
+                        isRatedUser
+                            ? InAppIconButton(
+                              user.isHeartUser
+                                  ? InAppIcons.heart.solid
+                                  : InAppIcons.star.solid,
+                              size: dimen.dp(40),
+                              iconScale: 1.2,
+                              primaryColor:
+                                  user.isCelebrityUser
+                                      ? context.yellow
+                                      : context.red,
+                              iconColor: Colors.white,
+                              onTap: () => _seeProfileStatus(context, user),
+                            )
+                            : InAppButton(
+                              height: dimen.dp(30),
+                              width: dimen.dp(50),
+                              fadeLowerBound: 1,
+                              padding: EdgeInsets.zero,
+                              borderRadius: BorderRadius.circular(dimen.dp(25)),
+                              text: user.rating.toStringAsFixed(1),
+                              backgroundColor: Colors.white,
+                              textStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: dimen.mediumFontWeight,
+                                fontSize: dimen.dp(16),
+                              ),
+                              elevation: 2,
+                              elevationColor: dark.t25,
+                              onTap: () => _seeProfileStatus(context, user),
                             ),
-                            elevation: 2,
-                            elevationColor: dark.t25,
-                            onTap: () => _seeProfileStatus(context, user),
-                          ),
                   ),
                 ],
               ),
@@ -353,11 +356,12 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
             InAppButton(
               scalerLowerBound: 1,
               backgroundColor: isFollowing ? primary.t10 : primary,
-              text: isCurrentUser
-                  ? "Edit"
-                  : isFollowing
-                  ? "Following"
-                  : "Follow",
+              text:
+                  isCurrentUser
+                      ? "Edit"
+                      : isFollowing
+                      ? "Following"
+                      : "Follow",
               textAllCaps: true,
               textStyle: TextStyle(
                 color: isFollowing ? primary : Colors.white,
@@ -366,9 +370,10 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
                 fontFamily: InAppFonts.secondary,
               ),
               onTap: isCurrentUser ? () => _editAvatar(context, user) : null,
-              onToggle: !isCurrentUser
-                  ? (value) => _makeAFollower(context, value)
-                  : null,
+              onToggle:
+                  !isCurrentUser
+                      ? (value) => _makeAFollower(context, value)
+                      : null,
               minWidth: 100,
               padding: EdgeInsets.symmetric(
                 horizontal: dimen.dp(16),
@@ -383,9 +388,10 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   InAppGesture(
-                    onTap: isCurrentUser
-                        ? () => _editProfileName(context, user)
-                        : null,
+                    onTap:
+                        isCurrentUser
+                            ? () => _editProfileName(context, user)
+                            : null,
                     child: Padding(
                       padding: EdgeInsets.all(dimen.dp(4)),
                       child: InAppText(
@@ -404,18 +410,20 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
                   ),
                   if (isCurrentUser || user.title.isValid)
                     InAppGesture(
-                      onTap: isCurrentUser
-                          ? () => _editTitle(context, user)
-                          : null,
+                      onTap:
+                          isCurrentUser
+                              ? () => _editTitle(context, user)
+                              : null,
                       child: Padding(
                         padding: EdgeInsets.all(dimen.dp(4)),
                         child: InAppText(
                           user.title ?? "Add your title",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: user.title.isValid && isCurrentUser
-                                ? dark.t50
-                                : dark.t75,
+                            color:
+                                user.title.isValid && isCurrentUser
+                                    ? dark.t50
+                                    : dark.t75,
                             fontWeight: dimen.mediumFontWeight,
                             fontSize: dimen.dp(16),
                             height: 1.5,
@@ -425,9 +433,8 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
                     ),
                   if ((isCurrentUser || user.biography.isValid))
                     InAppGesture(
-                      onTap: isCurrentUser
-                          ? () => _editBio(context, user)
-                          : null,
+                      onTap:
+                          isCurrentUser ? () => _editBio(context, user) : null,
                       child: Padding(
                         padding: EdgeInsets.all(dimen.dp(4)),
                         child: InAppText(

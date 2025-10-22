@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
 import 'package:flutter_app_navigator/app_navigator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:object_finder/object_finder.dart';
 
 import '../../data/models/user.dart';
 import '../../routes/paths.dart';
@@ -152,10 +152,12 @@ Widget _profile(BuildContext context, Object? args) {
       postCubit != null
           ? BlocProvider.value(value: postCubit..count())
           : BlocProvider(
-              create: (context) => UserPostCubit(uid)
-                ..fetch()
-                ..count(),
-            ),
+            create:
+                (context) =>
+                    UserPostCubit(uid)
+                      ..fetch()
+                      ..count(),
+          ),
       storyCubit != null
           ? BlocProvider.value(value: storyCubit)
           : BlocProvider(create: (context) => UserStoryCubit(uid)..fetch()),
@@ -165,10 +167,12 @@ Widget _profile(BuildContext context, Object? args) {
       reportCubit != null
           ? BlocProvider.value(value: reportCubit..count())
           : BlocProvider(
-              create: (context) => UserReportCubit(uid)
-                ..fetch()
-                ..count(),
-            ),
+            create:
+                (context) =>
+                    UserReportCubit(uid)
+                      ..fetch()
+                      ..count(),
+          ),
       userFollowerCubit != null
           ? BlocProvider.value(value: userFollowerCubit..count())
           : BlocProvider(create: (context) => UserFollowerCubit(uid)..count()),
@@ -188,10 +192,10 @@ Widget _profileReports(BuildContext context, Object? args) {
       reportCubit != null
           ? BlocProvider.value(value: reportCubit)
           : BlocProvider(
-              create: (context) {
-                return UserReportCubit(user?.id)..fetch();
-              },
-            ),
+            create: (context) {
+              return UserReportCubit(user?.id)..fetch();
+            },
+          ),
     ],
     child: UserReportsPage(args: args, user: user),
   );
@@ -218,10 +222,10 @@ Widget _profileFollowers(BuildContext context, Object? args) {
       followerCubit != null
           ? BlocProvider.value(value: followerCubit)
           : BlocProvider(
-              create: (context) {
-                return UserFollowerCubit(user?.id)..fetch();
-              },
-            ),
+            create: (context) {
+              return UserFollowerCubit(user?.id)..fetch();
+            },
+          ),
     ],
     child: UserFollowersPage(args: args, user: user),
   );

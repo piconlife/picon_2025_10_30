@@ -3,12 +3,12 @@ import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/string.dart';
-import 'package:flutter_andomie/utils/configs.dart';
-import 'package:flutter_andomie/utils/settings.dart';
-import 'package:flutter_andomie/utils/translation.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_terms_viewer/flutter_terms_viewer.dart';
+import 'package:in_app_configs/configs.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_settings/in_app_settings.dart';
+import 'package:in_app_translation/in_app_translation.dart';
 
 import '../../../../app/constants/app.dart';
 import '../../../../roots/contents/legals.dart';
@@ -179,25 +179,27 @@ class _TermsPageState extends State<TermsPage>
                                 fontWeight: context.mediumFontWeight,
                               ),
                             ),
-                            subtitle: item.body.use.isEmpty
-                                ? null
-                                : Padding(
-                                    padding: EdgeInsets.only(top: 8),
-                                    child: InAppText(
-                                      item.body?.replaceAll(
-                                        "{APP_NAME}",
-                                        AppConstants.name,
-                                      ),
-                                      suffix: " more",
-                                      onSuffixClick: (context) =>
-                                          _learnDetails(context, item),
-                                      suffixStyle: TextStyle(color: primary),
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: dark.t50,
+                            subtitle:
+                                item.body.use.isEmpty
+                                    ? null
+                                    : Padding(
+                                      padding: EdgeInsets.only(top: 8),
+                                      child: InAppText(
+                                        item.body?.replaceAll(
+                                          "{APP_NAME}",
+                                          AppConstants.name,
+                                        ),
+                                        suffix: " more",
+                                        onSuffixClick:
+                                            (context) =>
+                                                _learnDetails(context, item),
+                                        suffixStyle: TextStyle(color: primary),
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: dark.t50,
+                                        ),
                                       ),
                                     ),
-                                  ),
                             onChanged: (value) => _checked(item.headline ?? ''),
                           );
                         }),

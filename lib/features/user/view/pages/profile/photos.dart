@@ -61,9 +61,10 @@ class _ProfilePhotosSegmentState extends State<ProfilePhotosSegment> {
         if (result.isEmpty && state.status.isResultNotFound) {
           return UserNullableBody(
             contentSpacing: 8,
-            icon: isCurrentUser
-                ? InAppIcons.write.solid
-                : InAppIcons.gallery.regular,
+            icon:
+                isCurrentUser
+                    ? InAppIcons.write.solid
+                    : InAppIcons.gallery.regular,
             iconColor: isCurrentUser ? null : context.dark.t25,
             header: "No photos yet",
             body: "Currently no photos available.",

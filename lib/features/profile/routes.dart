@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/extensions/object.dart';
 import 'package:flutter_app_navigator/app_navigator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:object_finder/object_finder.dart';
 
 import '../../routes/paths.dart';
 import '../social/view/cubits/follower_cubit.dart';

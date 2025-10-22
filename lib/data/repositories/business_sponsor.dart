@@ -18,10 +18,11 @@ class BusinessSponsorRepository extends RemoteDataRepository<BusinessSponsor> {
 
   static BusinessSponsorRepository? _i;
 
-  static BusinessSponsorRepository get i => _i ??= BusinessSponsorRepository(
-    source: RemoteBusinessSponsorDataSource(),
-    backup: LocalBusinessSponsorDataSource(),
-  );
+  static BusinessSponsorRepository get i =>
+      _i ??= BusinessSponsorRepository(
+        source: RemoteBusinessSponsorDataSource(),
+        backup: LocalBusinessSponsorDataSource(),
+      );
 
   @override
   Future<Response<BusinessSponsor>> modifier(

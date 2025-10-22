@@ -1,5 +1,5 @@
-import 'package:flutter_andomie/utils/configs.dart';
 import 'package:flutter_terms_viewer/flutter_terms_viewer.dart';
+import 'package:in_app_configs/configs.dart';
 
 const _kLegals = "legals";
 const _kPrivacy = "privacy";
@@ -19,7 +19,7 @@ class Legals {
   const Legals({this.privacy = const Legal(), this.terms = const Legal()});
 
   static Legals get get {
-    final x = Configs.load(name: _kLegals, parser: Legals.parse);
+    final x = Configs.getByName(_kLegals, parser: Legals.parse);
     return x ?? Legals();
   }
 
@@ -63,9 +63,10 @@ class Legal {
     return Legal(
       title: title is String && title.isNotEmpty ? title : defaultValue?.title,
       body: body is String && body.isNotEmpty ? body : defaultValue?.body,
-      contents: contents is List && contents.isNotEmpty
-          ? contents.map(Terms.from).toList()
-          : defaultValue?.contents ?? [],
+      contents:
+          contents is List && contents.isNotEmpty
+              ? contents.map(Terms.from).toList()
+              : defaultValue?.contents ?? [],
     );
   }
 

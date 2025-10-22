@@ -99,9 +99,10 @@ class ItemSuggestedChannel extends StatelessWidget {
                 alignment: Alignment.center,
                 child: InAppPleasureButton(
                   onTap: onFollow,
-                  icon: selection.selected
-                      ? InAppIcons.heart.solid
-                      : InAppIcons.heart.regular,
+                  icon:
+                      selection.selected
+                          ? InAppIcons.heart.solid
+                          : InAppIcons.heart.regular,
                   iconColor: primary,
                 ),
               ),

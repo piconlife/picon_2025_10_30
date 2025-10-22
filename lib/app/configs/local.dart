@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/utils/configs.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
+import 'package:in_app_configs/configs.dart';
 import 'package:in_app_database/in_app_database.dart';
 
 import '../../features/chooser/data/models/country.dart';

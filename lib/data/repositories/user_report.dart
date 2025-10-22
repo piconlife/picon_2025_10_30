@@ -15,10 +15,11 @@ class UserReportRepository extends RemoteDataRepository<UserReport> {
 
   static UserReportRepository? _i;
 
-  static UserReportRepository get i => _i ??= UserReportRepository(
-    source: RemoteUserReportDataSource(),
-    backup: LocalUserReportDataSource(),
-  );
+  static UserReportRepository get i =>
+      _i ??= UserReportRepository(
+        source: RemoteUserReportDataSource(),
+        backup: LocalUserReportDataSource(),
+      );
 
   @override
   Future<Response<UserReport>> modifier(

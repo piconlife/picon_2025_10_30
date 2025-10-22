@@ -75,55 +75,62 @@ class Uploader extends ValueNotifier<UploadingSnapshot> {
           extension: data.extension,
           filename: "${task.id}.${data.extension ?? "jpg"}",
         ),
-        onCanceled: (event) => notify(
-          UploadingSnapshot(
-            id: task.id,
-            status: UploadingStatus.canceled,
-            value: event.value,
-          ),
-        ),
-        onDone: (event) => notify(
-          UploadingSnapshot(
-            id: task.id,
-            status: UploadingStatus.done,
-            value: event.value,
-          ),
-        ),
-        onError: (event) => notify(
-          UploadingSnapshot(
-            id: task.id,
-            status: UploadingStatus.error,
-            value: event.value,
-          ),
-        ),
-        onLoading: (event) => notify(
-          UploadingSnapshot(
-            id: task.id,
-            status: UploadingStatus.loading,
-            value: event.value,
-          ),
-        ),
-        onNetworkError: (event) => notify(
-          UploadingSnapshot(
-            id: task.id,
-            status: UploadingStatus.networkError,
-            value: event.value,
-          ),
-        ),
-        onPaused: (event) => notify(
-          UploadingSnapshot(
-            id: task.id,
-            status: UploadingStatus.paused,
-            value: event.value,
-          ),
-        ),
-        onProgress: (event) => notify(
-          UploadingSnapshot(
-            id: task.id,
-            status: UploadingStatus.progressing,
-            value: event.value,
-          ),
-        ),
+        onCanceled:
+            (event) => notify(
+              UploadingSnapshot(
+                id: task.id,
+                status: UploadingStatus.canceled,
+                value: event.value,
+              ),
+            ),
+        onDone:
+            (event) => notify(
+              UploadingSnapshot(
+                id: task.id,
+                status: UploadingStatus.done,
+                value: event.value,
+              ),
+            ),
+        onError:
+            (event) => notify(
+              UploadingSnapshot(
+                id: task.id,
+                status: UploadingStatus.error,
+                value: event.value,
+              ),
+            ),
+        onLoading:
+            (event) => notify(
+              UploadingSnapshot(
+                id: task.id,
+                status: UploadingStatus.loading,
+                value: event.value,
+              ),
+            ),
+        onNetworkError:
+            (event) => notify(
+              UploadingSnapshot(
+                id: task.id,
+                status: UploadingStatus.networkError,
+                value: event.value,
+              ),
+            ),
+        onPaused:
+            (event) => notify(
+              UploadingSnapshot(
+                id: task.id,
+                status: UploadingStatus.paused,
+                value: event.value,
+              ),
+            ),
+        onProgress:
+            (event) => notify(
+              UploadingSnapshot(
+                id: task.id,
+                status: UploadingStatus.progressing,
+                value: event.value,
+              ),
+            ),
       );
     } catch (error) {
       notify(

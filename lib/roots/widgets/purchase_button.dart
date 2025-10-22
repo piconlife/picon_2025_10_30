@@ -31,16 +31,17 @@ class InAppPurchaseButton extends StatelessWidget {
       textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
       clickEffect: AndrossyGestureEffect(
-        primary: onTap == null
-            ? null
-            : AndrossyGestureAnimation(
-                lowerBound: 0.95,
-                repeat: true,
-                duration: Duration(milliseconds: 700),
-                builder: (context, animation, child) {
-                  return ScaleTransition(scale: animation, child: child);
-                },
-              ),
+        primary:
+            onTap == null
+                ? null
+                : AndrossyGestureAnimation(
+                  lowerBound: 0.95,
+                  repeat: true,
+                  duration: Duration(milliseconds: 700),
+                  builder: (context, animation, child) {
+                    return ScaleTransition(scale: animation, child: child);
+                  },
+                ),
       ),
     );
   }

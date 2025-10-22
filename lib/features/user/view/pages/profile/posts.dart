@@ -44,17 +44,19 @@ class _ProfilePostsSegmentState extends State<ProfilePostsSegment> {
         if (result.isEmpty && state.status.isResultNotFound) {
           return UserNullableBody(
             contentSpacing: 8,
-            icon: isCurrentUser
-                ? InAppIcons.write.solid
-                : InAppIcons.feedPublic.regular,
+            icon:
+                isCurrentUser
+                    ? InAppIcons.write.solid
+                    : InAppIcons.feedPublic.regular,
             iconColor: isCurrentUser ? null : dark.t25,
             header: "No posts yet",
             body: "Currently no posts available.",
             buttonText: isCurrentUser ? "Take a new post" : null,
-            onButtonClick: () => context.open(
-              Routes.createUserPost,
-              arguments: {"$FeedType": FeedType.post},
-            ),
+            onButtonClick:
+                () => context.open(
+                  Routes.createUserPost,
+                  arguments: {"$FeedType": FeedType.post},
+                ),
           );
         }
 

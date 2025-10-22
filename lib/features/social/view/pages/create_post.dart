@@ -6,7 +6,6 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/list.dart';
-import 'package:flutter_andomie/extensions/object.dart';
 import 'package:flutter_andomie/utils/key_generator.dart';
 import 'package:flutter_andomie/utils/path_replacer.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
@@ -14,6 +13,7 @@ import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/flutter_entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/dialogs/bsd_audience.dart';
 import '../../../../app/dialogs/bsd_privacy.dart';
@@ -361,10 +361,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   void _createPost(BuildContext context, UserPost feed) {
     context.showLoader();
-    final mPhotos = photos.value
-        .map((e) => e.rootData)
-        .whereType<Photo>()
-        .toList();
+    final mPhotos =
+        photos.value.map((e) => e.rootData).whereType<Photo>().toList();
     context.read<UserPostCubit>().create(feed).then((value) {
       if (!context.mounted) return;
       if (value.isSuccessful) {
@@ -572,8 +570,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         key: ValueKey(item.id),
                         photo: item,
                         path: photosPath,
-                        onProcessing: (context, value) =>
-                            _upload(context, index, value),
+                        onProcessing:
+                            (context, value) => _upload(context, index, value),
                       );
                       return ReorderableDelayedDragStartListener(
                         index: index,

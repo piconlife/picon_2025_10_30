@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/extensions/object.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:object_finder/object_finder.dart';
 
 import '../../../../data/enums/feed_type.dart';
 import '../../../../data/models/feed.dart';

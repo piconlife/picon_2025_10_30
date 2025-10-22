@@ -106,8 +106,8 @@ class _UserPostHeaderState extends State<UserPostHeader> {
           final title =
               (widget.item.title.isValid
                   ? widget.item.isTranslated
-                        ? widget.item.translatedTitle
-                        : widget.item.title
+                      ? widget.item.translatedTitle
+                      : widget.item.title
                   : null) ??
               (widget.item.isPublisher ? UserHelper.username : user.username);
           return Row(
@@ -161,25 +161,22 @@ class _UserPostHeaderState extends State<UserPostHeader> {
                     if (!isMe)
                       PopupMenuItem(
                         value: "follow",
-                        child:
-                            BlocBuilder<
-                              FollowerCubit,
-                              Response<Selection<UserFollower>>
-                            >(
-                              bloc: followerCubit,
-                              builder: (context, response) {
-                                final isFollowing =
-                                    response.result.firstWhereOrNull((e) {
-                                      return UserHelper.isCurrentUser(
-                                        e.data.uid,
-                                      );
-                                    }) !=
-                                    null;
-                                return InAppText(
-                                  isFollowing ? "Following" : "Follow",
-                                );
-                              },
-                            ),
+                        child: BlocBuilder<
+                          FollowerCubit,
+                          Response<Selection<UserFollower>>
+                        >(
+                          bloc: followerCubit,
+                          builder: (context, response) {
+                            final isFollowing =
+                                response.result.firstWhereOrNull((e) {
+                                  return UserHelper.isCurrentUser(e.data.uid);
+                                }) !=
+                                null;
+                            return InAppText(
+                              isFollowing ? "Following" : "Follow",
+                            );
+                          },
+                        ),
                       ),
                     if (widget.item.isShareMode)
                       PopupMenuItem(value: "share", child: InAppText("Share")),

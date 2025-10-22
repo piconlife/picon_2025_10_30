@@ -21,39 +21,24 @@ class InAppBiometricAuthDelegate extends IBiometricAuthDelegate {
   }) {
     return i.authenticate(
       localizedReason: localizedReason,
-      authMessages: authMessages.map((e) {
-        if (e is IOSBiometricMessages) {
-          return IOSAuthMessages(
-            lockOut: e.lockOut,
-            goToSettingsButton: e.goToSettingsButton,
-            goToSettingsDescription: e.goToSettingsDescription,
-            cancelButton: e.cancelButton,
-            localizedFallbackTitle: e.localizedFallbackTitle,
-          );
-        } else if (e is AndroidBiometricMessages) {
-          return AndroidAuthMessages(
-            biometricHint: e.biometricHint,
-            biometricNotRecognized: e.biometricNotRecognized,
-            biometricRequiredTitle: e.biometricRequiredTitle,
-            biometricSuccess: e.biometricSuccess,
-            cancelButton: e.cancelButton,
-            deviceCredentialsRequiredTitle: e.deviceCredentialsRequiredTitle,
-            deviceCredentialsSetupDescription:
-                e.deviceCredentialsSetupDescription,
-            goToSettingsButton: e.goToSettingsButton,
-            goToSettingsDescription: e.goToSettingsDescription,
-            signInTitle: e.signInTitle,
-          );
-        } else {
-          return const WindowsAuthMessages();
-        }
-      }).toList(),
-      options: AuthenticationOptions(
-        useErrorDialogs: options.useErrorDialogs,
-        stickyAuth: options.stickyAuth,
-        sensitiveTransaction: options.sensitiveTransaction,
-        biometricOnly: options.biometricOnly,
-      ),
+      authMessages:
+          authMessages.map((e) {
+            if (e is IOSBiometricMessages) {
+              return IOSAuthMessages(
+                cancelButton: e.cancelButton,
+                localizedFallbackTitle: e.localizedFallbackTitle,
+              );
+            } else if (e is AndroidBiometricMessages) {
+              return AndroidAuthMessages(
+                cancelButton: e.cancelButton,
+                signInTitle: e.signInTitle,
+              );
+            } else {
+              return const WindowsAuthMessages();
+            }
+          }).toList(),
+      biometricOnly: options.biometricOnly,
+      sensitiveTransaction: options.sensitiveTransaction,
     );
   }
 

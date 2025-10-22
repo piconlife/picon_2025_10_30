@@ -1,4 +1,4 @@
-import 'package:flutter_andomie/utils/configs.dart';
+import 'package:in_app_configs/configs.dart';
 
 import '../../roots/utils/platform.dart';
 import '../constants/app.dart';

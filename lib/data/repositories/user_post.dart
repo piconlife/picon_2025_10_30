@@ -14,8 +14,9 @@ class UserPostRepository extends RemoteDataRepository<UserPost> {
 
   static UserPostRepository? _i;
 
-  static UserPostRepository get i => _i ??= UserPostRepository(
-    source: RemoteUserPostDataSource(),
-    backup: LocalUserPostDataSource(),
-  );
+  static UserPostRepository get i =>
+      _i ??= UserPostRepository(
+        source: RemoteUserPostDataSource(),
+        backup: LocalUserPostDataSource(),
+      );
 }

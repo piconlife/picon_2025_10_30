@@ -74,9 +74,10 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
           alignment: config.alignment,
           color: config.color,
           cacheKey: config.cacheKey,
-          cacheManager: config.cacheManager is BaseCacheManager
-              ? config.cacheManager as BaseCacheManager
-              : null,
+          cacheManager:
+              config.cacheManager is BaseCacheManager
+                  ? config.cacheManager as BaseCacheManager
+                  : null,
           colorBlendMode: config.colorBlendMode,
           errorListener: config.errorListener,
           errorWidget:
@@ -95,8 +96,8 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
           imageBuilder: config.imageBuilder,
           imageRenderMethodForWeb:
               config.imageRenderMethodForWeb is ImageRenderMethodForWeb
-              ? config.imageRenderMethodForWeb as ImageRenderMethodForWeb
-              : ImageRenderMethodForWeb.HtmlImage,
+                  ? config.imageRenderMethodForWeb as ImageRenderMethodForWeb
+                  : ImageRenderMethodForWeb.HtmlImage,
           imageUrl: config.imageUrl,
           key: null,
           matchTextDirection: config.matchTextDirection,
@@ -232,7 +233,7 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
       name: LocalConfigs.configName,
       connected: Internet.i.value,
       delegate: InAppConfigDelegate(),
-      paths: {...kDefaultConfigPaths, ...LocalConfigs.configPaths},
+      paths: LocalConfigs.configPaths,
       showLogs: LocalConfigs.configLogs,
       defaultPath: LocalConfigs.configDefault,
       platform: LocalConfigs.configPlatform,
@@ -280,7 +281,7 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
       stroke: InAppDimens.stroke,
       dimens: InAppDimens.customs,
     );
-    ColorTheme.tryParse(Configs.load(name: "themes"))?.apply();
+    ColorTheme.tryParse(Configs.getByName("themes"))?.apply();
   }
 
   void _initDatabase() {
@@ -501,18 +502,7 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
   }
 
   Future<void> _initSettings() async {
-    await Settings.init(
-      showLogs: true,
-      backup: const SettingsBackupDelegate(
-        read: readBackupData,
-        write: writeBackupData,
-        clean: cleanBackupData,
-      ),
-      cached: const SettingsCachedDelegate(
-        read: readCachedData,
-        write: writeCachedData,
-      ),
-    );
+    await Settings.init(delegate: InAppSettingsDelegate());
   }
 
   void _initStorage() {
@@ -665,18 +655,9 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     if (!_initialized) return SizedBox();
     Widget child = widget.app ?? App();
-    // child = _buildPurchaseProvider(child);
     child = _buildAuthProvider(child);
     child = _buildNetworkProvider(child);
     return child;
-  }
-
-  Widget _buildPurchaseProvider(Widget child) {
-    return PurchaseProvider(
-      logEnabled: LocalConfigs.purchaserLogEnabled,
-      delegate: InAppPurchaseDelegate(),
-      child: child,
-    );
   }
 
   Widget _buildAuthProvider(Widget child) {

@@ -117,10 +117,11 @@ class _DatePickerBSDState extends State<DatePickerBSD> {
                 minDateTime: widget.start,
                 maxDateTime: widget.end,
                 dateFormat: "dd-MMM-yyyy",
-                onChange: (date, _) => setState(() {
-                  _selected = date;
-                  if (widget.onChange != null) widget.onChange!(date);
-                }),
+                onChange:
+                    (date, _) => setState(() {
+                      _selected = date;
+                      if (widget.onChange != null) widget.onChange!(date);
+                    }),
                 pickerTheme: p.DateTimePickerTheme(
                   pickerHeight: dimen.dp(headerMode ? 120 : 180),
                   backgroundColor: Colors.transparent,

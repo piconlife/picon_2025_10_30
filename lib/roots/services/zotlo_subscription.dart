@@ -58,18 +58,20 @@ class ZotloProfile {
       subscriberId: json["subscriberId"],
       subscriptionId: json["subscriptionId"],
       subscriptionType: json["subscriptionType"],
-      startDate: json["startDate"] == null
-          ? null
-          : DateTime.parse(json["startDate"]),
-      expireDate: json["expireDate"] == null
-          ? null
-          : DateTime.parse(json["expireDate"]),
-      renewalDate: json["renewalDate"] == null
-          ? null
-          : DateTime.parse(json["renewalDate"]),
-      freezeEndDate: json["freezeEndDate"] == null
-          ? null
-          : DateTime.parse(json["freezeEndDate"]),
+      startDate:
+          json["startDate"] == null ? null : DateTime.parse(json["startDate"]),
+      expireDate:
+          json["expireDate"] == null
+              ? null
+              : DateTime.parse(json["expireDate"]),
+      renewalDate:
+          json["renewalDate"] == null
+              ? null
+              : DateTime.parse(json["renewalDate"]),
+      freezeEndDate:
+          json["freezeEndDate"] == null
+              ? null
+              : DateTime.parse(json["freezeEndDate"]),
       package: json["package"],
       country: json["country"],
       phoneNumber: json["phoneNumber"],
@@ -78,9 +80,10 @@ class ZotloProfile {
       lastTransactionId: json["lastTransactionId"],
       subscriptionPackageType: json["subscriptionPackageType"],
       cancellation: json["cancellation"],
-      customParameters: json["customParameters"] == null
-          ? null
-          : ZotloCustomParameters.fromJson(json["customParameters"]),
+      customParameters:
+          json["customParameters"] == null
+              ? null
+              : ZotloCustomParameters.fromJson(json["customParameters"]),
       quantity: json["quantity"],
       pendingQuantity: json["pendingQuantity"],
       renewalFetchCount: json["renewalFetchCount"],
@@ -141,9 +144,10 @@ class ZotloPackage {
       packageType: json["packageType"],
       name: json["name"],
       subscriptionPackageType: json["subscriptionPackageType"],
-      bundlePackages: json["bundlePackages"] == null
-          ? []
-          : List<dynamic>.from(json["bundlePackages"]!.map((x) => x)),
+      bundlePackages:
+          json["bundlePackages"] == null
+              ? []
+              : List<dynamic>.from(json["bundlePackages"]!.map((x) => x)),
     );
   }
 
@@ -155,9 +159,10 @@ class ZotloPackage {
       "packageType": packageType,
       "name": name,
       "subscriptionPackageType": subscriptionPackageType,
-      "bundlePackages": bundlePackages == null
-          ? []
-          : List<dynamic>.from(bundlePackages!.map((x) => x)),
+      "bundlePackages":
+          bundlePackages == null
+              ? []
+              : List<dynamic>.from(bundlePackages!.map((x) => x)),
     };
   }
 }
@@ -227,19 +232,23 @@ class ZotloResult {
 
   factory ZotloResult.fromJson(Map<String, dynamic> json) {
     return ZotloResult(
-      profile: json["profile"] == null
-          ? null
-          : ZotloProfile.fromJson(json["profile"]),
-      package: json["package"] == null
-          ? null
-          : ZotloPackage.fromJson(json["package"]),
-      newPackage: json["newPackage"] == null
-          ? null
-          : ZotloPackage.fromJson(json["newPackage"]),
+      profile:
+          json["profile"] == null
+              ? null
+              : ZotloProfile.fromJson(json["profile"]),
+      package:
+          json["package"] == null
+              ? null
+              : ZotloPackage.fromJson(json["package"]),
+      newPackage:
+          json["newPackage"] == null
+              ? null
+              : ZotloPackage.fromJson(json["newPackage"]),
       card: json["card"] == null ? null : ZotloCard.fromJson(json["card"]),
-      customer: json["customer"] == null
-          ? null
-          : ZotloCustomer.fromJson(json["customer"]),
+      customer:
+          json["customer"] == null
+              ? null
+              : ZotloCustomer.fromJson(json["customer"]),
     );
   }
 
@@ -467,15 +476,18 @@ class ZotloAgreement {
 
   factory ZotloAgreement.fromJson(Map<String, dynamic> json) {
     return ZotloAgreement(
-      company: json["company"] == null
-          ? null
-          : ZotloCompany.fromJson(json["company"]),
-      customer: json["customer"] == null
-          ? null
-          : ZotloCustomer.fromJson(json["customer"]),
-      product: json["product"] == null
-          ? null
-          : ZotloProduct.fromJson(json["product"]),
+      company:
+          json["company"] == null
+              ? null
+              : ZotloCompany.fromJson(json["company"]),
+      customer:
+          json["customer"] == null
+              ? null
+              : ZotloCustomer.fromJson(json["customer"]),
+      product:
+          json["product"] == null
+              ? null
+              : ZotloProduct.fromJson(json["product"]),
     );
   }
 
@@ -509,20 +521,24 @@ class ZotloCustomParameters {
 
   factory ZotloCustomParameters.fromJson(Map<String, dynamic> json) {
     return ZotloCustomParameters(
-      invoice: json["invoice"] == null
-          ? null
-          : ZotloInvoice.fromJson(json["invoice"]),
+      invoice:
+          json["invoice"] == null
+              ? null
+              : ZotloInvoice.fromJson(json["invoice"]),
       clientUuid: json["clientUuid"],
-      dataWarehouse: json["dataWarehouse"] == null
-          ? null
-          : ZotloDataWarehouse.fromJson(json["dataWarehouse"]),
+      dataWarehouse:
+          json["dataWarehouse"] == null
+              ? null
+              : ZotloDataWarehouse.fromJson(json["dataWarehouse"]),
       utm: json["utm"] == null ? null : ZotloUtm.fromJson(json["utm"]),
-      agreement: json["agreement"] == null
-          ? null
-          : ZotloAgreement.fromJson(json["agreement"]),
-      merchantParameters: json["merchantParameters"] == null
-          ? []
-          : List<dynamic>.from(json["merchantParameters"]!.map((x) => x)),
+      agreement:
+          json["agreement"] == null
+              ? null
+              : ZotloAgreement.fromJson(json["agreement"]),
+      merchantParameters:
+          json["merchantParameters"] == null
+              ? []
+              : List<dynamic>.from(json["merchantParameters"]!.map((x) => x)),
       subscriberIpAddress: json["subscriberIpAddress"],
     );
   }
@@ -534,9 +550,10 @@ class ZotloCustomParameters {
       "dataWarehouse": dataWarehouse?.toJson(),
       "utm": utm?.toJson(),
       "agreement": agreement?.toJson(),
-      "merchantParameters": merchantParameters == null
-          ? []
-          : List<dynamic>.from(merchantParameters!.map((x) => x)),
+      "merchantParameters":
+          merchantParameters == null
+              ? []
+              : List<dynamic>.from(merchantParameters!.map((x) => x)),
       "subscriberIpAddress": subscriberIpAddress,
     };
   }
@@ -585,9 +602,8 @@ class ZotloDetails {
     final result = json['result'];
     return ZotloDetails(
       meta: meta is! Map<String, dynamic> ? null : ZotloMeta.fromJson(meta),
-      result: result is! Map<String, dynamic>
-          ? null
-          : ZotloResult.fromJson(result),
+      result:
+          result is! Map<String, dynamic> ? null : ZotloResult.fromJson(result),
     );
   }
 

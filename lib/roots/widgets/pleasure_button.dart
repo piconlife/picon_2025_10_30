@@ -28,13 +28,14 @@ class InAppPleasureButton extends StatelessWidget {
       backgroundColor: AndrossyButtonProperty.all(
         backgroundColor ?? Colors.transparent,
       ),
-      onTap: onTap != null
-          ? () {
-              Future.delayed(duration).whenComplete(() {
-                if (context.mounted) onTap!();
-              });
-            }
-          : null,
+      onTap:
+          onTap != null
+              ? () {
+                Future.delayed(duration).whenComplete(() {
+                  if (context.mounted) onTap!();
+                });
+              }
+              : null,
       clickEffect: AndrossyGestureEffect.scale(
         lowerBound: 0,
         duration: duration,

@@ -1,5 +1,5 @@
-import 'package:flutter_andomie/utils/settings.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:in_app_settings/settings.dart';
 
 import '../utils/platform.dart';
 

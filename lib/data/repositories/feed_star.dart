@@ -14,8 +14,9 @@ class FeedStarRepository extends RemoteDataRepository<FeedStar> {
 
   static FeedStarRepository? _i;
 
-  static FeedStarRepository get i => _i ??= FeedStarRepository(
-    source: RemoteFeedStarDataSource(),
-    backup: LocalFeedStarDataSource(),
-  );
+  static FeedStarRepository get i =>
+      _i ??= FeedStarRepository(
+        source: RemoteFeedStarDataSource(),
+        backup: LocalFeedStarDataSource(),
+      );
 }

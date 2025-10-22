@@ -2,10 +2,10 @@ import 'dart:developer';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/extensions/object.dart';
-import 'package:flutter_andomie/utils/configs.dart';
 import 'package:flutter_andomie/utils/hit_logger.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
+import 'package:in_app_configs/configs.dart';
+import 'package:object_finder/object_finder.dart';
 
 import '../app/configs/local.dart';
 import '../app/dialogs/bsd_audience.dart';

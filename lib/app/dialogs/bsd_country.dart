@@ -2,8 +2,7 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/models/country.dart';
-import 'package:flutter_andomie/utils/translation.dart';
+import 'package:in_app_translation/in_app_translation.dart';
 
 import '../../roots/preferences/preferences.dart';
 
@@ -111,18 +110,19 @@ class _CountryPickerState extends State<CountryPicker> with TranslationMixin {
       if (query.isNotEmpty) {
         if (recent.isNotEmpty) temp = recent;
         recent = [];
-        countries = List<Country>.from(roots).where((e) {
-          switch (widget.type) {
-            case CountryPickerType.country:
-              return e.searchCountry(query);
-            case CountryPickerType.phone:
-              return e.searchPhone(query);
-            case CountryPickerType.currency:
-              return e.searchCurrency(query);
-            case CountryPickerType.language:
-              return e.searchLanguage(query);
-          }
-        }).toList();
+        countries =
+            List<Country>.from(roots).where((e) {
+              switch (widget.type) {
+                case CountryPickerType.country:
+                  return e.searchCountry(query);
+                case CountryPickerType.phone:
+                  return e.searchPhone(query);
+                case CountryPickerType.currency:
+                  return e.searchCurrency(query);
+                case CountryPickerType.language:
+                  return e.searchLanguage(query);
+              }
+            }).toList();
       } else {
         recent = temp;
         countries = List.from(roots);
@@ -245,19 +245,24 @@ class _CountryPickerState extends State<CountryPicker> with TranslationMixin {
             ? item.currencyCode
             : item.languageName,
       ),
-      subtitle: type.isPhone || type.isCountry
-          ? null
-          : _subtitle(dimen, type.isCurrency ? item.currencyName : item.name),
-      trailing: type.isCountry
-          ? null
-          : _trailing(
-              dimen,
-              type.isPhone
-                  ? item.phoneCode
-                  : type.isCurrency
-                  ? item.currencySymbol
-                  : item.languageCode,
-            ),
+      subtitle:
+          type.isPhone || type.isCountry
+              ? null
+              : _subtitle(
+                dimen,
+                type.isCurrency ? item.currencyName : item.name,
+              ),
+      trailing:
+          type.isCountry
+              ? null
+              : _trailing(
+                dimen,
+                type.isPhone
+                    ? item.phoneCode
+                    : type.isCurrency
+                    ? item.currencySymbol
+                    : item.languageCode,
+              ),
       contentPadding: EdgeInsets.only(
         top: dimen.dp(4),
         bottom: dimen.dp(4),
@@ -322,32 +327,34 @@ class _CountryPickerState extends State<CountryPicker> with TranslationMixin {
             SizedBox(height: dimen.dp(16)),
             _searchBar(dimen),
             Expanded(
-              child: isRecent
-                  ? ListView(
-                      padding: EdgeInsets.symmetric(vertical: dimen.dp(16)),
-                      controller: controller,
-                      children: [
-                        _label(
-                          dimen,
-                          localize("recent", defaultValue: "Recent"),
-                        ),
-                        Divider(color: context.dark.t05),
-                        ListView.separated(
-                          shrinkWrap: true,
-                          reverse: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: recent.length,
-                          itemBuilder: (context, index) {
-                            return _item(dimen, recent.elementAt(index));
-                          },
-                          separatorBuilder: (context, index) => _divider(dimen),
-                        ),
-                        _label(dimen, localize("all", defaultValue: "All")),
-                        Divider(color: context.dark.t05),
-                        _items(dimen),
-                      ],
-                    )
-                  : _items(dimen, controller),
+              child:
+                  isRecent
+                      ? ListView(
+                        padding: EdgeInsets.symmetric(vertical: dimen.dp(16)),
+                        controller: controller,
+                        children: [
+                          _label(
+                            dimen,
+                            localize("recent", defaultValue: "Recent"),
+                          ),
+                          Divider(color: context.dark.t05),
+                          ListView.separated(
+                            shrinkWrap: true,
+                            reverse: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: recent.length,
+                            itemBuilder: (context, index) {
+                              return _item(dimen, recent.elementAt(index));
+                            },
+                            separatorBuilder:
+                                (context, index) => _divider(dimen),
+                          ),
+                          _label(dimen, localize("all", defaultValue: "All")),
+                          Divider(color: context.dark.t05),
+                          _items(dimen),
+                        ],
+                      )
+                      : _items(dimen, controller),
             ),
           ],
         );

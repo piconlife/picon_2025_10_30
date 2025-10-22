@@ -14,8 +14,9 @@ class FeedCommentRepository extends RemoteDataRepository<FeedComment> {
 
   static FeedCommentRepository? _i;
 
-  static FeedCommentRepository get i => _i ??= FeedCommentRepository(
-    source: RemoteFeedCommentDataSource(),
-    backup: LocalFeedCommentDataSource(),
-  );
+  static FeedCommentRepository get i =>
+      _i ??= FeedCommentRepository(
+        source: RemoteFeedCommentDataSource(),
+        backup: LocalFeedCommentDataSource(),
+      );
 }

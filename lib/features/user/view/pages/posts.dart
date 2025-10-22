@@ -25,9 +25,10 @@ class UserPostsPage extends StatelessWidget {
     final dimen = context.dimens;
     return Scaffold(
       appBar: InAppAppbar(
-        titleText: user?.username != null
-            ? "${user?.username ?? ""}'s feeds"
-            : "Feeds",
+        titleText:
+            user?.username != null
+                ? "${user?.username ?? ""}'s feeds"
+                : "Feeds",
       ),
       body: BlocBuilder<UserPostCubit, Response<UserPost>>(
         builder: (context, response) {

@@ -226,14 +226,16 @@ class GridPainter extends CustomPainter {
     final showMiddleSideTicks = options.showMiddleSideTicks;
     final showBorder = options.showBorder;
 
-    final gridPaint = Paint()
-      ..strokeWidth = gridStroke
-      ..color = color.withValues(alpha: 0.25);
+    final gridPaint =
+        Paint()
+          ..strokeWidth = gridStroke
+          ..color = color.withValues(alpha: 0.25);
 
-    final handlePaint = Paint()
-      ..strokeWidth = handleStroke
-      ..strokeCap = StrokeCap.square
-      ..color = color;
+    final handlePaint =
+        Paint()
+          ..strokeWidth = handleStroke
+          ..strokeCap = StrokeCap.square
+          ..color = color;
 
     final spacing = Size(
       size.width / (divisions + 1),
@@ -243,10 +245,11 @@ class GridPainter extends CustomPainter {
     // Draw border
 
     if (showBorder) {
-      final borderPaint = Paint()
-        ..strokeWidth = gridStroke
-        ..color = color.withValues(alpha: 0.5)
-        ..style = PaintingStyle.stroke;
+      final borderPaint =
+          Paint()
+            ..strokeWidth = gridStroke
+            ..color = color.withValues(alpha: 0.5)
+            ..style = PaintingStyle.stroke;
 
       canvas.drawRect(
         Rect.fromLTWH(0, 0, size.width, size.height),

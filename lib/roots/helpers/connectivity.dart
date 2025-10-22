@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter_andomie/utils/configs.dart';
 import 'package:flutter_network_status/flutter_network_status.dart';
 import 'package:http/http.dart';
+import 'package:in_app_configs/configs.dart';
 
 import '../../app/configs/local.dart';
 

@@ -37,8 +37,11 @@ class FeedVerifiedPage extends StatelessWidget {
               header: "No posts yet",
               body: "Currently no posts available.",
               buttonText: "Take a new post",
-              onButtonClick: () =>
-                  context.open(Routes.createUserPost, arguments: FeedType.post),
+              onButtonClick:
+                  () => context.open(
+                    Routes.createUserPost,
+                    arguments: FeedType.post,
+                  ),
             );
           }
 

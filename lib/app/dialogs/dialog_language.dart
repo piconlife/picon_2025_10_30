@@ -1,8 +1,7 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/models/language.dart';
-import 'package:flutter_andomie/utils/translation.dart';
+import 'package:in_app_translation/in_app_translation.dart';
 
 import '../../roots/widgets/auto_scroll.dart';
 

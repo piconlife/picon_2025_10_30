@@ -25,11 +25,7 @@ class InAppTitledBody extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: crossAxisAlignment,
-      children: [
-        title,
-        SizedBox(height: spaceBetween),
-        child!,
-      ],
+      children: [title, SizedBox(height: spaceBetween), child!],
     );
   }
 }

@@ -70,9 +70,8 @@ class ItemUserFollowing extends StatelessWidget {
                                     : InAppIcons.star)
                                 .solid,
                             size: dimen.smallerIcon,
-                            color: user.isHeartUser
-                                ? context.red
-                                : context.yellow,
+                            color:
+                                user.isHeartUser ? context.red : context.yellow,
                           ),
                         ),
                       ),

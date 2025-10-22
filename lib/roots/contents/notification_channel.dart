@@ -4,7 +4,8 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions.dart';
-import 'package:flutter_andomie/utils/text_replacer.dart';
+import 'package:in_app_translation/in_app_translation.dart';
+import 'package:object_finder/object_finder.dart';
 
 import '../services/notification.dart';
 
@@ -273,11 +274,12 @@ class InAppNotificationChannel {
         defaultRingtoneType,
         null,
       ),
-      vibrationPattern: vibrationPattern == "low"
-          ? lowVibrationPattern
-          : vibrationPattern == "medium"
-          ? mediumVibrationPattern
-          : highVibrationPattern,
+      vibrationPattern:
+          vibrationPattern == "low"
+              ? lowVibrationPattern
+              : vibrationPattern == "medium"
+              ? mediumVibrationPattern
+              : highVibrationPattern,
     );
     return channel;
   }
@@ -321,23 +323,27 @@ class InAppNotificationChannel {
       channelName: channelName.toString(),
       channelDescription: channelDescription.toString(),
       channelGroupKey: channelGroupKey is String ? channelGroupKey : null,
-      channelShowBadge: channelShowBadge is bool
-          ? channelShowBadge
-          : channelShowBadge is String
-          ? bool.tryParse(
-              channelShowBadge.replace({
-                "IS_ANDROID": !kIsWeb && Platform.isAndroid,
-              }),
-            )
-          : null,
+      channelShowBadge:
+          channelShowBadge is bool
+              ? channelShowBadge
+              : channelShowBadge is String
+              ? bool.tryParse(
+                channelShowBadge.replace({
+                  "IS_ANDROID": !kIsWeb && Platform.isAndroid,
+                }),
+              )
+              : null,
       importance: _tryParseNotificationImportance(importance),
       playSound: playSound is bool ? playSound : null,
       soundSource: soundSource is String ? soundSource : null,
       defaultRingtoneType: _tryParseDefaultRingtoneType(defaultRingtoneType),
       enableVibration: enableVibration is bool ? enableVibration : null,
-      vibrationPattern: vibrationPattern is List
-          ? Int64List.fromList(vibrationPattern.map((e) => e as int).toList())
-          : null,
+      vibrationPattern:
+          vibrationPattern is List
+              ? Int64List.fromList(
+                vibrationPattern.map((e) => e as int).toList(),
+              )
+              : null,
       enableLights: enableLights is bool ? enableLights : null,
       ledColor: ledColor is String ? ledColor.color : null,
       ledOnMs: ledOnMs is num ? ledOnMs.toInt() : null,
@@ -356,10 +362,8 @@ class InAppNotificationChannel {
 
   static List<InAppNotificationChannel> tryParses(Iterable? source) {
     if (source == null) return [];
-    final a = source
-        .map(tryParse)
-        .whereType<InAppNotificationChannel>()
-        .toList();
+    final a =
+        source.map(tryParse).whereType<InAppNotificationChannel>().toList();
     return a;
   }
 

@@ -74,12 +74,13 @@ class InAppGesture extends StatelessWidget {
         ),
       ),
       enableFeedback: false,
-      onTap: onTap != null
-          ? () {
-              onTap!();
-              Haptics.light();
-            }
-          : null,
+      onTap:
+          onTap != null
+              ? () {
+                onTap!();
+                Haptics.light();
+              }
+              : null,
       child: child,
     );
   }

@@ -68,7 +68,7 @@ ThemeData get kDarkTheme {
         statusBarIconBrightness: Brightness.light,
       ),
     ),
-    bottomAppBarTheme: BottomAppBarTheme(
+    bottomAppBarTheme: BottomAppBarThemeData(
       elevation: 0.5,
       color: light,
       surfaceTintColor: Colors.transparent,

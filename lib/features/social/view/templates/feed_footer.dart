@@ -74,9 +74,10 @@ class _FeedFooterState extends State<FeedFooter> {
             builder: (context, value) {
               final activated = value.resultByMe.isNotEmpty;
               return InAppPleasureButton(
-                icon: activated
-                    ? InAppIcons.heart.solid
-                    : InAppIcons.heart.regular,
+                icon:
+                    activated
+                        ? InAppIcons.heart.solid
+                        : InAppIcons.heart.regular,
                 iconSize: dimen.dp(26),
                 iconColor: activated ? context.red : dark.t50,
                 onTap: _like,

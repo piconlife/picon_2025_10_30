@@ -1,4 +1,4 @@
-import 'package:flutter_andomie/utils/translation.dart';
+import 'package:in_app_translation/in_app_translation.dart';
 
 String stepsParser(String key, int total, int step) {
   return Translation.localize(

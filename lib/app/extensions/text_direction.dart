@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/utils/translation.dart';
+import 'package:in_app_translation/core.dart';
 
 extension PaddingTextDirectionalExtension on EdgeInsets {
   EdgeInsets get directional {

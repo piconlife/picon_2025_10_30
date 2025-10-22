@@ -18,10 +18,11 @@ class BusinessAdRepository extends RemoteDataRepository<BusinessAd> {
 
   static BusinessAdRepository? _i;
 
-  static BusinessAdRepository get i => _i ??= BusinessAdRepository(
-    source: RemoteBusinessAdDataSource(),
-    backup: LocalBusinessAdDataSource(),
-  );
+  static BusinessAdRepository get i =>
+      _i ??= BusinessAdRepository(
+        source: RemoteBusinessAdDataSource(),
+        backup: LocalBusinessAdDataSource(),
+      );
 
   @override
   Future<Response<BusinessAd>> modifier(

@@ -73,9 +73,13 @@ class InAppButton extends StatelessWidget {
       width: width,
       height: height,
       textAllCaps: textAllCaps,
-      constraints: (minWidth ?? minHeight ?? 0) > 0
-          ? BoxConstraints(minHeight: minHeight ?? 0, minWidth: minWidth ?? 0)
-          : null,
+      constraints:
+          (minWidth ?? minHeight ?? 0) > 0
+              ? BoxConstraints(
+                minHeight: minHeight ?? 0,
+                minWidth: minWidth ?? 0,
+              )
+              : null,
       backgroundColor: AndrossyButtonProperty.all(
         backgroundColor ?? context.primary,
       ),
@@ -90,20 +94,22 @@ class InAppButton extends StatelessWidget {
       overlayColor: overlayColor,
       padding: padding,
       clickEffect: AndrossyGestureEffect(
-        primary: scalerLowerBound < 1
-            ? AndrossyGestureAnimation.scale(
-                lowerBound: scalerLowerBound,
-                upperBound: scalerUpperBound,
-                duration: duration,
-              )
-            : null,
-        secondary: fadeLowerBound < 1
-            ? AndrossyGestureAnimation.fade(
-                lowerBound: fadeLowerBound,
-                upperBound: fadeUpperBound,
-                duration: duration,
-              )
-            : null,
+        primary:
+            scalerLowerBound < 1
+                ? AndrossyGestureAnimation.scale(
+                  lowerBound: scalerLowerBound,
+                  upperBound: scalerUpperBound,
+                  duration: duration,
+                )
+                : null,
+        secondary:
+            fadeLowerBound < 1
+                ? AndrossyGestureAnimation.fade(
+                  lowerBound: fadeLowerBound,
+                  upperBound: fadeUpperBound,
+                  duration: duration,
+                )
+                : null,
       ),
       text: text,
       textStyle: (textStyle ?? TextStyle()).copyWith(

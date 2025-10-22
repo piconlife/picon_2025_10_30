@@ -7,6 +7,7 @@ import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/channel.dart';
@@ -175,129 +176,124 @@ class _ChooseChannelPageState extends State<ChooseChannelPage> {
                   inputType: TextInputType.text,
                 ),
               ),
-              child:
-                  BlocBuilder<
-                    SuggestedChannelsCubit,
-                    Response<Selection<Channel>>
-                  >(
-                    builder: (context, response) {
-                      if (response.isLoading && response.result.isEmpty) {
-                        return GridView.builder(
-                          padding: EdgeInsets.only(
-                            left: dimen.dp(12),
-                            right: dimen.dp(12),
-                            bottom: dimen.dp(150),
-                          ),
-                          itemCount: initialSize,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                childAspectRatio: 2 / 1.5,
-                                crossAxisSpacing: 8,
-                                mainAxisSpacing: 8,
-                              ),
-                          itemBuilder: (context, index) {
-                            return PlaceholderSuggestedChannel();
-                          },
-                        );
-                      }
-                      if (response.result.isEmpty) {
-                        return Align(
-                          alignment: Alignment(0, -0.2),
-                          child: InAppException(
-                            "No suggested user found!",
-                            icon: InAppIcons.followers.regular,
-                            spaceBetween: dimen.dp(24),
-                          ),
-                        );
-                      }
-                      final items = response.result;
-                      if (response.isLoading) {
-                        items.addAll(
-                          List.generate(fetchingSize, (i) {
-                            return Selection(id: "", data: Channel());
-                          }),
-                        );
-                      } else if (response.isLoaded) {
-                        items.removeWhere((e) {
-                          return e.id.isEmpty;
-                        });
-                      }
+              child: BlocBuilder<
+                SuggestedChannelsCubit,
+                Response<Selection<Channel>>
+              >(
+                builder: (context, response) {
+                  if (response.isLoading && response.result.isEmpty) {
+                    return GridView.builder(
+                      padding: EdgeInsets.only(
+                        left: dimen.dp(12),
+                        right: dimen.dp(12),
+                        bottom: dimen.dp(150),
+                      ),
+                      itemCount: initialSize,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 2 / 1.5,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8,
+                      ),
+                      itemBuilder: (context, index) {
+                        return PlaceholderSuggestedChannel();
+                      },
+                    );
+                  }
+                  if (response.result.isEmpty) {
+                    return Align(
+                      alignment: Alignment(0, -0.2),
+                      child: InAppException(
+                        "No suggested user found!",
+                        icon: InAppIcons.followers.regular,
+                        spaceBetween: dimen.dp(24),
+                      ),
+                    );
+                  }
+                  final items = response.result;
+                  if (response.isLoading) {
+                    items.addAll(
+                      List.generate(fetchingSize, (i) {
+                        return Selection(id: "", data: Channel());
+                      }),
+                    );
+                  } else if (response.isLoaded) {
+                    items.removeWhere((e) {
+                      return e.id.isEmpty;
+                    });
+                  }
 
-                      return InAppSelection(
-                        controller: _controller,
-                        initialTags: _notifier.value,
-                        onSelectedTags: _changed,
-                        items: items,
-                        tagBuilder: (item) => item.id,
-                        searchBuilder: (query, item) {
-                          return item.data.name
-                              .toString()
-                              .toLowerCase()
-                              .contains(query.trim().toLowerCase());
-                        },
-                        builder: (context, instance) {
-                          final item = instance.data;
-                          if (item.id.isEmpty) {
-                            return PlaceholderSuggestedChannel();
-                          }
-                          return ItemSuggestedChannel(
-                            selection: item.copy(selected: instance.selected),
-                            onTap: () => context.open(
+                  return InAppSelection(
+                    controller: _controller,
+                    initialTags: _notifier.value,
+                    onSelectedTags: _changed,
+                    items: items,
+                    tagBuilder: (item) => item.id,
+                    searchBuilder: (query, item) {
+                      return item.data.name.toString().toLowerCase().contains(
+                        query.trim().toLowerCase(),
+                      );
+                    },
+                    builder: (context, instance) {
+                      final item = instance.data;
+                      if (item.id.isEmpty) {
+                        return PlaceholderSuggestedChannel();
+                      }
+                      return ItemSuggestedChannel(
+                        selection: item.copy(selected: instance.selected),
+                        onTap:
+                            () => context.open(
                               Routes.userChannel,
                               arguments: {"$User": item.data},
                             ),
-                            onFollow: instance.call,
-                          );
-                        },
-                        listBuilder: (context, children) {
-                          if (children.isEmpty) {
-                            return InAppException(
-                              "No suggested channel matched!",
+                        onFollow: instance.call,
+                      );
+                    },
+                    listBuilder: (context, children) {
+                      if (children.isEmpty) {
+                        return InAppException("No suggested channel matched!");
+                      }
+                      return GridView.builder(
+                        padding: EdgeInsets.only(
+                          left: dimen.dp(12),
+                          right: dimen.dp(12),
+                          bottom: dimen.dp(150),
+                        ),
+                        itemCount: children.length + 1,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 2 / 1.5,
+                          crossAxisSpacing: 8,
+                          mainAxisSpacing: 8,
+                        ),
+                        itemBuilder: (context, index) {
+                          if (index == children.length) {
+                            return Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(dimen.dp(12)),
+                                child: InAppButton(
+                                  text: "MORE",
+                                  textStyle: TextStyle(color: primary),
+                                  backgroundColor: primary.t10,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: dimen.dp(24),
+                                    vertical: dimen.dp(4),
+                                  ),
+                                  borderRadius: BorderRadius.circular(
+                                    dimen.dp(25),
+                                  ),
+                                  onTap: () => _loadMore(context),
+                                ),
+                              ),
                             );
                           }
-                          return GridView.builder(
-                            padding: EdgeInsets.only(
-                              left: dimen.dp(12),
-                              right: dimen.dp(12),
-                              bottom: dimen.dp(150),
-                            ),
-                            itemCount: children.length + 1,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  childAspectRatio: 2 / 1.5,
-                                  crossAxisSpacing: 8,
-                                  mainAxisSpacing: 8,
-                                ),
-                            itemBuilder: (context, index) {
-                              if (index == children.length) {
-                                return Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(dimen.dp(12)),
-                                    child: InAppButton(
-                                      text: "MORE",
-                                      textStyle: TextStyle(color: primary),
-                                      backgroundColor: primary.t10,
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: dimen.dp(24),
-                                        vertical: dimen.dp(4),
-                                      ),
-                                      borderRadius: BorderRadius.circular(
-                                        dimen.dp(25),
-                                      ),
-                                      onTap: () => _loadMore(context),
-                                    ),
-                                  ),
-                                );
-                              }
-                              return children[index];
-                            },
-                          );
+                          return children[index];
                         },
                       );
                     },
-                  ),
+                  );
+                },
+              ),
             ),
             ValueListenableBuilder(
               valueListenable: _notifier,
@@ -305,8 +301,8 @@ class _ChooseChannelPageState extends State<ChooseChannelPage> {
                 return InAppStackButton(
                   value.isEmpty
                       ? isOnboardingMode
-                            ? "Skip"
-                            : "Cancel"
+                          ? "Skip"
+                          : "Cancel"
                       : "Selected ${value.length} ${value.length > 1 ? "channels" : "channel"}",
                   onTap: () => _submit(context),
                 );

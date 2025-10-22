@@ -113,38 +113,44 @@ class _InfoPageState extends State<InfoPage> with ColorMixin {
                     child: InAppColumn(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: AboutsContent.items.map((e) {
-                        return InAppGesture(
-                          onTap: e.callback,
-                          scalerLowerBound: 1,
-                          backgroundColor: light,
-                          highlightColor: context.dark.t05,
-                          splashColor: context.dark.t05,
-                          child: ColoredBox(
-                            color: Colors.transparent,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 16,
-                                horizontal: 24,
-                              ),
-                              child: InAppRow(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                spacing: e.icon != null ? 16 : 0,
-                                children: [
-                                  if (e.icon != null)
-                                    InAppIcon(e.icon, size: 24, color: e.color),
-                                  Expanded(
-                                    child: InAppText(
-                                      e.text,
-                                      style: TextStyle(fontSize: 16),
-                                    ),
+                      children:
+                          AboutsContent.items.map((e) {
+                            return InAppGesture(
+                              onTap: e.callback,
+                              scalerLowerBound: 1,
+                              backgroundColor: light,
+                              highlightColor: context.dark.t05,
+                              splashColor: context.dark.t05,
+                              child: ColoredBox(
+                                color: Colors.transparent,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 16,
+                                    horizontal: 24,
                                   ),
-                                ],
+                                  child: InAppRow(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    spacing: e.icon != null ? 16 : 0,
+                                    children: [
+                                      if (e.icon != null)
+                                        InAppIcon(
+                                          e.icon,
+                                          size: 24,
+                                          color: e.color,
+                                        ),
+                                      Expanded(
+                                        child: InAppText(
+                                          e.text,
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        );
-                      }).toList(),
+                            );
+                          }).toList(),
                     ),
                   ),
                 ),

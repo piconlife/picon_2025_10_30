@@ -9,6 +9,7 @@ import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_translation/utils/country.dart';
 import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 
 import '../../../../app/constants/limitations.dart';
@@ -302,8 +303,8 @@ class _PasswordPageState extends State<PasswordPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           InAppGesture(
-                            onTap: () =>
-                                CountryPicker.phone(context)?.then((v) {
+                            onTap:
+                                () => CountryPicker.phone(context)?.then((v) {
                                   if (v is Country) _changePhoneCode(v);
                                 }),
                             child: Container(
@@ -346,8 +347,8 @@ class _PasswordPageState extends State<PasswordPage> {
                     },
                     onCheck: _check,
                     onError: AuthErrors.phone,
-                    onValidator: (value) =>
-                        isValidPhone(codeNotifier.value.code, value),
+                    onValidator:
+                        (value) => isValidPhone(codeNotifier.value.code, value),
                   ),
                   dimen.dp(24).h,
                   AndrossyField(

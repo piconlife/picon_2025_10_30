@@ -2,9 +2,11 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/extensions.dart';
-import 'package:flutter_andomie/models/country.dart';
+import 'package:flutter_andomie/extensions/iterator.dart';
+import 'package:flutter_andomie/extensions/string.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_translation/in_app_translation.dart';
+import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/res/icons.dart';
 import '../../../../roots/widgets/coordinator.dart';
@@ -237,8 +239,8 @@ class _ChooseCountryPageState extends State<ChooseCountryPage> {
                   return InAppStackButton(
                     value.isEmpty || value.isSame(initials)
                         ? isOnboardingMode
-                              ? "Skip"
-                              : "Cancel"
+                            ? "Skip"
+                            : "Cancel"
                         : _single
                         ? "Update"
                         : "Selected ${value.length} ${value.length > 1 ? "countries" : "country"}",

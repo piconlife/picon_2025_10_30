@@ -2,7 +2,7 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
+import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/helpers/user.dart';
 import '../../../../app/res/icons.dart';
@@ -131,9 +131,10 @@ class _UserProfilePageState extends State<UserProfilePage>
                       fontSize: dimen.dp(15),
                       fontFamily: InAppFonts.secondary,
                     ),
-                    tabs: _tabs.map((e) {
-                      return Tab(text: e);
-                    }).toList(),
+                    tabs:
+                        _tabs.map((e) {
+                          return Tab(text: e);
+                        }).toList(),
                   ),
                 ),
               ),

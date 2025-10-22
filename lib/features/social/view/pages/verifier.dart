@@ -37,8 +37,11 @@ class FeedVerifierPage extends StatelessWidget {
               header: "No friends yet",
               body: "Currently no friends yet.",
               buttonText: "Make a friends",
-              onButtonClick: () =>
-                  context.open(Routes.createUserPost, arguments: FeedType.post),
+              onButtonClick:
+                  () => context.open(
+                    Routes.createUserPost,
+                    arguments: FeedType.post,
+                  ),
             );
           }
           if (result.isEmpty && state.status.isResultNotFound) {
@@ -47,8 +50,11 @@ class FeedVerifierPage extends StatelessWidget {
               header: "No friends yet",
               body: "Currently no friends yet.",
               buttonText: "Make a friends",
-              onButtonClick: () =>
-                  context.open(Routes.createUserPost, arguments: FeedType.post),
+              onButtonClick:
+                  () => context.open(
+                    Routes.createUserPost,
+                    arguments: FeedType.post,
+                  ),
             );
           }
 
@@ -70,10 +76,11 @@ class FeedVerifierPage extends StatelessWidget {
               }
               return ItemVerifiedUser(
                 selection: item,
-                onFollow: () => context.read<VerifiedUsersCubit>().update(
-                  context,
-                  item.reverse,
-                ),
+                onFollow:
+                    () => context.read<VerifiedUsersCubit>().update(
+                      context,
+                      item.reverse,
+                    ),
               );
             },
             itemCount: result.length,

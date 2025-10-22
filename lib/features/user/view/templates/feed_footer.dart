@@ -62,9 +62,10 @@ class _UserFeedFooterState extends State<UserFeedFooter> {
             builder: (context, value) {
               final activated = Validator.isChecked(UserHelper.uid, value);
               return InAppPleasureButton(
-                icon: activated
-                    ? InAppIcons.heart.solid
-                    : InAppIcons.heart.regular,
+                icon:
+                    activated
+                        ? InAppIcons.heart.solid
+                        : InAppIcons.heart.regular,
                 iconSize: dimen.dp(26),
                 iconColor: activated ? context.red : dark.t50,
                 onTap: () => _updateLikes(context, activated),

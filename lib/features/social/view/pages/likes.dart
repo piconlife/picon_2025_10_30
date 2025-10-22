@@ -52,9 +52,10 @@ class _LikesPageState extends State<LikesPage> with ColorMixin {
             if (response.isInternetError || !response.isValid) {
               return InAppError(
                 alignment: InAppErrorProperties.all(Alignment(0, -0.2)),
-                type: response.isInternetError
-                    ? InAppErrorType.internet
-                    : InAppErrorType.nullable,
+                type:
+                    response.isInternetError
+                        ? InAppErrorType.internet
+                        : InAppErrorType.nullable,
                 iconData: InAppErrorProperties(
                   nullable: InAppIcons.heart.regular,
                 ),

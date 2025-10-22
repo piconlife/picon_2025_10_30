@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
-import 'package:flutter_andomie/utils/configs.dart';
-import 'package:flutter_andomie/utils/settings.dart';
+import 'package:in_app_configs/configs.dart';
+import 'package:in_app_settings/settings.dart';
 
 import '../services/haptic.dart';
 import 'platform.dart';

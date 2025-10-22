@@ -14,8 +14,9 @@ class PhotoRepository extends RemoteDataRepository<Photo> {
 
   static PhotoRepository? _i;
 
-  static PhotoRepository get i => _i ??= PhotoRepository(
-    source: RemotePhotoDataSource(),
-    backup: LocalPhotoDataSource(),
-  );
+  static PhotoRepository get i =>
+      _i ??= PhotoRepository(
+        source: RemotePhotoDataSource(),
+        backup: LocalPhotoDataSource(),
+      );
 }

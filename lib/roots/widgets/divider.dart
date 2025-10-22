@@ -24,12 +24,13 @@ class InAppDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     final isVertical = axis == Axis.vertical;
     return Container(
-      padding: EdgeInsets.only(
-        left: isVertical ? indent : 0,
-        right: isVertical ? endIndent : 0,
-        top: isVertical ? 0 : indent,
-        bottom: isVertical ? 0 : endIndent,
-      ).directional,
+      padding:
+          EdgeInsets.only(
+            left: isVertical ? indent : 0,
+            right: isVertical ? endIndent : 0,
+            top: isVertical ? 0 : indent,
+            bottom: isVertical ? 0 : endIndent,
+          ).directional,
       color: color ?? context.dark.t05,
       height: isVertical ? height : double.infinity,
       width: isVertical ? double.infinity : height,

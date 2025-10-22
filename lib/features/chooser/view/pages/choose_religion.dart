@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_andomie/utils/validator.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/res/icons.dart';
 import '../../../../app/styles/fonts.dart';
@@ -219,11 +220,12 @@ class _ChooseReligionPageState extends State<ChooseReligionPage> {
                                 height: double.infinity,
                               ),
                             Container(
-                              color: isValidPhoto
-                                  ? selected
-                                        ? Colors.white.withValues(alpha: 0.9)
-                                        : Colors.black26
-                                  : null,
+                              color:
+                                  isValidPhoto
+                                      ? selected
+                                          ? Colors.white.withValues(alpha: 0.9)
+                                          : Colors.black26
+                                      : null,
                               alignment: Alignment.center,
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
@@ -234,13 +236,14 @@ class _ChooseReligionPageState extends State<ChooseReligionPage> {
                                   item.label,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    color: isValidPhoto
-                                        ? selected
-                                              ? Colors.black
-                                              : Colors.white
-                                        : selected
-                                        ? Colors.white
-                                        : primary,
+                                    color:
+                                        isValidPhoto
+                                            ? selected
+                                                ? Colors.black
+                                                : Colors.white
+                                            : selected
+                                            ? Colors.white
+                                            : primary,
                                     fontWeight: dimen.boldFontWeight,
                                     fontSize: dimen.dp(18),
                                     fontFamily: InAppFonts.secondary,
@@ -281,8 +284,8 @@ class _ChooseReligionPageState extends State<ChooseReligionPage> {
                   return InAppStackButton(
                     value.isEmpty || value.isSame(initials)
                         ? isOnboardingMode
-                              ? "Skip"
-                              : "Cancel"
+                            ? "Skip"
+                            : "Cancel"
                         : _single
                         ? "Update"
                         : "Selected ${value.length} ${value.length > 1 ? "religions" : "religion"}",

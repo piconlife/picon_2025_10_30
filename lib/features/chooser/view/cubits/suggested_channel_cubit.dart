@@ -63,9 +63,10 @@ class SuggestedChannelsCubit extends Cubit<Response<Selection<Channel>>> {
   }
 
   void _attach(Response<Channel> response) {
-    final data = state.result.where((e) {
-      return !UserHelper.channels.contains(e.id);
-    }).toList();
+    final data =
+        state.result.where((e) {
+          return !UserHelper.channels.contains(e.id);
+        }).toList();
     if (response.result.isNotEmpty) {
       data.addAll(
         response.result.map((e) {

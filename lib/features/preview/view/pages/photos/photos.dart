@@ -237,9 +237,10 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
 
   Widget _buildActionPrivate(BuildContext context) {
     return InAppGesture(
-      onTap: UserHelper.isCurrentUser(selected.publisher)
-          ? _onChangePrivacy
-          : null,
+      onTap:
+          UserHelper.isCurrentUser(selected.publisher)
+              ? _onChangePrivacy
+              : null,
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
@@ -337,12 +338,13 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: selected ? Colors.transparent : context.lightAsFixed.t50,
-              border: selected
-                  ? Border.all(
-                      color: context.lightAsFixed,
-                      width: context.dp(3.5),
-                    )
-                  : null,
+              border:
+                  selected
+                      ? Border.all(
+                        color: context.lightAsFixed,
+                        width: context.dp(3.5),
+                      )
+                      : null,
             ),
           );
         }),

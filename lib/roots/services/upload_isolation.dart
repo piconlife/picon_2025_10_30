@@ -72,55 +72,62 @@ class UploadIsolation {
           extension: data.extension,
           filename: data.filename,
         ),
-        onCanceled: (event) => port.send(
-          IsolateSnapshot(
-            id: task.id,
-            status: IsolateStatus.canceled,
-            value: event.value,
-          ),
-        ),
-        onDone: (event) => port.send(
-          IsolateSnapshot(
-            id: task.id,
-            status: IsolateStatus.done,
-            value: event.value,
-          ),
-        ),
-        onError: (event) => port.send(
-          IsolateSnapshot(
-            id: task.id,
-            status: IsolateStatus.error,
-            value: event.value,
-          ),
-        ),
-        onLoading: (event) => port.send(
-          IsolateSnapshot(
-            id: task.id,
-            status: IsolateStatus.loading,
-            value: event.value,
-          ),
-        ),
-        onNetworkError: (event) => port.send(
-          IsolateSnapshot(
-            id: task.id,
-            status: IsolateStatus.networkError,
-            value: event.value,
-          ),
-        ),
-        onPaused: (event) => port.send(
-          IsolateSnapshot(
-            id: task.id,
-            status: IsolateStatus.paused,
-            value: event.value,
-          ),
-        ),
-        onProgress: (event) => port.send(
-          IsolateSnapshot(
-            id: task.id,
-            status: IsolateStatus.processing,
-            value: event.value,
-          ),
-        ),
+        onCanceled:
+            (event) => port.send(
+              IsolateSnapshot(
+                id: task.id,
+                status: IsolateStatus.canceled,
+                value: event.value,
+              ),
+            ),
+        onDone:
+            (event) => port.send(
+              IsolateSnapshot(
+                id: task.id,
+                status: IsolateStatus.done,
+                value: event.value,
+              ),
+            ),
+        onError:
+            (event) => port.send(
+              IsolateSnapshot(
+                id: task.id,
+                status: IsolateStatus.error,
+                value: event.value,
+              ),
+            ),
+        onLoading:
+            (event) => port.send(
+              IsolateSnapshot(
+                id: task.id,
+                status: IsolateStatus.loading,
+                value: event.value,
+              ),
+            ),
+        onNetworkError:
+            (event) => port.send(
+              IsolateSnapshot(
+                id: task.id,
+                status: IsolateStatus.networkError,
+                value: event.value,
+              ),
+            ),
+        onPaused:
+            (event) => port.send(
+              IsolateSnapshot(
+                id: task.id,
+                status: IsolateStatus.paused,
+                value: event.value,
+              ),
+            ),
+        onProgress:
+            (event) => port.send(
+              IsolateSnapshot(
+                id: task.id,
+                status: IsolateStatus.processing,
+                value: event.value,
+              ),
+            ),
       );
     } catch (error) {
       return port.send(

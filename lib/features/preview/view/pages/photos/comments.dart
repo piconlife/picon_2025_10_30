@@ -32,10 +32,7 @@ class _PhotoCommentsViewState extends State<PhotoCommentsView> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        _buildToolbar(context),
-        Expanded(child: _buildBody(context)),
-      ],
+      children: [_buildToolbar(context), Expanded(child: _buildBody(context))],
     );
   }
 

@@ -4,10 +4,10 @@ import 'dart:math' as math;
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/extensions/object.dart';
-import 'package:flutter_andomie/utils/configs.dart';
 import 'package:flutter_andomie/utils/random_provider.dart';
-import 'package:flutter_andomie/utils/translation.dart';
+import 'package:in_app_configs/configs.dart';
+import 'package:in_app_translation/in_app_translation.dart';
+import 'package:object_finder/object_finder.dart';
 
 import '../../app/constants/app.dart';
 import '../contents/notification_action_button.dart';
@@ -195,10 +195,11 @@ class InAppNotifications {
       defaultValue: {},
     );
 
-    final localizedChannels = channels
-        .map((e) => e.localize(localizations?[e.channelKey]))
-        .map((e) => e.channel)
-        .toList();
+    final localizedChannels =
+        channels
+            .map((e) => e.localize(localizations?[e.channelKey]))
+            .map((e) => e.channel)
+            .toList();
 
     if (localizedChannels.isEmpty) return;
     await _n.cancelAll();
@@ -457,10 +458,8 @@ class InAppNotifications {
     await cancelWeekly();
     try {
       final timezone = await _n.getLocalTimeZoneIdentifier();
-      Duration duration = Configs.get(
-        idWeeklyDuration,
-        defaultValue: "days: 1",
-      ).duration;
+      Duration duration =
+          Configs.get(idWeeklyDuration, defaultValue: "days: 1").duration;
 
       final converted = List.generate(values.length, (i) {
         duration = duration + (duration * i);
@@ -613,13 +612,14 @@ extension NotificationDuration on int? {
 
 extension NotificationEnum on Iterable {
   T current<T extends Enum?>(String? source, T defaultValue) {
-    final x = where((e) {
-      if (e is! Enum) return false;
-      if (e.name.toLowerCase() != source?.toLowerCase()) {
-        return false;
-      }
-      return true;
-    }).firstOrNull;
+    final x =
+        where((e) {
+          if (e is! Enum) return false;
+          if (e.name.toLowerCase() != source?.toLowerCase()) {
+            return false;
+          }
+          return true;
+        }).firstOrNull;
     return x ?? defaultValue;
   }
 }

@@ -79,18 +79,20 @@ class InAppAlertDialog extends StatelessWidget {
                 if (isTitled)
                   InAppText(
                     title,
-                    spans: titleSpans != null
-                        ? List.generate(titleSpans!.length, (index) {
-                            return TextSpan(
-                              text: titleSpans![index],
-                              style: TextStyle(
-                                fontWeight: index.isEven
-                                    ? dimen.boldFontWeight
-                                    : dimen.normalFontWeight,
-                              ),
-                            );
-                          })
-                        : [],
+                    spans:
+                        titleSpans != null
+                            ? List.generate(titleSpans!.length, (index) {
+                              return TextSpan(
+                                text: titleSpans![index],
+                                style: TextStyle(
+                                  fontWeight:
+                                      index.isEven
+                                          ? dimen.boldFontWeight
+                                          : dimen.normalFontWeight,
+                                ),
+                              );
+                            })
+                            : [],
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     maxLines: 5,
@@ -105,18 +107,20 @@ class InAppAlertDialog extends StatelessWidget {
                 if (isSubtitled)
                   InAppText(
                     subtitle,
-                    spans: subtitleSpans != null
-                        ? List.generate(subtitleSpans!.length, (index) {
-                            return TextSpan(
-                              text: subtitleSpans![index],
-                              style: TextStyle(
-                                fontWeight: index.isEven
-                                    ? dimen.boldFontWeight
-                                    : dimen.normalFontWeight,
-                              ),
-                            );
-                          })
-                        : [],
+                    spans:
+                        subtitleSpans != null
+                            ? List.generate(subtitleSpans!.length, (index) {
+                              return TextSpan(
+                                text: subtitleSpans![index],
+                                style: TextStyle(
+                                  fontWeight:
+                                      index.isEven
+                                          ? dimen.boldFontWeight
+                                          : dimen.normalFontWeight,
+                                ),
+                              );
+                            })
+                            : [],
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     maxLines: 4,

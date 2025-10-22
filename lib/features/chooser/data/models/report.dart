@@ -1,4 +1,4 @@
-import 'package:flutter_andomie/utils/configs.dart';
+import 'package:in_app_configs/configs.dart';
 
 const kReports = "reports";
 
@@ -32,7 +32,7 @@ class InAppReport {
   }
 
   static List<InAppReport> get items {
-    final data = Configs.load(name: kReports);
+    final data = Configs.getByName(kReports);
     if (data is List && data.isNotEmpty) {
       return data.map(InAppReport.parse).toList();
     }

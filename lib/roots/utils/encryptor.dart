@@ -91,11 +91,9 @@ class InAppEncryptor {
   /// Example:
   ///
   /// ```dart
-  /// String generatedKey = Encryptor.generateKey(ByteType.x16);
+  /// String generatedKey = Encryptor.generateKey;
   /// ```
-  static String generateKey([KeyByteType type = KeyByteType.x16]) {
-    return KeyGenerator.secretKey(type);
-  }
+  static String get generateKey => KeyGenerator.uniqueKey;
 
   /// Generates a random initialization vector (IV) based on the specified byte type.
   ///
@@ -104,7 +102,5 @@ class InAppEncryptor {
   /// ```dart
   /// String generatedIV = Encryptor.generateIV(ByteType.x8);
   /// ```
-  static String generateIV([KeyByteType type = KeyByteType.x8]) {
-    return KeyGenerator.secretKey(type);
-  }
+  static String get generateIV => KeyGenerator.randomKey(length: 8);
 }

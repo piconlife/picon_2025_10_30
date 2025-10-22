@@ -86,9 +86,10 @@ class _ItemFeedLikeState extends State<ItemFeedLike> {
                                     : InAppIcons.star)
                                 .solid,
                             size: dimen.smallerIcon,
-                            color: user.isHeartUser
-                                ? context.red
-                                : context.primary,
+                            color:
+                                user.isHeartUser
+                                    ? context.red
+                                    : context.primary,
                           ),
                         ),
                       ),
@@ -126,9 +127,8 @@ class _ItemFeedLikeState extends State<ItemFeedLike> {
                                 onTap: _tap,
                                 child: InAppText(
                                   user.username,
-                                  prefix: user.protectedName.isValid
-                                      ? "@"
-                                      : null,
+                                  prefix:
+                                      user.protectedName.isValid ? "@" : null,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   style: TextStyle(
@@ -154,27 +154,28 @@ class _ItemFeedLikeState extends State<ItemFeedLike> {
                                   height: dimen.dp(30),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    color: isFollowing
-                                        ? secondary.t10
-                                        : secondary,
+                                    color:
+                                        isFollowing ? secondary.t10 : secondary,
                                     borderRadius: BorderRadius.circular(
                                       dimen.largeCorner,
                                     ),
                                   ),
-                                  child: isFollowing
-                                      ? InAppIcon(
-                                          InAppIcons.nativeCheckMark.regular,
-                                          color: secondary,
-                                        )
-                                      : InAppText(
-                                          "Follow",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: light,
-                                            fontSize: dimen.fontSize.normal,
-                                            fontWeight: dimen.mediumFontWeight,
+                                  child:
+                                      isFollowing
+                                          ? InAppIcon(
+                                            InAppIcons.nativeCheckMark.regular,
+                                            color: secondary,
+                                          )
+                                          : InAppText(
+                                            "Follow",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: light,
+                                              fontSize: dimen.fontSize.normal,
+                                              fontWeight:
+                                                  dimen.mediumFontWeight,
+                                            ),
                                           ),
-                                        ),
                                 ),
                               );
                             },
@@ -184,9 +185,10 @@ class _ItemFeedLikeState extends State<ItemFeedLike> {
                     if (user.protectedBio.isValid)
                       InAppText(
                         user.protectedBio,
-                        prefix: user.protectedProfession.isValid
-                            ? "${user.protectedProfession} - "
-                            : null,
+                        prefix:
+                            user.protectedProfession.isValid
+                                ? "${user.protectedProfession} - "
+                                : null,
                         prefixStyle: TextStyle(color: dark.t50),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,

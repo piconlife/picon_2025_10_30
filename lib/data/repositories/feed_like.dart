@@ -14,8 +14,9 @@ class FeedLikeRepository extends RemoteDataRepository<FeedLike> {
 
   static FeedLikeRepository? _i;
 
-  static FeedLikeRepository get i => _i ??= FeedLikeRepository(
-    source: RemoteFeedLikeDataSource(),
-    backup: LocalFeedLikeDataSource(),
-  );
+  static FeedLikeRepository get i =>
+      _i ??= FeedLikeRepository(
+        source: RemoteFeedLikeDataSource(),
+        backup: LocalFeedLikeDataSource(),
+      );
 }

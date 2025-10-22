@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/utils/translation.dart';
+import 'package:in_app_translation/in_app_translation.dart';
 
 class InAppAlign extends StatelessWidget {
   final Alignment alignment;

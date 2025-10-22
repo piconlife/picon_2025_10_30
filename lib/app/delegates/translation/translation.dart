@@ -1,7 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/utils/settings.dart';
-import 'package:flutter_andomie/utils/translation.dart';
+import 'package:in_app_settings/settings.dart';
+import 'package:in_app_translation/core.dart';
 
 import '../../../roots/preferences/preferences.dart';
 import '../../dialogs/bsd_locale.dart';

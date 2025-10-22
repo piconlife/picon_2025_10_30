@@ -51,9 +51,10 @@ class _ItemUserFeedPostState extends State<ItemUserFeedPost> {
   Widget build(BuildContext context) {
     final dimen = context.dimens;
     final light = context.light;
-    final description = item.isTranslated
-        ? item.translatedDescription ?? item.description
-        : item.description;
+    final description =
+        item.isTranslated
+            ? item.translatedDescription ?? item.description
+            : item.description;
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(color: light),

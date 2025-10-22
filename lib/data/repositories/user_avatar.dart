@@ -14,8 +14,9 @@ class UserAvatarRepository extends RemoteDataRepository<UserAvatar> {
 
   static UserAvatarRepository? _i;
 
-  static UserAvatarRepository get i => _i ??= UserAvatarRepository(
-    source: RemoteUserAvatarDataSource(),
-    backup: LocalUserAvatarDataSource(),
-  );
+  static UserAvatarRepository get i =>
+      _i ??= UserAvatarRepository(
+        source: RemoteUserAvatarDataSource(),
+        backup: LocalUserAvatarDataSource(),
+      );
 }

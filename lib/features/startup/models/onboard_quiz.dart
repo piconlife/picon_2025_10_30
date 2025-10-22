@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_andomie/core.dart';
+import 'package:in_app_translation/extensions.dart';
 
 enum OnboardQuizType {
   option,
@@ -10,16 +10,17 @@ enum OnboardQuizType {
   none;
 
   factory OnboardQuizType.from(Object? source) {
-    final x = values.where((e) {
-      if (e.toString().toLowerCase() == source.toString().toLowerCase()) {
-        return true;
-      }
-      if (e.name.toLowerCase() == source.toString().toLowerCase()) {
-        return true;
-      }
-      if (e.index == source) return true;
-      return false;
-    }).firstOrNull;
+    final x =
+        values.where((e) {
+          if (e.toString().toLowerCase() == source.toString().toLowerCase()) {
+            return true;
+          }
+          if (e.name.toLowerCase() == source.toString().toLowerCase()) {
+            return true;
+          }
+          if (e.index == source) return true;
+          return false;
+        }).firstOrNull;
     if (x != null) return x;
     return option;
   }
@@ -60,52 +61,57 @@ class OnboardQuiz {
     final tips = source['tips'];
     final options = source['options'];
     return OnboardQuiz(
-      name: name is String
-          ? name.trWithOption(
-              applyRtl: true,
-              applyTranslator: true,
-              applyNumber: true,
-            )
-          : null,
+      name:
+          name is String
+              ? name.trWithOption(
+                applyRtl: true,
+                applyTranslator: true,
+                applyNumber: true,
+              )
+              : null,
       type: OnboardQuizType.from(type),
-      title: title is String
-          ? title.trWithOption(
-              applyRtl: true,
-              applyTranslator: true,
-              applyNumber: true,
-            )
-          : null,
-      body: body is String
-          ? body.trWithOption(
-              applyRtl: true,
-              applyTranslator: true,
-              applyNumber: true,
-            )
-          : null,
+      title:
+          title is String
+              ? title.trWithOption(
+                applyRtl: true,
+                applyTranslator: true,
+                applyNumber: true,
+              )
+              : null,
+      body:
+          body is String
+              ? body.trWithOption(
+                applyRtl: true,
+                applyTranslator: true,
+                applyNumber: true,
+              )
+              : null,
       tips: OnboardTips.from(tips),
       image: image is String ? image : null,
-      tabs: tabs is List
-          ? tabs
-                .map(
-                  (e) => e.toString().trWithOption(
-                    applyRtl: true,
-                    applyTranslator: true,
-                    applyNumber: true,
-                  ),
-                )
-                .toList()
-          : [],
-      options: options is List
-          ? options
-                .map(
-                  (e) => e.toString().trWithOption(
-                    applyRtl: true,
-                    applyTranslator: true,
-                    applyNumber: true,
-                  ),
-                )
-                .toList()
-          : [],
+      tabs:
+          tabs is List
+              ? tabs
+                  .map(
+                    (e) => e.toString().trWithOption(
+                      applyRtl: true,
+                      applyTranslator: true,
+                      applyNumber: true,
+                    ),
+                  )
+                  .toList()
+              : [],
+      options:
+          options is List
+              ? options
+                  .map(
+                    (e) => e.toString().trWithOption(
+                      applyRtl: true,
+                      applyTranslator: true,
+                      applyNumber: true,
+                    ),
+                  )
+                  .toList()
+              : [],
     );
   }
 }
@@ -131,20 +137,22 @@ class OnboardTips {
     final body = source['body'] ?? source['description'];
     return OnboardTips(
       index: index is num ? index.toInt() : null,
-      title: title is String
-          ? title.trWithOption(
-              applyRtl: true,
-              applyTranslator: true,
-              applyNumber: true,
-            )
-          : null,
-      body: body is String
-          ? body.trWithOption(
-              applyRtl: true,
-              applyTranslator: true,
-              applyNumber: true,
-            )
-          : null,
+      title:
+          title is String
+              ? title.trWithOption(
+                applyRtl: true,
+                applyTranslator: true,
+                applyNumber: true,
+              )
+              : null,
+      body:
+          body is String
+              ? body.trWithOption(
+                applyRtl: true,
+                applyTranslator: true,
+                applyNumber: true,
+              )
+              : null,
     );
   }
 }

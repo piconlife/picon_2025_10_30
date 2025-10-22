@@ -68,22 +68,24 @@ class InAppBottomBar extends StatelessWidget {
       child = DecoratedBox(
         decoration: BoxDecoration(
           color: backgroundColor ?? context.bottomColor.primary,
-          border: elevation > 0
-              ? Border(
-                  top: BorderSide(
-                    color: elevationColor ?? context.grey.t25,
-                    width: elevation,
-                  ),
-                )
-              : null,
-          boxShadow: shadowBlurRadius > 0
-              ? [
-                  BoxShadow(
-                    color: shadowColor ?? context.dark.t10,
-                    blurRadius: shadowBlurRadius,
-                  ),
-                ]
-              : null,
+          border:
+              elevation > 0
+                  ? Border(
+                    top: BorderSide(
+                      color: elevationColor ?? context.grey.t25,
+                      width: elevation,
+                    ),
+                  )
+                  : null,
+          boxShadow:
+              shadowBlurRadius > 0
+                  ? [
+                    BoxShadow(
+                      color: shadowColor ?? context.dark.t10,
+                      blurRadius: shadowBlurRadius,
+                    ),
+                  ]
+                  : null,
         ),
         child: child,
       );

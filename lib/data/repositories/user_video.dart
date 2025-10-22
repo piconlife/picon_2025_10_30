@@ -17,10 +17,11 @@ class UserVideoRepository extends RemoteDataRepository<UserVideo> {
 
   static UserVideoRepository? _i;
 
-  static UserVideoRepository get i => _i ??= UserVideoRepository(
-    source: RemoteUserVideoDataSource(),
-    backup: LocalUserVideoDataSource(),
-  );
+  static UserVideoRepository get i =>
+      _i ??= UserVideoRepository(
+        source: RemoteUserVideoDataSource(),
+        backup: LocalUserVideoDataSource(),
+      );
 
   @override
   Future<Response<UserVideo>> modifier(

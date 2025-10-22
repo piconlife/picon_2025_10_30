@@ -16,10 +16,11 @@ class UserFollowingRepository extends RemoteDataRepository<UserFollowing> {
 
   static UserFollowingRepository? _i;
 
-  static UserFollowingRepository get i => _i ??= UserFollowingRepository(
-    source: RemoteUserFollowingDataSource(),
-    backup: LocalUserFollowingDataSource(),
-  );
+  static UserFollowingRepository get i =>
+      _i ??= UserFollowingRepository(
+        source: RemoteUserFollowingDataSource(),
+        backup: LocalUserFollowingDataSource(),
+      );
 
   @override
   Future<Response<UserFollowing>> modifier(

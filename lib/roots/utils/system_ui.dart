@@ -26,9 +26,9 @@ class SystemUi {
       await SystemChrome.setPreferredOrientations(
         orientation == Orientation.landscape
             ? [
-                DeviceOrientation.landscapeLeft,
-                DeviceOrientation.landscapeRight,
-              ]
+              DeviceOrientation.landscapeLeft,
+              DeviceOrientation.landscapeRight,
+            ]
             : [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
       );
     } catch (_) {}

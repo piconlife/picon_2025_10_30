@@ -220,18 +220,20 @@ class _LoginPageState extends State<LoginPage> {
                       return Container(
                         height: double.infinity,
                         alignment: Alignment.center,
-                        decoration: !selected
-                            ? null
-                            : BoxDecoration(
-                                color: selected ? primary : Colors.transparent,
-                                borderRadius: BorderRadius.circular(
-                                  dimen.dp(50),
+                        decoration:
+                            !selected
+                                ? null
+                                : BoxDecoration(
+                                  color:
+                                      selected ? primary : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(
+                                    dimen.dp(50),
+                                  ),
+                                  border: Border.all(
+                                    color: primary,
+                                    width: dimen.dp(2),
+                                  ),
                                 ),
-                                border: Border.all(
-                                  color: primary,
-                                  width: dimen.dp(2),
-                                ),
-                              ),
                         child: InAppText(
                           index == 1 ? "Phone" : "Email",
                           textAlign: TextAlign.center,
@@ -255,8 +257,8 @@ class _LoginPageState extends State<LoginPage> {
                         dimen: dimen,
                         etPhone: etPhone,
                         globalPhoneKey: etPhoneKey,
-                        onValid: (v) =>
-                            btnSubmitKey.currentState?.setEnabled(v),
+                        onValid:
+                            (v) => btnSubmitKey.currentState?.setEnabled(v),
                         onSubmit: _submit,
                       );
                     } else {
@@ -268,8 +270,8 @@ class _LoginPageState extends State<LoginPage> {
                         globalPrefixKey: etEmailKey,
                         globalPasswordKey: etPasswordKey,
                         onForget: () => _forget(context),
-                        onValid: (v) =>
-                            btnSubmitKey.currentState?.setEnabled(v),
+                        onValid:
+                            (v) => btnSubmitKey.currentState?.setEnabled(v),
                         onSubmit: () => _submit(context),
                       );
                     }
@@ -508,9 +510,10 @@ class _Footer extends StatelessWidget {
                   return InAppIcon(
                     Icons.fingerprint,
                     size: dimen.dp(40),
-                    color: (user?.isBiometric ?? false)
-                        ? primary
-                        : context.iconColor.mid,
+                    color:
+                        (user?.isBiometric ?? false)
+                            ? primary
+                            : context.iconColor.mid,
                   );
                 },
               ),

@@ -2,6 +2,7 @@ import 'package:app_color/app_color.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
+import 'package:in_app_translation/in_app_translation.dart';
 
 import '../../app/dialogs/dialog_language.dart';
 import '../../app/res/icons.dart';

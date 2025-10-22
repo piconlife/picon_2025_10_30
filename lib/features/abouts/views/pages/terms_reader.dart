@@ -1,10 +1,10 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/extensions/object.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_andomie/utils/ordered_list_style.dart';
 import 'package:flutter_terms_viewer/flutter_terms_viewer.dart';
+import 'package:object_finder/object_finder.dart';
 
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/logo_trailing.dart';

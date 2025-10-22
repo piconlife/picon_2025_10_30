@@ -40,10 +40,7 @@ class InAppUploadPhoto extends StatelessWidget {
             InAppText(
               'Just tap here to ',
               spans: [
-                TextSpan(
-                  text: "browse ",
-                  style: TextStyle(color: primary),
-                ),
+                TextSpan(text: "browse ", style: TextStyle(color: primary)),
                 TextSpan(text: "your gallery to\nupload photo"),
               ],
               textAlign: TextAlign.center,

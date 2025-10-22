@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/utils/settings.dart';
+import 'package:in_app_settings/in_app_settings.dart';
 
 import '../../roots/services/zotlo_subscription.dart';
 import '../helpers/user.dart';

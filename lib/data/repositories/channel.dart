@@ -14,8 +14,9 @@ class ChannelRepository extends RemoteDataRepository<Channel> {
 
   static ChannelRepository? _i;
 
-  static ChannelRepository get i => _i ??= ChannelRepository(
-    source: RemoteChannelDataSource(),
-    backup: LocalChannelDataSource(),
-  );
+  static ChannelRepository get i =>
+      _i ??= ChannelRepository(
+        source: RemoteChannelDataSource(),
+        backup: LocalChannelDataSource(),
+      );
 }

@@ -53,10 +53,10 @@ class UserCoverCubit extends Cubit<Response<UserCover>> {
       if (value.isSuccessful) {
         emit(
           state.copyWith(
-            result: state.result
-              ..removeWhere((e) {
-                return e.id == id;
-              }),
+            result:
+                state.result..removeWhere((e) {
+                  return e.id == id;
+                }),
           ),
         );
       }

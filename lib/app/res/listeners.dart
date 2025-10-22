@@ -1,12 +1,13 @@
 import 'dart:ui';
 
-import 'package:flutter_andomie/utils/translation.dart';
+import 'package:in_app_purchaser/in_app_purchaser.dart';
+import 'package:in_app_translation/core.dart';
 
 import '../../roots/services/notification.dart';
 import '../../roots/utils/speech.dart';
 
-class InAppListeners {
-  const InAppListeners._();
+abstract final class InAppListeners {
+  static Future<void> purchased(InAppPurchaseResultSuccess result) async {}
 
   static void home() {}
 

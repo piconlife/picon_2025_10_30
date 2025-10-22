@@ -14,8 +14,9 @@ class FeedRepository extends RemoteDataRepository<Feed> {
 
   static FeedRepository? _i;
 
-  static FeedRepository get i => _i ??= FeedRepository(
-    source: RemoteFeedDataSource(),
-    backup: LocalFeedDataSource(),
-  );
+  static FeedRepository get i =>
+      _i ??= FeedRepository(
+        source: RemoteFeedDataSource(),
+        backup: LocalFeedDataSource(),
+      );
 }

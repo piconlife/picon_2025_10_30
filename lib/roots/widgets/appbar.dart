@@ -52,15 +52,16 @@ class InAppAppbar extends StatelessWidget implements PreferredSizeWidget {
     final isDark = backgroundColor?.isDark ?? context.isDarkMode;
     SystemUiOverlayStyle? style;
     if (useSystemUiOverlay) {
-      style = isDark
-          ? SystemUiOverlayStyle.light.copyWith(
-              systemNavigationBarColor: Colors.black.withAlpha(1),
-              statusBarColor: Colors.black.withAlpha(1),
-            )
-          : SystemUiOverlayStyle.dark.copyWith(
-              systemNavigationBarColor: Colors.white.withAlpha(1),
-              statusBarColor: Colors.white.withAlpha(1),
-            );
+      style =
+          isDark
+              ? SystemUiOverlayStyle.light.copyWith(
+                systemNavigationBarColor: Colors.black.withAlpha(1),
+                statusBarColor: Colors.black.withAlpha(1),
+              )
+              : SystemUiOverlayStyle.dark.copyWith(
+                systemNavigationBarColor: Colors.white.withAlpha(1),
+                statusBarColor: Colors.white.withAlpha(1),
+              );
     }
     if (hide) {
       return AppBar(
@@ -91,9 +92,8 @@ class InAppAppbar extends StatelessWidget implements PreferredSizeWidget {
             title: title ?? Text(titleText ?? "", style: titleTextStyle),
             elevation: 0,
             bottom: bottom,
-            actions: actions.isNotEmpty
-                ? [...actions, SizedBox(width: 8)]
-                : null,
+            actions:
+                actions.isNotEmpty ? [...actions, SizedBox(width: 8)] : null,
             systemOverlayStyle: style,
           ),
           if (elevation > 0)

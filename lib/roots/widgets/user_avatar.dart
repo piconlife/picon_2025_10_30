@@ -58,22 +58,24 @@ class AndrossyAvatar extends StatelessWidget {
         color: backgroundColor,
         boxShadow: border <= 0 && shadow != null ? [shadow!] : null,
       ),
-      child: fadeWidthFraction > 0
-          ? _buildShader(context, this.child)
-          : this.child,
+      child:
+          fadeWidthFraction > 0
+              ? _buildShader(context, this.child)
+              : this.child,
     );
 
     if (border > 0) {
       child = Container(
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
-          border: border > 0
-              ? Border.all(
-                  color: borderColor ?? Colors.white,
-                  width: border,
-                  strokeAlign: BorderSide.strokeAlignInside,
-                )
-              : null,
+          border:
+              border > 0
+                  ? Border.all(
+                    color: borderColor ?? Colors.white,
+                    width: border,
+                    strokeAlign: BorderSide.strokeAlignInside,
+                  )
+                  : null,
           shape: BoxShape.circle,
           boxShadow: shadow != null ? [shadow!] : null,
           color: shadow != null ? backgroundColor : null,

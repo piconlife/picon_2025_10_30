@@ -88,9 +88,8 @@ class InAppOptionBottomSheet extends StatelessWidget {
                   horizontal: dimen.dp(24),
                   vertical: dimen.dp(12),
                 ),
-                foregroundColor: index == options.length + 1
-                    ? context.error
-                    : color,
+                foregroundColor:
+                    index == options.length + 1 ? context.error : color,
                 backgroundColor: Colors.transparent,
                 onTap: () => context.dismiss(result: index - 1),
               ),
@@ -105,12 +104,7 @@ class InAppOptionBottomSheet extends StatelessWidget {
               endIndent: dimen.dp(24),
             );
             if (index == options.length) {
-              return Column(
-                children: [
-                  child,
-                  SizedBox(height: dimen.dp(8)),
-                ],
-              );
+              return Column(children: [child, SizedBox(height: dimen.dp(8))]);
             }
             return child;
           },

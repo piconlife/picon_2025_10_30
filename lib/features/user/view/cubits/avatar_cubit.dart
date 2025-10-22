@@ -53,10 +53,10 @@ class UserAvatarCubit extends Cubit<Response<UserAvatar>> {
       if (value.isSuccessful) {
         emit(
           state.copyWith(
-            result: state.result
-              ..removeWhere((e) {
-                return e.id == id;
-              }),
+            result:
+                state.result..removeWhere((e) {
+                  return e.id == id;
+                }),
           ),
         );
       }

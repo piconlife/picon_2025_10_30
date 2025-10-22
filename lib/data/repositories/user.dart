@@ -14,8 +14,9 @@ class UserRepository extends RemoteDataRepository<User> {
 
   static UserRepository? _i;
 
-  static UserRepository get i => _i ??= UserRepository(
-    source: RemoteUserDataSource(),
-    backup: LocalUserDataSource(),
-  );
+  static UserRepository get i =>
+      _i ??= UserRepository(
+        source: RemoteUserDataSource(),
+        backup: LocalUserDataSource(),
+      );
 }

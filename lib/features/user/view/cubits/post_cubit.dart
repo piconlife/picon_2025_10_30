@@ -140,9 +140,10 @@ class UserPostCubit extends Cubit<Response<UserPost>> {
     if (feedback is! UserPost) return;
     emit(
       state.copyWith(
-        result: state.result
-          ..removeAt(index)
-          ..insert(index, feedback),
+        result:
+            state.result
+              ..removeAt(index)
+              ..insert(index, feedback),
       ),
     );
   }
@@ -155,12 +156,12 @@ class UserPostCubit extends Cubit<Response<UserPost>> {
     if (!data.isShareMode) return;
     Utils.share(
       context,
-      subject: data.isTranslated
-          ? data.translatedTitle ?? data.title
-          : data.title,
-      body: data.isTranslated
-          ? data.translatedDescription ?? data.description
-          : data.description,
+      subject:
+          data.isTranslated ? data.translatedTitle ?? data.title : data.title,
+      body:
+          data.isTranslated
+              ? data.translatedDescription ?? data.description
+              : data.description,
       urls: data.photoUrls,
     );
   }
@@ -235,9 +236,10 @@ class UserPostCubit extends Cubit<Response<UserPost>> {
     final body = item.description ?? '';
     if (!item.isTranslatable) return;
     if (item.isTranslated) {
-      item = item
-        ..translatedTitle = null
-        ..translatedDescription = null;
+      item =
+          item
+            ..translatedTitle = null
+            ..translatedDescription = null;
       update(item);
       notify(item);
       return;
@@ -245,9 +247,10 @@ class UserPostCubit extends Cubit<Response<UserPost>> {
     TranslateProvider.translates([header, body], to: UserHelper.language).then((
       value,
     ) {
-      item = item
-        ..translatedTitle = value.firstOrNull
-        ..translatedDescription = value.lastOrNull;
+      item =
+          item
+            ..translatedTitle = value.firstOrNull
+            ..translatedDescription = value.lastOrNull;
       update(item);
       notify(item);
     });

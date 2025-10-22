@@ -14,8 +14,9 @@ class UserCoverRepository extends RemoteDataRepository<UserCover> {
 
   static UserCoverRepository? _i;
 
-  static UserCoverRepository get i => _i ??= UserCoverRepository(
-    source: RemoteUserCoverDataSource(),
-    backup: LocalUserCoverDataSource(),
-  );
+  static UserCoverRepository get i =>
+      _i ??= UserCoverRepository(
+        source: RemoteUserCoverDataSource(),
+        backup: LocalUserCoverDataSource(),
+      );
 }

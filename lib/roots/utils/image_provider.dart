@@ -77,13 +77,14 @@ class EditablePhoto {
   final bool editable;
   final Object? _data;
 
-  Object? get data => _data is MediaData
-      ? _data.data
-      : _data is Photo
-      ? (_data).photoUrl
-      : _data is String
-      ? _data
-      : null;
+  Object? get data =>
+      _data is MediaData
+          ? _data.data
+          : _data is Photo
+          ? (_data).photoUrl
+          : _data is String
+          ? _data
+          : null;
 
   Object? get rootData => _data;
 

@@ -18,10 +18,11 @@ class UserNoteRepository extends RemoteDataRepository<UserNote> {
 
   static UserNoteRepository? _i;
 
-  static UserNoteRepository get i => _i ??= UserNoteRepository(
-    source: RemoteUserNoteDataSource(),
-    backup: LocalUserNoteDataSource(),
-  );
+  static UserNoteRepository get i =>
+      _i ??= UserNoteRepository(
+        source: RemoteUserNoteDataSource(),
+        backup: LocalUserNoteDataSource(),
+      );
 
   @override
   Future<Response<UserNote>> modifier(

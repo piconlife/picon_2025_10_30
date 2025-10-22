@@ -60,19 +60,20 @@ class GeoPointer {
     required Iterable<T> source,
     required GeoPoint Function(T) pointer,
   }) {
-    List<T> results = source
-        .where((e) {
-          final point = pointer(e);
-          if (point.zero) return false;
-          return point.lon >= minLon && point.lon <= maxLon;
-        })
-        .where((e) {
-          final point = pointer(e);
-          if (point.zero) return false;
-          double d = haversine(point.lat, point.lon);
-          return d <= radiusKm;
-        })
-        .toList();
+    List<T> results =
+        source
+            .where((e) {
+              final point = pointer(e);
+              if (point.zero) return false;
+              return point.lon >= minLon && point.lon <= maxLon;
+            })
+            .where((e) {
+              final point = pointer(e);
+              if (point.zero) return false;
+              double d = haversine(point.lat, point.lon);
+              return d <= radiusKm;
+            })
+            .toList();
     return results;
   }
 

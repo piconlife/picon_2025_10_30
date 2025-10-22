@@ -14,8 +14,9 @@ class BusinessRepository extends RemoteDataRepository<Business> {
 
   static BusinessRepository? _i;
 
-  static BusinessRepository get i => _i ??= BusinessRepository(
-    source: RemoteBusinessDataSource(),
-    backup: LocalBusinessDataSource(),
-  );
+  static BusinessRepository get i =>
+      _i ??= BusinessRepository(
+        source: RemoteBusinessDataSource(),
+        backup: LocalBusinessDataSource(),
+      );
 }

@@ -52,17 +52,22 @@ class _InAppSystemOverlayState extends State<InAppSystemOverlay> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final brightness = widget.dark != null
-        ? (widget.dark! ? Brightness.dark : Brightness.light)
-        : null;
+    final brightness =
+        widget.dark != null
+            ? (widget.dark! ? Brightness.dark : Brightness.light)
+            : null;
 
-    final iconBrightness = widget.dark != null
-        ? (widget.dark! ? Brightness.light : Brightness.dark)
-        : null;
+    final iconBrightness =
+        widget.dark != null
+            ? (widget.dark! ? Brightness.light : Brightness.dark)
+            : null;
 
-    final color = widget.dark != null
-        ? (widget.dark! ? Colors.black : Colors.white).withValues(alpha: 0.002)
-        : null;
+    final color =
+        widget.dark != null
+            ? (widget.dark! ? Colors.black : Colors.white).withValues(
+              alpha: 0.002,
+            )
+            : null;
 
     final t = Theme.of(context);
     final d = t.brightness == Brightness.dark;
