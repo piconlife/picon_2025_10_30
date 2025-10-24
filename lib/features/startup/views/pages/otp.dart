@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:app_color/app_color.dart';
 import 'package:app_dimen/app_dimen.dart';
-import 'package:auth_management/auth_management.dart';
+import 'package:auth_management/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';

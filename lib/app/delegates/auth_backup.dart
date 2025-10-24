@@ -1,17 +1,18 @@
 import 'dart:developer';
 
-import 'package:auth_management/auth_management.dart';
+import 'package:auth_management/core.dart';
+import 'package:data_management/core.dart';
 import 'package:flutter_andomie/extensions.dart';
 
-import '../../../data/models/user.dart';
-import '../../../data/use_cases/user/create.dart';
-import '../../../data/use_cases/user/delete_user.dart';
-import '../../../data/use_cases/user/get.dart';
-import '../../../data/use_cases/user/update.dart';
-import '../../../features/startup/preferences/startup.dart';
-import '../../helpers/user.dart';
+import '../../data/models/user.dart';
+import '../../data/use_cases/user/create.dart';
+import '../../data/use_cases/user/delete_user.dart';
+import '../../data/use_cases/user/get.dart';
+import '../../data/use_cases/user/update.dart';
+import '../../features/startup/preferences/startup.dart';
+import '../helpers/user.dart';
 
-class InAppAuthBackupDelegate extends BackupDelegate<User> {
+class InAppAuthBackupDelegate extends AuthBackupDelegate<User> {
   final _create = CreateUserUseCase.i;
   final _update = UpdateUserUseCase.i;
   final _delete = DeleteUserUseCase.i;
@@ -25,7 +26,36 @@ class InAppAuthBackupDelegate extends BackupDelegate<User> {
       );
 
   @override
-  User build(Map<String, dynamic> source) => User.parse(source);
+  User build(Map source) => User.parse(source);
+
+  @override
+  Object? nonEncodableObjectParser(Object? current, Object? old) {
+    if (current is DataFieldValue) {
+      final value = current.value;
+      switch (current.type) {
+        case DataFieldValues.arrayUnion:
+          if (value is! List) return old;
+          if (old is Iterable) return [...old, ...value];
+          return value;
+        case DataFieldValues.arrayRemove:
+          if (old is List && value is Iterable) {
+            return old..removeWhere(value.contains);
+          }
+          return old;
+        case DataFieldValues.delete:
+          return null;
+        case DataFieldValues.serverTimestamp:
+          return DateTime.now().millisecondsSinceEpoch;
+        case DataFieldValues.increment:
+          if (value is! num) return old;
+          if (old is num) return old + value;
+          return value;
+        case DataFieldValues.none:
+          return null;
+      }
+    }
+    return old;
+  }
 
   @override
   Future<void> onCreateUser(User data) async {

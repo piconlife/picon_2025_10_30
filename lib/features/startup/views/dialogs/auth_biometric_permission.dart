@@ -1,7 +1,6 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
-import 'package:auth_management/auth_management.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../roots/widgets/icon.dart';
@@ -65,7 +64,7 @@ class InAppBiometricPermissionDialog extends StatelessWidget {
                   negativeText,
                   height: dimen.dp(54),
                   foregroundColor: Colors.grey,
-                  onTap: () => Navigator.pop(context, BiometricStatus.initial),
+                  onTap: () => Navigator.pop(context, false),
                 ),
               ),
               SizedBox(
@@ -78,8 +77,7 @@ class InAppBiometricPermissionDialog extends StatelessWidget {
                   borderRadius: BorderRadius.zero,
                   height: dimen.dp(54),
                   foregroundColor: context.primary,
-                  onTap:
-                      () => Navigator.pop(context, BiometricStatus.activated),
+                  onTap: () => Navigator.pop(context, true),
                 ),
               ),
             ],

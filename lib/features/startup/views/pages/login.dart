@@ -1,11 +1,13 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
-import 'package:auth_management/auth_management.dart';
+import 'package:auth_management/core.dart';
+import 'package:auth_management/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
+import 'package:flutter_entity/entity.dart';
 import 'package:flutter_network_status/flutter_network_status.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
@@ -511,7 +513,7 @@ class _Footer extends StatelessWidget {
                     Icons.fingerprint,
                     size: dimen.dp(40),
                     color:
-                        (user?.isBiometric ?? false)
+                        (user?.biometric ?? false)
                             ? primary
                             : context.iconColor.mid,
                   );

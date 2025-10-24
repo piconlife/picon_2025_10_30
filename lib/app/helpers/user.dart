@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/list.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_andomie/utils/validator.dart';
+import 'package:in_app_purchaser/in_app_purchaser.dart';
 
 import '../../data/models/user.dart';
 import '../../data/use_cases/user/get.dart';
-import '../../roots/notifiers/paywall.dart';
 import '../../roots/preferences/preferences.dart';
 import '../../roots/res/listeners.dart';
 
@@ -37,7 +37,7 @@ class UserHelper {
 
   static bool get isActiveUser => user.isLoggedIn;
 
-  static bool get isPremium => PaywallNotifier.i.status.isPremium;
+  static bool get isPremium => InAppPurchaser.isPremium;
 
   static bool get isValidUser {
     final a = Validator.isValidString(user.id);

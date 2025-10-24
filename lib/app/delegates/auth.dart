@@ -1,60 +1,17 @@
-import 'package:auth_management/auth_management.dart';
+import 'package:auth_management/core.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
-
-import 'auth_apple.dart';
-import 'auth_biometric.dart';
-import 'auth_facebook.dart';
-import 'auth_google.dart';
+import 'package:flutter_entity/entity.dart';
+import 'package:local_auth/local_auth.dart';
 
 String? _toMail(String prefix, String suffix, [String type = "com"]) {
   return "$prefix@$suffix.$type";
 }
 
 class InAppAuthDelegate extends AuthDelegate {
-  final FirebaseAuth firebaseAuth;
-  final IAppleAuthDelegate? appleAuthDelegate;
-  final IBiometricAuthDelegate? biometricAuthDelegate;
-  final IFacebookAuthDelegate? facebookAuthDelegate;
-  final IGoogleAuthDelegate? googleAuthDelegate;
+  final firebaseAuth = FirebaseAuth.instance;
+  final localAuth = LocalAuthentication();
 
-  InAppAuthDelegate()
-    : firebaseAuth = FirebaseAuth.instance,
-      appleAuthDelegate = InAppAppleAuthDelegate(),
-      biometricAuthDelegate = InAppBiometricAuthDelegate(),
-      facebookAuthDelegate = InAppFacebookAuthDelegate(),
-      googleAuthDelegate = InAppGoogleAuthDelegate();
-
-  IAppleAuthDelegate get appleAuth {
-    if (appleAuthDelegate != null) {
-      return appleAuthDelegate!;
-    } else {
-      throw const AuthException("IAppleAuthDelegate");
-    }
-  }
-
-  IFacebookAuthDelegate get facebookAuth {
-    if (facebookAuthDelegate != null) {
-      return facebookAuthDelegate!;
-    } else {
-      throw const AuthException("IFacebookAuthDelegate");
-    }
-  }
-
-  IBiometricAuthDelegate get localAuth {
-    if (biometricAuthDelegate != null) {
-      return biometricAuthDelegate!;
-    } else {
-      throw const AuthException("IBiometricAuthDelegate");
-    }
-  }
-
-  IGoogleAuthDelegate get googleAuth {
-    if (googleAuthDelegate != null) {
-      return googleAuthDelegate!;
-    } else {
-      throw const AuthException("IGoogleAuthDelegate");
-    }
-  }
+  InAppAuthDelegate();
 
   User? get user => FirebaseAuth.instance.currentUser;
 
@@ -104,38 +61,6 @@ class InAppAuthDelegate extends AuthDelegate {
 
   @override
   Future<bool> isSignIn([Provider? provider]) async {
-    if (provider != null) {
-      switch (provider) {
-        case Provider.apple:
-          return false;
-        case Provider.facebook:
-          return (await facebookAuth.accessToken) != null;
-        case Provider.gameCenter:
-          return false;
-        case Provider.github:
-          return false;
-        case Provider.google:
-          return googleAuth.isSignedIn();
-        case Provider.microsoft:
-          return false;
-        case Provider.playGames:
-          return false;
-        case Provider.saml:
-          return false;
-        case Provider.twitter:
-          return false;
-        case Provider.yahoo:
-          return false;
-        case Provider.email:
-        case Provider.guest:
-        case Provider.username:
-        case Provider.phone:
-          return firebaseAuth.currentUser != null;
-        case Provider.biometric:
-        case Provider.none:
-          return false;
-      }
-    }
     return firebaseAuth.currentUser != null;
   }
 
@@ -160,34 +85,31 @@ class InAppAuthDelegate extends AuthDelegate {
   }
 
   @override
-  Future<Response<void>> signInWithBiometric([BiometricConfig? config]) async {
-    final mConfig = config ?? const BiometricConfig();
+  Future<Response<void>> signInWithBiometric() async {
     try {
       final bool check = await localAuth.canCheckBiometrics;
       final bool isSupportable = check || await localAuth.isDeviceSupported();
       if (!isSupportable) {
         return Response(
-          error: mConfig.deviceException,
+          error: "Biometric not supported",
           status: Status.notSupported,
         );
       } else {
         if (check) {
           final authenticated = await localAuth.authenticate(
-            localizedReason: mConfig.localizedReason,
-            authMessages: mConfig.authMessages,
-            options: mConfig.options,
+            localizedReason: "Please authenticate to continue",
           );
           if (authenticated) {
             return Response(status: Status.ok);
           } else {
             return Response(
-              error: mConfig.failureException,
+              error: "Authentication failed",
               status: Status.notFound,
             );
           }
         } else {
           return Response(
-            error: mConfig.checkingException,
+            error: "Biometric not supported",
             status: Status.undetected,
           );
         }
@@ -299,52 +221,11 @@ class InAppAuthDelegate extends AuthDelegate {
   @override
   Future<Response<void>> signOut([Provider? provider]) async {
     try {
-      if (provider != null) {
-        switch (provider) {
-          case Provider.apple:
-            break;
-          case Provider.facebook:
-            await facebookAuth.logOut();
-            break;
-          case Provider.gameCenter:
-            break;
-          case Provider.github:
-            break;
-          case Provider.google:
-            if (await googleAuth.isSignedIn()) {
-              await googleAuth.disconnect();
-              await googleAuth.signOut();
-            }
-            break;
-          case Provider.microsoft:
-            break;
-          case Provider.playGames:
-            break;
-          case Provider.saml:
-            break;
-          case Provider.twitter:
-            break;
-          case Provider.yahoo:
-            break;
-          case Provider.biometric:
-          case Provider.guest:
-          case Provider.email:
-          case Provider.phone:
-          case Provider.username:
-          case Provider.none:
-            break;
-        }
-      } else {
-        if (await googleAuth.isSignedIn()) {
-          await googleAuth.disconnect();
-          await googleAuth.signOut();
-        }
-      }
       await firebaseAuth.signOut();
+      return Response(status: Status.ok);
     } catch (error) {
       return Response(status: Status.failure, error: error.toString());
     }
-    return Response(status: Status.ok);
   }
 
   @override
@@ -387,128 +268,6 @@ class InAppAuthDelegate extends AuthDelegate {
       );
     } catch (error) {
       throw AuthException(error.toString());
-    }
-  }
-
-  @override
-  Future<Response<Credential>> signInWithApple() async {
-    try {
-      final result = await appleAuth.getAppleIDCredential(
-        scopes: [
-          IAppleIDAuthorizationScopes.email,
-          IAppleIDAuthorizationScopes.fullName,
-        ],
-      );
-
-      if (result.identityToken != null) {
-        final credential = OAuthProvider("apple.com").credential(
-          idToken: result.identityToken,
-          accessToken: result.authorizationCode,
-        );
-
-        return Response(
-          status: Status.ok,
-          data: Credential(
-            providerId: credential.providerId,
-            signInMethod: credential.signInMethod,
-            accessToken: result.authorizationCode,
-            idToken: result.identityToken,
-            credential: credential,
-            uid: result.userIdentifier,
-            email: result.email,
-            displayName: result.givenName ?? result.familyName,
-          ),
-        );
-      } else {
-        return Response(status: Status.error, error: 'Token not valid!');
-      }
-    } catch (error) {
-      return Response(status: Status.failure, error: error.toString());
-    }
-  }
-
-  @override
-  Future<Response<Credential>> signInWithFacebook() async {
-    try {
-      final token = await facebookAuth.accessToken;
-      IFacebookLoginResult? result;
-
-      result =
-          token == null
-              ? await facebookAuth.login(
-                permissions: ['publicerrorprofile', 'email'],
-              )
-              : null;
-
-      final status = result?.status ?? IFacebookLoginStatus.failed;
-
-      if (token != null || status == IFacebookLoginStatus.success) {
-        final accessToken = result?.accessToken ?? token;
-        if (accessToken != null) {
-          final credential = FacebookAuthProvider.credential(
-            accessToken.tokenString,
-          );
-          final fbData = await facebookAuth.getUserData();
-          return Response(
-            status: Status.ok,
-            data: Credential.fromFbData(fbData).copyWith(
-              accessToken: accessToken.tokenString,
-              credential: credential,
-            ),
-          );
-        } else {
-          return Response(status: Status.error, error: 'Token not valid!');
-        }
-      } else {
-        return Response(status: Status.error, error: 'Token not valid!');
-      }
-    } catch (error) {
-      return Response(status: Status.failure, error: error.toString());
-    }
-  }
-
-  @override
-  Future<Response<Credential>> signInWithGoogle() async {
-    try {
-      IGoogleSignInAccount? result;
-      final auth = googleAuth;
-      final isSignedIn = await auth.isSignedIn();
-      if (isSignedIn) {
-        result = await auth.signInSilently();
-      } else {
-        result = await auth.signIn();
-      }
-      if (result != null) {
-        final authentication = await result.authentication;
-        final idToken = authentication.idToken;
-        final accessToken = authentication.accessToken;
-        if (accessToken != null || idToken != null) {
-          final receivedData = auth.currentUser;
-          return Response(
-            status: Status.ok,
-            data: Credential(
-              uid: receivedData?.id ?? result.id,
-              email: receivedData?.email ?? result.email,
-              displayName: receivedData?.displayName ?? result.displayName,
-              photoURL: receivedData?.photoUrl ?? result.photoUrl,
-              accessToken: accessToken,
-              signInMethod:
-                  receivedData?.serverAuthCode ?? result.serverAuthCode,
-              idToken: idToken,
-              credential: GoogleAuthProvider.credential(
-                idToken: idToken,
-                accessToken: accessToken,
-              ),
-            ),
-          );
-        } else {
-          return Response(status: Status.error, error: 'Token not valid!');
-        }
-      } else {
-        return Response(status: Status.error, error: 'Sign in failed!');
-      }
-    } catch (error) {
-      return Response(status: Status.failure, error: error.toString());
     }
   }
 }

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:in_app_settings/settings.dart';
 import 'package:in_app_translation/core.dart';
 
-import '../../../roots/preferences/preferences.dart';
-import '../../dialogs/bsd_locale.dart';
-import '../../res/listeners.dart';
-import '../../settings/remote.dart';
+import '../../roots/preferences/preferences.dart';
+import '../dialogs/bsd_locale.dart';
+import '../res/listeners.dart';
+import '../settings/remote.dart';
 
 class InAppTranslationDelegate extends TranslationDelegate {
   @override

@@ -50,9 +50,6 @@ class TestInAppPurchaseDelegate extends InAppPurchaseDelegate {
   }
 
   @override
-  Future<void> purchased(InAppPurchaseResultSuccess result) async {}
-
-  @override
   Future<InAppPurchaseProfile?> restore() async {
     return null;
   }

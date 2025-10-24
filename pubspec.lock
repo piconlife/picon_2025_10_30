@@ -93,18 +93,10 @@ packages:
     dependency: "direct main"
     description:
       name: auth_management
-      sha256: "5a84e2ec23822ea09f836be8aa34b0bf04635ee1fb5a62ad37933ddc3fbb549a"
+      sha256: "731b180f6e3bf94313e7e46864fa50fd6c9958ea16f2234374b3d34c9b80ebcc"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.2"
-  auth_management_delegates:
-    dependency: transitive
-    description:
-      name: auth_management_delegates
-      sha256: "3ab0fac2e87c997f9f1e5677c9d0d29fb62748b70a76497b65b66a6ea8f98fef"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.4"
+    version: "3.1.0"
   awesome_notifications:
     dependency: "direct main"
     description:
@@ -1362,6 +1354,14 @@ packages:
     description:
       name: object_finder
       sha256: "8ce0fe976cbf596ba78e91c254bbd4fb0dc9f18ca49e1b724f4d6fc18653b412"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
+  object_modifier:
+    dependency: transitive
+    description:
+      name: object_modifier
+      sha256: a0e0eb8c453f558a6f7f1b38b5a39ed9bda998fcd2ab821462232b56fd4a37dd
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"

@@ -1,6 +1,8 @@
-import 'package:auth_management/auth_management.dart' hide AuthStatus;
-import 'package:flutter/cupertino.dart';
+import 'package:auth_management/core.dart';
+import 'package:auth_management/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
+import 'package:flutter_entity/entity.dart';
 import 'package:in_app_configs/configs.dart';
 import 'package:in_app_settings/settings.dart';
 import 'package:in_app_translation/in_app_translation.dart';
@@ -9,7 +11,6 @@ import '../../app/res/listeners.dart';
 import '../../data/models/user.dart';
 import '../../roots/services/zotlo_subscription.dart';
 import '../helpers/connectivity.dart';
-import '../notifiers/auth.dart';
 
 class RootListeners {
   const RootListeners._();
@@ -52,7 +53,6 @@ class RootListeners {
       if (response.status.isAuthenticated) {
         await Settings.load();
         await InAppListeners.authorizationChanged(true);
-        AuthManager.changeStatus(AuthStatus.authorized);
         if (!context.mounted) return;
         context.hideLoader();
         context.showToast("Logged in successful!");
@@ -80,7 +80,6 @@ class RootListeners {
       AuthResponse<User> response = await context.signOut<User>(id: id);
       if (!context.mounted) return;
       if (!response.status.isAuthenticated) {
-        AuthManager.changeStatus(AuthStatus.none);
         context.hideLoader();
         context.showToast("Logged out!");
         return;
@@ -109,7 +108,6 @@ class RootListeners {
         await context.deleteAccount<User>();
         await Settings.clear();
         await InAppListeners.authorizationChanged(false);
-        AuthManager.changeStatus(AuthStatus.none);
         if (!context.mounted) return true;
         context.hideLoader();
         context.showToast("Account has deleted!");

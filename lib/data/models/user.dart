@@ -1,7 +1,9 @@
 import 'dart:convert';
 
-import 'package:auth_management/auth_management.dart';
+import 'package:auth_management/core/auth.dart';
+import 'package:auth_management/core/provider.dart';
 import 'package:flutter_andomie/utils/date_helper.dart';
+import 'package:flutter_entity/entity.dart';
 
 import '../../app/constants/limitations.dart';
 import '../../app/helpers/user.dart';
@@ -353,7 +355,7 @@ class User extends Auth<UserKeys> {
     String? id,
     int? timeMills,
     String? accessToken,
-    BiometricStatus? biometric,
+    bool? biometric,
     String? email,
     Map<String, dynamic>? extra,
     String? idToken,

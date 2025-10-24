@@ -4,7 +4,7 @@ import 'package:in_app_translation/extensions.dart';
 import 'package:in_app_translator/delegate.dart';
 import 'package:translator/translator.dart' hide Translation;
 
-import '../../../roots/preferences/preferences.dart';
+import '../../roots/preferences/preferences.dart';
 
 const kTranslatorCache = "__translator_cache__";
 

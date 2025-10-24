@@ -1,11 +1,12 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
-import 'package:auth_management/auth_management.dart';
+import 'package:auth_management/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
+import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/constants/app.dart';
@@ -73,7 +74,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     final value = await FindUserByEmailUseCase.i(email);
     btnSubmitKey.currentState?.hideLoading();
     if (!context.mounted) return;
-    if (value.status.isSuccessful || value.result.isNotEmpty) {
+    if (value.status == Status.ok || value.result.isNotEmpty) {
       _verify(context, value.result.first);
     } else {
       context.showErrorSnackBar(value.error);
