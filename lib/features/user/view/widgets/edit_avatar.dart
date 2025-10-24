@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../../../app/contents/media.dart';
 import '../../../../app/dialogs/dialog_image_cropper.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../app/res/placeholders.dart';
 import '../../../../app/utils/media_picker.dart';
-import '../../../../roots/contents/media.dart';
 import '../../../../roots/widgets/avatar.dart';
 import '../../../../roots/widgets/icon_button.dart';
 

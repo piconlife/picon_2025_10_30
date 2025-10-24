@@ -11,7 +11,6 @@ import 'package:in_app_settings/in_app_settings.dart';
 import 'package:in_app_translation/in_app_translation.dart';
 
 import '../../../../app/constants/app.dart';
-import '../../../../roots/contents/legals.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/column.dart';
 import '../../../../roots/widgets/filled_button.dart';
@@ -19,6 +18,7 @@ import '../../../../roots/widgets/logo_trailing.dart';
 import '../../../../roots/widgets/stack.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../routes/paths.dart';
+import '../../../startup/contents/legals.dart';
 import '../widgets/screen.dart';
 
 const kSeenTerms = "seen_terms";

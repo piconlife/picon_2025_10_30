@@ -14,7 +14,6 @@ import 'package:flutter_androssy_kits/flutter_androssy_kits.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_device_config/flutter_device_config.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:flutter_network_status/network_status.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:in_app_configs/configs.dart';
 import 'package:in_app_database/in_app_database.dart';

@@ -9,7 +9,7 @@ class UserRepository extends RemoteDataRepository<User> {
   UserRepository({
     required super.source,
     super.backup,
-    super.connectivity = ConnectivityHelper.connection,
+    super.connectivity = ConnectivityHelper.connected,
   });
 
   static UserRepository? _i;

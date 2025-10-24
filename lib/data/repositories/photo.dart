@@ -9,7 +9,7 @@ class PhotoRepository extends RemoteDataRepository<Photo> {
   PhotoRepository({
     required super.source,
     super.backup,
-    super.connectivity = ConnectivityHelper.connection,
+    super.connectivity = ConnectivityHelper.connected,
   });
 
   static PhotoRepository? _i;

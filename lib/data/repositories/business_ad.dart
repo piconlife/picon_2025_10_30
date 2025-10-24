@@ -13,7 +13,7 @@ class BusinessAdRepository extends RemoteDataRepository<BusinessAd> {
   BusinessAdRepository({
     required super.source,
     super.backup,
-    super.connectivity = ConnectivityHelper.connection,
+    super.connectivity = ConnectivityHelper.connected,
   });
 
   static BusinessAdRepository? _i;

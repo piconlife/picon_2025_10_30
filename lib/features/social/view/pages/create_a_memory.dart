@@ -15,6 +15,7 @@ import 'package:flutter_entity/flutter_entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 import 'package:object_finder/object_finder.dart';
 
+import '../../../../app/contents/media.dart';
 import '../../../../app/dialogs/bsd_audience.dart';
 import '../../../../app/dialogs/bsd_privacy.dart';
 import '../../../../app/helpers/user.dart';
@@ -30,7 +31,6 @@ import '../../../../data/models/user_post.dart';
 import '../../../../data/use_cases/feed/create.dart';
 import '../../../../data/use_cases/photo/create.dart';
 import '../../../../data/use_cases/user_post/update.dart';
-import '../../../../roots/contents/media.dart';
 import '../../../../roots/services/path_provider.dart';
 import '../../../../roots/services/storage.dart';
 import '../../../../roots/services/uploader.dart';

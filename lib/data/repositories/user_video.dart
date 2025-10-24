@@ -12,7 +12,7 @@ class UserVideoRepository extends RemoteDataRepository<UserVideo> {
   UserVideoRepository({
     required super.source,
     super.backup,
-    super.connectivity = ConnectivityHelper.connection,
+    super.connectivity = ConnectivityHelper.connected,
   });
 
   static UserVideoRepository? _i;

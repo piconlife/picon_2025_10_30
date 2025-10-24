@@ -11,7 +11,7 @@ class UserFollowerRepository extends RemoteDataRepository<UserFollower> {
   UserFollowerRepository({
     required super.source,
     super.backup,
-    super.connectivity = ConnectivityHelper.connection,
+    super.connectivity = ConnectivityHelper.connected,
   });
 
   static UserFollowerRepository? _i;

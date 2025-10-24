@@ -2,7 +2,7 @@ import 'dart:isolate';
 
 import 'package:flutter/cupertino.dart';
 
-import '../contents/media.dart';
+import '../../app/contents/media.dart';
 import 'storage.dart';
 
 class IsolateTask {

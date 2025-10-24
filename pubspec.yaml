@@ -30,7 +30,7 @@ dependencies:
   # LOGICS (WITH NATIVE)
   awesome_notifications: ^0.10.1
   awesome_notifications_core: ^0.10.1
-  connectivity_plus: ^6.1.5
+  connectivity_plus: ^7.0.0
   device_info_plus: ^12.2.0
   hive_flutter: ^1.1.0
   in_app_review: ^2.0.11
@@ -55,7 +55,6 @@ dependencies:
   flutter_device_config: ^1.0.3
   flutter_entity: ^1.2.2
   flutter_local_storage: ^0.0.1
-  flutter_network_status: ^1.0.0
   flutter_text_parser: ^1.0.2
   data_type_detector: ^1.0.0
   in_app_analytics: ^1.0.9

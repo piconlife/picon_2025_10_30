@@ -52,9 +52,6 @@ class LocalConfigs {
   static const showConfigsLogs = true;
   static const settingsShowLogs = true;
 
-  static const connectivityChecking = true;
-  static const connectivityTimeout = 5;
-  static const connectivityUrl = "https://www.cloudflare.com/cdn-cgi/trace";
   static const onboardSelectToNext = true;
 
   static bool translationShowLogs = true;

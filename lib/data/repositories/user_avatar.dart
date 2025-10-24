@@ -9,7 +9,7 @@ class UserAvatarRepository extends RemoteDataRepository<UserAvatar> {
   UserAvatarRepository({
     required super.source,
     super.backup,
-    super.connectivity = ConnectivityHelper.connection,
+    super.connectivity = ConnectivityHelper.connected,
   });
 
   static UserAvatarRepository? _i;

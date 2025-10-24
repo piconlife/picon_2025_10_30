@@ -9,7 +9,7 @@ class UserCoverRepository extends RemoteDataRepository<UserCover> {
   UserCoverRepository({
     required super.source,
     super.backup,
-    super.connectivity = ConnectivityHelper.connection,
+    super.connectivity = ConnectivityHelper.connected,
   });
 
   static UserCoverRepository? _i;

@@ -8,7 +8,7 @@ class NameUnifierRepository extends RemoteDataRepository<NameUnifier> {
   NameUnifierRepository({
     required super.source,
     super.backup,
-    super.connectivity = ConnectivityHelper.connection,
+    super.connectivity = ConnectivityHelper.connected,
     super.singletonMode = false,
   });
 
@@ -22,7 +22,7 @@ class PhoneUnifierRepository extends RemoteDataRepository<PhoneUnifier> {
   PhoneUnifierRepository({
     required super.source,
     super.backup,
-    super.connectivity = ConnectivityHelper.connection,
+    super.connectivity = ConnectivityHelper.connected,
     super.singletonMode = false,
   });
 
@@ -36,7 +36,7 @@ class PrefixUnifierRepository extends RemoteDataRepository<PrefixUnifier> {
   PrefixUnifierRepository({
     required super.source,
     super.backup,
-    super.connectivity = ConnectivityHelper.connection,
+    super.connectivity = ConnectivityHelper.connected,
     super.singletonMode = false,
   });
 

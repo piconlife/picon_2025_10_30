@@ -9,7 +9,7 @@ class BusinessRepository extends RemoteDataRepository<Business> {
   BusinessRepository({
     required super.source,
     super.backup,
-    super.connectivity = ConnectivityHelper.connection,
+    super.connectivity = ConnectivityHelper.connected,
   });
 
   static BusinessRepository? _i;

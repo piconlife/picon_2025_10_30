@@ -8,7 +8,6 @@ import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_entity/entity.dart';
-import 'package:flutter_network_status/flutter_network_status.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/constants/app.dart';
@@ -18,6 +17,7 @@ import '../../../../data/parsers/phone_parser.dart';
 import '../../../../data/parsers/user_parser.dart';
 import '../../../../data/parsers/validations.dart';
 import '../../../../data/use_cases/user/find_user_by_phone.dart';
+import '../../../../roots/helpers/connectivity.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/gesture.dart';
@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _submit(BuildContext context) async {
-    final isConnected = await ConnectivityProvider.I.isConnected;
+    final isConnected = await ConnectivityHelper.isConnected;
     if (!context.mounted) return;
     if (!isConnected) {
       context.showErrorSnackBar(ResponseMessages.internetDisconnected);

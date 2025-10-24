@@ -9,7 +9,7 @@ class FeedLikeRepository extends RemoteDataRepository<FeedLike> {
   FeedLikeRepository({
     required super.source,
     super.backup,
-    super.connectivity = ConnectivityHelper.connection,
+    super.connectivity = ConnectivityHelper.connected,
   });
 
   static FeedLikeRepository? _i;

@@ -9,7 +9,7 @@ class FeedVideoRepository extends RemoteDataRepository<FeedVideo> {
   FeedVideoRepository({
     required super.source,
     super.backup,
-    super.connectivity = ConnectivityHelper.connection,
+    super.connectivity = ConnectivityHelper.connected,
   });
 
   static FeedVideoRepository? _i;

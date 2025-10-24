@@ -1,4 +1,4 @@
-import '../contents/secrets.dart';
+import '../../app/contents/secrets.dart';
 import '../utils/encryptor.dart';
 
 class EncryptorHelper extends InAppEncryptor {

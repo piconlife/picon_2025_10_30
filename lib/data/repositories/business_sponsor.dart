@@ -13,7 +13,7 @@ class BusinessSponsorRepository extends RemoteDataRepository<BusinessSponsor> {
   BusinessSponsorRepository({
     required super.source,
     super.backup,
-    super.connectivity = ConnectivityHelper.connection,
+    super.connectivity = ConnectivityHelper.connected,
   });
 
   static BusinessSponsorRepository? _i;

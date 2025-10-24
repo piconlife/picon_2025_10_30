@@ -14,6 +14,7 @@ import 'package:object_finder/object_finder.dart';
 import 'package:picon/data/models/user_post.dart';
 import 'package:picon/roots/widgets/gesture.dart';
 
+import '../../../../app/contents/media.dart';
 import '../../../../app/dialogs/bsd_privacy.dart';
 import '../../../../app/dialogs/dialog_alert.dart';
 import '../../../../app/helpers/user.dart';
@@ -26,7 +27,6 @@ import '../../../../data/models/feed.dart';
 import '../../../../data/models/user.dart';
 import '../../../../data/models/user_avatar.dart';
 import '../../../../data/use_cases/feed/create.dart';
-import '../../../../roots/contents/media.dart';
 import '../../../../roots/helpers/connectivity.dart';
 import '../../../../roots/services/path_provider.dart';
 import '../../../../roots/services/storage.dart';

@@ -9,7 +9,7 @@ class ChannelRepository extends RemoteDataRepository<Channel> {
   ChannelRepository({
     required super.source,
     super.backup,
-    super.connectivity = ConnectivityHelper.connection,
+    super.connectivity = ConnectivityHelper.connected,
   });
 
   static ChannelRepository? _i;

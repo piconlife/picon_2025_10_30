@@ -32,7 +32,7 @@ class RootListeners {
   ) async {
     try {
       context.showLoader();
-      if (!(await ConnectivityHelper.isInternetActive)) {
+      if (await ConnectivityHelper.isDisconnected) {
         if (!context.mounted) return;
         context.hideLoader();
         context.showErrorSnackBar(Status.networkError.error);
@@ -70,7 +70,7 @@ class RootListeners {
   static Future<void> logout(BuildContext context, [String? id]) async {
     try {
       context.showLoader();
-      if (!(await ConnectivityHelper.isInternetActive)) {
+      if (await ConnectivityHelper.isDisconnected) {
         if (!context.mounted) return;
         context.hideLoader();
         context.showErrorSnackBar(Status.networkError.error);
@@ -95,7 +95,7 @@ class RootListeners {
   static Future<bool> deleteAccount(BuildContext context, [String? id]) async {
     try {
       context.showLoader();
-      if (!(await ConnectivityHelper.isInternetActive)) {
+      if (await ConnectivityHelper.isDisconnected) {
         if (!context.mounted) return false;
         context.hideLoader();
         context.showErrorSnackBar(Status.networkError.error);

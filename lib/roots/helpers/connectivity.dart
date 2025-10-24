@@ -1,41 +1,27 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter_network_status/flutter_network_status.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart';
 import 'package:in_app_configs/configs.dart';
-
-import '../../app/configs/local.dart';
-
-const kConnectivityChecking = "connectivity_checking";
-const kConnectivityTimeout = "connectivity_timeout";
-const kConnectivityUrl = "connectivity_url";
 
 class ConnectivityHelper {
   const ConnectivityHelper._();
 
-  static Future<bool> get isInternetActive async {
-    if (!Configs.get(
-      kConnectivityChecking,
-      defaultValue: LocalConfigs.connectivityChecking,
-    )) {
+  static Future<bool> get _test async {
+    if (!Configs.get("connectivity_checking", defaultValue: false)) {
       return true;
     }
     try {
       await get(
         Uri.parse(
           Configs.get(
-            kConnectivityUrl,
-            defaultValue: LocalConfigs.connectivityUrl,
+            "connectivity_url",
+            defaultValue: "https://www.cloudflare.com/cdn-cgi/trace",
           ),
         ),
       ).timeout(
-        Duration(
-          seconds: Configs.get(
-            kConnectivityTimeout,
-            defaultValue: LocalConfigs.connectivityTimeout,
-          ),
-        ),
+        Duration(seconds: Configs.get("connectivity_timeout", defaultValue: 3)),
       );
       return true;
     } on SocketException {
@@ -47,24 +33,29 @@ class ConnectivityHelper {
     }
   }
 
-  static Future<bool> get isInternetInactive async => !(await isInternetActive);
-
-  static Future<bool> get isConnected async {
-    final connected = await ConnectivityProvider.I.isConnected;
-    if (connected) return isInternetActive;
-    return connected;
-  }
-
-  static Future<bool> get isDisconnected async => !(await isConnected);
-
-  static Stream<bool> get activityChanges {
-    return ConnectivityProvider.I.connection.asyncMap((connected) {
-      if (connected) return isInternetActive;
+  static Future<bool> get isConnected {
+    return Connectivity().checkConnectivity().then((value) {
+      final connected = [
+        ConnectivityResult.mobile,
+        ConnectivityResult.wifi,
+        ConnectivityResult.ethernet,
+      ].any((element) => value.contains(element));
+      if (connected) return _test;
       return connected;
     });
   }
 
-  static Stream<bool> get changes => ConnectivityProvider.I.connection;
+  static Future<bool> get isDisconnected async => !(await isConnected);
 
-  static Future<bool> connection() => isConnected;
+  static Stream<bool> get changed {
+    return Connectivity().onConnectivityChanged.map((event) {
+      final status = event.firstOrNull;
+      final mobile = status == ConnectivityResult.mobile;
+      final wifi = status == ConnectivityResult.wifi;
+      final ethernet = status == ConnectivityResult.ethernet;
+      return mobile || wifi || ethernet;
+    });
+  }
+
+  static Future<bool> connected() => isConnected;
 }

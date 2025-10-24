@@ -9,7 +9,7 @@ class UserPostRepository extends RemoteDataRepository<UserPost> {
   UserPostRepository({
     required super.source,
     super.backup,
-    super.connectivity = ConnectivityHelper.connection,
+    super.connectivity = ConnectivityHelper.connected,
   });
 
   static UserPostRepository? _i;

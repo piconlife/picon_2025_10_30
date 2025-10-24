@@ -243,8 +243,8 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
 
   Future<void> _initConnectivity() async {
     await Internet.init(
-      connected: ConnectivityHelper.isInternetActive,
-      connection: ConnectivityHelper.activityChanges,
+      connected: ConnectivityHelper.isConnected,
+      connection: ConnectivityHelper.changed,
     );
     Internet.i.addListener(() {
       InAppListeners.connectivityChanged(Internet.i.value);
@@ -656,7 +656,6 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
     if (!_initialized) return SizedBox();
     Widget child = widget.app ?? App();
     child = _buildAuthProvider(child);
-    child = _buildNetworkProvider(child);
     return child;
   }
 
@@ -669,9 +668,5 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
       ),
       child: child,
     );
-  }
-
-  Widget _buildNetworkProvider(Widget child) {
-    return NetworkProvider(child: child);
   }
 }
