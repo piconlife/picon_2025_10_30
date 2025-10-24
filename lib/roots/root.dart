@@ -310,9 +310,7 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
       barrierColor: context.dark.withValues(alpha: .075),
       duration: const Duration(milliseconds: 500),
       reverseDuration: const Duration(milliseconds: 300),
-      builder: (context, content) {
-        return InAppLoadingDialog();
-      },
+      builder: (context, content) => InAppLoadingDialog(),
     );
     Dialogs.init(
       snackBarConfig: (context) {

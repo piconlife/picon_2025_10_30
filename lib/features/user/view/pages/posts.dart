@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/flutter_entity.dart';
 
 import '../../../../app/res/icons.dart';
+import '../../../../app/widgets/complete_text.dart';
 import '../../../../data/models/user.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../roots/widgets/appbar.dart';
-import '../../../../roots/widgets/complete_text.dart';
 import '../../../../roots/widgets/exception.dart';
 import '../../../../roots/widgets/scaffold_shimmer.dart';
 import '../cubits/post_cubit.dart';

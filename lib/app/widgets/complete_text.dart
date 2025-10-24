@@ -3,7 +3,7 @@ import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 
-import 'text.dart';
+import '../../roots/widgets/text.dart';
 
 class InAppCompleteText extends StatelessWidget {
   final String? text;

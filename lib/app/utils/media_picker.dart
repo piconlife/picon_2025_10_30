@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../roots/contents/media.dart';
-import '../dialogs/dialog_image_cropper.dart';
+import '../interfaces/dialog_image_cropper.dart';
 
 /// Class providing methods for interacting with media (images, videos, etc.)
 class MediaPicker {

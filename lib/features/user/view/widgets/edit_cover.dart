@@ -1,12 +1,12 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:flutter/material.dart';
-import 'package:picon/app/dialogs/dialog_image_cropper.dart';
+import 'package:picon/app/interfaces/dialog_image_cropper.dart';
 
-import '../../../../roots/contents/media.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../app/res/placeholders.dart';
 import '../../../../app/utils/media_picker.dart';
+import '../../../../roots/contents/media.dart';
 import '../../../../roots/widgets/icon_button.dart';
 import '../../../../roots/widgets/image.dart';
 

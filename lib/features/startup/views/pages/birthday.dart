@@ -8,7 +8,7 @@ import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/constants/limitations.dart';
-import '../../../../app/dialogs/dialog_date_picker.dart';
+import '../../../../app/interfaces/dialog_date_picker.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/gesture.dart';

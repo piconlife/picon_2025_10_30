@@ -9,9 +9,9 @@ import 'package:in_app_configs/configs.dart';
 import 'package:object_finder/object_finder.dart';
 
 import '../app/configs/local.dart';
-import '../app/dialogs/bsd_audience.dart';
-import '../app/dialogs/bsd_privacy.dart';
-import '../app/dialogs/dialog_big_photo.dart';
+import '../app/interfaces/bsd_audience.dart';
+import '../app/interfaces/bsd_privacy.dart';
+import '../app/interfaces/dialog_big_photo.dart';
 import '../data/enums/audience.dart';
 import '../data/enums/privacy.dart';
 import '../features/channel/view/dialogs/bsd_metube_format.dart';

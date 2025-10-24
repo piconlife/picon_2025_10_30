@@ -8,8 +8,8 @@ import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 import 'package:marquee/marquee.dart';
 
-import '../../../../../app/dialogs/bsd_privacy.dart';
 import '../../../../../app/helpers/user.dart';
+import '../../../../../app/interfaces/bsd_privacy.dart';
 import '../../../../../app/res/icons.dart';
 import '../../../../../data/enums/privacy.dart';
 import '../../../../../data/models/photo.dart';

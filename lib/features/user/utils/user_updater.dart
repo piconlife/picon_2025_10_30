@@ -5,8 +5,8 @@ import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../app/constants/limitations.dart';
-import '../../../app/dialogs/dialog_date_picker.dart';
 import '../../../app/helpers/user.dart';
+import '../../../app/interfaces/dialog_date_picker.dart';
 import '../../../data/models/user.dart';
 import '../../../routes/paths.dart';
 

@@ -10,8 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
-import '../../../../app/dialogs/dialog_big_photo.dart';
 import '../../../../app/helpers/user.dart';
+import '../../../../app/interfaces/dialog_big_photo.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../app/res/placeholders.dart';
 import '../../../../app/styles/fonts.dart';

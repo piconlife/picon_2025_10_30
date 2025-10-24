@@ -15,7 +15,7 @@ import 'package:in_app_translation/utils/country.dart';
 import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 
 import '../../../../app/constants/limitations.dart';
-import '../../../../app/dialogs/bsd_country.dart';
+import '../../../../app/interfaces/bsd_country.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/user.dart';
 import '../../../../data/parsers/errors.dart';

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:in_app_translation/in_app_translation.dart';
 
-import '../../app/dialogs/dialog_language.dart';
+import '../../app/interfaces/dialog_language.dart';
 import '../../app/res/icons.dart';
 import 'gesture.dart';
 import 'icon.dart';
