@@ -1,4 +1,4 @@
-String parseError(error) {
+String parseError(Object? error) {
   String exception = error.toString();
   if (exception.contains("[cloud_firestore/unavailable]")) {
     exception = exception.replaceAll("[cloud_firestore/unavailable]", "");

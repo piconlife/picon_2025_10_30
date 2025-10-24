@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_andomie/utils/date_helper.dart';
 
 /// Enumeration of supported media extensions
 enum MediaExtensions {
@@ -325,7 +324,16 @@ class Media {
       final pre = getPrefix(path) ?? "";
       final sep = pre.isNotEmpty ? separator : "";
       final randoms = getRandomNumbers(5);
-      final formatted = DateTime.now().toDate(format: "yyyyMMdd${sep}HHmmss");
+
+      final now = DateTime.now();
+      final y = now.year.toString().padLeft(4, '0');
+      final m = now.month.toString().padLeft(2, '0');
+      final d = now.day.toString().padLeft(2, '0');
+      final h = now.hour.toString().padLeft(2, '0');
+      final min = now.minute.toString().padLeft(2, '0');
+      final s = now.second.toString().padLeft(2, '0');
+
+      final formatted = "$y$m$d$sep$h$min$s";
       return '$pre$sep$formatted$randoms$dot$ex';
     }
   }

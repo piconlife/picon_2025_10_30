@@ -8,7 +8,7 @@ import 'package:in_app_purchaser/in_app_purchaser.dart';
 import '../../data/models/user.dart';
 import '../../data/use_cases/user/get.dart';
 import '../../roots/preferences/preferences.dart';
-import '../../roots/res/listeners.dart';
+import '../res/listeners.dart';
 
 class UserHelper {
   const UserHelper._();
@@ -87,11 +87,11 @@ class UserHelper {
   }
 
   static Future<void> signOut(BuildContext context, [String? id]) {
-    return RootListeners.logout(context, id);
+    return InAppListeners.logout(context, id);
   }
 
   static Future<bool> deleteAccount(BuildContext context, [String? id]) {
-    return RootListeners.deleteAccount(context, id);
+    return InAppListeners.deleteAccount(context, id);
   }
 
   // ADDITIONAL PROPERTIES

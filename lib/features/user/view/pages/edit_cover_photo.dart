@@ -12,7 +12,7 @@ import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 import 'package:object_finder/object_finder.dart';
 
-import '../../../../app/contents/media.dart';
+import '../../../../roots/contents/media.dart';
 import '../../../../app/dialogs/bsd_privacy.dart';
 import '../../../../app/dialogs/dialog_alert.dart';
 import '../../../../app/helpers/user.dart';

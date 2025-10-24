@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/utils/hit_logger.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
+import 'package:in_app_analytics/analytics.dart';
 import 'package:in_app_configs/configs.dart';
 import 'package:object_finder/object_finder.dart';
 
@@ -20,7 +21,6 @@ import '../features/social/view/dialogs/bsd_feed_format.dart';
 import '../features/startup/views/dialogs/auth_biometric_permission.dart';
 import '../firebase_options.dart';
 import '_imports.dart';
-import 'services/analytics.dart';
 import 'services/unique_id.dart';
 
 const kAssetsPreloads = <String>[];
@@ -95,11 +95,15 @@ final Map<String, DialogConfigBuilder<DialogConfig>> kDialogConfigs = {
 };
 
 Future<void> _initFirebase() {
-  return Analytics.call("firebase_init", msg: "_initFirebase", () async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  });
+  return Analytics.callAsync(
+    name: "firebase_init",
+    msg: "_initFirebase",
+    () async {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    },
+  );
 }
 
 Future<void> _initHitLogger() async {
@@ -115,7 +119,7 @@ Future<void> _initHitLogger() async {
 }
 
 Future<void> _initUniqueId() {
-  return Analytics.call("unique_id", msg: "_initUniqueId", () async {
+  return Analytics.callAsync(name: "unique_id", msg: "_initUniqueId", () async {
     if (Configs.get("application/firebase_app", defaultValue: false)) return;
     await UniqueIdService.init();
   });

@@ -29,8 +29,8 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     await SystemUi.resetOrientation();
     if (widget.onInit != null) await widget.onInit!();
-    await Analytics.call(
-      "root",
+    Analytics.call(
+      name: "root",
       msg: "initializeDateFormatting",
       initializeDateFormatting,
     );
@@ -247,7 +247,12 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
       connection: ConnectivityHelper.changed,
     );
     Internet.i.addListener(() {
-      InAppListeners.connectivityChanged(Internet.i.value);
+      final connected = Internet.i.value;
+      Configs.i.changeConnection(connected);
+      Translation.i.changeConnection(connected);
+      ZotloService.i.changeConnection(connected);
+      InAppPurchaser.changeConnection(connected);
+      InAppListeners.connectivityChanged(connected);
     });
   }
 
@@ -614,10 +619,13 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
     Configs.i.dispose();
   }
 
-  void _disposeConnectivity() async {
+  void _disposeConnectivity() {
     Internet.i.removeListener(() {
       Configs.i.changeConnection(false);
       Translation.i.changeConnection(false);
+      ZotloService.i.changeConnection(false);
+      InAppPurchaser.changeConnection(false);
+      InAppListeners.connectivityChanged(false);
     });
   }
 

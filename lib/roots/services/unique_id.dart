@@ -18,7 +18,7 @@ class UniqueIdService {
   static Future<String> init() async {
     idOrNull = await _ii._secureStorage.read(key: _ii._key);
     if (idOrNull == null) {
-      idOrNull = Uuid().v4();
+      idOrNull = "UID-${Uuid().v4()}";
       _ii._secureStorage.write(key: _ii._key, value: idOrNull);
     }
     return id;

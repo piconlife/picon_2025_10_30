@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../app/contents/media.dart';
+import '../contents/media.dart';
 import 'storage.dart';
 
 class UploadingTask {

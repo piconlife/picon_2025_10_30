@@ -14,7 +14,7 @@ import 'package:object_finder/object_finder.dart';
 import 'package:picon/data/models/user_post.dart';
 import 'package:picon/roots/widgets/gesture.dart';
 
-import '../../../../app/contents/media.dart';
+import '../../../../roots/contents/media.dart';
 import '../../../../app/dialogs/bsd_privacy.dart';
 import '../../../../app/dialogs/dialog_alert.dart';
 import '../../../../app/helpers/user.dart';

@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_andomie/utils/key_generator.dart';
 
-import '../../app/contents/media.dart';
 import '../../app/utils/media_picker.dart';
 import '../../data/models/photo.dart';
+import '../contents/media.dart';
 
 enum EditablePhotoProviderStatus {
   initial,
