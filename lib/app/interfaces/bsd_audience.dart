@@ -8,6 +8,8 @@ import '../../data/enums/audience.dart';
 import '../../roots/widgets/gesture.dart';
 import '../../roots/widgets/text.dart';
 
+const kAudienceBSD = "audience_bsd";
+
 class AudienceBSD extends StatelessWidget {
   final Audience audience;
 
@@ -65,7 +67,7 @@ class AudienceBSD extends StatelessWidget {
     final initial =
         audience ?? Audience.values.firstOrNull ?? Audience.everyone;
     return context
-        .show("audience_bsd", content: DialogContent(args: initial))
+        .show(kAudienceBSD, content: DialogContent(args: initial))
         .onError((e, st) => initial)
         .then((v) => v ?? initial);
   }

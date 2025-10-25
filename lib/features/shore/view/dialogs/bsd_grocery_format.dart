@@ -12,6 +12,8 @@ import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/text.dart';
 
+const kGroceryFormatBSD = "grocery_format_bsd";
+
 class GroceryFormatBSD extends StatelessWidget {
   const GroceryFormatBSD({super.key});
 
@@ -62,7 +64,7 @@ class GroceryFormatBSD extends StatelessWidget {
   }
 
   static Future<GroceryFormats?> show(BuildContext context) {
-    return context.show("grocery_format_bsd");
+    return context.show(kGroceryFormatBSD);
   }
 }
 

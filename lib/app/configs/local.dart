@@ -2,44 +2,60 @@ import 'package:flutter/material.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:in_app_configs/configs.dart';
 import 'package:in_app_database/in_app_database.dart';
+import 'package:object_finder/object_finder.dart';
 
-import '../../features/chooser/data/models/country.dart';
-import '../../features/chooser/data/models/hobby.dart';
-import '../../features/chooser/data/models/language.dart';
-import '../../features/chooser/data/models/profession.dart';
-import '../../features/chooser/data/models/religion.dart';
-import '../../features/chooser/data/models/report.dart';
+import '../../app/interfaces/bsd_audience.dart';
+import '../../app/interfaces/bsd_privacy.dart';
+import '../../app/interfaces/dialog_big_photo.dart';
+import '../../data/enums/audience.dart';
+import '../../data/enums/privacy.dart';
+import '../../features/channel/view/dialogs/bsd_metube_format.dart';
+import '../../features/shop/view/dialogs/bsd_market_format.dart';
+import '../../features/shore/view/dialogs/bsd_grocery_format.dart';
+import '../../features/social/view/dialogs/bsd_feed_format.dart';
+import '../../features/startup/views/dialogs/auth_biometric_permission.dart';
+import '../delegates/in_app_purchase_test.dart';
 
-class LocalConfigs {
-  const LocalConfigs._();
+/// Default configuration constants
+const kDailyNotificationsConfigPath = "daily_notifications";
+const kWeeklyNotificationsConfigPath = "weekly_notifications";
+const kThemesConfigPath = "themes";
+const kSecretsConfigPath = "secrets";
 
-  static const splashTime = 3000;
-  static const splashTimeForNative = 0;
+/// Default configuration paths used in initialization
+const _kDefaultConfigPaths = {
+  kDailyNotificationsConfigPath,
+  kWeeklyNotificationsConfigPath,
+  kSecretsConfigPath,
+  kThemesConfigPath,
+};
 
-  static const theme = ThemeMode.light;
+abstract final class LocalConfigs {
+  static int splashTime = 3000;
+  static int splashTimeForNative = 0;
 
-  static const authInitialCheck = true;
-  static const purchaserLogEnabled = true;
-  static const hitLogger = false;
+  static ThemeMode theme = ThemeMode.light;
 
-  // TRANSLATION
-  static const configName = "configs";
-  static const configDefault = "application";
-  static const configPlatform = PlatformType.system;
-  static const configEnvironment = EnvironmentType.system;
-  static const configPaths = <String>{
-    "legals",
-    kCountries,
-    kLanguages,
-    kHobbies,
-    kProfessions,
-    kReligions,
-    kReports,
-  };
-  static const configLogs = true;
+  static bool authInitialCheck = true;
+  static bool hitLogger = false;
+
+  static List<String> assetsPreloads = ["assets/contents/application.json"];
+
+  // SETTINGS
+  static Map<String, dynamic>? settings;
+  static bool settingsLogs = false;
+
+  static String configName = "configs";
+  static String configDefault = "application";
+  static PlatformType configPlatform = PlatformType.system;
+  static EnvironmentType configEnvironment = EnvironmentType.system;
+  static Set<String> configPaths = _kDefaultConfigPaths;
+  static Set<String> configSymmetricPaths = _kDefaultConfigPaths;
+  static bool configLogs = false;
+  static bool configLazyMode = false;
 
   // IN_APP_DATABASE
-  static bool inAppDatabaseLogs = true;
+  static bool inAppDatabaseLogs = false;
   static String? inAppDatabaseName;
   static InAppDatabaseType? inAppDatabaseType;
   static InAppDatabaseVersion? inAppDatabaseVersion;
@@ -49,11 +65,88 @@ class LocalConfigs {
   static Duration toastDisplayDuration = const Duration(seconds: 3);
   static ToastBuilder? toastBuilder;
 
-  static const showConfigsLogs = true;
-  static const settingsShowLogs = true;
+  // TRANSLATION
+  static bool translationShowLogs = false;
+  static Locale translationFallback = Locale("en", "US");
+  static Set<String> translationPaths = {
+    "notification_channels",
+    "hourly_notifications",
+    "time_of_day_notifications",
+    "weekly_notifications",
+  };
+  static Set<String> translationSymmetricPaths = {};
 
-  static const onboardSelectToNext = true;
+  static bool inAppPurchaseLogs = true;
+  static bool inAppPurchaseThrowLogs = true;
+  static final inAppPurchaseDelegate = TestInAppPurchaseDelegate();
 
-  static bool translationShowLogs = true;
-  static Locale translationFallbackLocale = Locale("en", "US");
+  static Map<String, DialogConfigBuilder<DialogConfig>> dialogConfigs = {
+    kBigPhotoDialogKey: (context) {
+      return DialogConfig(
+        builder: (context, content) {
+          return InAppBigPhotoDialog(content.args);
+        },
+      );
+    },
+    kBiometricPermissionDialogKey: (context) {
+      return DialogConfig(
+        position: AndrossyDialogPosition.center,
+        builder: (context, content) {
+          return const InAppBiometricPermissionDialog();
+        },
+      );
+    },
+    kFeedFormatBSD: (context) {
+      return DialogConfig(
+        position: AndrossyDialogPosition.bottom,
+        builder: (context, content) {
+          return const InAppFeedFormatBSD();
+        },
+      );
+    },
+    kGroceryFormatBSD: (context) {
+      return DialogConfig(
+        position: AndrossyDialogPosition.bottom,
+        builder: (context, content) {
+          return const GroceryFormatBSD();
+        },
+      );
+    },
+    kMarketFormatBSD: (context) {
+      return DialogConfig(
+        position: AndrossyDialogPosition.bottom,
+        builder: (context, content) {
+          return const MarketFormatBSD();
+        },
+      );
+    },
+    kMetubeFormatBSD: (context) {
+      return DialogConfig(
+        position: AndrossyDialogPosition.bottom,
+        builder: (context, content) {
+          return const MetubeFormatBSD();
+        },
+      );
+    },
+    kAudienceBSD: (context) {
+      return DialogConfig(
+        position: AndrossyDialogPosition.bottom,
+        builder: (context, content) {
+          return AudienceBSD(
+            audience: content.args.find(defaultValue: Audience.everyone),
+          );
+        },
+      );
+    },
+    kPrivacyBSD: (context) {
+      return DialogConfig(
+        position: AndrossyDialogPosition.bottom,
+        builder: (context, content) {
+          return PrivacyBSD(
+            privacy: content.args.find(defaultValue: Privacy.everyone),
+          );
+        },
+      );
+    },
+  };
 }

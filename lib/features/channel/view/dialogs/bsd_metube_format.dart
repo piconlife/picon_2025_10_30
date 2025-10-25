@@ -12,6 +12,8 @@ import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/text.dart';
 
+const kMetubeFormatBSD = "metube_format_bsd";
+
 class MetubeFormatBSD extends StatelessWidget {
   const MetubeFormatBSD({super.key});
 
@@ -62,7 +64,7 @@ class MetubeFormatBSD extends StatelessWidget {
   }
 
   static Future<MetubeFormats?> show(BuildContext context) {
-    return context.show("metube_format_bsd");
+    return context.show(kMetubeFormatBSD);
   }
 }
 

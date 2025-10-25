@@ -9,6 +9,8 @@ import '../../roots/widgets/gesture.dart';
 import '../../roots/widgets/icon.dart';
 import '../../roots/widgets/text.dart';
 
+const kPrivacyBSD = "privacy_bsd";
+
 class PrivacyBSD extends StatelessWidget {
   final Privacy privacy;
 
@@ -65,7 +67,7 @@ class PrivacyBSD extends StatelessWidget {
   static Future<Privacy> show(BuildContext context, [Privacy? privacy]) {
     final initial = privacy ?? Privacy.values.firstOrNull ?? Privacy.everyone;
     return context
-        .show("privacy_bsd", content: DialogContent(args: initial))
+        .show(kPrivacyBSD, content: DialogContent(args: initial))
         .onError((e, st) => initial)
         .then((v) => v ?? initial);
   }

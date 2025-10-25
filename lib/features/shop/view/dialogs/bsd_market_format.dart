@@ -12,6 +12,8 @@ import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/text.dart';
 
+const kMarketFormatBSD = "market_format_bsd";
+
 class MarketFormatBSD extends StatelessWidget {
   const MarketFormatBSD({super.key});
 
@@ -62,7 +64,7 @@ class MarketFormatBSD extends StatelessWidget {
   }
 
   static Future<MarketFormats?> show(BuildContext context) {
-    return context.show("market_format_bsd");
+    return context.show(kMarketFormatBSD);
   }
 }
 

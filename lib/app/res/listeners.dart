@@ -11,7 +11,9 @@ import 'package:in_app_translation/core.dart';
 import '../../data/models/user.dart';
 import '../../roots/helpers/connectivity.dart';
 import '../../roots/services/notification.dart';
+import '../../roots/services/zotlo_subscription.dart';
 import '../../roots/utils/speech.dart';
+import '../settings/remote.dart';
 
 abstract final class InAppListeners {
   static Future<void> purchased(InAppPurchaseResultSuccess result) async {}
@@ -21,6 +23,11 @@ abstract final class InAppListeners {
   static Future<void> authorizationChanged(bool authorized) async {}
 
   static void connectivityChanged(bool connected) {}
+
+  static void handleZotloReady(String? expireDate) {
+    Settings.set(kZotloExpireDate, expireDate);
+    if (ZotloService.i.isPremium) InAppPurchaser.setPremiumStatus(true);
+  }
 
   static void translationsLocaleChanged(Locale locale) async {
     Settings.set("locale", locale.toString());

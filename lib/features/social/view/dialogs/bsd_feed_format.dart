@@ -11,6 +11,8 @@ import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/text.dart';
 
+const kFeedFormatBSD = 'feed_format_bsd';
+
 class InAppFeedFormatBSD extends StatelessWidget {
   const InAppFeedFormatBSD({super.key});
 
@@ -60,7 +62,7 @@ class InAppFeedFormatBSD extends StatelessWidget {
   }
 
   static Future<FeedFormats?> show(BuildContext context) {
-    return context.show("feed_format_bsd");
+    return context.show(kFeedFormatBSD);
   }
 }
 
