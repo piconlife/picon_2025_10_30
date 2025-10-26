@@ -13,8 +13,11 @@ import 'views/pages/login.dart';
 import 'views/pages/ongoing.dart';
 import 'views/pages/otp.dart';
 import 'views/pages/password.dart';
+import 'views/pages/privacy.dart';
 import 'views/pages/reset_password.dart';
 import 'views/pages/splash.dart';
+import 'views/pages/terms.dart';
+import 'views/pages/terms_reader.dart';
 import 'views/pages/username.dart';
 
 Map<String, RouteBuilder> get mStartupRoutes {
@@ -33,6 +36,9 @@ Map<String, RouteBuilder> get mStartupRoutes {
     Routes.password: _password,
     Routes.resetPassword: _resetPassword,
     Routes.username: _username,
+    Routes.privacy: _privacyPolicy,
+    Routes.terms: _terms,
+    Routes.termsAndConditions: _termsAndConditions,
   };
 }
 
@@ -92,4 +98,16 @@ Widget _resetPassword(BuildContext context, Object? data) {
 
 Widget _username(BuildContext context, Object? data) {
   return const UsernamePage();
+}
+
+Widget _privacyPolicy(BuildContext context, Object? data) {
+  return PrivacyPage(args: data, isStartupMode: data is bool && data);
+}
+
+Widget _terms(BuildContext context, Object? data) {
+  return TermsReaderPage(args: data);
+}
+
+Widget _termsAndConditions(BuildContext context, Object? data) {
+  return TermsPage(args: data, isStartupMode: data is bool && data);
 }

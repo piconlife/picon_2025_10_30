@@ -18,30 +18,30 @@ import '../../../../roots/widgets/logo_trailing.dart';
 import '../../../../roots/widgets/stack.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../routes/paths.dart';
-import '../../../startup/contents/legals.dart';
+import '../../contents/legals.dart';
 import '../widgets/screen.dart';
 
-const kSeenTerms = "seen_terms";
+const kSeenPrivacy = "seen_privacy";
 
-bool get isTermsSeen => Settings.get(kSeenTerms, false);
+bool get isSeenPrivacy => Settings.get(kSeenPrivacy, false);
 
-class TermsPage extends StatefulWidget {
+class PrivacyPage extends StatefulWidget {
   final Object? args;
   final bool isStartupMode;
 
-  const TermsPage({super.key, this.args, this.isStartupMode = false});
+  const PrivacyPage({super.key, this.args, this.isStartupMode = false});
 
   @override
-  State<TermsPage> createState() => _TermsPageState();
+  State<PrivacyPage> createState() => _PrivacyPageState();
 }
 
-class _TermsPageState extends State<TermsPage>
+class _PrivacyPageState extends State<PrivacyPage>
     with TranslationMixin, ColorMixin {
   Legal? _legal;
 
   Legal get legal {
     if (_legal == null || _legal!.isEmpty) {
-      _legal = Legals.get.terms;
+      _legal = Legals.get.privacy;
     }
     return _legal!;
   }
@@ -49,13 +49,13 @@ class _TermsPageState extends State<TermsPage>
   final selections = <String>{};
 
   bool get isApproved =>
-      isTermsSeen ||
+      isSeenPrivacy ||
       legal.contents.every((i) => selections.contains(i.headline));
 
   void _accept() async {
-    if (Settings.set(kSeenTerms, true)) {
+    if (Settings.set(kSeenPrivacy, true)) {
       if (widget.isStartupMode) {
-        context.next(Routes.termsAndConditions, arguments: true);
+        context.next(Routes.privacy, arguments: true);
       } else {
         context.close();
       }
@@ -107,14 +107,15 @@ class _TermsPageState extends State<TermsPage>
   Widget build(BuildContext context) {
     final dark = context.dark;
     final primary = context.primary;
-    return InfoScreen(
+    return StartupScreen(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: InAppAppbar(
-          titleText: "Terms and Conditions",
+          titleText: "Privacy Policy",
           centerTitle: true,
           actions: [InAppLogoTrailing()],
         ),
+        resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: SizedBox.expand(
             child: InAppStack(
@@ -154,60 +155,65 @@ class _TermsPageState extends State<TermsPage>
                           ],
                         ),
                       ),
-                      InAppColumn(
-                        children: List.generate(legal.contents.length, (i) {
-                          final item = legal.contents[i];
-                          return CheckboxListTile(
-                            enabled: !isTermsSeen,
-                            value:
-                                selections.contains(item.headline) ||
-                                isApproved,
-                            activeColor: primary,
-                            contentPadding: EdgeInsets.only(
-                              left: 24,
-                              right: 16,
-                              top: 8,
-                              bottom: 8,
-                            ),
-                            title: InAppText(
-                              item.headline?.replaceAll(
-                                "{APP_NAME}",
-                                AppConstants.name,
+                      if (legal.contents.isNotEmpty)
+                        InAppColumn(
+                          children: List.generate(legal.contents.length, (i) {
+                            final item = legal.contents[i];
+                            return CheckboxListTile(
+                              enabled: !isSeenPrivacy,
+                              value:
+                                  selections.contains(item.headline) ||
+                                  isSeenPrivacy ||
+                                  isApproved,
+                              activeColor: primary,
+                              contentPadding: EdgeInsets.only(
+                                left: 24,
+                                right: 16,
+                                top: 8,
+                                bottom: 8,
                               ),
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: context.mediumFontWeight,
+                              title: InAppText(
+                                item.headline?.replaceAll(
+                                  "{APP_NAME}",
+                                  AppConstants.name,
+                                ),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: context.mediumFontWeight,
+                                ),
                               ),
-                            ),
-                            subtitle:
-                                item.body.use.isEmpty
-                                    ? null
-                                    : Padding(
-                                      padding: EdgeInsets.only(top: 8),
-                                      child: InAppText(
-                                        item.body?.replaceAll(
-                                          "{APP_NAME}",
-                                          AppConstants.name,
-                                        ),
-                                        suffix: " more",
-                                        onSuffixClick:
-                                            (context) =>
-                                                _learnDetails(context, item),
-                                        suffixStyle: TextStyle(color: primary),
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: dark.t50,
+                              subtitle:
+                                  item.body.use.isEmpty
+                                      ? null
+                                      : Padding(
+                                        padding: EdgeInsets.only(top: 8),
+                                        child: InAppText(
+                                          item.body?.replaceAll(
+                                            "{APP_NAME}",
+                                            AppConstants.name,
+                                          ),
+                                          suffix: " more",
+                                          onSuffixClick:
+                                              (context) =>
+                                                  _learnDetails(context, item),
+                                          suffixStyle: TextStyle(
+                                            color: primary,
+                                          ),
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: dark.t50,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                            onChanged: (value) => _checked(item.headline ?? ''),
-                          );
-                        }),
-                      ),
+                              onChanged:
+                                  (value) => _checked(item.headline ?? ''),
+                            );
+                          }),
+                        ),
                     ],
                   ),
                 ),
-                if (!isTermsSeen || widget.isStartupMode)
+                if (!isSeenPrivacy || widget.isStartupMode)
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
@@ -239,5 +245,5 @@ class _TermsPageState extends State<TermsPage>
   }
 
   @override
-  String get name => "about:terms";
+  String get name => "about:privacy";
 }

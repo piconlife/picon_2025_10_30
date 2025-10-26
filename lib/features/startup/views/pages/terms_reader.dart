@@ -59,7 +59,7 @@ class TermsReaderPage extends StatelessWidget {
       },
     );
     if (isViewMode) return child;
-    return InfoScreen(
+    return StartupScreen(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: InAppAppbar(
