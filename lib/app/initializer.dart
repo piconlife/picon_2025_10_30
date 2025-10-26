@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:in_app_analytics/analytics.dart';
 
 import '../firebase_options.dart';
-import '../firebase_options_parent.dart';
 import 'utils/secret_code.dart';
 
 Future<void> _initFirebase() async {
@@ -12,12 +11,12 @@ Future<void> _initFirebase() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
   });
-  await Analytics.callAsync(name: "firebase_parent", reason: "init", () {
-    return Firebase.initializeApp(
-      name: "parent",
-      options: ParentFirebaseOptions.currentPlatform,
-    );
-  });
+  // await Analytics.callAsync(name: "firebase_parent", reason: "init", () {
+  //   return Firebase.initializeApp(
+  //     name: "parent",
+  //     options: ParentFirebaseOptions.currentPlatform,
+  //   );
+  // });
 }
 
 void _initSecretCode() {

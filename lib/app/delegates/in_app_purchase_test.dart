@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
 import 'package:in_app_purchaser/in_app_purchaser.dart';
 
 class TestInAppPurchaseDelegate extends InAppPurchaseDelegate {
@@ -21,14 +18,12 @@ class TestInAppPurchaseDelegate extends InAppPurchaseDelegate {
 
   @override
   Future<InAppPurchaseOffering> offering(String placement) async {
-    final raw = await rootBundle.loadString("assets/paywall_configs.json");
     return InAppPurchaseOffering(
       id: '${placement}_test',
       products: [
         InAppPurchaseProduct(id: "yearly", price: 4200, currencyCode: "BDT"),
         InAppPurchaseProduct(id: "monthly", price: 1400, currencyCode: "BDT"),
       ],
-      configs: jsonDecode(raw),
     );
   }
 
