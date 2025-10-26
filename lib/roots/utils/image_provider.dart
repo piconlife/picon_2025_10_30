@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_andomie/utils/key_generator.dart';
 
 import '../../app/utils/media_picker.dart';
-import '../../data/models/photo.dart';
+import '../../data/models/content.dart';
 import '../contents/media.dart';
 
 enum EditablePhotoProviderStatus {
@@ -80,7 +80,7 @@ class EditablePhoto {
   Object? get data =>
       _data is MediaData
           ? _data.data
-          : _data is Photo
+          : _data is Content
           ? (_data).photoUrl
           : _data is String
           ? _data
@@ -95,9 +95,9 @@ class EditablePhoto {
       editable = !kIsWeb && data is MediaData;
 
   EditablePhoto.data(MediaData data)
-    : this._(data: data, id: KeyGenerator.uniqueKey);
+    : this._(data: data, id: KeyGenerator.generateKey(extraKeySize: 5));
 
-  EditablePhoto.photo(Photo photo) : this._(data: photo, id: photo.id);
+  EditablePhoto.photo(Content photo) : this._(data: photo, id: photo.id);
 
   EditablePhoto copy([Object? data]) {
     return EditablePhoto._(id: id, data: data ?? this.data);

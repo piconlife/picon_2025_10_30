@@ -70,7 +70,7 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
   }
 
   void _onChangePrivacy() async {
-    if (!UserHelper.isCurrentUser(selected.publisher)) return;
+    if (!UserHelper.isCurrentUser(selected.publisherId)) return;
     final feedback = await PrivacyBSD.show(context, selected.privacy);
     widget.onChangePrivacy(feedback);
   }
@@ -189,7 +189,7 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
           ] else ...[
             _buildActionPrivate(context),
           ],
-          if (UserHelper.isCurrentUser(selected.publisher))
+          if (UserHelper.isCurrentUser(selected.publisherId))
             _buildAction(context, InAppIcons.more.regular, _onMore),
         ],
       ),
@@ -238,7 +238,7 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
   Widget _buildActionPrivate(BuildContext context) {
     return InAppGesture(
       onTap:
-          UserHelper.isCurrentUser(selected.publisher)
+          UserHelper.isCurrentUser(selected.publisherId)
               ? _onChangePrivacy
               : null,
       child: Container(

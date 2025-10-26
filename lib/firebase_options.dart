@@ -29,12 +29,12 @@ class DefaultFirebaseOptions {
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
-              'you can reconfigure this by running the FlutterFire CLI again.',
+          'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
-              'you can reconfigure this by running the FlutterFire CLI again.',
+          'you can reconfigure this by running the FlutterFire CLI again.',
         );
       default:
         throw UnsupportedError(
@@ -50,7 +50,7 @@ class DefaultFirebaseOptions {
     projectId: 'picon-bd',
     authDomain: 'picon-bd.firebaseapp.com',
     databaseURL:
-    'https://picon-bd-default-rtdb.asia-southeast1.firebasedatabase.app',
+        'https://picon-bd-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'picon-bd.appspot.com',
     measurementId: 'G-804ZGZSHX7',
   );
@@ -71,8 +71,10 @@ class DefaultFirebaseOptions {
     projectId: 'picon-co',
     databaseURL: 'https://picon-co-default-rtdb.firebaseio.com',
     storageBucket: 'picon-co.appspot.com',
-    androidClientId: '680509866471-02q9o6ho9pg0tvbvimbinmvn6oun4cma.apps.googleusercontent.com',
-    iosClientId: '680509866471-f28triv3jc5u2mliqmoud1nd4p1omm29.apps.googleusercontent.com',
+    androidClientId:
+        '680509866471-02q9o6ho9pg0tvbvimbinmvn6oun4cma.apps.googleusercontent.com',
+    iosClientId:
+        '680509866471-f28triv3jc5u2mliqmoud1nd4p1omm29.apps.googleusercontent.com',
     iosBundleId: 'com.picon.picon',
   );
 
@@ -82,7 +84,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '545857015300',
     projectId: 'picon-bd',
     databaseURL:
-    'https://picon-bd-default-rtdb.asia-southeast1.firebasedatabase.app',
+        'https://picon-bd-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'picon-bd.appspot.com',
     iosBundleId: 'com.picon.picon.RunnerTests',
   );

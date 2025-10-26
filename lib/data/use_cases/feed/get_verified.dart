@@ -23,7 +23,7 @@ class GetVerifiedFeedsByPaginationUseCase extends BaseFeedUseCase {
       return Response(status: Status.notFound, error: "Followings not found!");
     }
     return repository.getByQuery(
-      queries: [DataQuery(Keys.i.publisher, whereIn: UserHelper.approvals)],
+      queries: [DataQuery(Keys.i.publisherId, whereIn: UserHelper.approvals)],
       selections: [DataSelection.startAfterDocument(snapshot)],
       sorts: [DataSorting(Keys.i.timeMills, descending: true)],
       options: DataPagingOptions(

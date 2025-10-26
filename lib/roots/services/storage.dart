@@ -46,6 +46,7 @@ enum UploadStringFormat {
 class UploadingFile {
   final dynamic data;
   final String filename;
+  final String? mimeType;
   final String? extension;
   final String? tag;
   final UploadDataType? type;
@@ -53,6 +54,7 @@ class UploadingFile {
   const UploadingFile({
     required this.data,
     required this.filename,
+    this.mimeType,
     this.extension,
     this.tag,
     this.type,
@@ -60,7 +62,7 @@ class UploadingFile {
 
   @override
   String toString() {
-    return "$UploadingFile(data: $data, filename: $filename, extension: $extension, tag: $tag, type: $type)";
+    return "$UploadingFile(data: $data, filename: $filename, extension: $extension, mimeType: $mimeType, tag: $tag, type: $type)";
   }
 }
 

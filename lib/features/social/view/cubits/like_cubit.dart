@@ -16,7 +16,7 @@ class FeedLikeCubit extends Cubit<Response<FeedLike>> {
   void count() {
     if (reference.isEmpty) return;
     ListenFeedLikesCountUseCase.i(reference).listen((value) {
-      emit(state.copyWith(count: value.data));
+      // emit(state.copyWith(count: value.data));
     });
   }
 

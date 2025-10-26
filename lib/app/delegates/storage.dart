@@ -88,7 +88,7 @@ class InAppStorageDelegate extends StorageDelegate {
           reference,
           type: data.type,
           format: format,
-          metadata: SettableMetadata(contentType: data.extension),
+          metadata: SettableMetadata(contentType: data.mimeType),
         ).snapshotEvents
         .listen((event) {
           switch (event.state) {

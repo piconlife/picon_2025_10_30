@@ -24,6 +24,7 @@ import '../../../../data/constants/paths.dart';
 import '../../../../data/enums/audience.dart';
 import '../../../../data/enums/feed_type.dart';
 import '../../../../data/enums/privacy.dart';
+import '../../../../data/models/content.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/photo.dart';
 import '../../../../data/models/user_post.dart';
@@ -182,12 +183,13 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
     final data = Photo.create(
       id: id,
       timeMills: Entity.generateTimeMills,
-      publisher: UserHelper.uid,
+      publisherId: UserHelper.uid,
       parentId: this.id,
       path: PathReplacer.replaceByIterable(Paths.refPhoto, [photosPath, id]),
       parentPath: path,
       photoUrl: url,
       privacy: privacy.value,
+      audience: Audience.everyone,
     );
     try {
       final value = await CreatePhotoUseCase.i(data);
@@ -362,7 +364,7 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
   void _createPost(BuildContext context, UserPost feed) {
     context.showLoader();
     final mPhotos =
-        photos.value.map((e) => e.rootData).whereType<Photo>().toList();
+        photos.value.map((e) => e.rootData).whereType<Content>().toList();
     context.read<UserPostCubit>().create(feed).then((value) {
       if (!context.mounted) return;
       if (value.isSuccessful) {

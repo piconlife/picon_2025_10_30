@@ -358,6 +358,27 @@ class Media {
     }
   }
 
+  static String? mimeType(String? ext) {
+    if (ext == null || ext.isEmpty) return null;
+    final mimes = [
+      'image/png',
+      'image/bmp',
+      'image/jpg',
+      'image/tiff',
+      'image/gif',
+      'image/jpeg',
+      'image/webp',
+    ];
+    String? matched(int index) {
+      if (index < 0 || index >= mimes.length) return null;
+      final e = mimes[index];
+      if (e.endsWith(ext)) return e;
+      return matched(index + 1);
+    }
+
+    return matched(0);
+  }
+
   /// Methods to get specific audio extension
   static String? audioExt({
     required String? pathOrMimeType,

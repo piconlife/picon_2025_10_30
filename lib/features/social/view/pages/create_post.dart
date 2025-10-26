@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
+import 'package:data_management/core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/list.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_andomie/utils/key_generator.dart';
 import 'package:flutter_andomie/utils/path_replacer.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/flutter_entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 import 'package:object_finder/object_finder.dart';
@@ -19,18 +19,20 @@ import '../../../../app/helpers/user.dart';
 import '../../../../app/interfaces/bsd_audience.dart';
 import '../../../../app/interfaces/bsd_privacy.dart';
 import '../../../../app/res/icons.dart';
+import '../../../../app/res/msg.dart';
 import '../../../../data/constants/keys.dart';
 import '../../../../data/constants/paths.dart';
 import '../../../../data/enums/audience.dart';
 import '../../../../data/enums/feed_type.dart';
 import '../../../../data/enums/privacy.dart';
+import '../../../../data/models/content.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/photo.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../data/use_cases/feed/create.dart';
-import '../../../../data/use_cases/photo/create.dart';
 import '../../../../data/use_cases/user_post/update.dart';
 import '../../../../roots/contents/media.dart';
+import '../../../../roots/helpers/connectivity.dart';
 import '../../../../roots/services/path_provider.dart';
 import '../../../../roots/services/storage.dart';
 import '../../../../roots/services/uploader.dart';
@@ -41,8 +43,6 @@ import '../../../../roots/widgets/icon_button.dart';
 import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/texted_action.dart';
 import '../../../../routes/paths.dart';
-import '../../../user/view/cubits/photo_cubit.dart';
-import '../../../user/view/cubits/post_cubit.dart';
 import '../../../user/view/widgets/uploading_image.dart';
 
 class CreatePostPage extends StatefulWidget {
@@ -68,8 +68,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
   final privacy = Privacy.everyone.obx;
   final tags = <String>[].obx;
   final photos = <EditablePhoto>[].obx;
-  final deletes = <EditablePhoto>[].obx;
-  final Map<int, UploadingSnapshot> _pendingSnapshots = {};
 
   UserPost? old;
   FeedType type = FeedType.post;
@@ -129,12 +127,32 @@ class _CreatePostPageState extends State<CreatePostPage> {
   /// PHOTO SECTION START
   /// --------------------------------------------------------------------------
 
-  List<Photo> get currentPhotoUrls {
+  List<Photo> get currentPhotos {
     return photos.value.map((i) => i.rootData).whereType<Photo>().toList();
   }
 
-  List<Photo> get deletedPhotoUrls {
-    return deletes.value.map((i) => i.rootData).whereType<Photo>().toList();
+  Future<UploadingStatus> _createPhoto(
+    BuildContext context,
+    int index,
+    UploadingSnapshot snapshot,
+  ) async {
+    final url = snapshot.url;
+    if (url == null || url.isEmpty) return UploadingStatus.error;
+    final x = photos.value.removeAt(index);
+    final photoId = snapshot.id;
+    final data = Photo.create(
+      id: photoId,
+      timeMills: Entity.generateTimeMills,
+      publisherId: UserHelper.uid,
+      parentId: id,
+      path: PathReplacer.replaceByIterable(Paths.refPhoto, [path, photoId]),
+      parentPath: path,
+      photoUrl: url,
+      audience: audience.value,
+      privacy: privacy.value,
+    );
+    photos.value.insert(index, x.copy(data));
+    return UploadingStatus.processed;
   }
 
   void _updatePosition(int previous, int current) {
@@ -143,105 +161,33 @@ class _CreatePostPageState extends State<CreatePostPage> {
     photos.value.insert(current, item);
   }
 
-  void _uploadPendingPhotos(BuildContext context) {
-    final size = _pendingSnapshots.length;
-    if (size > 0) {
-      for (int i = 0; i < size; i++) {
-        final item = _pendingSnapshots.entries.elementAt(i);
-        final index = item.key;
-        final snapshot = item.value;
-        if (snapshot.url == null) continue;
-        _createPhoto(
-          context: context,
-          index: index,
-          id: snapshot.id,
-          url: snapshot.url!,
-        ).then((value) {
-          if (value != null) {
-            final x = photos.value.removeAt(index);
-            photos.value.insert(index, x.copy(value));
-            _pendingSnapshots.remove(index);
-          } else {
-            _pendingSnapshots.putIfAbsent(index, () => snapshot);
-          }
-          if (i == size - 1) {
-            if (!context.mounted) return;
-            _submit(context, _pendingSnapshots.isNotEmpty);
-          }
-        });
-      }
-    }
-  }
-
-  Future<Photo?> _createPhoto({
-    required BuildContext context,
-    required int index,
-    required String url,
-    required String id,
-  }) async {
-    final data = Photo.create(
-      id: id,
-      timeMills: Entity.generateTimeMills,
-      publisher: UserHelper.uid,
-      parentId: this.id,
-      path: PathReplacer.replaceByIterable(Paths.refPhoto, [photosPath, id]),
-      parentPath: path,
-      photoUrl: url,
-      privacy: privacy.value,
-    );
-    try {
-      final value = await CreatePhotoUseCase.i(data);
-      if (value.isSuccessful) return data;
-      if (!context.mounted) return null;
-      final resubmission = await context.showAlert(
-        title: "Something went wrong!",
-        message: ResponseMessages.tryAgain,
-      );
-      if (!resubmission || !context.mounted) return null;
-      return _createPhoto(context: context, index: index, id: id, url: url);
-    } catch (error) {
-      if (!context.mounted) return null;
-      final resubmission = await context.showAlert(
-        title: "Something went wrong!",
-        message: ResponseMessages.tryAgain,
-      );
-      if (!resubmission || !context.mounted) return null;
-      return _createPhoto(context: context, index: index, id: id, url: url);
-    }
-  }
-
-  Future<UploadingStatus> _upload(
-    BuildContext context,
-    int index,
-    UploadingSnapshot snapshot,
-  ) async {
-    final url = snapshot.url;
-    if (url == null || url.isEmpty) return UploadingStatus.error;
-    return _createPhoto(
-      context: context,
-      index: index,
-      id: snapshot.id,
-      url: url,
-    ).then((value) {
-      if (value != null) {
-        final x = photos.value.removeAt(index);
-        photos.value.insert(index, x.copy(value));
-        return UploadingStatus.processed;
-      } else {
-        _pendingSnapshots.putIfAbsent(index, () => snapshot);
-        return UploadingStatus.error;
-      }
-    });
-  }
-
   void _pickPhotos(Object? feedback) {
-    if (feedback is EditablePhotoFeedback) {
-      photos.value = feedback.currents;
-      deletes.value = feedback.deletes;
-    }
+    if (feedback is! EditablePhotoFeedback) return;
+    photos.value = feedback.currents;
+    if (feedback.deletes.isEmpty) return;
+    final urls =
+        feedback.deletes
+            .map((e) {
+              final x = e.data;
+              if (x is String && x.isNotEmpty) return x;
+              if (x is Content && (x.photoUrl ?? '').isNotEmpty) {
+                return x.photoUrl!;
+              }
+              return null;
+            })
+            .whereType<String>()
+            .toList();
+    if (urls.isEmpty) return;
+    StorageService.i.deletes(urls);
   }
 
   void _choosePhoto(BuildContext context) async {
+    if (await ConnectivityHelper.isDisconnected) {
+      if (!context.mounted) return;
+      context.showToast(Msg.internetError);
+      return;
+    }
+    if (!context.mounted) return;
     context
         .open(
           Routes.choosePhoto,
@@ -265,56 +211,69 @@ class _CreatePostPageState extends State<CreatePostPage> {
     context.close();
   }
 
-  void _deleteUrls(BuildContext context) {
-    final urls = deletes.value.map((e) => e.data).whereType<String>().toList();
-    if (urls.isNotEmpty) {
-      StorageService.i.deletes(urls).then((value) {
-        if (!context.mounted) return;
-        if (value.successful) {
-          _complete(context);
-        } else {
-          context.hideLoader();
-          context.showAlert().then((value) {
-            if (!context.mounted) return;
-            if (value) {
-              _deleteUrls(context);
-            } else {
-              StorageService.i.deletes(urls, lazy: true).then((_) {
-                if (!context.mounted) return;
-                _complete(context);
-              });
-            }
-          });
-        }
-      });
-    }
-  }
-
   void _update(BuildContext context) {
-    final isValidDescription = description != old!.description;
-    if (photos.value.isNotEmpty || isValidDescription) {
-      final photos = currentPhotoUrls;
-      final isAllUploaded = photos.length == this.photos.value.length;
-      if (isAllUploaded) {
-        final updates = {
-          Keys.i.updatedAt: Entity.generateTimeMills,
-          Keys.i.description: description,
-          Keys.i.photoUrls: photos,
-        };
-        UpdateUserPostUseCase.i(id, updates).then((value) {
+    if (photos.value.isEmpty && description == old!.description) {
+      context.showMessage("Please write something...!");
+      return;
+    }
+    final mPhotos = currentPhotos;
+
+    if (mPhotos.length != photos.value.length) {
+      context.showMessage("Please wait a second...!");
+      return;
+    }
+
+    final updates = {
+      Keys.i.updatedAt: DataFieldValue.serverTimestamp(),
+      Keys.i.description: description,
+      Keys.i.photoUrls: mPhotos.map((e) => e.metadata).toList(),
+    };
+
+    UpdateUserPostUseCase.i(id, updates).then((value) {
+      if (!context.mounted) return;
+      _complete(context);
+    });
+
+    final mTimeMills = Entity.generateTimeMills;
+
+    final mUserPost = UserPost.create(
+      id: Entity.generateID,
+      timeMills: mTimeMills,
+      publisherId: UserHelper.uid,
+      path: path,
+      audience: audience.value,
+      privacy: privacy.value,
+      title: title.isEmpty ? null : title,
+      description: description.isEmpty ? null : description,
+      type: mPhotos.isNotEmpty ? FeedType.photo : null,
+      tags: tags.value,
+      photos: mPhotos.isEmpty ? null : mPhotos,
+    );
+
+    final mFeed = Feed.create(
+      id: id,
+      timeMills: mTimeMills,
+      path: PathProvider.generatePath(Paths.feeds, id),
+      content: mUserPost,
+      type: mUserPost.type,
+    );
+
+    CreateFeedUseCase.i(mFeed).then((value) {
+      if (!context.mounted) return;
+      if (value.isSuccessful) {
+        _complete(context);
+      } else {
+        context.hideLoader();
+        context.showAlert(message: ResponseMessages.tryAgain).then((value) {
           if (!context.mounted) return;
-          if (value.isSuccessful) {
-            _deleteUrls(context);
+          if (value) {
+            _create(context);
           } else {
-            _complete(context);
+            context.showMessage(ResponseMessages.postingUnsuccessful);
           }
         });
-      } else {
-        context.showMessage("Please wait a second...!");
       }
-    } else {
-      context.showMessage("Please write something...!");
-    }
+    });
   }
 
   /// --------------------------------------------------------------------------
@@ -325,23 +284,43 @@ class _CreatePostPageState extends State<CreatePostPage> {
   /// CREATE SECTION START
   /// --------------------------------------------------------------------------
 
-  void _createFeedForGlobal(BuildContext context, UserPost feed) {
-    final id = feed.id;
-    final path = PathProvider.generatePath(Paths.feeds, id);
-    final global = Feed.empty();
-    // final global = Feed(
-    //   id: id,
-    //   timeMills: feed.timeMills,
-    //   // audience: feed.audience,
-    //   path: path,
-    //   reference: "",
-    //   publisher: '',
-    //   // priority: feed.priority,
-    //   // privacy: feed.privacy,
-    //   // referenceId: feed.id,
-    //   // referencePath: feed.path,
-    // );
-    CreateFeedUseCase.i(global).then((value) {
+  void _create(BuildContext context) {
+    if (photos.value.isEmpty && description.isEmpty) {
+      context.showMessage(Msg.writeSomething);
+      return;
+    }
+    final mPhotos = currentPhotos;
+
+    if (mPhotos.length != photos.value.length) {
+      context.showMessage(Msg.waitASecond);
+      return;
+    }
+
+    final mTimeMills = Entity.generateTimeMills;
+
+    final mUserPost = UserPost.create(
+      id: Entity.generateID,
+      timeMills: mTimeMills,
+      publisherId: UserHelper.uid,
+      path: path,
+      audience: audience.value,
+      privacy: privacy.value,
+      title: title.isEmpty ? null : title,
+      description: description.isEmpty ? null : description,
+      type: mPhotos.isNotEmpty ? FeedType.photo : null,
+      tags: tags.value,
+      photos: mPhotos.isEmpty ? null : mPhotos,
+    );
+
+    final mFeed = Feed.create(
+      id: id,
+      timeMills: mTimeMills,
+      path: PathProvider.generatePath(Paths.feeds, id),
+      content: mUserPost,
+      type: mUserPost.type,
+    );
+
+    CreateFeedUseCase.i(mFeed).then((value) {
       if (!context.mounted) return;
       if (value.isSuccessful) {
         _complete(context);
@@ -350,60 +329,13 @@ class _CreatePostPageState extends State<CreatePostPage> {
         context.showAlert(message: ResponseMessages.tryAgain).then((value) {
           if (!context.mounted) return;
           if (value) {
-            _createFeedForGlobal(context, feed);
+            _create(context);
           } else {
             context.showMessage(ResponseMessages.postingUnsuccessful);
           }
         });
       }
     });
-  }
-
-  void _createPost(BuildContext context, UserPost feed) {
-    context.showLoader();
-    final mPhotos =
-        photos.value.map((e) => e.rootData).whereType<Photo>().toList();
-    context.read<UserPostCubit>().create(feed).then((value) {
-      if (!context.mounted) return;
-      if (value.isSuccessful) {
-        context.read<UserPhotoCubit?>()?.add(feed..photos = mPhotos);
-        _createFeedForGlobal(context, feed);
-      } else {
-        context.hideLoader();
-        context.showAlert(message: ResponseMessages.tryAgain).then((v) {
-          if (!context.mounted) return;
-          if (v) {
-            _createPost(context, feed);
-          } else {
-            context.showMessage(ResponseMessages.postingUnsuccessful);
-          }
-        });
-      }
-    });
-  }
-
-  void _create(BuildContext context) {
-    if (photos.value.isEmpty && description.isEmpty) {
-      context.showMessage("Please write something...!");
-      return;
-    }
-    if (currentPhotoUrls.length != photos.value.length) {
-      context.showMessage("Please wait a second...!");
-      return;
-    }
-    final data = UserPost.create(
-      id: id,
-      timeMills: Entity.generateTimeMills,
-      publisherId: UserHelper.uid,
-      path: path,
-      audience: audience.value,
-      privacy: privacy.value,
-      title: title.isEmpty ? null : title,
-      description: description.isEmpty ? null : description,
-      type: currentPhotoUrls.isNotEmpty ? FeedType.photo : null,
-      tags: tags.value,
-    );
-    _createPost(context, data);
   }
 
   /// --------------------------------------------------------------------------
@@ -416,15 +348,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   void _submit(BuildContext context, [bool skipMode = false]) {
     if (skipMode) return;
-    if (_pendingSnapshots.isEmpty) {
-      if (isUpdateMode) {
-        _update(context);
-      } else {
-        _create(context);
-      }
-    } else {
-      _uploadPendingPhotos(context);
-    }
+    // if (isUpdateMode) {
+    //   _update(context);
+    // } else {
+    //   _create(context);
+    // }
   }
 
   /// --------------------------------------------------------------------------
@@ -442,7 +370,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
     etHeader.dispose();
     etDescription.dispose();
     photos.dispose();
-    deletes.dispose();
     super.dispose();
   }
 
@@ -571,7 +498,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         photo: item,
                         path: photosPath,
                         onProcessing:
-                            (context, value) => _upload(context, index, value),
+                            (context, value) =>
+                                _createPhoto(context, index, value),
                       );
                       return ReorderableDelayedDragStartListener(
                         index: index,
@@ -662,7 +590,7 @@ class _ItemPhoto extends StatelessWidget {
         },
       );
     }
-    if (data is Photo) {
+    if (data is Content) {
       return InAppUploadingImage(data: data.photoUrl);
     }
     return const SizedBox.shrink();

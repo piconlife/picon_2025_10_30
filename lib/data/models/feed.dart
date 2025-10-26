@@ -5,10 +5,35 @@ import '../../features/chooser/data/models/country.dart';
 import '../../features/chooser/data/models/profession.dart';
 import '../../features/chooser/data/models/religion.dart';
 import '../../roots/helpers/location.dart';
+import '../enums/feed_type.dart';
 import 'content.dart';
 import 'user.dart';
 
 class Feed extends Content {
+  @override
+  Iterable<String> get keys => [
+    key.id,
+    key.timeMills,
+    // PUBLISHER
+    key.publisherId,
+    key.publisherAge,
+    key.publisherGender,
+    key.publisherProfession,
+    key.publisherRating,
+    key.publisherReligion,
+    // LOCATION
+    key.city,
+    key.country,
+    key.latitude,
+    key.longitude,
+    key.region,
+    key.zip,
+    // REFERENCE
+    key.path,
+    key.contentRef,
+    key.type,
+  ];
+
   Feed.empty() : this._();
 
   Feed._({
@@ -19,8 +44,8 @@ class Feed extends Content {
     super.publisherAge,
     super.publisherGender,
     super.publisherProfession,
-    super.publisherReligion,
     super.publisherRating,
+    super.publisherReligion,
     // LOCATION
     super.city,
     super.country,
@@ -30,7 +55,6 @@ class Feed extends Content {
     super.zip,
     // REFERENCES
     super.path,
-    super.reference,
     super.content,
     super.type,
   });
@@ -40,7 +64,7 @@ class Feed extends Content {
     required super.timeMills,
     required super.type,
     required super.path,
-    required super.reference,
+    required super.content,
     User? publisher,
   }) : super(
          publisherId: publisher?.id ?? UserHelper.uid,
@@ -78,8 +102,8 @@ class Feed extends Content {
       publisherAge: content.publisherAge,
       publisherGender: content.publisherGender.id,
       publisherProfession: content.publisherProfession,
-      publisherReligion: content.publisherReligion,
       publisherRating: content.publisherRating,
+      publisherReligion: content.publisherReligion,
       // LOCATION
       city: content.city,
       country: content.country,
@@ -90,32 +114,47 @@ class Feed extends Content {
       // REFERENCES
       content: content.content,
       path: content.path,
-      reference: content.content.path,
       type: content.type,
     );
   }
 
-  @override
-  Iterable<String> get keys => [
-    key.id,
-    key.timeMills,
-    // PUBLISHER
-    key.publisher,
-    key.publisherAge,
-    key.publisherGender,
-    key.publisherProfession,
-    key.publisherReligion,
-    key.publisherRating,
-    // LOCATION
-    key.city,
-    key.country,
-    key.latitude,
-    key.longitude,
-    key.region,
-    key.zip,
-    // REFERENCE
-    key.path,
-    key.contentRef,
-    key.type,
-  ];
+  Feed copyWith({
+    String? id,
+    int? timeMills,
+    String? publisherId,
+    int? publisherAge,
+    String? publisherGender,
+    String? publisherProfession,
+    double? publisherRating,
+    String? publisherReligion,
+    String? city,
+    String? country,
+    double? latitude,
+    double? longitude,
+    String? region,
+    int? zip,
+    String? path,
+    Content? content,
+    FeedType? type,
+  }) {
+    return Feed._(
+      id: id ?? this.id,
+      timeMills: timeMills ?? this.timeMills,
+      publisherId: publisherId ?? this.publisherId,
+      publisherAge: publisherAge ?? this.publisherAge,
+      publisherGender: publisherGender ?? this.publisherGender.id,
+      publisherProfession: publisherProfession ?? this.publisherProfession,
+      publisherRating: publisherRating ?? this.publisherRating,
+      publisherReligion: publisherReligion ?? this.publisherReligion,
+      city: city ?? this.city,
+      country: country ?? this.country,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      region: region ?? this.region,
+      zip: zip ?? this.zip,
+      path: path ?? this.path,
+      content: content ?? this.content,
+      type: type ?? this.type,
+    );
+  }
 }

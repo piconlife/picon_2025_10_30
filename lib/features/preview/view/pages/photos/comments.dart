@@ -41,7 +41,7 @@ class _PhotoCommentsViewState extends State<PhotoCommentsView> {
       backgroundColor: Colors.transparent,
       elevationColor: context.lightAsFixed.t10,
       leading: InAppUserBuilder(
-        id: widget.photo.publisher,
+        id: widget.photo.publisherId,
         builder: (context, user) {
           return Row(
             children: [

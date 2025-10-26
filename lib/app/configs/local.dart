@@ -49,7 +49,18 @@ abstract final class LocalConfigs {
   static String configDefault = "application";
   static PlatformType configPlatform = PlatformType.system;
   static EnvironmentType configEnvironment = EnvironmentType.system;
-  static Set<String> configPaths = _kDefaultConfigPaths;
+  static Set<String> configPaths = {
+    ..._kDefaultConfigPaths,
+    "countries",
+    "hobbies",
+    'languages',
+    'legals',
+    'onboards',
+    'professions',
+    'religions',
+    'reports',
+    'secrets',
+  };
   static Set<String> configSymmetricPaths = _kDefaultConfigPaths;
   static bool configLogs = false;
   static bool configLazyMode = false;

@@ -253,7 +253,6 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
         id: data.id,
         timeMills: Entity.generateTimeMills,
         publisherId: data.publisher,
-        reference: data.path,
         path: PathReplacer.replaceByIterable(
           PathProvider.generatePath(Paths.userPosts, data.id),
           [UserHelper.uid],
@@ -286,8 +285,8 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
         id: cover.id,
         timeMills: Entity.generateTimeMills,
         publisher: user,
-        reference: cover.path,
         path: Paths.feeds,
+        content: null,
         type: FeedType.cover,
       ),
     );

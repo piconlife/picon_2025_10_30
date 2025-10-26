@@ -4,8 +4,8 @@ import 'content.dart';
 
 List<String> _keys = [
   // PUBLISHER
-  Keys.i.publisher,
-  Keys.i.publisherPhoto,
+  Keys.i.publisherId,
+  Keys.i.publisherPhotoUrl,
   Keys.i.publisherProfession,
   Keys.i.publisherName,
   Keys.i.publisherShortName,
@@ -33,7 +33,7 @@ class Comment extends Content {
     // PUBLISHER
     super.publisherId,
     super.publisherAge,
-    super.publisherPhoto,
+    super.publisherPhotoUrl,
     super.publisherProfession,
     super.publisherProfilePath,
     super.publisherProfileUrl,
@@ -84,7 +84,7 @@ class Comment extends Content {
       // PUBLISHER
       publisherId: publisher ?? this.publisherId,
       publisherAge: publisherAge ?? this.publisherAge,
-      publisherPhoto: publisherPhoto ?? this.publisherPhoto,
+      publisherPhotoUrl: publisherPhoto ?? this.publisherPhotoUrl,
       publisherProfession: publisherProfession ?? this.publisherProfession,
       publisherProfilePath: publisherProfilePath ?? this.publisherProfilePath,
       publisherProfileUrl: publisherProfileUrl ?? this.publisherProfileUrl,
@@ -112,7 +112,7 @@ class Comment extends Content {
       // PUBLISHER
       publisherId: data.publisherId,
       publisherAge: data.publisherAge,
-      publisherPhoto: data.publisherPhoto,
+      publisherPhotoUrl: data.publisherPhotoUrl,
       publisherProfession: data.publisherProfession,
       publisherProfilePath: data.publisherProfilePath,
       publisherProfileUrl: data.publisherProfileUrl,

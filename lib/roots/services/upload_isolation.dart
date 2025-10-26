@@ -70,6 +70,7 @@ class UploadIsolation {
         UploadingFile(
           data: data.data,
           extension: data.extension,
+          mimeType: data.mimeType,
           filename: data.filename,
         ),
         onCanceled:

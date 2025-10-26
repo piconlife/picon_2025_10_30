@@ -20,10 +20,12 @@ class MediaPicker {
   Future<MediaData?> _filePick(XFile? data) async {
     if (data != null) {
       final raw = kIsWeb ? data.mimeType ?? "" : data.path;
+      final extension = Media.imageExt(pathOrMimeType: raw);
+      final mime = data.mimeType ?? Media.mimeType(extension);
       return MediaData(
         name: data.name,
-        extension: Media.imageExt(pathOrMimeType: raw),
-        mimeType: data.mimeType,
+        extension: extension,
+        mimeType: mime,
         path: data.path,
         bytes: await data.readAsBytes(),
       );

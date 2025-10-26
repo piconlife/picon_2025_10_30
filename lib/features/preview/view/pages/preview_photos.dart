@@ -7,6 +7,7 @@ import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:object_finder/object_finder.dart';
 
+import '../../../../data/constants/keys.dart';
 import '../../../../data/enums/privacy.dart';
 import '../../../../data/models/photo.dart';
 import '../../../../data/models/user_post.dart';
@@ -45,18 +46,16 @@ class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
 
   void _changePrivacy(Privacy privacy) {
     final data = photos.removeAt(index);
-    data.privacy = privacy;
-    photos.insert(index, data);
+    photos.insert(index, data.copyWith(privacy: privacy));
     setState(() {});
-    _update(index, {PhotoKeys.privacy: privacy.name});
+    _update(index, {Keys.i.privacy: privacy.name});
   }
 
   void _updateTag(String? tag) async {
     final data = photos.removeAt(index);
-    data.description = tag;
-    photos.insert(index, data);
+    photos.insert(index, data.copyWith(description: tag));
     setState(() {});
-    _update(index, {PhotoKeys.description: tag});
+    _update(index, {Keys.i.description: tag});
   }
 
   void _changedIndex(int value) {

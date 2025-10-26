@@ -8,21 +8,20 @@ class Keys extends EntityKey {
   static Keys get i => _i ??= const Keys();
 
   // PUBLISHER
-  final publisher = "publisher";
-  final publisherRef = "@publisher";
-  final publisherAge = "publisher_age";
-  final publisherPhoto = "publisher_photo";
-  final publisherProfession = "publisher_profession";
-  final publisherProfilePath = "publisher_profile_path";
-  final publisherProfileUrl = "publisher_profile_url";
-  final publisherName = "publisher_name";
-  final publisherShortName = "publisher_short_name";
-  final publisherTitle = "publisher_title";
-  final publisherRating = "publisher_rating";
-  final publisherReligion = "publisher_religion";
-  final publisherLatitude = "publisher_latitude";
-  final publisherLongitude = "publisher_longitude";
-  final publisherGender = "publisher_gender";
+  final publisherId = "publisherId";
+  final publisherAge = "publisherAge";
+  final publisherLatitude = "publisherLatitude";
+  final publisherLongitude = "publisherLongitude";
+  final publisherName = "publisherName";
+  final publisherProfession = "publisherProfession";
+  final publisherProfilePath = "publisherProfilePath";
+  final publisherProfileUrl = "publisherProfileUrl";
+  final publisherPhotoUrl = "publisherPhotoUrl";
+  final publisherRating = "publisherRating";
+  final publisherReligion = "publisherReligion";
+  final publisherShortName = "publisherShortName";
+  final publisherTitle = "publisherTitle";
+  final publisherGender = "publisherGender";
 
   // LOCATION
   final city = "city";
@@ -33,6 +32,7 @@ class Keys extends EntityKey {
   final zip = "zip";
 
   // CONTENT
+
   final audience = "audience";
   final bookmarks = "bookmarks";
   final commentCount = "comment_count";
@@ -53,6 +53,9 @@ class Keys extends EntityKey {
   final parentPath = "parent_path";
   final parentUrl = "parent_url";
   final path = "path";
+  final photosRef = "@photos";
+  final photoRef = "@photo";
+  final photo = "photo";
   final photos = "photos";
   final photoIds = "photo_ids";
   final photoUrl = "photo_url";
@@ -83,74 +86,4 @@ class Keys extends EntityKey {
   final videoUrls = "video_urls";
   final viewCount = "view_count";
   final views = "views";
-
-  @override
-  Iterable<String> get keys {
-    return [
-      // PUBLISHER
-      publisher,
-      publisherAge,
-      publisherPhoto,
-      publisherProfession,
-      publisherProfilePath,
-      publisherProfileUrl,
-      publisherName,
-      publisherShortName,
-      publisherTitle,
-      publisherRating,
-      publisherReligion,
-      publisherLatitude,
-      publisherLongitude,
-      publisherGender,
-      // CONTENT
-      audience,
-      bookmarks,
-      commentCount,
-      comments,
-      content,
-      contents,
-      description,
-      descriptions,
-      latitude,
-      likeCount,
-      likes,
-      link,
-      name,
-      longitude,
-      parentId,
-      parentLink,
-      parentPath,
-      parentUrl,
-      path,
-      photos,
-      photoIds,
-      photoUrl,
-      photoUrls,
-      priority,
-      privacy,
-      recent,
-      recentId,
-      recentPath,
-      referenceId,
-      referencePath,
-      reportCount,
-      reports,
-      starCount,
-      stars,
-      tags,
-      text,
-      title,
-      type,
-      updatedAt,
-      url,
-      userRating,
-      verified,
-      videos,
-      videoIds,
-      videoUrl,
-      videoUrls,
-      viewCount,
-      views,
-    ];
-  }
 }

@@ -5,7 +5,7 @@ import 'content.dart';
 import 'user.dart';
 
 List<String> _keys = [
-  Keys.i.publisher,
+  Keys.i.publisherId,
   Keys.i.id,
   Keys.i.timeMills,
   Keys.i.parentId,

@@ -1,4 +1,4 @@
-import 'package:flutter_andomie/utils/key_generator.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter_entity/flutter_entity.dart';
 
 import '../../app/helpers/user.dart';
@@ -6,14 +6,15 @@ import '../constants/keys.dart';
 import '../enums/audience.dart';
 import '../enums/feed_type.dart';
 import '../enums/privacy.dart';
-import 'photo.dart';
 import 'user.dart';
+
+const _equality = DeepCollectionEquality();
 
 class Content extends Entity<Keys> {
   // PUBLISHER
   String? _publisherId;
   int? publisherAge;
-  String? publisherPhoto;
+  String? publisherPhotoUrl;
   String? publisherProfession;
   String? publisherProfilePath;
   String? publisherProfileUrl;
@@ -53,7 +54,8 @@ class Content extends Entity<Keys> {
   String? reference;
   String? parentUrl;
   String? path;
-  List<Photo>? photos;
+  List<String>? photosRef;
+  List<Content>? photos;
   List<String>? photoIds;
   String? photoUrl;
   List<String>? _photoUrls;
@@ -149,23 +151,42 @@ class Content extends Entity<Keys> {
   Content get recent => _recent ?? Content();
 
   Content({
+    // -------------------------------------------------------------------------
+    // ROOT
+    // -------------------------------------------------------------------------
+    super.id,
+    super.timeMills,
+
+    // -------------------------------------------------------------------------
     // PUBLISHER
+    // -------------------------------------------------------------------------
+    String? publisherId,
     this.publisherAge,
-    this.publisherPhoto,
+    String? publisherGender,
+    this.publisherLatitude,
+    this.publisherLongitude,
+    this.publisherName,
+    this.publisherPhotoUrl,
     this.publisherProfession,
     this.publisherProfilePath,
     this.publisherProfileUrl,
-    this.publisherName,
-    this.publisherShortName,
-    this.publisherTitle,
     this.publisherRating,
     this.publisherReligion,
-    this.publisherLatitude,
-    this.publisherLongitude,
-    String? publisherId,
-    String? publisherGender,
+    this.publisherShortName,
+    this.publisherTitle,
 
+    // -------------------------------------------------------------------------
+    // ID & PATH
+    // -------------------------------------------------------------------------
+    this.parentId,
+    this.parentPath,
+    this.path,
+    this.recentPath,
+    this.referencePath,
+
+    // -------------------------------------------------------------------------
     // LOCATION
+    // -------------------------------------------------------------------------
     this.city,
     this.country,
     this.latitude,
@@ -173,212 +194,380 @@ class Content extends Entity<Keys> {
     this.region,
     this.zip,
 
-    // REFERENCES
-    this.path,
-    this.reference,
-    Content? content,
+    // -------------------------------------------------------------------------
+    // ENUMS
+    // -------------------------------------------------------------------------
+    Audience? audience,
+    Privacy? privacy,
     FeedType? type,
 
-    // OTHERS
-    String? id,
-    super.timeMills,
-    Audience? audience,
-    this.bookmarks,
-    this.contents,
-    this.commentCount,
-    this.comments,
-    String? description,
-    List<String>? descriptions,
-    this.likeCount,
-    this.likes,
-    this.link,
-    this.name,
-    this.parentId,
-    this.parentLink,
-    this.parentPath,
-    this.parentUrl,
+    // -------------------------------------------------------------------------
+    // REFERENCE
+    // -------------------------------------------------------------------------
+    Content? content,
     this.photos,
-    this.photoIds,
-    this.photoUrl,
-    Iterable<String>? photoUrls,
-    this.priority,
-    Privacy? privacy,
     Content? recent,
-    this.recentId,
-    this.recentPath,
-    this.referenceId,
-    this.referencePath,
-    this.reportCount,
-    this.reports,
-    this.starCount,
-    this.stars,
+
+    // -------------------------------------------------------------------------
+    // IF NEEDED
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // ARRAYS
+    // -------------------------------------------------------------------------
     this.tags,
-    this.text,
-    this.title,
-    this.url,
-    this.verified,
-    this.videos,
-    this.videoIds,
-    this.videoUrl,
-    this.videoUrls,
+
+    // -------------------------------------------------------------------------
+    // INT & DOUBLE
+    // -------------------------------------------------------------------------
+    this.likeCount,
+    this.priority,
     this.viewCount,
-    this.views,
-    // LOCAL INFO
+
+    // -------------------------------------------------------------------------
+    // STRING
+    // -------------------------------------------------------------------------
+    String? description,
+    this.name,
+    this.title,
+
+    // -------------------------------------------------------------------------
+    // URL
+    // -------------------------------------------------------------------------
+    this.photoUrl,
+    this.videoUrl,
+
+    // -------------------------------------------------------------------------
+    // IF NEEDED (INTERNAL USE ONLY)
+    // -------------------------------------------------------------------------
     this.translatedTitle,
     this.translatedDescription,
     this.translatedDescriptions,
-  }) : _publisherId = publisherId,
+  }) : // ----------------------------------------------------------------------
+       // PUBLISHER
+       // ----------------------------------------------------------------------
+       _publisherId = publisherId,
        _publisherGender = publisherGender,
-       _photoUrls = photoUrls?.toList(),
+
+       // ----------------------------------------------------------------------
+       // ENUMS
+       // ----------------------------------------------------------------------
        _audience = audience,
-       _content = content,
        _privacy = privacy,
        _type = type,
+
+       // ----------------------------------------------------------------------
+       // REFERENCE
+       // ----------------------------------------------------------------------
+       _content = content,
        _recent = recent,
-       _description = description,
-       _descriptions = descriptions,
-       super(id: id ?? KeyGenerator.generateKey(extraKeySize: 8));
+
+       // ----------------------------------------------------------------------
+       // IF NEEDED
+       // ----------------------------------------------------------------------
+       _description = description;
 
   factory Content.parse(Object? source) {
     final key = Keys.i;
     return Content(
+      // -----------------------------------------------------------------------
+      // ROOT
+      // -----------------------------------------------------------------------
+      id: source.entityValue(key.id),
+      timeMills: source.entityValue(key.timeMills),
+
+      // -----------------------------------------------------------------------
       // PUBLISHER
-      publisherId: source.entityValue(key.publisher),
+      // -----------------------------------------------------------------------
+      publisherId: source.entityValue(key.publisherId),
       publisherAge: source.entityValue(key.publisherAge),
-      publisherPhoto: source.entityValue(key.publisherPhoto),
+      publisherGender: source.entityValue(key.publisherGender),
+      publisherLatitude: source.entityValue(key.publisherLatitude),
+      publisherLongitude: source.entityValue(key.publisherLongitude),
+      publisherName: source.entityValue(key.publisherName),
+      publisherPhotoUrl: source.entityValue(key.publisherPhotoUrl),
       publisherProfession: source.entityValue(key.publisherProfession),
       publisherProfilePath: source.entityValue(key.publisherProfilePath),
       publisherProfileUrl: source.entityValue(key.publisherProfileUrl),
-      publisherName: source.entityValue(key.publisherName),
-      publisherShortName: source.entityValue(key.publisherShortName),
-      publisherTitle: source.entityValue(key.publisherTitle),
       publisherRating: source.entityValue(key.publisherRating),
       publisherReligion: source.entityValue(key.publisherReligion),
-      publisherLatitude: source.entityValue(key.publisherLatitude),
-      publisherLongitude: source.entityValue(key.publisherLongitude),
-      publisherGender: source.entityValue(key.publisherGender),
+      publisherShortName: source.entityValue(key.publisherShortName),
+      publisherTitle: source.entityValue(key.publisherTitle),
 
-      // CONTENT
-      id: source.entityValue(key.id),
-      timeMills: source.entityValue(key.timeMills),
-      text: source.entityValue(key.text),
-      title: source.entityValue(key.title),
-      link: source.entityValue(key.link),
-      path: source.entityValue(key.path),
+      // -----------------------------------------------------------------------
+      // ID & PATH
+      // -----------------------------------------------------------------------
       parentId: source.entityValue(key.parentId),
       parentPath: source.entityValue(key.parentPath),
-      photoUrl: source.entityValue(key.photoUrl),
-      photoUrls: source.entityValues(key.photoUrls),
-      photos: source.entityValues(key.photos, Photo.parse),
-      priority: source.entityValue(key.priority),
-      recentId: source.entityValue(key.recentId),
+      path: source.entityValue(key.path),
       recentPath: source.entityValue(key.recentPath),
-      referenceId: source.entityValue(key.referenceId),
       referencePath: source.entityValue(key.referencePath),
-      description: source.entityValue(key.description),
-      descriptions: source.entityValues(key.descriptions),
-      url: source.entityValue(key.url),
-      verified: source.entityValue(key.verified),
-      videos: source.entityValues(key.videos, Content.parse),
-      videoIds: source.entityValues(key.videoIds),
-      videoUrl: source.entityValue(key.videoUrl),
-      videoUrls: source.entityValues(key.videoUrls),
-      views: source.entityValues(key.views),
-      viewCount: source.entityValue(key.viewCount),
-      bookmarks: source.entityValues(key.bookmarks),
-      content: source.entityValue(key.content, Content.parse),
-      contents: source.entityValues(key.contents, Content.parse),
-      commentCount: source.entityValue(key.commentCount),
-      comments: source.entityValues(key.comments),
-      likeCount: source.entityValue(key.likeCount),
-      likes: source.entityValues(key.likes),
-      name: source.entityValue(key.name),
-      reportCount: source.entityValue(key.reportCount),
-      reports: source.entityValues(key.reports),
-      starCount: source.entityValue(key.starCount),
-      stars: source.entityValues(key.stars),
-      tags: source.entityValues(key.tags),
+
+      // -----------------------------------------------------------------------
+      // LOCATION
+      // -----------------------------------------------------------------------
+      city: source.entityValue(key.city),
+      country: source.entityValue(key.country),
+      latitude: source.entityValue(key.latitude),
+      longitude: source.entityValue(key.longitude),
+      region: source.entityValue(key.region),
+      zip: source.entityValue(key.zip),
+
+      // -----------------------------------------------------------------------
+      // ENUMS
+      // -----------------------------------------------------------------------
       audience: source.entityValue(key.audience, Audience.from),
       privacy: source.entityValue(key.privacy, Privacy.parse),
       type: source.entityValue(key.type, FeedType.parse),
-      recent: source.entityValue(key.recent, Content.parse),
+
+      // -----------------------------------------------------------------------
+      // REFERENCE
+      // -----------------------------------------------------------------------
+      content: source.entityValue(key.contentRef, Content.parse),
+      photos: source.entityValues(key.photosRef, Content.parse),
+      recent: source.entityValue(key.recentRef, Content.parse),
+
+      // -----------------------------------------------------------------------
+      // IF NEEDED
+      // -----------------------------------------------------------------------
+      // ARRAYS
+      // -----------------------------------------------------------------------
+      tags: source.entityValues(key.tags),
+
+      // -----------------------------------------------------------------------
+      // INT & DOUBLE
+      // -----------------------------------------------------------------------
+      likeCount: source.entityValue(key.likeCount),
+      priority: source.entityValue(key.priority),
+      viewCount: source.entityValue(key.viewCount),
+
+      // -----------------------------------------------------------------------
+      // STRING
+      // -----------------------------------------------------------------------
+      description: source.entityValue(key.description),
+      name: source.entityValue(key.name),
+      title: source.entityValue(key.title),
+
+      // -----------------------------------------------------------------------
+      // URL
+      // -----------------------------------------------------------------------
+      photoUrl: source.entityValue(key.photoUrl),
+      videoUrl: source.entityValue(key.videoUrl),
     );
   }
 
   @override
-  bool isInsertable(String key, value) {
-    return value != null && keys.contains(key);
-  }
+  Keys makeKey() => Keys.i;
 
-  Iterable<String> get keys => key.keys;
+  @override
+  bool isInsertable(String key, value) => value != null && keys.contains(key);
+
+  Map<String, dynamic> get metadata {
+    return {key.path: path, "create": source};
+  }
 
   @override
   Map<String, dynamic> get source {
     final entries = {
-      // PUBLISHER INFO
-      key.publisher: _publisherId,
-      // key.publisherRef: publisher,
+      // -----------------------------------------------------------------------
+      // PUBLISHER
+      // -----------------------------------------------------------------------
+      key.publisherId: _publisherId,
       key.publisherAge: publisherAge,
-      key.publisherPhoto: publisherPhoto,
+      key.publisherGender: _publisherGender,
+      key.publisherLatitude: publisherLatitude,
+      key.publisherLongitude: publisherLongitude,
+      key.publisherName: publisherName,
+      key.publisherPhotoUrl: publisherPhotoUrl,
       key.publisherProfession: publisherProfession,
       key.publisherProfilePath: publisherProfilePath,
       key.publisherProfileUrl: publisherProfileUrl,
-      key.publisherName: publisherName,
-      key.publisherShortName: publisherShortName,
-      key.publisherTitle: publisherTitle,
       key.publisherRating: publisherRating,
       key.publisherReligion: publisherReligion,
-      key.publisherLatitude: publisherLatitude,
-      key.publisherLongitude: publisherLongitude,
-      key.publisherGender: _publisherGender,
-      // CONTENT INFO
-      key.text: text,
-      key.title: title,
-      key.link: link,
-      key.path: path,
+      key.publisherShortName: publisherShortName,
+      key.publisherTitle: publisherTitle,
+
+      // -----------------------------------------------------------------------
+      // LOCATION
+      // -----------------------------------------------------------------------
+      key.city: city,
+      key.country: country,
+      key.latitude: latitude,
+      key.longitude: longitude,
+      key.region: region,
+      key.zip: zip,
+
+      // -----------------------------------------------------------------------
+      // ID & PATH
+      // -----------------------------------------------------------------------
       key.parentId: parentId,
       key.parentPath: parentPath,
-      key.photoUrl: photoUrl,
-      key.photoIds: photoIds,
-      key.photoUrls: photoUrls,
-      key.priority: priority,
-      key.recentId: recentId,
+      key.path: path,
       key.recentPath: recentPath,
-      key.referenceId: referenceId,
       key.referencePath: referencePath,
-      key.description: _description,
-      key.descriptions: _descriptions,
-      key.url: url,
-      key.verified: verified,
-      key.videoIds: videoIds,
-      key.videoUrl: videoUrl,
-      key.videoUrls: videoUrls,
-      key.views: views,
-      key.viewCount: viewCount,
-      key.bookmarks: bookmarks,
-      key.commentCount: commentCount,
-      key.comments: comments,
-      key.likeCount: likeCount,
-      key.likes: likes,
-      key.name: name,
-      key.reportCount: reportCount,
-      key.reports: reports,
-      key.starCount: starCount,
-      key.stars: stars,
-      key.tags: tags,
+
+      // -----------------------------------------------------------------------
+      // REFERENCE
+      // -----------------------------------------------------------------------
+      key.contentRef: _content?.metadata,
+      key.photosRef: photos?.map((e) => e.metadata).toList(),
+      key.recentRef: _recent?.metadata,
+
+      // -----------------------------------------------------------------------
+      // ENUMS
+      // -----------------------------------------------------------------------
       key.audience: _audience?.name,
       key.privacy: _privacy?.name,
       key.type: _type?.name,
-      key.recent: _recent?.source,
+
+      // -----------------------------------------------------------------------
+      // ARRAY
+      // -----------------------------------------------------------------------
+      key.tags: tags,
+
+      // -----------------------------------------------------------------------
+      // STRING
+      // -----------------------------------------------------------------------
+      key.description: _description,
+      key.name: name,
+      key.title: title,
+
+      // -----------------------------------------------------------------------
+      // URL
+      // -----------------------------------------------------------------------
+      key.photoUrl: photoUrl,
+      key.videoUrl: videoUrl,
+
+      // -----------------------------------------------------------------------
+      // INT & DOUBLE
+      // -----------------------------------------------------------------------
+      key.likeCount: likeCount,
+      key.priority: priority,
+      key.viewCount: viewCount,
     }.entries.where((e) => isInsertable(e.key, e.value));
     return super.source..addAll(Map.fromEntries(entries));
   }
 
+  Iterable<String> get keys => [];
+
   @override
-  int get hashCode => id.hashCode;
+  int get hashCode => Object.hashAll([
+    idOrNull,
+    timeMillsOrNull,
+    // PUBLISHER
+    _publisherId,
+    publisherAge,
+    _publisherGender,
+    publisherLatitude,
+    publisherLongitude,
+    publisherName,
+    publisherPhotoUrl,
+    publisherProfession,
+    publisherProfilePath,
+    publisherProfileUrl,
+    publisherRating,
+    publisherReligion,
+    publisherShortName,
+    publisherTitle,
+
+    // LOCATION
+    city,
+    country,
+    latitude,
+    longitude,
+    region,
+    zip,
+
+    // PATH
+    parentId,
+    parentPath,
+    path,
+    recentPath,
+    referencePath,
+
+    // REFERENCE
+    if (_content != null) _content,
+    if (photos != null && photos!.isNotEmpty) _equality.hash(photos),
+    if (_recent != null) _recent,
+
+    // TYPE
+    _audience?.name,
+    _privacy?.name,
+    _type?.name,
+
+    // ARRAY
+    _equality.hash(tags),
+
+    // STRING
+    _description,
+    name,
+    title,
+
+    // -------------------------------------------------------------------------
+    // URL
+    // -------------------------------------------------------------------------
+    photoUrl,
+    videoUrl,
+
+    // INT & DOUBLE
+    likeCount,
+    priority,
+    viewCount,
+  ]);
 
   @override
   bool operator ==(Object other) {
-    return other is Content && id == other.id && hashCode == other.hashCode;
+    if (identical(this, other)) return true;
+    return other is Content &&
+        idOrNull == other.idOrNull &&
+        timeMillsOrNull == other.timeMillsOrNull &&
+        // PUBLISHER
+        _publisherId == other._publisherId &&
+        publisherAge == other.publisherAge &&
+        _publisherGender == other._publisherGender &&
+        publisherLatitude == other.publisherLatitude &&
+        publisherLongitude == other.publisherLongitude &&
+        publisherName == other.publisherName &&
+        publisherPhotoUrl == other.publisherPhotoUrl &&
+        publisherProfession == other.publisherProfession &&
+        publisherProfilePath == other.publisherProfilePath &&
+        publisherProfileUrl == other.publisherProfileUrl &&
+        publisherRating == other.publisherRating &&
+        publisherReligion == other.publisherReligion &&
+        publisherShortName == other.publisherShortName &&
+        publisherTitle == other.publisherTitle &&
+        // LOCATION
+        city == other.city &&
+        country == other.country &&
+        latitude == other.latitude &&
+        longitude == other.longitude &&
+        region == other.region &&
+        zip == other.zip &&
+        // PATH
+        parentId == other.parentId &&
+        parentPath == other.parentPath &&
+        path == other.path &&
+        recentPath == other.recentPath &&
+        referencePath == other.referencePath &&
+        // REFERENCE
+        _content == other._content &&
+        _equality.equals(photos, other.photos) &&
+        _recent == other._recent &&
+        // TYPE
+        _audience == other._audience &&
+        _privacy == other._privacy &&
+        _type == other._type &&
+        // ARRAY
+        _equality.equals(tags, other.tags) &&
+        // STRING
+        _description == other._description &&
+        name == other.name &&
+        title == other.title &&
+        // URL
+        photoUrl == other.photoUrl &&
+        videoUrl == other.videoUrl &&
+        // INT & DOUBLE
+        likeCount == other.likeCount &&
+        priority == other.priority &&
+        viewCount == other.viewCount;
   }
 }
