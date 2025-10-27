@@ -61,8 +61,8 @@ class GetStarFeedsByPaginationUseCase extends BaseFeedUseCase {
             //     final publisherTitle = "pTitle";
             DataQuery(Keys.i.publisherRating, isGreaterThanOrEqualTo: 2),
             if (minLat > 0 && maxLat > 0) ...[
-              DataQuery(Keys.i.lat, isGreaterThanOrEqualTo: minLat),
-              DataQuery(Keys.i.lat, isLessThanOrEqualTo: maxLat),
+              DataQuery(Keys.i.latitude, isGreaterThanOrEqualTo: minLat),
+              DataQuery(Keys.i.latitude, isLessThanOrEqualTo: maxLat),
             ],
           ],
           selections: [

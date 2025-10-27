@@ -103,7 +103,7 @@ class _Option extends StatelessWidget {
                 )
                 : null,
         child: InAppText(
-          audience.title,
+          audience.label,
           style: TextStyle(color: dark, fontSize: dimen.dp(18)),
         ),
       ),

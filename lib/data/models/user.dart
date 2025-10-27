@@ -4,9 +4,14 @@ import 'package:auth_management/core/auth.dart';
 import 'package:auth_management/core/provider.dart';
 import 'package:flutter_andomie/utils/date_helper.dart';
 import 'package:flutter_entity/entity.dart';
+import 'package:picon/data/parsers/enum_parser.dart';
 
 import '../../app/constants/limitations.dart';
 import '../../app/helpers/user.dart';
+import '../enums/gender.dart';
+import '../enums/lifestyle.dart';
+import '../enums/marital_status.dart';
+import '../enums/relationship.dart';
 
 class UserKeys extends AuthKeys {
   const UserKeys._();
@@ -552,15 +557,18 @@ class User extends Auth<UserKeys> {
         UserKeys.i.interestedProfessions,
       ),
       secondaryLanguages: source.entityValues(UserKeys.i.secondaryLanguages),
-      gender: source.entityValue(UserKeys.i.gender, Gender.from),
-      lifestyle: source.entityValue(UserKeys.i.lifestyle, Lifestyle.from),
+      gender: source.entityValue(UserKeys.i.gender, Gender.values.parse),
+      lifestyle: source.entityValue(
+        UserKeys.i.lifestyle,
+        Lifestyle.values.parse,
+      ),
       maritalStatus: source.entityValue(
         UserKeys.i.maritalStatus,
-        MaritalStatus.from,
+        MaritalStatus.values.parse,
       ),
       relationship: source.entityValue(
         UserKeys.i.relationship,
-        Relationship.from,
+        Relationship.values.parse,
       ),
       alternateInfo: source.entityValue(
         UserKeys.i.alternateInfo,
@@ -620,10 +628,10 @@ class User extends Auth<UserKeys> {
       UserKeys.i.religion: religion,
       UserKeys.i.website: website,
 
-      UserKeys.i.gender: gender.id,
-      UserKeys.i.lifestyle: lifestyle.id,
-      UserKeys.i.maritalStatus: maritalStatus.id,
-      UserKeys.i.relationship: relationship.id,
+      UserKeys.i.gender: gender.name,
+      UserKeys.i.lifestyle: lifestyle.name,
+      UserKeys.i.maritalStatus: maritalStatus.name,
+      UserKeys.i.relationship: relationship.name,
 
       UserKeys.i.hobbies: hobbies,
       UserKeys.i.interestedPlaces: interestedPlaces,
@@ -650,85 +658,6 @@ class User extends Auth<UserKeys> {
 
   @override
   String toString() => "$User#$hashCode($filteredJson)";
-}
-
-enum Gender {
-  male(id: "male", name: "Male"),
-  female(id: "female", name: "Female"),
-  other(id: "other", name: "Other");
-
-  final String id;
-  final String name;
-
-  const Gender({required this.id, required this.name});
-
-  factory Gender.from(Object? source) {
-    if (source == null) return Gender.male;
-    return values.firstWhere(
-      (e) =>
-          e == source ||
-          e.index == source ||
-          e.id == source ||
-          e.name == source,
-      orElse: () => Gender.male,
-    );
-  }
-}
-
-enum MaritalStatus {
-  married(id: "married", name: "Married"),
-  unmarried(id: "unmarried", name: "Unmarried"),
-  other(id: "other", name: "Other");
-
-  final String id;
-  final String name;
-
-  const MaritalStatus({required this.id, required this.name});
-
-  factory MaritalStatus.from(Object? source) {
-    if (source == null) return MaritalStatus.unmarried;
-    final x = values.firstWhere(
-      (e) => e == source || e.id == source || e.name == source,
-      orElse: () => MaritalStatus.unmarried,
-    );
-    return x;
-  }
-}
-
-enum Lifestyle {
-  modern(id: "modern", name: "Modern"),
-  normal(id: "normal", name: "Normal");
-
-  final String id;
-  final String name;
-
-  const Lifestyle({required this.id, required this.name});
-
-  factory Lifestyle.from(Object? source) {
-    if (source == null) return Lifestyle.normal;
-    return values.firstWhere(
-      (e) => e == source || e.id == source || e.name == source,
-      orElse: () => Lifestyle.normal,
-    );
-  }
-}
-
-enum Relationship {
-  yes(id: "YES", name: "Yes"),
-  no(id: "NO", name: "No");
-
-  final String id;
-  final String name;
-
-  const Relationship({required this.id, required this.name});
-
-  factory Relationship.from(Object? source) {
-    if (source == null) return Relationship.no;
-    return values.firstWhere(
-      (e) => e == source || e.id == source || e.name == source,
-      orElse: () => Relationship.no,
-    );
-  }
 }
 
 class UserInfo {

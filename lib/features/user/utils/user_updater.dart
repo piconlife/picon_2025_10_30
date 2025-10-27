@@ -7,6 +7,9 @@ import 'package:in_app_navigator/in_app_navigator.dart';
 import '../../../app/constants/limitations.dart';
 import '../../../app/helpers/user.dart';
 import '../../../app/interfaces/dialog_date_picker.dart';
+import '../../../data/enums/lifestyle.dart';
+import '../../../data/enums/marital_status.dart';
+import '../../../data/enums/relationship.dart';
 import '../../../data/models/user.dart';
 import '../../../routes/paths.dart';
 
@@ -119,12 +122,12 @@ class UserInfoUpdater {
 
   void updateLifestyle(String title) async {
     final options = Lifestyle.values.map((e) => e.name).toList();
-    final initial = options.indexOf(user.lifestyle.id);
+    final initial = options.indexOf(user.lifestyle.name);
     final feedback = await _options(title, initial, options);
     if (feedback == initial) return;
     final data = Lifestyle.values.elementAtOrNull(feedback);
     if (data == null) return;
-    _update(keys.lifestyle, data.id);
+    _update(keys.lifestyle, data.name);
   }
 
   void updateMarital(String title) async {
@@ -139,12 +142,12 @@ class UserInfoUpdater {
 
   void updateRelationship(String title) async {
     final options = Relationship.values.map((e) => e.name).toList();
-    final initial = options.indexOf(user.relationship.id);
+    final initial = options.indexOf(user.relationship.name);
     final feedback = await _options(title, initial, options);
     if (feedback == initial) return;
     final data = Relationship.values.elementAtOrNull(feedback);
     if (data == null) return;
-    _update(keys.relationship, data.id);
+    _update(keys.relationship, data.name);
   }
 
   /// DATES

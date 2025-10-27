@@ -1,89 +1,123 @@
 import 'package:flutter_entity/flutter_entity.dart';
 
 class Keys extends EntityKey {
-  const Keys();
+  const Keys() : super(id: "id", timeMills: "timeMills");
 
   static Keys? _i;
 
   static Keys get i => _i ??= const Keys();
 
+  // ---------------------------------------------------------------------------
+  // --------------------------------COMMON-------------------------------------
+  // ---------------------------------------------------------------------------
   // PUBLISHER
-  final publisherId = "publisherId";
-  final publisherAge = "publisherAge";
-  final publisherLatitude = "publisherLatitude";
-  final publisherLongitude = "publisherLongitude";
-  final publisherName = "publisherName";
-  final publisherProfession = "publisherProfession";
-  final publisherProfilePath = "publisherProfilePath";
-  final publisherProfileUrl = "publisherProfileUrl";
-  final publisherPhotoUrl = "publisherPhotoUrl";
-  final publisherRating = "publisherRating";
-  final publisherReligion = "publisherReligion";
-  final publisherShortName = "publisherShortName";
-  final publisherTitle = "publisherTitle";
-  final publisherGender = "publisherGender";
+  final publisherId = 'publisherId';
+  final publisherAge = 'publisherAge';
+  final publisherGender = 'publisherGender';
+  final publisherLatitude = 'publisherLatitude';
+  final publisherLongitude = 'publisherLongitude';
+  final publisherName = 'publisherName';
+  final publisherPhotoUrl = 'publisherPhotoUrl';
+  final publisherProfession = 'publisherProfession';
+  final publisherProfilePath = 'publisherProfilePath';
+  final publisherProfileUrl = 'publisherProfileUrl';
+  final publisherRating = 'publisherRating';
+  final publisherReligion = 'publisherReligion';
+  final publisherShortName = 'publisherShortName';
+  final publisherTitle = 'publisherTitle';
 
   // LOCATION
-  final city = "city";
-  final country = "country";
-  final lat = "lat";
-  final lon = "lon";
-  final region = "region";
-  final zip = "zip";
+  final city = 'city';
+  final country = 'country';
+  final latitude = 'latitude';
+  final longitude = 'longitude';
+  final region = 'region';
+  final zip = 'zip';
 
-  // CONTENT
+  // ---------------------------------------------------------------------------
+  // ---------------------------------BOOLEANS----------------------------------
+  // ---------------------------------------------------------------------------
+  final verified = 'verified';
 
-  final audience = "audience";
-  final bookmarks = "bookmarks";
-  final commentCount = "comment_count";
-  final comments = "comments";
-  final content = "content";
-  final contentRef = "@content";
-  final contents = "contents";
-  final description = "description";
-  final descriptions = "descriptions";
-  final latitude = "latitude";
-  final likeCount = "like_count";
-  final likes = "likes";
-  final link = "link";
-  final name = "name";
-  final longitude = "longitude";
-  final parentId = "parent_id";
-  final parentLink = "parent_link";
-  final parentPath = "parent_path";
-  final parentUrl = "parent_url";
-  final path = "path";
-  final photosRef = "@photos";
-  final photoRef = "@photo";
-  final photo = "photo";
-  final photos = "photos";
-  final photoIds = "photo_ids";
-  final photoUrl = "photo_url";
-  final photoUrls = "photo_urls";
-  final priority = "priority";
-  final privacy = "privacy";
-  final recent = "recent";
-  final recentRef = "@recent";
-  final recentId = "recent_id";
-  final recentPath = "recent_path";
-  final referenceId = "reference_id";
-  final referencePath = "reference_path";
-  final reportCount = "report_count";
-  final reports = "reports";
-  final starCount = "star_count";
-  final stars = "stars";
-  final tags = "tags";
-  final text = "text";
-  final title = "title";
-  final type = "type";
-  final updatedAt = "updated_at";
-  final url = "url";
-  final userRating = "user_rating";
-  final verified = "verified";
-  final videos = "videos";
-  final videoIds = "video_ids";
-  final videoUrl = "video_url";
-  final videoUrls = "video_urls";
-  final viewCount = "view_count";
-  final views = "views";
+  // ---------------------------------------------------------------------------
+  // ---------------------------------INTEGERS----------------------------------
+  // ---------------------------------------------------------------------------
+  final commentCount = 'commentCount';
+  final likeCount = 'likeCount';
+  final priority = 'priority';
+  final reportCount = 'reportCount';
+  final starCount = 'starCount';
+  final updatedAt = 'updatedAt';
+  final viewCount = 'viewCount';
+
+  // ---------------------------------------------------------------------------
+  // ----------------------------------DOUBLES----------------------------------
+  // ---------------------------------------------------------------------------
+
+  // ---------------------------------------------------------------------------
+  // ----------------------------------STRINGS----------------------------------
+  // ---------------------------------------------------------------------------
+  final description = 'description';
+  final link = 'link';
+  final name = 'name';
+  final parentLink = 'parentLink';
+  final parentId = 'parentId';
+  final parentPath = 'parentPath';
+  final parentUrl = 'parentUrl';
+  final path = 'path';
+  final photoUrl = 'photoUrl';
+  final recentId = 'recentId';
+  final reference = 'reference';
+  final referenceId = 'referenceId';
+  final text = 'text';
+  final title = 'title';
+  final url = 'url';
+  final videoUrl = 'videoUrl';
+
+  // ---------------------------------------------------------------------------
+  // ------------------------------LIST OF STRINGS------------------------------
+  // ---------------------------------------------------------------------------
+  final bookmarks = 'bookmarks';
+  final comments = 'comments';
+  final descriptions = 'descriptions';
+  final likes = 'likes';
+  final photoIds = 'photoIds';
+  final photoUrls = 'photoUrls';
+  final reports = 'reports';
+  final stars = 'stars';
+  final tags = 'tags';
+  final videoIds = 'videoIds';
+  final videoUrls = 'videoUrls';
+  final views = 'views';
+
+  // ---------------------------------------------------------------------------
+  // -----------------------------------ENUMS-----------------------------------
+  // ---------------------------------------------------------------------------
+  final audience = 'audience';
+  final privacy = 'privacy';
+  final type = 'type';
+
+  // ---------------------------------------------------------------------------
+  // ----------------------------------OBJECTS----------------------------------
+  // ---------------------------------------------------------------------------
+  // SOURCE
+  final content = 'content';
+  final recent = 'recent';
+
+  // METADATA
+  final contentRef = 'contentRef';
+  final recentRef = 'recentRef';
+
+  // ---------------------------------------------------------------------------
+  // -------------------------------LIST OF OBJECTS-----------------------------
+  // ---------------------------------------------------------------------------
+  // SOURCE
+  final contents = 'contents';
+  final photos = 'photos';
+  final videos = 'videos';
+
+  // METADATA
+  final contentsRef = 'contentsRef';
+  final photosRef = 'photosRef';
+  final videosRef = 'videosRef';
 }

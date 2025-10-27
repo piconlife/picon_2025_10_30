@@ -1,16 +1,16 @@
 enum Audience {
-  everyone(name: "EVERYONE", title: "Everyone", subtitle: "Public"),
-  forKids(name: "FOR_KIDS", title: "For kids", subtitle: "Private"),
-  notForKids(name: "NOT_FOR_KIDS", title: "Not for kids", subtitle: "Public"),
+  everyone(name: "EVERYONE", label: "Everyone", subtitle: "Public"),
+  forKids(name: "FOR_KIDS", label: "For kids", subtitle: "Private"),
+  notForKids(name: "NOT_FOR_KIDS", label: "Not for kids", subtitle: "Public"),
   eighteenPlus(
     name: "EIGHTEEN_PLUS",
-    title: "Eighteen (+18)",
+    label: "Eighteen (+18)",
     subtitle: "Public",
   );
 
   final String name;
-  final String title;
-  final String subtitle;
+  final String label;
+  final String description;
 
   bool get isEveryone => this == Audience.everyone;
 
@@ -24,13 +24,6 @@ enum Audience {
 
   bool get isPublic => isEveryone || isNotForKids || isEighteenPlus;
 
-  const Audience({required this.name, required this.title, String? subtitle})
-    : subtitle = subtitle ?? title;
-
-  factory Audience.from(Object? value) {
-    return values.where((e) {
-          return e == value || e.name == value || e.title == value;
-        }).firstOrNull ??
-        Audience.everyone;
-  }
+  const Audience({required this.name, required this.label, String? subtitle})
+    : description = subtitle ?? label;
 }

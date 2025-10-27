@@ -46,14 +46,14 @@ class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
 
   void _changePrivacy(Privacy privacy) {
     final data = photos.removeAt(index);
-    photos.insert(index, data.change(privacy: privacy));
+    photos.insert(index, data..privacy = privacy);
     setState(() {});
     _update(index, {Keys.i.privacy: privacy.name});
   }
 
   void _updateTag(String? tag) async {
     final data = photos.removeAt(index);
-    photos.insert(index, data.change(description: tag));
+    photos.insert(index, data..description = tag);
     setState(() {});
     _update(index, {Keys.i.description: tag});
   }

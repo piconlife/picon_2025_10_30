@@ -7,7 +7,6 @@ import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../data/models/content.dart';
 import '../../../../data/models/user_post.dart';
-import '../../../../routes/keys.dart';
 import '../../../../routes/paths.dart';
 import '../cubits/post_cubit.dart';
 import 'feed_body.dart';

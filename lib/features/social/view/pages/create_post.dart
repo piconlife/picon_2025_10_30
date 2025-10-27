@@ -15,6 +15,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/flutter_entity.dart';
 import 'package:in_app_analytics/analytics.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_settings/in_app_settings.dart';
 import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/helpers/user.dart';
@@ -48,6 +49,8 @@ import '../../../../routes/paths.dart';
 import '../../../user/view/cubits/post_cubit.dart';
 import '../../../user/view/widgets/uploading_image.dart';
 import '../cubits/feed_home_cubit.dart';
+
+const _kRecentPostPath = "recent_post_path";
 
 class CreatePostPage extends StatefulWidget {
   final Object? args;
@@ -213,11 +216,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
   /// UPDATE SECTION START
   /// --------------------------------------------------------------------------
 
-  void _complete(BuildContext context) {
-    context.hideLoader();
-    context.close();
-  }
-
   void _update(BuildContext context) {
     if (photos.value.isEmpty && description == old!.description) {
       context.showMessage("Please write something...!");
@@ -238,7 +236,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
     UpdateUserPostUseCase.i(id, updates).then((value) {
       if (!context.mounted) return;
-      _complete(context);
+      context.close();
     });
 
     final mTimeMills = Entity.generateTimeMills;
@@ -268,7 +266,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     CreateFeedUseCase.i(mFeed).then((value) {
       if (!context.mounted) return;
       if (value.isSuccessful) {
-        _complete(context);
+        context.close();
       } else {
         context.hideLoader();
         context.showAlert(message: ResponseMessages.tryAgain).then((value) {
@@ -324,19 +322,22 @@ class _CreatePostPageState extends State<CreatePostPage> {
       timeMills: mTimeMills,
       path: PathProvider.generatePath(Paths.feeds, id),
       content: mUserPost,
+      recentRef: Settings.get(_kRecentPostPath, null),
       type: mUserPost.type,
     );
 
     Analytics.future(name: 'create_post', () async {
+      context.showLoader();
       final value = await CreateFeedUseCase.i(mFeed);
       if (!context.mounted) return;
+      context.hideLoader();
       if (value.isSuccessful) {
-        // feedCubit.refresh();
-        // postCubit.refresh();
-        _complete(context);
+        Settings.set(_kRecentPostPath, mUserPost.path);
+        feedCubit.created(mFeed);
+        postCubit.created(mUserPost);
+        context.close();
         return;
       }
-      context.hideLoader();
       context.showAlert(message: ResponseMessages.tryAgain).then((value) {
         if (!context.mounted) return;
         if (value) {

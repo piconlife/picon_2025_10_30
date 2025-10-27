@@ -1,4 +1,5 @@
 import '../constants/keys.dart';
+import '../enums/gender.dart';
 import '../enums/privacy.dart';
 import 'content.dart';
 
@@ -69,7 +70,7 @@ class Comment extends Content {
     String? publisherReligion,
     double? publisherLatitude,
     double? publisherLongitude,
-    String? publisherGender,
+    Gender? publisherGender,
 
     // OTHER
     String? id,
@@ -94,12 +95,11 @@ class Comment extends Content {
       publisherReligion: publisherReligion ?? this.publisherReligion,
       publisherLatitude: publisherLatitude ?? this.publisherLatitude,
       publisherLongitude: publisherLongitude ?? this.publisherLongitude,
-      publisherGender: publisherGender ?? this.publisherGender.name,
+      publisherGender: publisherGender ?? this.publisherGender,
       // OTHER
       id: id ?? this.id,
       timeMills: timeMills ?? this.timeMills,
       description: description ?? this.description,
-      parentId: parentId ?? this.parentId,
       parentPath: parentPath ?? this.parentPath,
       photoUrl: photoUrl ?? this.photoUrl,
       privacy: privacy ?? this.privacy,
@@ -122,7 +122,7 @@ class Comment extends Content {
       publisherReligion: data.publisherReligion,
       publisherLatitude: data.publisherLatitude,
       publisherLongitude: data.publisherLongitude,
-      publisherGender: data.publisherGender.name,
+      publisherGender: data.publisherGender,
 
       // OTHER
       id: data.id,

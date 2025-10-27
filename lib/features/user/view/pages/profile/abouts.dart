@@ -9,6 +9,7 @@ import 'package:in_app_translation/contents.dart';
 
 import '../../../../../app/res/icons.dart';
 import '../../../../../app/styles/fonts.dart';
+import '../../../../../data/enums/marital_status.dart';
 import '../../../../../data/models/user.dart';
 import '../../../../../roots/widgets/icon.dart';
 import '../../../../../roots/widgets/scaffold_shimmer.dart';
@@ -62,9 +63,9 @@ class _ProfileAboutsSegmentState extends State<ProfileAboutsSegment> {
             "key": UserKeys.i.maritalStatus,
             "icon": InAppIcons.maritalStatus.regular,
             "title": "Marital Status",
-            "body": user.maritalStatus.name,
-            "value": user.maritalStatus.id,
-            "editable": user.maritalStatus.id != MaritalStatus.married.id,
+            "body": user.maritalStatus.label,
+            "value": user.maritalStatus.name,
+            "editable": user.maritalStatus.name != MaritalStatus.married.name,
           },
           {
             "key": UserKeys.i.religion,
@@ -107,8 +108,8 @@ class _ProfileAboutsSegmentState extends State<ProfileAboutsSegment> {
             "key": UserKeys.i.relationship,
             "icon": InAppIcons.relationship.regular,
             "title": "Relationship",
-            "body": user.relationship.name,
-            "value": user.relationship.id,
+            "body": user.relationship.label,
+            "value": user.relationship.name,
             "editable": true,
           },
           {
@@ -158,8 +159,8 @@ class _ProfileAboutsSegmentState extends State<ProfileAboutsSegment> {
             "key": UserKeys.i.lifestyle,
             "icon": InAppIcons.tips.regular,
             "title": "Life Style",
-            "body": user.lifestyle.name,
-            "value": user.lifestyle.id,
+            "body": user.lifestyle.label,
+            "value": user.lifestyle.name,
             "editable": true,
           },
           {

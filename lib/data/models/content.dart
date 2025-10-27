@@ -1,97 +1,155 @@
 import 'package:collection/collection.dart';
 import 'package:flutter_entity/flutter_entity.dart';
+import 'package:picon/data/parsers/enum_parser.dart';
 
 import '../../app/helpers/user.dart';
 import '../constants/keys.dart';
 import '../enums/audience.dart';
 import '../enums/feed_type.dart';
+import '../enums/gender.dart';
 import '../enums/privacy.dart';
-import 'user.dart';
 
 const _equality = DeepCollectionEquality();
 
 class Content extends Entity<Keys> {
-  // PUBLISHER
+  // ---------------------------------------------------------------------------
+  // ----------------------------------COMMON-----------------------------------
+  // ---------------------------------------------------------------------------
+  // PUBLISHER FIELDS
   String? _publisherId;
-  int? publisherAge;
-  String? publisherPhotoUrl;
-  String? publisherProfession;
-  String? publisherProfilePath;
-  String? publisherProfileUrl;
-  String? publisherName;
-  String? publisherShortName;
-  String? publisherTitle;
-  double? publisherRating;
-  String? publisherReligion;
-  double? publisherLatitude;
-  double? publisherLongitude;
-  String? _publisherGender;
+  int? _publisherAge;
+  Gender? _publisherGender;
+  double? _publisherLatitude;
+  double? _publisherLongitude;
+  String? _publisherName;
+  String? _publisherPhotoUrl;
+  String? _publisherProfession;
+  String? _publisherProfilePath;
+  String? _publisherProfileUrl;
+  double? _publisherRating;
+  String? _publisherReligion;
+  String? _publisherShortName;
+  String? _publisherTitle;
 
-  // LOCATION
-  String? city;
-  String? country;
-  double? latitude;
-  double? longitude;
-  String? region;
-  int? zip;
+  // LOCATION FIELDS
+  String? _city;
+  String? _country;
+  double? _latitude;
+  double? _longitude;
+  String? _region;
+  int? _zip;
 
-  // CONTENT
-  Audience? _audience;
-  List<String>? bookmarks;
-  Content? _content;
-  List<Content>? contents;
-  List<String>? comments;
-  int? commentCount;
-  String? _description;
-  List<String>? _descriptions;
-  List<String>? likes;
-  int? likeCount;
-  String? link;
-  String? name;
-  String? parentId;
-  String? parentLink;
-  String? parentPath;
-  String? reference;
-  String? parentUrl;
-  String? path;
-  List<String>? photosRef;
-  List<Content>? _photos;
-  List<String>? photoIds;
-  String? _photoUrl;
-  List<String>? _photoUrls;
-  int? priority;
-  Privacy? _privacy;
-  Content? _recent;
-  String? recentId;
-  String? recentPath;
-  String? referenceId;
-  String? referencePath;
-  int? reportCount;
-  List<String>? reports;
-  int? starCount;
-  List<String>? stars;
-  List<String>? tags;
-  String? text;
-  String? title;
-  FeedType? _type;
-  String? url;
-  bool? verified;
-  List<Content>? videos;
-  List<String>? videoIds;
-  String? videoUrl;
-  List<String>? videoUrls;
-  int? viewCount;
-  List<String>? views;
+  // SETTERS (PUBLISHER)
+  set publisherId(String? value) => _publisherId = value;
 
-  // LOCAL INFO
-  String? translatedTitle;
-  String? translatedDescription;
-  List<String>? translatedDescriptions;
+  set publisherAge(int? value) => _publisherAge = value;
 
-  String? get publisherId => _publisherId ?? _content?._publisherId;
+  set publisherGender(Gender? value) => _publisherGender = value;
 
-  Content get content => _content ?? Content();
+  set publisherLatitude(double? value) => _publisherLatitude = value;
 
+  set publisherLongitude(double? value) => _publisherLongitude = value;
+
+  set publisherName(String? value) => _publisherName = value;
+
+  set publisherPhotoUrl(String? value) => _publisherPhotoUrl = value;
+
+  set publisherProfession(String? value) => _publisherProfession = value;
+
+  set publisherProfilePath(String? value) => _publisherProfilePath = value;
+
+  set publisherProfileUrl(String? value) => _publisherProfileUrl = value;
+
+  set publisherRating(double? value) => _publisherRating = value;
+
+  set publisherReligion(String? value) => _publisherReligion = value;
+
+  set publisherShortName(String? value) => _publisherShortName = value;
+
+  set publisherTitle(String? value) => _publisherTitle = value;
+
+  // SETTERS (LOCATIONS)
+  set city(String? value) => _city = value;
+
+  set country(String? value) => _country = value;
+
+  set latitude(double? value) => _latitude = value;
+
+  set longitude(double? value) => _longitude = value;
+
+  set region(String? value) => _region = value;
+
+  set zip(int? value) => _zip = value;
+
+  // GETTERS (PUBLISHER)
+  String? get publisherId => _string(_publisherId ?? _content?._publisherId);
+
+  int get publisherAge => _int(_publisherAge ?? _content?._publisherAge) ?? 0;
+
+  Gender get publisherGender =>
+      _publisherGender ?? _content?._publisherGender ?? Gender.male;
+
+  double get publisherLatitude =>
+      _double(_publisherLatitude ?? _content?._publisherLatitude) ?? 0;
+
+  double get publisherLongitude =>
+      _double(_publisherLongitude ?? _content?._publisherLongitude) ?? 0;
+
+  String? get publisherName =>
+      _string(_publisherName ?? _content?._publisherName);
+
+  String? get publisherPhotoUrl =>
+      _string(_publisherPhotoUrl ?? _content?._publisherPhotoUrl, url: true);
+
+  String? get publisherProfession =>
+      _string(_publisherProfession ?? _content?._publisherProfession);
+
+  String? get publisherProfilePath =>
+      _string(_publisherProfilePath ?? _content?._publisherProfilePath);
+
+  String? get publisherProfileUrl => _string(
+    _publisherProfileUrl ?? _content?._publisherProfileUrl,
+    url: true,
+  );
+
+  double get publisherRating =>
+      _double(_publisherRating ?? _content?._publisherRating) ?? 0;
+
+  String? get publisherReligion =>
+      _string(_publisherReligion ?? _content?._publisherReligion);
+
+  String? get publisherShortName =>
+      _string(_publisherShortName ?? _content?._publisherShortName);
+
+  String? get publisherTitle =>
+      _string(_publisherTitle ?? _content?._publisherTitle);
+
+  // GETTERS (LOCATION)
+  String? get city => _string(_city ?? _content?._city);
+
+  String? get country => _string(_country ?? _content?._country);
+
+  double get latitude => _double(_latitude ?? _content?._latitude) ?? 0;
+
+  double get longitude => _double(_longitude ?? _content?._longitude) ?? 0;
+
+  String? get region => _string(_region ?? _content?._region);
+
+  int? get zip => _int(_zip ?? _content?._zip);
+
+  // ---------------------------------------------------------------------------
+  // ---------------------------------BOOLEANS----------------------------------
+  // ---------------------------------------------------------------------------
+  // FIELDS
+  bool? _verified;
+
+  // SETTERS
+  set verified(bool? value) => _verified = value;
+
+  // GETTERS
+  bool get verified => _verified ?? _content?._verified ?? false;
+
+  // GETTER (CUSTOM)
   bool get isPrivacyAllow {
     if (UserHelper.isCurrentUser(publisherId)) return true;
     if (privacy.isOnlyMe) return false;
@@ -103,31 +161,14 @@ class Content extends Entity<Keys> {
   }
 
   bool get isTranslated {
-    return (translatedTitle ??
-            translatedDescription ??
-            translatedDescriptions?.firstOrNull ??
-            '')
-        .isNotEmpty;
-  }
-
-  String? get description {
-    return _description ??
-        _descriptions?.firstOrNull ??
-        content._description ??
-        content._descriptions?.firstOrNull;
-  }
-
-  List<String>? get descriptions {
-    return _descriptions ?? (_description != null ? [_description!] : null);
+    return (translatedTitle ?? translatedDescription ?? '').isNotEmpty;
   }
 
   bool get isPublisher => publisherId == UserHelper.uid;
 
-  bool get isReported => reports?.contains(UserHelper.uid) ?? false;
+  bool get isReported => reports.contains(UserHelper.uid);
 
-  bool get isDescription {
-    return (_description ?? _descriptions?.firstOrNull ?? '').isNotEmpty;
-  }
+  bool get isDescription => (description ?? '').isNotEmpty;
 
   bool get isTitled => (title ?? '').isNotEmpty;
 
@@ -135,267 +176,375 @@ class Content extends Entity<Keys> {
 
   bool get isShareMode => privacy.isEveryone || isPublisher;
 
-  bool get isPhotoMode => photoUrl != null;
+  bool get isPhotoMode => (photoUrl ?? '').isNotEmpty;
 
-  bool get isVideoMode => (videoUrl ?? videoUrls?.firstOrNull) != null;
+  bool get isVideoMode => (videoUrl ?? '').isNotEmpty;
 
-  Gender get publisherGender => Gender.from(_publisherGender);
+  // ---------------------------------------------------------------------------
+  // ---------------------------------INTEGERS----------------------------------
+  // ---------------------------------------------------------------------------
+  // FIELDS
+  int? _commentCount;
+  int? _likeCount;
+  int? _priority;
+  int? _reportCount;
+  int? _starCount;
+  int? _viewCount;
 
-  String? get photoUrl {
-    if ((_photoUrl ?? '').isNotEmpty) return _photoUrl;
-    if ((_content?._photoUrl ?? '').isNotEmpty) return _content!._photoUrl!;
-    if (photos.isNotEmpty) {
-      return photos.firstOrNull?._photoUrl;
+  // SETTERS
+  set commentCount(int? value) => _commentCount = value;
+
+  set likeCount(int? value) => _likeCount = value;
+
+  set priority(int? value) => _priority = value;
+
+  set reportCount(int? value) => _reportCount = value;
+
+  set starCount(int? value) => _starCount = value;
+
+  set viewCount(int? value) => _viewCount = value;
+
+  // GETTERS
+  int get commentCount => _int(_commentCount ?? _content?._commentCount) ?? 0;
+
+  int get likeCount => _int(_likeCount ?? _content?._likeCount) ?? 0;
+
+  int get priority => _int(_priority ?? _content?._priority) ?? 0;
+
+  int get reportCount => _int(_reportCount ?? _content?._reportCount) ?? 0;
+
+  int get starCount => _int(_starCount ?? _content?._starCount) ?? 0;
+
+  int get viewCount => _int(_viewCount ?? _content?._viewCount) ?? 0;
+
+  // ---------------------------------------------------------------------------
+  // ----------------------------------DOUBLES----------------------------------
+  // ---------------------------------------------------------------------------
+
+  // ---------------------------------------------------------------------------
+  // ----------------------------------STRINGS----------------------------------
+  // ---------------------------------------------------------------------------
+  // FIELDS
+  String? _description;
+  String? _link;
+  String? _name;
+  String? _parentId;
+  String? _parentLink;
+  String? _parentPath;
+  String? _reference;
+  String? _parentUrl;
+  String? _path;
+  String? _photoUrl;
+  String? _recentId;
+  String? _contentRef;
+  String? _recentRef;
+  String? _referenceId;
+  String? _text;
+  String? _title;
+  String? _url;
+  String? _videoUrl;
+
+  // SETTERS
+
+  set description(String? value) => _description = value;
+
+  set link(String? value) => _link = value;
+
+  set name(String? value) => _name = value;
+
+  set parentId(String? value) => _parentId = value;
+
+  set parentLink(String? value) => _parentLink = value;
+
+  set parentPath(String? value) => _parentPath = value;
+
+  set reference(String? value) => _reference = value;
+
+  set parentUrl(String? value) => _parentUrl = value;
+
+  set path(String? value) => _path = value;
+
+  set photoUrl(String? value) => _photoUrl = value;
+
+  set recentId(String? value) => _recentId = value;
+
+  set contentRef(String? value) => _contentRef = value;
+
+  set recentRef(String? value) => _recentRef = value;
+
+  set referenceId(String? value) => _referenceId = value;
+
+  set text(String? value) => _text = value;
+
+  set title(String? value) => _title = value;
+
+  set url(String? value) => _url = value;
+
+  set videoUrl(String? value) => _videoUrl = value;
+
+  // GETTERS
+
+  String? get description => _normalizedDescription;
+
+  String? get link => _string(_link ?? _content?._link, url: true);
+
+  String? get name => _string(_name ?? _content?._name);
+
+  String? get parentId => _string(_parentId ?? _content?._parentId);
+
+  String? get parentLink =>
+      _string(_parentLink ?? _content?._parentLink, url: true);
+
+  String? get parentPath => _string(_parentPath ?? _content?._parentPath);
+
+  String? get reference => _string(_reference ?? _content?._reference);
+
+  String? get parentUrl =>
+      _string(_parentUrl ?? _content?._parentUrl, url: true);
+
+  String? get path => _string(_path ?? _content?._path);
+
+  String? get photoUrl => _normalizedPhotoUrl;
+
+  String? get recentId => _string(_recentId ?? _content?._recentId);
+
+  String? get contentRef =>
+      _string(_contentRef ?? _content?._contentRef, ref: true);
+
+  String? get recentRef =>
+      _string(_recentRef ?? _content?._recentRef, ref: true);
+
+  String? get referenceId => _string(_referenceId ?? _content?._referenceId);
+
+  String? get text => _string(_text ?? _content?._text);
+
+  String? get title => _string(_title ?? _content?._title);
+
+  String? get url => _string(_url ?? _content?._url, url: true);
+
+  String? get videoUrl => _string(_videoUrl ?? _content?._videoUrl, url: true);
+
+  // GETTERS (NORMALIZERS)
+
+  String? get _normalizedDescription {
+    if ((_description ?? '').isNotEmpty) return _description;
+    if ((_content?._description ?? '').isNotEmpty) {
+      return _content!._description!;
+    }
+    if ((_descriptions ?? []).isNotEmpty) return _descriptions!.first;
+    if ((_content?._descriptions ?? []).isNotEmpty) {
+      return _content!._descriptions!.first;
     }
     return null;
   }
 
-  List<String> get photoUrls {
-    if ((_photoUrls ?? []).isNotEmpty) return _photoUrls!;
-    if (photos.isNotEmpty) {
-      return photos.map((e) => e._photoUrl).whereType<String>().toList();
+  String? get _normalizedPhotoUrl {
+    if (_photoUrl.isUrl) return _photoUrl!;
+    if (_photoUrls.isNotEmpty && _photoUrls!.first.isUrl) {
+      return _photoUrls!.first;
     }
-    if ((_photoUrl ?? '').isNotEmpty) return [_photoUrl!];
-    if ((_content?._photoUrl ?? '').isNotEmpty) return [_content!._photoUrl!];
+    if ((_photos ?? []).isNotEmpty && _photos!.first._photoUrl.isUrl) {
+      return _photos!.first._photoUrl;
+    }
+    if ((_content?._photoUrl ?? '').isUrl) return _content!._photoUrl!;
+    if ((_content?._photoUrls ?? []).isNotEmpty &&
+        _content!._photoUrls!.first.isUrl) {
+      return _content!._photoUrls!.first;
+    }
+    if ((_content?._photos ?? []).isNotEmpty &&
+        _content!._photos!.first._photoUrl.isUrl) {
+      return _content!._photos!.first._photoUrl;
+    }
+    return null;
+  }
+
+  // ---------------------------------------------------------------------------
+  // ------------------------------LIST OF STRINGS------------------------------
+  // ---------------------------------------------------------------------------
+  // FIELDS
+  List<String>? _bookmarks;
+  List<String>? _comments;
+  List<String>? _descriptions;
+  List<String>? _likes;
+  List<String>? _photosRef;
+  List<String>? _photoIds;
+  List<String>? _photoUrls;
+  List<String>? _reports;
+  List<String>? _stars;
+  List<String>? _tags;
+  List<String>? _videoIds;
+  List<String>? _videoUrls;
+  List<String>? _views;
+
+  // SETTERS
+  set bookmarks(List<String>? value) => _bookmarks = value;
+
+  set comments(List<String>? value) => _comments = value;
+
+  set descriptions(List<String>? value) => _descriptions = value;
+
+  set likes(List<String>? value) => _likes = value;
+
+  set photosRef(List<String>? value) => _photosRef = value;
+
+  set photoIds(List<String>? value) => _photoIds = value;
+
+  set photoUrls(List<String>? value) => _photoUrls = value;
+
+  set reports(List<String>? value) => _reports = value;
+
+  set stars(List<String>? value) => _stars = value;
+
+  set tags(List<String>? value) => _tags = value;
+
+  set videoIds(List<String>? value) => _videoIds = value;
+
+  set videoUrls(List<String>? value) => _videoUrls = value;
+
+  set views(List<String>? value) => _views = value;
+
+  // GETTERS
+  List<String> get bookmarks => _strings(_bookmarks ?? _content?._bookmarks);
+
+  List<String> get comments => _strings(_comments ?? _content?._comments);
+
+  List<String> get descriptions => _normalizedDescriptions;
+
+  List<String> get likes => _strings(_likes ?? _content?._likes, url: true);
+
+  List<String> get photosRef =>
+      _strings(_photosRef ?? _content?._photosRef, ref: true);
+
+  List<String> get photoIds => _strings(_photoIds ?? _content?._photoIds);
+
+  List<String> get photoUrls => _normalizedPhotoUrls;
+
+  List<String> get reports => _strings(_reports ?? _content?._reports);
+
+  List<String> get stars => _strings(_stars ?? _content?._stars);
+
+  List<String> get tags => _strings(_tags ?? _content?._tags);
+
+  List<String> get videoIds => _strings(_videoIds ?? _content?._videoIds);
+
+  List<String> get videoUrls =>
+      _strings(_videoUrls ?? _content?._videoUrls, url: true);
+
+  List<String> get views => _strings(_views ?? _content?._views);
+
+  // GETTERS (NORMALIZERS)
+
+  List<String> get _normalizedDescriptions {
+    if (_descriptions.isNotEmpty) return _descriptions!;
+    if ((_content?._descriptions ?? []).isNotEmpty) {
+      return _content!._descriptions!;
+    }
+    if (_description.isNotEmpty) return [_description!];
+    if ((_content?._description ?? '').isNotEmpty) {
+      return [_content!._description!];
+    }
     return [];
   }
 
+  List<String> get _normalizedPhotoUrls {
+    if (_photoUrls.isUrls) return _photoUrls!;
+    final x = _photos?.map((e) => e._photoUrl).whereType<String>().toList();
+    if (x.isUrls) return x!;
+    if (_photoUrl.isUrl) return [_photoUrl!];
+    if ((_content?._photoUrls ?? []).isUrls) return _content!._photoUrls!;
+    final y =
+        _content?._photos?.map((e) => e._photoUrl).whereType<String>().toList();
+    if (y.isUrls) return y!;
+    if ((_content?._photoUrl ?? '').isUrl) return [_content!._photoUrl!];
+    return [];
+  }
+
+  // ---------------------------------------------------------------------------
+  // -----------------------------------ENUMS-----------------------------------
+  // ---------------------------------------------------------------------------
+  // FIELDS
+  Audience? _audience;
+  Privacy? _privacy;
+  FeedType? _type;
+
+  // SETTERS
+  set audience(Audience? value) => _audience = value;
+
+  set privacy(Privacy? value) => _privacy = value;
+
+  set type(FeedType? value) => _type = value;
+
+  // GETTERS
+  Audience get audience =>
+      _audience ?? _content?._audience ?? Audience.everyone;
+
+  Privacy get privacy => _privacy ?? _content?._privacy ?? Privacy.everyone;
+
+  FeedType get type => _type ?? _content?.type ?? FeedType.none;
+
+  // ---------------------------------------------------------------------------
+  // ----------------------------------OBJECTS----------------------------------
+  // ---------------------------------------------------------------------------
+  // FIELDS
+  Content? _content;
+  Content? _recent;
+
+  // SETTERS
+  set content(Content? value) => _content = value;
+
+  set recent(Content? value) => _recent = value;
+
+  // GETTERS
+  Content get content => _content ?? Content.empty();
+
+  Content get recent => _recent ?? Content.empty();
+
+  // ---------------------------------------------------------------------------
+  // -------------------------------LIST OF OBJECTS-----------------------------
+  // ---------------------------------------------------------------------------
+  // FIELDS
+  List<Content>? _contents;
+  List<Content>? _photos;
+  List<Content>? _videos;
+
+  // SETTERS
+  set contents(List<Content>? value) => _contents = value;
+
+  set photos(List<Content>? value) => _photos = value;
+
+  set videos(List<Content>? value) => _videos = value;
+
+  // GETTERS
+  List<Content> get contents => _contents ?? _content?._contents ?? [];
+
   List<Content> get photos => _photos ?? _content?._photos ?? [];
 
-  Audience get audience => _audience ?? Audience.everyone;
+  List<Content> get videos => _videos ?? _content?._videos ?? [];
 
-  Privacy get privacy => _privacy ?? Privacy.everyone;
+  // ---------------------------------------------------------------------------
+  // ------------------------IF NEEDED (INTERNAL USE ONLY)----------------------
+  // ---------------------------------------------------------------------------
+  String? translatedTitle;
+  String? translatedDescription;
+  List<String>? translatedDescriptions;
 
-  FeedType get type => _type ?? FeedType.none;
-
-  Content get recent => _recent ?? Content();
+  // ---------------------------------------------------------------------------
+  // ------------------------------):CONSTRUCTORS:(-----------------------------
+  // ---------------------------------------------------------------------------
 
   Content.empty();
 
   Content({
     // -------------------------------------------------------------------------
-    // ROOT
+    // --------------------------------COMMON-----------------------------------
     // -------------------------------------------------------------------------
+    // ROOT
     super.id,
     super.timeMills,
-
-    // -------------------------------------------------------------------------
     // PUBLISHER
-    // -------------------------------------------------------------------------
-    String? publisherId,
-    this.publisherAge,
-    String? publisherGender,
-    this.publisherLatitude,
-    this.publisherLongitude,
-    this.publisherName,
-    this.publisherPhotoUrl,
-    this.publisherProfession,
-    this.publisherProfilePath,
-    this.publisherProfileUrl,
-    this.publisherRating,
-    this.publisherReligion,
-    this.publisherShortName,
-    this.publisherTitle,
-
-    // -------------------------------------------------------------------------
-    // ID & PATH
-    // -------------------------------------------------------------------------
-    this.parentId,
-    this.parentPath,
-    this.path,
-    this.recentPath,
-    this.referencePath,
-
-    // -------------------------------------------------------------------------
-    // LOCATION
-    // -------------------------------------------------------------------------
-    this.city,
-    this.country,
-    this.latitude,
-    this.longitude,
-    this.region,
-    this.zip,
-
-    // -------------------------------------------------------------------------
-    // ENUMS
-    // -------------------------------------------------------------------------
-    Audience? audience,
-    Privacy? privacy,
-    FeedType? type,
-
-    // -------------------------------------------------------------------------
-    // REFERENCE
-    // -------------------------------------------------------------------------
-    Content? content,
-    List<Content>? photos,
-    Content? recent,
-
-    // -------------------------------------------------------------------------
-    // IF NEEDED
-    // -------------------------------------------------------------------------
-    // -------------------------------------------------------------------------
-    // ARRAYS
-    // -------------------------------------------------------------------------
-    this.tags,
-
-    // -------------------------------------------------------------------------
-    // INT & DOUBLE
-    // -------------------------------------------------------------------------
-    this.likeCount,
-    this.priority,
-    this.viewCount,
-
-    // -------------------------------------------------------------------------
-    // STRING
-    // -------------------------------------------------------------------------
-    String? description,
-    this.name,
-    this.title,
-
-    // -------------------------------------------------------------------------
-    // URL
-    // -------------------------------------------------------------------------
-    String? photoUrl,
-    this.videoUrl,
-
-    // -------------------------------------------------------------------------
-    // IF NEEDED (INTERNAL USE ONLY)
-    // -------------------------------------------------------------------------
-    this.translatedTitle,
-    this.translatedDescription,
-    this.translatedDescriptions,
-  }) : // ----------------------------------------------------------------------
-       // PUBLISHER
-       // ----------------------------------------------------------------------
-       _publisherId = publisherId,
-       _publisherGender = publisherGender,
-
-       // ----------------------------------------------------------------------
-       // ENUMS
-       // ----------------------------------------------------------------------
-       _audience = audience,
-       _privacy = privacy,
-       _type = type,
-
-       // ----------------------------------------------------------------------
-       // REFERENCE
-       // ----------------------------------------------------------------------
-       _content = content,
-       _photos = photos,
-       _recent = recent,
-
-       // ----------------------------------------------------------------------
-       // IF NEEDED
-       // ----------------------------------------------------------------------
-       _description = description,
-
-       // -------------------------------------------------------------------------
-       // URL
-       // -------------------------------------------------------------------------
-       _photoUrl = photoUrl;
-
-  factory Content.parse(Object? source) {
-    final key = Keys.i;
-    return Content(
-      // -----------------------------------------------------------------------
-      // ROOT
-      // -----------------------------------------------------------------------
-      id: source.entityValue(key.id),
-      timeMills: source.entityValue(key.timeMills),
-
-      // -----------------------------------------------------------------------
-      // PUBLISHER
-      // -----------------------------------------------------------------------
-      publisherId: source.entityValue(key.publisherId),
-      publisherAge: source.entityValue(key.publisherAge),
-      publisherGender: source.entityValue(key.publisherGender),
-      publisherLatitude: source.entityValue(key.publisherLatitude),
-      publisherLongitude: source.entityValue(key.publisherLongitude),
-      publisherName: source.entityValue(key.publisherName),
-      publisherPhotoUrl: source.entityValue(key.publisherPhotoUrl),
-      publisherProfession: source.entityValue(key.publisherProfession),
-      publisherProfilePath: source.entityValue(key.publisherProfilePath),
-      publisherProfileUrl: source.entityValue(key.publisherProfileUrl),
-      publisherRating: source.entityValue(key.publisherRating),
-      publisherReligion: source.entityValue(key.publisherReligion),
-      publisherShortName: source.entityValue(key.publisherShortName),
-      publisherTitle: source.entityValue(key.publisherTitle),
-
-      // -----------------------------------------------------------------------
-      // ID & PATH
-      // -----------------------------------------------------------------------
-      parentId: source.entityValue(key.parentId),
-      parentPath: source.entityValue(key.parentPath),
-      path: source.entityValue(key.path),
-      recentPath: source.entityValue(key.recentPath),
-      referencePath: source.entityValue(key.referencePath),
-
-      // -----------------------------------------------------------------------
-      // LOCATION
-      // -----------------------------------------------------------------------
-      city: source.entityValue(key.city),
-      country: source.entityValue(key.country),
-      latitude: source.entityValue(key.latitude),
-      longitude: source.entityValue(key.longitude),
-      region: source.entityValue(key.region),
-      zip: source.entityValue(key.zip),
-
-      // -----------------------------------------------------------------------
-      // ENUMS
-      // -----------------------------------------------------------------------
-      audience: source.entityValue(key.audience, Audience.from),
-      privacy: source.entityValue(key.privacy, Privacy.parse),
-      type: source.entityValue(key.type, FeedType.parse),
-
-      // -----------------------------------------------------------------------
-      // REFERENCE
-      // -----------------------------------------------------------------------
-      content: source.entityValue(key.content, Content.parse),
-      photos: source.entityValues(key.photos, Content.parse),
-      recent: source.entityValue(key.recent, Content.parse),
-
-      // -----------------------------------------------------------------------
-      // IF NEEDED
-      // -----------------------------------------------------------------------
-      // ARRAYS
-      // -----------------------------------------------------------------------
-      tags: source.entityValues(key.tags),
-
-      // -----------------------------------------------------------------------
-      // INT & DOUBLE
-      // -----------------------------------------------------------------------
-      likeCount: source.entityValue(key.likeCount),
-      priority: source.entityValue(key.priority),
-      viewCount: source.entityValue(key.viewCount),
-
-      // -----------------------------------------------------------------------
-      // STRING
-      // -----------------------------------------------------------------------
-      description: source.entityValue(key.description),
-      name: source.entityValue(key.name),
-      title: source.entityValue(key.title),
-
-      // -----------------------------------------------------------------------
-      // URL
-      // -----------------------------------------------------------------------
-      photoUrl: source.entityValue(key.photoUrl),
-      videoUrl: source.entityValue(key.videoUrl),
-    );
-  }
-
-  Content change({
-    // -------------------------------------------------------------------------
-    // ROOT
-    // -------------------------------------------------------------------------
-    String? id,
-    int? timeMills,
-
-    // -------------------------------------------------------------------------
-    // PUBLISHER
-    // -------------------------------------------------------------------------
     String? publisherId,
     int? publisherAge,
-    String? publisherGender,
+    Gender? publisherGender,
     double? publisherLatitude,
     double? publisherLongitude,
     String? publisherName,
@@ -407,151 +556,289 @@ class Content extends Entity<Keys> {
     String? publisherReligion,
     String? publisherShortName,
     String? publisherTitle,
-
-    // -------------------------------------------------------------------------
-    // ID & PATH
-    // -------------------------------------------------------------------------
-    String? parentId,
-    String? parentPath,
-    String? path,
-    String? recentPath,
-    String? referencePath,
-
-    // -------------------------------------------------------------------------
     // LOCATION
-    // -------------------------------------------------------------------------
     String? city,
     String? country,
     double? latitude,
     double? longitude,
     String? region,
     int? zip,
+    // -------------------------------------------------------------------------
+    // ---------------------------------BOOLEANS--------------------------------
+    // -------------------------------------------------------------------------
+    bool? verified,
+    // -------------------------------------------------------------------------
+    // ---------------------------------INTEGERS--------------------------------
+    // -------------------------------------------------------------------------
+    int? commentCount,
+    int? likeCount,
+    int? priority,
+    int? reportCount,
+    int? starCount,
+    int? viewCount,
+    // -------------------------------------------------------------------------
+    // ----------------------------------DOUBLES--------------------------------
+    // -------------------------------------------------------------------------
 
     // -------------------------------------------------------------------------
-    // ENUMS
+    // ----------------------------------STRINGS--------------------------------
+    // -------------------------------------------------------------------------
+    String? description,
+    String? link,
+    String? name,
+    String? parentId,
+    String? parentLink,
+    String? parentPath,
+    String? reference,
+    String? parentUrl,
+    String? path,
+    String? photoUrl,
+    String? recentId,
+    String? contentRef,
+    String? recentRef,
+    String? referenceId,
+    String? text,
+    String? title,
+    String? url,
+    String? videoUrl,
+    // -------------------------------------------------------------------------
+    // ------------------------------LIST OF STRINGS----------------------------
+    // -------------------------------------------------------------------------
+    List<String>? bookmarks,
+    List<String>? comments,
+    List<String>? descriptions,
+    List<String>? likes,
+    List<String>? photosRef,
+    List<String>? photoIds,
+    List<String>? photoUrls,
+    List<String>? reports,
+    List<String>? stars,
+    List<String>? tags,
+    List<String>? videoIds,
+    List<String>? videoUrls,
+    List<String>? views,
+    // -------------------------------------------------------------------------
+    // -----------------------------------ENUMS---------------------------------
     // -------------------------------------------------------------------------
     Audience? audience,
     Privacy? privacy,
     FeedType? type,
 
     // -------------------------------------------------------------------------
-    // REFERENCE
+    // ----------------------------------OBJECTS--------------------------------
     // -------------------------------------------------------------------------
     Content? content,
-    List<Content>? photos,
     Content? recent,
+    // -------------------------------------------------------------------------
+    // -------------------------------LIST OF OBJECTS---------------------------
+    // -------------------------------------------------------------------------
+    List<Content>? contents,
+    List<Content>? photos,
+    List<Content>? videos,
+  }) : // ----------------------------------------------------------------------
+       // --------------------------------COMMON--------------------------------
+       // ----------------------------------------------------------------------
+       // PUBLISHER
+       _publisherId = publisherId,
+       _publisherAge = publisherAge,
+       _publisherGender = publisherGender,
+       _publisherLatitude = publisherLatitude,
+       _publisherLongitude = publisherLongitude,
+       _publisherName = publisherName,
+       _publisherPhotoUrl = publisherPhotoUrl,
+       _publisherProfession = publisherProfession,
+       _publisherProfilePath = publisherProfilePath,
+       _publisherProfileUrl = publisherProfileUrl,
+       _publisherRating = publisherRating,
+       _publisherReligion = publisherReligion,
+       _publisherShortName = publisherShortName,
+       _publisherTitle = publisherTitle,
+       // LOCATION
+       _city = city,
+       _country = country,
+       _latitude = latitude,
+       _longitude = longitude,
+       _region = region,
+       _zip = zip,
+       // ----------------------------------------------------------------------
+       // ---------------------------------BOOLEANS-----------------------------
+       // ----------------------------------------------------------------------
+       _verified = verified,
+       // ----------------------------------------------------------------------
+       // ---------------------------------INTEGERS-----------------------------
+       // ----------------------------------------------------------------------
+       _commentCount = commentCount,
+       _likeCount = likeCount,
+       _priority = priority,
+       _reportCount = reportCount,
+       _starCount = starCount,
+       _viewCount = viewCount,
+       // ----------------------------------------------------------------------
+       // ----------------------------------DOUBLES-----------------------------
+       // ----------------------------------------------------------------------
 
-    // -------------------------------------------------------------------------
-    // IF NEEDED
-    // -------------------------------------------------------------------------
-    // ARRAYS
-    // -------------------------------------------------------------------------
-    List<String>? tags,
+       // ----------------------------------------------------------------------
+       // ----------------------------------STRINGS-----------------------------
+       // ----------------------------------------------------------------------
+       _description = description,
+       _link = link,
+       _name = name,
+       _parentId = parentId,
+       _parentLink = parentLink,
+       _parentPath = parentPath,
+       _reference = reference,
+       _parentUrl = parentUrl,
+       _path = path,
+       _photoUrl = photoUrl,
+       _recentId = recentId,
+       _contentRef = contentRef,
+       _recentRef = recentRef,
+       _referenceId = referenceId,
+       _text = text,
+       _title = title,
+       _url = url,
+       _videoUrl = videoUrl,
+       // ----------------------------------------------------------------------
+       // ------------------------------LIST OF STRINGS-------------------------
+       // ----------------------------------------------------------------------
+       _bookmarks = bookmarks,
+       _comments = comments,
+       _descriptions = descriptions,
+       _likes = likes,
+       _photosRef = photosRef,
+       _photoIds = photoIds,
+       _photoUrls = photoUrls,
+       _reports = reports,
+       _stars = stars,
+       _tags = tags,
+       _videoIds = videoIds,
+       _videoUrls = videoUrls,
+       _views = views,
 
-    // -------------------------------------------------------------------------
-    // INT & DOUBLE
-    // -------------------------------------------------------------------------
-    int? likeCount,
-    int? priority,
-    int? viewCount,
+       // ----------------------------------------------------------------------
+       // -----------------------------------ENUMS------------------------------
+       // ----------------------------------------------------------------------
+       _audience = audience,
+       _privacy = privacy,
+       _type = type,
 
-    // -------------------------------------------------------------------------
-    // STRING
-    // -------------------------------------------------------------------------
-    String? description,
-    String? name,
-    String? title,
+       // ----------------------------------------------------------------------
+       // ----------------------------------OBJECTS-----------------------------
+       // ----------------------------------------------------------------------
+       _content = content,
+       _recent = recent,
+       // ----------------------------------------------------------------------
+       // -------------------------------LIST OF OBJECTS------------------------
+       // ----------------------------------------------------------------------
+       _contents = contents,
+       _photos = photos,
+       _videos = videos;
 
-    // -------------------------------------------------------------------------
-    // URL
-    // -------------------------------------------------------------------------
-    String? photoUrl,
-    String? videoUrl,
-  }) {
+  factory Content.parse(Object? source) {
+    if (source is! Map) return Content.empty();
+    final key = Keys.i;
     return Content(
       // -----------------------------------------------------------------------
+      // --------------------------------COMMON---------------------------------
+      // -----------------------------------------------------------------------
       // ROOT
-      // -----------------------------------------------------------------------
-      id: id ?? idOrNull,
-      timeMills: timeMills ?? timeMillsOrNull,
-
-      // -----------------------------------------------------------------------
+      id: source.entityValue(key.id),
+      timeMills: source.entityValue(key.timeMills),
       // PUBLISHER
-      // -----------------------------------------------------------------------
-      publisherId: publisherId ?? this.publisherId,
-      publisherAge: publisherAge ?? this.publisherAge,
-      publisherGender: publisherGender ?? _publisherGender,
-      publisherLatitude: publisherLatitude ?? this.publisherLatitude,
-      publisherLongitude: publisherLongitude ?? this.publisherLongitude,
-      publisherName: publisherName ?? this.publisherName,
-      publisherPhotoUrl: publisherPhotoUrl ?? this.publisherPhotoUrl,
-      publisherProfession: publisherProfession ?? this.publisherProfession,
-      publisherProfilePath: publisherProfilePath ?? this.publisherProfilePath,
-      publisherProfileUrl: publisherProfileUrl ?? this.publisherProfileUrl,
-      publisherRating: publisherRating ?? this.publisherRating,
-      publisherReligion: publisherReligion ?? this.publisherReligion,
-      publisherShortName: publisherShortName ?? this.publisherShortName,
-      publisherTitle: publisherTitle ?? this.publisherTitle,
-
-      // -----------------------------------------------------------------------
-      // ID & PATH
-      // -----------------------------------------------------------------------
-      parentId: parentId ?? this.parentId,
-      parentPath: parentPath ?? this.parentPath,
-      path: path ?? this.path,
-      recentPath: recentPath ?? this.recentPath,
-      referencePath: referencePath ?? this.referencePath,
-
-      // -----------------------------------------------------------------------
+      publisherId: source.entityValue(key.publisherId),
+      publisherAge: source.entityValue(key.publisherAge),
+      publisherGender: source.entityValue(
+        key.publisherGender,
+        Gender.values.parse,
+      ),
+      publisherLatitude: source.entityValue(key.publisherLatitude),
+      publisherLongitude: source.entityValue(key.publisherLongitude),
+      publisherName: source.entityValue(key.publisherName),
+      publisherPhotoUrl: source.entityValue(key.publisherPhotoUrl),
+      publisherProfession: source.entityValue(key.publisherProfession),
+      publisherProfilePath: source.entityValue(key.publisherProfilePath),
+      publisherProfileUrl: source.entityValue(key.publisherProfileUrl),
+      publisherRating: source.entityValue(key.publisherRating),
+      publisherReligion: source.entityValue(key.publisherReligion),
+      publisherShortName: source.entityValue(key.publisherShortName),
+      publisherTitle: source.entityValue(key.publisherTitle),
       // LOCATION
+      city: source.entityValue(key.city),
+      country: source.entityValue(key.country),
+      latitude: source.entityValue(key.latitude),
+      longitude: source.entityValue(key.longitude),
+      region: source.entityValue(key.region),
+      zip: source.entityValue(key.zip),
       // -----------------------------------------------------------------------
-      city: city ?? this.city,
-      country: country ?? this.country,
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
-      region: region ?? this.region,
-      zip: zip ?? this.zip,
-
+      // ---------------------------------BOOLEANS------------------------------
       // -----------------------------------------------------------------------
-      // ENUMS
+      verified: source.entityValue(key.verified),
       // -----------------------------------------------------------------------
-      audience: audience ?? _audience,
-      privacy: privacy ?? _privacy,
-      type: type ?? _type,
-
+      // ---------------------------------INTEGERS------------------------------
       // -----------------------------------------------------------------------
-      // REFERENCE
+      commentCount: source.entityValue(key.commentCount),
+      likeCount: source.entityValue(key.likeCount),
+      priority: source.entityValue(key.priority),
+      reportCount: source.entityValue(key.reportCount),
+      starCount: source.entityValue(key.starCount),
+      viewCount: source.entityValue(key.viewCount),
       // -----------------------------------------------------------------------
-      content: content ?? _content,
-      photos: photos ?? _photos,
-      recent: recent ?? _recent,
-
+      // ----------------------------------DOUBLES------------------------------
       // -----------------------------------------------------------------------
-      // IF NEEDED
       // -----------------------------------------------------------------------
-      // ARRAYS
+      // ----------------------------------STRINGS------------------------------
       // -----------------------------------------------------------------------
-      tags: tags ?? this.tags,
-
+      description: source.entityValue(key.description),
+      link: source.entityValue(key.link),
+      name: source.entityValue(key.name),
+      parentId: source.entityValue(key.parentId),
+      parentLink: source.entityValue(key.parentLink),
+      parentPath: source.entityValue(key.parentPath),
+      reference: source.entityValue(key.reference),
+      parentUrl: source.entityValue(key.parentUrl),
+      path: source.entityValue(key.path),
+      photoUrl: source.entityValue(key.photoUrl),
+      recentId: source.entityValue(key.recentId),
+      contentRef: source.entityValue(key.contentRef),
+      recentRef: source.entityValue(key.recentRef),
+      referenceId: source.entityValue(key.referenceId),
+      text: source.entityValue(key.text),
+      title: source.entityValue(key.title),
+      url: source.entityValue(key.url),
+      videoUrl: source.entityValue(key.videoUrl),
       // -----------------------------------------------------------------------
-      // INT & DOUBLE
+      // ------------------------------LIST OF STRINGS--------------------------
       // -----------------------------------------------------------------------
-      likeCount: likeCount ?? this.likeCount,
-      priority: priority ?? this.priority,
-      viewCount: viewCount ?? this.viewCount,
-
+      bookmarks: source.entityValues(key.bookmarks),
+      comments: source.entityValues(key.comments),
+      descriptions: source.entityValues(key.descriptions),
+      likes: source.entityValues(key.likes),
+      photosRef: source.entityValues(key.photosRef),
+      photoIds: source.entityValues(key.photoIds),
+      photoUrls: source.entityValues(key.photoUrls),
+      reports: source.entityValues(key.reports),
+      stars: source.entityValues(key.stars),
+      tags: source.entityValues(key.tags),
+      videoIds: source.entityValues(key.videoIds),
+      videoUrls: source.entityValues(key.videoUrls),
+      views: source.entityValues(key.views),
       // -----------------------------------------------------------------------
-      // STRING
+      // -----------------------------------ENUMS-------------------------------
       // -----------------------------------------------------------------------
-      description: description ?? this.description,
-      name: name ?? this.name,
-      title: title ?? this.title,
-
+      audience: source.entityValue(key.audience, Audience.values.parse),
+      privacy: source.entityValue(key.privacy, Privacy.values.parse),
+      type: source.entityValue(key.type, FeedType.values.parse),
       // -----------------------------------------------------------------------
-      // URL
+      // ----------------------------------OBJECTS------------------------------
       // -----------------------------------------------------------------------
-      photoUrl: photoUrl ?? _photoUrl,
-      videoUrl: videoUrl ?? this.videoUrl,
+      content: source.entityValue(key.content, Content.parse),
+      recent: source.entityValue(key.recent, Content.parse),
+      // -----------------------------------------------------------------------
+      // -------------------------------LIST OF OBJECTS-------------------------
+      // -----------------------------------------------------------------------
+      contents: source.entityValues(key.contents, Content.parse),
+      photos: source.entityValues(key.photos, Content.parse),
+      videos: source.entityValues(key.videos, Content.parse),
     );
   }
 
@@ -570,294 +857,504 @@ class Content extends Entity<Keys> {
   @override
   Map<String, dynamic> get source {
     final entries = {
-      // -----------------------------------------------------------------------
+      // ----------------------------------------------------------------------
+      // --------------------------------COMMON--------------------------------
+      // ----------------------------------------------------------------------
       // PUBLISHER
-      // -----------------------------------------------------------------------
-      if ((publisherId ?? '').isNotEmpty) key.publisherId: _publisherId,
-      if ((publisherAge ?? 0) > 0) key.publisherAge: publisherAge,
-      if ((_publisherGender ?? '').isNotEmpty)
-        key.publisherGender: _publisherGender,
-      if ((publisherLatitude ?? 0) != 0)
-        key.publisherLatitude: publisherLatitude,
-      if ((publisherLongitude ?? 0) != 0)
-        key.publisherLongitude: publisherLongitude,
-      if ((publisherName ?? '').isNotEmpty) key.publisherName: publisherName,
-      if ((publisherPhotoUrl ?? '').isNotEmpty)
-        key.publisherPhotoUrl: publisherPhotoUrl,
-      if ((publisherProfession ?? '').isNotEmpty)
-        key.publisherProfession: publisherProfession,
-      if ((publisherProfilePath ?? '').isNotEmpty)
-        key.publisherProfilePath: publisherProfilePath,
-      if ((publisherProfileUrl ?? '').isNotEmpty)
-        key.publisherProfileUrl: publisherProfileUrl,
-      if ((publisherRating ?? 0) > 0) key.publisherRating: publisherRating,
-      if ((publisherReligion ?? '').isNotEmpty)
-        key.publisherReligion: publisherReligion,
-      if ((publisherShortName ?? '').isNotEmpty)
-        key.publisherShortName: publisherShortName,
-      if ((publisherTitle ?? '').isNotEmpty) key.publisherTitle: publisherTitle,
-
-      // -----------------------------------------------------------------------
+      if (_publisherId.isNotEmpty) key.publisherId: _publisherId,
+      if ((_publisherAge ?? 0) > 0) key.publisherAge: _publisherAge,
+      if ((_publisherGender ?? Gender.male) != Gender.male)
+        key.publisherGender: _publisherGender?.name,
+      if ((_publisherLatitude ?? 0) > 0)
+        key.publisherLatitude: _publisherLatitude,
+      if ((_publisherLongitude ?? 0) > 0)
+        key.publisherLongitude: _publisherLongitude,
+      if (_publisherName.isNotEmpty) key.publisherName: _publisherName,
+      if (_publisherPhotoUrl.isUrl) key.publisherPhotoUrl: _publisherPhotoUrl,
+      if (_publisherProfession.isNotEmpty)
+        key.publisherProfession: _publisherProfession,
+      if (_publisherProfilePath.isNotEmpty)
+        key.publisherProfilePath: _publisherProfilePath,
+      if (_publisherProfileUrl.isUrl)
+        key.publisherProfileUrl: _publisherProfileUrl,
+      if ((_publisherRating ?? 0) > 0) key.publisherRating: _publisherRating,
+      if (_publisherReligion.isNotEmpty)
+        key.publisherReligion: _publisherReligion,
+      if (_publisherShortName.isNotEmpty)
+        key.publisherShortName: _publisherShortName,
+      if (_publisherTitle.isNotEmpty) key.publisherTitle: _publisherTitle,
       // LOCATION
-      // -----------------------------------------------------------------------
-      if ((city ?? '').isNotEmpty) key.city: city,
-      if ((country ?? '').isNotEmpty) key.country: country,
-      if ((latitude ?? 0) != 0) key.latitude: latitude,
-      if ((longitude ?? 0) != 0) key.longitude: longitude,
-      if ((region ?? '').isNotEmpty) key.region: region,
-      if ((zip ?? 0) != 0) key.zip: zip,
+      if (_city.isNotEmpty) key.city: _city,
+      if (_country.isNotEmpty) key.country: _country,
+      if ((_latitude ?? 0) > 0) key.latitude: _latitude,
+      if ((_longitude ?? 0) > 0) key.longitude: _longitude,
+      if (_region.isNotEmpty) key.region: _region,
+      if ((_zip ?? 0) > 0) key.zip: _zip,
+      // ----------------------------------------------------------------------
+      // ---------------------------------BOOLEANS-----------------------------
+      // ----------------------------------------------------------------------
+      if (_verified ?? false) key.verified: _verified,
+      // ----------------------------------------------------------------------
+      // ---------------------------------INTEGERS-----------------------------
+      // ----------------------------------------------------------------------
+      if ((_commentCount ?? 0) > 0) key.commentCount: _commentCount,
+      if ((_likeCount ?? 0) > 0) key.likeCount: _likeCount,
+      if ((_priority ?? 0) > 0) key.priority: _priority,
+      if ((_reportCount ?? 0) > 0) key.reportCount: _reportCount,
+      if ((_starCount ?? 0) > 0) key.starCount: _starCount,
+      if ((_viewCount ?? 0) > 0) key.viewCount: _viewCount,
+      // ----------------------------------------------------------------------
+      // ----------------------------------DOUBLES-----------------------------
+      // ----------------------------------------------------------------------
 
-      // -----------------------------------------------------------------------
-      // ID & PATH
-      // -----------------------------------------------------------------------
-      if ((parentId ?? '').isNotEmpty) key.parentId: parentId,
-      if ((parentPath ?? '').isNotEmpty) key.parentPath: parentPath,
-      if ((path ?? '').isNotEmpty) key.path: path,
-      if ((recentPath ?? '').isNotEmpty) key.recentRef: recentPath,
-      if ((referencePath ?? '').isNotEmpty) key.referencePath: referencePath,
+      // ----------------------------------------------------------------------
+      // ----------------------------------STRINGS-----------------------------
+      // ----------------------------------------------------------------------
+      if (_description.isNotEmpty) key.description: _description,
+      if (_link.isUrl) key.link: _link,
+      if (_name.isNotEmpty) key.name: _name,
+      if (_parentId.isNotEmpty) key.parentId: _parentId,
+      if (_parentLink.isUrl) key.parentLink: _parentLink,
+      if (_parentPath.isNotEmpty) key.parentPath: _parentPath,
+      if (_reference.isNotEmpty) key.reference: _reference,
+      if (_parentUrl.isUrl) key.parentUrl: _parentUrl,
+      if (_path.isNotEmpty) key.path: _path,
+      if (_photoUrl.isUrl) key.photoUrl: _photoUrl,
+      if (_recentId.isNotEmpty) key.recentId: _recentId,
+      if (_contentRef.isRef) key.contentRef: _contentRef,
+      if (_recentRef.isRef) key.recentRef: _recentRef,
+      if (_referenceId.isNotEmpty) key.referenceId: _referenceId,
+      if (_text.isNotEmpty) key.text: _text,
+      if (_title.isNotEmpty) key.title: _title,
+      if (_url.isUrl) key.url: _url,
+      if (_videoUrl.isUrl) key.videoUrl: _videoUrl,
+      // ----------------------------------------------------------------------
+      // ------------------------------LIST OF STRINGS-------------------------
+      // ----------------------------------------------------------------------
+      if (_bookmarks.isNotEmpty) key.bookmarks: _bookmarks,
+      if (_comments.isNotEmpty) key.comments: _comments,
+      if (_descriptions.isNotEmpty) key.descriptions: _descriptions,
+      if (_likes.isNotEmpty) key.likes: _likes,
+      if (_photosRef.isNotEmpty) key.photosRef: _photosRef,
+      if (_photoIds.isNotEmpty) key.photoIds: _photoIds,
+      if (_photoUrls.isUrls) key.photoUrls: _photoUrls,
+      if (_reports.isNotEmpty) key.reports: _reports,
+      if (_stars.isNotEmpty) key.stars: _stars,
+      if (_tags.isNotEmpty) key.tags: _tags,
+      if (_videoIds.isNotEmpty) key.videoIds: _videoIds,
+      if (_videoUrls.isUrls) key.videoUrls: _videoUrls,
+      if (_views.isNotEmpty) key.views: _views,
 
-      // -----------------------------------------------------------------------
-      // REFERENCE
-      // -----------------------------------------------------------------------
+      // ----------------------------------------------------------------------
+      // -----------------------------------ENUMS------------------------------
+      // ----------------------------------------------------------------------
+      if ((_audience ?? Audience.everyone) != Audience.everyone)
+        key.audience: _audience?.name,
+      if ((_privacy ?? Privacy.everyone) != Privacy.everyone)
+        key.privacy: _privacy?.name,
+      if ((_type ?? FeedType.none) != FeedType.none) key.type: _type?.name,
+
+      // ----------------------------------------------------------------------
+      // ----------------------------------OBJECTS-----------------------------
+      // ----------------------------------------------------------------------
+      // SOURCE
+      if (_content != null) key.content: _content?.source,
+      if (_recent != null) key.recent: _recent?.source,
+      // CREATE METADATA
       if (_content != null) key.contentRef: _content?.metadata,
+      if (_recent != null) key.recentRef: _recent?.metadata,
+      // ----------------------------------------------------------------------
+      // -------------------------------LIST OF OBJECTS------------------------
+      // ----------------------------------------------------------------------
+      // SOURCE
+      if ((_contents ?? []).isNotEmpty)
+        key.contents: _contents?.map((e) => e.source).toList(),
+      if ((_photos ?? []).isNotEmpty)
+        key.photos: _photos?.map((e) => e.source).toList(),
+      if ((_videos ?? []).isNotEmpty)
+        key.videos: _videos?.map((e) => e.source).toList(),
+      // CREATE METADATA
+      if ((_contents ?? []).isNotEmpty)
+        key.contentsRef: _contents?.map((e) => e.metadata).toList(),
       if ((_photos ?? []).isNotEmpty)
         key.photosRef: _photos?.map((e) => e.metadata).toList(),
-      if (_recent != null) key.recentRef: _recent?.metadata,
-
-      // -----------------------------------------------------------------------
-      // ENUMS
-      // -----------------------------------------------------------------------
-      if (_audience != null && _audience != Audience.everyone)
-        key.audience: _audience?.name,
-      if (_privacy != null && _privacy != Privacy.everyone)
-        key.privacy: _privacy?.name,
-      if (_type != null && _type != FeedType.none) key.type: _type?.name,
-
-      // -----------------------------------------------------------------------
-      // ARRAY
-      // -----------------------------------------------------------------------
-      if ((tags ?? []).isNotEmpty) key.tags: tags,
-
-      // -----------------------------------------------------------------------
-      // STRING
-      // -----------------------------------------------------------------------
-      if ((description ?? '').isNotEmpty) key.description: _description,
-      if ((name ?? '').isNotEmpty) key.name: name,
-      if ((title ?? '').isNotEmpty) key.title: title,
-
-      // -----------------------------------------------------------------------
-      // URL
-      // -----------------------------------------------------------------------
-      if ((_photoUrl ?? '').isNotEmpty) key.photoUrl: _photoUrl,
-      if ((videoUrl ?? '').isNotEmpty) key.videoUrl: videoUrl,
-
-      // -----------------------------------------------------------------------
-      // INT & DOUBLE
-      // -----------------------------------------------------------------------
-      if ((likeCount ?? 0) != 0) key.likeCount: likeCount,
-      if ((priority ?? 0) != 0) key.priority: priority,
-      if ((viewCount ?? 0) != 0) key.viewCount: viewCount,
+      if ((_videos ?? []).isNotEmpty)
+        key.videosRef: _videos?.map((e) => e.metadata).toList(),
     }.entries.where((e) => isInsertable(e.key, e.value));
     return super.source..addAll(Map.fromEntries(entries));
   }
 
-  Iterable<String> get keys => [
-    // -------------------------------------------------------------------------
-    // PUBLISHER
-    // -------------------------------------------------------------------------
-    key.publisherId,
-    key.publisherAge,
-    key.publisherGender,
-    key.publisherLatitude,
-    key.publisherLongitude,
-    key.publisherName,
-    key.publisherPhotoUrl,
-    key.publisherProfession,
-    key.publisherProfilePath,
-    key.publisherProfileUrl,
-    key.publisherRating,
-    key.publisherReligion,
-    key.publisherShortName,
-    key.publisherTitle,
+  bool get isDefaultInsertable => false;
 
-    // -------------------------------------------------------------------------
-    // LOCATION
-    // -------------------------------------------------------------------------
-    key.city,
-    key.country,
-    key.latitude,
-    key.longitude,
-    key.region,
-    key.zip,
+  Iterable<String> get keys {
+    if (!isDefaultInsertable) return [];
+    return [
+      // -------------------------------------------------------------------------
+      // --------------------------------COMMON-----------------------------------
+      // -------------------------------------------------------------------------
+      // ROOT
+      key.id,
+      key.timeMills,
+      // PUBLISHER
+      key.publisherId,
+      key.publisherAge,
+      key.publisherGender,
+      key.publisherLatitude,
+      key.publisherLongitude,
+      key.publisherName,
+      key.publisherPhotoUrl,
+      key.publisherProfession,
+      key.publisherProfilePath,
+      key.publisherProfileUrl,
+      key.publisherRating,
+      key.publisherReligion,
+      key.publisherShortName,
+      key.publisherTitle,
+      // LOCATION
+      key.city,
+      key.country,
+      key.latitude,
+      key.longitude,
+      key.region,
+      key.zip,
+      // -------------------------------------------------------------------------
+      // ---------------------------------BOOLEANS--------------------------------
+      // -------------------------------------------------------------------------
+      key.verified,
+      // -------------------------------------------------------------------------
+      // ---------------------------------INTEGERS--------------------------------
+      // -------------------------------------------------------------------------
+      key.commentCount,
+      key.likeCount,
+      key.priority,
+      key.reportCount,
+      key.starCount,
+      key.viewCount,
+      // -------------------------------------------------------------------------
+      // ----------------------------------DOUBLES--------------------------------
+      // -------------------------------------------------------------------------
 
-    // -------------------------------------------------------------------------
-    // ID & PATH
-    // -------------------------------------------------------------------------
-    key.parentId,
-    key.parentPath,
-    key.path,
-    key.recentPath,
-    key.referencePath,
+      // -------------------------------------------------------------------------
+      // ----------------------------------STRINGS--------------------------------
+      // -------------------------------------------------------------------------
+      key.description,
+      key.link,
+      key.name,
+      key.parentId,
+      key.parentLink,
+      key.parentPath,
+      key.reference,
+      key.parentUrl,
+      key.path,
+      key.photoUrl,
+      key.recentId,
+      key.contentRef,
+      key.recentRef,
+      key.referenceId,
+      key.text,
+      key.title,
+      key.url,
+      key.videoUrl,
+      // -------------------------------------------------------------------------
+      // ------------------------------LIST OF STRINGS----------------------------
+      // -------------------------------------------------------------------------
+      key.bookmarks,
+      key.comments,
+      key.descriptions,
+      key.likes,
+      key.photosRef,
+      key.photoIds,
+      key.photoUrls,
+      key.reports,
+      key.stars,
+      key.tags,
+      key.videoIds,
+      key.videoUrls,
+      key.views,
 
-    // -------------------------------------------------------------------------
-    // REFERENCE
-    // -------------------------------------------------------------------------
-    key.contentRef,
-    key.photosRef,
-    key.recentRef,
+      // -------------------------------------------------------------------------
+      // -----------------------------------ENUMS---------------------------------
+      // -------------------------------------------------------------------------
+      key.audience,
+      key.privacy,
+      key.type,
 
-    // -------------------------------------------------------------------------
-    // ENUMS
-    // -------------------------------------------------------------------------
-    key.audience,
-    key.privacy,
-    key.type,
-
-    // -------------------------------------------------------------------------
-    // ARRAY
-    // -------------------------------------------------------------------------
-    key.tags,
-
-    // -------------------------------------------------------------------------
-    // STRING
-    // -------------------------------------------------------------------------
-    key.description,
-    key.name,
-    key.title,
-
-    // -------------------------------------------------------------------------
-    // URL
-    // -------------------------------------------------------------------------
-    key.photoUrl,
-    key.videoUrl,
-
-    // -------------------------------------------------------------------------
-    // INT & DOUBLE
-    // -------------------------------------------------------------------------
-    key.likeCount,
-    key.priority,
-    key.viewCount,
-  ];
+      // -------------------------------------------------------------------------
+      // ----------------------------------OBJECTS--------------------------------
+      // -------------------------------------------------------------------------
+      key.content,
+      key.recent,
+      // -------------------------------------------------------------------------
+      // -------------------------------LIST OF OBJECTS---------------------------
+      // -------------------------------------------------------------------------
+      key.contents,
+      key.photos,
+      key.videos,
+    ];
+  }
 
   @override
   int get hashCode => Object.hashAll([
+    // -------------------------------------------------------------------------
+    // --------------------------------COMMON-----------------------------------
+    // -------------------------------------------------------------------------
+    // ROOt
     idOrNull,
     timeMillsOrNull,
     // PUBLISHER
     _publisherId,
-    publisherAge,
+    _publisherAge,
     _publisherGender,
-    publisherLatitude,
-    publisherLongitude,
-    publisherName,
-    publisherPhotoUrl,
-    publisherProfession,
-    publisherProfilePath,
-    publisherProfileUrl,
-    publisherRating,
-    publisherReligion,
-    publisherShortName,
-    publisherTitle,
-
+    _publisherLatitude,
+    _publisherLongitude,
+    _publisherName,
+    _publisherPhotoUrl,
+    _publisherProfession,
+    _publisherProfilePath,
+    _publisherProfileUrl,
+    _publisherRating,
+    _publisherReligion,
+    _publisherShortName,
+    _publisherTitle,
     // LOCATION
-    city,
-    country,
-    latitude,
-    longitude,
-    region,
-    zip,
+    _city,
+    _country,
+    _latitude,
+    _longitude,
+    _region,
+    _zip,
+    // -------------------------------------------------------------------------
+    // ---------------------------------BOOLEANS--------------------------------
+    // -------------------------------------------------------------------------
+    _verified,
+    // -------------------------------------------------------------------------
+    // ---------------------------------INTEGERS--------------------------------
+    // -------------------------------------------------------------------------
+    _commentCount,
+    _likeCount,
+    _priority,
+    _reportCount,
+    _starCount,
+    _viewCount,
+    // -------------------------------------------------------------------------
+    // ----------------------------------DOUBLES--------------------------------
+    // -------------------------------------------------------------------------
 
-    // PATH
-    parentId,
-    parentPath,
-    path,
-    recentPath,
-    referencePath,
-
-    // REFERENCE
-    if (_content != null) _content,
-    if (_photos != null && _photos!.isNotEmpty) _equality.hash(_photos),
-    if (_recent != null) _recent,
-
-    // TYPE
-    _audience?.name,
-    _privacy?.name,
-    _type?.name,
-
-    // ARRAY
-    _equality.hash(tags),
-
-    // STRING
+    // -------------------------------------------------------------------------
+    // ----------------------------------STRINGS--------------------------------
+    // -------------------------------------------------------------------------
     _description,
-    name,
-    title,
-
-    // -------------------------------------------------------------------------
-    // URL
-    // -------------------------------------------------------------------------
+    _link,
+    _name,
+    _parentId,
+    _parentLink,
+    _parentPath,
+    _reference,
+    _parentUrl,
+    _path,
     _photoUrl,
-    videoUrl,
+    _recentId,
+    _contentRef,
+    _recentRef,
+    _referenceId,
+    _text,
+    _title,
+    _url,
+    _videoUrl,
+    // -------------------------------------------------------------------------
+    // ------------------------------LIST OF STRINGS----------------------------
+    // -------------------------------------------------------------------------
+    _equality.hash(_bookmarks),
+    _equality.hash(_comments),
+    _equality.hash(_descriptions),
+    _equality.hash(_likes),
+    _equality.hash(_photosRef),
+    _equality.hash(_photoIds),
+    _equality.hash(_photoUrls),
+    _equality.hash(_reports),
+    _equality.hash(_stars),
+    _equality.hash(_tags),
+    _equality.hash(_videoIds),
+    _equality.hash(_videoUrls),
+    _equality.hash(_views),
 
-    // INT & DOUBLE
-    likeCount,
-    priority,
-    viewCount,
+    // -------------------------------------------------------------------------
+    // -----------------------------------ENUMS---------------------------------
+    // -------------------------------------------------------------------------
+    _audience,
+    _privacy,
+    _type,
+
+    // -------------------------------------------------------------------------
+    // ----------------------------------OBJECTS--------------------------------
+    // -------------------------------------------------------------------------
+    _content,
+    _recent,
+    // -------------------------------------------------------------------------
+    // -------------------------------LIST OF OBJECTS---------------------------
+    // -------------------------------------------------------------------------
+    _equality.hash(_contents),
+    _equality.hash(_photos),
+    _equality.hash(_videos),
   ]);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (runtimeType != other.runtimeType) return false;
     return other is Content &&
+        // ---------------------------------------------------------------------
+        // --------------------------------COMMON-------------------------------
+        // ---------------------------------------------------------------------
+        // ROOt
         idOrNull == other.idOrNull &&
         timeMillsOrNull == other.timeMillsOrNull &&
         // PUBLISHER
         _publisherId == other._publisherId &&
-        publisherAge == other.publisherAge &&
+        _publisherAge == other._publisherAge &&
         _publisherGender == other._publisherGender &&
-        publisherLatitude == other.publisherLatitude &&
-        publisherLongitude == other.publisherLongitude &&
-        publisherName == other.publisherName &&
-        publisherPhotoUrl == other.publisherPhotoUrl &&
-        publisherProfession == other.publisherProfession &&
-        publisherProfilePath == other.publisherProfilePath &&
-        publisherProfileUrl == other.publisherProfileUrl &&
-        publisherRating == other.publisherRating &&
-        publisherReligion == other.publisherReligion &&
-        publisherShortName == other.publisherShortName &&
-        publisherTitle == other.publisherTitle &&
+        _publisherLatitude == other._publisherLatitude &&
+        _publisherLongitude == other._publisherLongitude &&
+        _publisherName == other._publisherName &&
+        _publisherPhotoUrl == other._publisherPhotoUrl &&
+        _publisherProfession == other._publisherProfession &&
+        _publisherProfilePath == other._publisherProfilePath &&
+        _publisherProfileUrl == other._publisherProfileUrl &&
+        _publisherRating == other._publisherRating &&
+        _publisherReligion == other._publisherReligion &&
+        _publisherShortName == other._publisherShortName &&
+        _publisherTitle == other._publisherTitle &&
         // LOCATION
-        city == other.city &&
-        country == other.country &&
-        latitude == other.latitude &&
-        longitude == other.longitude &&
-        region == other.region &&
-        zip == other.zip &&
-        // PATH
-        parentId == other.parentId &&
-        parentPath == other.parentPath &&
-        path == other.path &&
-        recentPath == other.recentPath &&
-        referencePath == other.referencePath &&
-        // REFERENCE
-        _content == other._content &&
-        _equality.equals(_photos, other._photos) &&
-        _recent == other._recent &&
-        // TYPE
+        _city == other._city &&
+        _country == other._country &&
+        _latitude == other._latitude &&
+        _longitude == other._longitude &&
+        _region == other._region &&
+        _zip == other._zip &&
+        // ---------------------------------------------------------------------
+        // ---------------------------------BOOLEANS----------------------------
+        // ---------------------------------------------------------------------
+        _verified == other._verified &&
+        // ---------------------------------------------------------------------
+        // ---------------------------------INTEGERS----------------------------
+        // ---------------------------------------------------------------------
+        _commentCount == other._commentCount &&
+        _likeCount == other._likeCount &&
+        _priority == other._priority &&
+        _reportCount == other._reportCount &&
+        _starCount == other._starCount &&
+        _viewCount == other._viewCount &&
+        // ---------------------------------------------------------------------
+        // ----------------------------------DOUBLES----------------------------
+        // ---------------------------------------------------------------------
+        // ---------------------------------------------------------------------
+        // ----------------------------------STRINGS----------------------------
+        // ---------------------------------------------------------------------
+        _description == other._description &&
+        _link == other._link &&
+        _name == other._name &&
+        _parentId == other._parentId &&
+        _parentLink == other._parentLink &&
+        _parentPath == other._parentPath &&
+        _reference == other._reference &&
+        _parentUrl == other._parentUrl &&
+        _path == other._path &&
+        _photoUrl == other._photoUrl &&
+        _recentId == other._recentId &&
+        _contentRef == other._contentRef &&
+        _recentRef == other._recentRef &&
+        _referenceId == other._referenceId &&
+        _text == other._text &&
+        _title == other._title &&
+        _url == other._url &&
+        _videoUrl == other._videoUrl &&
+        // ---------------------------------------------------------------------
+        // ------------------------------LIST OF STRINGS------------------------
+        // ---------------------------------------------------------------------
+        _equality.equals(_bookmarks, other._bookmarks) &&
+        _equality.equals(_comments, other._comments) &&
+        _equality.equals(_descriptions, other._descriptions) &&
+        _equality.equals(_likes, other._likes) &&
+        _equality.equals(_photosRef, other._photosRef) &&
+        _equality.equals(_photoIds, other._photoIds) &&
+        _equality.equals(_photoUrls, other._photoUrls) &&
+        _equality.equals(_reports, other._reports) &&
+        _equality.equals(_stars, other._stars) &&
+        _equality.equals(_tags, other._tags) &&
+        _equality.equals(_videoIds, other._videoIds) &&
+        _equality.equals(_videoUrls, other._videoUrls) &&
+        _equality.equals(_views, other._views) &&
+        // ---------------------------------------------------------------------
+        // -----------------------------------ENUMS-----------------------------
+        // ---------------------------------------------------------------------
         _audience == other._audience &&
         _privacy == other._privacy &&
         _type == other._type &&
-        // ARRAY
-        _equality.equals(tags, other.tags) &&
-        // STRING
-        _description == other._description &&
-        name == other.name &&
-        title == other.title &&
-        // URL
-        _photoUrl == other._photoUrl &&
-        videoUrl == other.videoUrl &&
-        // INT & DOUBLE
-        likeCount == other.likeCount &&
-        priority == other.priority &&
-        viewCount == other.viewCount;
+        // ---------------------------------------------------------------------
+        // ----------------------------------OBJECTS----------------------------
+        // ---------------------------------------------------------------------
+        _content == other._content &&
+        _recent == other._recent &&
+        // ---------------------------------------------------------------------
+        // -------------------------------LIST OF OBJECTS-----------------------
+        // ---------------------------------------------------------------------
+        _equality.equals(_contents, other._contents) &&
+        _equality.equals(_photos, other._photos) &&
+        _equality.equals(_videos, other._videos);
   }
+
+  @override
+  String toString() => "$Content#$hashCode($idOrNull)";
+}
+
+int? _int(int? value) {
+  if (value == null) return null;
+  if (value == 0) return null;
+  return value;
+}
+
+double? _double(double? value) {
+  if (value == null) return null;
+  if (value == 0) return null;
+  return value;
+}
+
+String? _string(String? value, {bool url = false, bool ref = false}) {
+  if (value == null) return null;
+  if (value.isEmpty) return null;
+  if (url && !value.startsWith("https://")) return null;
+  if (ref && !value.startsWith("@")) return null;
+  return value;
+}
+
+List<String> _strings(
+  List<String>? value, {
+  bool url = false,
+  bool ref = false,
+}) {
+  if (value == null) return [];
+  if (value.isEmpty) return [];
+  if (url && !value.every((e) => e.startsWith("https://"))) return [];
+  if (ref && !value.every((e) => e.startsWith("@"))) return [];
+  return value;
+}
+
+extension StringHelper on String? {
+  bool get isEmpty => this == null || this!.isEmpty;
+
+  bool get isNotEmpty => this != null && this!.isNotEmpty;
+
+  bool get isUrl => this != null && this!.startsWith("https://");
+
+  bool get isRef => this != null && this!.startsWith("@");
+}
+
+extension StringsHelper on List<String>? {
+  bool get isEmpty => this == null || this!.isEmpty;
+
+  bool get isNotEmpty => this != null && this!.isNotEmpty;
+
+  bool get isUrls => this != null && this!.every((e) => e.isUrl);
+
+  bool get isRefs => this != null && this!.every((e) => e.isRef);
 }

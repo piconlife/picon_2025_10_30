@@ -6,6 +6,7 @@ import '../../features/chooser/data/models/profession.dart';
 import '../../features/chooser/data/models/religion.dart';
 import '../../roots/helpers/location.dart';
 import '../enums/feed_type.dart';
+import '../enums/gender.dart';
 import 'content.dart';
 import 'user.dart';
 
@@ -58,7 +59,7 @@ class Feed extends Content {
     super.path,
     super.content,
     super.recent,
-    super.recentPath,
+    super.recentRef,
     super.type,
   });
 
@@ -68,12 +69,12 @@ class Feed extends Content {
     required super.type,
     required super.path,
     required super.content,
-    super.recentPath,
+    super.recentRef,
     User? publisher,
   }) : super(
          publisherId: publisher?.id ?? UserHelper.uid,
          publisherAge: publisher?.age ?? UserHelper.user.age,
-         publisherGender: publisher?.gender.id ?? UserHelper.user.gender.id,
+         publisherGender: publisher?.gender ?? UserHelper.user.gender,
          publisherProfession:
              InAppProfession.of(
                publisher?.profession ?? UserHelper.user.profession,
@@ -104,7 +105,7 @@ class Feed extends Content {
       // PUBLISHER
       publisherId: content.publisherId,
       publisherAge: content.publisherAge,
-      publisherGender: content.publisherGender.id,
+      publisherGender: content.publisherGender,
       publisherProfession: content.publisherProfession,
       publisherRating: content.publisherRating,
       publisherReligion: content.publisherReligion,
@@ -128,7 +129,7 @@ class Feed extends Content {
     int? timeMills,
     String? publisherId,
     int? publisherAge,
-    String? publisherGender,
+    Gender? publisherGender,
     String? publisherProfession,
     double? publisherRating,
     String? publisherReligion,
@@ -148,7 +149,7 @@ class Feed extends Content {
       timeMills: timeMills ?? this.timeMills,
       publisherId: publisherId ?? this.publisherId,
       publisherAge: publisherAge ?? this.publisherAge,
-      publisherGender: publisherGender ?? this.publisherGender.id,
+      publisherGender: publisherGender ?? this.publisherGender,
       publisherProfession: publisherProfession ?? this.publisherProfession,
       publisherRating: publisherRating ?? this.publisherRating,
       publisherReligion: publisherReligion ?? this.publisherReligion,

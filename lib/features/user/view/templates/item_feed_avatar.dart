@@ -7,6 +7,7 @@ import 'package:flutter_andomie/utils/date_helper.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/res/placeholders.dart';
+import '../../../../data/enums/gender.dart';
 import '../../../../data/models/user.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../roots/widgets/avatar.dart';

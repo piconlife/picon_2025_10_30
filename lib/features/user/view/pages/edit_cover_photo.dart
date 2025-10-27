@@ -423,7 +423,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
                   return AndrossyButton(
                     primary: primary,
                     clickEffect: AndrossyGestureEffect.scale(),
-                    text: value.title,
+                    text: value.label,
                     textSize: dimen.dp(16),
                     textColor: const AndrossyButtonProperty.all(Colors.white),
                     icon: InAppIcons.shieldCheck.solid,

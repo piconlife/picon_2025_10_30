@@ -6,25 +6,25 @@ enum Privacy {
   everyone(
     name: "EVERYONE",
     icon: InAppIcons.user,
-    title: "Everyone",
+    label: "Everyone",
     subtitle: "Public",
   ),
   onlyFriends(
     name: "ONLY_FRIENDS",
     icon: InAppIcons.following,
-    title: "Only friends",
+    label: "Only friends",
   ),
   onlyMe(
     name: "ONLY_ME",
     icon: InAppIcons.lock,
-    title: "Only me",
+    label: "Only me",
     subtitle: "Private",
   );
 
   final String name;
   final AndomieIcon icon;
-  final String title;
-  final String subtitle;
+  final String label;
+  final String description;
 
   bool get isOnlyMe => this == Privacy.onlyMe;
 
@@ -39,13 +39,13 @@ enum Privacy {
   const Privacy({
     required this.name,
     required this.icon,
-    required this.title,
+    required this.label,
     String? subtitle,
-  }) : subtitle = subtitle ?? title;
+  }) : description = subtitle ?? label;
 
   factory Privacy.parse(Object? value) {
     return values.where((e) {
-          return e == value || e.name == value || e.title == value;
+          return e == value || e.name == value || e.label == value;
         }).firstOrNull ??
         Privacy.everyone;
   }

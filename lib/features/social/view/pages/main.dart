@@ -192,7 +192,7 @@ class _FeedPageState extends State<FeedPage>
       ),
       body: TabBarView(
         controller: controller,
-        children:  [
+        children: [
           FeedHomePage(),
           FeedVerifiedPage(),
           FeedVerifierPage(),

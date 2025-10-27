@@ -103,7 +103,7 @@ class _Option extends StatelessWidget {
           SizedBox(width: dimen.dp(16)),
           Expanded(
             child: InAppText(
-              privacy.title,
+              privacy.label,
               style: TextStyle(color: dark, fontSize: dimen.dp(18)),
             ),
           ),
