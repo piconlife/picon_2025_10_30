@@ -6,7 +6,7 @@ import '../../models/photo.dart';
 
 class RemoteFeedPhotoDataSource extends RemoteDataSource<Photo> {
   RemoteFeedPhotoDataSource()
-    : super(delegate: FirestoreDataDelegate.i, path: Paths.refPhotos);
+    : super(delegate: FirestoreDataDelegate.i, path: Paths.userPhotos);
 
   @override
   Photo build(Object? source) => Photo.parse(source);

@@ -16,8 +16,6 @@ class Paths {
   static const feeds = "feeds";
   static const feedLikes = "{${ParamKeys.path}}/$likes";
   static const feedComments = "{${ParamKeys.path}}/$comments";
-  static const refPhotos = "{${ParamKeys.path}}/$photos";
-  static const refPhoto = "$refPhotos/{${ParamKeys.id}}";
   static const feedStars = "{${ParamKeys.path}}/$stars";
   static const feedVideos = "{${ParamKeys.path}}/$videos";
   static const followers = "followers";
@@ -45,6 +43,7 @@ class Paths {
   static const userMemories = "$users/{${ParamKeys.uid}}/$memories";
   static const userNotes = "$users/{${ParamKeys.uid}}/$notes";
   static const userPhotos = "$users/{${ParamKeys.uid}}/$photos";
+  static const userPhotoRef = "$userPhotos/{${ParamKeys.id}}";
   static const userPosts = "$users/{${ParamKeys.uid}}/$posts";
   static const userPost = "$userPosts/{${ParamKeys.id}}";
   static const userReports = "$users/{${ParamKeys.uid}}/$reports";

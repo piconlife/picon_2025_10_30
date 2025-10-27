@@ -105,8 +105,8 @@ class Keys extends EntityKey {
   final recent = 'recent';
 
   // METADATA
-  final contentRef = 'contentRef';
-  final recentRef = 'recentRef';
+  final contentRef = '@content';
+  final recentRef = '@recent';
 
   // ---------------------------------------------------------------------------
   // -------------------------------LIST OF OBJECTS-----------------------------
@@ -117,7 +117,7 @@ class Keys extends EntityKey {
   final videos = 'videos';
 
   // METADATA
-  final contentsRef = 'contentsRef';
-  final photosRef = 'photosRef';
-  final videosRef = 'videosRef';
+  final contentsRef = '@contents';
+  final photosRef = '@photos';
+  final videosRef = '@videos';
 }

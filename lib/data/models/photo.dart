@@ -9,11 +9,10 @@ class Photo extends Content {
     Keys.i.id,
     Keys.i.timeMills,
     Keys.i.publisherId,
-    Keys.i.parentId,
-    Keys.i.parentPath,
     Keys.i.path,
-    Keys.i.photoUrl,
     Keys.i.privacy,
+    Keys.i.audience,
+    Keys.i.photoUrl,
     Keys.i.description,
     Keys.i.likeCount,
     Keys.i.viewCount,
@@ -23,27 +22,24 @@ class Photo extends Content {
     super.id,
     super.timeMills,
     super.publisherId,
-    super.parentId,
     super.path,
-    super.parentPath,
+    super.audience,
+    super.privacy,
     super.photoUrl,
     super.description,
     super.likeCount,
     super.viewCount,
-    super.audience,
-    super.privacy,
   });
 
   Photo.create({
     required super.id,
     required super.timeMills,
     required super.publisherId,
-    required super.parentId,
     required super.path,
-    required super.parentPath,
-    required super.photoUrl,
     required super.audience,
     required super.privacy,
+    required super.photoUrl,
+    super.description,
   });
 
   factory Photo.parse(Object? source) {
@@ -52,9 +48,7 @@ class Photo extends Content {
       id: content.id,
       timeMills: content.timeMills,
       publisherId: content.publisherId,
-      parentId: content.parentId,
       path: content.path,
-      parentPath: content.parentPath,
       photoUrl: content.photoUrl,
       description: content.description,
       audience: content.audience,
@@ -68,9 +62,7 @@ class Photo extends Content {
     String? id,
     int? timeMills,
     String? publisherId,
-    String? parentId,
     String? path,
-    String? parentPath,
     String? photoUrl,
     String? description,
     int? likeCount,
@@ -82,9 +74,7 @@ class Photo extends Content {
       id: id ?? this.id,
       timeMills: timeMills ?? this.timeMills,
       publisherId: publisherId ?? this.publisherId,
-      parentId: parentId ?? this.parentId,
       path: path ?? this.path,
-      parentPath: parentPath ?? this.parentPath,
       photoUrl: photoUrl ?? this.photoUrl,
       description: description ?? this.description,
       likeCount: likeCount ?? this.likeCount,
@@ -95,5 +85,5 @@ class Photo extends Content {
   }
 
   @override
-  String toString() => "$Photo#$hashCode($filtered)";
+  String toString() => "$Photo#$hashCode($idOrNull)";
 }

@@ -110,7 +110,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
       }
     }
     path = PathReplacer.replaceByIterable(Paths.userPost, [UserHelper.uid, id]);
-    photosPath = PathReplacer.replaceByIterable(Paths.refPhotos, [path]);
+    photosPath = PathReplacer.replaceByIterable(Paths.userPhotos, [
+      UserHelper.uid,
+    ]);
   }
 
   void _changeAudience(BuildContext context) {
@@ -154,12 +156,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
       id: photoId,
       timeMills: Entity.generateTimeMills,
       publisherId: UserHelper.uid,
-      parentId: id,
-      path: PathReplacer.replaceByIterable(Paths.refPhoto, [path, photoId]),
-      parentPath: path,
-      photoUrl: url,
+      path: PathProvider.generatePath(photosPath, photoId),
       audience: audience.value,
       privacy: privacy.value,
+      photoUrl: url,
     );
     photos.value.insert(index, x.copy(data));
     return UploadingStatus.processed;
@@ -304,7 +304,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     final mTimeMills = Entity.generateTimeMills;
 
     final mUserPost = UserPost.create(
-      id: Entity.generateID,
+      id: id,
       timeMills: mTimeMills,
       publisherId: UserHelper.uid,
       path: path,
@@ -314,7 +314,14 @@ class _CreatePostPageState extends State<CreatePostPage> {
       description: description.isEmpty ? null : description,
       type: mPhotos.isNotEmpty ? FeedType.photo : null,
       tags: tags.value,
-      photos: mPhotos.isEmpty ? null : mPhotos,
+      photos:
+          mPhotos.isEmpty
+              ? null
+              : mPhotos.map((e) {
+                return e
+                  ..privacy = privacy.value
+                  ..audience = audience.value;
+              }).toList(),
     );
 
     final mFeed = Feed.create(
@@ -325,6 +332,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
       recentRef: Settings.get(_kRecentPostPath, null),
       type: mUserPost.type,
     );
+
+    // log(jsonEncode(mFeed.filtered));
+    //
+    // return;
 
     Analytics.future(name: 'create_post', () async {
       context.showLoader();

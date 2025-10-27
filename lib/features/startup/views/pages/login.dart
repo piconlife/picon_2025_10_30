@@ -8,6 +8,7 @@ import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_entity/entity.dart';
+import 'package:in_app_analytics/analytics.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/constants/app.dart';
@@ -75,10 +76,12 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     btnSubmitKey.currentState?.showLoading();
-    final value = await FindUserByPhoneUseCase.i(number.international);
+    final value = await Analytics.future(name: 'find_user_by_phone', () {
+      return FindUserByPhoneUseCase.i(number.international);
+    });
     btnSubmitKey.currentState?.hideLoading();
     if (!context.mounted) return;
-    if (!value.status.isSuccessful || value.result.isEmpty) {
+    if (value == null || !value.status.isSuccessful || value.result.isEmpty) {
       context.showErrorSnackBar("User account not found!");
       return;
     }
@@ -149,11 +152,13 @@ class _LoginPageState extends State<LoginPage> {
 
   void _login(BuildContext context, String email, String password) async {
     if (email.isEmpty || password.isEmpty) return;
-    context.signInByEmail<User>(
-      EmailAuthenticator(email: email, password: password),
-      id: Routes.login,
-      // onBiometric: (_) => context.show("biometric"),
-    );
+    Analytics.callAsync(name: 'sign_in_by_email', () {
+      return context.signInByEmail<User>(
+        EmailAuthenticator(email: email, password: password),
+        id: Routes.login,
+        // onBiometric: (_) => context.show("biometric"),
+      );
+    });
   }
 
   void _loginWithBiometric(BuildContext context) {

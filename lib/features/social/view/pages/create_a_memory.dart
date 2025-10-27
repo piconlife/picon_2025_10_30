@@ -103,7 +103,9 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
       }
     }
     path = PathReplacer.replaceByIterable(Paths.userPost, [UserHelper.uid, id]);
-    photosPath = PathReplacer.replaceByIterable(Paths.refPhotos, [path]);
+    photosPath = PathReplacer.replaceByIterable(Paths.userPhotoRef, [
+      UserHelper.uid,
+    ]);
   }
 
   void _changeAudience(BuildContext context) {
@@ -184,9 +186,7 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
       id: id,
       timeMills: Entity.generateTimeMills,
       publisherId: UserHelper.uid,
-      parentId: this.id,
-      path: PathReplacer.replaceByIterable(Paths.refPhoto, [photosPath, id]),
-      parentPath: path,
+      path: PathProvider.generatePath(photosPath, id),
       photoUrl: url,
       privacy: privacy.value,
       audience: Audience.everyone,

@@ -6,7 +6,7 @@ import '../../models/photo.dart';
 
 class LocalPhotoDataSource extends LocalDataSource<Photo> {
   LocalPhotoDataSource()
-    : super(delegate: LocalDataDelegate.i, path: Paths.refPhotos);
+    : super(delegate: LocalDataDelegate.i, path: Paths.userPhotos);
 
   @override
   Photo build(Object? source) => Photo.parse(source);
