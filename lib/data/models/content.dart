@@ -55,9 +55,9 @@ class Content extends Entity<Keys> {
   String? parentUrl;
   String? path;
   List<String>? photosRef;
-  List<Content>? photos;
+  List<Content>? _photos;
   List<String>? photoIds;
-  String? photoUrl;
+  String? _photoUrl;
   List<String>? _photoUrls;
   int? priority;
   Privacy? _privacy;
@@ -135,22 +135,32 @@ class Content extends Entity<Keys> {
 
   bool get isShareMode => privacy.isEveryone || isPublisher;
 
-  bool get isPhotoMode => photoUrlAt != null;
+  bool get isPhotoMode => photoUrl != null;
 
   bool get isVideoMode => (videoUrl ?? videoUrls?.firstOrNull) != null;
 
   Gender get publisherGender => Gender.from(_publisherGender);
 
-  String? get photoUrlAt {
-    return photoUrl ??
-        _photoUrls?.firstOrNull ??
-        content.photoUrl ??
-        content._photoUrls?.firstOrNull;
+  String? get photoUrl {
+    if ((_photoUrl ?? '').isNotEmpty) return _photoUrl;
+    if ((_content?._photoUrl ?? '').isNotEmpty) return _content!._photoUrl!;
+    if (photos.isNotEmpty) {
+      return photos.firstOrNull?._photoUrl;
+    }
+    return null;
   }
 
   List<String> get photoUrls {
-    return _photoUrls ?? [if (photoUrl != null) photoUrl!];
+    if ((_photoUrls ?? []).isNotEmpty) return _photoUrls!;
+    if (photos.isNotEmpty) {
+      return photos.map((e) => e._photoUrl).whereType<String>().toList();
+    }
+    if ((_photoUrl ?? '').isNotEmpty) return [_photoUrl!];
+    if ((_content?._photoUrl ?? '').isNotEmpty) return [_content!._photoUrl!];
+    return [];
   }
+
+  List<Content> get photos => _photos ?? _content?._photos ?? [];
 
   Audience get audience => _audience ?? Audience.everyone;
 
@@ -217,7 +227,7 @@ class Content extends Entity<Keys> {
     // REFERENCE
     // -------------------------------------------------------------------------
     Content? content,
-    this.photos,
+    List<Content>? photos,
     Content? recent,
 
     // -------------------------------------------------------------------------
@@ -245,7 +255,7 @@ class Content extends Entity<Keys> {
     // -------------------------------------------------------------------------
     // URL
     // -------------------------------------------------------------------------
-    this.photoUrl,
+    String? photoUrl,
     this.videoUrl,
 
     // -------------------------------------------------------------------------
@@ -271,12 +281,18 @@ class Content extends Entity<Keys> {
        // REFERENCE
        // ----------------------------------------------------------------------
        _content = content,
+       _photos = photos,
        _recent = recent,
 
        // ----------------------------------------------------------------------
        // IF NEEDED
        // ----------------------------------------------------------------------
-       _description = description;
+       _description = description,
+
+       // -------------------------------------------------------------------------
+       // URL
+       // -------------------------------------------------------------------------
+       _photoUrl = photoUrl;
 
   factory Content.parse(Object? source) {
     final key = Keys.i;
@@ -507,7 +523,7 @@ class Content extends Entity<Keys> {
       // REFERENCE
       // -----------------------------------------------------------------------
       content: content ?? _content,
-      photos: photos ?? this.photos,
+      photos: photos ?? _photos,
       recent: recent ?? _recent,
 
       // -----------------------------------------------------------------------
@@ -534,7 +550,7 @@ class Content extends Entity<Keys> {
       // -----------------------------------------------------------------------
       // URL
       // -----------------------------------------------------------------------
-      photoUrl: photoUrl ?? this.photoUrl,
+      photoUrl: photoUrl ?? _photoUrl,
       videoUrl: videoUrl ?? this.videoUrl,
     );
   }
@@ -604,8 +620,8 @@ class Content extends Entity<Keys> {
       // REFERENCE
       // -----------------------------------------------------------------------
       if (_content != null) key.contentRef: _content?.metadata,
-      if ((photos ?? []).isNotEmpty)
-        key.photosRef: photos?.map((e) => e.metadata).toList(),
+      if ((_photos ?? []).isNotEmpty)
+        key.photosRef: _photos?.map((e) => e.metadata).toList(),
       if (_recent != null) key.recentRef: _recent?.metadata,
 
       // -----------------------------------------------------------------------
@@ -632,7 +648,7 @@ class Content extends Entity<Keys> {
       // -----------------------------------------------------------------------
       // URL
       // -----------------------------------------------------------------------
-      if ((photoUrl ?? '').isNotEmpty) key.photoUrl: photoUrl,
+      if ((_photoUrl ?? '').isNotEmpty) key.photoUrl: _photoUrl,
       if ((videoUrl ?? '').isNotEmpty) key.videoUrl: videoUrl,
 
       // -----------------------------------------------------------------------
@@ -760,7 +776,7 @@ class Content extends Entity<Keys> {
 
     // REFERENCE
     if (_content != null) _content,
-    if (photos != null && photos!.isNotEmpty) _equality.hash(photos),
+    if (_photos != null && _photos!.isNotEmpty) _equality.hash(_photos),
     if (_recent != null) _recent,
 
     // TYPE
@@ -779,7 +795,7 @@ class Content extends Entity<Keys> {
     // -------------------------------------------------------------------------
     // URL
     // -------------------------------------------------------------------------
-    photoUrl,
+    _photoUrl,
     videoUrl,
 
     // INT & DOUBLE
@@ -824,7 +840,7 @@ class Content extends Entity<Keys> {
         referencePath == other.referencePath &&
         // REFERENCE
         _content == other._content &&
-        _equality.equals(photos, other.photos) &&
+        _equality.equals(_photos, other._photos) &&
         _recent == other._recent &&
         // TYPE
         _audience == other._audience &&
@@ -837,7 +853,7 @@ class Content extends Entity<Keys> {
         name == other.name &&
         title == other.title &&
         // URL
-        photoUrl == other.photoUrl &&
+        _photoUrl == other._photoUrl &&
         videoUrl == other.videoUrl &&
         // INT & DOUBLE
         likeCount == other.likeCount &&

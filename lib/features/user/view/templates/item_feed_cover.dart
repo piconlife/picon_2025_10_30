@@ -175,7 +175,7 @@ class _Body extends StatelessWidget {
                       ),
                     ),
                     child: InAppImage(
-                      item.photoUrlAt ?? InAppPlaceholders.image,
+                      item.photoUrl ?? InAppPlaceholders.image,
                       width: double.infinity,
                       fit: BoxFit.cover,
                     ),

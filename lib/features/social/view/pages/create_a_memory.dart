@@ -368,7 +368,7 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
     context.read<UserPostCubit>().create(feed).then((value) {
       if (!context.mounted) return;
       if (value.isSuccessful) {
-        context.read<UserPhotoCubit?>()?.add(feed..photos = mPhotos);
+        context.read<UserPhotoCubit?>()?.add(feed.copyWith(photos: mPhotos));
         _createFeedForGlobal(context, feed);
       } else {
         context.hideLoader();

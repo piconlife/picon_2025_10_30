@@ -57,6 +57,7 @@ class Feed extends Content {
     // REFERENCES
     super.path,
     super.content,
+    super.recent,
     super.recentPath,
     super.type,
   });
@@ -67,6 +68,7 @@ class Feed extends Content {
     required super.type,
     required super.path,
     required super.content,
+    super.recentPath,
     User? publisher,
   }) : super(
          publisherId: publisher?.id ?? UserHelper.uid,
@@ -115,6 +117,7 @@ class Feed extends Content {
       zip: content.zip,
       // REFERENCES
       content: content.content,
+      recent: content.recent,
       path: content.path,
       type: content.type,
     );
@@ -137,6 +140,7 @@ class Feed extends Content {
     int? zip,
     String? path,
     Content? content,
+    Content? recent,
     FeedType? type,
   }) {
     return Feed._(
@@ -156,6 +160,7 @@ class Feed extends Content {
       zip: zip ?? this.zip,
       path: path ?? this.path,
       content: content ?? this.content,
+      recent: recent ?? this.recent,
       type: type ?? this.type,
     );
   }

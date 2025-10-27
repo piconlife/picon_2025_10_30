@@ -166,7 +166,7 @@ class _Body extends StatelessWidget {
                 child: InAppGesture(
                   onTap: () {},
                   child: InAppAvatar(
-                    item.photoUrlAt ?? InAppPlaceholders.image,
+                    item.photoUrl ?? InAppPlaceholders.image,
                     borderColor: Colors.white,
                     borderSize: dimen.dp(4),
                     backgroundColor: dark.t01,
