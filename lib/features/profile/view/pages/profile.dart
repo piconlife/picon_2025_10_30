@@ -3,7 +3,6 @@ import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/constants/app.dart';
@@ -11,6 +10,7 @@ import '../../../../app/helpers/user.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../app/res/size.dart';
 import '../../../../data/models/user.dart';
+import '../../../../features/user/routes.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
@@ -21,7 +21,6 @@ import '../../../../roots/widgets/tiled_button.dart';
 import '../../../../roots/widgets/user_avatar.dart';
 import '../../../../roots/widgets/user_builder.dart';
 import '../../../../routes/paths.dart';
-import '../../../social/view/cubits/follower_cubit.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -36,14 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _visitProfile(BuildContext context, User? user) {
-    if (user == null) return;
-    context.open(
-      Routes.userProfile,
-      arguments: {
-        "$FollowerCubit": context.read<FollowerCubit>(),
-        "$User": user,
-      },
-    );
+    context.openUserProfile(user: user);
   }
 
   void _visitStore(BuildContext context) {

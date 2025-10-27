@@ -11,7 +11,9 @@ import 'package:flutter_andomie/utils/key_generator.dart';
 import 'package:flutter_andomie/utils/path_replacer.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/flutter_entity.dart';
+import 'package:in_app_analytics/analytics.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 import 'package:object_finder/object_finder.dart';
 
@@ -43,7 +45,9 @@ import '../../../../roots/widgets/icon_button.dart';
 import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/texted_action.dart';
 import '../../../../routes/paths.dart';
+import '../../../user/view/cubits/post_cubit.dart';
 import '../../../user/view/widgets/uploading_image.dart';
+import '../cubits/feed_home_cubit.dart';
 
 class CreatePostPage extends StatefulWidget {
   final Object? args;
@@ -68,6 +72,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
   final privacy = Privacy.everyone.obx;
   final tags = <String>[].obx;
   final photos = <EditablePhoto>[].obx;
+
+  late final feedCubit = context.read<FeedHomeCubit>();
+  late final postCubit = context.read<UserPostCubit>();
 
   UserPost? old;
   FeedType type = FeedType.post;
@@ -320,21 +327,24 @@ class _CreatePostPageState extends State<CreatePostPage> {
       type: mUserPost.type,
     );
 
-    CreateFeedUseCase.i(mFeed).then((value) {
+    Analytics.future(name: 'create_post', () async {
+      final value = await CreateFeedUseCase.i(mFeed);
       if (!context.mounted) return;
       if (value.isSuccessful) {
+        // feedCubit.refresh();
+        // postCubit.refresh();
         _complete(context);
-      } else {
-        context.hideLoader();
-        context.showAlert(message: ResponseMessages.tryAgain).then((value) {
-          if (!context.mounted) return;
-          if (value) {
-            _create(context);
-          } else {
-            context.showMessage(ResponseMessages.postingUnsuccessful);
-          }
-        });
+        return;
       }
+      context.hideLoader();
+      context.showAlert(message: ResponseMessages.tryAgain).then((value) {
+        if (!context.mounted) return;
+        if (value) {
+          _create(context);
+        } else {
+          context.showMessage(ResponseMessages.postingUnsuccessful);
+        }
+      });
     });
   }
 
@@ -348,11 +358,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   void _submit(BuildContext context, [bool skipMode = false]) {
     if (skipMode) return;
-    // if (isUpdateMode) {
-    //   _update(context);
-    // } else {
-    //   _create(context);
-    // }
+    if (isUpdateMode) {
+      _update(context);
+    } else {
+      _create(context);
+    }
   }
 
   /// --------------------------------------------------------------------------

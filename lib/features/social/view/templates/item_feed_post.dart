@@ -5,14 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_andomie/utils/date_helper.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
+import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/res/placeholders.dart';
+import '../../../../data/models/content.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/user_builder.dart';
+import '../../../../routes/paths.dart';
 import 'feed_footer_recent.dart';
 import 'feed_header.dart';
 import 'stared_feed_footer.dart';
@@ -29,7 +32,7 @@ class ItemFeedPost extends StatefulWidget {
 
 class _ItemFeedPostState extends State<ItemFeedPost> {
   String? _subtitle(User user) {
-    return widget.item.title.isNotValid
+    return widget.item.content.title.isNotValid
         ? DateHelper.toRealtime(widget.item.timeMills)
         : user.title.isValid
         ? user.title
@@ -85,13 +88,20 @@ class _Body extends StatelessWidget {
 
   const _Body({required this.item});
 
+  Future<void> _preview(BuildContext context, int index) async {
+    context.open(
+      Routes.previewPhotos,
+      arguments: {"$Content": item.content, "index": index},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final dark = context.dark;
     final dimen = context.dimens;
     return Column(
       children: [
-        if (item.title.isValid) ...[
+        if (item.content.title.isValid) ...[
           Divider(height: 1, indent: dimen.dp(16), endIndent: dimen.dp(16)),
           SizedBox(
             width: double.infinity,
@@ -104,7 +114,7 @@ class _Body extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InAppText(
-                    item.title,
+                    item.content.title,
                     style: TextStyle(color: dark, fontSize: dimen.dp(16)),
                   ),
                   InAppText(
@@ -116,17 +126,17 @@ class _Body extends StatelessWidget {
             ),
           ),
         ],
-        if (item.photoUrls.use.isNotEmpty) ...[
+        if (item.content.photos.use.isNotEmpty) ...[
           Divider(height: dimen.dp(1)),
           AndrossyImageGrid(
             itemBackground: dark.t05,
-            itemCount: item.photoUrls.use.length,
+            itemCount: item.content.photos.use.length,
             itemBuilder: (context, index) {
-              final image = item.photoUrls.use.elementAtOrNull(index);
+              final image = item.content.photos.use.elementAtOrNull(index);
               return InAppGesture(
-                onTap: () {},
+                onTap: () => _preview(context, index),
                 child: InAppImage(
-                  image ?? InAppPlaceholders.image,
+                  image?.photoUrl ?? InAppPlaceholders.image,
                   fit: BoxFit.cover,
                 ),
               );
@@ -134,13 +144,13 @@ class _Body extends StatelessWidget {
           ),
         ],
         SizedBox(height: dimen.dp(12)),
-        if (item.description.use.isNotEmpty) ...[
+        if (item.content.description.use.isNotEmpty) ...[
           Divider(height: dimen.dp(1)),
           Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(horizontal: dimen.dp(16)),
             child: AndrossyExpandableText(
-              item.description.use,
+              item.content.description.use,
               initial: 50,
               style: TextStyle(fontSize: dimen.dp(16), color: dark),
             ),

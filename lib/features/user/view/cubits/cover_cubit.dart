@@ -1,19 +1,18 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 
+import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../data/models/user_cover.dart';
 import '../../../../data/use_cases/user_cover/create.dart';
 import '../../../../data/use_cases/user_cover/delete.dart';
 import '../../../../data/use_cases/user_cover/get_by_pagination.dart';
 
-class UserCoverCubit extends Cubit<Response<UserCover>> {
+class UserCoverCubit extends DataCubit<UserCover> {
   final String uid;
 
-  UserCoverCubit([String? uid])
-    : uid = uid ?? UserHelper.uid,
-      super(Response());
+  UserCoverCubit([String? uid]) : uid = uid ?? UserHelper.uid;
 
+  @override
   void fetch({int initialSize = 10, int fetchingSize = 5}) {
     emit(state.copyWith(status: Status.loading));
     GetUserCoversByPaginationUseCase.i().then(_attach).catchError((

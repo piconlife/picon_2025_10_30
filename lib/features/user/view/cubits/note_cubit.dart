@@ -1,15 +1,16 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 
+import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../data/models/user_note.dart';
 import '../../../../data/use_cases/user_note/get_by_pagination.dart';
 
-class UserNoteCubit extends Cubit<Response<UserNote>> {
+class UserNoteCubit extends DataCubit<UserNote> {
   final String uid;
 
-  UserNoteCubit([String? uid]) : uid = uid ?? UserHelper.uid, super(Response());
+  UserNoteCubit([String? uid]) : uid = uid ?? UserHelper.uid;
 
+  @override
   void fetch({int initialSize = 10, int fetchingSize = 5}) {
     emit(state.copyWith(status: Status.loading));
     GetUserNotesByPaginationUseCase.i(

@@ -1,12 +1,11 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 
+import '../../../../app/base/data_cubit.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/use_cases/feed/get_verified.dart';
 
-class VerifiedFeedCubit extends Cubit<Response<Feed>> {
-  VerifiedFeedCubit() : super(Response());
-
+class VerifiedFeedCubit extends DataCubit<Feed> {
+  @override
   void fetch({int initialSize = 10, int fetchingSize = 5}) {
     emit(state.copyWith(status: Status.loading));
     GetVerifiedFeedsByPaginationUseCase.i(
@@ -16,15 +15,6 @@ class VerifiedFeedCubit extends Cubit<Response<Feed>> {
     ).then(_attach).catchError((e, st) {
       emit(state.copyWith(status: Status.failure));
     });
-  }
-
-  void update(Feed value) {
-    final index = state.result.indexOf(value);
-    if (index >= 0) {
-      state.result.removeAt(index);
-      state.result.insert(index, value);
-      emit(state.copyWith(data: value, result: state.result, requestCode: 202));
-    }
   }
 
   void _attach(Response<Feed> response) {

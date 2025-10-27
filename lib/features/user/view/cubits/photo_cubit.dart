@@ -1,17 +1,21 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 
+import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../data/use_cases/user_post/get_photos_by_pagination.dart';
 
-class UserPhotoCubit extends Cubit<Response<UserPost>> {
+class UserPhotoCubit extends DataCubit<UserPost> {
   final String uid;
 
-  UserPhotoCubit([String? uid])
-    : uid = uid ?? UserHelper.uid,
-      super(Response());
+  UserPhotoCubit([String? uid]) : uid = uid ?? UserHelper.uid;
 
+  void initialFetch() {
+    if (state.result.isNotEmpty) return;
+    fetch();
+  }
+
+  @override
   void fetch({int initialSize = 10, int fetchingSize = 5}) {
     emit(state.copyWith(status: Status.loading));
     GetUserPhotosByPaginationUseCase.i(

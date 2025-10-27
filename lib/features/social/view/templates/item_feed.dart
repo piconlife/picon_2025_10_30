@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:object_finder/object_finder.dart';
 
 import '../../../../data/enums/feed_type.dart';
 import '../../../../data/models/feed.dart';
@@ -23,19 +22,20 @@ class ItemFeed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (item.reference.isNotValid) return SizedBox();
+    final path = item.content.path;
+    if (path == null || path.isEmpty) return SizedBox();
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (context) {
-            return FeedLikeCubit(item.reference!)
+            return FeedLikeCubit(path)
               ..count()
               ..fetchByMe();
           },
         ),
         BlocProvider(
           create: (context) {
-            return FeedCommentCubit(item.reference!)..count();
+            return FeedCommentCubit(path)..count();
           },
         ),
       ],

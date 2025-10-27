@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_navigator/app_navigator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:in_app_navigator/in_app_navigator.dart';
 import 'package:object_finder/object_finder.dart';
 
 import '../../data/models/user.dart';
 import '../../routes/paths.dart';
 import '../social/view/cubits/feed_home_cubit.dart';
 import '../social/view/cubits/follower_cubit.dart';
-import '../social/view/pages/create_post.dart';
 import 'view/cubits/avatar_cubit.dart';
 import 'view/cubits/cover_cubit.dart';
 import 'view/cubits/follower_cubit.dart';
@@ -29,9 +29,34 @@ import 'view/pages/posts.dart';
 import 'view/pages/profile.dart';
 import 'view/pages/reports.dart';
 
+extension UserRouteHelper on BuildContext {
+  Future<void> openUserProfile({String? uid, User? user}) async {
+    open(
+      Routes.userProfile,
+      arguments: {
+        "uid": uid,
+        "$User": user,
+        "$FeedHomeCubit": read<FeedHomeCubit>(),
+        "$FollowerCubit": read<FollowerCubit>(),
+        "$UserCubit": read<UserCubit>(),
+        "$UserFollowerCubit": read<UserFollowerCubit>(),
+        "$UserFollowingCubit": read<UserFollowingCubit>(),
+        "$UserMemoryCubit": read<UserMemoryCubit>(),
+        "$UserNoteCubit": read<UserNoteCubit>(),
+        "$UserPostCubit": read<UserPostCubit>(),
+        "$UserPhotoCubit": read<UserPhotoCubit>(),
+        "$UserReportCubit": read<UserReportCubit>(),
+        "$UserStoryCubit": read<UserStoryCubit>(),
+        "$UserVideoCubit": read<UserVideoCubit>(),
+        "$UserAvatarCubit": read<UserAvatarCubit>(),
+        "$UserCoverCubit": read<UserCoverCubit>(),
+      },
+    );
+  }
+}
+
 Map<String, RouteBuilder> get mUserRoutes {
   return {
-    Routes.createUserPost: _createUserPost,
     Routes.editUserProfilePhoto: _editUserProfilePhoto,
     Routes.editUserCoverPhoto: _editUserCoverPhoto,
     Routes.editUserPrimaryAddress: _editUserPrimaryAddress,
@@ -42,22 +67,6 @@ Map<String, RouteBuilder> get mUserRoutes {
     Routes.userFollowers: _profileFollowers,
     Routes.userFollowings: _profileFollowings,
   };
-}
-
-Widget _createUserPost(BuildContext context, Object? args) {
-  UserPostCubit? postCubit = args.findOrNull(key: "$UserPostCubit");
-  UserPhotoCubit? photoCubit = args.findOrNull(key: "$UserPhotoCubit");
-  return MultiBlocProvider(
-    providers: [
-      postCubit != null
-          ? BlocProvider.value(value: postCubit)
-          : BlocProvider(create: (context) => UserPostCubit()),
-      photoCubit != null
-          ? BlocProvider.value(value: photoCubit)
-          : BlocProvider(create: (context) => UserPhotoCubit()),
-    ],
-    child: CreatePostPage(args: args),
-  );
 }
 
 Widget _editUserProfilePhoto(BuildContext context, Object? args) {
@@ -111,6 +120,7 @@ Widget _editUserSecondaryAddress(BuildContext context, Object? args) {
 Widget _profile(BuildContext context, Object? args) {
   User? user = args.findOrNull(key: "$User");
   String? uid = user?.id ?? args.findOrNull(key: "uid") ?? args.findOrNull();
+  FeedHomeCubit? feedHomeCubit = args.findOrNull(key: "$FeedHomeCubit");
   FollowerCubit? followerCubit = args.findOrNull(key: "$FollowerCubit");
   UserCubit? userCubit = args.findOrNull(key: "$UserCubit");
   UserFollowerCubit? userFollowerCubit = args.findOrNull(
@@ -130,55 +140,57 @@ Widget _profile(BuildContext context, Object? args) {
   UserCoverCubit? coversCubit = args.findOrNull(key: "$UserCoverCubit");
   return MultiBlocProvider(
     providers: [
+      feedHomeCubit != null
+          ? BlocProvider.value(value: feedHomeCubit)
+          : BlocProvider(create: (_) => FeedHomeCubit()),
       if (followerCubit != null) BlocProvider.value(value: followerCubit),
       avatarsCubit != null
-          ? BlocProvider.value(value: avatarsCubit)
-          : BlocProvider(create: (context) => UserAvatarCubit(uid)..fetch()),
+          ? BlocProvider.value(value: avatarsCubit..initial())
+          : BlocProvider(create: (_) => UserAvatarCubit(uid)..fetch()),
       coversCubit != null
-          ? BlocProvider.value(value: coversCubit)
+          ? BlocProvider.value(value: coversCubit..initial())
           : BlocProvider(create: (context) => UserCoverCubit(uid)..fetch()),
       userCubit != null
-          ? BlocProvider.value(value: userCubit)
+          ? BlocProvider.value(value: userCubit..initial())
           : BlocProvider(create: (context) => UserCubit(uid)..fetch()),
       memoryCubit != null
-          ? BlocProvider.value(value: memoryCubit)
+          ? BlocProvider.value(value: memoryCubit..initial())
           : BlocProvider(create: (context) => UserMemoryCubit(uid)..fetch()),
       noteCubit != null
-          ? BlocProvider.value(value: noteCubit)
+          ? BlocProvider.value(value: noteCubit..initial())
           : BlocProvider(create: (context) => UserNoteCubit(uid)..fetch()),
       photoCubit != null
-          ? BlocProvider.value(value: photoCubit)
+          ? BlocProvider.value(value: photoCubit..initial())
           : BlocProvider(create: (context) => UserPhotoCubit(uid)..fetch()),
       postCubit != null
-          ? BlocProvider.value(value: postCubit..count())
+          ? BlocProvider.value(
+            value:
+                postCubit
+                  ..initial()
+                  ..initialCount(),
+          )
           : BlocProvider(
             create:
-                (context) =>
+                (_) =>
                     UserPostCubit(uid)
                       ..fetch()
                       ..count(),
           ),
       storyCubit != null
-          ? BlocProvider.value(value: storyCubit)
-          : BlocProvider(create: (context) => UserStoryCubit(uid)..fetch()),
+          ? BlocProvider.value(value: storyCubit..initial())
+          : BlocProvider(create: (_) => UserStoryCubit(uid)..fetch()),
       videoCubit != null
-          ? BlocProvider.value(value: videoCubit)
-          : BlocProvider(create: (context) => UserVideoCubit(uid)..fetch()),
+          ? BlocProvider.value(value: videoCubit..initial())
+          : BlocProvider(create: (_) => UserVideoCubit(uid)..fetch()),
       reportCubit != null
-          ? BlocProvider.value(value: reportCubit..count())
-          : BlocProvider(
-            create:
-                (context) =>
-                    UserReportCubit(uid)
-                      ..fetch()
-                      ..count(),
-          ),
+          ? BlocProvider.value(value: reportCubit..initialCount())
+          : BlocProvider(create: (_) => UserReportCubit(uid)..count()),
       userFollowerCubit != null
-          ? BlocProvider.value(value: userFollowerCubit..count())
-          : BlocProvider(create: (context) => UserFollowerCubit(uid)..count()),
+          ? BlocProvider.value(value: userFollowerCubit..initialCount())
+          : BlocProvider(create: (_) => UserFollowerCubit(uid)..count()),
       userFollowingCubit != null
-          ? BlocProvider.value(value: userFollowingCubit)
-          : BlocProvider(create: (context) => UserFollowingCubit(uid)),
+          ? BlocProvider.value(value: userFollowingCubit..initialCount())
+          : BlocProvider(create: (_) => UserFollowingCubit(uid)..count()),
     ],
     child: UserProfilePage(args: args),
   );

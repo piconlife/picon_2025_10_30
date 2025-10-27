@@ -2,16 +2,15 @@ import 'package:data_management/core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_andomie/extensions/list.dart';
 import 'package:flutter_andomie/models/selection.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 
+import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../data/models/user.dart';
 import '../../../../data/use_cases/user/get_users_by_ids.dart';
 
-class VerifiedUsersCubit extends Cubit<Response<Selection<User>>> {
-  VerifiedUsersCubit() : super(Response());
-
+class VerifiedUsersCubit extends DataCubit<Selection<User>> {
+  @override
   void fetch() async {
     final ids = UserHelper.followings;
     if (ids.isEmpty) return emit(state.copyWith(status: Status.notFound));

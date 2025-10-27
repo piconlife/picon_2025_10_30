@@ -35,7 +35,6 @@ class _ProfilePostsSegmentState extends State<ProfilePostsSegment> {
     final dark = context.dark;
     final isCurrentUser = UserHelper.isCurrentUser(widget.uid);
     return BlocBuilder<UserPostCubit, Response<UserPost>>(
-      buildWhen: (previous, current) => current.requestCode == 0,
       builder: (context, state) {
         final result = state.result;
         if (result.isEmpty && state.status.isLoading) {

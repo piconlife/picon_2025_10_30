@@ -3,6 +3,7 @@ import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
@@ -12,7 +13,7 @@ import '../../../../../app/helpers/user.dart';
 import '../../../../../app/interfaces/bsd_privacy.dart';
 import '../../../../../app/res/icons.dart';
 import '../../../../../data/enums/privacy.dart';
-import '../../../../../data/models/photo.dart';
+import '../../../../../data/models/content.dart';
 import '../../../../../roots/utils/utils.dart';
 import '../../../../../roots/widgets/gesture.dart';
 import '../../../../../roots/widgets/icon.dart';
@@ -24,8 +25,9 @@ import 'expandable_text.dart';
 
 class PhotoPreviewView extends StatefulWidget {
   final int index;
-  final List<Photo> photos;
+  final List<Content> photos;
   final ValueChanged<int> onChanged;
+  final ValueChanged<int> onChangedPageType;
   final ValueChanged<Privacy> onChangePrivacy;
   final ValueChanged<String?> onUpdateTag;
 
@@ -34,6 +36,7 @@ class PhotoPreviewView extends StatefulWidget {
     this.index = 0,
     required this.photos,
     required this.onChanged,
+    required this.onChangedPageType,
     required this.onChangePrivacy,
     required this.onUpdateTag,
   });
@@ -51,7 +54,9 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
   Set<int> downloads = {};
   Set<int> bookmarks = {};
 
-  Photo get selected => widget.photos.elementAt(widget.index);
+  Content get selected {
+    return widget.photos.elementAtOrNull(widget.index) ?? Content();
+  }
 
   void _onShare() {
     if (!selected.photoUrl.isValidWebUrl || !selected.isPrivacyAllow) {
@@ -116,7 +121,7 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
 
   void _like() {}
 
-  void _comment() {}
+  void _comment() => widget.onChangedPageType(1);
 
   void _changeIndex(int index) {
     if (widget.index == index) return;
@@ -143,16 +148,16 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
   }
 
   Widget _buildToolbar(BuildContext context) {
-    return Container(
-      height: kToolbarHeight,
-      padding: EdgeInsets.only(
-        left: context.smallSpace,
-        right: context.smallSpace,
+    return AppBar(
+      primary: true,
+      surfaceTintColor: Colors.transparent,
+      automaticallyImplyLeading: false,
+      backgroundColor: Colors.transparent,
+      systemOverlayStyle: SystemUiOverlayStyle.light.copyWith(
+        systemNavigationBarColor: Colors.transparent,
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [_buildLeading(context), Spacer(), _buildActions(context)],
-      ),
+      leading: Center(child: _buildLeading(context)),
+      actions: [_buildActions(context), SizedBox(width: 8)],
     );
   }
 
@@ -266,7 +271,11 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
     final item = widget.photos[index];
     return Align(
       alignment: Alignment(0, -0.1),
-      child: InAppImage(item.photoUrl, fit: BoxFit.cover),
+      child: InAppImage(
+        item.photoUrl,
+        fit: BoxFit.cover,
+        width: double.infinity,
+      ),
     );
   }
 

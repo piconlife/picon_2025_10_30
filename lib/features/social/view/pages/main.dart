@@ -8,13 +8,18 @@ import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/devs/nav_content.dart';
 import '../../../../app/res/icons.dart';
+import '../../../../features/profile/routes.dart';
 import '../../../../roots/widgets/floating_action_button.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/row.dart';
 import '../../../../roots/widgets/user_avatar.dart';
 import '../../../../routes/paths.dart';
 import '../../../main/views/widgets/search_box.dart';
-import '../cubits/follower_cubit.dart';
+import '../../../user/view/cubits/memory_cubit.dart';
+import '../../../user/view/cubits/note_cubit.dart';
+import '../../../user/view/cubits/post_cubit.dart';
+import '../../../user/view/cubits/video_cubit.dart';
+import '../cubits/feed_home_cubit.dart';
 import '../dialogs/bsd_feed_format.dart';
 import 'home.dart';
 import 'notification.dart';
@@ -68,21 +73,37 @@ class _FeedPageState extends State<FeedPage>
   void _createANew(BuildContext context) async {
     final value = await InAppFeedFormatBSD.show(context);
     if (!context.mounted) return;
+    Map args = {"$FeedHomeCubit": context.read<FeedHomeCubit>()};
     Object? result;
     if (value == FeedFormats.memory) {
-      result = await context.open(Routes.createAMemory);
+      result = await context.open(
+        Routes.createAMemory,
+        arguments: {
+          ...args,
+          "$UserMemoryCubit": context.read<UserMemoryCubit>(),
+        },
+      );
       return;
     }
     if (value == FeedFormats.note) {
-      result = await context.open(Routes.createANote);
+      result = await context.open(
+        Routes.createANote,
+        arguments: {...args, "$UserNoteCubit": context.read<UserNoteCubit>()},
+      );
       return;
     }
     if (value == FeedFormats.post) {
-      result = await context.open(Routes.createUserPost);
+      result = await context.open(
+        Routes.createUserPost,
+        arguments: {...args, "$UserPostCubit": context.read<UserPostCubit>()},
+      );
       return;
     }
     if (value == FeedFormats.video) {
-      result = await context.open(Routes.createAVideo);
+      result = await context.open(
+        Routes.createAVideo,
+        arguments: {...args, "$UserVideoCubit": context.read<UserVideoCubit>()},
+      );
       return;
     }
     _finally(result);
@@ -91,10 +112,7 @@ class _FeedPageState extends State<FeedPage>
   void _finally(Object? value) {}
 
   void _visitMenu(BuildContext context) {
-    context.open(
-      Routes.profile,
-      arguments: {"$FollowerCubit": context.read<FollowerCubit>()},
-    );
+    context.openProfile();
   }
 
   void _visitSearch(BuildContext context) {
@@ -174,7 +192,7 @@ class _FeedPageState extends State<FeedPage>
       ),
       body: TabBarView(
         controller: controller,
-        children: const [
+        children:  [
           FeedHomePage(),
           FeedVerifiedPage(),
           FeedVerifierPage(),

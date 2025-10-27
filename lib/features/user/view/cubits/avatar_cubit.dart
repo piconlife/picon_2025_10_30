@@ -1,19 +1,18 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 
+import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../data/models/user_avatar.dart';
 import '../../../../data/use_cases/user_avatar/create.dart';
 import '../../../../data/use_cases/user_avatar/delete.dart';
 import '../../../../data/use_cases/user_avatar/get_by_pagination.dart';
 
-class UserAvatarCubit extends Cubit<Response<UserAvatar>> {
+class UserAvatarCubit extends DataCubit<UserAvatar> {
   final String uid;
 
-  UserAvatarCubit([String? uid])
-    : uid = uid ?? UserHelper.uid,
-      super(Response());
+  UserAvatarCubit([String? uid]) : uid = uid ?? UserHelper.uid;
 
+  @override
   void fetch({int initialSize = 10, int fetchingSize = 5}) {
     emit(state.copyWith(status: Status.loading));
     GetUserAvatarsByPaginationUseCase.i().then(_attach).catchError((

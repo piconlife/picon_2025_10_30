@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_andomie/models/selection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
@@ -9,6 +8,22 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   DataCubit() : super(Response());
 
   Timer? _timer;
+
+  void initial() {
+    if (state.result.isNotEmpty && state.requestCode != 201) return;
+    fetch();
+  }
+
+  void initialCount() {
+    if (state.data is num &&
+        (state.data as num) > 0 &&
+        state.requestCode != 201) {
+      return;
+    }
+    count();
+  }
+
+  void refresh() => fetch();
 
   void execute(Function() callback) {
     _timer?.cancel();
@@ -57,6 +72,21 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     return result;
   }
 
+  void created(T value) {
+    final x = List<T>.from(state.result);
+    x.insert(0, value);
+    emit(state.copyWith(result: x, requestCode: 201, count: x.length));
+  }
+
+  void updated(T value) {
+    final index = state.result.indexOf(value);
+    if (index >= 0) {
+      state.result.removeAt(index);
+      state.result.insert(index, value);
+      emit(state.copyWith(data: value, result: state.result, requestCode: 202));
+    }
+  }
+
   List<T> remove(String id) {
     final result = state.result;
     final index = indexOf(id);
@@ -64,13 +94,15 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     return result;
   }
 
+  void count() {}
+
   void fetch() {}
 
   void live() {}
 
-  void insert(BuildContext context, T data) {}
-
-  void delete(BuildContext context, String id) {}
-
-  void update(BuildContext context, String id, Map<String, dynamic> updates) {}
+  @override
+  Future<void> close() async {
+    super.close();
+    _timer?.cancel();
+  }
 }

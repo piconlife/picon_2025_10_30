@@ -1,20 +1,9 @@
-import '../../app/helpers/user.dart';
 import '../constants/keys.dart';
 import '../enums/audience.dart';
 import '../enums/privacy.dart';
 import 'content.dart';
 
 class Photo extends Content {
-  bool get isPrivacyAllow {
-    if (UserHelper.isCurrentUser(publisherId)) return true;
-    if (privacy.isOnlyMe) return false;
-    if (privacy.isEveryone) return true;
-    if (privacy.isOnlyFriends && UserHelper.isFollowing(publisherId)) {
-      return true;
-    }
-    return false;
-  }
-
   @override
   Iterable<String> get keys => [
     Keys.i.id,

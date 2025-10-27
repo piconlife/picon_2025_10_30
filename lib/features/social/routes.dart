@@ -5,18 +5,22 @@ import 'package:object_finder/object_finder.dart';
 
 import '../../routes/paths.dart';
 import '../user/view/cubits/following_cubit.dart';
+import '../user/view/cubits/post_cubit.dart';
 import 'view/cubits/comment_cubit.dart';
+import 'view/cubits/feed_home_cubit.dart';
 import 'view/cubits/like_cubit.dart';
 import 'view/pages/comments.dart';
 import 'view/pages/create_a_memory.dart';
 import 'view/pages/create_a_note.dart';
 import 'view/pages/create_a_story.dart';
 import 'view/pages/create_a_video.dart';
+import 'view/pages/create_post.dart';
 import 'view/pages/likes.dart';
 import 'view/pages/search_feed.dart';
 
 Map<String, RouteBuilder> get mSocialRoutes {
   return {
+    Routes.createUserPost: _createUserPost,
     Routes.createAMemory: _createAMemory,
     Routes.createANote: _createANote,
     Routes.createAStory: _createAStory,
@@ -25,6 +29,22 @@ Map<String, RouteBuilder> get mSocialRoutes {
     Routes.comments: _comments,
     Routes.likes: _likes,
   };
+}
+
+Widget _createUserPost(BuildContext context, Object? args) {
+  FeedHomeCubit? feedHomeCubit = args.findOrNull(key: "$FeedHomeCubit");
+  UserPostCubit? userPostCubit = args.findOrNull(key: "$UserPostCubit");
+  return MultiBlocProvider(
+    providers: [
+      feedHomeCubit != null
+          ? BlocProvider.value(value: feedHomeCubit)
+          : BlocProvider(create: (context) => FeedHomeCubit()),
+      userPostCubit != null
+          ? BlocProvider.value(value: userPostCubit)
+          : BlocProvider(create: (context) => UserPostCubit()),
+    ],
+    child: CreatePostPage(args: args),
+  );
 }
 
 Widget _createAMemory(BuildContext context, Object? args) {

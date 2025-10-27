@@ -1,24 +1,24 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 
+import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../data/models/user_follower.dart';
 import '../../../../data/use_cases/user_follower/count.dart';
 import '../../../../data/use_cases/user_follower/get.dart';
 
-class UserFollowerCubit extends Cubit<Response<UserFollower>> {
+class UserFollowerCubit extends DataCubit<UserFollower> {
   final String? uid;
 
-  UserFollowerCubit([String? uid])
-    : uid = uid ?? UserHelper.uid,
-      super(Response());
+  UserFollowerCubit([String? uid]) : uid = uid ?? UserHelper.uid;
 
+  @override
   void count() {
     GetUserFollowerCountUseCase.i(uid).then((value) {
       emit(state.copyWith(count: value.data));
     });
   }
 
+  @override
   void fetch({int initialSize = 30, int fetchingSize = 15}) {
     emit(state.copyWith(status: Status.loading));
     GetUserFollowersUseCase.i().then(_attach).catchError((error, stackTrace) {

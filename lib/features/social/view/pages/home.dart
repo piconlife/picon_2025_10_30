@@ -25,7 +25,6 @@ class FeedHomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: BlocBuilder<FeedHomeCubit, Response<Feed>>(
-        buildWhen: (previous, current) => current.requestCode == 0,
         builder: (context, state) {
           final result = state.result;
           if (result.isEmpty && state.status.isLoading) {

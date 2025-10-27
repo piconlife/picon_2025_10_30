@@ -1,6 +1,6 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 
+import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../data/models/user_following.dart';
 import '../../../../data/use_cases/user_following/count.dart';
@@ -8,19 +8,19 @@ import '../../../../data/use_cases/user_following/create.dart';
 import '../../../../data/use_cases/user_following/delete.dart';
 import '../../../../data/use_cases/user_following/get.dart';
 
-class UserFollowingCubit extends Cubit<Response<UserFollowing>> {
+class UserFollowingCubit extends DataCubit<UserFollowing> {
   final String uid;
 
-  UserFollowingCubit([String? uid])
-    : uid = uid ?? UserHelper.uid,
-      super(Response(count: 0));
+  UserFollowingCubit([String? uid]) : uid = uid ?? UserHelper.uid;
 
+  @override
   void count() {
     GetUserFollowingCountUseCase.i(uid).then((value) {
       emit(state.copyWith(count: value.data));
     });
   }
 
+  @override
   void fetch({int initialSize = 30, int fetchingSize = 15}) {
     if (uid.isEmpty) return;
     emit(state.copyWith(status: Status.loading));

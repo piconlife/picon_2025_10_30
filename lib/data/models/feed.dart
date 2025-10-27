@@ -31,6 +31,7 @@ class Feed extends Content {
     // REFERENCE
     key.path,
     key.contentRef,
+    key.recentRef,
     key.type,
   ];
 
@@ -56,6 +57,7 @@ class Feed extends Content {
     // REFERENCES
     super.path,
     super.content,
+    super.recentPath,
     super.type,
   });
 

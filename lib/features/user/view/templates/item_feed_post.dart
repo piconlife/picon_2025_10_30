@@ -5,6 +5,7 @@ import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
+import '../../../../data/models/content.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../routes/keys.dart';
 import '../../../../routes/paths.dart';
@@ -35,7 +36,7 @@ class _ItemUserFeedPostState extends State<ItemUserFeedPost> {
   Future<void> _preview(int index) async {
     context.open(
       Routes.previewPhotos,
-      arguments: {kRouteData: item, "index": index},
+      arguments: {"$Content": item, "index": index},
     );
   }
 
@@ -61,11 +62,11 @@ class _ItemUserFeedPostState extends State<ItemUserFeedPost> {
       child: Column(
         children: [
           UserPostHeader(item: item, onTranslate: _translate),
-          if (item.photoUrls.use.isEmpty)
+          if (item.photos.use.isEmpty)
             Divider(height: 1, indent: dimen.dp(16), endIndent: dimen.dp(16)),
           UserFeedImageBody(
             description: description,
-            photos: item.photoUrls,
+            photos: item.photos,
             onTap: _preview,
           ),
           SizedBox(height: dimen.dp(12)),

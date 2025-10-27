@@ -6,12 +6,13 @@ import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/res/placeholders.dart';
+import '../../../../data/models/content.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/image.dart';
 
 class UserFeedImageBody extends StatelessWidget {
   final String? description;
-  final List? photos;
+  final List<Content>? photos;
   final ValueChanged<int>? onTap;
 
   const UserFeedImageBody({
@@ -37,7 +38,7 @@ class UserFeedImageBody extends StatelessWidget {
               return InAppGesture(
                 onTap: onTap != null ? () => onTap!(index) : null,
                 child: InAppImage(
-                  image ?? InAppPlaceholders.image,
+                  image?.photoUrl ?? InAppPlaceholders.image,
                   fit: BoxFit.cover,
                 ),
               );

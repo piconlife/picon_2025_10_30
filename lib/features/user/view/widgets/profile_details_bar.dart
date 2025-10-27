@@ -31,13 +31,13 @@ import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/user_builder.dart';
 import '../../../../routes/paths.dart';
+import '../../../social/view/cubits/feed_home_cubit.dart';
 import '../../../social/view/dialogs/bsd_feed_format.dart';
 import '../../utils/user_updater.dart';
 import '../cubits/avatar_cubit.dart';
 import '../cubits/cover_cubit.dart';
 import '../cubits/follower_cubit.dart';
 import '../cubits/following_cubit.dart';
-import '../cubits/photo_cubit.dart';
 import '../cubits/post_cubit.dart';
 import '../cubits/report_cubit.dart';
 import '../dialogs/bsd_user_profile_avatars.dart';
@@ -138,32 +138,34 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
     return updater.updateBiography("Biography");
   }
 
-  void _createPost(BuildContext context) async {
+  void _createANew() async {
     final value = await InAppFeedFormatBSD.show(context);
-    if (!context.mounted) return;
+    if (!mounted) return;
+    Object? args = {
+      "$FeedHomeCubit": context.read<FeedHomeCubit>(),
+      "$UserPostCubit": context.read<UserPostCubit>(),
+    };
+    Object? result;
     if (value == FeedFormats.memory) {
-      context.open(Routes.createAMemory);
+      result = await context.open(Routes.createAMemory, arguments: args);
       return;
     }
     if (value == FeedFormats.note) {
-      context.open(Routes.createANote);
+      result = await context.open(Routes.createANote, arguments: args);
       return;
     }
     if (value == FeedFormats.post) {
-      context.open(
-        Routes.createUserPost,
-        arguments: {
-          "$UserPostCubit": context.read<UserPostCubit>(),
-          "$UserPhotoCubit": context.read<UserPhotoCubit>(),
-        },
-      );
+      result = await context.open(Routes.createUserPost, arguments: args);
       return;
     }
     if (value == FeedFormats.video) {
-      context.open(Routes.createAVideo);
+      result = await context.open(Routes.createAVideo, arguments: args);
       return;
     }
+    _finally(result);
   }
+
+  void _finally(Object? value) {}
 
   void _createStory(BuildContext context) {
     context.open(Routes.createAStory);
@@ -521,7 +523,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
                     _Button(
                       icon: InAppIcons.editNote.solid,
                       primary: primary,
-                      onClick: () => _createPost(context),
+                      onClick: _createANew,
                     ),
                   if (isCurrentUser || isCalling)
                     _Button(

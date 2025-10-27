@@ -3,10 +3,10 @@ import 'package:flutter_andomie/extensions/list.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_andomie/helpers/clipboard_helper.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
+import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../data/constants/paths.dart';
 import '../../../../data/models/user_post.dart';
@@ -28,17 +28,19 @@ import '../../../../roots/utils/utils.dart';
 import '../../../../routes/paths.dart';
 import '../../../chooser/data/models/report.dart';
 
-class UserPostCubit extends Cubit<Response<UserPost>> {
+class UserPostCubit extends DataCubit<UserPost> {
   final String uid;
 
-  UserPostCubit([String? uid]) : uid = uid ?? UserHelper.uid, super(Response());
+  UserPostCubit([String? uid]) : uid = uid ?? UserHelper.uid;
 
+  @override
   void count() {
     GetUserFeedCountUseCase.i(uid).then((value) {
       emit(state.copyWith(count: value.data));
     });
   }
 
+  @override
   void fetch({int initialSize = 10, int fetchingSize = 5}) {
     emit(state.copyWith(status: Status.loading));
     GetUserPostsByPaginationUseCase.i(

@@ -1,24 +1,24 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 
+import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../data/models/user_report.dart';
 import '../../../../data/use_cases/user_report/count.dart';
 import '../../../../data/use_cases/user_report/get_by_pagination.dart';
 
-class UserReportCubit extends Cubit<Response<UserReport>> {
+class UserReportCubit extends DataCubit<UserReport> {
   final String uid;
 
-  UserReportCubit([String? uid])
-    : uid = uid ?? UserHelper.uid,
-      super(Response());
+  UserReportCubit([String? uid]) : uid = uid ?? UserHelper.uid;
 
+  @override
   void count() {
     GetUserReportCountUseCase.i(uid).then((value) {
       emit(state.copyWith(count: value.data));
     });
   }
 
+  @override
   void fetch({int initialSize = 10, int fetchingSize = 5}) {
     emit(state.copyWith(status: Status.loading));
     GetUserReportsByPaginationUseCase.i(
