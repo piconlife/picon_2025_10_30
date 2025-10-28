@@ -42,6 +42,7 @@ class Keys extends EntityKey {
   // ---------------------------------------------------------------------------
   // ---------------------------------INTEGERS----------------------------------
   // ---------------------------------------------------------------------------
+  // FIELDS
   final commentCount = 'commentCount';
   final likeCount = 'likeCount';
   final priority = 'priority';
@@ -49,6 +50,13 @@ class Keys extends EntityKey {
   final starCount = 'starCount';
   final updatedAt = 'updatedAt';
   final viewCount = 'viewCount';
+
+  // COUNTER REFS
+  final commentCountRef = '#commentCount';
+  final likeCountRef = '#likeCount';
+  final reportCountRef = '#reportCount';
+  final starCountRef = '#starCount';
+  final viewCountRef = '#viewCount';
 
   // ---------------------------------------------------------------------------
   // ----------------------------------DOUBLES----------------------------------

@@ -1,3 +1,6 @@
+import 'package:flutter_andomie/utils/path_replacer.dart';
+
+import '../constants/paths.dart';
 import '../enums/audience.dart';
 import '../enums/feed_type.dart';
 import '../enums/privacy.dart';
@@ -17,6 +20,9 @@ class UserPost extends Content {
     key.description,
     key.tags,
     key.photosRef,
+    key.commentCountRef,
+    key.likeCountRef,
+    key.starCountRef,
   ];
 
   UserPost({
@@ -31,13 +37,15 @@ class UserPost extends Content {
     super.description,
     super.tags,
     super.photos,
+    super.commentCountRef,
+    super.likeCountRef,
+    super.starCountRef,
   });
 
   UserPost.create({
-    required super.id,
+    required String super.id,
     required super.timeMills,
-    required super.publisherId,
-    required super.path,
+    required String super.publisherId,
     required super.audience,
     required super.privacy,
     required super.type,
@@ -45,7 +53,33 @@ class UserPost extends Content {
     required super.description,
     required super.tags,
     super.photos,
-  });
+    String? path,
+    String? commentCountRef,
+    String? likeCountRef,
+    String? starCountRef,
+  }) : super(
+         path:
+             path ??
+             PathReplacer.replaceByIterable(Paths.userPost, [publisherId, id]),
+         commentCountRef:
+             commentCountRef ??
+             PathReplacer.replaceByIterable(Paths.userPostComments, [
+               publisherId,
+               id,
+             ]),
+         likeCountRef:
+             likeCountRef ??
+             PathReplacer.replaceByIterable(Paths.userPostLikes, [
+               publisherId,
+               id,
+             ]),
+         starCountRef:
+             starCountRef ??
+             PathReplacer.replaceByIterable(Paths.userPostStars, [
+               publisherId,
+               id,
+             ]),
+       );
 
   UserPost.createForAvatar({
     required super.id,

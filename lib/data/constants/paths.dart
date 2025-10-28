@@ -46,6 +46,10 @@ class Paths {
   static const userPhotoRef = "$userPhotos/{${ParamKeys.id}}";
   static const userPosts = "$users/{${ParamKeys.uid}}/$posts";
   static const userPost = "$userPosts/{${ParamKeys.id}}";
+  static const userPostComments = "$userPost/$comments";
+  static const userPostLikes = "$userPost/$likes";
+  static const userPostStars = "$userPost/$stars";
+  static const userPostReports = "$userPost/$reports";
   static const userReports = "$users/{${ParamKeys.uid}}/$reports";
   static const userStories = "$users/{${ParamKeys.uid}}/$stories";
   static const userVideos = "$users/{${ParamKeys.uid}}/$videos";

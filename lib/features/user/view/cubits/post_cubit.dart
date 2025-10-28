@@ -9,6 +9,7 @@ import 'package:in_app_navigator/in_app_navigator.dart';
 import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../data/constants/paths.dart';
+import '../../../../data/models/content.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../data/models/user_report.dart';
 import '../../../../data/use_cases/feed_star/delete.dart';
@@ -137,17 +138,10 @@ class UserPostCubit extends DataCubit<UserPost> {
     if (data == null || data.id != id) return;
     final feedback = await context.open(
       Routes.createUserPost,
-      arguments: {"$UserPost": data},
+      arguments: {"$Content": data},
     );
     if (feedback is! UserPost) return;
-    emit(
-      state.copyWith(
-        result:
-            state.result
-              ..removeAt(index)
-              ..insert(index, feedback),
-      ),
-    );
+    updatedAt(index, feedback);
   }
 
   void share(BuildContext context, String id) {

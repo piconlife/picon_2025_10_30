@@ -222,6 +222,57 @@ class Content extends Entity<Keys> {
   // ---------------------------------------------------------------------------
 
   // ---------------------------------------------------------------------------
+  // ---------------------------------REFERENCES--------------------------------
+  // ---------------------------------------------------------------------------
+  // COUNTER FIELDS
+  String? _commentCountRef;
+  String? _likeCountRef;
+  String? _reportCountRef;
+  String? _starCountRef;
+  String? _viewCountRef;
+
+  // OBJECT FIELDS
+  String? _contentRef;
+  String? _recentRef;
+
+  // SETTERS (COUNTER)
+  set commentCountRef(String? value) => _commentCountRef = value;
+
+  set likeCountRef(String? value) => _likeCountRef = value;
+
+  set reportCountRef(String? value) => _reportCountRef = value;
+
+  set starCountRef(String? value) => _starCountRef = value;
+
+  set viewCountRef(String? value) => _viewCountRef = value;
+
+  // SETTER (OBJECT)
+  set contentRef(String? value) => _contentRef = value;
+
+  set recentRef(String? value) => _recentRef = value;
+
+  // GETTERS (COUNTER)
+  String? get commentCountRef =>
+      _counterRef(_commentCountRef ?? _content?._commentCountRef);
+
+  String? get likeCountRef =>
+      _counterRef(_likeCountRef ?? _content?._likeCountRef);
+
+  String? get reportCountRef =>
+      _counterRef(_reportCountRef ?? _content?._reportCountRef);
+
+  String? get starCountRef =>
+      _counterRef(_starCountRef ?? _content?._starCountRef);
+
+  String? get viewCountRef =>
+      _counterRef(_viewCountRef ?? _content?._viewCountRef);
+
+  // GETTERS (OBJECT)
+  String? get contentRef => _objectRef(_contentRef ?? _content?._contentRef);
+
+  String? get recentRef => _objectRef(_recentRef ?? _content?._recentRef);
+
+  // ---------------------------------------------------------------------------
   // ----------------------------------STRINGS----------------------------------
   // ---------------------------------------------------------------------------
   // FIELDS
@@ -236,8 +287,6 @@ class Content extends Entity<Keys> {
   String? _path;
   String? _photoUrl;
   String? _recentId;
-  String? _contentRef;
-  String? _recentRef;
   String? _referenceId;
   String? _text;
   String? _title;
@@ -268,10 +317,6 @@ class Content extends Entity<Keys> {
 
   set recentId(String? value) => _recentId = value;
 
-  set contentRef(String? value) => _contentRef = value;
-
-  set recentRef(String? value) => _recentRef = value;
-
   set referenceId(String? value) => _referenceId = value;
 
   set text(String? value) => _text = value;
@@ -285,6 +330,9 @@ class Content extends Entity<Keys> {
   // GETTERS
 
   String? get description => _normalizedDescription;
+
+  String? get descriptionOrNull =>
+      _string(_description ?? _content?._description);
 
   String? get link => _string(_link ?? _content?._link, url: true);
 
@@ -307,12 +355,6 @@ class Content extends Entity<Keys> {
   String? get photoUrl => _normalizedPhotoUrl;
 
   String? get recentId => _string(_recentId ?? _content?._recentId);
-
-  String? get contentRef =>
-      _string(_contentRef ?? _content?._contentRef, ref: true);
-
-  String? get recentRef =>
-      _string(_recentRef ?? _content?._recentRef, ref: true);
 
   String? get referenceId => _string(_referenceId ?? _content?._referenceId);
 
@@ -497,7 +539,11 @@ class Content extends Entity<Keys> {
   // GETTERS
   Content get content => _content ?? Content.empty();
 
+  Content? get contentOrNull => _content;
+
   Content get recent => _recent ?? Content.empty();
+
+  Content? get recentOrNull => _recent;
 
   // ---------------------------------------------------------------------------
   // -------------------------------LIST OF OBJECTS-----------------------------
@@ -580,6 +626,18 @@ class Content extends Entity<Keys> {
     // ----------------------------------DOUBLES--------------------------------
     // -------------------------------------------------------------------------
 
+    // ---------------------------------------------------------------------------
+    // ---------------------------------REFERENCES--------------------------------
+    // ---------------------------------------------------------------------------
+    // COUNTER
+    String? commentCountRef,
+    String? likeCountRef,
+    String? reportCountRef,
+    String? starCountRef,
+    String? viewCountRef,
+    // OBJECT
+    String? contentRef,
+    String? recentRef,
     // -------------------------------------------------------------------------
     // ----------------------------------STRINGS--------------------------------
     // -------------------------------------------------------------------------
@@ -594,8 +652,6 @@ class Content extends Entity<Keys> {
     String? path,
     String? photoUrl,
     String? recentId,
-    String? contentRef,
-    String? recentRef,
     String? referenceId,
     String? text,
     String? title,
@@ -678,6 +734,18 @@ class Content extends Entity<Keys> {
        // ----------------------------------------------------------------------
 
        // ----------------------------------------------------------------------
+       // ---------------------------------REFERENCES---------------------------
+       // ----------------------------------------------------------------------
+       // COUNTER
+       _commentCountRef = commentCountRef,
+       _likeCountRef = likeCountRef,
+       _reportCountRef = reportCountRef,
+       _starCountRef = starCountRef,
+       _viewCountRef = viewCountRef,
+       // OBJECT
+       _contentRef = contentRef,
+       _recentRef = recentRef,
+       // ----------------------------------------------------------------------
        // ----------------------------------STRINGS-----------------------------
        // ----------------------------------------------------------------------
        _description = description,
@@ -691,8 +759,6 @@ class Content extends Entity<Keys> {
        _path = path,
        _photoUrl = photoUrl,
        _recentId = recentId,
-       _contentRef = contentRef,
-       _recentRef = recentRef,
        _referenceId = referenceId,
        _text = text,
        _title = title,
@@ -786,6 +852,18 @@ class Content extends Entity<Keys> {
       // ----------------------------------DOUBLES------------------------------
       // -----------------------------------------------------------------------
       // -----------------------------------------------------------------------
+      // ---------------------------------REFERENCES----------------------------
+      // -----------------------------------------------------------------------
+      // COUNTER
+      commentCountRef: source.entityValue(key.commentCountRef),
+      likeCountRef: source.entityValue(key.likeCountRef),
+      reportCountRef: source.entityValue(key.reportCountRef),
+      starCountRef: source.entityValue(key.starCountRef),
+      viewCountRef: source.entityValue(key.viewCountRef),
+      // OBJECT
+      contentRef: source.entityValue(key.contentRef),
+      recentRef: source.entityValue(key.recentRef),
+      // -----------------------------------------------------------------------
       // ----------------------------------STRINGS------------------------------
       // -----------------------------------------------------------------------
       description: source.entityValue(key.description),
@@ -799,8 +877,6 @@ class Content extends Entity<Keys> {
       path: source.entityValue(key.path),
       photoUrl: source.entityValue(key.photoUrl),
       recentId: source.entityValue(key.recentId),
-      contentRef: source.entityValue(key.contentRef),
-      recentRef: source.entityValue(key.recentRef),
       referenceId: source.entityValue(key.referenceId),
       text: source.entityValue(key.text),
       title: source.entityValue(key.title),
@@ -850,8 +926,16 @@ class Content extends Entity<Keys> {
     return value != null && keys.contains(key);
   }
 
-  Map<String, dynamic> get metadata {
+  Map<String, dynamic> get createMetadata {
     return {key.path: path, "create": filtered};
+  }
+
+  Map<String, dynamic> get updateMetadata {
+    return {key.path: path, "update": filtered};
+  }
+
+  Map<String, dynamic> get deleteMetadata {
+    return {key.path: path, "delete": true};
   }
 
   @override
@@ -906,7 +990,18 @@ class Content extends Entity<Keys> {
       // ----------------------------------------------------------------------
       // ----------------------------------DOUBLES-----------------------------
       // ----------------------------------------------------------------------
-
+      // ----------------------------------------------------------------------
+      // ---------------------------------REFERENCES---------------------------
+      // ----------------------------------------------------------------------
+      // COUNTER
+      if (_commentCountRef.isNotEmpty) key.commentCountRef: _commentCountRef,
+      if (_likeCountRef.isNotEmpty) key.likeCountRef: _likeCountRef,
+      if (_reportCountRef.isNotEmpty) key.reportCountRef: _reportCountRef,
+      if (_starCountRef.isNotEmpty) key.starCountRef: _starCountRef,
+      if (_viewCountRef.isNotEmpty) key.viewCountRef: _viewCountRef,
+      // OBJECT
+      if (_contentRef.isNotEmpty) key.contentRef: _contentRef,
+      if (_recentRef.isNotEmpty) key.recentRef: _recentRef,
       // ----------------------------------------------------------------------
       // ----------------------------------STRINGS-----------------------------
       // ----------------------------------------------------------------------
@@ -921,8 +1016,6 @@ class Content extends Entity<Keys> {
       if (_path.isNotEmpty) key.path: _path,
       if (_photoUrl.isUrl) key.photoUrl: _photoUrl,
       if (_recentId.isNotEmpty) key.recentId: _recentId,
-      if (_contentRef.isNotEmpty) key.contentRef: _contentRef,
-      if (_recentRef.isNotEmpty) key.recentRef: _recentRef,
       if (_referenceId.isNotEmpty) key.referenceId: _referenceId,
       if (_text.isNotEmpty) key.text: _text,
       if (_title.isNotEmpty) key.title: _title,
@@ -961,8 +1054,8 @@ class Content extends Entity<Keys> {
       if (_content != null) key.content: _content?.source,
       if (_recent != null) key.recent: _recent?.source,
       // CREATE METADATA
-      if (_content != null) key.contentRef: _content?.metadata,
-      if (_recent != null) key.recentRef: _recent?.metadata,
+      if (_content != null) key.contentRef: _content?.createMetadata,
+      if (_recent != null) key.recentRef: _recent?.createMetadata,
       // ----------------------------------------------------------------------
       // -------------------------------LIST OF OBJECTS------------------------
       // ----------------------------------------------------------------------
@@ -975,123 +1068,127 @@ class Content extends Entity<Keys> {
         key.videos: _videos?.map((e) => e.source).toList(),
       // CREATE METADATA
       if ((_contents ?? []).isNotEmpty)
-        key.contentsRef: _contents?.map((e) => e.metadata).toList(),
+        key.contentsRef: _contents?.map((e) => e.createMetadata).toList(),
       if ((_photos ?? []).isNotEmpty)
-        key.photosRef: _photos?.map((e) => e.metadata).toList(),
+        key.photosRef: _photos?.map((e) => e.createMetadata).toList(),
       if ((_videos ?? []).isNotEmpty)
-        key.videosRef: _videos?.map((e) => e.metadata).toList(),
+        key.videosRef: _videos?.map((e) => e.createMetadata).toList(),
     }.entries.where((e) => isInsertable(e.key, e.value));
     return super.source..addAll(Map.fromEntries(entries));
   }
 
-  bool get isDefaultInsertable => false;
+  Iterable<String> get keys => [
+    // -------------------------------------------------------------------------
+    // --------------------------------COMMON-----------------------------------
+    // -------------------------------------------------------------------------
+    // ROOT
+    key.id,
+    key.timeMills,
+    // PUBLISHER
+    key.publisherId,
+    key.publisherAge,
+    key.publisherGender,
+    key.publisherLatitude,
+    key.publisherLongitude,
+    key.publisherName,
+    key.publisherPhotoUrl,
+    key.publisherProfession,
+    key.publisherProfilePath,
+    key.publisherProfileUrl,
+    key.publisherRating,
+    key.publisherReligion,
+    key.publisherShortName,
+    key.publisherTitle,
+    // LOCATION
+    key.city,
+    key.country,
+    key.latitude,
+    key.longitude,
+    key.region,
+    key.zip,
+    // -------------------------------------------------------------------------
+    // ---------------------------------BOOLEANS--------------------------------
+    // -------------------------------------------------------------------------
+    key.verified,
+    // -------------------------------------------------------------------------
+    // ---------------------------------INTEGERS--------------------------------
+    // -------------------------------------------------------------------------
+    key.commentCount,
+    key.likeCount,
+    key.priority,
+    key.reportCount,
+    key.starCount,
+    key.viewCount,
+    // -------------------------------------------------------------------------
+    // ----------------------------------DOUBLES--------------------------------
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // ---------------------------------REFERENCES------------------------------
+    // -------------------------------------------------------------------------
+    // COUNTER
+    key.commentCountRef,
+    key.likeCountRef,
+    key.reportCountRef,
+    key.starCountRef,
+    key.viewCountRef,
+    // OBJECT
+    key.contentRef,
+    key.recentRef,
+    // -------------------------------------------------------------------------
+    // ----------------------------------STRINGS--------------------------------
+    // -------------------------------------------------------------------------
+    key.description,
+    key.link,
+    key.name,
+    key.parentId,
+    key.parentLink,
+    key.parentPath,
+    key.reference,
+    key.parentUrl,
+    key.path,
+    key.photoUrl,
+    key.recentId,
+    key.referenceId,
+    key.text,
+    key.title,
+    key.url,
+    key.videoUrl,
+    // -------------------------------------------------------------------------
+    // ------------------------------LIST OF STRINGS----------------------------
+    // -------------------------------------------------------------------------
+    key.bookmarks,
+    key.comments,
+    key.descriptions,
+    key.likes,
+    key.photosRef,
+    key.photoIds,
+    key.photoUrls,
+    key.reports,
+    key.stars,
+    key.tags,
+    key.videoIds,
+    key.videoUrls,
+    key.views,
 
-  Iterable<String> get keys {
-    if (!isDefaultInsertable) return [];
-    return [
-      // -------------------------------------------------------------------------
-      // --------------------------------COMMON-----------------------------------
-      // -------------------------------------------------------------------------
-      // ROOT
-      key.id,
-      key.timeMills,
-      // PUBLISHER
-      key.publisherId,
-      key.publisherAge,
-      key.publisherGender,
-      key.publisherLatitude,
-      key.publisherLongitude,
-      key.publisherName,
-      key.publisherPhotoUrl,
-      key.publisherProfession,
-      key.publisherProfilePath,
-      key.publisherProfileUrl,
-      key.publisherRating,
-      key.publisherReligion,
-      key.publisherShortName,
-      key.publisherTitle,
-      // LOCATION
-      key.city,
-      key.country,
-      key.latitude,
-      key.longitude,
-      key.region,
-      key.zip,
-      // -------------------------------------------------------------------------
-      // ---------------------------------BOOLEANS--------------------------------
-      // -------------------------------------------------------------------------
-      key.verified,
-      // -------------------------------------------------------------------------
-      // ---------------------------------INTEGERS--------------------------------
-      // -------------------------------------------------------------------------
-      key.commentCount,
-      key.likeCount,
-      key.priority,
-      key.reportCount,
-      key.starCount,
-      key.viewCount,
-      // -------------------------------------------------------------------------
-      // ----------------------------------DOUBLES--------------------------------
-      // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // -----------------------------------ENUMS---------------------------------
+    // -------------------------------------------------------------------------
+    key.audience,
+    key.privacy,
+    key.type,
 
-      // -------------------------------------------------------------------------
-      // ----------------------------------STRINGS--------------------------------
-      // -------------------------------------------------------------------------
-      key.description,
-      key.link,
-      key.name,
-      key.parentId,
-      key.parentLink,
-      key.parentPath,
-      key.reference,
-      key.parentUrl,
-      key.path,
-      key.photoUrl,
-      key.recentId,
-      key.contentRef,
-      key.recentRef,
-      key.referenceId,
-      key.text,
-      key.title,
-      key.url,
-      key.videoUrl,
-      // -------------------------------------------------------------------------
-      // ------------------------------LIST OF STRINGS----------------------------
-      // -------------------------------------------------------------------------
-      key.bookmarks,
-      key.comments,
-      key.descriptions,
-      key.likes,
-      key.photosRef,
-      key.photoIds,
-      key.photoUrls,
-      key.reports,
-      key.stars,
-      key.tags,
-      key.videoIds,
-      key.videoUrls,
-      key.views,
-
-      // -------------------------------------------------------------------------
-      // -----------------------------------ENUMS---------------------------------
-      // -------------------------------------------------------------------------
-      key.audience,
-      key.privacy,
-      key.type,
-
-      // -------------------------------------------------------------------------
-      // ----------------------------------OBJECTS--------------------------------
-      // -------------------------------------------------------------------------
-      key.content,
-      key.recent,
-      // -------------------------------------------------------------------------
-      // -------------------------------LIST OF OBJECTS---------------------------
-      // -------------------------------------------------------------------------
-      key.contents,
-      key.photos,
-      key.videos,
-    ];
-  }
+    // -------------------------------------------------------------------------
+    // ----------------------------------OBJECTS--------------------------------
+    // -------------------------------------------------------------------------
+    key.content,
+    key.recent,
+    // -------------------------------------------------------------------------
+    // -------------------------------LIST OF OBJECTS---------------------------
+    // -------------------------------------------------------------------------
+    key.contents,
+    key.photos,
+    key.videos,
+  ];
 
   @override
   int get hashCode => Object.hashAll([
@@ -1139,7 +1236,18 @@ class Content extends Entity<Keys> {
     // -------------------------------------------------------------------------
     // ----------------------------------DOUBLES--------------------------------
     // -------------------------------------------------------------------------
-
+    // -------------------------------------------------------------------------
+    // ---------------------------------REFERENCES------------------------------
+    // -------------------------------------------------------------------------
+    // COUNTER
+    _commentCountRef,
+    _likeCountRef,
+    _reportCountRef,
+    _starCountRef,
+    _viewCountRef,
+    // OBJECT
+    _contentRef,
+    _recentRef,
     // -------------------------------------------------------------------------
     // ----------------------------------STRINGS--------------------------------
     // -------------------------------------------------------------------------
@@ -1154,8 +1262,6 @@ class Content extends Entity<Keys> {
     _path,
     _photoUrl,
     _recentId,
-    _contentRef,
-    _recentRef,
     _referenceId,
     _text,
     _title,
@@ -1248,6 +1354,18 @@ class Content extends Entity<Keys> {
         // ----------------------------------DOUBLES----------------------------
         // ---------------------------------------------------------------------
         // ---------------------------------------------------------------------
+        // ---------------------------------REFERENCES--------------------------
+        // ---------------------------------------------------------------------
+        // COUNTER
+        _commentCountRef == other._commentCountRef &&
+        _likeCountRef == other._likeCountRef &&
+        _reportCountRef == other._reportCountRef &&
+        _starCountRef == other._starCountRef &&
+        _viewCountRef == other._viewCountRef &&
+        // OBJECT
+        _contentRef == other._contentRef &&
+        _recentRef == other._recentRef &&
+        // ---------------------------------------------------------------------
         // ----------------------------------STRINGS----------------------------
         // ---------------------------------------------------------------------
         _description == other._description &&
@@ -1261,8 +1379,6 @@ class Content extends Entity<Keys> {
         _path == other._path &&
         _photoUrl == other._photoUrl &&
         _recentId == other._recentId &&
-        _contentRef == other._contentRef &&
-        _recentRef == other._recentRef &&
         _referenceId == other._referenceId &&
         _text == other._text &&
         _title == other._title &&
@@ -1336,6 +1452,20 @@ List<String> _strings(
   if (value.isEmpty) return [];
   if (url && !value.every((e) => e.startsWith("https://"))) return [];
   if (ref && !value.every((e) => e.startsWith("@"))) return [];
+  return value;
+}
+
+String? _counterRef(String? value) {
+  if (value == null) return null;
+  if (value.isEmpty) return null;
+  if (!value.startsWith("#")) return null;
+  return value;
+}
+
+String? _objectRef(String? value) {
+  if (value == null) return null;
+  if (value.isEmpty) return null;
+  if (!value.startsWith("@")) return null;
   return value;
 }
 

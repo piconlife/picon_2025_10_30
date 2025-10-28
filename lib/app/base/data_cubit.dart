@@ -45,7 +45,17 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
 
   T? elementOf(String? id, [int? index]) {
     index ??= indexOf(id);
-    if (index < 0 || index >= state.result.length) return null;
+    if (index < 0 || index >= state.result.length) {
+      try {
+        return state.result.firstWhere((e) {
+          if (e is Entity && e.id == id) return true;
+          if (e is Selection && e.id == id) return true;
+          return false;
+        });
+      } catch (_) {
+        return null;
+      }
+    }
     return state.result.elementAtOrNull(index);
   }
 
@@ -73,17 +83,21 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   }
 
   void created(T value) {
-    final x = List<T>.from(state.result);
-    x.insert(0, value);
-    emit(state.copyWith(result: x, requestCode: 201, count: x.length));
+    state.result.insert(0, value);
+    emit(
+      state.copyWith(
+        result: state.result,
+        requestCode: 201,
+        count: state.result.length,
+      ),
+    );
   }
 
-  void updated(T value) {
-    final index = state.result.indexOf(value);
-    if (index >= 0) {
+  void updatedAt(int index, T value) {
+    if (index >= 0 && state.result.length > index) {
       state.result.removeAt(index);
       state.result.insert(index, value);
-      emit(state.copyWith(data: value, result: state.result, requestCode: 202));
+      emit(state.copyWith(result: state.result, requestCode: 202));
     }
   }
 

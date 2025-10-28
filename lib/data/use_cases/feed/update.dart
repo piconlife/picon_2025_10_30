@@ -10,10 +10,7 @@ class UpdateFeedUseCase extends BaseFeedUseCase {
 
   static UpdateFeedUseCase get i => _i ??= UpdateFeedUseCase._();
 
-  Future<Response<Feed>> call({
-    required String id,
-    required Map<String, dynamic> data,
-  }) {
-    return repository.updateById(id, data);
+  Future<Response<Feed>> call(String id, Map<String, dynamic> data) {
+    return repository.updateById(id, data, resolveRefs: true, updateRefs: true);
   }
 }

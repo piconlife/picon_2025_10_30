@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
@@ -33,7 +31,7 @@ import '../../../../data/models/feed.dart';
 import '../../../../data/models/photo.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../data/use_cases/feed/create.dart';
-import '../../../../data/use_cases/user_post/update.dart';
+import '../../../../data/use_cases/feed/update.dart';
 import '../../../../roots/contents/media.dart';
 import '../../../../roots/helpers/connectivity.dart';
 import '../../../../roots/services/path_provider.dart';
@@ -65,7 +63,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
   late Object? data = widget.args;
 
   late String id;
-  late String path;
   late String photosPath;
 
   final etHeader = TextEditingController();
@@ -79,7 +76,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   late final feedCubit = context.read<FeedHomeCubit>();
   late final postCubit = context.read<UserPostCubit>();
 
-  UserPost? old;
+  Content? old;
   FeedType type = FeedType.post;
 
   String get title => etHeader.text;
@@ -93,23 +90,21 @@ class _CreatePostPageState extends State<CreatePostPage> {
   /// --------------------------------------------------------------------------
 
   void _init(BuildContext context) {
-    old = data?.findOrNull(key: "$UserPost");
+    old = data?.findOrNull(key: "$Content");
     if (old != null) {
       id = old!.id;
       type = old?.type ?? FeedType.none;
+      etHeader.text = old!.title ?? '';
+      etDescription.text = old!.descriptionOrNull ?? '';
       photos.set(old!.photos.use.map(EditablePhoto.photo).toList());
       privacy.set(Privacy.parse(old?.privacy));
     } else {
-      id = KeyGenerator.generateKey(
-        timeMills: Entity.generateTimeMills,
-        extraKeySize: 5,
-      );
+      id = KeyGenerator.generateKey();
       type = data.findByKey("$FeedType", defaultValue: FeedType.post);
       if (type.isPhoto) {
         _pickPhotos(data.findOrNull(key: "$EditablePhotoFeedback"));
       }
     }
-    path = PathReplacer.replaceByIterable(Paths.userPost, [UserHelper.uid, id]);
     photosPath = PathReplacer.replaceByIterable(Paths.userPhotos, [
       UserHelper.uid,
     ]);
@@ -139,8 +134,14 @@ class _CreatePostPageState extends State<CreatePostPage> {
   /// PHOTO SECTION START
   /// --------------------------------------------------------------------------
 
-  List<Photo> get currentPhotos {
-    return photos.value.map((i) => i.rootData).whereType<Photo>().toList();
+  List<Content> get currentPhotos {
+    return photos.value.map((i) => i.rootData).whereType<Content>().toList();
+  }
+
+  List<Content> get deletedPhotos {
+    if (old == null) return [];
+    final current = currentPhotos;
+    return old!.photos.where((e) => !current.contains(e)).toList();
   }
 
   Future<UploadingStatus> _createPhoto(
@@ -180,9 +181,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
             .map((e) {
               final x = e.data;
               if (x is String && x.isNotEmpty) return x;
-              if (x is Content && (x.photoUrl ?? '').isNotEmpty) {
-                return x.photoUrl!;
-              }
               return null;
             })
             .whereType<String>()
@@ -213,80 +211,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   /// --------------------------------------------------------------------------
 
   /// --------------------------------------------------------------------------
-  /// UPDATE SECTION START
-  /// --------------------------------------------------------------------------
-
-  void _update(BuildContext context) {
-    if (photos.value.isEmpty && description == old!.description) {
-      context.showMessage("Please write something...!");
-      return;
-    }
-    final mPhotos = currentPhotos;
-
-    if (mPhotos.length != photos.value.length) {
-      context.showMessage("Please wait a second...!");
-      return;
-    }
-
-    final updates = {
-      Keys.i.updatedAt: DataFieldValue.serverTimestamp(),
-      Keys.i.description: description,
-      Keys.i.photoUrls: mPhotos.map((e) => e.metadata).toList(),
-    };
-
-    UpdateUserPostUseCase.i(id, updates).then((value) {
-      if (!context.mounted) return;
-      context.close();
-    });
-
-    final mTimeMills = Entity.generateTimeMills;
-
-    final mUserPost = UserPost.create(
-      id: Entity.generateID,
-      timeMills: mTimeMills,
-      publisherId: UserHelper.uid,
-      path: path,
-      audience: audience.value,
-      privacy: privacy.value,
-      title: title.isEmpty ? null : title,
-      description: description.isEmpty ? null : description,
-      type: mPhotos.isNotEmpty ? FeedType.photo : null,
-      tags: tags.value,
-      photos: mPhotos.isEmpty ? null : mPhotos,
-    );
-
-    final mFeed = Feed.create(
-      id: id,
-      timeMills: mTimeMills,
-      path: PathProvider.generatePath(Paths.feeds, id),
-      content: mUserPost,
-      type: mUserPost.type,
-    );
-
-    CreateFeedUseCase.i(mFeed).then((value) {
-      if (!context.mounted) return;
-      if (value.isSuccessful) {
-        context.close();
-      } else {
-        context.hideLoader();
-        context.showAlert(message: ResponseMessages.tryAgain).then((value) {
-          if (!context.mounted) return;
-          if (value) {
-            _create(context);
-          } else {
-            context.showMessage(ResponseMessages.postingUnsuccessful);
-          }
-        });
-      }
-    });
-  }
-
-  /// --------------------------------------------------------------------------
-  /// UPDATE SECTION END
-  /// --------------------------------------------------------------------------
-
-  /// --------------------------------------------------------------------------
-  /// CREATE SECTION START
+  /// FINAL SECTION START
   /// --------------------------------------------------------------------------
 
   void _create(BuildContext context) {
@@ -307,7 +232,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
       id: id,
       timeMills: mTimeMills,
       publisherId: UserHelper.uid,
-      path: path,
       audience: audience.value,
       privacy: privacy.value,
       title: title.isEmpty ? null : title,
@@ -333,40 +257,127 @@ class _CreatePostPageState extends State<CreatePostPage> {
       type: mUserPost.type,
     );
 
-    // log(jsonEncode(mFeed.filtered));
-    //
-    // return;
-
     Analytics.future(name: 'create_post', () async {
       context.showLoader();
-      final value = await CreateFeedUseCase.i(mFeed);
+      final feedback = await CreateFeedUseCase.i(mFeed);
       if (!context.mounted) return;
       context.hideLoader();
-      if (value.isSuccessful) {
+      if (feedback.isSuccessful) {
         Settings.set(_kRecentPostPath, mUserPost.path);
         feedCubit.created(mFeed);
         postCubit.created(mUserPost);
         context.close();
         return;
       }
-      context.showAlert(message: ResponseMessages.tryAgain).then((value) {
-        if (!context.mounted) return;
-        if (value) {
-          _create(context);
-        } else {
-          context.showMessage(ResponseMessages.postingUnsuccessful);
-        }
-      });
+      final allow = await context.showAlert(message: Msg.somethingWentWrong);
+      if (!context.mounted) return;
+      if (!allow) {
+        context.showMessage(Msg.postFailed);
+        return;
+      }
+      _create(context);
     });
   }
 
-  /// --------------------------------------------------------------------------
-  /// CREATE SECTION END
-  /// --------------------------------------------------------------------------
+  void _update(BuildContext context) {
+    if (photos.value.isEmpty && description == old!.description) {
+      context.showMessage(Msg.writeSomething);
+      return;
+    }
+    final mPhotos = currentPhotos;
 
-  /// --------------------------------------------------------------------------
-  /// FINAL SECTION START
-  /// --------------------------------------------------------------------------
+    if (mPhotos.length != photos.value.length) {
+      context.showMessage(Msg.waitASecond);
+      return;
+    }
+
+    final cp = currentPhotos.map((e) {
+      if (old!.photos.contains(e)) {
+        final updates = {
+          if (privacy.value != old!.privacy) Keys.i.privacy: privacy.value.name,
+          if (audience.value != old!.audience)
+            Keys.i.audience: audience.value.name,
+        };
+        if (e.path != null && updates.isNotEmpty) {
+          return {"path": e.path, "update": updates};
+        }
+        return e.path;
+      }
+      return e.createMetadata;
+    });
+    final dp = deletedPhotos.map((e) => e.deleteMetadata);
+    final hasChangedPhotos =
+        !(cp.every((e) => e is String) && dp.isEmpty) ||
+        old!.photos.map((e) => e.id).toString() !=
+            currentPhotos.map((e) => e.id).toString();
+    final metadata = [if (hasChangedPhotos) ...cp, if (dp.isNotEmpty) ...dp];
+
+    final isTitleDeleted = title.isEmpty && old!.title.isNotEmpty;
+    final isTitleChanged = title.isNotEmpty && old!.title != title;
+
+    final isDescriptionDeleted =
+        description.isEmpty && old!.description.isNotEmpty;
+    final isDescriptionChanged =
+        description.isNotEmpty && old!.description != description;
+
+    final updates = {
+      if (isTitleDeleted) Keys.i.title: DataFieldValue.delete(),
+      if (isTitleChanged) Keys.i.title: title,
+      if (isDescriptionDeleted) Keys.i.description: DataFieldValue.delete(),
+      if (isDescriptionChanged) Keys.i.description: description,
+      if (metadata.isNotEmpty) Keys.i.photosRef: metadata,
+    };
+
+    if (updates.isNotEmpty) {
+      updates[Keys.i.updatedAt] = Entity.generateTimeMills;
+    }
+
+    if (updates.isEmpty) {
+      context.showMessage(Msg.noChangesFound);
+      return;
+    }
+
+    Content? updatedContent(Content? v) {
+      if (v == null) return null;
+      if (isTitleChanged) {
+        v.title = title;
+      } else if (isTitleDeleted) {
+        v.title = null;
+      }
+      if (isDescriptionChanged) {
+        v.description = description;
+      } else if (isDescriptionDeleted) {
+        v.description = null;
+      }
+      if (hasChangedPhotos) {
+        v.photos = currentPhotos;
+      }
+      return v;
+    }
+
+    Analytics.future(name: 'update_post', () async {
+      context.showLoader();
+      final feedback = await UpdateFeedUseCase.i(id, updates);
+      if (!context.mounted) return;
+      context.hideLoader();
+      if (feedback.isSuccessful) {
+        if (old is Feed) {
+          old!.content = updatedContent(old?.contentOrNull);
+        } else if (old is UserPost) {
+          old = updatedContent(old);
+        }
+        context.close(result: old);
+        return;
+      }
+      final allow = await context.showAlert(message: Msg.somethingWentWrong);
+      if (!context.mounted) return;
+      if (!allow) {
+        context.showMessage(Msg.postFailed);
+        return;
+      }
+      _update(context);
+    });
+  }
 
   void _submit(BuildContext context, [bool skipMode = false]) {
     if (skipMode) return;
@@ -598,7 +609,6 @@ class _ItemPhoto extends StatelessWidget {
         builder: (context, value, callback) {
           final status = value.status;
           final data = value.value;
-          log(status.name);
           return InAppUploadingImage(
             data: photo.data,
             loading: status == UploadingStatus.loading,
