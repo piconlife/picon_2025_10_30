@@ -357,7 +357,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
     Analytics.future(name: 'update_post', () async {
       context.showLoader();
-      final feedback = await UpdateFeedUseCase.i(id, updates);
+      final feedback = await UpdateFeedUseCase.i(id, {
+        Keys.i.contentRef: {"path": old!.path!, "update": updates},
+        Keys.i.updatedAt: Entity.generateTimeMills,
+      });
       if (!context.mounted) return;
       context.hideLoader();
       if (feedback.isSuccessful) {

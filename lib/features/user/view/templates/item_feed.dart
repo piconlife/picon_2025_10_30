@@ -13,9 +13,10 @@ import 'item_feed_sponsored.dart';
 import 'item_feed_video.dart';
 
 class ItemUserFeed extends StatelessWidget {
+  final int index;
   final UserPost item;
 
-  const ItemUserFeed({super.key, required this.item});
+  const ItemUserFeed({super.key, required this.index, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class ItemUserFeed extends StatelessWidget {
       case FeedType.none:
       case FeedType.photo:
       case FeedType.post:
-        return ItemUserFeedPost(item: item);
+        return ItemUserFeedPost(index: index, item: item);
       case FeedType.ads:
         return ItemUserFeedAds(item: item);
       case FeedType.avatar:

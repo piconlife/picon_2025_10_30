@@ -18,10 +18,11 @@ import 'feed_footer.dart';
 import 'feed_header.dart';
 
 class ItemFeedMemory extends StatefulWidget {
+  final int index;
   final Feed item;
   final Function(BuildContext context, Feed item)? onClick;
 
-  const ItemFeedMemory({super.key, required this.item, this.onClick});
+  const ItemFeedMemory({super.key,required this.index, required this.item, this.onClick});
 
   @override
   State<ItemFeedMemory> createState() => _ItemFeedMemoryState();

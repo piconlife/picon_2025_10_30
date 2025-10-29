@@ -81,7 +81,7 @@ class FeedLikeCubit extends Cubit<Response<FeedLike>> {
 
   void like([LikeType? type]) {
     if (reference.isEmpty) return;
-    final data = FeedLike.create(type: type);
+    final data = FeedLike.create(type: type, parentPath: reference);
     emit(
       state.copyWith(
         // count: state.count + 1,

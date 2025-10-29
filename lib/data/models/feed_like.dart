@@ -8,14 +8,18 @@ class FeedLikeKeys extends EntityKey {
 
   static const FeedLikeKeys i = FeedLikeKeys._();
 
+  final parentPath = "parentPath";
   final type = "type";
 
   @override
-  Iterable<String> get keys => [id, timeMills, type];
+  Iterable<String> get keys => [id, timeMills, type, parentPath];
 }
 
 class FeedLike extends Entity<FeedLikeKeys> {
+  String? _parentPath;
   LikeType? _type;
+
+  String? get parentPath => _parentPath;
 
   String get publisher => id;
 
@@ -27,10 +31,13 @@ class FeedLike extends Entity<FeedLikeKeys> {
 
   FeedLike.empty();
 
-  FeedLike._({super.id, super.timeMills, LikeType? type}) : _type = type;
+  FeedLike._({super.id, super.timeMills, String? parentPath, LikeType? type})
+    : _parentPath = parentPath,
+      _type = type;
 
-  FeedLike.create({super.timeMills, LikeType? type})
-    : _type = type,
+  FeedLike.create({super.timeMills, required String parentPath, LikeType? type})
+    : _parentPath = parentPath,
+      _type = type,
       super.auto(id: UserHelper.uid);
 
   factory FeedLike.parse(Object? source) {
@@ -39,6 +46,7 @@ class FeedLike extends Entity<FeedLikeKeys> {
     return FeedLike._(
       id: source.entityValue(key.id),
       timeMills: source.entityValue(key.timeMills),
+      parentPath: source.entityValue(key.parentPath),
       type: source.entityValue(key.type, LikeType.parse),
     );
   }
@@ -48,17 +56,26 @@ class FeedLike extends Entity<FeedLikeKeys> {
 
   @override
   Map<String, dynamic> get source {
-    return {key.id: id, key.timeMills: timeMills, key.type: _type?.name};
+    return {
+      key.id: id,
+      key.timeMills: timeMills,
+      key.parentPath: _parentPath,
+      key.type: _type?.name,
+    };
   }
 
   @override
-  int get hashCode => id.hashCode ^ timeMills.hashCode ^ type.hashCode;
+  int get hashCode =>
+      Object.hash(idOrNull, timeMillsOrNull, _parentPath, _type);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! FeedLike) return false;
-    return id == other.id && timeMills == other.timeMills && type == other.type;
+    return idOrNull == other.idOrNull &&
+        timeMillsOrNull == other.timeMillsOrNull &&
+        _parentPath == other._parentPath &&
+        _type == other._type;
   }
 
   @override

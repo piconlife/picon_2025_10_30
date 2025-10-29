@@ -18,10 +18,16 @@ import 'feed_footer.dart';
 import 'feed_header.dart';
 
 class ItemFeedCover extends StatefulWidget {
+  final int index;
   final Feed item;
   final Function(BuildContext context, Feed item)? onClick;
 
-  const ItemFeedCover({super.key, required this.item, this.onClick});
+  const ItemFeedCover({
+    super.key,
+    required this.index,
+    required this.item,
+    this.onClick,
+  });
 
   @override
   State<ItemFeedCover> createState() => _ItemFeedCoverState();

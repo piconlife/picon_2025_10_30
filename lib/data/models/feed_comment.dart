@@ -12,7 +12,7 @@ class FeedCommentKeys extends EntityKey {
   final path = "path";
   final pid = "pid";
   final privacy = "privacy";
-  final ref = "ref";
+  final parentPath = "parentPath";
   final type = "type";
 }
 
@@ -21,7 +21,7 @@ class FeedComment extends Entity<FeedCommentKeys> {
   String? path;
   String? publisher;
   Privacy? _privacy;
-  String? reference;
+  String? parentPath;
   CommentType? _type;
 
   Privacy get privacy => _privacy ?? Privacy.everyone;
@@ -36,7 +36,7 @@ class FeedComment extends Entity<FeedCommentKeys> {
     this.content,
     this.path,
     this.publisher,
-    this.reference,
+    this.parentPath,
     CommentType? type,
     Privacy? privacy,
   }) : _type = type,
@@ -48,7 +48,7 @@ class FeedComment extends Entity<FeedCommentKeys> {
     required this.content,
     required this.path,
     required this.publisher,
-    required this.reference,
+    required this.parentPath,
     required CommentType type,
     required Privacy privacy,
   });
@@ -62,7 +62,7 @@ class FeedComment extends Entity<FeedCommentKeys> {
       content: source.entityValue(key.content),
       path: source.entityValue(key.path),
       publisher: source.entityValue(key.pid),
-      reference: source.entityValue(key.ref),
+      parentPath: source.entityValue(key.parentPath),
       privacy: source.entityValue(key.privacy, Privacy.parse),
       type: source.entityValue(key.type, CommentType.parse),
     );
@@ -79,7 +79,7 @@ class FeedComment extends Entity<FeedCommentKeys> {
       key.content: content,
       key.path: path,
       key.pid: publisher,
-      key.ref: reference,
+      key.parentPath: parentPath,
       key.privacy: privacy,
       key.type: type,
     };
@@ -92,7 +92,7 @@ class FeedComment extends Entity<FeedCommentKeys> {
       content.hashCode ^
       path.hashCode ^
       publisher.hashCode ^
-      reference.hashCode ^
+      parentPath.hashCode ^
       privacy.hashCode ^
       type.hashCode;
 
@@ -105,7 +105,7 @@ class FeedComment extends Entity<FeedCommentKeys> {
         content == other.content &&
         path == other.path &&
         publisher == other.publisher &&
-        reference == other.reference &&
+        parentPath == other.parentPath &&
         privacy == other.privacy &&
         type == other.type;
   }

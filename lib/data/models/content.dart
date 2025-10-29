@@ -1484,7 +1484,10 @@ extension StringsHelper on List<String>? {
 
   bool get isNotEmpty => this != null && this!.isNotEmpty;
 
-  bool get isUrls => this != null && this!.every((e) => e.isUrl);
+  bool get isUrls {
+    return this != null && this!.isNotEmpty && this!.every((e) => e.isUrl);
+  }
 
-  bool get isRefs => this != null && this!.every((e) => e.isRef);
+  bool get isRefs =>
+      this != null && this!.isNotEmpty && this!.every((e) => e.isRef);
 }

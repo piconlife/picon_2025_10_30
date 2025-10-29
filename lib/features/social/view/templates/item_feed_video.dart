@@ -12,15 +12,22 @@ import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/user_builder.dart';
+import '../widgets/menu_button.dart';
 import 'feed_footer_recent.dart';
 import 'feed_header.dart';
 import 'stared_feed_footer.dart';
 
 class ItemFeedVideo extends StatefulWidget {
+  final int index;
   final Feed item;
   final Function(BuildContext context, Feed item)? onClick;
 
-  const ItemFeedVideo({super.key, required this.item, this.onClick});
+  const ItemFeedVideo({
+    super.key,
+    required this.index,
+    required this.item,
+    this.onClick,
+  });
 
   @override
   State<ItemFeedVideo> createState() => _ItemFeedVideoState();
@@ -49,7 +56,9 @@ class _ItemFeedVideoState extends State<ItemFeedVideo> {
                 title: user.username,
                 subtitle: _subtitle(user),
                 avatar: user.photo,
-                actions: [FeedHeaderMoreAction()],
+                actions: [
+                  FeedHeaderMoreAction(index: widget.index, item: widget.item),
+                ],
               );
             },
           ),

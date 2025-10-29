@@ -54,15 +54,6 @@ class UserPostCubit extends DataCubit<UserPost> {
     });
   }
 
-  void update(UserPost value) {
-    final index = state.result.indexOf(value);
-    if (index >= 0) {
-      state.result.removeAt(index);
-      state.result.insert(index, value);
-      emit(state.copyWith(data: value, result: state.result, requestCode: 202));
-    }
-  }
-
   void _attach(Response<UserPost> response) {
     emit(
       state.copyWith(
@@ -227,7 +218,7 @@ class UserPostCubit extends DataCubit<UserPost> {
     // ClipboardHelper.setText(data.description!);
   }
 
-  void translate(UserPost item, ValueChanged<UserPost> notify) {
+  void translate(int index, UserPost item, ValueChanged<UserPost> notify) {
     final header = item.title ?? '';
     final body = item.description ?? '';
     if (!item.isTranslatable) return;
@@ -236,7 +227,7 @@ class UserPostCubit extends DataCubit<UserPost> {
           item
             ..translatedTitle = null
             ..translatedDescription = null;
-      update(item);
+      updatedAt(index, item);
       notify(item);
       return;
     }
@@ -247,7 +238,7 @@ class UserPostCubit extends DataCubit<UserPost> {
           item
             ..translatedTitle = value.firstOrNull
             ..translatedDescription = value.lastOrNull;
-      update(item);
+      updatedAt(index, item);
       notify(item);
     });
   }

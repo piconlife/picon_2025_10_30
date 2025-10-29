@@ -60,7 +60,7 @@ class FeedVerifiedPage extends StatelessWidget {
                   ),
                 );
               }
-              return ItemFeed(item: result.elementAt(index));
+              return ItemFeed(index: index, item: result.elementAt(index));
             },
             separatorBuilder: (context, index) => SizedBox(height: dimen.dp(4)),
             itemCount: result.length,

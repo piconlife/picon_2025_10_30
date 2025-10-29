@@ -16,9 +16,10 @@ import 'item_feed_sponsored.dart';
 import 'item_feed_video.dart';
 
 class ItemFeed extends StatelessWidget {
+  final int index;
   final Feed item;
 
-  const ItemFeed({super.key, required this.item});
+  const ItemFeed({super.key, required this.index, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -48,23 +49,23 @@ class ItemFeed extends StatelessWidget {
       case FeedType.none:
       case FeedType.photo:
       case FeedType.post:
-        return ItemFeedPost(item: item);
+        return ItemFeedPost(index: index, item: item);
       case FeedType.ads:
-        return ItemFeedAds(item: item);
+        return ItemFeedAds(index: index, item: item);
       case FeedType.avatar:
-        return ItemFeedAvatar(item: item);
+        return ItemFeedAvatar(index: index, item: item);
       case FeedType.business:
-        return ItemFeedBusiness(item: item);
+        return ItemFeedBusiness(index: index, item: item);
       case FeedType.cover:
-        return ItemFeedCover(item: item);
+        return ItemFeedCover(index: index, item: item);
       case FeedType.note:
-        return ItemFeedNote(item: item);
+        return ItemFeedNote(index: index, item: item);
       case FeedType.sponsored:
-        return ItemFeedSponsored(item: item);
+        return ItemFeedSponsored(index: index, item: item);
       case FeedType.memory:
-        return ItemFeedMemory(item: item);
+        return ItemFeedMemory(index: index, item: item);
       case FeedType.video:
-        return ItemFeedVideo(item: item);
+        return ItemFeedVideo(index: index, item: item);
     }
   }
 }

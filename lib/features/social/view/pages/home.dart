@@ -60,7 +60,7 @@ class FeedHomePage extends StatelessWidget {
                   ),
                 );
               }
-              return ItemFeed(item: result.elementAt(index));
+              return ItemFeed(index: index, item: result.elementAt(index));
             },
             separatorBuilder: (context, index) {
               return SizedBox(height: dimen.dp(4));

@@ -16,15 +16,22 @@ import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/user_builder.dart';
 import '../../../../routes/paths.dart';
+import '../widgets/menu_button.dart';
 import 'feed_footer_recent.dart';
 import 'feed_header.dart';
 import 'stared_feed_footer.dart';
 
 class ItemFeedPost extends StatefulWidget {
+  final int index;
   final Feed item;
   final Function(BuildContext context, Feed item)? onClick;
 
-  const ItemFeedPost({super.key, required this.item, this.onClick});
+  const ItemFeedPost({
+    super.key,
+    required this.index,
+    required this.item,
+    this.onClick,
+  });
 
   @override
   State<ItemFeedPost> createState() => _ItemFeedPostState();
@@ -53,7 +60,9 @@ class _ItemFeedPostState extends State<ItemFeedPost> {
                 title: user.username,
                 subtitle: _subtitle(user),
                 avatar: user.photo,
-                actions: [FeedHeaderMoreAction()],
+                actions: [
+                  FeedHeaderMoreAction(index: widget.index, item: widget.item),
+                ],
               );
             },
           ),

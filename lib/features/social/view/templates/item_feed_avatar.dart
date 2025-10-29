@@ -18,10 +18,16 @@ import 'feed_footer.dart';
 import 'feed_header.dart';
 
 class ItemFeedAvatar extends StatefulWidget {
+  final int index;
   final Feed item;
   final Function(BuildContext context, Feed item)? onClick;
 
-  const ItemFeedAvatar({super.key, required this.item, this.onClick});
+  const ItemFeedAvatar({
+    super.key,
+    required this.index,
+    required this.item,
+    this.onClick,
+  });
 
   @override
   State<ItemFeedAvatar> createState() => _ItemFeedAvatarState();

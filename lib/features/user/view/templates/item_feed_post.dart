@@ -14,10 +14,16 @@ import 'stared_feed_footer.dart';
 import 'user_post_header.dart';
 
 class ItemUserFeedPost extends StatefulWidget {
+  final int index;
   final UserPost item;
   final Function(BuildContext context, UserPost item)? onClick;
 
-  const ItemUserFeedPost({super.key, required this.item, this.onClick});
+  const ItemUserFeedPost({
+    super.key,
+    required this.index,
+    required this.item,
+    this.onClick,
+  });
 
   @override
   State<ItemUserFeedPost> createState() => _ItemUserFeedPostState();
@@ -27,7 +33,7 @@ class _ItemUserFeedPostState extends State<ItemUserFeedPost> {
   late UserPost item = widget.item;
 
   Future<void> _translate() async {
-    context.read<UserPostCubit>().translate(item, (value) {
+    context.read<UserPostCubit>().translate(widget.index, item, (value) {
       setState(() => item = value);
     });
   }
@@ -75,8 +81,12 @@ class _ItemUserFeedPostState extends State<ItemUserFeedPost> {
             likes: [],
             stars: [],
             comments: [],
-            onLiked: (value) => context.read<UserPostCubit>().update(item),
-            onStared: (value) => context.read<UserPostCubit>().update(item),
+            onLiked: (value) {
+              context.read<UserPostCubit>().updatedAt(widget.index, item);
+            },
+            onStared: (value) {
+              context.read<UserPostCubit>().updatedAt(widget.index, item);
+            },
           ),
           SizedBox(height: dimen.dp(8)),
         ],

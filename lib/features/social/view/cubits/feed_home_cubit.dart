@@ -1,8 +1,34 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_andomie/extensions/list.dart';
+import 'package:flutter_andomie/extensions/string.dart';
+import 'package:flutter_andomie/helpers/clipboard_helper.dart';
+import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_entity/entity.dart';
+import 'package:in_app_analytics/analytics.dart';
+import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/base/data_cubit.dart';
+import '../../../../app/helpers/user.dart';
+import '../../../../data/constants/paths.dart';
+import '../../../../data/models/content.dart';
 import '../../../../data/models/feed.dart';
+import '../../../../data/models/user_report.dart';
+import '../../../../data/use_cases/feed/delete.dart';
 import '../../../../data/use_cases/feed/get_stars.dart';
+import '../../../../data/use_cases/feed_comment/delete.dart';
+import '../../../../data/use_cases/feed_comment/get.dart';
+import '../../../../data/use_cases/feed_like/delete.dart';
+import '../../../../data/use_cases/feed_like/get.dart';
+import '../../../../data/use_cases/feed_star/delete.dart';
+import '../../../../data/use_cases/feed_star/get.dart';
+import '../../../../data/use_cases/feed_video/delete.dart';
+import '../../../../data/use_cases/feed_video/get.dart';
+import '../../../../roots/services/path_provider.dart';
+import '../../../../roots/services/storage.dart';
+import '../../../../roots/services/translator.dart';
+import '../../../../roots/utils/utils.dart';
+import '../../../../routes/paths.dart';
+import '../../../chooser/data/models/report.dart';
 
 class FeedHomeCubit extends DataCubit<Feed> {
   @override
@@ -26,5 +52,165 @@ class FeedHomeCubit extends DataCubit<Feed> {
         requestCode: 0,
       ),
     );
+  }
+
+  void delete(BuildContext context, int index, Feed data) {
+    Analytics.callAsync(name: 'delete_feed', reason: data.id, () async {
+      emit(state.copyWith(result: state.result..removeAt(index)));
+      final feedback = await DeleteFeedUseCase.i(data.id);
+      if (!context.mounted) return;
+      if (!feedback.isSuccessful) {
+        context.showErrorSnackBar(feedback.status.error);
+        emit(state.copyWith(result: state.result..insert(index, data)));
+        return;
+      }
+      StorageService.i.deletes(data.photoUrls.use, lazy: true);
+      if (data.path == null || data.path!.isEmpty) return;
+      GetLikesUseCase.i(data.path ?? '').then((value) {
+        for (var i in value.result) {
+          if (i.parentPath != null || i.parentPath!.isEmpty) return null;
+          DeleteFeedLikeUseCase.i(id: i.id, path: i.parentPath!);
+        }
+      });
+      GetStarsUseCase.i(data.path ?? '').then((value) {
+        for (var i in value.result) {
+          if (i.parentPath != null || i.parentPath!.isEmpty) return null;
+          DeleteFeedStarUseCase.i(id: i.id, path: i.parentPath!);
+        }
+      });
+      GetCommentsUseCase.i(data.path ?? '').then((value) {
+        for (var i in value.result) {
+          if (i.parentPath != null || i.parentPath!.isEmpty) return null;
+          DeleteFeedCommentUseCase.i(id: i.id, path: i.parentPath!);
+        }
+      });
+      GetVideosUseCase.i(data.path ?? '').then((value) {
+        for (var i in value.result) {
+          if (i.parentPath != null || i.parentPath!.isEmpty) return null;
+          DeleteFeedVideoUseCase.i(id: i.id, path: i.parentPath!);
+        }
+      });
+    });
+  }
+
+  void edit(BuildContext context, String id) async {
+    final index = state.result.indexWhere((e) => e.id == id);
+    if (index < 0) return;
+    final data = state.result.elementAtOrNull(index);
+    if (data == null || data.id != id) return;
+    final feedback = await context.open(
+      Routes.createUserPost,
+      arguments: {"$Content": data},
+    );
+    if (feedback is! Feed) return;
+    updatedAt(index, feedback);
+  }
+
+  void share(BuildContext context, String id) {
+    final index = state.result.indexWhere((e) => e.id == id);
+    if (index < 0) return;
+    final data = state.result.elementAtOrNull(index);
+    if (data == null || data.id != id) return;
+    if (!data.isShareMode) return;
+    Utils.share(
+      context,
+      subject:
+          data.isTranslated ? data.translatedTitle ?? data.title : data.title,
+      body:
+          data.isTranslated
+              ? data.translatedDescription ?? data.description
+              : data.description,
+      urls: data.photoUrls,
+    );
+  }
+
+  void copy(BuildContext context, String id) {
+    final index = state.result.indexWhere((e) => e.id == id);
+    if (index < 0) return;
+    final data = state.result.elementAtOrNull(index);
+    if (data == null || data.id != id) return;
+    if (!data.isShareMode) return;
+    if (!data.isDescription) return;
+    ClipboardHelper.setText(
+      data.isTranslated
+          ? data.translatedDescription ?? data.description.use
+          : data.description.use,
+    );
+  }
+
+  void follow(BuildContext context, String id) {
+    final index = state.result.indexWhere((e) => e.id == id);
+    if (index < 0) return;
+    final data = state.result.elementAtOrNull(index);
+    if (data == null || data.id != id) return;
+    // if (!data.isDescription) return;
+    // ClipboardHelper.setText(data.description!);
+  }
+
+  void download(BuildContext context, String id) {
+    final index = state.result.indexWhere((e) => e.id == id);
+    if (index < 0) return;
+    final data = state.result.elementAtOrNull(index);
+    if (data == null || data.id != id) return;
+    // if (!data.isDescription) return;
+    // ClipboardHelper.setText(data.description!);
+  }
+
+  void report(BuildContext context, String id) async {
+    final labels = InAppReport.labels;
+    final index = state.result.indexWhere((e) => e.id == id);
+    if (index < 0) return;
+    final data = state.result.elementAtOrNull(index);
+    if (data == null || data.id != id) return;
+    final type = await context.showOptionsSheet(
+      title: "What kind of problem is this feed causing you?",
+      options: labels,
+    );
+    if (!context.mounted) return;
+    final feedback = await context.showEditorSheet(
+      title: "Please enter your reporting message?",
+      hint: "Write a report…",
+    );
+    final mId = Entity.generateID;
+    final path = PathProvider.generatePath(Paths.reports, mId, data.path);
+    final report = UserReport(
+      id: mId,
+      reporter: UserHelper.uid,
+      publisher: data.publisherId,
+      path: path,
+      parentId: data.id,
+      parentPath: data.path,
+      feedback: feedback,
+      category: labels.elementAtOrNull(type),
+    );
+    // reports.add(report.getDocument_id());
+    // mViewModel.addReport(report);
+    // if (!data.isDescription) return;
+    // ClipboardHelper.setText(data.description!);
+  }
+
+  void translate(int index, Feed item, ValueChanged<Feed> notify) {
+    final header = item.title ?? '';
+    final body = item.description ?? '';
+    if (!item.isTranslatable) return;
+    if (item.isTranslated) {
+      item =
+          item
+            ..translatedTitle = null
+            ..translatedDescription = null;
+      updatedAt(index, item);
+      notify(item);
+      return;
+    }
+    TranslateProvider.translates([header, body], to: UserHelper.language).then((
+      value,
+    ) {
+      item =
+          item
+            ..translatedTitle = value.firstOrNull
+            ..translatedDescription = value.lastOrNull;
+      updatedAt(index, item);
+      notify(item);
+    });
   }
 }

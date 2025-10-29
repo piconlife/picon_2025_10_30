@@ -54,7 +54,7 @@ class UserPostsPage extends StatelessWidget {
               if (item == null) {
                 return const ItemUserFeedPlaceholder();
               } else {
-                return ItemUserFeed(item: item);
+                return ItemUserFeed(index: index, item: item);
               }
             },
             separatorBuilder: (context, index) {

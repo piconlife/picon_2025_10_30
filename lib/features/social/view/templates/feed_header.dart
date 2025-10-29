@@ -74,31 +74,6 @@ class FeedHeader extends StatelessWidget {
   }
 }
 
-class FeedHeaderMoreAction extends StatelessWidget {
-  final VoidCallback? onClick;
-
-  const FeedHeaderMoreAction({super.key, this.onClick});
-
-  @override
-  Widget build(BuildContext context) {
-    final dimen = context.dimens;
-    return InAppGesture(
-      onTap: onClick,
-      backgroundColor: Colors.transparent,
-      shape: const CircleBorder(),
-      splashColor: context.dark.t05,
-      child: Padding(
-        padding: EdgeInsets.all(dimen.dp(8)),
-        child: InAppIcon(
-          InAppIcons.nativeMoreY.regular,
-          size: dimen.dp(24),
-          color: context.dark.t50,
-        ),
-      ),
-    );
-  }
-}
-
 class FeedHeaderFollowButton extends StatelessWidget {
   final String? publisher;
 

@@ -9,14 +9,21 @@ import '../../../../app/res/icons.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/user_builder.dart';
+import '../widgets/menu_button.dart';
 import 'feed_footer.dart';
 import 'feed_header.dart';
 
 class ItemFeedNote extends StatefulWidget {
+  final int index;
   final Feed item;
   final Function(BuildContext context, Feed item)? onClick;
 
-  const ItemFeedNote({super.key, required this.item, this.onClick});
+  const ItemFeedNote({
+    super.key,
+    required this.index,
+    required this.item,
+    this.onClick,
+  });
 
   @override
   State<ItemFeedNote> createState() => _ItemFeedNoteState();
@@ -36,7 +43,9 @@ class _ItemFeedNoteState extends State<ItemFeedNote> {
                 title: user.name,
                 subtitle: widget.item.timeMills.toRealtime(),
                 avatar: user.photo,
-                actions: [FeedHeaderMoreAction()],
+                actions: [
+                  FeedHeaderMoreAction(index: widget.index, item: widget.item),
+                ],
               );
             },
           ),

@@ -13,14 +13,21 @@ import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/user_builder.dart';
+import '../widgets/menu_button.dart';
 import 'feed_footer.dart';
 import 'feed_header.dart';
 
 class ItemFeedSponsored extends StatefulWidget {
+  final int index;
   final Feed item;
   final Function(BuildContext context, Feed item)? onClick;
 
-  const ItemFeedSponsored({super.key, required this.item, this.onClick});
+  const ItemFeedSponsored({
+    super.key,
+    required this.index,
+    required this.item,
+    this.onClick,
+  });
 
   @override
   State<ItemFeedSponsored> createState() => _ItemFeedSponsoredState();
@@ -40,7 +47,9 @@ class _ItemFeedSponsoredState extends State<ItemFeedSponsored> {
                 title: user.name,
                 subtitle: FeedType.sponsored.value,
                 avatar: user.photo,
-                actions: [FeedHeaderMoreAction()],
+                actions: [
+                  FeedHeaderMoreAction(index: widget.index, item: widget.item),
+                ],
               );
             },
           ),

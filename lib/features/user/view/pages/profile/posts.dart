@@ -79,7 +79,7 @@ class _ProfilePostsSegmentState extends State<ProfilePostsSegment> {
             if (item == null) {
               return const ItemUserFeedPlaceholder();
             } else {
-              return ItemUserFeed(item: item);
+              return ItemUserFeed(index: index, item: item);
             }
           },
           separatorBuilder: (context, index) {
