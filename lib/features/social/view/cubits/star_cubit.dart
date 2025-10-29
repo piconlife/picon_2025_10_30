@@ -4,9 +4,9 @@ import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../data/enums/privacy.dart';
 import '../../../../data/models/feed_star.dart';
-import '../../../../data/use_cases/feed_like/delete.dart';
 import '../../../../data/use_cases/feed_star/count.dart';
 import '../../../../data/use_cases/feed_star/create.dart';
+import '../../../../data/use_cases/feed_star/delete.dart';
 import '../../../../data/use_cases/feed_star/get_by_id.dart';
 import '../../../../data/use_cases/feed_star/get_by_pagination.dart';
 
@@ -34,7 +34,7 @@ class FeedStarCubit extends DataCubit<FeedStar> {
 
   @override
   Future<bool> onDeleteByData(FeedStar data) {
-    return DeleteFeedLikeUseCase.i(path, data.id).then((value) {
+    return DeleteFeedStarUseCase.i(path, data.id).then((value) {
       return value.isSuccessful;
     });
   }

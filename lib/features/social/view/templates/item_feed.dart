@@ -6,6 +6,7 @@ import '../../../../data/enums/feed_type.dart';
 import '../../../../data/models/feed.dart';
 import '../cubits/comment_cubit.dart';
 import '../cubits/like_cubit.dart';
+import '../cubits/star_cubit.dart';
 import 'item_feed_ads.dart';
 import 'item_feed_avatar.dart';
 import 'item_feed_business.dart';
@@ -32,7 +33,11 @@ class ItemFeed extends StatelessWidget {
         ..count()
         ..fetchByMe();
     });
-
+    FeedStarCubit starCubit = Cache.put("star_cubit[$path]", () {
+      return FeedStarCubit(path, initialCount: item.starCount)
+        ..count()
+        ..fetchByMe();
+    });
     FeedCommentCubit commentCubit = Cache.put("comment_cubit[$path]", () {
       return FeedCommentCubit(path, initialCount: item.commentCount)..count();
     });
@@ -40,6 +45,7 @@ class ItemFeed extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: likeCubit),
+        BlocProvider.value(value: starCubit),
         BlocProvider.value(value: commentCubit),
       ],
       child: _buildLayout(context),

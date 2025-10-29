@@ -9,11 +9,13 @@ import '../../../../app/base/exist_by_me_builder.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/feed_comment.dart';
 import '../../../../data/models/feed_like.dart';
+import '../../../../data/models/feed_star.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/pleasure_button.dart';
 import '../../../../roots/widgets/text.dart';
 import '../cubits/comment_cubit.dart';
 import '../cubits/like_cubit.dart';
+import '../cubits/star_cubit.dart';
 import 'feed_comment_box.dart';
 
 class StaredFeedFooter extends StatefulWidget {
@@ -65,7 +67,7 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
             ),
             InAppText(",", style: counterStyle),
             SizedBox(width: dimen.dp(8)),
-            CountableBuilder<FeedLikeCubit, FeedLike>(
+            CountableBuilder<FeedStarCubit, FeedStar>(
               builder: (context, value) {
                 return InAppText(
                   Converter.toKMB(value, "Star", "Stars"),
@@ -104,7 +106,7 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
                 );
               },
             ),
-            ExistByMeBuilder<FeedLikeCubit, FeedLike>(
+            ExistByMeBuilder<FeedStarCubit, FeedStar>(
               index: widget.index,
               builder: (context, value, toggle) {
                 return InAppPleasureButton(
