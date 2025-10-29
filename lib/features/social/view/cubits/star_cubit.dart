@@ -2,38 +2,38 @@ import 'package:flutter_entity/entity.dart';
 
 import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
-import '../../../../data/enums/like_type.dart';
-import '../../../../data/models/feed_like.dart';
-import '../../../../data/use_cases/feed_like/count.dart';
-import '../../../../data/use_cases/feed_like/create.dart';
+import '../../../../data/enums/privacy.dart';
+import '../../../../data/models/feed_star.dart';
 import '../../../../data/use_cases/feed_like/delete.dart';
-import '../../../../data/use_cases/feed_like/get_by_id.dart';
-import '../../../../data/use_cases/feed_like/get_by_pagination.dart';
+import '../../../../data/use_cases/feed_star/count.dart';
+import '../../../../data/use_cases/feed_star/create.dart';
+import '../../../../data/use_cases/feed_star/get_by_id.dart';
+import '../../../../data/use_cases/feed_star/get_by_pagination.dart';
 
-class FeedLikeCubit extends DataCubit<FeedLike> {
+class FeedStarCubit extends DataCubit<FeedStar> {
   final String path;
 
-  FeedLikeCubit(this.path, {int? initialCount})
+  FeedStarCubit(this.path, {int? initialCount})
     : super(Response(count: initialCount));
 
   @override
-  FeedLike? createNewObject(Object? args) {
+  FeedStar? createNewObject(Object? args) {
     if (path.isEmpty) return null;
-    return FeedLike.create(
-      type: args is LikeType ? args : null,
+    return FeedStar.create(
+      privacy: args is Privacy ? args : null,
       parentPath: path,
     );
   }
 
   @override
-  Future<bool> onCreateByData(FeedLike data) {
-    return CreateFeedLikeUseCase.i(data).then((value) {
+  Future<bool> onCreateByData(FeedStar data) {
+    return CreateFeedStarUseCase.i(data).then((value) {
       return value.isSuccessful;
     });
   }
 
   @override
-  Future<bool> onDeleteByData(FeedLike data) {
+  Future<bool> onDeleteByData(FeedStar data) {
     return DeleteFeedLikeUseCase.i(path, data.id).then((value) {
       return value.isSuccessful;
     });
@@ -42,14 +42,14 @@ class FeedLikeCubit extends DataCubit<FeedLike> {
   @override
   void count() {
     if (path.isEmpty || state.count > 0) return;
-    GetFeedLikesCountUseCase.i(path).then((value) {
+    GetFeedStarsCountUseCase.i(path).then((value) {
       emit(state.copyWith(count: value.data));
     });
   }
 
   void fetchByMe() {
     if (path.isEmpty) return;
-    GetFeedLikeUseCase.i(UserHelper.uid, path).then((value) {
+    GetFeedStarUseCase.i(path, UserHelper.uid).then((value) {
       emit(
         state.copyWith(resultByMe: value.data != null ? [value.data!] : null),
       );
@@ -60,7 +60,7 @@ class FeedLikeCubit extends DataCubit<FeedLike> {
   void fetch({int initialSize = 30, int fetchingSize = 15}) {
     if (path.isEmpty) return;
     emit(state.copyWith(status: Status.loading));
-    GetFeedLikesByPaginationUseCase.i(
+    GetFeedStarsByPaginationUseCase.i(
       path,
       initialSize: initialSize,
       fetchingSize: fetchingSize,
@@ -74,7 +74,7 @@ class FeedLikeCubit extends DataCubit<FeedLike> {
   void refresh({int initialSize = 30, int fetchingSize = 15}) {
     if (path.isEmpty) return;
     emit(state.copyWith(status: Status.loading));
-    GetFeedLikesByPaginationUseCase.i(
+    GetFeedStarsByPaginationUseCase.i(
       path,
       initialSize: initialSize,
       fetchingSize: fetchingSize,
@@ -83,7 +83,7 @@ class FeedLikeCubit extends DataCubit<FeedLike> {
     });
   }
 
-  void _attach(Response<FeedLike> response) {
+  void _attach(Response<FeedStar> response) {
     emit(
       state.copyWith(
         status: response.status,

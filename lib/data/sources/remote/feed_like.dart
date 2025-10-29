@@ -6,7 +6,11 @@ import '../../models/feed_like.dart';
 
 class RemoteFeedLikeDataSource extends RemoteDataSource<FeedLike> {
   RemoteFeedLikeDataSource()
-    : super(delegate: FirestoreDataDelegate.i, path: Paths.feedLikes);
+    : super(
+        delegate: FirestoreDataDelegate.i,
+        path: Paths.feedLikes,
+        limitations: DataLimitations(maximumDeleteLimit: 1000),
+      );
 
   @override
   FeedLike build(Object? source) => FeedLike.parse(source);

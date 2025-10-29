@@ -9,5 +9,5 @@ class LocalFeedStarDataSource extends LocalDataSource<FeedStar> {
     : super(delegate: LocalDataDelegate.i, path: Paths.feedStars);
 
   @override
-  FeedStar build(Object? source) => FeedStar.from(source);
+  FeedStar build(Object? source) => FeedStar.parse(source);
 }

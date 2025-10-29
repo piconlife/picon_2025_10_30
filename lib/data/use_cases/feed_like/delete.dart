@@ -10,7 +10,7 @@ class DeleteFeedLikeUseCase extends BaseFeedLikeUseCase {
 
   static DeleteFeedLikeUseCase get i => _i ??= DeleteFeedLikeUseCase._();
 
-  Future<Response<FeedLike>> call({required String id, required String path}) {
-    return repository.deleteById(id, params: getParams(path));
+  Future<Response<FeedLike>> call(String parentPath, String id) {
+    return repository.deleteById(id, params: getParams(parentPath));
   }
 }

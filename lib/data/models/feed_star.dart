@@ -1,81 +1,88 @@
+import 'package:flutter_entity/entity.dart';
+
 import '../../app/helpers/user.dart';
-import '../constants/keys.dart';
+import '../../data/parsers/enum_parser.dart';
 import '../enums/privacy.dart';
-import 'content.dart';
-import 'user.dart';
 
-List<String> _keys = [
-  Keys.i.publisherId,
-  Keys.i.id,
-  Keys.i.timeMills,
-  Keys.i.parentId,
-  Keys.i.parentPath,
-  Keys.i.privacy,
-];
+class FeedStarKeys extends EntityKey {
+  const FeedStarKeys._();
 
-class FeedStar extends Content {
-  FeedStar({
-    super.publisherId,
-    super.id,
+  static const FeedStarKeys i = FeedStarKeys._();
+
+  final parentPath = "parentPath";
+  final privacy = "privacy";
+
+  @override
+  Iterable<String> get keys => [id, timeMills, privacy, parentPath];
+}
+
+class FeedStar extends Entity<FeedStarKeys> {
+  String? _parentPath;
+  Privacy? _privacy;
+
+  String? get parentPath => _parentPath;
+
+  String get publisher => id;
+
+  Privacy get privacy => _privacy ?? Privacy.onlyMe;
+
+  bool get isMe => id == UserHelper.uid;
+
+  bool get isEmpty => id.isEmpty;
+
+  FeedStar.empty();
+
+  FeedStar._({super.id, super.timeMills, String? parentPath, Privacy? privacy})
+    : _parentPath = parentPath,
+      _privacy = privacy;
+
+  FeedStar.create({
     super.timeMills,
-    super.parentId,
-    super.parentPath,
-    super.privacy,
-  });
-
-  factory FeedStar.create({
-    User? publisher,
-    String? id,
-    int? timeMills,
-    String? parentId,
-    String? parentPath,
+    required String parentPath,
     Privacy? privacy,
-  }) {
-    publisher ??= UserHelper.user;
-    return FeedStar(
-      publisherId: publisher.id,
-      id: id,
-      timeMills: timeMills,
-      parentId: parentId,
-      parentPath: parentPath,
-      privacy: privacy,
-    );
-  }
+  }) : _parentPath = parentPath,
+       _privacy = privacy,
+       super.auto(id: UserHelper.uid);
 
-  factory FeedStar.from(Object? source) {
-    final data = Content.parse(source);
-    return FeedStar(
-      publisherId: data.publisherId,
-      id: data.id,
-      timeMills: data.timeMills,
-      parentId: data.parentId,
-      parentPath: data.parentPath,
-      privacy: data.privacy,
-    );
-  }
-
-  FeedStar withFeedStar({
-    String? publisher,
-    String? id,
-    int? timeMills,
-    String? parentId,
-    String? parentPath,
-    String? photoUrl,
-    Privacy? privacy,
-  }) {
-    return FeedStar(
-      publisherId: publisher ?? this.publisherId,
-      id: id ?? this.id,
-      timeMills: timeMills ?? this.timeMills,
-      parentId: parentId ?? this.parentId,
-      parentPath: parentPath ?? this.parentPath,
-      privacy: privacy ?? this.privacy,
+  factory FeedStar.parse(Object? source) {
+    if (source is! Map) return FeedStar.empty();
+    final key = FeedStarKeys.i;
+    return FeedStar._(
+      id: source.entityValue(key.id),
+      timeMills: source.entityValue(key.timeMills),
+      parentPath: source.entityValue(key.parentPath),
+      privacy: source.entityValue(key.privacy, Privacy.values.parse),
     );
   }
 
   @override
+  FeedStarKeys makeKey() => FeedStarKeys.i;
+
+  @override
   Map<String, dynamic> get source {
-    final data = super.source.entries.where((item) => _keys.contains(item.key));
-    return Map.fromEntries(data);
+    return {
+      key.id: id,
+      key.timeMills: timeMills,
+      key.parentPath: _parentPath,
+      key.privacy: _privacy?.name,
+    };
   }
+
+  @override
+  int get hashCode {
+    return Object.hash(idOrNull, timeMillsOrNull, _parentPath, _privacy);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! FeedStar) return false;
+    return idOrNull == other.idOrNull &&
+        timeMillsOrNull == other.timeMillsOrNull &&
+        _parentPath == other._parentPath &&
+        _privacy == other._privacy;
+  }
+
+  @override
+  String toString() => "$FeedStar#$hashCode($filtered)";
 }

@@ -14,14 +14,14 @@ class GetFeedStarsByPaginationUseCase extends BaseFeedStarUseCase {
     return _i ??= GetFeedStarsByPaginationUseCase._();
   }
 
-  Future<Response<FeedStar>> call({
-    required String referencePath,
+  Future<Response<FeedStar>> call(
+    String parentPath, {
     int? initialSize,
     int? fetchingSize,
     Object? snapshot,
   }) {
     return repository.getByQuery(
-      params: getParams(referencePath),
+      params: getParams(parentPath),
       sorts: [DataSorting(Keys.i.timeMills, descending: true)],
       selections: [
         if (snapshot != null) DataSelection.startAfterDocument(snapshot),

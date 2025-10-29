@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:in_app_cache/in_app_cache.dart';
 
 import '../../../../data/enums/feed_type.dart';
 import '../../../../data/models/feed.dart';
@@ -24,21 +25,22 @@ class ItemFeed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final path = item.content.path;
-    if (path == null || path.isEmpty) return SizedBox();
+    if (path == null || path.isEmpty) return const SizedBox.shrink();
+
+    FeedLikeCubit likeCubit = Cache.put("like_cubit[$path]", () {
+      return FeedLikeCubit(path, initialCount: item.likeCount)
+        ..count()
+        ..fetchByMe();
+    });
+
+    FeedCommentCubit commentCubit = Cache.put("comment_cubit[$path]", () {
+      return FeedCommentCubit(path, initialCount: item.commentCount)..count();
+    });
+
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) {
-            return FeedLikeCubit(path)
-              ..count()
-              ..fetchByMe();
-          },
-        ),
-        BlocProvider(
-          create: (context) {
-            return FeedCommentCubit(path)..count();
-          },
-        ),
+        BlocProvider.value(value: likeCubit),
+        BlocProvider.value(value: commentCubit),
       ],
       child: _buildLayout(context),
     );

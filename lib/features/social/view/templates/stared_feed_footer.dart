@@ -1,27 +1,23 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
-import 'package:data_management/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_andomie/utils/converter.dart';
-import 'package:flutter_andomie/utils/validator.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 
-import '../../../../app/helpers/user.dart';
+import '../../../../app/base/countable_builder.dart';
+import '../../../../app/base/exist_by_me_builder.dart';
 import '../../../../app/res/icons.dart';
-import '../../../../data/constants/keys.dart';
-import '../../../../data/enums/privacy.dart';
-import '../../../../data/models/feed_star.dart';
-import '../../../../data/use_cases/feed_star/create.dart';
-import '../../../../data/use_cases/feed_star/delete.dart';
-import '../../../../data/use_cases/user_post/update.dart';
+import '../../../../data/models/feed_comment.dart';
+import '../../../../data/models/feed_like.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/pleasure_button.dart';
 import '../../../../roots/widgets/text.dart';
+import '../cubits/comment_cubit.dart';
+import '../cubits/like_cubit.dart';
 import 'feed_comment_box.dart';
 
 class StaredFeedFooter extends StatefulWidget {
+  final int index;
   final String id;
   final String path;
   final int? likes;
@@ -32,6 +28,7 @@ class StaredFeedFooter extends StatefulWidget {
 
   const StaredFeedFooter({
     super.key,
+    required this.index,
     required this.id,
     required this.path,
     required this.onLiked,
@@ -46,68 +43,6 @@ class StaredFeedFooter extends StatefulWidget {
 }
 
 class _StaredFeedFooterState extends State<StaredFeedFooter> {
-  late final _observerLikes = widget.likes.use.obx;
-  late final _observerStars = widget.stars.use.obx;
-
-  Future<bool> _like(bool like) async {
-    return false;
-  }
-
-  Future<bool> _star(bool value) {
-    if (!value) {
-      return CreateFeedStarUseCase.i(
-        FeedStar.create(
-          id: UserHelper.uid,
-          parentId: widget.id,
-          parentPath: widget.path,
-          privacy: Privacy.onlyMe,
-        ),
-      ).then((value) {
-        if (value.isSuccessful) {
-          return UpdateUserPostUseCase.i(widget.id, {
-            Keys.i.stars: DataFieldValue.arrayUnion([UserHelper.uid]),
-          }).then((value) {
-            return value.isSuccessful;
-          });
-        } else {
-          return false;
-        }
-      });
-    } else {
-      return DeleteFeedStarUseCase.i(
-        id: UserHelper.uid,
-        path: widget.path.use,
-      ).then((value) {
-        if (value.isSuccessful) {
-          return UpdateUserPostUseCase.i(widget.id, {
-            Keys.i.stars: DataFieldValue.arrayRemove([UserHelper.uid]),
-          }).then((value) {
-            return value.isSuccessful;
-          });
-        } else {
-          return false;
-        }
-      });
-    }
-  }
-
-  void _updateLikes(BuildContext context, bool selected) async {
-    _like(selected);
-  }
-
-  Future<void> _updateStars(BuildContext context, bool selected) async {
-    _observerStars.toggle(UserHelper.uid, selected);
-    widget.onStared(_observerStars.value);
-    _star(selected);
-  }
-
-  @override
-  void dispose() {
-    _observerLikes.dispose();
-    _observerStars.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final dark = context.dark;
@@ -120,8 +55,7 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
         Row(
           children: [
             SizedBox(width: dimen.dp(16)),
-            AndrossyObserver(
-              observer: _observerLikes,
+            CountableBuilder<FeedLikeCubit, FeedLike>(
               builder: (context, value) {
                 return InAppText(
                   Converter.toKMB(value, "Like", "Likes"),
@@ -131,11 +65,10 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
             ),
             InAppText(",", style: counterStyle),
             SizedBox(width: dimen.dp(8)),
-            AndrossyObserver(
-              observer: _observerStars,
+            CountableBuilder<FeedLikeCubit, FeedLike>(
               builder: (context, value) {
                 return InAppText(
-                  Converter.toKMBFromList(value, "Star", "Stars"),
+                  Converter.toKMB(value, "Star", "Stars"),
                   style: counterStyle,
                 );
               },
@@ -143,13 +76,13 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
             SizedBox(width: dimen.dp(8)),
             InAppText("&", style: counterStyle),
             SizedBox(width: dimen.dp(8)),
-            InAppText(
-              Converter.toKMBFromList(
-                widget.comments.use,
-                "Comment",
-                "Comments",
-              ),
-              style: counterStyle,
+            CountableBuilder<FeedCommentCubit, FeedComment>(
+              builder: (context, value) {
+                return InAppText(
+                  Converter.toKMB(value, "Comment", "Comments"),
+                  style: counterStyle,
+                );
+              },
             ),
             SizedBox(width: dimen.dp(16)),
           ],
@@ -159,33 +92,26 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(width: dimen.dp(8)),
-            AndrossyObserver(
-              observer: _observerLikes,
-              builder: (context, value) {
-                final activated = false;
+            ExistByMeBuilder<FeedLikeCubit, FeedLike>(
+              index: widget.index,
+              builder: (context, value, toggle) {
                 return InAppPleasureButton(
                   icon:
-                      activated
-                          ? InAppIcons.heart.solid
-                          : InAppIcons.heart.regular,
+                      value ? InAppIcons.heart.solid : InAppIcons.heart.regular,
                   iconSize: dimen.dp(28),
-                  iconColor: activated ? context.red : dark.t50,
-                  onTap: () => _updateLikes(context, activated),
+                  iconColor: value ? context.red : dark.t50,
+                  onTap: toggle,
                 );
               },
             ),
-            AndrossyObserver(
-              observer: _observerStars,
-              builder: (context, value) {
-                final activated = Validator.isChecked(UserHelper.uid, value);
+            ExistByMeBuilder<FeedLikeCubit, FeedLike>(
+              index: widget.index,
+              builder: (context, value, toggle) {
                 return InAppPleasureButton(
-                  icon:
-                      activated
-                          ? InAppIcons.star.solid
-                          : InAppIcons.star.regular,
+                  icon: value ? InAppIcons.star.solid : InAppIcons.star.regular,
                   iconSize: dimen.dp(28),
-                  iconColor: activated ? context.yellow : dark.t50,
-                  onTap: () => _updateStars(context, activated),
+                  iconColor: value ? context.yellow : dark.t50,
+                  onTap: toggle,
                 );
               },
             ),

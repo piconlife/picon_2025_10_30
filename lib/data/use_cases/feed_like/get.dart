@@ -10,7 +10,7 @@ class GetLikesUseCase extends BaseFeedLikeUseCase {
 
   static GetLikesUseCase get i => _i ??= GetLikesUseCase._();
 
-  Future<Response<FeedLike>> call(String referencePath) {
-    return repository.get(params: getParams(referencePath));
+  Future<Response<FeedLike>> call(String parentPath) {
+    return repository.get(params: getParams(parentPath));
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter_entity/entity.dart';
 
 import '../../app/helpers/user.dart';
+import '../../data/parsers/enum_parser.dart';
 import '../enums/like_type.dart';
 
 class FeedLikeKeys extends EntityKey {
@@ -47,7 +48,7 @@ class FeedLike extends Entity<FeedLikeKeys> {
       id: source.entityValue(key.id),
       timeMills: source.entityValue(key.timeMills),
       parentPath: source.entityValue(key.parentPath),
-      type: source.entityValue(key.type, LikeType.parse),
+      type: source.entityValue(key.type, LikeType.values.parse),
     );
   }
 

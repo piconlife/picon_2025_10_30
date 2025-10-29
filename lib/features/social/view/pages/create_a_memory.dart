@@ -365,9 +365,9 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
     context.showLoader();
     final mPhotos =
         photos.value.map((e) => e.rootData).whereType<Content>().toList();
-    context.read<UserPostCubit>().create(feed).then((value) {
+    context.read<UserPostCubit>().onCreateByData(feed).then((value) {
       if (!context.mounted) return;
-      if (value.isSuccessful) {
+      if (value) {
         context.read<UserPhotoCubit?>()?.add(feed.copyWith(photos: mPhotos));
         _createFeedForGlobal(context, feed);
       } else {

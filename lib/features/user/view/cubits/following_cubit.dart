@@ -42,13 +42,13 @@ class UserFollowingCubit extends DataCubit<UserFollowing> {
 
   UserFollowing? following(String uid) => state.elementOf((e) => e.id == uid);
 
-  void toggle(String uid, [UserFollowing? data]) {
-    if (data != null) {
-      unfollow(data);
-    } else {
-      follow(uid);
-    }
-  }
+  // void toggle(String uid, [UserFollowing? data]) {
+  //   if (data != null) {
+  //     unfollow(data);
+  //   } else {
+  //     follow(uid);
+  //   }
+  // }
 
   void follow(String uid) {
     if (uid.isEmpty) return;

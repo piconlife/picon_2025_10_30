@@ -40,6 +40,4 @@ abstract final class Msg {
   static const somethingWentWrong3 = "Hmm... looks like something went off!";
   static const somethingWentWrong4 = "That didn’t go as planned — try again!";
   static const somethingWentWrong5 = "An error occurred, please try once more!";
-
-
 }

@@ -1061,6 +1061,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.9"
+  in_app_cache:
+    dependency: "direct main"
+    description:
+      name: in_app_cache
+      sha256: "7b376c83d3ba907ff97004104d471efa911e5f5b17d6055942106e3cf59e1fe5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   in_app_configs:
     dependency: "direct main"
     description:

@@ -4,8 +4,10 @@ import 'package:flutter_andomie/models/selection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 
+typedef DataCubitToggleAsyncCallback = Future<Response<bool>> Function();
+
 abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
-  DataCubit() : super(Response());
+  DataCubit([Response<T>? initial]) : super(initial ?? Response());
 
   Timer? _timer;
 
@@ -81,6 +83,73 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     result.insert(index, callback(data));
     return result;
   }
+
+  void toggle({int? index, bool? exist, Object? args}) {
+    T? data;
+    if (index != null) {
+      data = state.result.elementAtOrNull(index);
+    }
+    data ??= state.resultByMe.firstOrNull;
+    if (data != null) {
+      _unlike(data);
+    } else {
+      _like(args);
+    }
+  }
+
+  void _like(Object? args) {
+    final data = createNewObject(args);
+    if (data == null) return;
+    emit(
+      state.copyWith(
+        count: state.count + 1,
+        result: state.result..insert(0, data),
+        resultByMe: state.resultByMe..insert(0, data),
+      ),
+    );
+    onCreateByData(data).then((value) {
+      if (!value) {
+        emit(
+          state.copyWith(
+            count: state.count - 1,
+            result: state.result..remove(data),
+            resultByMe: state.resultByMe..remove(data),
+          ),
+        );
+      }
+      return value;
+    });
+  }
+
+  void _unlike(T data) {
+    emit(
+      state.copyWith(
+        count: state.count - 1,
+        result: state.result..remove(data),
+        resultByMe: state.resultByMe..remove(data),
+      ),
+    );
+    onDeleteByData(data).then((value) {
+      if (!value) {
+        emit(
+          state.copyWith(
+            count: state.count + 1,
+            result: state.result..insert(0, data),
+            resultByMe: state.resultByMe..insert(0, data),
+          ),
+        );
+      }
+      return value;
+    });
+  }
+
+  T? createNewObject(Object? args) => null;
+
+  Future<bool> onCreateByData(T data) async => true;
+
+  Future<bool> onDeleteByData(T data) async => true;
+
+  Future<bool> onDeleteById(String id) async => true;
 
   void created(T value) {
     state.result.insert(0, value);

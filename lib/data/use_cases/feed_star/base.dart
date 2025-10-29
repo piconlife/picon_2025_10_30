@@ -7,7 +7,7 @@ class BaseFeedStarUseCase {
 
   BaseFeedStarUseCase() : repository = FeedStarRepository.i;
 
-  IterableParams getParams(String referencePath) {
-    return IterableParams([referencePath]);
+  IterableParams getParams(String parentPath) {
+    return IterableParams([parentPath]);
   }
 }

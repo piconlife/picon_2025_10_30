@@ -1,28 +1,32 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 
+import '../../../../app/base/data_cubit.dart';
 import '../../../../data/models/feed_comment.dart';
+import '../../../../data/use_cases/feed_comment/count.dart';
 import '../../../../data/use_cases/feed_comment/create.dart';
 import '../../../../data/use_cases/feed_comment/delete.dart';
 import '../../../../data/use_cases/feed_comment/get_by_pagination.dart';
 
-class FeedCommentCubit extends Cubit<Response<FeedComment>> {
-  final String reference;
+class FeedCommentCubit extends DataCubit<FeedComment> {
+  final String path;
 
-  FeedCommentCubit(this.reference) : super(Response(count: 0));
+  FeedCommentCubit(this.path, {int? initialCount})
+    : super(Response(count: initialCount));
 
+  @override
   void count() {
-    if (reference.isEmpty) return;
-    // GetFeedCommentsCountUseCase.i(reference).then((value) {
-    //   emit(state.copy(count: value.data));
-    // });
+    if (path.isEmpty || state.count > 0) return;
+    GetFeedCommentsCountUseCase.i(path).then((value) {
+      emit(state.copyWith(count: value.data));
+    });
   }
 
+  @override
   void fetch({int initialSize = 30, int fetchingSize = 15}) {
-    if (reference.isEmpty) return;
+    if (path.isEmpty) return;
     emit(state.copyWith(status: Status.loading));
     GetFeedCommentsByPaginationUseCase.i(
-      referencePath: reference,
+      referencePath: path,
       initialSize: initialSize,
       fetchingSize: fetchingSize,
       snapshot: state.snapshot,
@@ -32,7 +36,7 @@ class FeedCommentCubit extends Cubit<Response<FeedComment>> {
   }
 
   void update(FeedComment value) {
-    if (reference.isEmpty) return;
+    if (path.isEmpty) return;
     emit(state.copyWith(data: value, requestCode: 202));
   }
 
@@ -47,19 +51,21 @@ class FeedCommentCubit extends Cubit<Response<FeedComment>> {
     );
   }
 
-  void create(FeedComment data) {
-    if (reference.isEmpty) return;
-    CreateFeedCommentUseCase.i(data).then((value) {
+  @override
+  Future<bool> onCreateByData(FeedComment data) async {
+    if (path.isEmpty) return false;
+    return CreateFeedCommentUseCase.i(data).then((value) {
       if (value.isSuccessful) {
         emit(state.copyWith(result: state.result..insert(0, data)));
       }
-      return value;
+      return value.isSuccessful;
     });
   }
 
-  void delete(String id) {
-    if (reference.isEmpty) return;
-    DeleteFeedCommentUseCase.i(id: id, path: reference).then((value) {
+  @override
+  Future<bool> onDeleteById(String id) async {
+    if (path.isEmpty) return false;
+    return DeleteFeedCommentUseCase.i(id: id, path: path).then((value) {
       if (value.isSuccessful) {
         emit(
           state.copyWith(
@@ -70,7 +76,7 @@ class FeedCommentCubit extends Cubit<Response<FeedComment>> {
           ),
         );
       }
-      return value;
+      return value.isSuccessful;
     });
   }
 }

@@ -14,14 +14,14 @@ class GetFeedLikesByPaginationUseCase extends BaseFeedLikeUseCase {
     return _i ??= GetFeedLikesByPaginationUseCase._();
   }
 
-  Future<Response<FeedLike>> call({
-    required String referencePath,
+  Future<Response<FeedLike>> call(
+    String parentPath, {
     int? initialSize,
     int? fetchingSize,
     Object? snapshot,
   }) {
     return repository.getByQuery(
-      params: getParams(referencePath),
+      params: getParams(parentPath),
       sorts: [DataSorting(Keys.i.timeMills, descending: true)],
       selections: [
         if (snapshot != null) DataSelection.startAfterDocument(snapshot),

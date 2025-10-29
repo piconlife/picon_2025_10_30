@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/extensions/list.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_andomie/helpers/clipboard_helper.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
@@ -12,18 +11,10 @@ import '../../../../data/constants/paths.dart';
 import '../../../../data/models/content.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../data/models/user_report.dart';
-import '../../../../data/use_cases/feed_star/delete.dart';
-import '../../../../data/use_cases/feed_star/get.dart';
-import '../../../../data/use_cases/feed_video/delete.dart';
-import '../../../../data/use_cases/feed_video/get.dart';
-import '../../../../data/use_cases/photo/delete.dart';
-import '../../../../data/use_cases/photo/get.dart';
 import '../../../../data/use_cases/user_post/count.dart';
 import '../../../../data/use_cases/user_post/create.dart';
-import '../../../../data/use_cases/user_post/delete.dart';
 import '../../../../data/use_cases/user_post/get_by_pagination.dart';
 import '../../../../roots/services/path_provider.dart';
-import '../../../../roots/services/storage.dart';
 import '../../../../roots/services/translator.dart';
 import '../../../../roots/utils/utils.dart';
 import '../../../../routes/paths.dart';
@@ -65,61 +56,19 @@ class UserPostCubit extends DataCubit<UserPost> {
     );
   }
 
-  Future<Response<UserPost>> create(UserPost data) {
+  @override
+  Future<bool> onCreateByData(UserPost data) {
     return CreateUserPostUseCase.i(data).then((value) {
       if (value.isSuccessful) {
         emit(state.copyWith(result: state.result..insert(0, data)));
       }
-      return value;
+      return value.isSuccessful;
     });
   }
 
-  void delete(BuildContext context, String id) {
-    final index = state.result.indexWhere((e) => e.id == id);
-    if (index < 0) return;
-    final data = state.result.elementAtOrNull(index);
-    if (data == null || data.id != id) return;
-    emit(state.copyWith(result: state.result..removeAt(index)));
-    DeleteUserPostUseCase.i(id).then((feedback) {
-      if (!context.mounted) return;
-      if (!feedback.isSuccessful) {
-        context.showErrorSnackBar(feedback.status.error);
-        emit(state.copyWith(result: state.result..insert(index, data)));
-        return;
-      }
-      StorageService.i.deletes(data.photoUrls.use, lazy: true);
-      if (data.path == null || data.path!.isEmpty) return;
-      GetPhotosUseCase.i(data.path ?? '').then((value) {
-        for (var i in value.result) {
-          if (i.parentPath != null || i.parentPath!.isEmpty) return null;
-          DeletePhotoUseCase.i(id: i.id, path: i.parentPath!);
-        }
-      });
-      // GetLikesUseCase.i(data.path ?? '').then((value) {
-      //   for (var i in value.result) {
-      //     if (i.parentPath != null || i.parentPath!.isEmpty) return null;
-      //     DeleteFeedLikeUseCase.i(id: i.id, path: i.parentPath!);
-      //   }
-      // });
-      GetStarsUseCase.i(data.path ?? '').then((value) {
-        for (var i in value.result) {
-          if (i.parentPath != null || i.parentPath!.isEmpty) return null;
-          DeleteFeedStarUseCase.i(id: i.id, path: i.parentPath!);
-        }
-      });
-      // GetCommentsUseCase.i(data.path ?? '').then((value) {
-      //   for (var i in value.result) {
-      //     if (i.parentPath != null || i.parentPath!.isEmpty) return null;
-      //     DeleteFeedCommentUseCase.i(id: i.id, path: i.parentPath!);
-      //   }
-      // });
-      GetVideosUseCase.i(data.path ?? '').then((value) {
-        for (var i in value.result) {
-          if (i.parentPath != null || i.parentPath!.isEmpty) return null;
-          DeleteFeedVideoUseCase.i(id: i.id, path: i.parentPath!);
-        }
-      });
-    });
+  @override
+  Future<bool> onDeleteById(String id) async {
+    return false;
   }
 
   void edit(BuildContext context, String id) async {

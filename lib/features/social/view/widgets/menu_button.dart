@@ -63,7 +63,7 @@ class _FeedHeaderMoreActionState extends State<FeedHeaderMoreAction> {
   }
 
   Future<void> _delete(BuildContext context) async {
-    context.read<FeedHomeCubit>().delete(context, widget.index, widget.item);
+    context.read<FeedHomeCubit>().deletes(context, widget.index, widget.item);
   }
 
   Future<void> _edit(BuildContext context) async {

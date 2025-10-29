@@ -7,7 +7,7 @@ class BaseFeedLikeUseCase {
 
   BaseFeedLikeUseCase() : repository = FeedLikeRepository.i;
 
-  IterableParams getParams(String referencePath) {
-    return IterableParams([referencePath]);
+  IterableParams getParams(String parentPath) {
+    return IterableParams([parentPath]);
   }
 }

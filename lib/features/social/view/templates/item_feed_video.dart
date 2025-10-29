@@ -64,6 +64,7 @@ class _ItemFeedVideoState extends State<ItemFeedVideo> {
           ),
           _Body(item: widget.item),
           StaredFeedFooter(
+            index: widget.index,
             id: widget.item.id,
             path: widget.item.path.use,
             onLiked: (value) {},

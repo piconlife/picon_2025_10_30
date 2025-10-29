@@ -10,11 +10,11 @@ class UpdateFeedLikeUseCase extends BaseFeedLikeUseCase {
 
   static UpdateFeedLikeUseCase get i => _i ??= UpdateFeedLikeUseCase._();
 
-  Future<Response<FeedLike>> call({
-    required String referencePath,
-    required String id,
-    required Map<String, dynamic> data,
-  }) {
-    return repository.updateById(id, data, params: getParams(referencePath));
+  Future<Response<FeedLike>> call(
+    String parentPath,
+    String id,
+    Map<String, dynamic> data,
+  ) {
+    return repository.updateById(id, data, params: getParams(parentPath));
   }
 }

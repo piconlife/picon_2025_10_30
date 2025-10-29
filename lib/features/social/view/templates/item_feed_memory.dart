@@ -22,7 +22,12 @@ class ItemFeedMemory extends StatefulWidget {
   final Feed item;
   final Function(BuildContext context, Feed item)? onClick;
 
-  const ItemFeedMemory({super.key,required this.index, required this.item, this.onClick});
+  const ItemFeedMemory({
+    super.key,
+    required this.index,
+    required this.item,
+    this.onClick,
+  });
 
   @override
   State<ItemFeedMemory> createState() => _ItemFeedMemoryState();

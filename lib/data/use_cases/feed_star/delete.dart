@@ -10,7 +10,7 @@ class DeleteFeedStarUseCase extends BaseFeedStarUseCase {
 
   static DeleteFeedStarUseCase get i => _i ??= DeleteFeedStarUseCase._();
 
-  Future<Response<FeedStar>> call({required String id, required String path}) {
-    return repository.deleteById(id, params: getParams(path));
+  Future<Response<FeedStar>> call(String parentPath, String id) {
+    return repository.deleteById(id, params: getParams(parentPath));
   }
 }

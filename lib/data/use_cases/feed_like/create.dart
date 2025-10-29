@@ -10,10 +10,10 @@ class CreateFeedLikeUseCase extends BaseFeedLikeUseCase {
 
   static CreateFeedLikeUseCase get i => _i ??= CreateFeedLikeUseCase._();
 
-  Future<Response<FeedLike>> call({
-    required String path,
-    required FeedLike data,
-  }) {
-    return repository.create(data, params: getParams(path));
+  Future<Response<FeedLike>> call(FeedLike data) async {
+    if (data.parentPath == null) {
+      return Response.failure("Parent path required!");
+    }
+    return repository.create(data, params: getParams(data.parentPath!));
   }
 }

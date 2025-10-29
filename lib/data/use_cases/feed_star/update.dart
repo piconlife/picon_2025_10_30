@@ -10,11 +10,11 @@ class UpdateFeedStarUseCase extends BaseFeedStarUseCase {
 
   static UpdateFeedStarUseCase get i => _i ??= UpdateFeedStarUseCase._();
 
-  Future<Response<FeedStar>> call({
-    required String referencePath,
-    required String id,
-    required Map<String, dynamic> data,
-  }) {
-    return repository.updateById(id, data, params: getParams(referencePath));
+  Future<Response<FeedStar>> call(
+    String parentPath,
+    String id,
+    Map<String, dynamic> data,
+  ) {
+    return repository.updateById(id, data, params: getParams(parentPath));
   }
 }

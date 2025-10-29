@@ -38,16 +38,18 @@ class UserCoverCubit extends DataCubit<UserCover> {
     );
   }
 
-  Future<Response<UserCover>> create(UserCover data) {
+  @override
+  Future<bool> onCreateByData(UserCover data) {
     return CreateUserCoverUseCase.i(data).then((value) {
       if (value.isSuccessful) {
         emit(state.copyWith(result: state.result..insert(0, data)));
       }
-      return value;
+      return value.isSuccessful;
     });
   }
 
-  Future<Response<UserCover>> delete(String id) {
+  @override
+  Future<bool> onDeleteById(String id) {
     return DeleteUserCoverUseCase.i(id).then((value) {
       if (value.isSuccessful) {
         emit(
@@ -59,7 +61,7 @@ class UserCoverCubit extends DataCubit<UserCover> {
           ),
         );
       }
-      return value;
+      return value.isSuccessful;
     });
   }
 }

@@ -9,7 +9,7 @@ class GetFeedLikesCountUseCase extends BaseFeedLikeUseCase {
 
   static GetFeedLikesCountUseCase get i => _i ??= GetFeedLikesCountUseCase._();
 
-  Future<Response<int>> call(String referencePath) {
-    return repository.count(params: getParams(referencePath));
+  Future<Response<int>> call(String parentPath) {
+    return repository.count(params: getParams(parentPath));
   }
 }

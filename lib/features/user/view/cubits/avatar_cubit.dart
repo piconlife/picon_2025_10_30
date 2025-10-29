@@ -38,16 +38,18 @@ class UserAvatarCubit extends DataCubit<UserAvatar> {
     );
   }
 
-  Future<Response<UserAvatar>> create(UserAvatar data) {
+  @override
+  Future<bool> onCreateByData(UserAvatar data) async {
     return CreateUserAvatarUseCase.i(data).then((value) {
       if (value.isSuccessful) {
         emit(state.copyWith(result: state.result..insert(0, data)));
       }
-      return value;
+      return value.isSuccessful;
     });
   }
 
-  Future<Response<UserAvatar>> delete(String id) {
+  @override
+  Future<bool> onDeleteById(String id) async {
     return DeleteUserAvatarUseCase.i(id).then((value) {
       if (value.isSuccessful) {
         emit(
@@ -59,7 +61,7 @@ class UserAvatarCubit extends DataCubit<UserAvatar> {
           ),
         );
       }
-      return value;
+      return value.isSuccessful;
     });
   }
 }

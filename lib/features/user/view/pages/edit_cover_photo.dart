@@ -234,9 +234,9 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
   }
 
   void _createCover(BuildContext context, UserCover data) async {
-    final feedback = await context.read<UserCoverCubit>().create(data);
+    final feedback = await context.read<UserCoverCubit>().onCreateByData(data);
     if (!context.mounted) return;
-    if (!feedback.isSuccessful) {
+    if (!feedback) {
       context.hideLoader();
       final permission = await context.showAlert(
         message: ResponseMessages.tryAgain,
@@ -266,9 +266,9 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
     UserCover cover,
     UserPost data,
   ) async {
-    final feedback = await context.read<UserPostCubit>().create(data);
+    final feedback = await context.read<UserPostCubit>().onCreateByData(data);
     if (!context.mounted) return;
-    if (!feedback.isSuccessful) {
+    if (!feedback) {
       context.hideLoader();
       final permission = await context.showAlert(
         message: ResponseMessages.tryAgain,

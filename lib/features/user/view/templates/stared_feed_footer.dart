@@ -56,12 +56,7 @@ class _UserStaredFeedFooterState extends State<UserStaredFeedFooter> {
   Future<bool> _star(bool value) {
     if (!value) {
       return CreateFeedStarUseCase.i(
-        FeedStar.create(
-          id: UserHelper.uid,
-          parentId: widget.id,
-          parentPath: widget.path,
-          privacy: Privacy.onlyMe,
-        ),
+        FeedStar.create(parentPath: widget.path, privacy: Privacy.onlyMe),
       ).then((value) {
         if (value.isSuccessful) {
           return UpdateUserPostUseCase.i(widget.id, {
@@ -74,10 +69,9 @@ class _UserStaredFeedFooterState extends State<UserStaredFeedFooter> {
         }
       });
     } else {
-      return DeleteFeedStarUseCase.i(
-        id: UserHelper.uid,
-        path: widget.path.use,
-      ).then((value) {
+      return DeleteFeedStarUseCase.i(widget.path.use, UserHelper.uid).then((
+        value,
+      ) {
         if (value.isSuccessful) {
           return UpdateUserPostUseCase.i(widget.id, {
             Keys.i.stars: DataFieldValue.arrayRemove([UserHelper.uid]),

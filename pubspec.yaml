@@ -58,6 +58,7 @@ dependencies:
   flutter_text_parser: ^1.0.2
   data_type_detector: ^1.0.0
   in_app_analytics: ^1.0.9
+  in_app_cache: ^1.0.0
   in_app_configs: ^1.0.2
   in_app_database: ^1.3.5
   in_app_navigator: ^1.0.7

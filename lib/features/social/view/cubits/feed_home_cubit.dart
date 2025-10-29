@@ -54,7 +54,7 @@ class FeedHomeCubit extends DataCubit<Feed> {
     );
   }
 
-  void delete(BuildContext context, int index, Feed data) {
+  void deletes(BuildContext context, int index, Feed data) {
     Analytics.callAsync(name: 'delete_feed', reason: data.id, () async {
       emit(state.copyWith(result: state.result..removeAt(index)));
       final feedback = await DeleteFeedUseCase.i(data.id);
@@ -69,13 +69,13 @@ class FeedHomeCubit extends DataCubit<Feed> {
       GetLikesUseCase.i(data.path ?? '').then((value) {
         for (var i in value.result) {
           if (i.parentPath != null || i.parentPath!.isEmpty) return null;
-          DeleteFeedLikeUseCase.i(id: i.id, path: i.parentPath!);
+          DeleteFeedLikeUseCase.i(i.parentPath!, i.id);
         }
       });
       GetStarsUseCase.i(data.path ?? '').then((value) {
         for (var i in value.result) {
           if (i.parentPath != null || i.parentPath!.isEmpty) return null;
-          DeleteFeedStarUseCase.i(id: i.id, path: i.parentPath!);
+          DeleteFeedStarUseCase.i(i.parentPath!, i.id);
         }
       });
       GetCommentsUseCase.i(data.path ?? '').then((value) {

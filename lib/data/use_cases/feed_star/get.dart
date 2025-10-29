@@ -10,7 +10,7 @@ class GetStarsUseCase extends BaseFeedStarUseCase {
 
   static GetStarsUseCase get i => _i ??= GetStarsUseCase._();
 
-  Future<Response<FeedStar>> call(String referencePath) {
-    return repository.get(params: getParams(referencePath));
+  Future<Response<FeedStar>> call(String parentPath) {
+    return repository.get(params: getParams(parentPath));
   }
 }

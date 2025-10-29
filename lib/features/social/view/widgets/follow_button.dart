@@ -32,11 +32,9 @@ class _InAppFollowBuilderState extends State<InAppFollowBuilder> {
     return BlocBuilder<UserFollowingCubit, Response<UserFollowing>>(
       builder: (context, state) {
         final data = state.elementOf((e) => e.id == widget.id);
-        return widget.builder(
-          context,
-          data != null,
-          () => cubit.toggle(widget.id, data),
-        );
+        return widget.builder(context, data != null, () {
+          // cubit.toggle(widget.id, data);
+        });
       },
     );
   }

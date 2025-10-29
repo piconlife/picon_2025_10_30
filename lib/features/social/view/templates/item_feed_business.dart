@@ -25,7 +25,12 @@ class ItemFeedBusiness extends StatefulWidget {
   final Feed item;
   final Function(BuildContext context, Feed item)? onClick;
 
-  const ItemFeedBusiness({super.key,required this.index, required this.item, this.onClick});
+  const ItemFeedBusiness({
+    super.key,
+    required this.index,
+    required this.item,
+    this.onClick,
+  });
 
   @override
   State<ItemFeedBusiness> createState() => _ItemFeedBusinessState();
@@ -46,7 +51,9 @@ class _ItemFeedBusinessState extends State<ItemFeedBusiness> {
                 avatar: user.photo,
                 title: user.name,
                 subtitle: FeedType.business.value,
-                actions: [FeedHeaderMoreAction(index: widget.index, item: widget.item)],
+                actions: [
+                  FeedHeaderMoreAction(index: widget.index, item: widget.item),
+                ],
               );
             },
           ),

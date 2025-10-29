@@ -237,9 +237,9 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
   }
 
   void _createAvatar(BuildContext context, UserAvatar data) async {
-    final feedback = await context.read<UserAvatarCubit>().create(data);
+    final feedback = await context.read<UserAvatarCubit>().onCreateByData(data);
     if (!context.mounted) return;
-    if (!feedback.isSuccessful) {
+    if (!feedback) {
       context.hideLoader();
       final permission = await context.showAlert(
         message: ResponseMessages.tryAgain,
@@ -269,9 +269,9 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
     UserAvatar avatar,
     UserPost data,
   ) async {
-    final feedback = await context.read<UserPostCubit>().create(data);
+    final feedback = await context.read<UserPostCubit>().onCreateByData(data);
     if (!context.mounted) return;
-    if (!feedback.isSuccessful) {
+    if (!feedback) {
       context.hideLoader();
       final permission = await context.showAlert(
         message: ResponseMessages.tryAgain,

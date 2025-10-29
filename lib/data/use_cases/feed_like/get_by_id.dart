@@ -10,10 +10,7 @@ class GetFeedLikeUseCase extends BaseFeedLikeUseCase {
 
   static GetFeedLikeUseCase get i => _i ??= GetFeedLikeUseCase._();
 
-  Future<Response<FeedLike>> call({
-    required String id,
-    required String referencePath,
-  }) {
-    return repository.getById(id, params: getParams(referencePath));
+  Future<Response<FeedLike>> call(String parentPath, String id) {
+    return repository.getById(id, params: getParams(parentPath));
   }
 }
