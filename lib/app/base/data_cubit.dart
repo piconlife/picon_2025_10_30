@@ -402,7 +402,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   // ------------------------------WRITE FUNCTIONS------------------------------
   // ---------------------------------------------------------------------------
 
-  Future<bool> create(T data, [int index = 0]) {
+  Future<bool> create(T data, {int index = 0, String? placement}) {
     emit(
       state.copyWith(
         count: state.count + 1,
@@ -410,7 +410,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
         resultByMe: state.resultByMe..insert(0, data),
       ),
     );
-    return execute(placement: "create", () {
+    return execute(placement: placement ?? "create[$T]", () {
       return onCreate(data).then((value) {
         if (!value.isSuccessful) {
           emit(

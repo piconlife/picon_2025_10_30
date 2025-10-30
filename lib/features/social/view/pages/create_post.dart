@@ -30,7 +30,6 @@ import '../../../../data/models/content.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/photo.dart';
 import '../../../../data/models/user_post.dart';
-import '../../../../data/use_cases/feed/create.dart';
 import '../../../../data/use_cases/feed/update.dart';
 import '../../../../roots/contents/media.dart';
 import '../../../../roots/helpers/connectivity.dart';
@@ -214,7 +213,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   /// FINAL SECTION START
   /// --------------------------------------------------------------------------
 
-  void _create(BuildContext context) {
+  void _create() {
     if (photos.value.isEmpty && description.isEmpty) {
       context.showMessage(Msg.writeSomething);
       return;
@@ -257,12 +256,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
       type: mUserPost.type,
     );
 
-    Analytics.future(name: 'create_post', () async {
-      context.showLoader();
-      final feedback = await CreateFeedUseCase.i(mFeed);
-      if (!context.mounted) return;
+    context.showLoader();
+    feedCubit.create(mFeed, placement: "create_post").then((status) async {
+      if (!mounted) return;
       context.hideLoader();
-      if (feedback.isSuccessful) {
+      if (status) {
         Settings.set(_kRecentPostPath, mUserPost.path);
         feedCubit.add(mFeed);
         postCubit.add(mUserPost);
@@ -270,16 +268,16 @@ class _CreatePostPageState extends State<CreatePostPage> {
         return;
       }
       final allow = await context.showAlert(message: Msg.somethingWentWrong);
-      if (!context.mounted) return;
+      if (!mounted) return;
       if (!allow) {
         context.showMessage(Msg.postFailed);
         return;
       }
-      _create(context);
+      _create();
     });
   }
 
-  void _update(BuildContext context) {
+  void _update() {
     if (photos.value.isEmpty && description == old!.description) {
       context.showMessage(Msg.writeSomething);
       return;
@@ -303,9 +301,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
         }
         return e.path;
       }
-      return e.createMetadata;
+      return e.createWriter();
     });
-    final dp = deletedPhotos.map((e) => e.deleteMetadata);
+    final dp = deletedPhotos.map((e) => e.deleteWriter());
     final hasChangedPhotos =
         !(cp.every((e) => e is String) && dp.isEmpty) ||
         old!.photos.map((e) => e.id).toString() !=
@@ -378,16 +376,16 @@ class _CreatePostPageState extends State<CreatePostPage> {
         context.showMessage(Msg.postFailed);
         return;
       }
-      _update(context);
+      _update();
     });
   }
 
-  void _submit(BuildContext context, [bool skipMode = false]) {
+  void _submit([bool skipMode = false]) {
     if (skipMode) return;
     if (isUpdateMode) {
-      _update(context);
+      _update();
     } else {
-      _create(context);
+      _create();
     }
   }
 
@@ -421,10 +419,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
         appBar: InAppAppbar(
           titleText: isUpdateMode ? "Update post" : "Add a new post",
           actions: [
-            InAppTextedAction(
-              isUpdateMode ? "Update" : "Post",
-              onTap: () => _submit(context),
-            ),
+            InAppTextedAction(isUpdateMode ? "Update" : "Post", onTap: _submit),
           ],
         ),
         bottomNavigationBar: InAppBottomBar(

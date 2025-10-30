@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:data_management/core.dart';
 import 'package:flutter_entity/flutter_entity.dart';
 import 'package:picon/data/parsers/enum_parser.dart';
 
@@ -926,16 +927,19 @@ class Content extends Entity<Keys> {
     return value != null && keys.contains(key);
   }
 
-  Map<String, dynamic> get createMetadata {
-    return {key.path: path, "create": filtered};
+  DataFieldValueWriter? createWriter([Map<String, dynamic>? value]) {
+    if (path == null || path!.isEmpty) return null;
+    return DataFieldValueWriter.set(path!, value ?? filtered);
   }
 
-  Map<String, dynamic> get updateMetadata {
-    return {key.path: path, "update": filtered};
+  DataFieldValueWriter? updateWriter(Map<String, dynamic> updates) {
+    if (path == null || path!.isEmpty) return null;
+    return DataFieldValueWriter.update(path!, updates);
   }
 
-  Map<String, dynamic> get deleteMetadata {
-    return {key.path: path, "delete": true};
+  DataFieldValueWriter? deleteWriter() {
+    if (path == null || path!.isEmpty) return null;
+    return DataFieldValueWriter.delete(path!);
   }
 
   @override
@@ -1054,8 +1058,8 @@ class Content extends Entity<Keys> {
       if (_content != null) key.content: _content?.source,
       if (_recent != null) key.recent: _recent?.source,
       // CREATE METADATA
-      if (_content != null) key.contentRef: _content?.createMetadata,
-      if (_recent != null) key.recentRef: _recent?.createMetadata,
+      if (_content != null) key.contentRef: _content?.createWriter(),
+      if (_recent != null) key.recentRef: _recent?.createWriter(),
       // ----------------------------------------------------------------------
       // -------------------------------LIST OF OBJECTS------------------------
       // ----------------------------------------------------------------------
@@ -1068,11 +1072,11 @@ class Content extends Entity<Keys> {
         key.videos: _videos?.map((e) => e.source).toList(),
       // CREATE METADATA
       if ((_contents ?? []).isNotEmpty)
-        key.contentsRef: _contents?.map((e) => e.createMetadata).toList(),
+        key.contentsRef: _contents?.map((e) => e.createWriter()).toList(),
       if ((_photos ?? []).isNotEmpty)
-        key.photosRef: _photos?.map((e) => e.createMetadata).toList(),
+        key.photosRef: _photos?.map((e) => e.createWriter()).toList(),
       if ((_videos ?? []).isNotEmpty)
-        key.videosRef: _videos?.map((e) => e.createMetadata).toList(),
+        key.videosRef: _videos?.map((e) => e.createWriter()).toList(),
     }.entries.where((e) => isInsertable(e.key, e.value));
     return super.source..addAll(Map.fromEntries(entries));
   }
