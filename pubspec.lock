@@ -309,10 +309,10 @@ packages:
     dependency: transitive
     description:
       name: cross_file
-      sha256: "7caf6a750a0c04effbb52a676dce9a4a592e10ad35c34d6d2d0e4811160d5670"
+      sha256: "942a4791cd385a68ccb3b32c71c427aba508a1bb949b86dff2adbe4049f16239"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.4+2"
+    version: "0.3.5"
   crypto:
     dependency: transitive
     description:
@@ -341,10 +341,10 @@ packages:
     dependency: "direct main"
     description:
       name: data_management
-      sha256: d5d80623d73f688326fdbd26ee4e28fc897d6ccef2476000a1a3822cf4cdecbd
+      sha256: "62df75e40bc4aa27a3a5f3f11070b4b037dc0d267bb86629f1208e036159f889"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.3"
+    version: "2.4.4"
   data_management_local_delegate:
     dependency: "direct main"
     description:
@@ -1902,10 +1902,10 @@ packages:
     dependency: "direct main"
     description:
       name: upgrader
-      sha256: a28de64108db70f77e5eacf8b87c1bdfaf9374ece9cab26f9aeac26ac3403eff
+      sha256: aa4149357501862c8a79283fe2649faf03608d870af1d239cf5874c2ed9110f5
       url: "https://pub.dev"
     source: hosted
-    version: "12.1.0"
+    version: "12.2.0"
   url_launcher:
     dependency: "direct main"
     description:

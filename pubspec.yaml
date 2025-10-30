@@ -46,7 +46,7 @@ dependencies:
   app_color: ^1.1.2
   app_dimen: ^1.0.11
   auth_management: ^3.1.0
-  data_management: 2.4.3
+  data_management: 2.4.4
   data_management_local_delegate: ^1.0.7
   flutter_andomie: ^0.7.0
   flutter_androssy_dialogs: ^1.0.13+1
@@ -130,7 +130,7 @@ dependencies:
   flutter_tts: ^4.2.3
   path: ^1.9.1
   path_provider: ^2.1.5
-  upgrader: ^12.1.0
+  upgrader: ^12.2.0
   video_player: ^2.10.0
   web: ^1.1.1
   wakelock_plus: ^1.4.0
