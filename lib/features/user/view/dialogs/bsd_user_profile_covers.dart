@@ -35,7 +35,7 @@ class UserProfileCoversBSD extends StatelessWidget {
           return BlocProvider.value(value: cubit, child: child);
         }
         return BlocProvider(
-          create: (context) => UserCoverCubit()..fetch(),
+          create: (context) => UserCoverCubit(context)..load(),
           child: child,
         );
       },

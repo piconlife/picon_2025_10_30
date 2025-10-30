@@ -11,10 +11,10 @@ import '../../../../data/use_cases/user_avatar/get_by_pagination.dart';
 class UserAvatarCubit extends DataCubit<UserAvatar> {
   final String uid;
 
-  UserAvatarCubit([String? uid]) : uid = uid ?? UserHelper.uid;
+  UserAvatarCubit(super.context, [String? uid]) : uid = uid ?? UserHelper.uid;
 
   @override
-  Future<Response<UserAvatar>> fetch({
+  Future<Response<UserAvatar>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,
@@ -30,23 +30,19 @@ class UserAvatarCubit extends DataCubit<UserAvatar> {
 
   @protected
   @override
-  Future<Response<UserAvatar>> create(UserAvatar data) async {
+  Future<Response<UserAvatar>> onCreate(UserAvatar data) async {
     return CreateUserAvatarUseCase.i(data).then((value) {
       return value.copyWith(data: data);
     });
   }
 
   @override
-  Future<Response<UserAvatar>> delete(UserAvatar data) {
-    return deleteById(data.id);
+  Future<Response<UserAvatar>> onDelete(UserAvatar data) {
+    return onDeleteById(data.id);
   }
 
   @override
-  Future<Response<UserAvatar>> deleteById(String id) async {
+  Future<Response<UserAvatar>> onDeleteById(String id) async {
     return DeleteUserAvatarUseCase.i(id);
-  }
-
-  void update(UserAvatar value) {
-    emit(state.copyWith(data: value, requestCode: 202));
   }
 }

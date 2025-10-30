@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_andomie/models/selection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
@@ -10,10 +10,13 @@ typedef DataCubitToggleAsyncCallback = Future<Response<bool>> Function();
 
 abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   // ---------------------------------------------------------------------------
-  // -------------------------------CORE MODIFIER-------------------------------
+  // ----------------------------------CORE-------------------------------------
   // ---------------------------------------------------------------------------
 
-  DataCubit([Response<T>? initial]) : super(initial ?? Response());
+  BuildContext context;
+
+  DataCubit(this.context, [Response<T>? initial])
+    : super(initial ?? Response());
 
   @override
   Future<void> close() async {
@@ -21,6 +24,81 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     _scheduledAsync?.cancel();
     _scheduledRefresh?.cancel();
     _scheduledStream?.cancel();
+  }
+
+  // ---------------------------------------------------------------------------
+  // ---------------------------------MODIFIER----------------------------------
+  // ---------------------------------------------------------------------------
+
+  bool add(T data, [int? index]) {
+    final result = List<T>.from(state.result);
+    if (index == null || index < 0 || index > result.length) {
+      emit(state.copyWith(result: result..add(data)));
+      return true;
+    }
+    emit(state.copyWith(result: result..insert(index, data)));
+    return true;
+  }
+
+  bool remove(Object identifier, {bool Function(T data)? test}) {
+    if (identifier is int) {
+      emit(
+        state.copyWith(
+          result: List<T>.from(state.result)..removeAt(identifier),
+        ),
+      );
+      return true;
+    }
+    if (identifier is String) {
+      final index = indexOf(identifier, test);
+      if (index == -1) return false;
+      emit(state.copyWith(result: List<T>.from(state.result)..removeAt(index)));
+      return true;
+    }
+    if (identifier is T) {
+      emit(
+        state.copyWith(result: List<T>.from(state.result)..remove(identifier)),
+      );
+      return true;
+    }
+    return false;
+  }
+
+  bool replace(
+    Object identifier,
+    T Function(T) callback, {
+    bool Function(T data)? test,
+  }) {
+    if (identifier is int) {
+      if (identifier < 0 || identifier >= state.result.length) {
+        return false;
+      }
+      final result = List<T>.from(state.result);
+      final removed = result.removeAt(identifier);
+      result.insert(identifier, callback(removed));
+      emit(state.copyWith(result: result));
+      return true;
+    }
+    if (identifier is String) {
+      final index = indexOf(identifier, test);
+      if (index == -1) return false;
+      final result = List<T>.from(state.result);
+      final removed = result.removeAt(index);
+      result.insert(index, callback(removed));
+      emit(state.copyWith(result: result));
+      return true;
+    }
+    if (identifier is T) {
+      final result = List<T>.from(state.result);
+      final removed = result.remove(identifier);
+      if (!removed) return false;
+      final index = indexOf(identifier, test);
+      if (index == -1) return false;
+      result.insert(index, callback(identifier));
+      emit(state.copyWith(result: result));
+      return true;
+    }
+    return false;
   }
 
   // ---------------------------------------------------------------------------
@@ -74,69 +152,6 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     if (identifier is T) return identifier;
 
     return null;
-  }
-
-  @protected
-  List<T> put(T data, [int? index]) {
-    final result = List<T>.from(state.result);
-    if (index == null || index < 0 || index > result.length) {
-      result.add(data);
-      return result;
-    }
-    result.insert(index, data);
-    return result;
-  }
-
-  /// identifier can be int, String, T
-  @protected
-  List<T> pop(Object identifier, {bool Function(T data)? test}) {
-    if (identifier is int) {
-      return List<T>.from(state.result)..removeAt(identifier);
-    }
-    if (identifier is String) {
-      final index = indexOf(identifier, test);
-      if (index == -1) return state.result;
-      return List<T>.from(state.result)..removeAt(index);
-    }
-    if (identifier is T) {
-      return List<T>.from(state.result)..remove(identifier);
-    }
-    return state.result;
-  }
-
-  @protected
-  List<T> change(
-    Object identifier,
-    T Function(T) callback, {
-    bool Function(T data)? test,
-  }) {
-    if (identifier is int) {
-      if (identifier < 0 || identifier >= state.result.length) {
-        return state.result;
-      }
-      final result = List<T>.from(state.result);
-      final removed = result.removeAt(identifier);
-      result.insert(identifier, callback(removed));
-      return result;
-    }
-    if (identifier is String) {
-      final index = indexOf(identifier, test);
-      if (index == -1) return state.result;
-      final result = List<T>.from(state.result);
-      final removed = result.removeAt(index);
-      result.insert(index, callback(removed));
-      return result;
-    }
-    if (identifier is T) {
-      final result = List<T>.from(state.result);
-      final removed = result.remove(identifier);
-      if (!removed) return result;
-      final index = indexOf(identifier, test);
-      if (index == -1) return result;
-      result.insert(index, callback(identifier));
-      return result;
-    }
-    return state.result;
   }
 
   // ---------------------------------------------------------------------------
@@ -243,7 +258,80 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     return state.copyWith(status: Status.failure, error: error.toString());
   }
 
-  Future<Response<T>> onFetch({
+  // ---------------------------------------------------------------------------
+  // ----------------------------EXTERNAL FUNCTIONS-----------------------------
+  // ---------------------------------------------------------------------------
+
+  // ---------------------------------------------------------------------------
+  // -----------------------------CUSTOM FUNCTIONS------------------------------
+  // ---------------------------------------------------------------------------
+
+  Future<C> execute<C extends Object>(
+    Future<C> Function() callback, {
+    String? placement,
+  }) async {
+    placement ??= "execute<$C>";
+    try {
+      final feedback = await callback();
+      handle(state, placement: placement, modifyState: false);
+      return feedback;
+    } catch (e) {
+      handleCatchError(e, null, placement, false);
+      rethrow;
+    }
+  }
+
+  Future<void> load({
+    bool force = false,
+    bool resultByMe = false,
+    int? initialSize,
+    int? fetchingSize,
+  }) async {
+    if (!force && state.result.isNotEmpty && state.requestCode != 201) {
+      return;
+    }
+    fetch(
+      placement: "initial",
+      loader: force,
+      resultByMe: resultByMe,
+      initialSize: initialSize,
+      fetchingSize: fetchingSize,
+    );
+  }
+
+  Future<void> loadCounter({bool force = false}) async {
+    if (!force &&
+        state.data is num &&
+        (state.data as num) > 0 &&
+        state.requestCode != 201) {
+      return;
+    }
+    count(placement: "initialCount");
+  }
+
+  // ---------------------------------------------------------------------------
+  // ------------------------------READ FUNCTIONS-------------------------------
+  // ---------------------------------------------------------------------------
+
+  Future<int> count({
+    bool loader = false,
+    String? placement,
+    Future<Response<int>> Function()? callback,
+  }) async {
+    placement ??= "count";
+    try {
+      final x = loading(force: loader);
+      if (x != state) emit(x);
+      return await (callback?.call() ?? onCount())
+          .then((e) => handleCount(e.count, placement: placement))
+          .onError((e, st) => handleError(e, st, placement))
+          .then((v) => v.count);
+    } catch (e) {
+      return handleCatchError(e, null, placement).count;
+    }
+  }
+
+  Future<Response<T>> fetch({
     bool loader = false,
     bool resultByMe = false,
     String? placement,
@@ -251,12 +339,12 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     int? fetchingSize,
     Future<Response<T>> Function()? callback,
   }) async {
-    placement ??= resultByMe ? "handleAsyncResultByMe" : "handleAsync";
+    placement ??= resultByMe ? "fetchResultByMe" : "fetch";
     try {
       final x = loading(force: loader && !resultByMe);
       if (x != state) emit(x);
       return await (callback?.call() ??
-              fetch(
+              onFetch(
                 fetchingSize: fetchingSize,
                 initialSize: initialSize,
                 resultByMe: resultByMe,
@@ -268,66 +356,17 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     }
   }
 
-  Future<C> handleCustomAsync<C extends Object>(
-    Future<C> Function() callback, {
-    String? placement,
-  }) async {
-    placement ??= "handleCustomAsync<$C>";
-    try {
-      final feedback = await callback();
-      handle(state, placement: placement, modifyState: false);
-      return feedback;
-    } catch (e) {
-      handleCatchError(e, null, placement, false);
-      rethrow;
-    }
-  }
-
-  Future<Response<T>> handleAsyncCount({
-    bool loader = false,
-    String? placement,
-    Future<Response<int>> Function()? callback,
-  }) async {
-    placement ??= "handleAsyncCount";
-    try {
-      final x = loading(force: loader);
-      if (x != state) emit(x);
-      return await (callback?.call() ?? count())
-          .then((e) => handleCount(e.count, placement: placement))
-          .onError((e, st) => handleError(e, st, placement));
-    } catch (e) {
-      return handleCatchError(e, null, placement);
-    }
-  }
-
-  Future<bool> onRefresh({
-    bool loader = false,
-    bool resultByMe = false,
-    String? placement,
-    int? initialSize,
-    int? fetchingSize,
-  }) {
-    placement ??= resultByMe ? "handleRefreshResultByMe" : "handleRefresh";
-    return onFetch(
-      loader: loader,
-      resultByMe: resultByMe,
-      placement: placement,
-      initialSize: initialSize,
-      fetchingSize: fetchingSize,
-    ).then((value) => value.isSuccessful);
-  }
-
-  Stream<Response<T>> handleStream({
+  Stream<Response<T>> listen({
     Stream<Response<T>> Function()? callback,
     String? placement,
     bool resultByMe = false,
     int? initialSize,
     int? fetchingSize,
   }) async* {
-    placement ??= resultByMe ? "handleStreamResultByMe" : "handleStream";
+    placement ??= resultByMe ? "listenResultByMe" : "listen";
     try {
       yield* (callback?.call() ??
-              live(
+              onStream(
                 resultByMe: resultByMe,
                 fetchingSize: fetchingSize,
                 initialSize: initialSize,
@@ -339,13 +378,183 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     }
   }
 
+  Future<bool> refresh({
+    bool loader = false,
+    bool resultByMe = false,
+    String? placement,
+    int? initialSize,
+    int? fetchingSize,
+  }) {
+    placement ??= resultByMe ? "refreshResultByMe" : "refresh";
+    return fetch(
+      loader: loader,
+      resultByMe: resultByMe,
+      placement: placement,
+      initialSize: initialSize,
+      fetchingSize: fetchingSize,
+    ).then((value) => value.isSuccessful);
+  }
+
+  // ---------------------------------------------------------------------------
+  // ------------------------------WRITE FUNCTIONS------------------------------
+  // ---------------------------------------------------------------------------
+
+  Future<bool> create(T data, [int index = 0]) {
+    emit(
+      state.copyWith(
+        count: state.count + 1,
+        result: state.result..insert(0, data),
+        resultByMe: state.resultByMe..insert(0, data),
+      ),
+    );
+    return execute(placement: "create", () {
+      return onCreate(data).then((value) {
+        if (!value.isSuccessful) {
+          emit(
+            state.copyWith(
+              count: state.count - 1,
+              result: state.result..remove(data),
+              resultByMe: state.resultByMe..remove(data),
+            ),
+          );
+        }
+        return value.isSuccessful;
+      });
+    });
+  }
+
+  Future<bool> delete(Object identifier, {bool Function(T data)? test}) async {
+    T? data = elementOfOrNull(identifier, test);
+    if (data == null) return false;
+    emit(
+      state.copyWith(
+        count: state.count - 1,
+        result: state.result..remove(data),
+        resultByMe: state.resultByMe..remove(data),
+      ),
+    );
+    return execute(placement: "delete", () {
+      return onDelete(data).then((value) {
+        if (!value.isSuccessful) {
+          emit(
+            state.copyWith(
+              count: state.count + 1,
+              result: state.result..insert(0, data),
+              resultByMe: state.resultByMe..insert(0, data),
+            ),
+          );
+        }
+        return value.isSuccessful;
+      });
+    });
+  }
+
+  Future<bool> toggle({int? index, bool? exist, Object? args}) {
+    T? data;
+    if (index != null) {
+      data = state.result.elementAtOrNull(index);
+    }
+    data ??= state.resultByMe.firstOrNull;
+
+    Future<bool> create(Object? args) async {
+      final data = createNewObject(args);
+      if (data == null) return false;
+      emit(
+        state.copyWith(
+          count: state.count + 1,
+          result: state.result..insert(0, data),
+          resultByMe: state.resultByMe..insert(0, data),
+        ),
+      );
+      return execute(placement: "toggle:set", () {
+        return onCreate(data).then((value) {
+          if (!value.isSuccessful) {
+            emit(
+              state.copyWith(
+                count: state.count - 1,
+                result: state.result..remove(data),
+                resultByMe: state.resultByMe..remove(data),
+              ),
+            );
+          }
+          return value.isSuccessful;
+        });
+      });
+    }
+
+    Future<bool> delete(T data) async {
+      emit(
+        state.copyWith(
+          count: state.count - 1,
+          result: state.result..remove(data),
+          resultByMe: state.resultByMe..remove(data),
+        ),
+      );
+      return execute(placement: "toggle:unlike", () {
+        return onDelete(data).then((value) {
+          if (!value.isSuccessful) {
+            emit(
+              state.copyWith(
+                count: state.count + 1,
+                result: state.result..insert(0, data),
+                resultByMe: state.resultByMe..insert(0, data),
+              ),
+            );
+          }
+          return value.isSuccessful;
+        });
+      });
+    }
+
+    if (data != null) {
+      return delete(data);
+    } else {
+      return create(args);
+    }
+  }
+
+  Future<bool> update(
+    Object identifier,
+    Map<String, dynamic> changes,
+    T Function(T) changed, {
+    bool Function(T data)? test,
+  }) async {
+    final index = indexOf(identifier, test);
+    if (index == -1) return false;
+    T? old = state.result.elementAtOrNull(index);
+    if (old == null) return false;
+    emit(
+      state.copyWith(
+        result:
+            state.result
+              ..removeAt(index)
+              ..insert(index, changed(old)),
+      ),
+    );
+    return execute(placement: "update", () {
+      return onUpdate(old, changes).then((value) {
+        if (!value.isSuccessful) {
+          emit(
+            state.copyWith(
+              result:
+                  state.result
+                    ..removeAt(index)
+                    ..insert(index, old),
+            ),
+          );
+        }
+        return value.isSuccessful;
+      });
+    });
+  }
+
   // ---------------------------------------------------------------------------
   // ----------------------------SCHEDULE FUNCTIONS-----------------------------
   // ---------------------------------------------------------------------------
 
   Timer? _scheduledAsync, _scheduledRefresh, _scheduledStream;
 
-  void scheduledAsync({
+  void scheduledFetch({
     Future<Response<T>> Function()? callback,
     String? placement,
     Duration duration = const Duration(milliseconds: 100),
@@ -358,7 +567,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     _scheduledAsync?.cancel();
     _scheduledAsync = Timer(duration, () {
       _scheduledAsync?.cancel();
-      onFetch(
+      fetch(
         callback: callback,
         loader: loader,
         resultByMe: resultByMe,
@@ -381,7 +590,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
         resultByMe ? "scheduledRefreshResultByMe" : "scheduledRefresh";
     _scheduledRefresh?.cancel();
     _scheduledRefresh = Timer.periodic(duration, (_) {
-      onRefresh(
+      refresh(
         loader: loader,
         resultByMe: resultByMe,
         initialSize: initialSize,
@@ -402,132 +611,12 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     _scheduledStream?.cancel();
     _scheduledStream = Timer(duration, () {
       _scheduledStream?.cancel();
-      handleStream(
+      listen(
         callback: callback,
         resultByMe: resultByMe,
         initialSize: initialSize,
         fetchingSize: fetchingSize,
       );
-    });
-  }
-
-  // ---------------------------------------------------------------------------
-  // ----------------------------INTERNAL FUNCTIONS-----------------------------
-  // ---------------------------------------------------------------------------
-
-  Future<bool> _like(Object? args) async {
-    final data = createNewObject(args);
-    if (data == null) return false;
-    emit(
-      state.copyWith(
-        count: state.count + 1,
-        result: state.result..insert(0, data),
-        resultByMe: state.resultByMe..insert(0, data),
-      ),
-    );
-    return handleCustomAsync(placement: "toggle:like", () {
-      return create(data).then((value) {
-        if (!value.isSuccessful) {
-          emit(
-            state.copyWith(
-              count: state.count - 1,
-              result: state.result..remove(data),
-              resultByMe: state.resultByMe..remove(data),
-            ),
-          );
-        }
-        return value.isSuccessful;
-      });
-    });
-  }
-
-  Future<bool> _unlike(T data) async {
-    emit(
-      state.copyWith(
-        count: state.count - 1,
-        result: state.result..remove(data),
-        resultByMe: state.resultByMe..remove(data),
-      ),
-    );
-    return handleCustomAsync(placement: "toggle:unlike", () {
-      return delete(data).then((value) {
-        if (!value.isSuccessful) {
-          emit(
-            state.copyWith(
-              count: state.count + 1,
-              result: state.result..insert(0, data),
-              resultByMe: state.resultByMe..insert(0, data),
-            ),
-          );
-        }
-        return value.isSuccessful;
-      });
-    });
-  }
-
-  Future<bool> toggle({int? index, bool? exist, Object? args}) {
-    T? data;
-    if (index != null) {
-      data = state.result.elementAtOrNull(index);
-    }
-    data ??= state.resultByMe.firstOrNull;
-    if (data != null) {
-      return _unlike(data);
-    } else {
-      return _like(args);
-    }
-  }
-
-  Future<bool> putAsync(T data, [int index = 0]) {
-    emit(
-      state.copyWith(
-        count: state.count + 1,
-        result: state.result..insert(0, data),
-        resultByMe: state.resultByMe..insert(0, data),
-      ),
-    );
-    return handleCustomAsync(placement: "putAsync", () {
-      return create(data).then((value) {
-        if (!value.isSuccessful) {
-          emit(
-            state.copyWith(
-              count: state.count - 1,
-              result: state.result..remove(data),
-              resultByMe: state.resultByMe..remove(data),
-            ),
-          );
-        }
-        return value.isSuccessful;
-      });
-    });
-  }
-
-  Future<bool> popAsync(
-    Object identifier, {
-    bool Function(T data)? test,
-  }) async {
-    T? data = elementOfOrNull(identifier, test);
-    if (data == null) return false;
-    emit(
-      state.copyWith(
-        count: state.count - 1,
-        result: state.result..remove(data),
-        resultByMe: state.resultByMe..remove(data),
-      ),
-    );
-    return handleCustomAsync(placement: "popAsync", () {
-      return delete(data).then((value) {
-        if (!value.isSuccessful) {
-          emit(
-            state.copyWith(
-              count: state.count + 1,
-              result: state.result..insert(0, data),
-              resultByMe: state.resultByMe..insert(0, data),
-            ),
-          );
-        }
-        return value.isSuccessful;
-      });
     });
   }
 
@@ -539,27 +628,32 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   T? createNewObject(Object? args) => null;
 
   @protected
-  Future<Response<T>> create(T data) async {
+  Future<Response<int>> onCount() async {
     return Response(status: Status.undefined);
   }
 
   @protected
-  Future<Response<T>> delete(T data) async {
+  Future<Response<T>> onCreate(T data) async {
     return Response(status: Status.undefined);
   }
 
   @protected
-  Future<Response<T>> deleteById(String id) async {
+  Future<Response<T>> onDelete(T data) async {
     return Response(status: Status.undefined);
   }
 
   @protected
-  Future<Response<int>> count() async {
+  Future<Response<T>> onDeleteById(String id) async {
     return Response(status: Status.undefined);
   }
 
   @protected
-  Future<Response<T>> fetch({
+  Future<Response<T>> onUpdate(T old, Map<String, dynamic> changes) async {
+    return Response(status: Status.undefined);
+  }
+
+  @protected
+  Future<Response<T>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,
@@ -568,73 +662,11 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   }
 
   @protected
-  Stream<Response<T>> live({
+  Stream<Response<T>> onStream({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,
   }) {
     throw Response(status: Status.undefined);
-  }
-
-  // ---------------------------------------------------------------------------
-  // -----------------------------GLOBAL FUNCTIONS------------------------------
-  // ---------------------------------------------------------------------------
-
-  Future<Response<T>> initial({
-    bool force = false,
-    bool resultByMe = false,
-    int? initialSize,
-    int? fetchingSize,
-  }) async {
-    if (!force && state.result.isNotEmpty && state.requestCode != 201) {
-      return state;
-    }
-    return onFetch(
-      placement: "initial",
-      loader: force,
-      resultByMe: resultByMe,
-      initialSize: initialSize,
-      fetchingSize: fetchingSize,
-    );
-  }
-
-  Future<Response<T>> initialCount({bool force = false}) async {
-    if (!force &&
-        state.data is num &&
-        (state.data as num) > 0 &&
-        state.requestCode != 201) {
-      return state;
-    }
-    return handleAsyncCount(placement: "initialCount", callback: count);
-  }
-
-  /// created data by T and index
-  void created(T data, [int? index]) {
-    final result = put(data, index);
-    emit(
-      state.copyWith(result: result, requestCode: 201, count: result.length),
-    );
-  }
-
-  /// deleted data by index, id, T
-  void deleted(Object identifier, {bool Function(T data)? test}) {
-    final result = pop(identifier, test: test);
-    emit(
-      state.copyWith(result: result, requestCode: 203, count: result.length),
-    );
-  }
-
-  /// updated data by index, id, T
-  void updated(
-    Object identifier,
-    T Function(T) callback, {
-    bool Function(T data)? test,
-  }) {
-    emit(
-      state.copyWith(
-        result: change(identifier, callback, test: test),
-        requestCode: 202,
-      ),
-    );
   }
 }

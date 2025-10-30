@@ -5,8 +5,10 @@ import '../../../../data/models/feed.dart';
 import '../../../../data/use_cases/feed/get_verified.dart';
 
 class VerifiedFeedCubit extends DataCubit<Feed> {
+  VerifiedFeedCubit(super.context);
+
   @override
-  Future<Response<Feed>> fetch({
+  Future<Response<Feed>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,

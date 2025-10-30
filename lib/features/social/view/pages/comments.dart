@@ -26,7 +26,7 @@ class CommentsPage extends StatefulWidget {
 }
 
 class _CommentsPageState extends State<CommentsPage> with ColorMixin {
-  late final cubit = context.read<CommentCubit>()..fetch();
+  late final cubit = context.read<CommentCubit>()..onFetch();
   final TextEditingController _commentController = TextEditingController();
   bool _isLoading = false;
 

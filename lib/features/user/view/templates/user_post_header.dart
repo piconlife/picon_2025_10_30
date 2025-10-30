@@ -62,7 +62,7 @@ class _UserPostHeaderState extends State<UserPostHeader> {
   }
 
   Future<void> _delete(BuildContext context) async {
-    context.read<UserPostCubit>().popAsync(widget.item);
+    context.read<UserPostCubit>().delete(widget.item);
   }
 
   Future<void> _edit(BuildContext context) async {

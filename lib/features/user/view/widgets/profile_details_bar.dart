@@ -31,7 +31,7 @@ import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/user_builder.dart';
 import '../../../../routes/paths.dart';
-import '../../../social/view/cubits/feed_home_cubit.dart';
+import '../../../social/data/cubits/feed_home_cubit.dart';
 import '../../../social/view/dialogs/bsd_feed_format.dart';
 import '../../utils/user_updater.dart';
 import '../cubits/avatar_cubit.dart';

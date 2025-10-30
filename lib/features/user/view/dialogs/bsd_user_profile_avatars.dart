@@ -34,7 +34,7 @@ class UserProfileAvatarsBSD extends StatelessWidget {
           return BlocProvider.value(value: cubit, child: child);
         }
         return BlocProvider(
-          create: (context) => UserAvatarCubit()..fetch(),
+          create: (context) => UserAvatarCubit(context)..load(),
           child: child,
         );
       },

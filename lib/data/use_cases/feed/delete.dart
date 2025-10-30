@@ -11,6 +11,6 @@ class DeleteFeedUseCase extends BaseFeedUseCase {
   static DeleteFeedUseCase get i => _i ??= DeleteFeedUseCase._();
 
   Future<Response<Feed>> call(String id) {
-    return repository.deleteById(id, deleteRefs: true);
+    return repository.deleteById(id, deleteRefs: true, counter: true);
   }
 }

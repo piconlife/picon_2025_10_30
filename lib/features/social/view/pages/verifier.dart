@@ -77,9 +77,9 @@ class FeedVerifierPage extends StatelessWidget {
               return ItemVerifiedUser(
                 selection: item,
                 onFollow:
-                    () => context.read<VerifiedUsersCubit>().update(
-                      context,
-                      item.reverse,
+                    () => context.read<VerifiedUsersCubit>().replace(
+                      item,
+                      (e) => item.reverse,
                     ),
               );
             },

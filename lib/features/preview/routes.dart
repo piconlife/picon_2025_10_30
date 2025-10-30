@@ -27,10 +27,14 @@ Widget _previewPhotos(BuildContext context, Object? args) {
     providers: [
       likeCubit != null
           ? BlocProvider.value(value: likeCubit)
-          : BlocProvider(create: (_) => LikeCubit(parentPath)..initialCount()),
+          : BlocProvider(
+            create: (context) => LikeCubit(context, parentPath)..loadCounter(),
+          ),
       likeCubit != null
           ? BlocProvider.value(value: likeCubit)
-          : BlocProvider(create: (_) => LikeCubit(parentPath)..initialCount()),
+          : BlocProvider(
+            create: (context) => LikeCubit(context, parentPath)..loadCounter(),
+          ),
       if (viewCubit != null) BlocProvider.value(value: viewCubit),
     ],
     child: PreviewPhotosPage(args: args),

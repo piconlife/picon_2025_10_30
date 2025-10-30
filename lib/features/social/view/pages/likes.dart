@@ -30,11 +30,11 @@ class _LikesPageState extends State<LikesPage> with ColorMixin {
   final int fetchingSize = 50;
 
   void _fetch() {
-    cubit.onFetch(initialSize: initialSize, fetchingSize: fetchingSize);
+    cubit.fetch(initialSize: initialSize, fetchingSize: fetchingSize);
   }
 
   void _refresh() {
-    cubit.onRefresh(initialSize: initialSize, fetchingSize: fetchingSize);
+    cubit.refresh(initialSize: initialSize, fetchingSize: fetchingSize);
   }
 
   @override

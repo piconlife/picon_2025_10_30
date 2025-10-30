@@ -237,7 +237,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
   }
 
   void _createAvatar(BuildContext context, UserAvatar data) async {
-    final feedback = await context.read<UserAvatarCubit>().putAsync(data);
+    final feedback = await context.read<UserAvatarCubit>().create(data);
     if (!context.mounted) return;
     if (!feedback) {
       context.hideLoader();
@@ -269,7 +269,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
     UserAvatar avatar,
     UserPost data,
   ) async {
-    final feedback = await context.read<UserPostCubit>().putAsync(data);
+    final feedback = await context.read<UserPostCubit>().create(data);
     if (!context.mounted) return;
     if (!feedback) {
       context.hideLoader();

@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_entity/entity.dart';
 
 import '../../../../app/base/data_cubit.dart';
@@ -14,8 +14,8 @@ import '../../../../data/use_cases/star/get_by_pagination.dart';
 class StarCubit extends DataCubit<StarModel> {
   final String path;
 
-  StarCubit(this.path, {int? initialCount})
-    : super(Response(count: initialCount));
+  StarCubit(BuildContext context, this.path, {int? initialCount})
+    : super(context, Response(count: initialCount));
 
   @protected
   @override
@@ -29,23 +29,23 @@ class StarCubit extends DataCubit<StarModel> {
 
   @protected
   @override
-  Future<Response<int>> count() => GetStarsCountUseCase.i(path);
+  Future<Response<int>> onCount() => GetStarsCountUseCase.i(path);
 
   @protected
   @override
-  Future<Response<StarModel>> create(StarModel data) {
+  Future<Response<StarModel>> onCreate(StarModel data) {
     return CreateStarUseCase.i(data);
   }
 
   @protected
   @override
-  Future<Response<StarModel>> delete(StarModel data) {
+  Future<Response<StarModel>> onDelete(StarModel data) {
     return DeleteStarUseCase.i(path, data.id);
   }
 
   @protected
   @override
-  Future<Response<StarModel>> fetch({
+  Future<Response<StarModel>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,

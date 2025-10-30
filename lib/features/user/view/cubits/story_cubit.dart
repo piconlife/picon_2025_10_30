@@ -8,10 +8,10 @@ import '../../../../data/use_cases/user_story/get_by_pagination.dart';
 class UserStoryCubit extends DataCubit<UserStory> {
   final String uid;
 
-  UserStoryCubit([String? uid]) : uid = uid ?? UserHelper.uid;
+  UserStoryCubit(super.context, [String? uid]) : uid = uid ?? UserHelper.uid;
 
   @override
-  Future<Response<UserStory>> fetch({
+  Future<Response<UserStory>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,
@@ -23,14 +23,5 @@ class UserStoryCubit extends DataCubit<UserStory> {
       fetchingSize: fetchingSize ?? 5,
       snapshot: state.snapshot,
     );
-  }
-
-  void update(UserStory value) {
-    final index = state.result.indexOf(value);
-    if (index >= 0) {
-      state.result.removeAt(index);
-      state.result.insert(index, value);
-      emit(state.copyWith(data: value, result: state.result, requestCode: 202));
-    }
   }
 }

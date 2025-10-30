@@ -46,7 +46,7 @@ import '../../../../roots/widgets/texted_action.dart';
 import '../../../../routes/paths.dart';
 import '../../../user/view/cubits/post_cubit.dart';
 import '../../../user/view/widgets/uploading_image.dart';
-import '../cubits/feed_home_cubit.dart';
+import '../../data/cubits/feed_home_cubit.dart';
 
 const _kRecentPostPath = "recent_post_path";
 
@@ -264,8 +264,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
       context.hideLoader();
       if (feedback.isSuccessful) {
         Settings.set(_kRecentPostPath, mUserPost.path);
-        feedCubit.created(mFeed);
-        postCubit.created(mUserPost);
+        feedCubit.add(mFeed);
+        postCubit.add(mUserPost);
         context.close();
         return;
       }

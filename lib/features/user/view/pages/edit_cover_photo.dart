@@ -234,7 +234,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
   }
 
   void _createCover(BuildContext context, UserCover data) async {
-    final feedback = await context.read<UserCoverCubit>().putAsync(data);
+    final feedback = await context.read<UserCoverCubit>().create(data);
     if (!context.mounted) return;
     if (!feedback) {
       context.hideLoader();
@@ -266,7 +266,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
     UserCover cover,
     UserPost data,
   ) async {
-    final feedback = await context.read<UserPostCubit>().putAsync(data);
+    final feedback = await context.read<UserPostCubit>().create(data);
     if (!context.mounted) return;
     if (!feedback) {
       context.hideLoader();

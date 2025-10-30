@@ -8,10 +8,10 @@ import '../../../../data/use_cases/user_post/get_photos_by_pagination.dart';
 class UserPhotoCubit extends DataCubit<UserPost> {
   final String uid;
 
-  UserPhotoCubit([String? uid]) : uid = uid ?? UserHelper.uid;
+  UserPhotoCubit(super.context, [String? uid]) : uid = uid ?? UserHelper.uid;
 
   @override
-  Future<Response<UserPost>> fetch({
+  Future<Response<UserPost>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,
@@ -23,10 +23,5 @@ class UserPhotoCubit extends DataCubit<UserPost> {
       fetchingSize: fetchingSize ?? 5,
       snapshot: state.snapshot,
     );
-  }
-
-  void add(UserPost data) {
-    if (!data.isPhotoMode) return;
-    emit(state.copyWith(result: state.result..insert(0, data)));
   }
 }

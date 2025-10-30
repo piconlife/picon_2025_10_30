@@ -3,7 +3,7 @@ import 'package:flutter_app_navigator/app_navigator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../routes/paths.dart';
-import '../social/view/cubits/feed_home_cubit.dart';
+import '../social/data/cubits/feed_home_cubit.dart';
 import '../social/view/cubits/verified_feed_cubit.dart';
 import '../social/view/cubits/verified_users_cubit.dart';
 import '../user/view/cubits/avatar_cubit.dart';
@@ -27,23 +27,23 @@ Map<String, RouteBuilder> get mMainRoutes {
 Widget _main(BuildContext context, Object? args) {
   return MultiBlocProvider(
     providers: [
-      BlocProvider(create: (_) => FeedHomeCubit()..initial()),
-      BlocProvider(create: (_) => VerifiedFeedCubit()..initial()),
-      BlocProvider(create: (_) => VerifiedUsersCubit()..initial()),
+      BlocProvider(create: (context) => FeedHomeCubit(context)..load()),
+      BlocProvider(create: (context) => VerifiedFeedCubit(context)..load()),
+      BlocProvider(create: (context) => VerifiedUsersCubit(context)..load()),
 
-      BlocProvider(create: (_) => UserFollowerCubit()..initial()),
-      BlocProvider(create: (_) => UserFollowingCubit()..initial()),
+      BlocProvider(create: (context) => UserFollowerCubit(context)..load()),
+      BlocProvider(create: (context) => UserFollowingCubit(context)..load()),
 
-      BlocProvider(create: (_) => UserAvatarCubit()),
-      BlocProvider(create: (_) => UserCoverCubit()),
-      BlocProvider(create: (_) => UserCubit()),
-      BlocProvider(create: (_) => UserMemoryCubit()),
-      BlocProvider(create: (_) => UserNoteCubit()),
-      BlocProvider(create: (_) => UserPhotoCubit()),
-      BlocProvider(create: (_) => UserPostCubit()),
-      BlocProvider(create: (_) => UserStoryCubit()),
-      BlocProvider(create: (_) => UserVideoCubit()),
-      BlocProvider(create: (_) => UserReportCubit()),
+      BlocProvider(create: (context) => UserAvatarCubit(context)),
+      BlocProvider(create: (context) => UserCoverCubit(context)),
+      BlocProvider(create: (context) => UserCubit(context)),
+      BlocProvider(create: (context) => UserMemoryCubit(context)),
+      BlocProvider(create: (context) => UserNoteCubit(context)),
+      BlocProvider(create: (context) => UserPhotoCubit(context)),
+      BlocProvider(create: (context) => UserPostCubit(context)),
+      BlocProvider(create: (context) => UserStoryCubit(context)),
+      BlocProvider(create: (context) => UserVideoCubit(context)),
+      BlocProvider(create: (context) => UserReportCubit(context)),
     ],
     child: const MainPage(),
   );

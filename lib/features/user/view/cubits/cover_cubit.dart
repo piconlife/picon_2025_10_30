@@ -11,10 +11,10 @@ import '../../../../data/use_cases/user_cover/get_by_pagination.dart';
 class UserCoverCubit extends DataCubit<UserCover> {
   final String uid;
 
-  UserCoverCubit([String? uid]) : uid = uid ?? UserHelper.uid;
+  UserCoverCubit(super.context, [String? uid]) : uid = uid ?? UserHelper.uid;
 
   @override
-  Future<Response<UserCover>> fetch({
+  Future<Response<UserCover>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,
@@ -30,23 +30,19 @@ class UserCoverCubit extends DataCubit<UserCover> {
 
   @protected
   @override
-  Future<Response<UserCover>> create(UserCover data) async {
+  Future<Response<UserCover>> onCreate(UserCover data) async {
     return CreateUserCoverUseCase.i(data).then((value) {
       return value.copyWith(data: data);
     });
   }
 
   @override
-  Future<Response<UserCover>> delete(UserCover data) {
-    return deleteById(data.id);
+  Future<Response<UserCover>> onDelete(UserCover data) {
+    return onDeleteById(data.id);
   }
 
   @override
-  Future<Response<UserCover>> deleteById(String id) async {
+  Future<Response<UserCover>> onDeleteById(String id) async {
     return DeleteUserCoverUseCase.i(id);
-  }
-
-  void update(UserCover value) {
-    emit(state.copyWith(data: value, requestCode: 202));
   }
 }

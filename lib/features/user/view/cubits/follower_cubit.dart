@@ -10,13 +10,13 @@ import '../../../../data/use_cases/user_follower/get.dart';
 class UserFollowerCubit extends DataCubit<Selection<UserFollower>> {
   final String? uid;
 
-  UserFollowerCubit([String? uid]) : uid = uid ?? UserHelper.uid;
+  UserFollowerCubit(super.context, [String? uid]) : uid = uid ?? UserHelper.uid;
 
   @override
-  Future<Response<int>> count() => GetUserFollowerCountUseCase.i(uid);
+  Future<Response<int>> onCount() => GetUserFollowerCountUseCase.i(uid);
 
   @override
-  Future<Response<Selection<UserFollower>>> fetch({
+  Future<Response<Selection<UserFollower>>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,

@@ -11,7 +11,8 @@ import '../../../../data/use_cases/user_following/get.dart';
 class UserFollowingCubit extends DataCubit<UserFollowing> {
   final String uid;
 
-  UserFollowingCubit([String? uid]) : uid = uid ?? UserHelper.uid;
+  UserFollowingCubit(super.context, [String? uid])
+    : uid = uid ?? UserHelper.uid;
 
   @override
   UserFollowing? createNewObject(Object? args) {
@@ -20,20 +21,20 @@ class UserFollowingCubit extends DataCubit<UserFollowing> {
   }
 
   @override
-  Future<Response<int>> count() => GetUserFollowingCountUseCase.i(uid);
+  Future<Response<int>> onCount() => GetUserFollowingCountUseCase.i(uid);
 
   @override
-  Future<Response<UserFollowing>> create(UserFollowing data) {
+  Future<Response<UserFollowing>> onCreate(UserFollowing data) {
     return CreateUserFollowingUseCase.i(data);
   }
 
   @override
-  Future<Response<UserFollowing>> delete(UserFollowing data) {
+  Future<Response<UserFollowing>> onDelete(UserFollowing data) {
     return DeleteUserFollowingUseCase.i(data.id);
   }
 
   @override
-  Future<Response<UserFollowing>> fetch({
+  Future<Response<UserFollowing>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,

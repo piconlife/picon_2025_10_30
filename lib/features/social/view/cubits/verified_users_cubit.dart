@@ -1,6 +1,4 @@
 import 'package:data_management/core.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_andomie/extensions/list.dart';
 import 'package:flutter_andomie/models/selection.dart';
 import 'package:flutter_entity/entity.dart';
 
@@ -10,6 +8,8 @@ import '../../../../data/models/user.dart';
 import '../../../../data/use_cases/user/get_users_by_ids.dart';
 
 class VerifiedUsersCubit extends DataCubit<Selection<User>> {
+  VerifiedUsersCubit(super.context);
+
   Response<Selection<User>> _converter(Response<User> response) {
     return Response.convert(response, (e) {
       return Selection(
@@ -21,7 +21,7 @@ class VerifiedUsersCubit extends DataCubit<Selection<User>> {
   }
 
   @override
-  Future<Response<Selection<User>>> fetch({
+  Future<Response<Selection<User>>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,
@@ -32,20 +32,18 @@ class VerifiedUsersCubit extends DataCubit<Selection<User>> {
     return GetUsersByIdsUseCase.i(ids).then(_converter);
   }
 
-  void update(BuildContext context, Selection<User> value) {
-    emit(
-      state.copyWith(
-        result: state.result.change(value, (e) {
-          return e.data.id == value.data.id;
-        }),
-      ),
-    );
+  @override
+  Future<Response<Selection<User>>> onUpdate(
+    Selection<User> old,
+    Map<String, dynamic> changes,
+  ) async {
     DataFieldValue field;
-    if (value.selected) {
-      field = DataFieldValue.arrayRemove([value.id]);
+    if (old.selected) {
+      field = DataFieldValue.arrayRemove([old.id]);
     } else {
-      field = DataFieldValue.arrayUnion([value.id]);
+      field = DataFieldValue.arrayUnion([old.id]);
     }
     UserHelper.update(context, {UserKeys.i.approvals: field});
+    return Response(status: Status.ok);
   }
 }

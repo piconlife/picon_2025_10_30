@@ -3,11 +3,16 @@ import 'package:flutter_entity/entity.dart';
 
 import '../../../../app/base/data_cubit.dart';
 import '../../../../data/models/feed.dart';
+import '../../../../data/use_cases/feed/create.dart';
+import '../../../../data/use_cases/feed/delete.dart';
 import '../../../../data/use_cases/feed/get_stars.dart';
+import '../../../../data/use_cases/feed/update.dart';
 
 class FeedHomeCubit extends DataCubit<Feed> {
+  FeedHomeCubit(super.context);
+
   @override
-  Future<Response<Feed>> fetch({
+  Future<Response<Feed>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,
@@ -18,6 +23,24 @@ class FeedHomeCubit extends DataCubit<Feed> {
       fetchingSize: fetchingSize ?? 5,
       snapshot: state.snapshot,
     );
+  }
+
+  @protected
+  @override
+  Future<Response<Feed>> onCreate(Feed data) => CreateFeedUseCase.i(data);
+
+  @protected
+  @override
+  Future<Response<Feed>> onDelete(Feed data) => onDeleteById(data.id);
+
+  @protected
+  @override
+  Future<Response<Feed>> onDeleteById(String id) => DeleteFeedUseCase.i(id);
+
+  @protected
+  @override
+  Future<Response<Feed>> onUpdate(Feed old, Map<String, dynamic> changes) {
+    return UpdateFeedUseCase.i(old.id, changes);
   }
 
   void deletes(BuildContext context, int index, Feed data) {

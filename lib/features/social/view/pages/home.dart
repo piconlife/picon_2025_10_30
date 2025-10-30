@@ -12,7 +12,7 @@ import '../../../../../routes/paths.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../roots/widgets/scaffold_shimmer.dart';
 import '../../../../roots/widgets/text.dart';
-import '../cubits/feed_home_cubit.dart';
+import '../../data/cubits/feed_home_cubit.dart';
 import '../templates/item_feed.dart';
 import '../templates/nullable_body.dart';
 

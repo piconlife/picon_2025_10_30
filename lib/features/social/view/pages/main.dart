@@ -19,7 +19,7 @@ import '../../../user/view/cubits/memory_cubit.dart';
 import '../../../user/view/cubits/note_cubit.dart';
 import '../../../user/view/cubits/post_cubit.dart';
 import '../../../user/view/cubits/video_cubit.dart';
-import '../cubits/feed_home_cubit.dart';
+import '../../data/cubits/feed_home_cubit.dart';
 import '../dialogs/bsd_feed_format.dart';
 import 'home.dart';
 import 'notification.dart';

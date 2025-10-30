@@ -29,18 +29,18 @@ class ItemFeed extends StatelessWidget {
     if (path == null || path.isEmpty) return const SizedBox.shrink();
 
     LikeCubit likeCubit = Cache.put("like_cubit[$path]", () {
-      return LikeCubit(path, initialCount: item.likeCount)
-        ..initialCount()
-        ..initial(resultByMe: true);
+      return LikeCubit(context, path, initialCount: item.likeCount)
+        ..loadCounter()
+        ..load(resultByMe: true);
     });
     StarCubit starCubit = Cache.put("star_cubit[$path]", () {
-      return StarCubit(path, initialCount: item.starCount)
-        ..initialCount()
-        ..initial(resultByMe: true);
+      return StarCubit(context, path, initialCount: item.starCount)
+        ..loadCounter()
+        ..load(resultByMe: true);
     });
     CommentCubit commentCubit = Cache.put("comment_cubit[$path]", () {
-      return CommentCubit(path, initialCount: item.commentCount)
-        ..initialCount();
+      return CommentCubit(context, path, initialCount: item.commentCount)
+        ..loadCounter();
     });
 
     return MultiBlocProvider(

@@ -17,13 +17,13 @@ import '../../../../routes/paths.dart';
 class UserPostCubit extends DataCubit<UserPost> {
   final String uid;
 
-  UserPostCubit([String? uid]) : uid = uid ?? UserHelper.uid;
+  UserPostCubit(super.context, [String? uid]) : uid = uid ?? UserHelper.uid;
 
   @override
-  Future<Response<int>> count() => GetUserFeedCountUseCase.i(uid);
+  Future<Response<int>> onCount() => GetUserFeedCountUseCase.i(uid);
 
   @override
-  Future<Response<UserPost>> fetch({
+  Future<Response<UserPost>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,
@@ -47,7 +47,7 @@ class UserPostCubit extends DataCubit<UserPost> {
       arguments: {"$Content": data},
     );
     if (feedback is! UserPost) return;
-    updated(index, (_) => feedback);
+    replace(index, (_) => feedback);
   }
 
   void share(BuildContext context, String id) {
@@ -142,7 +142,7 @@ class UserPostCubit extends DataCubit<UserPost> {
           item
             ..translatedTitle = null
             ..translatedDescription = null;
-      updated(index, (_) => item);
+      replace(index, (_) => item);
       notify(item);
       return;
     }
@@ -153,7 +153,7 @@ class UserPostCubit extends DataCubit<UserPost> {
           item
             ..translatedTitle = value.firstOrNull
             ..translatedDescription = value.lastOrNull;
-      updated(index, (_) => item);
+      replace(index, (_) => item);
       notify(item);
     });
   }

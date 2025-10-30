@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_entity/entity.dart';
 
 import '../../../../app/base/data_cubit.dart';
@@ -14,8 +14,8 @@ import '../../../../data/use_cases/like/get_by_pagination.dart';
 class LikeCubit extends DataCubit<LikeModel> {
   final String path;
 
-  LikeCubit(this.path, {int? initialCount})
-    : super(Response(count: initialCount));
+  LikeCubit(BuildContext context, this.path, {int? initialCount})
+    : super(context, Response(count: initialCount));
 
   @protected
   @override
@@ -29,23 +29,23 @@ class LikeCubit extends DataCubit<LikeModel> {
 
   @protected
   @override
-  Future<Response<int>> count() => GetLikesCountUseCase.i(path);
+  Future<Response<int>> onCount() => GetLikesCountUseCase.i(path);
 
   @protected
   @override
-  Future<Response<LikeModel>> create(LikeModel data) {
+  Future<Response<LikeModel>> onCreate(LikeModel data) {
     return CreateLikeUseCase.i(data);
   }
 
   @protected
   @override
-  Future<Response<LikeModel>> delete(LikeModel data) {
+  Future<Response<LikeModel>> onDelete(LikeModel data) {
     return DeleteLikeUseCase.i(path, data.id);
   }
 
   @protected
   @override
-  Future<Response<LikeModel>> fetch({
+  Future<Response<LikeModel>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,

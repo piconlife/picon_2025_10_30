@@ -6,9 +6,9 @@ import 'package:object_finder/object_finder.dart';
 import '../../routes/paths.dart';
 import '../user/view/cubits/following_cubit.dart';
 import '../user/view/cubits/post_cubit.dart';
+import 'data/cubits/feed_home_cubit.dart';
 import 'data/cubits/like_cubit.dart';
 import 'view/cubits/comment_cubit.dart';
-import 'view/cubits/feed_home_cubit.dart';
 import 'view/pages/comments.dart';
 import 'view/pages/create_a_memory.dart';
 import 'view/pages/create_a_note.dart';
@@ -38,10 +38,10 @@ Widget _createUserPost(BuildContext context, Object? args) {
     providers: [
       feedHomeCubit != null
           ? BlocProvider.value(value: feedHomeCubit)
-          : BlocProvider(create: (context) => FeedHomeCubit()),
+          : BlocProvider(create: (context) => FeedHomeCubit(context)),
       userPostCubit != null
           ? BlocProvider.value(value: userPostCubit)
-          : BlocProvider(create: (context) => UserPostCubit()),
+          : BlocProvider(create: (context) => UserPostCubit(context)),
     ],
     child: CreatePostPage(args: args),
   );
@@ -72,14 +72,17 @@ Widget _comments(BuildContext context, Object? args) {
   return MultiBlocProvider(
     providers: [
       commentCubit != null
-          ? BlocProvider.value(value: commentCubit..fetch())
-          : BlocProvider(create: (context) => CommentCubit('')..fetch()),
+          ? BlocProvider.value(value: commentCubit..load())
+          : BlocProvider(
+            create: (context) => CommentCubit(context, '')..load(),
+          ),
     ],
     child: CommentsPage(args: args),
   );
 }
 
 Widget _likes(BuildContext context, Object? args) {
+  String? path = args.findOrNull(key: "path");
   final likeCubit = args.findOrNull<LikeCubit>(key: "$LikeCubit");
   final followingCubit = args.findOrNull<UserFollowingCubit>(
     key: "$UserFollowingCubit",
@@ -87,11 +90,15 @@ Widget _likes(BuildContext context, Object? args) {
   return MultiBlocProvider(
     providers: [
       likeCubit != null
-          ? BlocProvider.value(value: likeCubit..fetch())
-          : BlocProvider(create: (context) => LikeCubit('')..fetch()),
+          ? BlocProvider.value(value: likeCubit..load())
+          : BlocProvider(
+            create: (context) => LikeCubit(context, path ?? '')..load(),
+          ),
       followingCubit != null
           ? BlocProvider.value(value: followingCubit)
-          : BlocProvider(create: (context) => UserFollowingCubit()),
+          : BlocProvider(
+            create: (context) => UserFollowingCubit(context, path),
+          ),
     ],
     child: LikesPage(args: args),
   );

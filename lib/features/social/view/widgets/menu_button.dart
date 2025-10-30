@@ -12,7 +12,7 @@ import '../../../../roots/widgets/menu_button.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../user/view/cubits/follower_cubit.dart';
 import '../../../user/view/cubits/post_cubit.dart';
-import '../cubits/feed_home_cubit.dart';
+import '../../data/cubits/feed_home_cubit.dart';
 
 class FeedHeaderMoreAction extends StatefulWidget {
   final int index;

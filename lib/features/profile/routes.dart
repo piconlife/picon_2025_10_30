@@ -5,7 +5,7 @@ import 'package:in_app_navigator/in_app_navigator.dart';
 import 'package:object_finder/object_finder.dart';
 
 import '../../routes/paths.dart';
-import '../social/view/cubits/feed_home_cubit.dart';
+import '../social/data/cubits/feed_home_cubit.dart';
 import '../user/view/cubits/avatar_cubit.dart';
 import '../user/view/cubits/cover_cubit.dart';
 import '../user/view/cubits/follower_cubit.dart';
@@ -70,43 +70,43 @@ Widget _profile(BuildContext context, Object? args) {
     providers: [
       feedHomeCubit != null
           ? BlocProvider.value(value: feedHomeCubit)
-          : BlocProvider(create: (_) => FeedHomeCubit()),
+          : BlocProvider(create: (context) => FeedHomeCubit(context)),
       avatarsCubit != null
           ? BlocProvider.value(value: avatarsCubit)
-          : BlocProvider(create: (_) => UserAvatarCubit()),
+          : BlocProvider(create: (context) => UserAvatarCubit(context)),
       coversCubit != null
           ? BlocProvider.value(value: coversCubit)
-          : BlocProvider(create: (_) => UserCoverCubit()),
+          : BlocProvider(create: (context) => UserCoverCubit(context)),
       userCubit != null
           ? BlocProvider.value(value: userCubit)
-          : BlocProvider(create: (_) => UserCubit()),
+          : BlocProvider(create: (context) => UserCubit(context)),
       memoryCubit != null
           ? BlocProvider.value(value: memoryCubit)
-          : BlocProvider(create: (_) => UserMemoryCubit()),
+          : BlocProvider(create: (context) => UserMemoryCubit(context)),
       noteCubit != null
           ? BlocProvider.value(value: noteCubit)
-          : BlocProvider(create: (_) => UserNoteCubit()),
+          : BlocProvider(create: (context) => UserNoteCubit(context)),
       photoCubit != null
           ? BlocProvider.value(value: photoCubit)
-          : BlocProvider(create: (_) => UserPhotoCubit()),
+          : BlocProvider(create: (context) => UserPhotoCubit(context)),
       postCubit != null
           ? BlocProvider.value(value: postCubit)
-          : BlocProvider(create: (_) => UserPostCubit()),
+          : BlocProvider(create: (context) => UserPostCubit(context)),
       storyCubit != null
           ? BlocProvider.value(value: storyCubit)
-          : BlocProvider(create: (_) => UserStoryCubit()),
+          : BlocProvider(create: (context) => UserStoryCubit(context)),
       videoCubit != null
           ? BlocProvider.value(value: videoCubit)
-          : BlocProvider(create: (_) => UserVideoCubit()),
+          : BlocProvider(create: (context) => UserVideoCubit(context)),
       reportCubit != null
           ? BlocProvider.value(value: reportCubit)
-          : BlocProvider(create: (_) => UserReportCubit()),
+          : BlocProvider(create: (context) => UserReportCubit(context)),
       userFollowerCubit != null
           ? BlocProvider.value(value: userFollowerCubit)
-          : BlocProvider(create: (_) => UserFollowerCubit()),
+          : BlocProvider(create: (context) => UserFollowerCubit(context)),
       userFollowingCubit != null
           ? BlocProvider.value(value: userFollowingCubit)
-          : BlocProvider(create: (_) => UserFollowingCubit()),
+          : BlocProvider(create: (context) => UserFollowingCubit(context)),
     ],
     child: ProfilePage(),
   );

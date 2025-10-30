@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_entity/entity.dart';
 
 import '../../../../app/base/data_cubit.dart';
@@ -6,8 +7,8 @@ import '../../../../data/models/feed_comment.dart';
 class CommentCubit extends DataCubit<CommentModel> {
   final String path;
 
-  CommentCubit(this.path, {int? initialCount})
-    : super(Response(count: initialCount));
+  CommentCubit(BuildContext context, this.path, {int? initialCount})
+    : super(context, Response(count: initialCount));
   //
   // @override
   // void count() {

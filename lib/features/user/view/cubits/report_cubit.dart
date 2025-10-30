@@ -9,13 +9,13 @@ import '../../../../data/use_cases/user_report/get_by_pagination.dart';
 class UserReportCubit extends DataCubit<UserReport> {
   final String uid;
 
-  UserReportCubit([String? uid]) : uid = uid ?? UserHelper.uid;
+  UserReportCubit(super.context, [String? uid]) : uid = uid ?? UserHelper.uid;
 
   @override
-  Future<Response<int>> count() => GetUserReportCountUseCase.i(uid);
+  Future<Response<int>> onCount() => GetUserReportCountUseCase.i(uid);
 
   @override
-  Future<Response<UserReport>> fetch({
+  Future<Response<UserReport>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,
@@ -27,14 +27,5 @@ class UserReportCubit extends DataCubit<UserReport> {
       fetchingSize: fetchingSize ?? 5,
       snapshot: state.snapshot,
     );
-  }
-
-  void update(UserReport value) {
-    final index = state.result.indexOf(value);
-    if (index >= 0) {
-      state.result.removeAt(index);
-      state.result.insert(index, value);
-      emit(state.copyWith(data: value, result: state.result, requestCode: 202));
-    }
   }
 }
