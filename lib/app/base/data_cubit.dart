@@ -159,15 +159,16 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   // ---------------------------------------------------------------------------
 
   @protected
-  Response<T> loading({bool force = false}) {
-    if (force) return state.copyWith(status: Status.loading);
-    if (state.status == Status.loading) return state;
-    if (state.result.isEmpty) return state.copyWith(status: Status.loading);
-    return state;
+  void loading({bool force = false}) {
+    if (force) return emit(state.copyWith(status: Status.loading));
+    if (state.status == Status.loading) return;
+    if (state.result.isEmpty) {
+      return emit(state.copyWith(status: Status.loading));
+    }
   }
 
   @protected
-  Response<T> handle(
+  void handle(
     Response<T> value, {
     bool resultByMe = false,
     String? placement,
@@ -183,21 +184,19 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
         "placement": placement ?? "handle",
       },
     );
-    if (!modifyState) return state;
-    if (resultByMe) return state.copyWith(resultByMe: value.result);
-    return state.copyWith(
-      status: value.status,
-      snapshot: value.snapshot,
-      result: value.result,
+    if (!modifyState) return;
+    if (resultByMe) return emit(state.copyWith(resultByMe: value.result));
+    return emit(
+      state.copyWith(
+        status: value.status,
+        snapshot: value.snapshot,
+        result: value.result,
+      ),
     );
   }
 
   @protected
-  Response<T> handleCount(
-    int value, {
-    String? placement,
-    bool modifyState = true,
-  }) {
+  void handleCount(int value, {String? placement, bool modifyState = true}) {
     Analytics.event(
       "data_cubit",
       reason: "ok",
@@ -208,12 +207,12 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
         "placement": placement ?? "handleCount",
       },
     );
-    if (!modifyState) return state;
-    return state.copyWith(count: value);
+    if (!modifyState) return;
+    return emit(state.copyWith(count: value));
   }
 
   @protected
-  Response<T> handleError([
+  void handleError([
     Object? error,
     StackTrace? stackTrace,
     String? placement,
@@ -231,12 +230,12 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
         if (stackTrace != null) "stackTrace": stackTrace.toString(),
       },
     );
-    if (!modifyState) return state;
-    return state.copyWith(status: Status.error, error: error.toString());
+    if (!modifyState) return;
+    return emit(state.copyWith(status: Status.error, error: error.toString()));
   }
 
   @protected
-  Response<T> handleCatchError([
+  void handleCatchError([
     Object? error,
     StackTrace? stackTrace,
     String? placement,
@@ -254,8 +253,10 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
         if (stackTrace != null) "stackTrace": stackTrace.toString(),
       },
     );
-    if (!modifyState) return state;
-    return state.copyWith(status: Status.failure, error: error.toString());
+    if (!modifyState) return;
+    return emit(
+      state.copyWith(status: Status.failure, error: error.toString()),
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -320,14 +321,14 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   }) async {
     placement ??= "count";
     try {
-      final x = loading(force: loader);
-      if (x != state) emit(x);
-      return await (callback?.call() ?? onCount())
+      loading(force: loader);
+      await (callback?.call() ?? onCount())
           .then((e) => handleCount(e.count, placement: placement))
-          .onError((e, st) => handleError(e, st, placement))
-          .then((v) => v.count);
+          .onError((e, st) => handleError(e, st, placement));
+      return state.count;
     } catch (e) {
-      return handleCatchError(e, null, placement).count;
+      handleCatchError(e, null, placement);
+      return state.count;
     }
   }
 
@@ -341,8 +342,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   }) async {
     placement ??= resultByMe ? "fetchResultByMe" : "fetch";
     try {
-      final x = loading(force: loader && !resultByMe);
-      if (x != state) emit(x);
+      loading(force: loader && !resultByMe);
       return await (callback?.call() ??
               onFetch(
                 fetchingSize: fetchingSize,
@@ -350,9 +350,11 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
                 resultByMe: resultByMe,
               ))
           .then((e) => handle(e, resultByMe: resultByMe, placement: placement))
-          .onError((e, st) => handleError(e, st, placement));
+          .onError((e, st) => handleError(e, st, placement))
+          .then((_) => state);
     } catch (e) {
-      return handleCatchError(e, null, placement);
+      handleCatchError(e, null, placement);
+      return state;
     }
   }
 
@@ -372,9 +374,10 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
                 initialSize: initialSize,
               ))
           .map((e) => handle(e, resultByMe: resultByMe, placement: placement))
-          .handleError((e, st) => handleError(e, st, placement));
+          .handleError((e, st) => handleError(e, st, placement))
+          .map((_) => state);
     } catch (e) {
-      yield handleCatchError(e, null, placement);
+      handleCatchError(e, null, placement);
     }
   }
 
