@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_andomie/helpers/clipboard_helper.dart';
-import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
-import '../../../../data/constants/paths.dart';
 import '../../../../data/models/content.dart';
 import '../../../../data/models/user_post.dart';
-import '../../../../data/models/user_report.dart';
 import '../../../../data/use_cases/user_post/count.dart';
-import '../../../../data/use_cases/user_post/create.dart';
 import '../../../../data/use_cases/user_post/get_by_pagination.dart';
-import '../../../../roots/services/path_provider.dart';
 import '../../../../roots/services/translator.dart';
 import '../../../../roots/utils/utils.dart';
 import '../../../../routes/paths.dart';
-import '../../../chooser/data/models/report.dart';
 
 class UserPostCubit extends DataCubit<UserPost> {
   final String uid;
@@ -26,49 +20,21 @@ class UserPostCubit extends DataCubit<UserPost> {
   UserPostCubit([String? uid]) : uid = uid ?? UserHelper.uid;
 
   @override
-  void count() {
-    GetUserFeedCountUseCase.i(uid).then((value) {
-      emit(state.copyWith(count: value.data));
-    });
-  }
+  Future<Response<int>> count() => GetUserFeedCountUseCase.i(uid);
 
   @override
-  void fetch({int initialSize = 10, int fetchingSize = 5}) {
-    emit(state.copyWith(status: Status.loading));
-    GetUserPostsByPaginationUseCase.i(
+  Future<Response<UserPost>> fetch({
+    int? initialSize,
+    int? fetchingSize,
+    bool resultByMe = false,
+  }) async {
+    if (resultByMe) return Response(status: Status.undefined);
+    return GetUserPostsByPaginationUseCase.i(
       uid: uid,
-      initialSize: initialSize,
-      fetchingSize: fetchingSize,
+      initialSize: initialSize ?? 10,
+      fetchingSize: fetchingSize ?? 5,
       snapshot: state.snapshot,
-    ).then(_attach).catchError((error, st) {
-      emit(state.copyWith(status: Status.failure));
-    });
-  }
-
-  void _attach(Response<UserPost> response) {
-    emit(
-      state.copyWith(
-        status: response.status,
-        snapshot: response.snapshot,
-        result: state.result..addAll(response.result),
-        requestCode: 0,
-      ),
     );
-  }
-
-  @override
-  Future<bool> onCreateByData(UserPost data) {
-    return CreateUserPostUseCase.i(data).then((value) {
-      if (value.isSuccessful) {
-        emit(state.copyWith(result: state.result..insert(0, data)));
-      }
-      return value.isSuccessful;
-    });
-  }
-
-  @override
-  Future<bool> onDeleteById(String id) async {
-    return false;
   }
 
   void edit(BuildContext context, String id) async {
@@ -81,7 +47,7 @@ class UserPostCubit extends DataCubit<UserPost> {
       arguments: {"$Content": data},
     );
     if (feedback is! UserPost) return;
-    updatedAt(index, feedback);
+    updated(index, (_) => feedback);
   }
 
   void share(BuildContext context, String id) {
@@ -135,32 +101,32 @@ class UserPostCubit extends DataCubit<UserPost> {
   }
 
   void report(BuildContext context, String id) async {
-    final labels = InAppReport.labels;
-    final index = state.result.indexWhere((e) => e.id == id);
-    if (index < 0) return;
-    final data = state.result.elementAtOrNull(index);
-    if (data == null || data.id != id) return;
-    final type = await context.showOptionsSheet(
-      title: "What kind of problem is this feed causing you?",
-      options: labels,
-    );
-    if (!context.mounted) return;
-    final feedback = await context.showEditorSheet(
-      title: "Please enter your reporting message?",
-      hint: "Write a report…",
-    );
-    final mId = Entity.generateID;
-    final path = PathProvider.generatePath(Paths.reports, mId, data.path);
-    final report = UserReport(
-      id: mId,
-      reporter: UserHelper.uid,
-      publisher: data.publisherId,
-      path: path,
-      parentId: data.id,
-      parentPath: data.path,
-      feedback: feedback,
-      category: labels.elementAtOrNull(type),
-    );
+    // final labels = InAppReport.labels;
+    // final index = state.result.indexWhere((e) => e.id == id);
+    // if (index < 0) return;
+    // final data = state.result.elementAtOrNull(index);
+    // if (data == null || data.id != id) return;
+    // final type = await context.showOptionsSheet(
+    //   title: "What kind of problem is this feed causing you?",
+    //   options: labels,
+    // );
+    // if (!context.mounted) return;
+    // final feedback = await context.showEditorSheet(
+    //   title: "Please enter your reporting message?",
+    //   hint: "Write a report…",
+    // );
+    // final mId = Entity.generateID;
+    // final path = PathProvider.generatePath(Paths.reports, mId, data.path);
+    // final report = UserReport(
+    //   id: mId,
+    //   reporter: UserHelper.uid,
+    //   publisher: data.publisherId,
+    //   path: path,
+    //   parentId: data.id,
+    //   parentPath: data.path,
+    //   feedback: feedback,
+    //   category: labels.elementAtOrNull(type),
+    // );
     // reports.add(report.getDocument_id());
     // mViewModel.addReport(report);
     // if (!data.isDescription) return;
@@ -176,7 +142,7 @@ class UserPostCubit extends DataCubit<UserPost> {
           item
             ..translatedTitle = null
             ..translatedDescription = null;
-      updatedAt(index, item);
+      updated(index, (_) => item);
       notify(item);
       return;
     }
@@ -187,7 +153,7 @@ class UserPostCubit extends DataCubit<UserPost> {
           item
             ..translatedTitle = value.firstOrNull
             ..translatedDescription = value.lastOrNull;
-      updatedAt(index, item);
+      updated(index, (_) => item);
       notify(item);
     });
   }

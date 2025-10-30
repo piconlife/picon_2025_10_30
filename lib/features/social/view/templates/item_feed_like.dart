@@ -6,7 +6,7 @@ import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app/res/icons.dart';
-import '../../../../data/models/feed_like.dart';
+import '../../../../data/models/like.dart';
 import '../../../../roots/widgets/column.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
@@ -18,7 +18,7 @@ import '../../../user/view/cubits/following_cubit.dart';
 import '../widgets/follow_button.dart';
 
 class ItemFeedLike extends StatefulWidget {
-  final FeedLike data;
+  final LikeModel data;
 
   const ItemFeedLike({super.key, required this.data});
 

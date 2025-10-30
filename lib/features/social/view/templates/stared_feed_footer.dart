@@ -8,14 +8,14 @@ import '../../../../app/base/countable_builder.dart';
 import '../../../../app/base/exist_by_me_builder.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/feed_comment.dart';
-import '../../../../data/models/feed_like.dart';
-import '../../../../data/models/feed_star.dart';
+import '../../../../data/models/like.dart';
+import '../../../../data/models/star.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/pleasure_button.dart';
 import '../../../../roots/widgets/text.dart';
+import '../../data/cubits/like_cubit.dart';
+import '../../data/cubits/star_cubit.dart';
 import '../cubits/comment_cubit.dart';
-import '../cubits/like_cubit.dart';
-import '../cubits/star_cubit.dart';
 import 'feed_comment_box.dart';
 
 class StaredFeedFooter extends StatefulWidget {
@@ -57,7 +57,7 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
         Row(
           children: [
             SizedBox(width: dimen.dp(16)),
-            CountableBuilder<FeedLikeCubit, FeedLike>(
+            CountableBuilder<LikeCubit, LikeModel>(
               builder: (context, value) {
                 return InAppText(
                   Converter.toKMB(value, "Like", "Likes"),
@@ -67,7 +67,7 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
             ),
             InAppText(",", style: counterStyle),
             SizedBox(width: dimen.dp(8)),
-            CountableBuilder<FeedStarCubit, FeedStar>(
+            CountableBuilder<StarCubit, StarModel>(
               builder: (context, value) {
                 return InAppText(
                   Converter.toKMB(value, "Star", "Stars"),
@@ -78,7 +78,7 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
             SizedBox(width: dimen.dp(8)),
             InAppText("&", style: counterStyle),
             SizedBox(width: dimen.dp(8)),
-            CountableBuilder<FeedCommentCubit, FeedComment>(
+            CountableBuilder<CommentCubit, CommentModel>(
               builder: (context, value) {
                 return InAppText(
                   Converter.toKMB(value, "Comment", "Comments"),
@@ -94,7 +94,7 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(width: dimen.dp(8)),
-            ExistByMeBuilder<FeedLikeCubit, FeedLike>(
+            ExistByMeBuilder<LikeCubit, LikeModel>(
               index: widget.index,
               builder: (context, value, toggle) {
                 return InAppPleasureButton(
@@ -106,7 +106,7 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
                 );
               },
             ),
-            ExistByMeBuilder<FeedStarCubit, FeedStar>(
+            ExistByMeBuilder<StarCubit, StarModel>(
               index: widget.index,
               builder: (context, value, toggle) {
                 return InAppPleasureButton(

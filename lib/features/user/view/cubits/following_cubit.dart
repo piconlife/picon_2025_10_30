@@ -14,72 +14,31 @@ class UserFollowingCubit extends DataCubit<UserFollowing> {
   UserFollowingCubit([String? uid]) : uid = uid ?? UserHelper.uid;
 
   @override
-  void count() {
-    GetUserFollowingCountUseCase.i(uid).then((value) {
-      emit(state.copyWith(count: value.data));
-    });
+  UserFollowing? createNewObject(Object? args) {
+    if (uid.isEmpty) return null;
+    return UserFollowing.create(uid: uid);
   }
 
   @override
-  void fetch({int initialSize = 30, int fetchingSize = 15}) {
-    if (uid.isEmpty) return;
-    emit(state.copyWith(status: Status.loading));
-    GetUserFollowingsUseCase.i().then(_attach).catchError((error, stackTrace) {
-      emit(state.copyWith(status: Status.failure));
-    });
+  Future<Response<int>> count() => GetUserFollowingCountUseCase.i(uid);
+
+  @override
+  Future<Response<UserFollowing>> create(UserFollowing data) {
+    return CreateUserFollowingUseCase.i(data);
   }
 
-  void _attach(Response<UserFollowing> response) {
-    emit(
-      state.copyWith(
-        status: response.status,
-        snapshot: response.snapshot,
-        result: response.result,
-        requestCode: 0,
-      ),
-    );
+  @override
+  Future<Response<UserFollowing>> delete(UserFollowing data) {
+    return DeleteUserFollowingUseCase.i(data.id);
   }
 
-  UserFollowing? following(String uid) => state.elementOf((e) => e.id == uid);
-
-  // void toggle(String uid, [UserFollowing? data]) {
-  //   if (data != null) {
-  //     unfollow(data);
-  //   } else {
-  //     follow(uid);
-  //   }
-  // }
-
-  void follow(String uid) {
-    if (uid.isEmpty) return;
-    final data = UserFollowing.create(uid: uid);
-    emit(
-      state.copyWith(
-        result: state.result..insert(0, data),
-        count: state.count + 1,
-      ),
-    );
-    CreateUserFollowingUseCase.i(data).then((value) {
-      if (!value.isSuccessful) {
-        emit(state.copyWith(result: state.result..remove(data)));
-      }
-      return value;
-    });
-  }
-
-  void unfollow(UserFollowing data) {
-    if (data.id.isEmpty) return;
-    emit(
-      state.copyWith(
-        result: state.result..remove(data),
-        count: state.count - 1,
-      ),
-    );
-    DeleteUserFollowingUseCase.i(data.id).then((value) {
-      if (!value.isSuccessful) {
-        emit(state.copyWith(result: state.result..insert(0, data)));
-      }
-      return value;
-    });
+  @override
+  Future<Response<UserFollowing>> fetch({
+    int? initialSize,
+    int? fetchingSize,
+    bool resultByMe = false,
+  }) async {
+    if (resultByMe) return Response(status: Status.undefined);
+    return GetUserFollowingsUseCase.i(uid);
   }
 }

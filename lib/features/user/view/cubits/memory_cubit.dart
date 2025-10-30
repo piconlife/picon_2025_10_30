@@ -11,16 +11,18 @@ class UserMemoryCubit extends DataCubit<UserMemory> {
   UserMemoryCubit([String? uid]) : uid = uid ?? UserHelper.uid;
 
   @override
-  void fetch({int initialSize = 10, int fetchingSize = 5}) {
-    emit(state.copyWith(status: Status.loading));
-    GetUserMemoriesByPaginationUseCase.i(
+  Future<Response<UserMemory>> fetch({
+    int? initialSize,
+    int? fetchingSize,
+    bool resultByMe = false,
+  }) async {
+    if (resultByMe) return Response(status: Status.undefined);
+    return GetUserMemoriesByPaginationUseCase.i(
       uid: uid,
-      initialSize: initialSize,
-      fetchingSize: fetchingSize,
+      initialSize: initialSize ?? 10,
+      fetchingSize: fetchingSize ?? 5,
       snapshot: state.snapshot,
-    ).then(_attach).catchError((error, st) {
-      emit(state.copyWith(status: Status.failure));
-    });
+    );
   }
 
   void update(UserMemory value) {
@@ -30,16 +32,5 @@ class UserMemoryCubit extends DataCubit<UserMemory> {
       state.result.insert(index, value);
       emit(state.copyWith(data: value, result: state.result, requestCode: 202));
     }
-  }
-
-  void _attach(Response<UserMemory> response) {
-    emit(
-      state.copyWith(
-        status: response.status,
-        snapshot: response.snapshot,
-        result: state.result..addAll(response.result),
-        requestCode: 0,
-      ),
-    );
   }
 }

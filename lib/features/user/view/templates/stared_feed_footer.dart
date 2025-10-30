@@ -12,9 +12,9 @@ import '../../../../app/helpers/user.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../data/constants/keys.dart';
 import '../../../../data/enums/privacy.dart';
-import '../../../../data/models/feed_star.dart';
-import '../../../../data/use_cases/feed_star/create.dart';
-import '../../../../data/use_cases/feed_star/delete.dart';
+import '../../../../data/models/star.dart';
+import '../../../../data/use_cases/star/create.dart';
+import '../../../../data/use_cases/star/delete.dart';
 import '../../../../data/use_cases/user_post/update.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/pleasure_button.dart';
@@ -55,8 +55,8 @@ class _UserStaredFeedFooterState extends State<UserStaredFeedFooter> {
 
   Future<bool> _star(bool value) {
     if (!value) {
-      return CreateFeedStarUseCase.i(
-        FeedStar.create(parentPath: widget.path, privacy: Privacy.onlyMe),
+      return CreateStarUseCase.i(
+        StarModel.create(parentPath: widget.path, privacy: Privacy.onlyMe),
       ).then((value) {
         if (value.isSuccessful) {
           return UpdateUserPostUseCase.i(widget.id, {
@@ -69,9 +69,7 @@ class _UserStaredFeedFooterState extends State<UserStaredFeedFooter> {
         }
       });
     } else {
-      return DeleteFeedStarUseCase.i(widget.path.use, UserHelper.uid).then((
-        value,
-      ) {
+      return DeleteStarUseCase.i(widget.path.use, UserHelper.uid).then((value) {
         if (value.isSuccessful) {
           return UpdateUserPostUseCase.i(widget.id, {
             Keys.i.stars: DataFieldValue.arrayRemove([UserHelper.uid]),

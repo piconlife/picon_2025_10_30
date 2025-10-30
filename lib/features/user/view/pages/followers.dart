@@ -1,5 +1,6 @@
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_andomie/models/selection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 
@@ -33,7 +34,7 @@ class _UserFollowersPageState extends State<UserFollowersPage> {
                 ? "${widget.user?.username ?? ""}'s followers"
                 : "Followers",
       ),
-      body: BlocBuilder<UserFollowerCubit, Response<UserFollower>>(
+      body: BlocBuilder<UserFollowerCubit, Response<Selection<UserFollower>>>(
         builder: (context, response) {
           if (response.isLoading) {
             return InAppScaffoldShimmer();

@@ -82,10 +82,10 @@ class _ItemUserFeedPostState extends State<ItemUserFeedPost> {
             stars: [],
             comments: [],
             onLiked: (value) {
-              context.read<UserPostCubit>().updatedAt(widget.index, item);
+              context.read<UserPostCubit>().updated(widget.index, (e) => item);
             },
             onStared: (value) {
-              context.read<UserPostCubit>().updatedAt(widget.index, item);
+              context.read<UserPostCubit>().updated(widget.index, (e) => item);
             },
           ),
           SizedBox(height: dimen.dp(8)),

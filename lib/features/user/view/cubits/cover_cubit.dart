@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_entity/entity.dart';
 
 import '../../../../app/base/data_cubit.dart';
@@ -13,55 +14,39 @@ class UserCoverCubit extends DataCubit<UserCover> {
   UserCoverCubit([String? uid]) : uid = uid ?? UserHelper.uid;
 
   @override
-  void fetch({int initialSize = 10, int fetchingSize = 5}) {
-    emit(state.copyWith(status: Status.loading));
-    GetUserCoversByPaginationUseCase.i().then(_attach).catchError((
-      error,
-      stackTrace,
-    ) {
-      emit(state.copyWith(status: Status.failure));
+  Future<Response<UserCover>> fetch({
+    int? initialSize,
+    int? fetchingSize,
+    bool resultByMe = false,
+  }) async {
+    if (resultByMe) return Response(status: Status.undefined);
+    return GetUserCoversByPaginationUseCase.i(
+      uid: uid,
+      initialSize: initialSize ?? 10,
+      fetchingSize: fetchingSize ?? 5,
+      snapshot: state.snapshot,
+    );
+  }
+
+  @protected
+  @override
+  Future<Response<UserCover>> create(UserCover data) async {
+    return CreateUserCoverUseCase.i(data).then((value) {
+      return value.copyWith(data: data);
     });
+  }
+
+  @override
+  Future<Response<UserCover>> delete(UserCover data) {
+    return deleteById(data.id);
+  }
+
+  @override
+  Future<Response<UserCover>> deleteById(String id) async {
+    return DeleteUserCoverUseCase.i(id);
   }
 
   void update(UserCover value) {
     emit(state.copyWith(data: value, requestCode: 202));
-  }
-
-  void _attach(Response<UserCover> response) {
-    emit(
-      state.copyWith(
-        status: response.status,
-        snapshot: response.snapshot,
-        result: response.result,
-        requestCode: 0,
-      ),
-    );
-  }
-
-  @override
-  Future<bool> onCreateByData(UserCover data) {
-    return CreateUserCoverUseCase.i(data).then((value) {
-      if (value.isSuccessful) {
-        emit(state.copyWith(result: state.result..insert(0, data)));
-      }
-      return value.isSuccessful;
-    });
-  }
-
-  @override
-  Future<bool> onDeleteById(String id) {
-    return DeleteUserCoverUseCase.i(id).then((value) {
-      if (value.isSuccessful) {
-        emit(
-          state.copyWith(
-            result:
-                state.result..removeWhere((e) {
-                  return e.id == id;
-                }),
-          ),
-        );
-      }
-      return value.isSuccessful;
-    });
   }
 }

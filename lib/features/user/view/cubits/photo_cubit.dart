@@ -10,31 +10,18 @@ class UserPhotoCubit extends DataCubit<UserPost> {
 
   UserPhotoCubit([String? uid]) : uid = uid ?? UserHelper.uid;
 
-  void initialFetch() {
-    if (state.result.isNotEmpty) return;
-    fetch();
-  }
-
   @override
-  void fetch({int initialSize = 10, int fetchingSize = 5}) {
-    emit(state.copyWith(status: Status.loading));
-    GetUserPhotosByPaginationUseCase.i(
+  Future<Response<UserPost>> fetch({
+    int? initialSize,
+    int? fetchingSize,
+    bool resultByMe = false,
+  }) async {
+    if (resultByMe) return Response(status: Status.undefined);
+    return GetUserPhotosByPaginationUseCase.i(
       uid: uid,
-      initialSize: initialSize,
-      fetchingSize: fetchingSize,
+      initialSize: initialSize ?? 10,
+      fetchingSize: fetchingSize ?? 5,
       snapshot: state.snapshot,
-    ).then(_attach).catchError((error, st) {
-      emit(state.copyWith(status: Status.failure));
-    });
-  }
-
-  void _attach(Response<UserPost> response) {
-    emit(
-      state.copyWith(
-        status: response.status,
-        snapshot: response.snapshot,
-        result: state.result..addAll(response.result),
-      ),
     );
   }
 

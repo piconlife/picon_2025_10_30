@@ -14,7 +14,7 @@ class GetFeedCommentsByPaginationUseCase extends BaseFeedCommentUseCase {
     return _i ??= GetFeedCommentsByPaginationUseCase._();
   }
 
-  Future<Response<FeedComment>> call({
+  Future<Response<CommentModel>> call({
     required String referencePath,
     int? initialSize,
     int? fetchingSize,

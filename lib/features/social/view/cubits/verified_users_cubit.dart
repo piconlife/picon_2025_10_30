@@ -10,14 +10,26 @@ import '../../../../data/models/user.dart';
 import '../../../../data/use_cases/user/get_users_by_ids.dart';
 
 class VerifiedUsersCubit extends DataCubit<Selection<User>> {
-  @override
-  void fetch() async {
-    final ids = UserHelper.followings;
-    if (ids.isEmpty) return emit(state.copyWith(status: Status.notFound));
-    emit(state.copyWith(status: Status.loading));
-    GetUsersByIdsUseCase.i(ids).then(_attach).catchError((e, st) {
-      emit(state.copyWith(status: Status.failure));
+  Response<Selection<User>> _converter(Response<User> response) {
+    return Response.convert(response, (e) {
+      return Selection(
+        id: e.id,
+        data: e,
+        selected: UserHelper.approvals.contains(e.id),
+      );
     });
+  }
+
+  @override
+  Future<Response<Selection<User>>> fetch({
+    int? initialSize,
+    int? fetchingSize,
+    bool resultByMe = false,
+  }) async {
+    final ids = UserHelper.followings;
+    if (ids.isEmpty) return Response(status: Status.notFound);
+    if (resultByMe) return Response(status: Status.undefined);
+    return GetUsersByIdsUseCase.i(ids).then(_converter);
   }
 
   void update(BuildContext context, Selection<User> value) {
@@ -35,28 +47,5 @@ class VerifiedUsersCubit extends DataCubit<Selection<User>> {
       field = DataFieldValue.arrayUnion([value.id]);
     }
     UserHelper.update(context, {UserKeys.i.approvals: field});
-  }
-
-  void _attach(Response<User> response) {
-    final data = state.result;
-    if (response.result.isNotEmpty) {
-      data.addAll(
-        response.result.map((e) {
-          return Selection(
-            id: e.id,
-            data: e,
-            selected: UserHelper.approvals.contains(e.id),
-          );
-        }),
-      );
-    }
-    emit(
-      state.copyWith(
-        status: response.status,
-        snapshot: response.snapshot,
-        result: data,
-        requestCode: 0,
-      ),
-    );
   }
 }

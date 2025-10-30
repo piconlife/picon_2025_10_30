@@ -26,11 +26,11 @@ class CommentsPage extends StatefulWidget {
 }
 
 class _CommentsPageState extends State<CommentsPage> with ColorMixin {
-  late final cubit = context.read<FeedCommentCubit>()..fetch();
+  late final cubit = context.read<CommentCubit>()..fetch();
   final TextEditingController _commentController = TextEditingController();
   bool _isLoading = false;
 
-  List<FeedComment> comments = [];
+  List<CommentModel> comments = [];
 
   Future<void> _refreshComments() async {
     setState(() => _isLoading = true);
@@ -42,7 +42,7 @@ class _CommentsPageState extends State<CommentsPage> with ColorMixin {
     final text = _commentController.text.trim();
     if (text.isNotEmpty) {
       setState(() {
-        comments.add(FeedComment.empty()..content = text);
+        comments.add(CommentModel.empty()..content = text);
         _commentController.clear();
       });
     }

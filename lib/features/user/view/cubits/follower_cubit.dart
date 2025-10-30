@@ -1,3 +1,4 @@
+import 'package:flutter_andomie/core.dart';
 import 'package:flutter_entity/entity.dart';
 
 import '../../../../app/base/data_cubit.dart';
@@ -6,34 +7,25 @@ import '../../../../data/models/user_follower.dart';
 import '../../../../data/use_cases/user_follower/count.dart';
 import '../../../../data/use_cases/user_follower/get.dart';
 
-class UserFollowerCubit extends DataCubit<UserFollower> {
+class UserFollowerCubit extends DataCubit<Selection<UserFollower>> {
   final String? uid;
 
   UserFollowerCubit([String? uid]) : uid = uid ?? UserHelper.uid;
 
   @override
-  void count() {
-    GetUserFollowerCountUseCase.i(uid).then((value) {
-      emit(state.copyWith(count: value.data));
-    });
-  }
+  Future<Response<int>> count() => GetUserFollowerCountUseCase.i(uid);
 
   @override
-  void fetch({int initialSize = 30, int fetchingSize = 15}) {
-    emit(state.copyWith(status: Status.loading));
-    GetUserFollowersUseCase.i().then(_attach).catchError((error, stackTrace) {
-      emit(state.copyWith(status: Status.failure));
+  Future<Response<Selection<UserFollower>>> fetch({
+    int? initialSize,
+    int? fetchingSize,
+    bool resultByMe = false,
+  }) async {
+    if (resultByMe) return Response(status: Status.undefined);
+    return GetUserFollowersUseCase.i(uid).then((value) {
+      return Response.convert(value, (e) {
+        return Selection(id: e.id, data: e);
+      });
     });
-  }
-
-  void _attach(Response<UserFollower> response) {
-    emit(
-      state.copyWith(
-        status: response.status,
-        snapshot: response.snapshot,
-        result: response.result,
-        requestCode: 0,
-      ),
-    );
   }
 }

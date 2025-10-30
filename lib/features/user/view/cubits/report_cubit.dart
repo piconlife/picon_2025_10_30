@@ -12,23 +12,21 @@ class UserReportCubit extends DataCubit<UserReport> {
   UserReportCubit([String? uid]) : uid = uid ?? UserHelper.uid;
 
   @override
-  void count() {
-    GetUserReportCountUseCase.i(uid).then((value) {
-      emit(state.copyWith(count: value.data));
-    });
-  }
+  Future<Response<int>> count() => GetUserReportCountUseCase.i(uid);
 
   @override
-  void fetch({int initialSize = 10, int fetchingSize = 5}) {
-    emit(state.copyWith(status: Status.loading));
-    GetUserReportsByPaginationUseCase.i(
+  Future<Response<UserReport>> fetch({
+    int? initialSize,
+    int? fetchingSize,
+    bool resultByMe = false,
+  }) async {
+    if (resultByMe) return Response(status: Status.undefined);
+    return GetUserReportsByPaginationUseCase.i(
       uid: uid,
-      initialSize: initialSize,
-      fetchingSize: fetchingSize,
+      initialSize: initialSize ?? 10,
+      fetchingSize: fetchingSize ?? 5,
       snapshot: state.snapshot,
-    ).then(_attach).catchError((error, st) {
-      emit(state.copyWith(status: Status.failure));
-    });
+    );
   }
 
   void update(UserReport value) {
@@ -38,16 +36,5 @@ class UserReportCubit extends DataCubit<UserReport> {
       state.result.insert(index, value);
       emit(state.copyWith(data: value, result: state.result, requestCode: 202));
     }
-  }
-
-  void _attach(Response<UserReport> response) {
-    emit(
-      state.copyWith(
-        status: response.status,
-        snapshot: response.snapshot,
-        result: state.result..addAll(response.result),
-        requestCode: 0,
-      ),
-    );
   }
 }

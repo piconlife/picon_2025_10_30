@@ -6,7 +6,6 @@ import 'package:object_finder/object_finder.dart';
 
 import '../../routes/paths.dart';
 import '../social/view/cubits/feed_home_cubit.dart';
-import '../social/view/cubits/follower_cubit.dart';
 import '../user/view/cubits/avatar_cubit.dart';
 import '../user/view/cubits/cover_cubit.dart';
 import '../user/view/cubits/follower_cubit.dart';
@@ -27,7 +26,6 @@ extension ProfileRouteHelper on BuildContext {
       Routes.profile,
       arguments: {
         "$FeedHomeCubit": read<FeedHomeCubit>(),
-        "$FollowerCubit": read<FollowerCubit>(),
         "$UserCubit": read<UserCubit>(),
         "$UserFollowerCubit": read<UserFollowerCubit>(),
         "$UserFollowingCubit": read<UserFollowingCubit>(),
@@ -51,7 +49,6 @@ Map<String, RouteBuilder> get mProfileRoutes {
 
 Widget _profile(BuildContext context, Object? args) {
   FeedHomeCubit? feedHomeCubit = args.findOrNull(key: "$FeedHomeCubit");
-  FollowerCubit? followerCubit = args.findOrNull(key: "$FollowerCubit");
   UserCubit? userCubit = args.findOrNull(key: "$UserCubit");
   UserFollowerCubit? userFollowerCubit = args.findOrNull(
     key: "$UserFollowerCubit",
@@ -74,9 +71,6 @@ Widget _profile(BuildContext context, Object? args) {
       feedHomeCubit != null
           ? BlocProvider.value(value: feedHomeCubit)
           : BlocProvider(create: (_) => FeedHomeCubit()),
-      followerCubit != null
-          ? BlocProvider.value(value: followerCubit)
-          : BlocProvider(create: (_) => FollowerCubit()),
       avatarsCubit != null
           ? BlocProvider.value(value: avatarsCubit)
           : BlocProvider(create: (_) => UserAvatarCubit()),

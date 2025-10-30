@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../routes/paths.dart';
 import '../social/view/cubits/feed_home_cubit.dart';
-import '../social/view/cubits/follower_cubit.dart';
 import '../social/view/cubits/verified_feed_cubit.dart';
 import '../social/view/cubits/verified_users_cubit.dart';
 import '../user/view/cubits/avatar_cubit.dart';
@@ -28,7 +27,6 @@ Map<String, RouteBuilder> get mMainRoutes {
 Widget _main(BuildContext context, Object? args) {
   return MultiBlocProvider(
     providers: [
-      BlocProvider(create: (_) => FollowerCubit()..initial()),
       BlocProvider(create: (_) => FeedHomeCubit()..initial()),
       BlocProvider(create: (_) => VerifiedFeedCubit()..initial()),
       BlocProvider(create: (_) => VerifiedUsersCubit()..initial()),

@@ -12,8 +12,8 @@ import '../../../../roots/widgets/avatar.dart';
 import '../../../../roots/widgets/menu_button.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/user_builder.dart';
+import '../cubits/follower_cubit.dart';
 import '../cubits/post_cubit.dart';
-import '../cubits/user_follower.dart';
 
 class UserPostHeader extends StatefulWidget {
   final UserPost item;
@@ -30,7 +30,7 @@ class UserPostHeader extends StatefulWidget {
 }
 
 class _UserPostHeaderState extends State<UserPostHeader> {
-  late FollowerCubit followerCubit = context.read();
+  late UserFollowerCubit followerCubit = context.read();
 
   void _menu(String value) {
     switch (value) {
@@ -62,7 +62,7 @@ class _UserPostHeaderState extends State<UserPostHeader> {
   }
 
   Future<void> _delete(BuildContext context) async {
-    context.read<UserPostCubit>().onDeleteByData(widget.item);
+    context.read<UserPostCubit>().popAsync(widget.item);
   }
 
   Future<void> _edit(BuildContext context) async {
@@ -162,7 +162,7 @@ class _UserPostHeaderState extends State<UserPostHeader> {
                       PopupMenuItem(
                         value: "follow",
                         child: BlocBuilder<
-                          FollowerCubit,
+                          UserFollowerCubit,
                           Response<Selection<UserFollower>>
                         >(
                           bloc: followerCubit,

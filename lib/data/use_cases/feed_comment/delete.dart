@@ -10,7 +10,7 @@ class DeleteFeedCommentUseCase extends BaseFeedCommentUseCase {
 
   static DeleteFeedCommentUseCase get i => _i ??= DeleteFeedCommentUseCase._();
 
-  Future<Response<FeedComment>> call({
+  Future<Response<CommentModel>> call({
     required String id,
     required String path,
   }) {

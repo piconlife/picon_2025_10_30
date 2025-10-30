@@ -4,10 +4,10 @@ import '../../constants/paths.dart';
 import '../../delegates/local.dart';
 import '../../models/feed_comment.dart';
 
-class LocalFeedCommentDataSource extends LocalDataSource<FeedComment> {
+class LocalFeedCommentDataSource extends LocalDataSource<CommentModel> {
   LocalFeedCommentDataSource()
     : super(delegate: LocalDataDelegate.i, path: Paths.feedComments);
 
   @override
-  FeedComment build(Object? source) => FeedComment.parse(source);
+  CommentModel build(Object? source) => CommentModel.parse(source);
 }

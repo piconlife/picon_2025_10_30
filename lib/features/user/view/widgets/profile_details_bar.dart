@@ -478,7 +478,10 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
                       );
                     },
                   ),
-                  BlocBuilder<UserFollowerCubit, Response<UserFollower>>(
+                  BlocBuilder<
+                    UserFollowerCubit,
+                    Response<Selection<UserFollower>>
+                  >(
                     builder: (context, response) {
                       return _Counter(
                         text: "Followers",

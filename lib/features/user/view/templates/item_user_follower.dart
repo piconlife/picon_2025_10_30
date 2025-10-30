@@ -2,6 +2,7 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_andomie/models/selection.dart';
 
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/user_follower.dart';
@@ -12,7 +13,7 @@ import '../../../../roots/widgets/text.dart';
 import '../../../social/view/widgets/follow_button.dart';
 
 class ItemUserFollower extends StatelessWidget {
-  final UserFollower data;
+  final Selection<UserFollower> data;
 
   const ItemUserFollower({super.key, required this.data});
 
@@ -47,10 +48,10 @@ class ItemUserFollower extends StatelessWidget {
                     right: dimen.margin.smallest,
                     bottom: dimen.margin.smallest,
                   ),
-                  child: InAppImage(data.user?.avatar, fit: BoxFit.cover),
+                  child: InAppImage(data.data.user?.avatar, fit: BoxFit.cover),
                 ),
-                if ((data.user?.isHeartUser ?? false) ||
-                    (data.user?.isCelebrityUser ?? false))
+                if ((data.data.user?.isHeartUser ?? false) ||
+                    (data.data.user?.isCelebrityUser ?? false))
                   Positioned(
                     bottom: 0,
                     right: 0,
@@ -62,13 +63,13 @@ class ItemUserFollower extends StatelessWidget {
                         color: light,
                       ),
                       child: InAppIcon(
-                        ((data.user?.isHeartUser ?? false)
+                        ((data.data.user?.isHeartUser ?? false)
                                 ? InAppIcons.heart
                                 : InAppIcons.star)
                             .solid,
                         size: dimen.smallerIcon,
                         color:
-                            (data.user?.isHeartUser ?? false)
+                            (data.data.user?.isHeartUser ?? false)
                                 ? context.red
                                 : context.yellow,
                       ),
@@ -83,7 +84,7 @@ class ItemUserFollower extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 InAppText(
-                  data.user?.name,
+                  data.data.user?.name,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: TextStyle(
@@ -94,7 +95,7 @@ class ItemUserFollower extends StatelessWidget {
                 ),
                 SizedBox(height: dimen.margin.smaller),
                 InAppText(
-                  data.user?.username,
+                  data.data.user?.username,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: TextStyle(

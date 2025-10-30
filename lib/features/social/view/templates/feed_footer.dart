@@ -10,15 +10,15 @@ import 'package:in_app_navigator/in_app_navigator.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/feed_comment.dart';
-import '../../../../data/models/feed_like.dart';
+import '../../../../data/models/like.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/pleasure_button.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../routes/paths.dart';
 import '../../../user/view/cubits/following_cubit.dart';
+import '../../data/cubits/like_cubit.dart';
 import '../cubits/comment_cubit.dart';
-import '../cubits/like_cubit.dart';
 
 class FeedFooter extends StatefulWidget {
   final Feed item;
@@ -30,8 +30,8 @@ class FeedFooter extends StatefulWidget {
 }
 
 class _FeedFooterState extends State<FeedFooter> {
-  late final likeCubit = context.read<FeedLikeCubit>();
-  late final commentCubit = context.read<FeedCommentCubit>();
+  late final likeCubit = context.read<LikeCubit>();
+  late final commentCubit = context.read<CommentCubit>();
 
   void _like() => likeCubit.toggle();
 
@@ -39,7 +39,7 @@ class _FeedFooterState extends State<FeedFooter> {
     context.open(
       Routes.likes,
       arguments: {
-        "$FeedLikeCubit": context.read<FeedLikeCubit>(),
+        "$LikeCubit": context.read<LikeCubit>(),
         "$UserFollowingCubit": context.read<UserFollowingCubit>(),
       },
     );
@@ -49,7 +49,7 @@ class _FeedFooterState extends State<FeedFooter> {
     context.open(
       Routes.comments,
       arguments: {
-        "$FeedCommentCubit": context.read<FeedCommentCubit>(),
+        "$CommentCubit": context.read<CommentCubit>(),
         "$UserFollowingCubit": context.read<UserFollowingCubit>(),
       },
     );
@@ -70,7 +70,7 @@ class _FeedFooterState extends State<FeedFooter> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          BlocBuilder<FeedLikeCubit, Response<FeedLike>>(
+          BlocBuilder<LikeCubit, Response<LikeModel>>(
             builder: (context, value) {
               final activated = value.resultByMe.isNotEmpty;
               return InAppPleasureButton(
@@ -97,7 +97,7 @@ class _FeedFooterState extends State<FeedFooter> {
             ),
           ),
           SizedBox(width: dimen.dp(8)),
-          BlocBuilder<FeedLikeCubit, Response<FeedLike>>(
+          BlocBuilder<LikeCubit, Response<LikeModel>>(
             builder: (context, value) {
               return InAppGesture(
                 onTap: _seeLikes,
@@ -111,7 +111,7 @@ class _FeedFooterState extends State<FeedFooter> {
           SizedBox(width: dimen.dp(8)),
           InAppText("&", style: counterStyle),
           SizedBox(width: dimen.dp(8)),
-          BlocBuilder<FeedCommentCubit, Response<FeedComment>>(
+          BlocBuilder<CommentCubit, Response<CommentModel>>(
             builder: (context, value) {
               return InAppGesture(
                 onTap: _seeComments,

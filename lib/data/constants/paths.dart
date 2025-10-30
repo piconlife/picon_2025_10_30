@@ -14,10 +14,12 @@ class Paths {
   static const comments = "comments";
   static const covers = "covers";
   static const feeds = "feeds";
+  static const views = "views";
   static const feedLikes = "{${ParamKeys.path}}/$likes";
   static const feedComments = "{${ParamKeys.path}}/$comments";
   static const feedStars = "{${ParamKeys.path}}/$stars";
   static const feedVideos = "{${ParamKeys.path}}/$videos";
+  static const feedViews = "{${ParamKeys.path}}/$views";
   static const followers = "followers";
   static const followings = "followings";
   static const likes = "likes";

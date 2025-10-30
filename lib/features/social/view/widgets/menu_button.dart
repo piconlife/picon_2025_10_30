@@ -10,8 +10,8 @@ import '../../../../data/models/feed.dart';
 import '../../../../data/models/user_follower.dart';
 import '../../../../roots/widgets/menu_button.dart';
 import '../../../../roots/widgets/text.dart';
+import '../../../user/view/cubits/follower_cubit.dart';
 import '../../../user/view/cubits/post_cubit.dart';
-import '../../../user/view/cubits/user_follower.dart';
 import '../cubits/feed_home_cubit.dart';
 
 class FeedHeaderMoreAction extends StatefulWidget {
@@ -31,7 +31,7 @@ class FeedHeaderMoreAction extends StatefulWidget {
 }
 
 class _FeedHeaderMoreActionState extends State<FeedHeaderMoreAction> {
-  late FollowerCubit followerCubit = context.read();
+  late UserFollowerCubit followerCubit = context.read();
 
   void _menu(String value) {
     switch (value) {
@@ -107,18 +107,20 @@ class _FeedHeaderMoreActionState extends State<FeedHeaderMoreAction> {
           if (!isMe)
             PopupMenuItem(
               value: "follow",
-              child:
-                  BlocBuilder<FollowerCubit, Response<Selection<UserFollower>>>(
-                    bloc: followerCubit,
-                    builder: (context, response) {
-                      final isFollowing =
-                          response.result.firstWhereOrNull((e) {
-                            return UserHelper.isCurrentUser(e.data.uid);
-                          }) !=
-                          null;
-                      return InAppText(isFollowing ? "Following" : "Follow");
-                    },
-                  ),
+              child: BlocBuilder<
+                UserFollowerCubit,
+                Response<Selection<UserFollower>>
+              >(
+                bloc: followerCubit,
+                builder: (context, response) {
+                  final isFollowing =
+                      response.result.firstWhereOrNull((e) {
+                        return UserHelper.isCurrentUser(e.data.uid);
+                      }) !=
+                      null;
+                  return InAppText(isFollowing ? "Following" : "Follow");
+                },
+              ),
             ),
           if (widget.item.isShareMode)
             PopupMenuItem(value: "share", child: InAppText("Share")),

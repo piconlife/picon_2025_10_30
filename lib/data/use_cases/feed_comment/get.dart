@@ -10,7 +10,7 @@ class GetCommentsUseCase extends BaseFeedCommentUseCase {
 
   static GetCommentsUseCase get i => _i ??= GetCommentsUseCase._();
 
-  Future<Response<FeedComment>> call(String referencePath) {
+  Future<Response<CommentModel>> call(String referencePath) {
     return repository.get(params: getParams(referencePath));
   }
 }

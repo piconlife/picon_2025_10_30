@@ -4,13 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 
 import '../../../../app/res/icons.dart';
-import '../../../../data/models/feed_like.dart';
+import '../../../../data/models/like.dart';
 import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/error.dart';
 import '../../../../roots/widgets/scaffold_shimmer.dart';
 import '../../../../roots/widgets/screen.dart';
-import '../cubits/like_cubit.dart';
+import '../../data/cubits/like_cubit.dart';
 import '../templates/item_feed_like.dart';
 
 class LikesPage extends StatefulWidget {
@@ -24,17 +24,17 @@ class LikesPage extends StatefulWidget {
 }
 
 class _LikesPageState extends State<LikesPage> with ColorMixin {
-  late final cubit = context.read<FeedLikeCubit>();
+  late final cubit = context.read<LikeCubit>();
 
   final int initialSize = 25;
   final int fetchingSize = 50;
 
   void _fetch() {
-    cubit.fetch(initialSize: initialSize, fetchingSize: fetchingSize);
+    cubit.onFetch(initialSize: initialSize, fetchingSize: fetchingSize);
   }
 
   void _refresh() {
-    cubit.refresh(initialSize: initialSize, fetchingSize: fetchingSize);
+    cubit.onRefresh(initialSize: initialSize, fetchingSize: fetchingSize);
   }
 
   @override
@@ -44,7 +44,7 @@ class _LikesPageState extends State<LikesPage> with ColorMixin {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: InAppAppbar(titleText: "Likes"),
-        body: BlocBuilder<FeedLikeCubit, Response<FeedLike>>(
+        body: BlocBuilder<LikeCubit, Response<LikeModel>>(
           builder: (context, response) {
             if (response.isLoading) {
               return InAppScaffoldShimmer();

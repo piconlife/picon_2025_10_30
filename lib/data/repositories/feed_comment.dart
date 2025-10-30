@@ -5,7 +5,7 @@ import '../models/feed_comment.dart';
 import '../sources/local/feed_comment.dart';
 import '../sources/remote/feed_comment.dart';
 
-class FeedCommentRepository extends RemoteDataRepository<FeedComment> {
+class FeedCommentRepository extends RemoteDataRepository<CommentModel> {
   FeedCommentRepository({
     required super.source,
     super.backup,

@@ -14,7 +14,7 @@ import '../../../../roots/widgets/user_avatar.dart';
 import '../../../../roots/widgets/user_builder.dart';
 
 class ItemFeedComment extends StatefulWidget {
-  final FeedComment data;
+  final CommentModel data;
   final VoidCallback? onReply;
   final VoidCallback? onTranslate;
   final VoidCallback? onMore;
@@ -32,7 +32,7 @@ class ItemFeedComment extends StatefulWidget {
 }
 
 class _ItemFeedCommentState extends State<ItemFeedComment> with ColorMixin {
-  late FeedComment data = widget.data;
+  late CommentModel data = widget.data;
 
   @override
   Widget build(BuildContext context) {

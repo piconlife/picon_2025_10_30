@@ -4,10 +4,10 @@ import '../../constants/paths.dart';
 import '../../delegates/firestore.dart';
 import '../../models/feed_comment.dart';
 
-class RemoteFeedCommentDataSource extends RemoteDataSource<FeedComment> {
+class RemoteFeedCommentDataSource extends RemoteDataSource<CommentModel> {
   RemoteFeedCommentDataSource()
     : super(delegate: FirestoreDataDelegate.i, path: Paths.feedComments);
 
   @override
-  FeedComment build(Object? source) => FeedComment.parse(source);
+  CommentModel build(Object? source) => CommentModel.parse(source);
 }

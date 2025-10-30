@@ -1,4 +1,5 @@
 import 'package:flutter_entity/entity.dart';
+import 'package:picon/app/helpers/user.dart';
 
 import '../enums/comment_type.dart';
 import '../enums/privacy.dart';
@@ -16,7 +17,7 @@ class FeedCommentKeys extends EntityKey {
   final type = "type";
 }
 
-class FeedComment extends Entity<FeedCommentKeys> {
+class CommentModel extends Entity<FeedCommentKeys> {
   String? content;
   String? path;
   String? publisher;
@@ -28,9 +29,9 @@ class FeedComment extends Entity<FeedCommentKeys> {
 
   CommentType get type => _type ?? CommentType.none;
 
-  FeedComment.empty();
+  CommentModel.empty();
 
-  FeedComment._({
+  CommentModel._({
     super.id,
     super.timeMills,
     this.content,
@@ -42,21 +43,24 @@ class FeedComment extends Entity<FeedCommentKeys> {
   }) : _type = type,
        _privacy = privacy;
 
-  FeedComment.create({
-    required super.id,
-    required super.timeMills,
+  CommentModel.create({
+    super.id,
+    super.timeMills,
     required this.content,
     required this.path,
-    required this.publisher,
+    String? publisher,
     required this.parentPath,
-    required CommentType type,
-    required Privacy privacy,
-  });
+    CommentType? type,
+    Privacy? privacy,
+  }) : publisher = publisher ?? UserHelper.uid,
+       _type = type,
+       _privacy = privacy,
+       super.auto();
 
-  factory FeedComment.parse(Object? source) {
-    if (source is! Map) return FeedComment.empty();
+  factory CommentModel.parse(Object? source) {
+    if (source is! Map) return CommentModel.empty();
     final key = FeedCommentKeys.i;
-    return FeedComment._(
+    return CommentModel._(
       id: source.entityValue(key.id),
       timeMills: source.entityValue(key.timeMills),
       content: source.entityValue(key.content),
@@ -99,7 +103,7 @@ class FeedComment extends Entity<FeedCommentKeys> {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (other is! FeedComment) return false;
+    if (other is! CommentModel) return false;
     return id == other.id &&
         timeMills == other.timeMills &&
         content == other.content &&
@@ -111,5 +115,5 @@ class FeedComment extends Entity<FeedCommentKeys> {
   }
 
   @override
-  String toString() => "$FeedComment#$hashCode($filtered)";
+  String toString() => "$CommentModel#$hashCode($filtered)";
 }

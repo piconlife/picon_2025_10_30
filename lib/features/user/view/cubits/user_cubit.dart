@@ -11,25 +11,16 @@ class UserCubit extends DataCubit<User> {
   UserCubit([String? uid]) : uid = uid ?? UserHelper.uid;
 
   @override
-  void fetch({int initialSize = 10, int fetchingSize = 5}) {
-    emit(state.copyWith(status: Status.loading));
-    GetUserUseCase.i(uid).then(_attach).catchError((error, st) {
-      emit(state.copyWith(status: Status.failure));
-    });
+  Future<Response<User>> fetch({
+    int? initialSize,
+    int? fetchingSize,
+    bool resultByMe = false,
+  }) async {
+    if (resultByMe) return Response(status: Status.undefined);
+    return GetUserUseCase.i(uid);
   }
 
   void update(User value) {
     emit(state.copyWith(data: value, requestCode: 202));
-  }
-
-  void _attach(Response<User> response) {
-    emit(
-      state.copyWith(
-        status: response.status,
-        snapshot: response.snapshot,
-        data: response.data,
-        requestCode: 0,
-      ),
-    );
   }
 }

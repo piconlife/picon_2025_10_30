@@ -6,9 +6,9 @@ import 'package:object_finder/object_finder.dart';
 import '../../routes/paths.dart';
 import '../user/view/cubits/following_cubit.dart';
 import '../user/view/cubits/post_cubit.dart';
+import 'data/cubits/like_cubit.dart';
 import 'view/cubits/comment_cubit.dart';
 import 'view/cubits/feed_home_cubit.dart';
-import 'view/cubits/like_cubit.dart';
 import 'view/pages/comments.dart';
 import 'view/pages/create_a_memory.dart';
 import 'view/pages/create_a_note.dart';
@@ -68,21 +68,19 @@ Widget _searchFeeds(BuildContext context, Object? args) {
 }
 
 Widget _comments(BuildContext context, Object? args) {
-  final commentCubit = args.findOrNull<FeedCommentCubit>(
-    key: "$FeedCommentCubit",
-  );
+  final commentCubit = args.findOrNull<CommentCubit>(key: "$CommentCubit");
   return MultiBlocProvider(
     providers: [
       commentCubit != null
           ? BlocProvider.value(value: commentCubit..fetch())
-          : BlocProvider(create: (context) => FeedCommentCubit('')..fetch()),
+          : BlocProvider(create: (context) => CommentCubit('')..fetch()),
     ],
     child: CommentsPage(args: args),
   );
 }
 
 Widget _likes(BuildContext context, Object? args) {
-  final likeCubit = args.findOrNull<FeedLikeCubit>(key: "$FeedLikeCubit");
+  final likeCubit = args.findOrNull<LikeCubit>(key: "$LikeCubit");
   final followingCubit = args.findOrNull<UserFollowingCubit>(
     key: "$UserFollowingCubit",
   );
@@ -90,7 +88,7 @@ Widget _likes(BuildContext context, Object? args) {
     providers: [
       likeCubit != null
           ? BlocProvider.value(value: likeCubit..fetch())
-          : BlocProvider(create: (context) => FeedLikeCubit('')..fetch()),
+          : BlocProvider(create: (context) => LikeCubit('')..fetch()),
       followingCubit != null
           ? BlocProvider.value(value: followingCubit)
           : BlocProvider(create: (context) => UserFollowingCubit()),

@@ -4,9 +4,9 @@ import 'package:in_app_cache/in_app_cache.dart';
 
 import '../../../../data/enums/feed_type.dart';
 import '../../../../data/models/feed.dart';
+import '../../data/cubits/like_cubit.dart';
+import '../../data/cubits/star_cubit.dart';
 import '../cubits/comment_cubit.dart';
-import '../cubits/like_cubit.dart';
-import '../cubits/star_cubit.dart';
 import 'item_feed_ads.dart';
 import 'item_feed_avatar.dart';
 import 'item_feed_business.dart';
@@ -28,18 +28,19 @@ class ItemFeed extends StatelessWidget {
     final path = item.content.path;
     if (path == null || path.isEmpty) return const SizedBox.shrink();
 
-    FeedLikeCubit likeCubit = Cache.put("like_cubit[$path]", () {
-      return FeedLikeCubit(path, initialCount: item.likeCount)
-        ..count()
-        ..fetchByMe();
+    LikeCubit likeCubit = Cache.put("like_cubit[$path]", () {
+      return LikeCubit(path, initialCount: item.likeCount)
+        ..initialCount()
+        ..initial(resultByMe: true);
     });
-    FeedStarCubit starCubit = Cache.put("star_cubit[$path]", () {
-      return FeedStarCubit(path, initialCount: item.starCount)
-        ..count()
-        ..fetchByMe();
+    StarCubit starCubit = Cache.put("star_cubit[$path]", () {
+      return StarCubit(path, initialCount: item.starCount)
+        ..initialCount()
+        ..initial(resultByMe: true);
     });
-    FeedCommentCubit commentCubit = Cache.put("comment_cubit[$path]", () {
-      return FeedCommentCubit(path, initialCount: item.commentCount)..count();
+    CommentCubit commentCubit = Cache.put("comment_cubit[$path]", () {
+      return CommentCubit(path, initialCount: item.commentCount)
+        ..initialCount();
     });
 
     return MultiBlocProvider(
