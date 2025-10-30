@@ -41,6 +41,7 @@ import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/bottom_bar.dart';
 import '../../../../roots/widgets/icon_button.dart';
 import '../../../../roots/widgets/screen.dart';
+import '../../../../roots/widgets/text_button.dart';
 import '../../../../roots/widgets/texted_action.dart';
 import '../../../../routes/paths.dart';
 import '../../../user/view/cubits/post_cubit.dart';
@@ -166,6 +167,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   }
 
   void _updatePosition(int previous, int current) {
+    if (photos.value.length <= 1) return;
     if (current > previous) current -= 1;
     final item = photos.value.removeAt(previous);
     photos.value.insert(current, item);
@@ -262,7 +264,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
       context.hideLoader();
       if (status) {
         Settings.set(_kRecentPostPath, mUserPost.path);
-        feedCubit.add(mFeed);
         postCubit.add(mUserPost);
         context.close();
         return;
@@ -430,76 +431,76 @@ class _CreatePostPageState extends State<CreatePostPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              InAppIconButton(
-                InAppIcons.tagMultiple.regular,
-                primaryColor: Colors.transparent,
-                iconColor: CupertinoColors.activeGreen,
-                iconScale: 1.5,
-                onTap: () => _changeTags(context),
-              ),
-              InAppIconButton(
-                InAppIcons.audience.regular,
-                primaryColor: Colors.transparent,
-                iconColor: CupertinoColors.systemBlue,
-                iconScale: 1.5,
-                onTap: () => _changeAudience(context),
-              ),
-              InAppIconButton(
-                InAppIcons.addPhoto.solid,
-                iconColor: context.primary,
-                primaryColor: Colors.transparent,
-                size: 50,
-                iconScale: 1.5,
-                onTap: () => _choosePhoto(context),
-              ),
-              InAppIconButton(
-                InAppIcons.public.regular,
-                primaryColor: Colors.transparent,
-                iconColor: CupertinoColors.systemBlue,
-                iconScale: 1.5,
-                onTap: () => _changePrivacy(context),
-              ),
-              InAppIconButton(
-                InAppIcons.moreX.regular,
-                primaryColor: CupertinoColors.systemGreen.t10,
-                iconColor: CupertinoColors.systemGreen,
-                iconScale: 1.5,
-                onTap: () => _changeMore(context),
-              ),
-              // SizedBox(width: dimen.dp(8)),
-              // AndrossyObserver(
-              //   observer: privacy,
-              //   builder: (context, value) {
-              //     return InAppTextButton(
-              //       value.title,
-              //       highlightColor: dark.t05,
-              //       borderRadius: BorderRadius.circular(dimen.dp(10)),
-              //       style: TextStyle(
-              //         color: dark,
-              //         fontSize: dimen.dp(14),
-              //         fontWeight: FontWeight.bold,
-              //       ),
-              //       onTap: () => _changePrivacy(context),
-              //     );
-              //   },
+              // InAppIconButton(
+              //   InAppIcons.tagMultiple.regular,
+              //   primaryColor: Colors.transparent,
+              //   iconColor: CupertinoColors.activeGreen,
+              //   iconScale: 1.5,
+              //   onTap: () => _changeTags(context),
               // ),
-              // VerticalDivider(
-              //   color: dark.t05,
-              //   indent: dimen.dp(12),
-              //   endIndent: dimen.dp(12),
+              // InAppIconButton(
+              //   InAppIcons.audience.regular,
+              //   primaryColor: Colors.transparent,
+              //   iconColor: CupertinoColors.systemBlue,
+              //   iconScale: 1.5,
+              //   onTap: () => _changeAudience(context),
               // ),
-              // InAppTextButton(
-              //   "Photo",
-              //   highlightColor: dark.t05,
-              //   borderRadius: BorderRadius.circular(dimen.dp(10)),
-              //   style: TextStyle(
-              //     color: dark,
-              //     fontSize: dimen.dp(14),
-              //     fontWeight: FontWeight.bold,
-              //   ),
+              // InAppIconButton(
+              //   InAppIcons.addPhoto.solid,
+              //   iconColor: context.primary,
+              //   primaryColor: Colors.transparent,
+              //   size: 50,
+              //   iconScale: 1.5,
               //   onTap: () => _choosePhoto(context),
               // ),
-              // SizedBox(width: dimen.dp(8)),
+              // InAppIconButton(
+              //   InAppIcons.public.regular,
+              //   primaryColor: Colors.transparent,
+              //   iconColor: CupertinoColors.systemBlue,
+              //   iconScale: 1.5,
+              //   onTap: () => _changePrivacy(context),
+              // ),
+              // InAppIconButton(
+              //   InAppIcons.moreX.regular,
+              //   primaryColor: CupertinoColors.systemGreen.t10,
+              //   iconColor: CupertinoColors.systemGreen,
+              //   iconScale: 1.5,
+              //   onTap: () => _changeMore(context),
+              // ),
+              SizedBox(width: dimen.dp(8)),
+              AndrossyObserver(
+                observer: privacy,
+                builder: (context, value) {
+                  return InAppTextButton(
+                    value.label,
+                    highlightColor: dark.t05,
+                    borderRadius: BorderRadius.circular(dimen.dp(10)),
+                    style: TextStyle(
+                      color: dark,
+                      fontSize: dimen.dp(14),
+                      fontWeight: FontWeight.bold,
+                    ),
+                    onTap: () => _changePrivacy(context),
+                  );
+                },
+              ),
+              VerticalDivider(
+                color: dark.t05,
+                indent: dimen.dp(12),
+                endIndent: dimen.dp(12),
+              ),
+              InAppTextButton(
+                "Photo",
+                highlightColor: dark.t05,
+                borderRadius: BorderRadius.circular(dimen.dp(10)),
+                style: TextStyle(
+                  color: dark,
+                  fontSize: dimen.dp(14),
+                  fontWeight: FontWeight.bold,
+                ),
+                onTap: () => _choosePhoto(context),
+              ),
+              SizedBox(width: dimen.dp(8)),
             ],
           ),
         ),
