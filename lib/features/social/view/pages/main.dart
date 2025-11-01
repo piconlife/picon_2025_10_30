@@ -2,6 +2,7 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
@@ -121,6 +122,7 @@ class _FeedPageState extends State<FeedPage>
 
   @override
   Widget build(BuildContext context) {
+    Toast.context = context;
     final primary = context.primary;
     final secondary = context.iconColor.mid;
     final dimen = context.dimens;

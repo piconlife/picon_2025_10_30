@@ -4,8 +4,11 @@ import 'package:flutter_andomie/extensions/iterator.dart';
 import 'package:flutter_andomie/models/selection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
+import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:picon/routes/paths.dart';
 
 import '../../../../app/helpers/user.dart';
+import '../../../../data/models/content.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/user_follower.dart';
 import '../../../../roots/widgets/menu_button.dart';
@@ -67,7 +70,14 @@ class _FeedHeaderMoreActionState extends State<FeedHeaderMoreAction> {
   }
 
   Future<void> _edit(BuildContext context) async {
-    context.read<UserPostCubit>().edit(context, widget.item.id);
+    context.open(
+      Routes.createUserPost,
+      arguments: {
+        "$Content": widget.item,
+        "$FeedHomeCubit": context.read<FeedHomeCubit>(),
+        "$UserPostCubit": context.read<UserPostCubit>(),
+      },
+    );
   }
 
   Future<void> _share(BuildContext context) async {

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/res/icons.dart';
 import '../../../../app/res/placeholders.dart';
+import '../../../../data/enums/content_state.dart';
 import '../../../../roots/widgets/avatar.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
@@ -16,6 +17,7 @@ class FeedHeader extends StatelessWidget {
   final String? title;
   final String? subtitle;
   final List<Widget> actions;
+  final ContentUiState state;
 
   const FeedHeader({
     super.key,
@@ -23,13 +25,14 @@ class FeedHeader extends StatelessWidget {
     required this.title,
     required this.subtitle,
     this.actions = const [],
+    this.state = ContentUiState.none,
   });
 
   @override
   Widget build(BuildContext context) {
     final dimen = context.dimens;
     final dark = context.dark;
-    return Container(
+    Widget child = Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(vertical: dimen.dp(12)),
       child: Row(
@@ -71,6 +74,20 @@ class FeedHeader extends StatelessWidget {
         ],
       ),
     );
+    if (state.isProcessing) {
+      child = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            child: InAppText("Processing..."),
+          ),
+          child,
+        ],
+      );
+    }
+    return child;
   }
 }
 

@@ -1,4 +1,5 @@
 abstract final class Msg {
+  static const login = "Please login first";
   static const writeSomething = writeSomething3;
   static const writeSomething1 = "Please write something first...";
   static const writeSomething2 = "Looks like it's empty — add a few words!";
@@ -27,12 +28,18 @@ abstract final class Msg {
   static const noChangesFound4 = "Try editing something before updating!";
   static const noChangesFound5 = "All set! No changes detected!";
 
+  static const postingDone = postingDone1;
+  static const postingDone1 = "Posting successful!";
+
   static const postFailed = postFailed4;
   static const postFailed1 = "Posting unsuccessful, please try again!";
   static const postFailed2 = "Oops! Something went wrong while posting.";
   static const postFailed3 = "Couldn’t post right now — please try again!";
   static const postFailed4 = "Post failed to upload. Give it another try!";
   static const postFailed5 = "Hmm... looks like your post didn’t go through!";
+
+  static const updatingDone = "Updating successful!";
+  static const updatingFailed = "Updating failed!";
 
   static const somethingWentWrong = somethingWentWrong1;
   static const somethingWentWrong1 = "Something went wrong, please try again!";

@@ -4,14 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
+import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/helpers/user.dart';
+import '../../../../data/models/content.dart';
 import '../../../../data/models/user_follower.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../roots/widgets/avatar.dart';
 import '../../../../roots/widgets/menu_button.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/user_builder.dart';
+import '../../../../routes/paths.dart';
+import '../../../social/data/cubits/feed_home_cubit.dart';
 import '../cubits/follower_cubit.dart';
 import '../cubits/post_cubit.dart';
 
@@ -66,7 +70,14 @@ class _UserPostHeaderState extends State<UserPostHeader> {
   }
 
   Future<void> _edit(BuildContext context) async {
-    context.read<UserPostCubit>().edit(context, widget.item.id);
+    context.open(
+      Routes.createUserPost,
+      arguments: {
+        "$Content": widget.item,
+        "$FeedHomeCubit": context.read<FeedHomeCubit>(),
+        "$UserPostCubit": context.read<UserPostCubit>(),
+      },
+    );
   }
 
   Future<void> _share(BuildContext context) async {

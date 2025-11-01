@@ -5,16 +5,20 @@ import '../../features/chooser/data/models/country.dart';
 import '../../features/chooser/data/models/profession.dart';
 import '../../features/chooser/data/models/religion.dart';
 import '../../roots/helpers/location.dart';
+import '../constants/content_types.dart';
+import '../enums/content_state.dart';
 import '../enums/feed_type.dart';
 import '../enums/gender.dart';
 import 'content.dart';
 import 'user.dart';
+import 'user_post.dart';
 
 class Feed extends Content {
   @override
   Iterable<String> get keys => [
     key.id,
     key.timeMills,
+    key.contentType,
     // PUBLISHER
     key.publisherId,
     key.publisherAge,
@@ -61,7 +65,8 @@ class Feed extends Content {
     super.recent,
     super.recentRef,
     super.type,
-  });
+    super.uiState,
+  }) : super(contentType: ContentType.feed);
 
   Feed.create({
     required super.id,
@@ -72,6 +77,7 @@ class Feed extends Content {
     super.recentRef,
     User? publisher,
   }) : super(
+         contentType: ContentType.feed,
          publisherId: publisher?.id ?? UserHelper.uid,
          publisherAge: publisher?.age ?? UserHelper.user.age,
          publisherGender: publisher?.gender ?? UserHelper.user.gender,
@@ -95,10 +101,11 @@ class Feed extends Content {
          longitude: LocationInfo.i.lon,
          region: LocationInfo.i.region?.asKey,
          zip: LocationInfo.i.zip,
+         uiState: ContentUiState.processing,
        );
 
   factory Feed.parse(Object? source) {
-    final content = Content.parse(source);
+    final content = source is Feed ? source : Content.parse(source);
     return Feed._(
       id: content.id,
       timeMills: content.timeMills,
@@ -117,11 +124,20 @@ class Feed extends Content {
       region: content.region,
       zip: content.zip,
       // REFERENCES
-      content: content.content,
+      content: normalize(content.content),
       recent: content.recent,
       path: content.path,
       type: content.type,
     );
+  }
+
+  static Content normalize(Content raw) {
+    final type = raw.contentType;
+    if (type == ContentType.userPost) {
+      return UserPost.parse(raw);
+    } else {
+      return raw;
+    }
   }
 
   Feed copyWith({
@@ -143,26 +159,31 @@ class Feed extends Content {
     Content? content,
     Content? recent,
     FeedType? type,
+    ContentUiState? uiState,
   }) {
     return Feed._(
-      id: id ?? this.id,
-      timeMills: timeMills ?? this.timeMills,
-      publisherId: publisherId ?? this.publisherId,
-      publisherAge: publisherAge ?? this.publisherAge,
-      publisherGender: publisherGender ?? this.publisherGender,
-      publisherProfession: publisherProfession ?? this.publisherProfession,
-      publisherRating: publisherRating ?? this.publisherRating,
-      publisherReligion: publisherReligion ?? this.publisherReligion,
-      city: city ?? this.city,
-      country: country ?? this.country,
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
-      region: region ?? this.region,
-      zip: zip ?? this.zip,
-      path: path ?? this.path,
-      content: content ?? this.content,
-      recent: recent ?? this.recent,
-      type: type ?? this.type,
+      id: stringify(id, this.id),
+      timeMills: stringify(timeMills, this.timeMills),
+      publisherId: stringify(publisherId, this.publisherId),
+      publisherAge: stringify(publisherAge, this.publisherAge),
+      publisherGender: stringify(publisherGender, this.publisherGender),
+      publisherProfession: stringify(
+        publisherProfession,
+        this.publisherProfession,
+      ),
+      publisherRating: stringify(publisherRating, this.publisherRating),
+      publisherReligion: stringify(publisherReligion, this.publisherReligion),
+      city: stringify(city, this.city),
+      country: stringify(country, this.country),
+      latitude: stringify(latitude, this.latitude),
+      longitude: stringify(longitude, this.longitude),
+      region: stringify(region, this.region),
+      zip: stringify(zip, this.zip),
+      path: stringify(path, this.path),
+      content: stringify(content, this.content),
+      recent: stringify(recent, this.recent),
+      type: stringify(type, this.type),
+      uiState: stringify(uiState, this.uiState),
     );
   }
 }

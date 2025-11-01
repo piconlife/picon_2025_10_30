@@ -60,6 +60,7 @@ class _ItemFeedPostState extends State<ItemFeedPost> {
                 title: user.username,
                 subtitle: _subtitle(user),
                 avatar: user.photo,
+                state: widget.item.uiState,
                 actions: [
                   FeedHeaderMoreAction(index: widget.index, item: widget.item),
                 ],

@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/list.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_andomie/utils/validator.dart';
+import 'package:flutter_androssy_dialogs/dialogs.dart';
+import 'package:in_app_navigator/in_app_navigator.dart';
 import 'package:in_app_purchaser/in_app_purchaser.dart';
 
 import '../../data/models/user.dart';
 import '../../data/use_cases/user/get.dart';
 import '../../roots/preferences/preferences.dart';
+import '../../routes/paths.dart';
 import '../res/listeners.dart';
+import '../res/msg.dart';
 
 class UserHelper {
   const UserHelper._();
@@ -80,6 +84,15 @@ class UserHelper {
     } catch (error) {
       return false;
     }
+  }
+
+  static bool isLoggedOut(BuildContext context) {
+    if (uid.isEmpty || !(user.loggedIn ?? false)) {
+      context.showMessage(Msg.login);
+      context.clear(Routes.login);
+      return true;
+    }
+    return false;
   }
 
   static Future<bool> isLoggedIn(BuildContext context) {

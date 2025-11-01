@@ -2,6 +2,7 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/helpers/user.dart';
@@ -68,6 +69,7 @@ class _UserProfilePageState extends State<UserProfilePage>
 
   @override
   Widget build(context) {
+    Toast.context = context;
     final dimen = context.dimens;
     final dark = context.dark;
     return InAppScreen(

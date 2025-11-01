@@ -2,35 +2,32 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:data_management/core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/list.dart';
 import 'package:flutter_andomie/utils/key_generator.dart';
 import 'package:flutter_andomie/utils/path_replacer.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/flutter_entity.dart';
-import 'package:in_app_analytics/analytics.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 import 'package:in_app_settings/in_app_settings.dart';
 import 'package:object_finder/object_finder.dart';
 
+import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../app/interfaces/bsd_audience.dart';
 import '../../../../app/interfaces/bsd_privacy.dart';
-import '../../../../app/res/icons.dart';
 import '../../../../app/res/msg.dart';
 import '../../../../data/constants/keys.dart';
 import '../../../../data/constants/paths.dart';
 import '../../../../data/enums/audience.dart';
+import '../../../../data/enums/content_state.dart';
 import '../../../../data/enums/feed_type.dart';
 import '../../../../data/enums/privacy.dart';
 import '../../../../data/models/content.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/photo.dart';
 import '../../../../data/models/user_post.dart';
-import '../../../../data/use_cases/feed/update.dart';
 import '../../../../roots/contents/media.dart';
 import '../../../../roots/helpers/connectivity.dart';
 import '../../../../roots/services/path_provider.dart';
@@ -39,7 +36,6 @@ import '../../../../roots/services/uploader.dart';
 import '../../../../roots/utils/image_provider.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/bottom_bar.dart';
-import '../../../../roots/widgets/icon_button.dart';
 import '../../../../roots/widgets/screen.dart';
 import '../../../../roots/widgets/text_button.dart';
 import '../../../../roots/widgets/texted_action.dart';
@@ -73,8 +69,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
   final tags = <String>[].obx;
   final photos = <EditablePhoto>[].obx;
 
-  late final feedCubit = context.read<FeedHomeCubit>();
-  late final postCubit = context.read<UserPostCubit>();
+  late final feedCubit = DataCubit.of<FeedHomeCubit>(context);
+  late final postCubit = DataCubit.of<UserPostCubit>(context);
 
   Content? old;
   FeedType type = FeedType.post;
@@ -84,6 +80,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
   String get description => etDescription.text;
 
   bool get isUpdateMode => old != null;
+
+  bool get isUserPost => old is UserPost;
 
   /// --------------------------------------------------------------------------
   /// BASE SECTION START
@@ -166,19 +164,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
     return UploadingStatus.processed;
   }
 
-  void _updatePosition(int previous, int current) {
-    if (photos.value.length <= 1) return;
-    if (current > previous) current -= 1;
-    final item = photos.value.removeAt(previous);
-    photos.value.insert(current, item);
-  }
-
-  void _pickPhotos(Object? feedback) {
-    if (feedback is! EditablePhotoFeedback) return;
-    photos.value = feedback.currents;
-    if (feedback.deletes.isEmpty) return;
+  Future<void> _deletePhotoUrls([List<EditablePhoto>? photos]) async {
+    photos ??= this.photos.value;
+    if (photos.isEmpty) return;
     final urls =
-        feedback.deletes
+        photos
             .map((e) {
               final x = e.data;
               if (x is String && x.isNotEmpty) return x;
@@ -190,7 +180,22 @@ class _CreatePostPageState extends State<CreatePostPage> {
     StorageService.i.deletes(urls);
   }
 
+  void _updatePosition(int previous, int current) {
+    if (photos.value.length <= 1) return;
+    if (current > previous) current -= 1;
+    final item = photos.value.removeAt(previous);
+    photos.value.insert(current, item);
+  }
+
+  void _pickPhotos(Object? feedback) {
+    if (feedback is! EditablePhotoFeedback) return;
+    photos.value = feedback.currents;
+    if (feedback.deletes.isEmpty) return;
+    _deletePhotoUrls(feedback.deletes);
+  }
+
   void _choosePhoto(BuildContext context) async {
+    if (UserHelper.isLoggedOut(context)) return;
     if (await ConnectivityHelper.isDisconnected) {
       if (!context.mounted) return;
       context.showToast(Msg.internetError);
@@ -258,28 +263,31 @@ class _CreatePostPageState extends State<CreatePostPage> {
       type: mUserPost.type,
     );
 
-    context.showLoader();
-    feedCubit.create(mFeed, placement: "create_post").then((status) async {
-      if (!mounted) return;
-      context.hideLoader();
-      if (status) {
+    context.close(result: mFeed);
+    feedCubit.create(
+      mFeed,
+      placement: "create_post",
+      replace: (e) => e..uiState = ContentUiState.processed,
+      onPut: () => postCubit.add(mUserPost, 0),
+      onCreated: () {
         Settings.set(_kRecentPostPath, mUserPost.path);
-        postCubit.add(mUserPost);
-        context.close();
-        return;
-      }
-      final allow = await context.showAlert(message: Msg.somethingWentWrong);
-      if (!mounted) return;
-      if (!allow) {
-        context.showMessage(Msg.postFailed);
-        return;
-      }
-      _create();
-    });
+        postCubit.replace(
+          mUserPost,
+          (e) => e..uiState = ContentUiState.processed,
+        );
+        Toast.show(Msg.postingDone);
+      },
+      onFailed: () {
+        postCubit.remove(mUserPost);
+        Toast.show(Msg.postFailed);
+      },
+    );
   }
 
   void _update() {
-    if (photos.value.isEmpty && description == old!.description) {
+    if (photos.value.isEmpty &&
+        description == old!.description &&
+        title == old!.title) {
       context.showMessage(Msg.writeSomething);
       return;
     }
@@ -290,7 +298,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
       return;
     }
 
-    final cp = currentPhotos.map((e) {
+    final up = currentPhotos.map((e) {
       if (old!.photos.contains(e)) {
         final updates = {
           if (privacy.value != old!.privacy) Keys.i.privacy: privacy.value.name,
@@ -298,7 +306,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
             Keys.i.audience: audience.value.name,
         };
         if (e.path != null && updates.isNotEmpty) {
-          return {"path": e.path, "update": updates};
+          return e.updateWriter(updates);
         }
         return e.path;
       }
@@ -306,10 +314,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
     });
     final dp = deletedPhotos.map((e) => e.deleteWriter());
     final hasChangedPhotos =
-        !(cp.every((e) => e is String) && dp.isEmpty) ||
+        !(up.every((e) => e is String) && dp.isEmpty) ||
         old!.photos.map((e) => e.id).toString() !=
             currentPhotos.map((e) => e.id).toString();
-    final metadata = [if (hasChangedPhotos) ...cp, if (dp.isNotEmpty) ...dp];
 
     final isTitleDeleted = title.isEmpty && old!.title.isNotEmpty;
     final isTitleChanged = title.isNotEmpty && old!.title != title;
@@ -318,6 +325,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
         description.isEmpty && old!.description.isNotEmpty;
     final isDescriptionChanged =
         description.isNotEmpty && old!.description != description;
+
+    final isPhotosCleared = currentPhotos.isEmpty && old!.photos.isNotEmpty;
+
+    final metadata = [if (hasChangedPhotos) ...up, if (dp.isNotEmpty) ...dp];
 
     final updates = {
       if (isTitleDeleted) Keys.i.title: DataFieldValue.delete(),
@@ -336,52 +347,106 @@ class _CreatePostPageState extends State<CreatePostPage> {
       return;
     }
 
-    Content? updatedContent(Content? v) {
-      if (v == null) return null;
-      if (isTitleChanged) {
-        v.title = title;
-      } else if (isTitleDeleted) {
-        v.title = null;
-      }
-      if (isDescriptionChanged) {
-        v.description = description;
-      } else if (isDescriptionDeleted) {
-        v.description = null;
-      }
-      if (hasChangedPhotos) {
-        v.photos = currentPhotos;
-      }
-      return v;
+    void updateFeed(Feed old) {
+      final mOldUserPost = old.content as UserPost;
+      final mUpdatedUserPost = mOldUserPost.copyWith(
+        title:
+            isTitleChanged
+                ? title
+                : isTitleDeleted
+                ? ""
+                : null,
+        description:
+            isDescriptionChanged
+                ? description
+                : isDescriptionDeleted
+                ? ""
+                : null,
+        photos:
+            hasChangedPhotos
+                ? currentPhotos
+                : isPhotosCleared
+                ? []
+                : null,
+      );
+
+      context.close(result: old);
+      feedCubit.update(
+        old.id,
+        {
+          Keys.i.updatedAt: Entity.generateTimeMills,
+          Keys.i.contentRef: DataFieldValueWriter.update(
+            mOldUserPost.path!,
+            updates,
+          ),
+        },
+        modifier: (e, s) {
+          if (s) return e.copyWith(uiState: ContentUiState.processed);
+          return old.copyWith(
+            content: mUpdatedUserPost,
+            uiState: ContentUiState.processing,
+          );
+        },
+        placement: "update_post",
+        onUpdated: () {
+          Toast.show(Msg.updatingDone);
+        },
+        onFailed: () {
+          Toast.show(Msg.updatingFailed);
+        },
+      );
     }
 
-    Analytics.future(name: 'update_post', () async {
-      context.showLoader();
-      final feedback = await UpdateFeedUseCase.i(id, {
-        Keys.i.contentRef: {"path": old!.path!, "update": updates},
-        Keys.i.updatedAt: Entity.generateTimeMills,
-      });
-      if (!context.mounted) return;
-      context.hideLoader();
-      if (feedback.isSuccessful) {
-        if (old is Feed) {
-          old!.content = updatedContent(old?.contentOrNull);
-        } else if (old is UserPost) {
-          old = updatedContent(old);
-        }
-        context.close(result: old);
-        return;
-      }
-      final allow = await context.showAlert(message: Msg.somethingWentWrong);
-      if (!context.mounted) return;
-      if (!allow) {
-        context.showMessage(Msg.postFailed);
-        return;
-      }
-      _update();
-    });
+    void updateUserPost(UserPost old) {
+      final updated = old.copyWith(
+        title:
+            isTitleChanged
+                ? title
+                : isTitleDeleted
+                ? ""
+                : null,
+        description:
+            isDescriptionChanged
+                ? description
+                : isDescriptionDeleted
+                ? ""
+                : null,
+        photos:
+            hasChangedPhotos
+                ? currentPhotos
+                : isPhotosCleared
+                ? []
+                : null,
+
+        uiState: ContentUiState.processing,
+      );
+      context.close(result: old);
+      postCubit.update(
+        old.id,
+        updates,
+        modifier: (e, s) {
+          if (s) return e.copyWith(uiState: ContentUiState.processed);
+          return updated;
+        },
+        placement: "update_post",
+        onUpdated: () {
+          Toast.show(Msg.updatingDone);
+        },
+        onFailed: () {
+          Toast.show(Msg.updatingFailed);
+        },
+      );
+    }
+
+    if (old is UserPost) {
+      updateUserPost(old as UserPost);
+    } else {
+      updateFeed(old as Feed);
+    }
   }
 
   void _submit([bool skipMode = false]) {
+    if (UserHelper.isLoggedOut(context)) return;
     if (skipMode) return;
     if (isUpdateMode) {
       _update();
@@ -398,6 +463,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
   void initState() {
     super.initState();
     _init(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (UserHelper.isLoggedOut(context)) return;
+    });
   }
 
   @override

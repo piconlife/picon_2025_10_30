@@ -232,13 +232,18 @@ Widget _profileReports(BuildContext context, Object? args) {
 
 Widget _profileFeeds(BuildContext context, Object? args) {
   User? user = args.findOrNull(key: "$User");
+  String? uid = user?.id ?? args.findOrNull(key: "uid") ?? args.findOrNull();
+  FeedHomeCubit? feedHomeCubit = args.findOrNull(key: "$FeedHomeCubit");
   UserPostCubit? postCubit = args.findOrNull(key: "$UserPostCubit");
   return MultiBlocProvider(
     providers: [
+      feedHomeCubit != null
+          ? BlocProvider.value(value: feedHomeCubit)
+          : BlocProvider(create: (context) => FeedHomeCubit(context)),
       postCubit != null
           ? BlocProvider.value(value: postCubit)
           : BlocProvider(
-            create: (context) => UserPostCubit(context, user?.id)..load(),
+            create: (context) => UserPostCubit(context, uid)..load(),
           ),
     ],
     child: UserPostsPage(args: args, user: user),

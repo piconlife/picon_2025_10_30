@@ -18,6 +18,8 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   DataCubit(this.context, [Response<T>? initial])
     : super(initial ?? Response());
 
+  static C of<C extends DataCubit>(BuildContext context) => context.read<C>();
+
   @override
   Future<void> close() async {
     super.close();
@@ -31,12 +33,23 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   // ---------------------------------------------------------------------------
 
   bool add(T data, [int? index]) {
-    final result = List<T>.from(state.result);
-    if (index == null || index < 0 || index > result.length) {
-      emit(state.copyWith(result: result..add(data)));
+    if (index == null || index < 0 || index > state.result.length) {
+      emit(
+        state.copyWith(
+          count: state.count + 1,
+          result: state.result..add(data),
+          resultByMe: state.resultByMe..add(data),
+        ),
+      );
       return true;
     }
-    emit(state.copyWith(result: result..insert(index, data)));
+    emit(
+      state.copyWith(
+        count: state.count + 1,
+        result: state.result..insert(0, data),
+        resultByMe: state.resultByMe..insert(0, data),
+      ),
+    );
     return true;
   }
 
@@ -44,7 +57,9 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     if (identifier is int) {
       emit(
         state.copyWith(
-          result: List<T>.from(state.result)..removeAt(identifier),
+          count: state.count - 1,
+          result: state.result..removeAt(identifier),
+          resultByMe: state.resultByMe..removeAt(identifier),
         ),
       );
       return true;
@@ -52,12 +67,22 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     if (identifier is String) {
       final index = indexOf(identifier, test);
       if (index == -1) return false;
-      emit(state.copyWith(result: List<T>.from(state.result)..removeAt(index)));
+      emit(
+        state.copyWith(
+          count: state.count - 1,
+          result: state.result..removeAt(index),
+          resultByMe: state.resultByMe..removeAt(index),
+        ),
+      );
       return true;
     }
     if (identifier is T) {
       emit(
-        state.copyWith(result: List<T>.from(state.result)..remove(identifier)),
+        state.copyWith(
+          count: state.count - 1,
+          result: state.result..remove(identifier),
+          resultByMe: state.resultByMe..remove(identifier),
+        ),
       );
       return true;
     }
@@ -131,6 +156,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   }
 
   T? elementOfOrNull(Object? identifier, [bool Function(T data)? test]) {
+    if (identifier is T) return identifier;
     if (identifier == null || state.result.isEmpty) return null;
     final result = state.result;
     if (identifier is int && identifier >= 0 && identifier < result.length) {
@@ -148,8 +174,6 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
         return null;
       }
     }
-
-    if (identifier is T) return identifier;
 
     return null;
   }
@@ -402,7 +426,15 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   // ------------------------------WRITE FUNCTIONS------------------------------
   // ---------------------------------------------------------------------------
 
-  Future<bool> create(T data, {int index = 0, String? placement}) {
+  Future<bool> create(
+    T data, {
+    int index = 0,
+    String? placement,
+    T Function(T)? replace,
+    VoidCallback? onPut,
+    VoidCallback? onCreated,
+    VoidCallback? onFailed,
+  }) {
     emit(
       state.copyWith(
         count: state.count + 1,
@@ -410,6 +442,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
         resultByMe: state.resultByMe..insert(0, data),
       ),
     );
+    onPut?.call();
     return execute(placement: placement ?? "create[$T]", () {
       return onCreate(data).then((value) {
         if (!value.isSuccessful) {
@@ -420,13 +453,25 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
               resultByMe: state.resultByMe..remove(data),
             ),
           );
+          onFailed?.call();
+        } else {
+          if (replace != null) this.replace(data, replace);
+          onCreated?.call();
         }
         return value.isSuccessful;
       });
     });
   }
 
-  Future<bool> delete(Object identifier, {bool Function(T data)? test}) async {
+  Future<bool> delete(
+    Object identifier, {
+    String? placement,
+    T Function(T)? replace,
+    bool Function(T data)? test,
+    VoidCallback? onPop,
+    VoidCallback? onDeleted,
+    VoidCallback? onFailed,
+  }) async {
     T? data = elementOfOrNull(identifier, test);
     if (data == null) return false;
     emit(
@@ -436,7 +481,8 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
         resultByMe: state.resultByMe..remove(data),
       ),
     );
-    return execute(placement: "delete", () {
+    onPop?.call();
+    return execute(placement: placement ?? "delete", () {
       return onDelete(data).then((value) {
         if (!value.isSuccessful) {
           emit(
@@ -446,105 +492,78 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
               resultByMe: state.resultByMe..insert(0, data),
             ),
           );
+          onFailed?.call();
+        } else {
+          if (replace != null) this.replace(data, replace);
+          onDeleted?.call();
         }
         return value.isSuccessful;
       });
     });
   }
 
-  Future<bool> toggle({int? index, bool? exist, Object? args}) {
+  Future<bool> toggle({
+    int? index,
+    bool? exist,
+    Object? args,
+    String? placement,
+    T Function(T)? replace,
+    VoidCallback? onPut,
+    VoidCallback? onPop,
+    ValueChanged<bool>? onToggled,
+    ValueChanged<bool>? onFailed,
+  }) async {
     T? data;
     if (index != null) {
       data = state.result.elementAtOrNull(index);
     }
     data ??= state.resultByMe.firstOrNull;
 
-    Future<bool> create(Object? args) async {
+    if (data != null) {
+      return delete(
+        data,
+        placement: placement ?? "toggle:delete",
+        replace: replace,
+        onPop: onPop,
+        onDeleted: onToggled != null ? () => onToggled(false) : null,
+        onFailed: onFailed != null ? () => onFailed(false) : null,
+      );
+    } else {
       final data = createNewObject(args);
       if (data == null) return false;
-      emit(
-        state.copyWith(
-          count: state.count + 1,
-          result: state.result..insert(0, data),
-          resultByMe: state.resultByMe..insert(0, data),
-        ),
+      return create(
+        data,
+        placement: placement ?? "toggle:create",
+        replace: replace,
+        onPut: onPut,
+        onCreated: onToggled != null ? () => onToggled(true) : null,
+        onFailed: onFailed != null ? () => onFailed(true) : null,
       );
-      return execute(placement: "toggle:set", () {
-        return onCreate(data).then((value) {
-          if (!value.isSuccessful) {
-            emit(
-              state.copyWith(
-                count: state.count - 1,
-                result: state.result..remove(data),
-                resultByMe: state.resultByMe..remove(data),
-              ),
-            );
-          }
-          return value.isSuccessful;
-        });
-      });
-    }
-
-    Future<bool> delete(T data) async {
-      emit(
-        state.copyWith(
-          count: state.count - 1,
-          result: state.result..remove(data),
-          resultByMe: state.resultByMe..remove(data),
-        ),
-      );
-      return execute(placement: "toggle:unlike", () {
-        return onDelete(data).then((value) {
-          if (!value.isSuccessful) {
-            emit(
-              state.copyWith(
-                count: state.count + 1,
-                result: state.result..insert(0, data),
-                resultByMe: state.resultByMe..insert(0, data),
-              ),
-            );
-          }
-          return value.isSuccessful;
-        });
-      });
-    }
-
-    if (data != null) {
-      return delete(data);
-    } else {
-      return create(args);
     }
   }
 
   Future<bool> update(
     Object identifier,
-    Map<String, dynamic> changes,
-    T Function(T) changed, {
+    Map<String, dynamic> changes, {
+    required T Function(T, bool) modifier,
+    String? placement,
+    VoidCallback? onUpdated,
+    VoidCallback? onReplaced,
+    VoidCallback? onFailed,
     bool Function(T data)? test,
   }) async {
-    final index = indexOf(identifier, test);
-    if (index == -1) return false;
-    T? old = state.result.elementAtOrNull(index);
+    final old = elementOfOrNull(identifier, test);
     if (old == null) return false;
-    emit(
-      state.copyWith(
-        result:
-            state.result
-              ..removeAt(index)
-              ..insert(index, changed(old)),
-      ),
-    );
-    return execute(placement: "update", () {
+    replace(old, (e) => modifier(e, false));
+    onReplaced?.call();
+    return execute(placement: placement ?? "update", () {
       return onUpdate(old, changes).then((value) {
-        if (!value.isSuccessful) {
-          emit(
-            state.copyWith(
-              result:
-                  state.result
-                    ..removeAt(index)
-                    ..insert(index, old),
-            ),
-          );
+        if (value.isSuccessful) {
+          replace(identifier, (e) => modifier(e, true));
+          onUpdated?.call();
+        } else {
+          replace(identifier, (e) => old);
+          onFailed?.call();
         }
         return value.isSuccessful;
       });

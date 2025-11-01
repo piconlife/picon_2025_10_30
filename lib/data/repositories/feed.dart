@@ -9,6 +9,8 @@ class FeedRepository extends RemoteDataRepository<Feed> {
   FeedRepository({
     required super.source,
     super.backup,
+    super.backupMode,
+    super.restoreMode,
     super.connectivity = ConnectivityHelper.connected,
   });
 

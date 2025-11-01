@@ -10,6 +10,8 @@ class Keys extends EntityKey {
   // ---------------------------------------------------------------------------
   // --------------------------------COMMON-------------------------------------
   // ---------------------------------------------------------------------------
+  final contentType = 'contentType';
+
   // PUBLISHER
   final publisherId = 'publisherId';
   final publisherAge = 'publisherAge';

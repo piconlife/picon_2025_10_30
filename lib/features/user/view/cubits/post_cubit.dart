@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_andomie/helpers/clipboard_helper.dart';
 import 'package:flutter_entity/entity.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
-import '../../../../data/models/content.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../data/use_cases/user_post/count.dart';
+import '../../../../data/use_cases/user_post/delete.dart';
 import '../../../../data/use_cases/user_post/get_by_pagination.dart';
+import '../../../../data/use_cases/user_post/update.dart';
 import '../../../../roots/services/translator.dart';
 import '../../../../roots/utils/utils.dart';
-import '../../../../routes/paths.dart';
 
 class UserPostCubit extends DataCubit<UserPost> {
   final String uid;
@@ -37,17 +36,23 @@ class UserPostCubit extends DataCubit<UserPost> {
     );
   }
 
-  void edit(BuildContext context, String id) async {
-    final index = state.result.indexWhere((e) => e.id == id);
-    if (index < 0) return;
-    final data = state.result.elementAtOrNull(index);
-    if (data == null || data.id != id) return;
-    final feedback = await context.open(
-      Routes.createUserPost,
-      arguments: {"$Content": data},
-    );
-    if (feedback is! UserPost) return;
-    replace(index, (_) => feedback);
+  @protected
+  @override
+  Future<Response<UserPost>> onDelete(UserPost data) => onDeleteById(data.id);
+
+  @protected
+  @override
+  Future<Response<UserPost>> onDeleteById(String id) {
+    return DeleteUserPostUseCase.i(id);
+  }
+
+  @protected
+  @override
+  Future<Response<UserPost>> onUpdate(
+    UserPost old,
+    Map<String, dynamic> changes,
+  ) {
+    return UpdateUserPostUseCase.i(old.id, changes);
   }
 
   void share(BuildContext context, String id) {

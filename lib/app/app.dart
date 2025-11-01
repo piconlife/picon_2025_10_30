@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:in_app_translation/core.dart';
 
 import '../routes/_imports.dart';
@@ -12,6 +13,7 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Toast.context = context;
     return ListenableBuilder(
       listenable: Translation.i,
       builder: (context, child) {

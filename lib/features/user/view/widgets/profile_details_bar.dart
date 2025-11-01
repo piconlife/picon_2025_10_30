@@ -210,6 +210,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
       Routes.userFeeds,
       arguments: {
         "$User": user,
+        "$FeedHomeCubit": context.read<FeedHomeCubit>(),
         "$UserPostCubit": context.read<UserPostCubit>(),
       },
     );

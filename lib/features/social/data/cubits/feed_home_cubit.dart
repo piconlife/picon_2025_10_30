@@ -76,19 +76,6 @@ class FeedHomeCubit extends DataCubit<Feed> {
     // });
   }
 
-  void edit(BuildContext context, String id) async {
-    // final index = state.result.indexWhere((e) => e.id == id);
-    // if (index < 0) return;
-    // final data = state.result.elementAtOrNull(index);
-    // if (data == null || data.id != id) return;
-    // final feedback = await context.open(
-    //   Routes.createUserPost,
-    //   arguments: {"$Content": data},
-    // );
-    // if (feedback is! Feed) return;
-    // updatedAt(index, feedback);
-  }
-
   void share(BuildContext context, String id) {
     // final index = state.result.indexWhere((e) => e.id == id);
     // if (index < 0) return;

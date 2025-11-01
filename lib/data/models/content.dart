@@ -6,6 +6,7 @@ import 'package:picon/data/parsers/enum_parser.dart';
 import '../../app/helpers/user.dart';
 import '../constants/keys.dart';
 import '../enums/audience.dart';
+import '../enums/content_state.dart';
 import '../enums/feed_type.dart';
 import '../enums/gender.dart';
 import '../enums/privacy.dart';
@@ -16,6 +17,9 @@ class Content extends Entity<Keys> {
   // ---------------------------------------------------------------------------
   // ----------------------------------COMMON-----------------------------------
   // ---------------------------------------------------------------------------
+  // BASE
+  String? _contentType;
+
   // PUBLISHER FIELDS
   String? _publisherId;
   int? _publisherAge;
@@ -39,6 +43,9 @@ class Content extends Entity<Keys> {
   double? _longitude;
   String? _region;
   int? _zip;
+
+  // SETTERS (ROOT)
+  set contentType(String? value) => _contentType = value;
 
   // SETTERS (PUBLISHER)
   set publisherId(String? value) => _publisherId = value;
@@ -81,6 +88,9 @@ class Content extends Entity<Keys> {
   set region(String? value) => _region = value;
 
   set zip(int? value) => _zip = value;
+
+  // GETTERS (ROOT)
+  String get contentType => _string(_contentType) ?? 'none';
 
   // GETTERS (PUBLISHER)
   String? get publisherId => _string(_publisherId ?? _content?._publisherId);
@@ -569,11 +579,54 @@ class Content extends Entity<Keys> {
   List<Content> get videos => _videos ?? _content?._videos ?? [];
 
   // ---------------------------------------------------------------------------
-  // ------------------------IF NEEDED (INTERNAL USE ONLY)----------------------
+  // ----------------------------(INTERNAL USE ONLY)----------------------------
   // ---------------------------------------------------------------------------
-  String? translatedTitle;
-  String? translatedDescription;
-  List<String>? translatedDescriptions;
+  // FIELDS
+  String? _translatedTitle;
+  String? _translatedDescription;
+  List<String>? _translatedDescriptions;
+  ContentUiState? _uiState;
+
+  // SETTERS
+  set translatedDescription(String? value) => _translatedDescription = value;
+
+  set translatedDescriptions(List<String>? value) =>
+      _translatedDescriptions = value;
+
+  set translatedTitle(String? value) => _translatedTitle = value;
+
+  set uiState(ContentUiState? value) => _uiState = value;
+
+  // GETTERS
+  String? get translatedDescription => _normalizedTranslatedDescription;
+
+  List<String> get translatedDescriptions =>
+      _translatedDescriptions ??
+      _content?._translatedDescriptions ??
+      descriptions;
+
+  String? get translatedTitle =>
+      _translatedTitle ?? _content?._translatedTitle ?? title;
+
+  ContentUiState get uiState => _uiState ?? ContentUiState.none;
+
+  // GETTERS (CUSTOM)
+
+  String? get _normalizedTranslatedDescription {
+    if ((_translatedDescription ?? '').isNotEmpty) {
+      return _translatedDescription;
+    }
+    if ((_content?._translatedDescription ?? '').isNotEmpty) {
+      return _content!._translatedDescription!;
+    }
+    if ((_translatedDescriptions ?? []).isNotEmpty) {
+      return _translatedDescriptions!.first;
+    }
+    if ((_content?._translatedDescriptions ?? []).isNotEmpty) {
+      return _content!._translatedDescriptions!.first;
+    }
+    return description;
+  }
 
   // ---------------------------------------------------------------------------
   // ------------------------------):CONSTRUCTORS:(-----------------------------
@@ -588,6 +641,7 @@ class Content extends Entity<Keys> {
     // ROOT
     super.id,
     super.timeMills,
+    String? contentType,
     // PUBLISHER
     String? publisherId,
     int? publisherAge,
@@ -692,9 +746,18 @@ class Content extends Entity<Keys> {
     List<Content>? contents,
     List<Content>? photos,
     List<Content>? videos,
+    // -------------------------------------------------------------------------
+    // ------------------------------(INTERNAL USE ONLY)------------------------
+    // -------------------------------------------------------------------------
+    String? translatedDescription,
+    List<String>? translatedDescriptions,
+    String? translatedTitle,
+    ContentUiState? uiState,
   }) : // ----------------------------------------------------------------------
        // --------------------------------COMMON--------------------------------
        // ----------------------------------------------------------------------
+       // ROOT
+       _contentType = contentType,
        // PUBLISHER
        _publisherId = publisherId,
        _publisherAge = publisherAge,
@@ -799,7 +862,15 @@ class Content extends Entity<Keys> {
        // ----------------------------------------------------------------------
        _contents = contents,
        _photos = photos,
-       _videos = videos;
+       _videos = videos,
+
+       // ----------------------------------------------------------------------
+       // ------------------------------(INTERNAL USE ONLY)---------------------
+       // ----------------------------------------------------------------------
+       _translatedDescription = translatedDescription,
+       _translatedDescriptions = translatedDescriptions,
+       _translatedTitle = translatedTitle,
+       _uiState = uiState;
 
   factory Content.parse(Object? source) {
     if (source is! Map) return Content.empty();
@@ -811,6 +882,7 @@ class Content extends Entity<Keys> {
       // ROOT
       id: source.entityValue(key.id),
       timeMills: source.entityValue(key.timeMills),
+      contentType: source.entityValue(key.contentType),
       // PUBLISHER
       publisherId: source.entityValue(key.publisherId),
       publisherAge: source.entityValue(key.publisherAge),
@@ -919,6 +991,259 @@ class Content extends Entity<Keys> {
     );
   }
 
+  Content copy({
+    // -------------------------------------------------------------------------
+    // --------------------------------COMMON-----------------------------------
+    // -------------------------------------------------------------------------
+    // ROOT
+    String? id,
+    int? timeMills,
+    String? contentType,
+    // PUBLISHER
+    String? publisherId,
+    int? publisherAge,
+    Gender? publisherGender,
+    double? publisherLatitude,
+    double? publisherLongitude,
+    String? publisherName,
+    String? publisherPhotoUrl,
+    String? publisherProfession,
+    String? publisherProfilePath,
+    String? publisherProfileUrl,
+    double? publisherRating,
+    String? publisherReligion,
+    String? publisherShortName,
+    String? publisherTitle,
+    // LOCATION
+    String? city,
+    String? country,
+    double? latitude,
+    double? longitude,
+    String? region,
+    int? zip,
+    // -------------------------------------------------------------------------
+    // ---------------------------------BOOLEANS--------------------------------
+    // -------------------------------------------------------------------------
+    bool? verified,
+    // -------------------------------------------------------------------------
+    // ---------------------------------INTEGERS--------------------------------
+    // -------------------------------------------------------------------------
+    int? commentCount,
+    int? likeCount,
+    int? priority,
+    int? reportCount,
+    int? starCount,
+    int? viewCount,
+    // -------------------------------------------------------------------------
+    // ----------------------------------DOUBLES--------------------------------
+    // -------------------------------------------------------------------------
+
+    // ---------------------------------------------------------------------------
+    // ---------------------------------REFERENCES--------------------------------
+    // ---------------------------------------------------------------------------
+    // COUNTER
+    String? commentCountRef,
+    String? likeCountRef,
+    String? reportCountRef,
+    String? starCountRef,
+    String? viewCountRef,
+    // OBJECT
+    String? contentRef,
+    String? recentRef,
+    // -------------------------------------------------------------------------
+    // ----------------------------------STRINGS--------------------------------
+    // -------------------------------------------------------------------------
+    String? description,
+    String? link,
+    String? name,
+    String? parentId,
+    String? parentLink,
+    String? parentPath,
+    String? reference,
+    String? parentUrl,
+    String? path,
+    String? photoUrl,
+    String? recentId,
+    String? referenceId,
+    String? text,
+    String? title,
+    String? url,
+    String? videoUrl,
+    // -------------------------------------------------------------------------
+    // ------------------------------LIST OF STRINGS----------------------------
+    // -------------------------------------------------------------------------
+    List<String>? bookmarks,
+    List<String>? comments,
+    List<String>? descriptions,
+    List<String>? likes,
+    List<String>? photosRef,
+    List<String>? photoIds,
+    List<String>? photoUrls,
+    List<String>? reports,
+    List<String>? stars,
+    List<String>? tags,
+    List<String>? videoIds,
+    List<String>? videoUrls,
+    List<String>? views,
+    // -------------------------------------------------------------------------
+    // -----------------------------------ENUMS---------------------------------
+    // -------------------------------------------------------------------------
+    Audience? audience,
+    Privacy? privacy,
+    FeedType? type,
+
+    // -------------------------------------------------------------------------
+    // ----------------------------------OBJECTS--------------------------------
+    // -------------------------------------------------------------------------
+    Content? content,
+    Content? recent,
+    // -------------------------------------------------------------------------
+    // -------------------------------LIST OF OBJECTS---------------------------
+    // -------------------------------------------------------------------------
+    List<Content>? contents,
+    List<Content>? photos,
+    List<Content>? videos,
+    // -------------------------------------------------------------------------
+    // ------------------------------(INTERNAL USE ONLY)------------------------
+    // -------------------------------------------------------------------------
+    String? translatedDescription,
+    List<String>? translatedDescriptions,
+    String? translatedTitle,
+    ContentUiState? uiState,
+  }) {
+    return Content(
+      // -----------------------------------------------------------------------
+      // ---------------------------------COMMON--------------------------------
+      // -----------------------------------------------------------------------
+      // ROOT
+      id: stringify(id, idOrNull),
+      timeMills: stringify(timeMills, timeMillsOrNull),
+      contentType: stringify(contentType, _contentType),
+      // PUBLISHER
+      publisherId: stringify(publisherId, _publisherId),
+      publisherAge: stringify(publisherAge, _publisherAge),
+      publisherGender: stringify(publisherGender, _publisherGender),
+      publisherLatitude: stringify(publisherLatitude, _publisherLatitude),
+      publisherLongitude: stringify(publisherLongitude, _publisherLongitude),
+      publisherName: stringify(publisherName, _publisherName),
+      publisherPhotoUrl: stringify(publisherPhotoUrl, _publisherPhotoUrl),
+      publisherProfession: stringify(publisherProfession, _publisherProfession),
+      publisherProfilePath: stringify(
+        publisherProfilePath,
+        _publisherProfilePath,
+      ),
+      publisherProfileUrl: stringify(publisherProfileUrl, _publisherProfileUrl),
+      publisherRating: stringify(publisherRating, _publisherRating),
+      publisherReligion: stringify(publisherReligion, _publisherReligion),
+      publisherShortName: stringify(publisherShortName, _publisherShortName),
+      publisherTitle: stringify(publisherTitle, _publisherTitle),
+      // LOCATION
+      city: stringify(city, _city),
+      country: stringify(country, _country),
+      latitude: stringify(latitude, _latitude),
+      longitude: stringify(longitude, _longitude),
+      region: stringify(region, _region),
+      zip: stringify(zip, _zip),
+      // -----------------------------------------------------------------------
+      // ----------------------------------BOOLEANS-----------------------------
+      // -----------------------------------------------------------------------
+      verified: stringify(verified, _verified),
+      // -----------------------------------------------------------------------
+      // ----------------------------------INTEGERS-----------------------------
+      // -----------------------------------------------------------------------
+      commentCount: stringify(commentCount, _commentCount),
+      likeCount: stringify(likeCount, _likeCount),
+      priority: stringify(priority, _priority),
+      reportCount: stringify(reportCount, _reportCount),
+      starCount: stringify(starCount, _starCount),
+      viewCount: stringify(viewCount, _viewCount),
+      // -----------------------------------------------------------------------
+      // -----------------------------------DOUBLES-----------------------------
+      // -----------------------------------------------------------------------
+
+      // -----------------------------------------------------------------------
+      // ----------------------------------REFERENCES---------------------------
+      // -----------------------------------------------------------------------
+      // COUNTER
+      commentCountRef: stringify(commentCountRef, _commentCountRef),
+      likeCountRef: stringify(likeCountRef, _likeCountRef),
+      reportCountRef: stringify(reportCountRef, _reportCountRef),
+      starCountRef: stringify(starCountRef, _starCountRef),
+      viewCountRef: stringify(viewCountRef, _viewCountRef),
+      // OBJECT
+      contentRef: stringify(contentRef, _contentRef),
+      recentRef: stringify(recentRef, _recentRef),
+      // -----------------------------------------------------------------------
+      // -----------------------------------STRINGS-----------------------------
+      // -----------------------------------------------------------------------
+      description: stringify(description, _description),
+      link: stringify(link, _link),
+      name: stringify(name, _name),
+      parentId: stringify(parentId, _parentId),
+      parentLink: stringify(parentLink, _parentLink),
+      parentPath: stringify(parentPath, _parentPath),
+      reference: stringify(reference, _reference),
+      parentUrl: stringify(parentUrl, _parentUrl),
+      path: stringify(path, _path),
+      photoUrl: stringify(photoUrl, _photoUrl),
+      recentId: stringify(recentId, _recentId),
+      referenceId: stringify(referenceId, _referenceId),
+      text: stringify(text, _text),
+      title: stringify(title, _title),
+      url: stringify(url, _url),
+      videoUrl: stringify(videoUrl, _videoUrl),
+      // -----------------------------------------------------------------------
+      // -------------------------------LIST OF STRINGS-------------------------
+      // -----------------------------------------------------------------------
+      bookmarks: stringify(bookmarks, _bookmarks),
+      comments: stringify(comments, _comments),
+      descriptions: stringify(descriptions, _descriptions),
+      likes: stringify(likes, _likes),
+      photosRef: stringify(photosRef, _photosRef),
+      photoIds: stringify(photoIds, _photoIds),
+      photoUrls: stringify(photoUrls, _photoUrls),
+      reports: stringify(reports, _reports),
+      stars: stringify(stars, _stars),
+      tags: stringify(tags, _tags),
+      videoIds: stringify(videoIds, _videoIds),
+      videoUrls: stringify(videoUrls, _videoUrls),
+      views: stringify(views, _views),
+
+      // -----------------------------------------------------------------------
+      // ------------------------------------ENUMS------------------------------
+      // -----------------------------------------------------------------------
+      audience: stringify(audience, _audience),
+      privacy: stringify(privacy, _privacy),
+      type: stringify(type, _type),
+
+      // -----------------------------------------------------------------------
+      // -----------------------------------OBJECTS-----------------------------
+      // -----------------------------------------------------------------------
+      content: stringify(content, _content),
+      recent: stringify(recent, _recent),
+      // -----------------------------------------------------------------------
+      // --------------------------------LIST OF OBJECTS------------------------
+      // -----------------------------------------------------------------------
+      contents: stringify(contents, _contents),
+      photos: stringify(photos, _photos),
+      videos: stringify(videos, _videos),
+
+      // -----------------------------------------------------------------------
+      // -------------------------------(INTERNAL USE ONLY)---------------------
+      // -----------------------------------------------------------------------
+      translatedDescription: stringify(
+        translatedDescription,
+        _translatedDescription,
+      ),
+      translatedDescriptions: stringify(
+        translatedDescriptions,
+        _translatedDescriptions,
+      ),
+      translatedTitle: stringify(translatedTitle, _translatedTitle),
+      uiState: stringify(uiState, _uiState),
+    );
+  }
+
   @override
   Keys makeKey() => Keys.i;
 
@@ -948,6 +1273,9 @@ class Content extends Entity<Keys> {
       // ----------------------------------------------------------------------
       // --------------------------------COMMON--------------------------------
       // ----------------------------------------------------------------------
+      // BASE
+      if (_contentType.isNotEmpty && _contentType != 'none')
+        key.contentType: _contentType,
       // PUBLISHER
       if (_publisherId.isNotEmpty) key.publisherId: _publisherId,
       if ((_publisherAge ?? 0) > 0) key.publisherAge: _publisherAge,
@@ -1088,6 +1416,7 @@ class Content extends Entity<Keys> {
     // ROOT
     key.id,
     key.timeMills,
+    key.contentType,
     // PUBLISHER
     key.publisherId,
     key.publisherAge,
@@ -1199,9 +1528,10 @@ class Content extends Entity<Keys> {
     // -------------------------------------------------------------------------
     // --------------------------------COMMON-----------------------------------
     // -------------------------------------------------------------------------
-    // ROOt
+    // ROOT
     idOrNull,
     timeMillsOrNull,
+    _contentType,
     // PUBLISHER
     _publisherId,
     _publisherAge,
@@ -1306,6 +1636,14 @@ class Content extends Entity<Keys> {
     _equality.hash(_contents),
     _equality.hash(_photos),
     _equality.hash(_videos),
+
+    // -------------------------------------------------------------------------
+    // -----------------------------(INTERNAL USE ONLY)-------------------------
+    // -------------------------------------------------------------------------
+    _translatedDescription,
+    _equality.hash(_translatedDescriptions),
+    _translatedTitle,
+    _uiState,
   ]);
 
   @override
@@ -1316,9 +1654,10 @@ class Content extends Entity<Keys> {
         // ---------------------------------------------------------------------
         // --------------------------------COMMON-------------------------------
         // ---------------------------------------------------------------------
-        // ROOt
+        // ROOT
         idOrNull == other.idOrNull &&
         timeMillsOrNull == other.timeMillsOrNull &&
+        _contentType == other._contentType &&
         // PUBLISHER
         _publisherId == other._publisherId &&
         _publisherAge == other._publisherAge &&
@@ -1420,7 +1759,14 @@ class Content extends Entity<Keys> {
         // ---------------------------------------------------------------------
         _equality.equals(_contents, other._contents) &&
         _equality.equals(_photos, other._photos) &&
-        _equality.equals(_videos, other._videos);
+        _equality.equals(_videos, other._videos) &&
+        // ---------------------------------------------------------------------
+        // ------------------------------(INTERNAL USE ONLY)--------------------
+        // ---------------------------------------------------------------------
+        _translatedDescription == other._translatedDescription &&
+        _translatedDescriptions == other._translatedDescriptions &&
+        _translatedTitle == other._translatedTitle &&
+        _uiState == other._uiState;
   }
 
   @override
@@ -1471,6 +1817,30 @@ String? _objectRef(String? value) {
   if (value.isEmpty) return null;
   if (!value.startsWith("@")) return null;
   return value;
+}
+
+T? stringify<T extends Object?>(
+  T? current,
+  T? old, {
+  bool boolCheck = true,
+  bool numCheck = true,
+  bool stringCheck = true,
+  bool mapCheck = true,
+  bool listCheck = true,
+}) {
+  if (old == null && current == null) return null;
+
+  T? check(T? v) {
+    if (v == null) return null;
+    if (boolCheck && v is bool && !v) return null;
+    if (numCheck && v is num && v == 0) return null;
+    if (stringCheck && v is String && v.isEmpty) return null;
+    if (mapCheck && v is Map && v.isEmpty) return null;
+    if (listCheck && v is List && v.isEmpty) return null;
+    return v;
+  }
+
+  return check(current) ?? check(old);
 }
 
 extension StringHelper on String? {

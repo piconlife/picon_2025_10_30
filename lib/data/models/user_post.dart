@@ -1,7 +1,9 @@
 import 'package:flutter_andomie/utils/path_replacer.dart';
 
+import '../constants/content_types.dart';
 import '../constants/paths.dart';
 import '../enums/audience.dart';
+import '../enums/content_state.dart';
 import '../enums/feed_type.dart';
 import '../enums/privacy.dart';
 import 'content.dart';
@@ -11,6 +13,7 @@ class UserPost extends Content {
   Iterable<String> get keys => [
     key.id,
     key.timeMills,
+    key.contentType,
     key.publisherId,
     key.path,
     key.audience,
@@ -40,7 +43,8 @@ class UserPost extends Content {
     super.commentCountRef,
     super.likeCountRef,
     super.starCountRef,
-  });
+    super.uiState,
+  }) : super(contentType: ContentType.userPost);
 
   UserPost.create({
     required String super.id,
@@ -54,31 +58,12 @@ class UserPost extends Content {
     required super.tags,
     super.photos,
     String? path,
-    String? commentCountRef,
-    String? likeCountRef,
-    String? starCountRef,
   }) : super(
+         contentType: ContentType.userPost,
          path:
              path ??
              PathReplacer.replaceByIterable(Paths.userPost, [publisherId, id]),
-         commentCountRef:
-             commentCountRef ??
-             PathReplacer.replaceByIterable(Paths.userPostComments, [
-               publisherId,
-               id,
-             ]),
-         likeCountRef:
-             likeCountRef ??
-             PathReplacer.replaceByIterable(Paths.userPostLikes, [
-               publisherId,
-               id,
-             ]),
-         starCountRef:
-             starCountRef ??
-             PathReplacer.replaceByIterable(Paths.userPostStars, [
-               publisherId,
-               id,
-             ]),
+         uiState: ContentUiState.processing,
        );
 
   UserPost.createForAvatar({
@@ -96,8 +81,7 @@ class UserPost extends Content {
   }) : super(type: FeedType.cover);
 
   factory UserPost.parse(Object? source) {
-    final content = Content.parse(source);
-    if (source is! Map) return UserPost();
+    final content = source is Content ? source : Content.parse(source);
     return UserPost(
       id: content.id,
       timeMills: content.timeMills,
@@ -125,19 +109,21 @@ class UserPost extends Content {
     String? description,
     List<String>? tags,
     List<Content>? photos,
+    ContentUiState? uiState,
   }) {
     return UserPost(
-      id: id ?? this.id,
-      timeMills: timeMills ?? this.timeMills,
-      publisherId: publisherId ?? this.publisherId,
-      path: path ?? this.path,
-      audience: audience ?? this.audience,
-      privacy: privacy ?? this.privacy,
-      type: type ?? this.type,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      tags: tags ?? this.tags,
-      photos: photos ?? this.photos,
+      id: stringify(id, this.id),
+      timeMills: stringify(timeMills, this.timeMills),
+      publisherId: stringify(publisherId, this.publisherId),
+      path: stringify(path, this.path),
+      audience: stringify(audience, this.audience),
+      privacy: stringify(privacy, this.privacy),
+      type: stringify(type, this.type),
+      title: stringify(title, this.title),
+      description: stringify(description, this.description),
+      tags: stringify(tags, this.tags),
+      photos: stringify(photos, this.photos),
+      uiState: stringify(uiState, this.uiState),
     );
   }
 }
