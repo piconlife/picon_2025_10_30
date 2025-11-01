@@ -46,6 +46,14 @@ class _ItemUserFeedPostState extends State<ItemUserFeedPost> {
   }
 
   @override
+  void didUpdateWidget(covariant ItemUserFeedPost oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.item != oldWidget.item){
+      item = widget.item;
+    }
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // if (!item.isTranslated && Settings.i.autoTranslationMode.use) {

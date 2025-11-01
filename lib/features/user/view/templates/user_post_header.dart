@@ -7,6 +7,7 @@ import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/helpers/user.dart';
+import '../../../../data/enums/content_state.dart';
 import '../../../../data/models/content.dart';
 import '../../../../data/models/user_follower.dart';
 import '../../../../data/models/user_post.dart';
@@ -108,7 +109,7 @@ class _UserPostHeaderState extends State<UserPostHeader> {
   Widget build(BuildContext context) {
     final dimen = context.dimens;
     final dark = context.dark;
-    return Container(
+    Widget child = Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(vertical: dimen.dp(12)),
       child: InAppUserBuilder(
@@ -223,5 +224,19 @@ class _UserPostHeaderState extends State<UserPostHeader> {
         },
       ),
     );
+    if (widget.item.uiState.isProcessing) {
+      child = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            child: InAppText("Processing..."),
+          ),
+          child,
+        ],
+      );
+    }
+    return child;
   }
 }
