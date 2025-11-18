@@ -16,7 +16,7 @@ dependencies:
   # ------------------------------------------------------------------------------------------------
 
   # DESIGN (WITHOUT NATIVE)
-  flutter_svg: ^2.2.1
+  flutter_svg: ^2.2.2
 
   # DESIGN (WITH NATIVE)
   cached_network_image: ^3.4.1
@@ -24,7 +24,7 @@ dependencies:
   flutter_cache_manager: ^3.4.1
 
   # LOGICS (WITHOUT NATIVE)
-  http: ^1.5.0
+  http: ^1.6.0
   intl: ^0.20.2
 
   # LOGICS (WITH NATIVE)
@@ -83,15 +83,15 @@ dependencies:
   #  sign_in_with_apple: ^7.0.1 # APPLE SIGN IN
 
   # FIREBASE (WITH NATIVE)
-  cloud_firestore: ^6.0.3
-  firebase_analytics: ^12.0.3
-  firebase_app_check: ^0.4.1+1
-  firebase_auth: ^6.1.1
-  firebase_core: ^4.2.0
-  firebase_crashlytics: ^5.0.3
-  firebase_database: ^12.0.3
-  firebase_remote_config: ^6.1.0
-  firebase_storage: ^13.0.3
+  cloud_firestore: ^6.1.0
+  firebase_analytics: ^12.0.4
+  firebase_app_check: ^0.4.1+2
+  firebase_auth: ^6.1.2
+  firebase_core: ^4.2.1
+  firebase_crashlytics: ^5.0.5
+  firebase_database: ^12.1.0
+  firebase_remote_config: ^6.1.2
+  firebase_storage: ^13.0.4
 
   # PURCHASE AND SUBSCRIPTIONS
   #  adapty_flutter: ^3.11.2
@@ -111,7 +111,7 @@ dependencies:
 
   # DESIGN (WITH NATIVE)
 #  image_cropper: ^9.0.0
-  image_picker: ^1.2.0
+  image_picker: ^1.2.1
 
   # LOGICS (WITHOUT NATIVE)
   async: ^2.13.0
@@ -120,9 +120,9 @@ dependencies:
   get_ip_address: ^0.0.7
   encrypt: ^5.0.3
   #  get_it: ^8.0.3
-  phone_numbers_parser: ^9.0.11
+  phone_numbers_parser: ^9.0.16
   translator: ^1.0.4+1
-  uuid: ^4.5.1
+  uuid: ^4.5.2
 
   # LOGICS (WITH NATIVE)
   flutter_native_splash: ^2.4.7
@@ -130,8 +130,8 @@ dependencies:
   flutter_tts: ^4.2.3
   path: ^1.9.1
   path_provider: ^2.1.5
-  upgrader: ^12.2.0
-  video_player: ^2.10.0
+  upgrader: ^12.3.0
+  video_player: ^2.10.1
   web: ^1.1.1
   wakelock_plus: ^1.4.0
 
@@ -153,7 +153,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  build_runner: ^2.10.1
+  build_runner: ^2.10.3
   flutter_lints: ^6.0.0
   #  hive_generator: ^2.0.1
   mockito: ^5.5.1
