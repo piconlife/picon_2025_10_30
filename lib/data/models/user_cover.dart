@@ -1,86 +1,82 @@
-import 'package:flutter_entity/entity.dart';
+import 'package:flutter_andomie/utils/path_replacer.dart';
 
+import '../../app/helpers/user.dart';
+import '../../roots/services/path_provider.dart';
+import '../constants/paths.dart';
+import '../enums/content_state.dart';
 import '../enums/privacy.dart';
+import 'content.dart';
 
-class UserCoverKeys extends EntityKey {
-  UserCoverKeys._();
-
-  static final i = UserCoverKeys._();
-  final publisher = "publisher";
-  final path = "path";
-  final description = "description";
-  final photo = "photo";
-  final privacy = "privacy";
-
+class UserCover extends Content {
   @override
   Iterable<String> get keys => [
-    id,
-    timeMills,
-    publisher,
-    path,
-    description,
-    photo,
-    privacy,
+    key.id,
+    key.timeMills,
+    key.publisherId,
+    key.path,
+    key.description,
+    key.photoUrl,
+    key.privacy,
   ];
-}
-
-class UserCover extends Entity<UserCoverKeys> {
-  String? description;
-  String? path;
-  String? photo;
-  Privacy? privacy;
-  String? publisher;
 
   UserCover({
     super.id,
     super.timeMills,
-    this.description,
-    this.path,
-    this.photo,
-    this.privacy,
-    this.publisher,
+    super.path,
+    super.privacy,
+    super.publisherId,
+    super.photoUrl,
+    super.description,
+    super.uiState,
   });
 
+  UserCover.create({
+    required String super.id,
+    required super.timeMills,
+    required super.privacy,
+    required super.description,
+    required super.photoUrl,
+  }) : super(
+         uiState: ContentUiState.processing,
+         publisherId: UserHelper.uid,
+         path: PathReplacer.replaceByIterable(
+           PathProvider.generatePath(Paths.userCovers, id),
+           [UserHelper.uid],
+         ),
+       );
+
   factory UserCover.parse(Object? source) {
-    if (source is! Map) return UserCover();
-    final key = UserCoverKeys.i;
+    final content = source is Content ? source : Content.parse(source);
     return UserCover(
-      id: source.entityValue(key.id),
-      timeMills: source.entityValue(key.timeMills),
-      description: source.entityValue(key.description),
-      path: source.entityValue(key.path),
-      photo: source.entityValue(key.photo),
-      privacy: source.entityValue(key.privacy, Privacy.parse),
-      publisher: source.entityValue(key.publisher),
+      id: content.id,
+      timeMills: content.timeMills,
+      path: content.path,
+      privacy: content.privacy,
+      publisherId: content.publisherId,
+      description: content.description,
+      photoUrl: content.photoUrl,
     );
   }
 
-  @override
-  UserCoverKeys makeKey() => UserCoverKeys.i;
-
-  @override
-  Map<String, dynamic> get source {
-    return {
-      key.id: id,
-      key.timeMills: timeMills,
-      key.description: description,
-      key.path: path,
-      key.photo: photo,
-      key.privacy: privacy?.name,
-      key.publisher: publisher,
-    };
+  UserCover copyWith({
+    String? id,
+    int? timeMills,
+    String? publisherId,
+    String? path,
+    Privacy? privacy,
+    String? description,
+    String? photoUrl,
+    ContentUiState? uiState,
+  }) {
+    return UserCover(
+      id: stringify(id, this.id),
+      timeMills: stringify(timeMills, this.timeMills),
+      publisherId: stringify(publisherId, this.publisherId),
+      path: stringify(path, this.path),
+      privacy: stringify(privacy, this.privacy),
+      description: stringify(description, this.description),
+      photoUrl: stringify(photoUrl, this.photoUrl),
+      uiState: stringify(uiState, this.uiState),
+    );
   }
-
-  @override
-  int get hashCode => source.hashCode;
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other is! UserCover) return false;
-    return source == other.source;
-  }
-
-  @override
-  String toString() => "$UserCover#$hashCode($source)";
 }

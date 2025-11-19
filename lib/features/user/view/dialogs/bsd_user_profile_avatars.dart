@@ -106,12 +106,13 @@ class UserProfileAvatarsBSD extends StatelessWidget {
                           ),
                           itemBuilder: (context, index) {
                             final item = state.result.elementAtOrNull(index);
-                            final isActivated = item?.photoUrl == activeUrl;
+                            final photoUrl = item?.photoUrl;
+                            final isActivated = photoUrl == activeUrl;
                             return Stack(
                               fit: StackFit.expand,
                               children: [
                                 InAppAvatar(
-                                  item?.photoUrl,
+                                  photoUrl,
                                   backgroundColor: dark.t05,
                                   onTap: () => context.close(result: item),
                                 ),

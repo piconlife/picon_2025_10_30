@@ -85,7 +85,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
   void _loadCoverPhotos(BuildContext context, User user) {
     UserProfileCoversBSD.show(context, user).then((value) {
       if (value is UserCover && context.mounted) {
-        _changeCoverPhoto(context, value.photo);
+        _changeCoverPhoto(context, value.photoUrl);
       }
     });
   }

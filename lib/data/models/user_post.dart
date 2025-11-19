@@ -85,11 +85,19 @@ class UserPost extends Content {
        );
 
   UserPost.createForCover({
-    required super.id,
+    required String super.id,
     required super.timeMills,
-    required super.publisherId,
-    required super.path,
-  }) : super(type: FeedType.cover);
+    required String super.publisherId,
+    required super.content,
+    String? path,
+  }) : super(
+         type: FeedType.cover,
+         contentType: ContentType.userPost,
+         path:
+             path ??
+             PathReplacer.replaceByIterable(Paths.userPost, [publisherId, id]),
+         uiState: ContentUiState.processing,
+       );
 
   factory UserPost.parse(Object? source) {
     final content = source is Content ? source : Content.parse(source);

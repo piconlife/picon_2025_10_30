@@ -101,7 +101,8 @@ class UserProfileCoversBSD extends StatelessWidget {
                           padding: EdgeInsets.only(bottom: dimen.dp(50)),
                           itemBuilder: (context, index) {
                             final item = state.result.elementAtOrNull(index);
-                            final isActivated = item?.photo == activeUrl;
+                            final photoUrl = item?.photoUrl;
+                            final isActivated = photoUrl == activeUrl;
                             return Stack(
                               fit: StackFit.expand,
                               children: [
@@ -110,7 +111,7 @@ class UserProfileCoversBSD extends StatelessWidget {
                                   child: ColoredBox(
                                     color: dark.t05,
                                     child: InAppImage(
-                                      item?.photo,
+                                      photoUrl,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
