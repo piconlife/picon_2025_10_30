@@ -371,44 +371,56 @@ class Content extends Entity<Keys> {
 
   String? get text => _string(_text ?? _content?._text);
 
-  String? get title => _string(_title ?? _content?._title);
+  String? get title => _normalizedTitle;
 
   String? get url => _string(_url ?? _content?._url, url: true);
 
-  String? get videoUrl => _string(_videoUrl ?? _content?._videoUrl, url: true);
+  String? get videoUrl => _normalizedVideoUrl;
 
   // GETTERS (NORMALIZERS)
 
+  String? get _normalizedTitle {
+    return normalizeContentData(this, (e) {
+      if ((e._title ?? '').isNotEmpty) return e._title!;
+      return null;
+    });
+  }
+
   String? get _normalizedDescription {
-    if ((_description ?? '').isNotEmpty) return _description;
-    if ((_content?._description ?? '').isNotEmpty) {
-      return _content!._description!;
-    }
-    if ((_descriptions ?? []).isNotEmpty) return _descriptions!.first;
-    if ((_content?._descriptions ?? []).isNotEmpty) {
-      return _content!._descriptions!.first;
-    }
-    return null;
+    return normalizeContentData(this, (e) {
+      if ((e._description ?? '').isNotEmpty) return e._description!;
+      if ((e._descriptions ?? []).isNotEmpty &&
+          e._descriptions!.first.isNotEmpty) {
+        return e._descriptions!.first;
+      }
+      return null;
+    });
   }
 
   String? get _normalizedPhotoUrl {
-    if (_photoUrl.isUrl) return _photoUrl!;
-    if (_photoUrls.isNotEmpty && _photoUrls!.first.isUrl) {
-      return _photoUrls!.first;
-    }
-    if ((_photos ?? []).isNotEmpty && _photos!.first._photoUrl.isUrl) {
-      return _photos!.first._photoUrl;
-    }
-    if ((_content?._photoUrl ?? '').isUrl) return _content!._photoUrl!;
-    if ((_content?._photoUrls ?? []).isNotEmpty &&
-        _content!._photoUrls!.first.isUrl) {
-      return _content!._photoUrls!.first;
-    }
-    if ((_content?._photos ?? []).isNotEmpty &&
-        _content!._photos!.first._photoUrl.isUrl) {
-      return _content!._photos!.first._photoUrl;
-    }
-    return null;
+    return normalizeContentData(this, (e) {
+      if ((e._photoUrl ?? '').isUrl) return e._photoUrl!;
+      if ((e._photoUrls ?? []).isNotEmpty && e._photoUrls!.first.isUrl) {
+        return e._photoUrls!.first;
+      }
+      if ((e._photos ?? []).isNotEmpty && e._photos!.first._photoUrl.isUrl) {
+        return e._photos!.first._photoUrl;
+      }
+      return null;
+    });
+  }
+
+  String? get _normalizedVideoUrl {
+    return normalizeContentData(this, (e) {
+      if ((e._videoUrl ?? '').isUrl) return e._videoUrl!;
+      if ((e._videoUrls ?? []).isNotEmpty && e._videoUrls!.first.isUrl) {
+        return e._videoUrls!.first;
+      }
+      if ((e._videos ?? []).isNotEmpty && e._videos!.first._videoUrl.isUrl) {
+        return e._videos!.first._videoUrl;
+      }
+      return null;
+    });
   }
 
   // ---------------------------------------------------------------------------
@@ -1817,6 +1829,16 @@ String? _objectRef(String? value) {
   if (value.isEmpty) return null;
   if (!value.startsWith("@")) return null;
   return value;
+}
+
+T? normalizeContentData<T extends Object?>(
+  Content? content,
+  T? Function(Content content) test,
+) {
+  if (content == null) return null;
+  final data = test(content);
+  if (data != null) return data;
+  return normalizeContentData(content._content, test);
 }
 
 T? stringify<T extends Object?>(

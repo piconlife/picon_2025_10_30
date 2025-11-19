@@ -11,7 +11,9 @@ import '../../../../data/enums/gender.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/avatar.dart';
+import '../../../../roots/widgets/column.dart';
 import '../../../../roots/widgets/gesture.dart';
+import '../../../../roots/widgets/padding.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/user_builder.dart';
 import 'feed_footer.dart';
@@ -33,7 +35,7 @@ class ItemFeedAvatar extends StatefulWidget {
   State<ItemFeedAvatar> createState() => _ItemFeedAvatarState();
 }
 
-class _ItemFeedAvatarState extends State<ItemFeedAvatar> {
+class _ItemFeedAvatarState extends State<ItemFeedAvatar> with ColorMixin {
   String _title(User user) {
     final date = DateHelper.toRealtime(widget.item.timeMills);
     if (widget.item.isPublisher) {
@@ -58,8 +60,8 @@ class _ItemFeedAvatarState extends State<ItemFeedAvatar> {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: context.light,
-      child: Column(
+      color: light,
+      child: InAppColumn(
         children: [
           InAppUserBuilder(
             id: widget.item.publisherId,
@@ -92,17 +94,17 @@ class _Body extends StatelessWidget {
     final dimen = context.dimens;
     final dark = context.dark;
     final divider = dark.t05;
-    return Column(
+    return InAppColumn(
       children: [
         ColoredBox(
           color: dark.t02,
           child: AndrossyFlex(
-            flexible: Padding(
+            flexible: InAppPadding(
               padding: EdgeInsets.only(left: dimen.dp(3)),
               child: SizedBox(
                 width: dimen.dp(57),
                 height: double.infinity,
-                child: Column(
+                child: InAppColumn(
                   children: [
                     Container(
                       width: dimen.dp(4),
@@ -161,7 +163,7 @@ class _Body extends StatelessWidget {
                 ),
               ),
             ),
-            child: Padding(
+            child: InAppPadding(
               padding: EdgeInsets.only(
                 left: dimen.dp(64),
                 top: dimen.dp(32),
@@ -186,7 +188,7 @@ class _Body extends StatelessWidget {
         if (item.description.isValid)
           SizedBox(
             width: double.infinity,
-            child: Padding(
+            child: InAppPadding(
               padding: EdgeInsets.symmetric(
                 horizontal: dimen.dp(16),
                 vertical: dimen.dp(16 * 0.75),
