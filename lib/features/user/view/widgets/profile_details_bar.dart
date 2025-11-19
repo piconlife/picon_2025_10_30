@@ -66,8 +66,9 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
       context.open(
         Routes.editUserCoverPhoto,
         arguments: {
-          "$UserCoverCubit": context.read<UserCoverCubit>(),
+          "$FeedHomeCubit": context.read<FeedHomeCubit>(),
           "$UserPostCubit": context.read<UserPostCubit>(),
+          "$UserCoverCubit": context.read<UserCoverCubit>(),
         },
       );
     } else if (option == 1) {
@@ -100,8 +101,9 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
       context.open(
         Routes.editUserProfilePhoto,
         arguments: {
-          "$UserAvatarCubit": context.read<UserAvatarCubit>(),
+          "$FeedHomeCubit": context.read<FeedHomeCubit>(),
           "$UserPostCubit": context.read<UserPostCubit>(),
+          "$UserAvatarCubit": context.read<UserAvatarCubit>(),
         },
       );
     } else if (option == 1) {
@@ -118,7 +120,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
   void _loadAvatars(BuildContext context, User user) async {
     UserProfileAvatarsBSD.show(context, user).then((value) {
       if (value is UserAvatar && context.mounted) {
-        _changeAvatar(context, value.photo);
+        _changeAvatar(context, value.photoUrl);
       }
     });
   }

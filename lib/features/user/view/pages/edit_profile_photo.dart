@@ -4,31 +4,33 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:auth_management/core.dart';
 import 'package:auth_management/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
+import 'package:flutter_andomie/extensions/spacing.dart';
+import 'package:flutter_andomie/utils/path_replacer.dart';
+import 'package:flutter_andomie/utils/validator.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 import 'package:object_finder/object_finder.dart';
 import 'package:picon/data/models/user_post.dart';
 import 'package:picon/roots/widgets/gesture.dart';
 
+import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../app/interfaces/bsd_privacy.dart';
 import '../../../../app/interfaces/dialog_alert.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../app/res/labels.dart';
+import '../../../../app/res/msg.dart';
 import '../../../../data/constants/paths.dart';
+import '../../../../data/enums/content_state.dart';
 import '../../../../data/enums/feed_type.dart';
 import '../../../../data/enums/privacy.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/user.dart';
 import '../../../../data/models/user_avatar.dart';
-import '../../../../data/use_cases/feed/create.dart';
 import '../../../../roots/contents/media.dart';
 import '../../../../roots/helpers/connectivity.dart';
-import '../../../../roots/services/path_provider.dart';
 import '../../../../roots/services/storage.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/bottom_bar.dart';
@@ -41,6 +43,7 @@ import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/texted_action.dart';
 import '../../../../routes/keys.dart';
 import '../../../../routes/paths.dart';
+import '../../../social/data/cubits/feed_home_cubit.dart';
 import '../cubits/avatar_cubit.dart';
 import '../cubits/post_cubit.dart';
 import '../widgets/edit_avatar.dart';
@@ -62,6 +65,10 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
     defaultValue: false,
   );
 
+  late final feedCubit = DataCubit.of<FeedHomeCubit>(context);
+  late final postCubit = DataCubit.of<UserPostCubit>(context);
+  late final avatarCubit = DataCubit.of<UserAvatarCubit>(context);
+
   final etText = TextEditingController();
   final btnNext = GlobalKey<InAppFilledButtonState>();
 
@@ -75,7 +82,8 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
 
   bool get isValidUrl => photoUrl.isValidWebUrl;
 
-  void _changePrivacy(BuildContext context) async {
+  void _changePrivacy() async {
+    if (!mounted) return;
     final value = await PrivacyBSD.show(context, privacy.value);
     privacy.value = value;
   }
@@ -85,9 +93,9 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
     user = value;
   }
 
-  Future<bool> _delete(BuildContext context, [bool skipMode = false]) async {
+  Future<bool> _delete([bool skipMode = false]) async {
     if (!isValidUrl) {
-      if (skipMode) _next(context);
+      if (skipMode) _next();
       return false;
     }
     final permission = await context.showAlert(
@@ -98,12 +106,12 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
       ),
     );
 
-    if (!permission || !context.mounted) return false;
+    if (!permission || !mounted) return false;
 
     loading.value = true;
     btnNext.currentState?.setEnabled(false);
     final response = await StorageService.i.delete(photoUrl!);
-    if (!context.mounted) return false;
+    if (!mounted) return false;
     if (!response.successful) {
       btnNext.currentState?.setEnabled(true);
       final permission = await context.showAlert(
@@ -113,22 +121,22 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
           negativeButtonText: ActionNames.cancel,
         ),
       );
-      if (!context.mounted) return false;
+      if (!mounted) return false;
       if (permission) {
-        return _delete(context, skipMode);
+        return _delete(skipMode);
       } else {
-        if (skipMode) _next(context);
+        if (skipMode) _next();
         return false;
       }
     }
 
     photoUrl = null;
     loading.value = false;
-    if (skipMode) _next(context);
+    if (skipMode) _next();
     return true;
   }
 
-  void _upload(BuildContext context, MediaData? data) {
+  void _upload(MediaData? data) {
     if (data == null) {
       context.showWarningSnackBar("File not found!");
       return;
@@ -165,13 +173,13 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
     );
   }
 
-  void _skip(BuildContext context) => _delete(context, true);
+  void _skip() => _delete(true);
 
-  void _submit(BuildContext context) {
-    _update(context);
+  void _submit() {
+    _update();
   }
 
-  void _update(BuildContext context) async {
+  void _update() async {
     if (!isValidUrl) {
       context.showWarningSnackBar("User profile photo isn't valid!");
       return;
@@ -179,17 +187,17 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
 
     context.showLoader();
     if (await ConnectivityHelper.isDisconnected) {
-      if (!context.mounted) return;
+      if (!mounted) return;
       context.hideLoader();
       context.showWarningSnackBar(ResponseMessages.internetDisconnected);
       return;
     }
 
-    if (!context.mounted) return;
+    if (!mounted) return;
     final updateAccountResponse = await context.updateAccount<User>({
       UserKeys.i.photo: photoUrl,
     });
-    if (!context.mounted) return;
+    if (!mounted) return;
 
     if (updateAccountResponse == null) {
       context.hideLoader();
@@ -200,127 +208,83 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
         negativeButtonText: ActionNames.cancel,
       );
 
-      if (!context.mounted) return;
+      if (!mounted) return;
       if (!permission) {
-        _delete(context);
+        _delete();
         return;
       }
 
-      _update(context);
+      _update();
       return;
     }
 
-    _create(context);
+    _create();
   }
 
-  void _create(BuildContext context) {
+  void _create() {
     if (!isValidUrl || !user.isCurrentUser) {
       context.hideLoader();
       context.showErrorSnackBar("User not active now!");
       return;
     }
-    _createAvatar(
-      context,
-      UserAvatar(
-        id: id,
-        timeMills: Entity.generateTimeMills,
-        description: etText.text.isNotEmpty ? etText.text : null,
-        photo: photoUrl,
-        privacy: privacy.value,
-        publisher: user.id,
-        path: PathReplacer.replaceByIterable(
-          PathProvider.generatePath(Paths.userAvatars, id),
-          [UserHelper.uid],
-        ),
-      ),
+
+    final mPublisherId = UserHelper.uid;
+    final mTimeMills = Entity.generateTimeMills;
+
+    final mAvatar = UserAvatar.create(
+      id: id,
+      timeMills: mTimeMills,
+      description: etText.text.isNotEmpty ? etText.text : null,
+      photoUrl: photoUrl,
+      privacy: privacy.value,
+    );
+
+    final mUserPost = UserPost.createForAvatar(
+      id: id,
+      timeMills: mTimeMills,
+      publisherId: mPublisherId,
+      content: mAvatar,
+    );
+
+    final mFeed = Feed.create(
+      id: id,
+      timeMills: mTimeMills,
+      publisher: user,
+      path: Paths.feeds,
+      type: FeedType.avatar,
+      content: mUserPost,
+    );
+
+    feedCubit.create(
+      mFeed,
+      placement: "create_avatar",
+      replace: (e) => e..uiState = ContentUiState.processed,
+      onPut: () {
+        postCubit.add(mUserPost, 0);
+        avatarCubit.add(mAvatar, 0);
+      },
+      onCreated: () {
+        postCubit.replace(mUserPost, (e) {
+          return e..uiState = ContentUiState.processed;
+        });
+        avatarCubit.replace(mAvatar, (e) {
+          return e..uiState = ContentUiState.processed;
+        });
+        if (mounted) context.hideLoader();
+        _next();
+        Toast.show(Msg.postingDone);
+      },
+      onFailed: () {
+        postCubit.remove(mUserPost);
+        avatarCubit.remove(mAvatar);
+        if (mounted) context.hideLoader(true);
+        Toast.show(Msg.postFailed);
+      },
     );
   }
 
-  void _createAvatar(BuildContext context, UserAvatar data) async {
-    final feedback = await context.read<UserAvatarCubit>().create(data);
-    if (!context.mounted) return;
-    if (!feedback) {
-      context.hideLoader();
-      final permission = await context.showAlert(
-        message: ResponseMessages.tryAgain,
-      );
-      if (!context.mounted) return;
-      if (!permission) return _next(context);
-      return _createAvatar(context, data);
-    }
-
-    _createFeedForUser(
-      context,
-      data,
-      UserPost.createForAvatar(
-        id: data.id,
-        timeMills: Entity.generateTimeMills,
-        publisherId: data.publisher,
-        path: PathReplacer.replaceByIterable(
-          PathProvider.generatePath(Paths.userPosts, data.id),
-          [UserHelper.uid],
-        ),
-      ),
-    );
-  }
-
-  void _createFeedForUser(
-    BuildContext context,
-    UserAvatar avatar,
-    UserPost data,
-  ) async {
-    final feedback = await context.read<UserPostCubit>().create(data);
-    if (!context.mounted) return;
-    if (!feedback) {
-      context.hideLoader();
-      final permission = await context.showAlert(
-        message: ResponseMessages.tryAgain,
-      );
-      if (!context.mounted) return;
-      if (!permission) return _next(context);
-      return _createFeedForUser(context, avatar, data);
-    }
-
-    _createFeedForGlobal(
-      context,
-      avatar,
-      Feed.create(
-        id: avatar.id,
-        timeMills: Entity.generateTimeMills,
-        publisher: user,
-        path: Paths.feeds,
-        content: null,
-        type: FeedType.avatar,
-      ),
-    );
-  }
-
-  void _createFeedForGlobal(
-    BuildContext context,
-    UserAvatar avatar,
-    Feed data,
-  ) async {
-    if (feed.value) {
-      final feedback = await CreateFeedUseCase.i(data);
-      if (!context.mounted) return;
-      if (!feedback.isSuccessful) {
-        context.hideLoader();
-        final permission = await context.showAlert(
-          message: ResponseMessages.tryAgain,
-        );
-        if (!context.mounted) return;
-        if (!permission) {
-          context.showMessage(ResponseMessages.postingUnsuccessful);
-          return;
-        }
-        return _createFeedForGlobal(context, avatar, data);
-      }
-    }
-    context.hideLoader();
-    _next(context);
-  }
-
-  void _next(BuildContext context) {
+  void _next() {
+    if (!mounted) return;
     InAppNavigator.setVisitor(Routes.editUserProfilePhoto);
     if (!isOnboardingMode) {
       context.close();
@@ -364,7 +328,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
           actions: [
             InAppTextedAction(
               isOnboardingMode ? "Skip" : "Cancel",
-              onTap: () => _skip(context),
+              onTap: _skip,
             ),
           ],
         ),
@@ -414,8 +378,8 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
                           isUploading: value,
                           isAlreadyUploaded: isValidUrl,
                           image: photoUrl ?? user?.photo,
-                          imageChosen: _upload,
-                          imageRemove: _delete,
+                          imageChosen: (c, v) => _upload(v),
+                          imageRemove: (c) => _delete(),
                         );
                       },
                     );
@@ -444,7 +408,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
                       ),
                       iconOrIndicatorSpace: dimen.dp(8),
                       borderRadius: BorderRadius.circular(dimen.dp(25)),
-                      onTap: () => _changePrivacy(context),
+                      onTap: _changePrivacy,
                     );
                   },
                 ),
@@ -493,7 +457,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
                       borderRadius: BorderRadius.circular(dimen.dp(24)),
                       height: dimen.dp(45),
                       text: isOnboardingMode ? "Next" : "Upload",
-                      onTap: () => _submit(context),
+                      onTap: _submit,
                     ),
                   ],
                 ),

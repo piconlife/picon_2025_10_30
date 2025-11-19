@@ -22,6 +22,7 @@ class UserPost extends Content {
     key.title,
     key.description,
     key.tags,
+    key.contentRef,
     key.photosRef,
     key.commentCountRef,
     key.likeCountRef,
@@ -40,6 +41,8 @@ class UserPost extends Content {
     super.description,
     super.tags,
     super.photos,
+    super.content,
+    super.contentRef,
     super.commentCountRef,
     super.likeCountRef,
     super.starCountRef,
@@ -67,11 +70,19 @@ class UserPost extends Content {
        );
 
   UserPost.createForAvatar({
-    required super.id,
+    required String super.id,
     required super.timeMills,
-    required super.publisherId,
-    required super.path,
-  }) : super(type: FeedType.avatar);
+    required String super.publisherId,
+    required super.content,
+    String? path,
+  }) : super(
+         type: FeedType.avatar,
+         contentType: ContentType.userPost,
+         path:
+             path ??
+             PathReplacer.replaceByIterable(Paths.userPost, [publisherId, id]),
+         uiState: ContentUiState.processing,
+       );
 
   UserPost.createForCover({
     required super.id,
@@ -94,6 +105,8 @@ class UserPost extends Content {
       description: content.description,
       tags: content.tags,
       photos: content.photos,
+      content: content.contentOrNull,
+      contentRef: content.contentRef,
     );
   }
 
@@ -107,6 +120,8 @@ class UserPost extends Content {
     FeedType? type,
     String? title,
     String? description,
+    Content? content,
+    String? contentRef,
     List<String>? tags,
     List<Content>? photos,
     ContentUiState? uiState,
@@ -123,6 +138,8 @@ class UserPost extends Content {
       description: stringify(description, this.description),
       tags: stringify(tags, this.tags),
       photos: stringify(photos, this.photos),
+      content: stringify(content, contentOrNull),
+      contentRef: stringify(contentRef, this.contentRef),
       uiState: stringify(uiState, this.uiState),
     );
   }
