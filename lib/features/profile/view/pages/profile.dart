@@ -14,7 +14,7 @@ import '../../../../features/user/routes.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
-import '../../../../roots/widgets/screen.dart';
+import '../../../../roots/widgets/body.dart';
 import '../../../../roots/widgets/styled_button.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/tiled_button.dart';
@@ -64,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final primary = context.primary;
     final color = context.dark;
     final bg = context.isDarkMode ? Colors.white.t05 : Colors.white;
-    return InAppScreen(
+    return InAppBody(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: const InAppAppbar(titleText: "Me"),

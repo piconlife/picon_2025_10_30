@@ -87,7 +87,7 @@ enum ThemeType {
   }
 }
 
-class InAppScreen extends StatelessWidget {
+class InAppBody extends StatelessWidget {
   final bool enabled;
   final List<double>? stops;
   final Gradient? gradient;
@@ -97,7 +97,7 @@ class InAppScreen extends StatelessWidget {
   final ThemeType theme;
   final Widget child;
 
-  const InAppScreen({
+  const InAppBody({
     super.key,
     this.enabled = true,
     this.useBackground = true,

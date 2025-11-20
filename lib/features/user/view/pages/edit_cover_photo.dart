@@ -37,7 +37,7 @@ import '../../../../roots/widgets/bottom_bar.dart';
 import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/padding.dart';
 import '../../../../roots/widgets/row.dart';
-import '../../../../roots/widgets/screen.dart';
+import '../../../../roots/widgets/body.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/texted_action.dart';
 import '../../../../routes/keys.dart';
@@ -314,7 +314,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
   Widget build(BuildContext context) {
     final primary = context.primary;
     final dimen = context.dimens;
-    return InAppScreen(
+    return InAppBody(
       unfocusMode: true,
       theme: ThemeType.secondary,
       child: Scaffold(

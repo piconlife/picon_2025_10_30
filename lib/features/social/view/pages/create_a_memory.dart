@@ -39,7 +39,7 @@ import '../../../../roots/utils/image_provider.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/bottom_bar.dart';
 import '../../../../roots/widgets/icon_button.dart';
-import '../../../../roots/widgets/screen.dart';
+import '../../../../roots/widgets/body.dart';
 import '../../../../roots/widgets/texted_action.dart';
 import '../../../../routes/paths.dart';
 import '../../../user/view/cubits/photo_cubit.dart';
@@ -453,7 +453,7 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
     final dimen = context.dimens;
     final light = context.light;
     final dark = context.dark;
-    return InAppScreen(
+    return InAppBody(
       theme: ThemeType.secondary,
       child: Scaffold(
         backgroundColor: Colors.transparent,

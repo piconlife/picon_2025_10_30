@@ -9,7 +9,7 @@ import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/error.dart';
 import '../../../../roots/widgets/scaffold_shimmer.dart';
-import '../../../../roots/widgets/screen.dart';
+import '../../../../roots/widgets/body.dart';
 import '../../data/cubits/like_cubit.dart';
 import '../templates/item_feed_like.dart';
 
@@ -39,7 +39,7 @@ class _LikesPageState extends State<LikesPage> with ColorMixin {
 
   @override
   Widget build(BuildContext context) {
-    return InAppScreen(
+    return InAppBody(
       theme: ThemeType.secondary,
       child: Scaffold(
         backgroundColor: Colors.transparent,

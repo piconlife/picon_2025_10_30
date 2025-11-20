@@ -8,7 +8,7 @@ import 'package:object_finder/object_finder.dart';
 
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/logo_trailing.dart';
-import '../../../../roots/widgets/screen.dart';
+import '../../../../roots/widgets/body.dart';
 import '../widgets/screen.dart';
 
 class TermsReaderPage extends StatelessWidget {
@@ -66,7 +66,7 @@ class TermsReaderPage extends StatelessWidget {
           titleText: terms.headline,
           actions: const [InAppLogoTrailing()],
         ),
-        body: InAppScreen(
+        body: InAppBody(
           child: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.only(

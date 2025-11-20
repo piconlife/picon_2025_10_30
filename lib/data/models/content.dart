@@ -492,36 +492,41 @@ class Content extends Entity<Keys> {
 
   List<String> get videoIds => _strings(_videoIds ?? _content?._videoIds);
 
-  List<String> get videoUrls =>
-      _strings(_videoUrls ?? _content?._videoUrls, url: true);
+  List<String> get videoUrls => _normalizedVideoUrls;
 
   List<String> get views => _strings(_views ?? _content?._views);
 
   // GETTERS (NORMALIZERS)
 
   List<String> get _normalizedDescriptions {
-    if (_descriptions.isNotEmpty) return _descriptions!;
-    if ((_content?._descriptions ?? []).isNotEmpty) {
-      return _content!._descriptions!;
-    }
-    if (_description.isNotEmpty) return [_description!];
-    if ((_content?._description ?? '').isNotEmpty) {
-      return [_content!._description!];
-    }
-    return [];
+    final x = normalizeContentData(this, (e) {
+      if ((e._descriptions ?? []).isNotEmpty) return e._descriptions!;
+      if ((e._description ?? '').isNotEmpty) return [e._description!];
+      return null;
+    });
+    return x ?? [];
   }
 
   List<String> get _normalizedPhotoUrls {
-    if (_photoUrls.isUrls) return _photoUrls!;
-    final x = _photos?.map((e) => e._photoUrl).whereType<String>().toList();
-    if (x.isUrls) return x!;
-    if (_photoUrl.isUrl) return [_photoUrl!];
-    if ((_content?._photoUrls ?? []).isUrls) return _content!._photoUrls!;
-    final y =
-        _content?._photos?.map((e) => e._photoUrl).whereType<String>().toList();
-    if (y.isUrls) return y!;
-    if ((_content?._photoUrl ?? '').isUrl) return [_content!._photoUrl!];
-    return [];
+    final x = normalizeContentData(this, (e) {
+      if (e._photoUrls.isUrls) return e._photoUrls!;
+      final x = e._photos?.map((e) => e._photoUrl).whereType<String>().toList();
+      if (x.isUrls) return x!;
+      if (e._photoUrl.isUrl) return [e._photoUrl!];
+      return null;
+    });
+    return x ?? [];
+  }
+
+  List<String> get _normalizedVideoUrls {
+    final x = normalizeContentData(this, (e) {
+      if (e._videoUrls.isUrls) return e._videoUrls!;
+      final x = e._videos?.map((e) => e._videoUrl).whereType<String>().toList();
+      if (x.isUrls) return x!;
+      if (e._videoUrl.isUrl) return [e._videoUrl!];
+      return null;
+    });
+    return x ?? [];
   }
 
   // ---------------------------------------------------------------------------
@@ -586,9 +591,20 @@ class Content extends Entity<Keys> {
   // GETTERS
   List<Content> get contents => _contents ?? _content?._contents ?? [];
 
-  List<Content> get photos => _photos ?? _content?._photos ?? [];
+  List<Content> get photos => _normalizedPhotos;
 
   List<Content> get videos => _videos ?? _content?._videos ?? [];
+
+  List<Content> get _normalizedPhotos {
+    bool isPhoto(Content e) => e._photoUrl.isUrl;
+    final x = normalizeContentData(this, (e) {
+      final photos = e._photos?.where(isPhoto);
+      if ((photos ?? []).isNotEmpty) return photos!.toList();
+      if (isPhoto(e)) return [e];
+      return null;
+    });
+    return x ?? [];
+  }
 
   // ---------------------------------------------------------------------------
   // ----------------------------(INTERNAL USE ONLY)----------------------------

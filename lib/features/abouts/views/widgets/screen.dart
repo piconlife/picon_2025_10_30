@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../roots/widgets/screen.dart';
+import '../../../../roots/widgets/body.dart';
 
 class InfoScreen extends StatelessWidget {
   final Widget child;
@@ -9,6 +9,6 @@ class InfoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InAppScreen(theme: ThemeType.secondary, child: child);
+    return InAppBody(theme: ThemeType.secondary, child: child);
   }
 }

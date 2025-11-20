@@ -13,6 +13,9 @@ import '../../../../data/models/content.dart';
 import '../../../../data/models/photo.dart';
 import '../../../../data/use_cases/photo/update.dart';
 import '../../../../roots/widgets/image.dart';
+import '../../../../roots/widgets/layout.dart';
+import '../../../../roots/widgets/scaffold.dart';
+import '../../../../roots/widgets/transfluent_app_bar.dart';
 import 'photos/comments.dart';
 import 'photos/photos.dart';
 
@@ -70,27 +73,30 @@ class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
   @override
   void initState() {
     super.initState();
-    index = widget.args.find(key: "index", defaultValue: 0);
-    content = widget.args.findOrNull(key: "$Content");
+    index = widget.args.get("index", 0);
+    content = widget.args.getOrNull("$Content");
     photos = List.from(content?.photos ?? []);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return InAppScaffold(
       backgroundColor: Colors.black,
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
-      body: Stack(
+      appBar: TransfluentAppBar(),
+      body: InAppLayout(
         fit: StackFit.expand,
+        layout: LayoutType.stack,
         children: [
           InAppImage(selected.photoUrl, fit: BoxFit.cover),
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
             child: ColoredBox(color: context.darkAsFixed.t80),
           ),
-          IndexedStack(
+          InAppLayout(
             index: pageType,
+            layout: LayoutType.stack,
             children: [
               PhotoPreviewView(
                 index: index,

@@ -36,7 +36,7 @@ import '../../../../roots/services/uploader.dart';
 import '../../../../roots/utils/image_provider.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/bottom_bar.dart';
-import '../../../../roots/widgets/screen.dart';
+import '../../../../roots/widgets/body.dart';
 import '../../../../roots/widgets/text_button.dart';
 import '../../../../roots/widgets/texted_action.dart';
 import '../../../../routes/paths.dart';
@@ -481,7 +481,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     final dimen = context.dimens;
     final light = context.light;
     final dark = context.dark;
-    return InAppScreen(
+    return InAppBody(
       theme: ThemeType.secondary,
       child: Scaffold(
         backgroundColor: Colors.transparent,

@@ -11,7 +11,7 @@ import '../../../../roots/widgets/column.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/row.dart';
-import '../../../../roots/widgets/screen.dart';
+import '../../../../roots/widgets/body.dart';
 import '../cubits/comment_cubit.dart';
 import '../templates/item_feed_comment.dart';
 import '../templates/nullable_body.dart';
@@ -50,7 +50,7 @@ class _CommentsPageState extends State<CommentsPage> with ColorMixin {
 
   @override
   Widget build(BuildContext context) {
-    return InAppScreen(
+    return InAppBody(
       unfocusMode: true,
       theme: ThemeType.secondary,
       child: Scaffold(

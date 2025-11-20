@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../roots/widgets/screen.dart';
+import '../../../../roots/widgets/body.dart';
 
 class StartupScreen extends StatelessWidget {
   final Widget child;
@@ -9,7 +9,7 @@ class StartupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InAppScreen(
+    return InAppBody(
       theme: ThemeType.secondary,
       unfocusMode: true,
       child: child,

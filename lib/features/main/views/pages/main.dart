@@ -10,11 +10,11 @@ import '../../../../app/devs/nav_content.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/user.dart';
 import '../../../../roots/preferences/preferences.dart';
+import '../../../../roots/widgets/body.dart';
 import '../../../../roots/widgets/bottom_bar.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
-import '../../../../roots/widgets/screen.dart';
-import '../../../../roots/widgets/system_overlay.dart';
+import '../../../../roots/widgets/scaffold.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../routes/paths.dart';
 import '../../../channel/view/pages/main.dart';
@@ -57,49 +57,46 @@ class _MainPageState extends State<MainPage> {
       onStatus: (context, value) {
         if (value.isUnauthenticated) context.clear(Routes.intro);
       },
-      child: InAppSystemOverlay(
-        child: InAppScreen(
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            bottomNavigationBar: InAppBottomBar(
-              enabled: false,
-              child: _NavBar(
-                index: index,
-                dimen: dimen,
-                onChanged: _changeIndex,
-                items: [
-                  NavigationContent(
-                    label: "Home",
-                    activeIcon: InAppIcons.navHome.solid,
-                    inactiveIcon: InAppIcons.navHome.regular,
-                  ),
-                  NavigationContent(
-                    label: "Market",
-                    activeIcon: InAppIcons.navMarket.solid,
-                    inactiveIcon: InAppIcons.navMarket.regular,
-                  ),
-                  NavigationContent(
-                    label: "Grocery",
-                    activeIcon: InAppIcons.navGrocery.solid,
-                    inactiveIcon: InAppIcons.navGrocery.regular,
-                  ),
-                  NavigationContent(
-                    label: "Tube",
-                    activeIcon: InAppIcons.navTube.solid,
-                    inactiveIcon: InAppIcons.navTube.regular,
-                  ),
-                ],
+      child: InAppScaffold(
+        bottomNavigationBar: InAppBottomBar(
+          enabled: true,
+          child: _NavBar(
+            index: index,
+            dimen: dimen,
+            onChanged: _changeIndex,
+            items: [
+              NavigationContent(
+                label: "Home",
+                activeIcon: InAppIcons.navHome.solid,
+                inactiveIcon: InAppIcons.navHome.regular,
               ),
-            ),
-            body: IndexedStack(
-              index: index,
-              children: const [
-                FeedPage(),
-                MarketPage(),
-                GroceryPage(),
-                MetubePage(),
-              ],
-            ),
+              NavigationContent(
+                label: "Market",
+                activeIcon: InAppIcons.navMarket.solid,
+                inactiveIcon: InAppIcons.navMarket.regular,
+              ),
+              NavigationContent(
+                label: "Grocery",
+                activeIcon: InAppIcons.navGrocery.solid,
+                inactiveIcon: InAppIcons.navGrocery.regular,
+              ),
+              NavigationContent(
+                label: "Tube",
+                activeIcon: InAppIcons.navTube.solid,
+                inactiveIcon: InAppIcons.navTube.regular,
+              ),
+            ],
+          ),
+        ),
+        body: InAppBody(
+          child: IndexedStack(
+            index: index,
+            children: const [
+              FeedPage(),
+              MarketPage(),
+              GroceryPage(),
+              MetubePage(),
+            ],
           ),
         ),
       ),

@@ -12,7 +12,7 @@ import '../../../../data/models/user.dart';
 import '../../../../roots/preferences/preferences.dart';
 import '../../../../roots/widgets/action.dart';
 import '../../../../roots/widgets/appbar.dart';
-import '../../../../roots/widgets/screen.dart';
+import '../../../../roots/widgets/body.dart';
 import '../widgets/profile_details_bar.dart';
 import 'profile/abouts.dart';
 import 'profile/notes.dart';
@@ -72,7 +72,7 @@ class _UserProfilePageState extends State<UserProfilePage>
     Toast.context = context;
     final dimen = context.dimens;
     final dark = context.dark;
-    return InAppScreen(
+    return InAppBody(
       theme: ThemeType.secondary,
       child: Scaffold(
         backgroundColor: Colors.transparent,

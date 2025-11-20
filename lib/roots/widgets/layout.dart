@@ -4,6 +4,7 @@ import 'package:in_app_translation/in_app_translation.dart';
 enum LayoutType { row, column, stack }
 
 class InAppLayout extends StatelessWidget {
+  final int? index;
   final Alignment alignment;
   final StackFit fit;
   final Clip clipBehavior;
@@ -19,8 +20,9 @@ class InAppLayout extends StatelessWidget {
 
   const InAppLayout({
     super.key,
+    this.index,
+    this.layout = LayoutType.column,
     this.alignment = Alignment.topLeft,
-    this.fit = StackFit.loose,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.mainAxisSize = MainAxisSize.max,
     this.crossAxisAlignment = CrossAxisAlignment.center,
@@ -29,9 +31,10 @@ class InAppLayout extends StatelessWidget {
     this.textBaseline,
     this.clipBehavior = Clip.none,
     this.spacing = 0.0,
-    this.layout = LayoutType.column,
+    StackFit? sizing,
+    StackFit fit = StackFit.loose,
     required this.children,
-  });
+  }) : fit = sizing ?? fit;
 
   Alignment get _alignment {
     if (Translation.textDirection == TextDirection.rtl) {
@@ -56,6 +59,16 @@ class InAppLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final direction = Translation.textDirection;
     if (layout == LayoutType.stack) {
+      if (index != null && index! >= 0) {
+        return IndexedStack(
+          index: index,
+          sizing: fit,
+          alignment: _alignment,
+          clipBehavior: clipBehavior,
+          textDirection: direction,
+          children: children,
+        );
+      }
       return Stack(
         alignment: _alignment,
         clipBehavior: clipBehavior,
