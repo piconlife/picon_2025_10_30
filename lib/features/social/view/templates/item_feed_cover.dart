@@ -88,6 +88,7 @@ class _Body extends StatelessWidget {
     context.open(
       Routes.previewPhotos,
       args: {"$Content": item, "index": index},
+      configs: RouteConfigs(transitionType: TransitionType.fadeIn),
     );
   }
 

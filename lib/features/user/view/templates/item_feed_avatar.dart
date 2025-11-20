@@ -14,6 +14,7 @@ import '../../../../data/models/user.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../roots/widgets/avatar.dart';
 import '../../../../roots/widgets/gesture.dart';
+import '../../../../roots/widgets/hero.dart';
 import '../../../../roots/widgets/layout.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/user_builder.dart';
@@ -87,6 +88,7 @@ class _Body extends StatelessWidget {
     context.open(
       Routes.previewPhotos,
       args: {"$Content": item, "index": index},
+      configs: RouteConfigs(transitionType: TransitionType.fadeIn),
     );
   }
 
@@ -175,11 +177,14 @@ class _Body extends StatelessWidget {
                 aspectRatio: 1,
                 child: InAppGesture(
                   onTap: () => _preview(context, 0),
-                  child: InAppAvatar(
-                    item.photoUrl ?? InAppPlaceholders.image,
-                    borderColor: Colors.white,
-                    borderSize: dimen.dp(4),
-                    backgroundColor: dark.t01,
+                  child: InAppHero(
+                    tag: item.photoUrl,
+                    child: InAppAvatar(
+                      item.photoUrl ?? InAppPlaceholders.image,
+                      borderColor: Colors.white,
+                      borderSize: dimen.dp(4),
+                      backgroundColor: dark.t01,
+                    ),
                   ),
                 ),
               ),

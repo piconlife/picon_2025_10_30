@@ -13,6 +13,7 @@ import '../../../../data/models/content.dart';
 import '../../../../data/models/user.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../roots/widgets/gesture.dart';
+import '../../../../roots/widgets/hero.dart';
 import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/user_builder.dart';
@@ -81,6 +82,7 @@ class _Body extends StatelessWidget {
     context.open(
       Routes.previewPhotos,
       args: {"$Content": item, "index": index},
+      configs: RouteConfigs(transitionType: TransitionType.fadeIn),
     );
   }
 
@@ -178,10 +180,13 @@ class _Body extends StatelessWidget {
                         width: dimen.dp(4),
                       ),
                     ),
-                    child: InAppImage(
-                      item.photoUrl ?? InAppPlaceholders.image,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
+                    child: InAppHero(
+                      tag: item.photoUrl,
+                      child: InAppImage(
+                        item.photoUrl ?? InAppPlaceholders.image,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),

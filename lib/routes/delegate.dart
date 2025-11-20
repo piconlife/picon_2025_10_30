@@ -64,7 +64,6 @@ class NavigatorDelegate extends InAppNavigatorDelegate {
   Future<T?>? open<T extends Object?>(
     BuildContext context,
     String route, {
-    RouteConfigs? configs,
     Object? args,
   }) {
     return Navigator.pushNamed(context, route, arguments: args);

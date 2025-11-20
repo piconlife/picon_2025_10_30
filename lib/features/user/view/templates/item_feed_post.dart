@@ -42,6 +42,7 @@ class _ItemUserFeedPostState extends State<ItemUserFeedPost> {
     context.open(
       Routes.previewPhotos,
       args: {"$Content": item, "index": index},
+      configs: RouteConfigs(transitionType: TransitionType.fadeIn),
     );
   }
 

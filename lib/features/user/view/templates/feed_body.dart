@@ -8,6 +8,7 @@ import 'package:flutter_androssy_kits/widgets.dart';
 import '../../../../app/res/placeholders.dart';
 import '../../../../data/models/content.dart';
 import '../../../../roots/widgets/gesture.dart';
+import '../../../../roots/widgets/hero.dart';
 import '../../../../roots/widgets/image.dart';
 
 class UserFeedImageBody extends StatelessWidget {
@@ -37,9 +38,12 @@ class UserFeedImageBody extends StatelessWidget {
               final image = photos?.elementAtOrNull(index);
               return InAppGesture(
                 onTap: onTap != null ? () => onTap!(index) : null,
-                child: InAppImage(
-                  image?.photoUrl ?? InAppPlaceholders.image,
-                  fit: BoxFit.cover,
+                child: InAppHero(
+                  tag: image?.photoUrl,
+                  child: InAppImage(
+                    image?.photoUrl ?? InAppPlaceholders.image,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               );
             },
