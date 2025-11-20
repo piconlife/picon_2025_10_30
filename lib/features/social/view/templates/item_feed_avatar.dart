@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_andomie/utils/date_helper.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 
 import '../../../../app/res/placeholders.dart';
 import '../../../../data/enums/gender.dart';
@@ -88,7 +88,7 @@ class _Body extends StatelessWidget {
   Future<void> _preview(BuildContext context, int index) async {
     context.open(
       Routes.previewPhotos,
-      arguments: {"$Content": item, "index": index},
+      args: {"$Content": item, "index": index},
     );
   }
 

@@ -1,7 +1,7 @@
 import 'package:app_color/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_androssy_kits/widgets/splash.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 import 'package:in_app_settings/settings.dart';
 import 'package:picon/roots/widgets/appbar.dart';
 

@@ -4,7 +4,7 @@ import 'package:flutter_andomie/extensions/iterator.dart';
 import 'package:flutter_andomie/models/selection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 import 'package:picon/routes/paths.dart';
 
 import '../../../../app/helpers/user.dart';
@@ -72,7 +72,7 @@ class _FeedHeaderMoreActionState extends State<FeedHeaderMoreAction> {
   Future<void> _edit(BuildContext context) async {
     context.open(
       Routes.createUserPost,
-      arguments: {
+      args: {
         "$Content": widget.item,
         "$FeedHomeCubit": context.read<FeedHomeCubit>(),
         "$UserPostCubit": context.read<UserPostCubit>(),

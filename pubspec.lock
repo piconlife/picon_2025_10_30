@@ -1073,10 +1073,10 @@ packages:
     dependency: "direct main"
     description:
       name: in_app_navigator
-      sha256: "3f515c3ad11f26e6080171af644c0fc10fdc37623c0c6eb07fa82f349c443cf9"
+      sha256: acabfe27a762a36e59d0162abf1d29a27c3f92b1c23f6ee5d35f3f7da62dac80
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.7"
+    version: "1.0.8"
   in_app_purchaser:
     dependency: "direct main"
     description:

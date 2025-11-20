@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 
 import '../../../../app/devs/nav_content.dart';
 import '../../../../app/res/icons.dart';
@@ -79,31 +79,28 @@ class _FeedPageState extends State<FeedPage>
     if (value == FeedFormats.memory) {
       result = await context.open(
         Routes.createAMemory,
-        arguments: {
-          ...args,
-          "$UserMemoryCubit": context.read<UserMemoryCubit>(),
-        },
+        args: {...args, "$UserMemoryCubit": context.read<UserMemoryCubit>()},
       );
       return;
     }
     if (value == FeedFormats.note) {
       result = await context.open(
         Routes.createANote,
-        arguments: {...args, "$UserNoteCubit": context.read<UserNoteCubit>()},
+        args: {...args, "$UserNoteCubit": context.read<UserNoteCubit>()},
       );
       return;
     }
     if (value == FeedFormats.post) {
       result = await context.open(
         Routes.createUserPost,
-        arguments: {...args, "$UserPostCubit": context.read<UserPostCubit>()},
+        args: {...args, "$UserPostCubit": context.read<UserPostCubit>()},
       );
       return;
     }
     if (value == FeedFormats.video) {
       result = await context.open(
         Routes.createAVideo,
-        arguments: {...args, "$UserVideoCubit": context.read<UserVideoCubit>()},
+        args: {...args, "$UserVideoCubit": context.read<UserVideoCubit>()},
       );
       return;
     }

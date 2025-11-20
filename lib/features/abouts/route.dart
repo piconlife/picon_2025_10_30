@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:in_app_navigator/generate.dart';
 
-import '../../routes/builder.dart';
 import '../../routes/paths.dart';
 import 'views/pages/info.dart';
 

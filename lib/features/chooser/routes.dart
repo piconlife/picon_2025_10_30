@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:in_app_navigator/generate.dart';
 import 'package:object_finder/object_finder.dart';
 
-import '../../routes/builder.dart';
 import '../../routes/paths.dart';
 import 'view/cubits/suggested_channel_cubit.dart';
 import 'view/cubits/suggested_user_cubit.dart';

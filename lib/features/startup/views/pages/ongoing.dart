@@ -2,7 +2,7 @@ import 'package:app_color/app_color.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 
 import '../../../../app/constants/app.dart';
 import '../../../../roots/widgets/appbar.dart';
@@ -18,11 +18,11 @@ class OngoingPage extends StatelessWidget {
   const OngoingPage({super.key});
 
   void _next(BuildContext context) {
-    context.next(Routes.ongoing, arguments: true);
+    context.next(Routes.ongoing, args: true);
   }
 
   void _signIn(BuildContext context) {
-    context.open(Routes.login, arguments: true);
+    context.open(Routes.login, args: true);
   }
 
   @override

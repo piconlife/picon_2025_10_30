@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/generate.dart';
+import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
 
-import '../../routes/builder.dart';
 import '../../routes/paths.dart';
 import '../social/data/cubits/feed_home_cubit.dart';
 import '../user/view/cubits/avatar_cubit.dart';
@@ -24,7 +24,7 @@ extension ProfileRouteHelper on BuildContext {
   Future<void> openProfile() async {
     open(
       Routes.profile,
-      arguments: {
+      args: {
         "$FeedHomeCubit": read<FeedHomeCubit>(),
         "$UserCubit": read<UserCubit>(),
         "$UserFollowerCubit": read<UserFollowerCubit>(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:in_app_navigator/generate.dart';
 import 'package:in_app_translation/core.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -15,7 +16,6 @@ import '../features/shore/routes.dart';
 import '../features/social/routes.dart';
 import '../features/startup/route.dart';
 import '../features/user/routes.dart';
-import 'builder.dart';
 import 'paths.dart';
 
 part 'routes.dart';

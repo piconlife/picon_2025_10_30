@@ -4,7 +4,7 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/iterator.dart';
 import 'package:flutter_andomie/extensions/string.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 import 'package:in_app_translation/in_app_translation.dart';
 import 'package:object_finder/object_finder.dart';
 
@@ -71,10 +71,7 @@ class _ChooseCountryPageState extends State<ChooseCountryPage> {
     }
     final target = Routes.chooseLanguage;
     if (InAppNavigator.isNotVisited(target)) {
-      context.clear(
-        target,
-        arguments: {kRouteOnboardingMode: isOnboardingMode},
-      );
+      context.clear(target, args: {kRouteOnboardingMode: isOnboardingMode});
       return;
     }
     context.clear(Routes.main);

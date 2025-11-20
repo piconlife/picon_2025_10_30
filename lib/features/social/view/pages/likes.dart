@@ -7,9 +7,9 @@ import '../../../../app/res/icons.dart';
 import '../../../../data/models/like.dart';
 import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/appbar.dart';
+import '../../../../roots/widgets/body.dart';
 import '../../../../roots/widgets/error.dart';
 import '../../../../roots/widgets/scaffold_shimmer.dart';
-import '../../../../roots/widgets/body.dart';
 import '../../data/cubits/like_cubit.dart';
 import '../templates/item_feed_like.dart';
 

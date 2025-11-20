@@ -10,7 +10,7 @@ import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_entity/entity.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 import 'package:in_app_translation/utils/country.dart';
 import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 
@@ -207,7 +207,7 @@ class _PasswordPageState extends State<PasswordPage> {
     if (!context.mounted) return;
     context.clear(
       Routes.editUserProfilePhoto,
-      arguments: {kRouteOnboardingMode: true},
+      args: {kRouteOnboardingMode: true},
     );
   }
 

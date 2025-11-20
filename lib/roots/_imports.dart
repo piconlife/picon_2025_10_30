@@ -19,7 +19,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:in_app_analytics/analytics.dart';
 import 'package:in_app_configs/configs.dart';
 import 'package:in_app_database/in_app_database.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 import 'package:in_app_purchaser/in_app_purchaser.dart';
 import 'package:in_app_settings/settings.dart';
 import 'package:in_app_translation/in_app_translation.dart';

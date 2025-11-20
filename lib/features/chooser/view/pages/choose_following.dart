@@ -6,7 +6,7 @@ import 'package:flutter_andomie/models/selection.dart';
 import 'package:flutter_androssy_kits/widgets/field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/res/icons.dart';
@@ -68,10 +68,7 @@ class _ChooseFollowingPageState extends State<ChooseFollowingPage> {
     }
     final target = Routes.chooseChannel;
     if (InAppNavigator.isNotVisited(target)) {
-      context.clear(
-        target,
-        arguments: {kRouteOnboardingMode: isOnboardingMode},
-      );
+      context.clear(target, args: {kRouteOnboardingMode: isOnboardingMode});
       return;
     }
     context.clear(Routes.main);
@@ -249,7 +246,7 @@ class _ChooseFollowingPageState extends State<ChooseFollowingPage> {
                             onTap:
                                 () => context.open(
                                   Routes.userProfile,
-                                  arguments: {"$User": item.data},
+                                  args: {"$User": item.data},
                                 ),
                             onFollow: instance.call,
                           );

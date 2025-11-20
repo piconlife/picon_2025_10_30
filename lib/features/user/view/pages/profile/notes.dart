@@ -4,7 +4,7 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 
 import '../../../../../app/helpers/user.dart';
 import '../../../../../app/res/icons.dart';
@@ -51,7 +51,7 @@ class _ProfileNotesSegmentState extends State<ProfileNotesSegment> {
             onButtonClick:
                 () => context.open(
                   Routes.createANote,
-                  arguments: {"$FeedType": FeedType.note},
+                  args: {"$FeedType": FeedType.note},
                 ),
           );
         }

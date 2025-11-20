@@ -4,7 +4,7 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/flutter_entity.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 
 import '../../../../../data/enums/feed_type.dart';
 import '../../../../../data/models/feed.dart';
@@ -37,10 +37,8 @@ class FeedHomePage extends StatelessWidget {
               body: "Currently no posts available.",
               buttonText: "Take a new post",
               onButtonClick:
-                  () => context.open(
-                    Routes.createUserPost,
-                    arguments: FeedType.post,
-                  ),
+                  () =>
+                      context.open(Routes.createUserPost, args: FeedType.post),
             );
           }
 

@@ -3,7 +3,7 @@ import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 import 'package:in_app_translation/utils/language.dart';
 import 'package:object_finder/object_finder.dart';
 
@@ -70,10 +70,7 @@ class _ChooseLanguagePageState extends State<ChooseLanguagePage> {
     }
     final target = Routes.chooseProfession;
     if (InAppNavigator.isNotVisited(target)) {
-      context.clear(
-        target,
-        arguments: {kRouteOnboardingMode: isOnboardingMode},
-      );
+      context.clear(target, args: {kRouteOnboardingMode: isOnboardingMode});
       return;
     }
     context.clear(Routes.main);

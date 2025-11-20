@@ -12,7 +12,7 @@ import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/flutter_entity.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/helpers/user.dart';
@@ -37,9 +37,9 @@ import '../../../../roots/services/storage.dart';
 import '../../../../roots/services/uploader.dart';
 import '../../../../roots/utils/image_provider.dart';
 import '../../../../roots/widgets/appbar.dart';
+import '../../../../roots/widgets/body.dart';
 import '../../../../roots/widgets/bottom_bar.dart';
 import '../../../../roots/widgets/icon_button.dart';
-import '../../../../roots/widgets/body.dart';
 import '../../../../roots/widgets/texted_action.dart';
 import '../../../../routes/paths.dart';
 import '../../../user/view/cubits/photo_cubit.dart';
@@ -247,7 +247,7 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
     context
         .open(
           Routes.choosePhoto,
-          arguments: {
+          args: {
             "List<$EditablePhoto>": List<EditablePhoto>.from(photos.value),
           },
         )

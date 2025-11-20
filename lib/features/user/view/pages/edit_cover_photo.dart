@@ -10,7 +10,7 @@ import 'package:flutter_andomie/utils/validator.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_entity/entity.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
 import 'package:picon/data/models/user_post.dart';
 import 'package:picon/roots/widgets/gesture.dart';
@@ -33,11 +33,11 @@ import '../../../../roots/contents/media.dart';
 import '../../../../roots/helpers/connectivity.dart';
 import '../../../../roots/services/storage.dart';
 import '../../../../roots/widgets/appbar.dart';
+import '../../../../roots/widgets/body.dart';
 import '../../../../roots/widgets/bottom_bar.dart';
 import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/padding.dart';
 import '../../../../roots/widgets/row.dart';
-import '../../../../roots/widgets/body.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/texted_action.dart';
 import '../../../../routes/keys.dart';
@@ -288,7 +288,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
     if (InAppNavigator.isNotVisited(Routes.editUserPrimaryAddress)) {
       context.clear(
         Routes.editUserPrimaryAddress,
-        arguments: {kRouteOnboardingMode: isOnboardingMode},
+        args: {kRouteOnboardingMode: isOnboardingMode},
       );
       return;
     }

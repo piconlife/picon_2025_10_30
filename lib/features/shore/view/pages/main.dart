@@ -3,7 +3,7 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/spacing.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 
 import '../../../../app/devs/nav_content.dart';
 import '../../../../app/res/icons.dart';

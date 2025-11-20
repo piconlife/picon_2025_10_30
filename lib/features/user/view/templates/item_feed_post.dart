@@ -3,7 +3,7 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 
 import '../../../../data/models/content.dart';
 import '../../../../data/models/user_post.dart';
@@ -41,14 +41,14 @@ class _ItemUserFeedPostState extends State<ItemUserFeedPost> {
   Future<void> _preview(int index) async {
     context.open(
       Routes.previewPhotos,
-      arguments: {"$Content": item, "index": index},
+      args: {"$Content": item, "index": index},
     );
   }
 
   @override
   void didUpdateWidget(covariant ItemUserFeedPost oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.item != oldWidget.item){
+    if (widget.item != oldWidget.item) {
       item = widget.item;
     }
   }

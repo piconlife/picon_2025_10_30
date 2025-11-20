@@ -7,7 +7,7 @@ import 'package:flutter_andomie/extensions/list.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 
 import '../../../../../app/helpers/user.dart';
 import '../../../../../app/res/icons.dart';
@@ -40,10 +40,7 @@ class _ProfilePhotosSegmentState extends State<ProfilePhotosSegment> {
     }
     context.open(
       Routes.createUserPost,
-      arguments: {
-        "$FeedType": FeedType.photo,
-        "$EditablePhotoFeedback": feedback,
-      },
+      args: {"$FeedType": FeedType.photo, "$EditablePhotoFeedback": feedback},
     );
   }
 

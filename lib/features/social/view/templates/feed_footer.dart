@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/feed.dart';
@@ -38,7 +38,7 @@ class _FeedFooterState extends State<FeedFooter> {
   void _seeLikes() {
     context.open(
       Routes.likes,
-      arguments: {
+      args: {
         "$LikeCubit": context.read<LikeCubit>(),
         "$UserFollowingCubit": context.read<UserFollowingCubit>(),
       },
@@ -48,7 +48,7 @@ class _FeedFooterState extends State<FeedFooter> {
   void _seeComments() {
     context.open(
       Routes.comments,
-      arguments: {
+      args: {
         "$CommentCubit": context.read<CommentCubit>(),
         "$UserFollowingCubit": context.read<UserFollowingCubit>(),
       },

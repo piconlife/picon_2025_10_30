@@ -8,7 +8,7 @@ import 'package:flutter_androssy_kits/core/cached_network_image.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 
 import '../../../../app/helpers/user.dart';
 import '../../../../app/interfaces/dialog_big_photo.dart';
@@ -65,7 +65,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
     if (option == 0) {
       context.open(
         Routes.editUserCoverPhoto,
-        arguments: {
+        args: {
           "$FeedHomeCubit": context.read<FeedHomeCubit>(),
           "$UserPostCubit": context.read<UserPostCubit>(),
           "$UserCoverCubit": context.read<UserCoverCubit>(),
@@ -100,7 +100,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
     if (option == 0) {
       context.open(
         Routes.editUserProfilePhoto,
-        arguments: {
+        args: {
           "$FeedHomeCubit": context.read<FeedHomeCubit>(),
           "$UserPostCubit": context.read<UserPostCubit>(),
           "$UserAvatarCubit": context.read<UserAvatarCubit>(),
@@ -149,19 +149,19 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
     };
     Object? result;
     if (value == FeedFormats.memory) {
-      result = await context.open(Routes.createAMemory, arguments: args);
+      result = await context.open(Routes.createAMemory, args: args);
       return;
     }
     if (value == FeedFormats.note) {
-      result = await context.open(Routes.createANote, arguments: args);
+      result = await context.open(Routes.createANote, args: args);
       return;
     }
     if (value == FeedFormats.post) {
-      result = await context.open(Routes.createUserPost, arguments: args);
+      result = await context.open(Routes.createUserPost, args: args);
       return;
     }
     if (value == FeedFormats.video) {
-      result = await context.open(Routes.createAVideo, arguments: args);
+      result = await context.open(Routes.createAVideo, args: args);
       return;
     }
     _finally(result);
@@ -175,17 +175,17 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
 
   void _makeACall(BuildContext context, User user) {
     if (user.isCurrentUser) {
-      context.open(Routes.callingHome, arguments: widget.uid);
+      context.open(Routes.callingHome, args: widget.uid);
     } else if (user.calling.use) {
-      context.open(Routes.callingCall, arguments: widget.uid);
+      context.open(Routes.callingCall, args: widget.uid);
     }
   }
 
   void _makeAConversation(BuildContext context, User user) {
     if (user.isCurrentUser) {
-      context.open(Routes.messagingChat, arguments: widget.uid);
+      context.open(Routes.messagingChat, args: widget.uid);
     } else if (user.messaging.use) {
-      context.open(Routes.messagingInbox, arguments: widget.uid);
+      context.open(Routes.messagingInbox, args: widget.uid);
     }
   }
 
@@ -210,7 +210,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
   void _seePosts(BuildContext context, User user) {
     context.open(
       Routes.userFeeds,
-      arguments: {
+      args: {
         "$User": user,
         "$FeedHomeCubit": context.read<FeedHomeCubit>(),
         "$UserPostCubit": context.read<UserPostCubit>(),
@@ -219,15 +219,15 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
   }
 
   void _seeFollowers(BuildContext context, User user) {
-    context.open(Routes.userFollowers, arguments: {"$User": user});
+    context.open(Routes.userFollowers, args: {"$User": user});
   }
 
   void _seeFollowings(BuildContext context, User user) {
-    context.open(Routes.userFollowings, arguments: {"$User": user});
+    context.open(Routes.userFollowings, args: {"$User": user});
   }
 
   void _seeReports(BuildContext context, User user) {
-    context.open(Routes.userReports, arguments: {"$User": user});
+    context.open(Routes.userReports, args: {"$User": user});
   }
 
   @override

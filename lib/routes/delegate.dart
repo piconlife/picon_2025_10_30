@@ -8,9 +8,6 @@ class NavigatorDelegate extends InAppNavigatorDelegate {
   const NavigatorDelegate() : super(defaultRoute: Routes.main);
 
   @override
-  Object? get arguments => null;
-
-  @override
   bool isVisited(String name) {
     return Preferences.getBoolOrNull(name) ?? false;
   }
@@ -41,14 +38,13 @@ class NavigatorDelegate extends InAppNavigatorDelegate {
     BuildContext context,
     String route, {
     RoutePredicate? predicate,
-    Object? arguments,
-    Map<String, dynamic>? routeConfigs,
+    Object? args,
   }) {
     return Navigator.pushNamedAndRemoveUntil(
       context,
       route,
       predicate ?? (_) => false,
-      arguments: arguments,
+      arguments: args,
     );
   }
 
@@ -56,7 +52,7 @@ class NavigatorDelegate extends InAppNavigatorDelegate {
   Future<T?>? close<T extends Object?>(
     BuildContext context, {
     T? result,
-    Map<String, dynamic>? routeConfigs,
+    Object? args,
   }) {
     if (Navigator.canPop(context)) {
       Navigator.pop(context, result);
@@ -68,10 +64,10 @@ class NavigatorDelegate extends InAppNavigatorDelegate {
   Future<T?>? open<T extends Object?>(
     BuildContext context,
     String route, {
-    Object? arguments,
-    Map<String, dynamic>? routeConfigs,
+    RouteConfigs? configs,
+    Object? args,
   }) {
-    return Navigator.pushNamed(context, route, arguments: arguments);
+    return Navigator.pushNamed(context, route, arguments: args);
   }
 
   @override
@@ -79,14 +75,13 @@ class NavigatorDelegate extends InAppNavigatorDelegate {
     BuildContext context,
     String route, {
     TO? result,
-    Object? arguments,
-    Map<String, dynamic>? routeConfigs,
+    Object? args,
   }) {
     return Navigator.pushReplacementNamed(
       context,
       route,
       result: result,
-      arguments: arguments,
+      arguments: args,
     );
   }
 }

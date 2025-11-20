@@ -6,7 +6,7 @@ import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_terms_viewer/flutter_terms_viewer.dart';
 import 'package:in_app_configs/configs.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 import 'package:in_app_settings/in_app_settings.dart';
 import 'package:in_app_translation/in_app_translation.dart';
 
@@ -55,7 +55,7 @@ class _PrivacyPageState extends State<PrivacyPage>
   void _accept() async {
     if (Settings.set(kSeenPrivacy, true)) {
       if (widget.isStartupMode) {
-        context.next(Routes.privacy, arguments: true);
+        context.next(Routes.privacy, args: true);
       } else {
         context.close();
       }
@@ -84,7 +84,7 @@ class _PrivacyPageState extends State<PrivacyPage>
   }
 
   void _learnDetails(BuildContext context, Terms terms) {
-    context.open(Routes.terms, arguments: terms);
+    context.open(Routes.terms, args: terms);
   }
 
   void _listener() {

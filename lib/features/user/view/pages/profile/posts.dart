@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/spacing.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 
 import '../../../../../app/helpers/user.dart';
 import '../../../../../app/res/icons.dart';
@@ -54,7 +54,7 @@ class _ProfilePostsSegmentState extends State<ProfilePostsSegment> {
             onButtonClick:
                 () => context.open(
                   Routes.createUserPost,
-                  arguments: {"$FeedType": FeedType.post},
+                  args: {"$FeedType": FeedType.post},
                 ),
           );
         }

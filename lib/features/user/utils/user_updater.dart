@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_andomie/utils/converter.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 
 import '../../../app/constants/limitations.dart';
 import '../../../app/helpers/user.dart';
@@ -201,7 +201,7 @@ class UserInfoUpdater {
   void updateCountry() async {
     final feedback = await context.open(
       Routes.chooseCountry,
-      arguments: {
+      args: {
         ChoosingRouteKeys.submitMode: false,
         ChoosingRouteKeys.data: [if (user.country != null) user.country],
       },
@@ -213,7 +213,7 @@ class UserInfoUpdater {
   void updateHobbies() async {
     final feedback = await context.open(
       Routes.chooseHobbies,
-      arguments: {
+      args: {
         ChoosingRouteKeys.submitMode: false,
         ChoosingRouteKeys.data: [if (user.hobbies != null) ...user.hobbies!],
       },
@@ -225,7 +225,7 @@ class UserInfoUpdater {
   void updateLanguage() async {
     final feedback = await context.open(
       Routes.chooseLanguage,
-      arguments: {
+      args: {
         ChoosingRouteKeys.submitMode: false,
         ChoosingRouteKeys.data: [if (user.language != null) user.language],
       },
@@ -237,7 +237,7 @@ class UserInfoUpdater {
   void updateLanguages() async {
     final feedback = await context.open(
       Routes.chooseLanguages,
-      arguments: {
+      args: {
         ChoosingRouteKeys.submitMode: false,
         ChoosingRouteKeys.data: [
           if (user.secondaryLanguages != null) ...user.secondaryLanguages!,
@@ -253,7 +253,7 @@ class UserInfoUpdater {
   void updateMotherland() async {
     final feedback = await context.open(
       Routes.chooseMotherland,
-      arguments: {
+      args: {
         ChoosingRouteKeys.submitMode: false,
         ChoosingRouteKeys.data: [
           if (user.nationality != null) user.nationality,
@@ -267,7 +267,7 @@ class UserInfoUpdater {
   void updateProfession() async {
     final feedback = await context.open(
       Routes.chooseProfession,
-      arguments: {
+      args: {
         ChoosingRouteKeys.submitMode: false,
         ChoosingRouteKeys.data: [if (user.profession != null) user.profession],
       },
@@ -279,7 +279,7 @@ class UserInfoUpdater {
   void updateProfessions() async {
     final feedback = await context.open(
       Routes.chooseProfessions,
-      arguments: {
+      args: {
         ChoosingRouteKeys.submitMode: false,
         ChoosingRouteKeys.data: [
           if (user.interestedProfessions != null)
@@ -296,7 +296,7 @@ class UserInfoUpdater {
   void updateReligion() async {
     final feedback = await context.open(
       Routes.chooseReligion,
-      arguments: {
+      args: {
         ChoosingRouteKeys.submitMode: false,
         ChoosingRouteKeys.data: [if (user.religion != null) user.religion],
       },

@@ -7,8 +7,8 @@ import 'package:flutter_terms_viewer/flutter_terms_viewer.dart';
 import 'package:object_finder/object_finder.dart';
 
 import '../../../../roots/widgets/appbar.dart';
-import '../../../../roots/widgets/logo_trailing.dart';
 import '../../../../roots/widgets/body.dart';
+import '../../../../roots/widgets/logo_trailing.dart';
 import '../widgets/screen.dart';
 
 class TermsReaderPage extends StatelessWidget {

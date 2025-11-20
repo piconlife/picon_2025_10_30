@@ -1,7 +1,7 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 
 import '../../app/res/icons.dart';
 import 'action.dart';

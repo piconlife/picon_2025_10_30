@@ -1,6 +1,6 @@
 part of '_imports.dart';
 
-class InAppRouter extends InAppRouteGenerator {
+class InAppRouter extends RouteGenerator {
   const InAppRouter._() : super(home: Routes.main);
 
   static InAppRouter get I => const InAppRouter._();
@@ -18,7 +18,7 @@ class InAppRouter extends InAppRouteGenerator {
   @override
   Route<T> defaultRoute<T>(
     RouteSettings settings,
-    InAppRouteConfig config,
+    RouteConfigs config,
     WidgetBuilder builder,
   ) {
     return MaterialWithModalsPageRoute(builder: builder);

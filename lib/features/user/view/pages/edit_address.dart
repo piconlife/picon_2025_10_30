@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/spacing.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/res/icons.dart';
@@ -62,10 +62,7 @@ class _EditUserAddressPageState extends State<EditUserAddressPage> {
     final target =
         widget.primary ? Routes.editUserSecondaryAddress : Routes.chooseCountry;
     if (InAppNavigator.isNotVisited(target)) {
-      context.clear(
-        target,
-        arguments: {kRouteOnboardingMode: isOnboardingMode},
-      );
+      context.clear(target, args: {kRouteOnboardingMode: isOnboardingMode});
       return;
     }
     context.clear(Routes.main);

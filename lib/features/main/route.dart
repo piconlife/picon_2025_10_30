@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:in_app_navigator/generate.dart';
 
-import '../../routes/builder.dart';
 import '../../routes/paths.dart';
 import '../social/data/cubits/feed_home_cubit.dart';
 import '../social/view/cubits/verified_feed_cubit.dart';

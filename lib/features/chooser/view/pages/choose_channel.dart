@@ -6,7 +6,7 @@ import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/res/icons.dart';
@@ -244,7 +244,7 @@ class _ChooseChannelPageState extends State<ChooseChannelPage> {
                         onTap:
                             () => context.open(
                               Routes.userChannel,
-                              arguments: {"$User": item.data},
+                              args: {"$User": item.data},
                             ),
                         onFollow: instance.call,
                       );

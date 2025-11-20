@@ -1,7 +1,7 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:flutter/material.dart';
-import 'package:in_app_navigator/in_app_navigator.dart';
+import 'package:in_app_navigator/route.dart';
 
 import '../../roots/widgets/gesture.dart';
 import '../../roots/widgets/icon.dart';
