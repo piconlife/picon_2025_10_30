@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_navigator/app_navigator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:object_finder/object_finder.dart';
 
 import '../../data/models/content.dart';
+import '../../routes/builder.dart';
 import '../../routes/paths.dart';
 import '../social/data/cubits/like_cubit.dart';
 import '../social/data/cubits/view_cubit.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_navigator/app_navigator.dart';
 
+import '../../routes/builder.dart';
 import '../../routes/paths.dart';
 import 'view/pages/settings.dart';
 

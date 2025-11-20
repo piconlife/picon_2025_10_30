@@ -16,6 +16,7 @@ import '../../../../../data/enums/privacy.dart';
 import '../../../../../data/models/content.dart';
 import '../../../../../roots/utils/utils.dart';
 import '../../../../../roots/widgets/gesture.dart';
+import '../../../../../roots/widgets/hero.dart';
 import '../../../../../roots/widgets/icon.dart';
 import '../../../../../roots/widgets/image.dart';
 import '../../../../../roots/widgets/pleasure_button.dart';
@@ -269,12 +270,12 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
 
   Widget _buildBodyItem(BuildContext context, int index) {
     final item = widget.photos[index];
+    final url = item.photoUrl;
     return Align(
       alignment: Alignment(0, -0.1),
-      child: InAppImage(
-        item.photoUrl,
-        fit: BoxFit.cover,
-        width: double.infinity,
+      child: InAppHero(
+        tag: url,
+        child: InAppImage(url, fit: BoxFit.cover, width: double.infinity),
       ),
     );
   }
