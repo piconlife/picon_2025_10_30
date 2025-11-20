@@ -5,32 +5,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_andomie/utils/date_helper.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
+import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/res/placeholders.dart';
 import '../../../../data/enums/gender.dart';
+import '../../../../data/models/content.dart';
 import '../../../../data/models/user.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../roots/widgets/avatar.dart';
 import '../../../../roots/widgets/gesture.dart';
+import '../../../../roots/widgets/layout.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/user_builder.dart';
+import '../../../../routes/paths.dart';
 import 'feed_footer.dart';
 import 'feed_header.dart';
 
-class ItemUserFeedAvatar extends StatefulWidget {
+class ItemUserFeedAvatar extends StatelessWidget {
   final UserPost item;
   final Function(BuildContext context, UserPost item)? onClick;
 
   const ItemUserFeedAvatar({super.key, required this.item, this.onClick});
 
-  @override
-  State<ItemUserFeedAvatar> createState() => _ItemUserFeedAvatarState();
-}
-
-class _ItemUserFeedAvatarState extends State<ItemUserFeedAvatar> {
   String _title(User user) {
-    final date = DateHelper.toRealtime(widget.item.timeMills);
-    if (widget.item.isPublisher) {
+    final date = DateHelper.toRealtime(item.timeMills);
+    if (item.isPublisher) {
       return "Updated your profile photo at $date";
     } else {
       if (user.gender == Gender.male) {
@@ -42,9 +41,9 @@ class _ItemUserFeedAvatarState extends State<ItemUserFeedAvatar> {
   }
 
   String? _subtitle(User user) {
-    return !widget.item.title.isValid
-        ? DateHelper.toRealtime(widget.item.timeMills)
-        : widget.item.title.isValid
+    return !item.title.isValid
+        ? DateHelper.toRealtime(item.timeMills)
+        : item.title.isValid
         ? user.title
         : user.profession;
   }
@@ -53,26 +52,26 @@ class _ItemUserFeedAvatarState extends State<ItemUserFeedAvatar> {
   Widget build(BuildContext context) {
     return ColoredBox(
       color: context.light,
-      child: Column(
+      child: InAppLayout(
         children: [
           InAppUserBuilder(
-            id: widget.item.publisherId,
+            id: item.publisherId,
             builder: (context, user) {
               return UserFeedHeader(
                 title: _title(user),
                 subtitle: _subtitle(user),
                 avatar: user.photo,
                 actions: [
-                  if (widget.item.isPublisher)
+                  if (item.isPublisher)
                     FeedHeaderMoreAction()
                   else
-                    FeedHeaderFollowButton(publisher: widget.item.publisherId),
+                    FeedHeaderFollowButton(publisher: item.publisherId),
                 ],
               );
             },
           ),
-          _Body(item: widget.item),
-          UserFeedFooter(item: widget.item, onLiked: (value) {}),
+          _Body(item: item),
+          UserFeedFooter(item: item, onLiked: (value) {}),
         ],
       ),
     );
@@ -83,6 +82,13 @@ class _Body extends StatelessWidget {
   final UserPost item;
 
   const _Body({required this.item});
+
+  Future<void> _preview(BuildContext context, int index) async {
+    context.open(
+      Routes.previewPhotos,
+      arguments: {"$Content": item, "index": index},
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +174,7 @@ class _Body extends StatelessWidget {
               child: AspectRatio(
                 aspectRatio: 1,
                 child: InAppGesture(
-                  onTap: () {},
+                  onTap: () => _preview(context, 0),
                   child: InAppAvatar(
                     item.photoUrl ?? InAppPlaceholders.image,
                     borderColor: Colors.white,

@@ -5,19 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_andomie/utils/date_helper.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
+import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/res/placeholders.dart';
 import '../../../../data/enums/gender.dart';
+import '../../../../data/models/content.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/user_builder.dart';
+import '../../../../routes/paths.dart';
 import 'feed_footer.dart';
 import 'feed_header.dart';
 
-class ItemFeedCover extends StatefulWidget {
+class ItemFeedCover extends StatelessWidget {
   final int index;
   final Feed item;
   final Function(BuildContext context, Feed item)? onClick;
@@ -29,14 +32,9 @@ class ItemFeedCover extends StatefulWidget {
     this.onClick,
   });
 
-  @override
-  State<ItemFeedCover> createState() => _ItemFeedCoverState();
-}
-
-class _ItemFeedCoverState extends State<ItemFeedCover> {
   String _title(User user) {
-    final date = DateHelper.toRealtime(widget.item.timeMills);
-    if (widget.item.isPublisher) {
+    final date = DateHelper.toRealtime(item.timeMills);
+    if (item.isPublisher) {
       return "Updated your cover photo at $date";
     } else {
       if (user.gender == Gender.male) {
@@ -48,9 +46,9 @@ class _ItemFeedCoverState extends State<ItemFeedCover> {
   }
 
   String? _subtitle(User user) {
-    return !widget.item.title.isValid
+    return !item.title.isValid
         ? null
-        : widget.item.title.isValid
+        : item.title.isValid
         ? user.title
         : user.profession;
   }
@@ -62,20 +60,18 @@ class _ItemFeedCoverState extends State<ItemFeedCover> {
       child: Column(
         children: [
           InAppUserBuilder(
-            id: widget.item.publisherId,
+            id: item.publisherId,
             builder: (context, user) {
               return FeedHeader(
                 title: _title(user),
                 subtitle: _subtitle(user),
                 avatar: user.photo,
-                actions: [
-                  FeedHeaderFollowButton(publisher: widget.item.publisherId),
-                ],
+                actions: [FeedHeaderFollowButton(publisher: item.publisherId)],
               );
             },
           ),
-          _Body(item: widget.item),
-          FeedFooter(item: widget.item),
+          _Body(item: item),
+          FeedFooter(item: item),
         ],
       ),
     );
@@ -86,6 +82,13 @@ class _Body extends StatelessWidget {
   final Feed item;
 
   const _Body({required this.item});
+
+  Future<void> _preview(BuildContext context, int index) async {
+    context.open(
+      Routes.previewPhotos,
+      arguments: {"$Content": item, "index": index},
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +172,7 @@ class _Body extends StatelessWidget {
                 right: dimen.dp(16),
               ),
               child: InAppGesture(
-                onTap: () {},
+                onTap: () => _preview(context, 0),
                 splashBorderRadius: BorderRadius.circular(dimen.dp(28)),
                 child: AspectRatio(
                   aspectRatio: 9 / 6,
