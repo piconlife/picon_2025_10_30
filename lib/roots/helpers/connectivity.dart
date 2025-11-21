@@ -8,7 +8,7 @@ import 'package:in_app_configs/configs.dart';
 class ConnectivityHelper {
   const ConnectivityHelper._();
 
-  static Future<bool> get _test async {
+  static Future<bool> get test async {
     if (!Configs.get("connectivity_checking", defaultValue: false)) {
       return true;
     }
@@ -40,7 +40,6 @@ class ConnectivityHelper {
         ConnectivityResult.wifi,
         ConnectivityResult.ethernet,
       ].any((element) => value.contains(element));
-      if (connected) return _test;
       return connected;
     });
   }

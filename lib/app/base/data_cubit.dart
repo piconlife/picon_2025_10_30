@@ -347,7 +347,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     try {
       loading(force: loader);
       await (callback?.call() ?? onCount())
-          .then((e) => handleCount(e.count, placement: placement))
+          .then((e) => handleCount(e.data ?? 0, placement: placement))
           .onError((e, st) => handleError(e, st, placement));
       return state.count;
     } catch (e) {
