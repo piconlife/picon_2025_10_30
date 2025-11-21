@@ -25,7 +25,8 @@ class ItemFeed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final path = item.content.path;
+    final path = item.contentPath;
+
     if (path == null || path.isEmpty) return const SizedBox.shrink();
 
     LikeCubit likeCubit = Cache.put("like_cubit[$path]", () {

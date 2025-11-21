@@ -51,7 +51,7 @@ class FirestoreDataDelegate extends DataDelegate {
 
   @override
   Future<int?> count(String path) async {
-    return _db.collection("$path/").count().get().then((snapshot) {
+    return _db.collection(path).count().get().then((snapshot) {
       return snapshot.count;
     });
   }

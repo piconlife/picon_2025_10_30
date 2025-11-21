@@ -361,7 +361,9 @@ class Content extends Entity<Keys> {
   String? get parentUrl =>
       _string(_parentUrl ?? _content?._parentUrl, url: true);
 
-  String? get path => _string(_path ?? _content?._path);
+  String? get path => _normalizedPath;
+
+  String? get contentPath => _normalizedContentPath;
 
   String? get photoUrl => _normalizedPhotoUrl;
 
@@ -378,6 +380,22 @@ class Content extends Entity<Keys> {
   String? get videoUrl => _normalizedVideoUrl;
 
   // GETTERS (NORMALIZERS)
+
+  String? get _normalizedPath {
+    return normalizeContentData(this, (e) {
+      if ((e._path ?? '').isNotEmpty) return e._path!;
+      return null;
+    });
+  }
+
+  String? get _normalizedContentPath {
+    final x = normalizeContentData(this, (e) {
+      if (e._content != null && e._content!._path != null) return null;
+      if ((e._path ?? '').isNotEmpty) return e._path!;
+      return null;
+    });
+    return x;
+  }
 
   String? get _normalizedTitle {
     return normalizeContentData(this, (e) {
