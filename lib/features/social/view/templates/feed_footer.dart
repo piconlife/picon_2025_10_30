@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/route.dart';
 
+import '../../../../app/base/data_cubit.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/feed_comment.dart';
@@ -30,8 +31,8 @@ class FeedFooter extends StatefulWidget {
 }
 
 class _FeedFooterState extends State<FeedFooter> {
-  late final likeCubit = context.read<LikeCubit>();
-  late final commentCubit = context.read<CommentCubit>();
+  late final likeCubit = DataCubit.of<LikeCubit>(context);
+  late final commentCubit = DataCubit.of<CommentCubit>(context);
 
   void _like() => likeCubit.toggle();
 

@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_andomie/utils/date_helper.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
-import 'package:in_app_navigator/route.dart';
 
 import '../../../../app/res/placeholders.dart';
 import '../../../../data/enums/gender.dart';
-import '../../../../data/models/content.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/avatar.dart';
@@ -19,7 +17,7 @@ import '../../../../roots/widgets/hero.dart';
 import '../../../../roots/widgets/padding.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/user_builder.dart';
-import '../../../../routes/paths.dart';
+import '../../../preview/view/pages/preview_photos.dart';
 import 'feed_footer.dart';
 import 'feed_header.dart';
 
@@ -87,11 +85,7 @@ class _Body extends StatelessWidget {
   const _Body({required this.item});
 
   Future<void> _preview(BuildContext context, int index) async {
-    context.open(
-      Routes.previewPhotos,
-      args: {"$Content": item, "index": index},
-      configs: RouteConfigs(transitionType: TransitionType.fadeIn),
-    );
+    PreviewPhotosPage.open(context, item, index);
   }
 
   @override

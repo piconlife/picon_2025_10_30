@@ -3,25 +3,34 @@ import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/route.dart';
 import 'package:marquee/marquee.dart';
 
+import '../../../../../app/base/data_cubit.dart';
 import '../../../../../app/helpers/user.dart';
 import '../../../../../app/interfaces/bsd_privacy.dart';
 import '../../../../../app/res/icons.dart';
 import '../../../../../data/enums/privacy.dart';
 import '../../../../../data/models/content.dart';
+import '../../../../../data/models/like.dart';
+import '../../../../../data/models/view.dart';
 import '../../../../../roots/utils/utils.dart';
 import '../../../../../roots/widgets/gesture.dart';
 import '../../../../../roots/widgets/hero.dart';
 import '../../../../../roots/widgets/icon.dart';
 import '../../../../../roots/widgets/image.dart';
+import '../../../../../roots/widgets/layout.dart';
 import '../../../../../roots/widgets/pleasure_button.dart';
 import '../../../../../roots/widgets/text.dart';
+import '../../../../../roots/widgets/transfluent_app_bar.dart';
 import '../../../../../routes/keys.dart';
+import '../../../../social/data/cubits/like_cubit.dart';
+import '../../../../social/data/cubits/view_cubit.dart';
+import '../../../../social/view/pages/likes.dart';
 import 'expandable_text.dart';
 
 class PhotoPreviewView extends StatefulWidget {
@@ -50,25 +59,24 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
   final _isBookmarked = ValueNotifier(false);
   late final _pageController = PageController(initialPage: widget.index);
 
+  late final likeCubit = DataCubit.of<LikeCubit>(context);
+  late final viewCubit = DataCubit.of<ViewCubit>(context);
+
   bool _isExpandedText = false;
 
   Set<int> downloads = {};
   Set<int> bookmarks = {};
 
-  Content get selected {
+  Content get item {
     return widget.photos.elementAtOrNull(widget.index) ?? Content();
   }
 
   void _onShare() {
-    if (!selected.photoUrl.isValidWebUrl || !selected.isPrivacyAllow) {
+    if (!item.photoUrl.isValidWebUrl || !item.isPrivacyAllow) {
       context.showMessage("This photo is personal");
       return;
     }
-    Utils.share(
-      context,
-      body: selected.description,
-      urls: [selected.photoUrl!],
-    );
+    Utils.share(context, body: item.description, urls: [item.photoUrl!]);
   }
 
   void _onBookmark() {
@@ -76,8 +84,8 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
   }
 
   void _onChangePrivacy() async {
-    if (!UserHelper.isCurrentUser(selected.publisherId)) return;
-    final feedback = await PrivacyBSD.show(context, selected.privacy);
+    if (!UserHelper.isCurrentUser(item.publisherId)) return;
+    final feedback = await PrivacyBSD.show(context, item.privacy);
     widget.onChangePrivacy(feedback);
   }
 
@@ -88,7 +96,7 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
       content: EditableDialogContent(
         args: {kDialogPositiveButtonTextKey: "SEND"},
       ),
-      text: selected.description,
+      text: item.description,
     );
     if (feedback.isNotValid) return;
     widget.onUpdateTag(feedback);
@@ -102,8 +110,8 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
       title: "Choose action",
       options: [
         "Change privacy",
-        selected.description.isValid ? "Update description" : "Add description",
-        if (selected.description.isValid) "Remove description",
+        item.description.isValid ? "Update description" : "Add description",
+        if (item.description.isValid) "Remove description",
       ],
     );
     if (feedback < 0) return;
@@ -120,7 +128,11 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
     _downloadLabel.value = "Done";
   }
 
-  void _like() {}
+  void _like() => likeCubit.toggle();
+
+  void _seeLikes() {
+    LikesPage.open(context);
+  }
 
   void _comment() => widget.onChangedPageType(1);
 
@@ -149,14 +161,7 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
   }
 
   Widget _buildToolbar(BuildContext context) {
-    return AppBar(
-      primary: true,
-      surfaceTintColor: Colors.transparent,
-      automaticallyImplyLeading: false,
-      backgroundColor: Colors.transparent,
-      systemOverlayStyle: SystemUiOverlayStyle.light.copyWith(
-        systemNavigationBarColor: Colors.transparent,
-      ),
+    return TransfluentAppBar(
       leading: Center(child: _buildLeading(context)),
       actions: [_buildActions(context), SizedBox(width: 8)],
     );
@@ -164,7 +169,7 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
 
   Widget _buildLeading(BuildContext context) {
     return InAppGesture(
-      onTap: () => context.close(),
+      onTap: context.close,
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
@@ -184,7 +189,7 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
       ),
       child: Row(
         children: [
-          if (selected.isPrivacyAllow) ...[
+          if (item.isPrivacyAllow) ...[
             _buildAction(context, InAppIcons.share.solid, _onShare),
             _buildActionToggle(
               context,
@@ -195,7 +200,7 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
           ] else ...[
             _buildActionPrivate(context),
           ],
-          if (UserHelper.isCurrentUser(selected.publisherId))
+          if (UserHelper.isCurrentUser(item.publisherId))
             _buildAction(context, InAppIcons.more.regular, _onMore),
         ],
       ),
@@ -244,9 +249,7 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
   Widget _buildActionPrivate(BuildContext context) {
     return InAppGesture(
       onTap:
-          UserHelper.isCurrentUser(selected.publisherId)
-              ? _onChangePrivacy
-              : null,
+          UserHelper.isCurrentUser(item.publisherId) ? _onChangePrivacy : null,
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
@@ -293,7 +296,7 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: context.smallerSpace),
-            child: Column(
+            child: InAppLayout(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (expanded) ...[
@@ -304,7 +307,7 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
                   children: [
                     if (widget.photos.length > 1) _buildIndicator(context),
                     _buildCounter(context),
-                    if (selected.description.isValid && !expanded) ...[
+                    if (item.description.isValid && !expanded) ...[
                       context.smallSpace.w,
                       Expanded(child: _buildDescription(context)),
                     ],
@@ -403,19 +406,31 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
       fontWeight: context.mediumFontWeight,
       fontSize: context.normalFontSize,
     );
-    return Row(
+    return InAppLayout(
+      layout: LayoutType.row,
       children: [
-        InAppText(
-          Converter.toKMB(selected.likeCount.use, "Like", "Likes"),
-          style: style,
+        BlocBuilder<LikeCubit, Response<LikeModel>>(
+          builder: (context, value) {
+            return InAppGesture(
+              onTap: _seeLikes,
+              child: InAppText(
+                Converter.toKMB(value.count, "Like", "Likes"),
+                style: style,
+              ),
+            );
+          },
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: context.smallSpace),
           child: InAppText("-", style: style),
         ),
-        InAppText(
-          Converter.toKMB(selected.viewCount.use, "View", "Views"),
-          style: style,
+        BlocBuilder<ViewCubit, Response<ViewModel>>(
+          builder: (context, value) {
+            return InAppText(
+              Converter.toKMB(value.count, "View", "Views"),
+              style: style,
+            );
+          },
         ),
       ],
     );
@@ -423,7 +438,7 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
 
   final _descriptionController = ScrollController();
 
-  bool get expanded => selected.description.use.length >= 500;
+  bool get expanded => item.description.use.length >= 100;
 
   Widget _buildDescription(BuildContext context) {
     final style = TextStyle(
@@ -435,7 +450,7 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
       return SizedBox(
         height: context.dp(24),
         child: Marquee(
-          text: selected.description.use,
+          text: item.description.use,
           blankSpace: context.dp(8),
           fadingEdgeStartFraction: 0.1,
           fadingEdgeEndFraction: 0.1,
@@ -449,7 +464,8 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
         child: SingleChildScrollView(
           controller: _descriptionController,
           child: AndrossyExpandableText(
-            selected.description.use,
+            item.description.use,
+            expandedText: '',
             charDuration: Duration.zero,
             style: style,
             onChanged: (value) {
@@ -481,10 +497,15 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
   }
 
   Widget _buildLikeButton(BuildContext context) {
-    return InAppPleasureButton(
-      onTap: _like,
-      icon: InAppIcons.heart.regular,
-      iconColor: context.lightAsFixed,
+    return BlocBuilder<LikeCubit, Response<LikeModel>>(
+      builder: (context, value) {
+        final activated = value.resultByMe.isNotEmpty;
+        return InAppPleasureButton(
+          icon: activated ? InAppIcons.heart.solid : InAppIcons.heart.regular,
+          iconColor: activated ? context.red : context.lightAsFixed,
+          onTap: _like,
+        );
+      },
     );
   }
 

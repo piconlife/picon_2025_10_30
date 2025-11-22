@@ -130,6 +130,25 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   // ------------------------------CONTENT MODIFIER-----------------------------
   // ---------------------------------------------------------------------------
 
+  bool isExist(Object identifier, {bool Function(String id, T data)? test}) {
+    if (identifier is Entity) {
+      identifier = identifier.id;
+    } else if (identifier is Selection) {
+      identifier = identifier.id;
+    }
+    if (identifier is T) {
+      if (state.resultByMe.contains(identifier)) return true;
+      if (state.result.contains(identifier)) return true;
+    }
+    if (identifier is! String || identifier.isEmpty) return false;
+    return state.result.any((e) {
+      if (e is Entity) return e.id == identifier;
+      if (e is Selection) return e.id == identifier;
+      if (test != null) return test(identifier as String, e);
+      return false;
+    });
+  }
+
   int indexOf(Object? identifier, [bool Function(T data)? test]) {
     if (identifier == null) return -1;
     final result = state.result;
@@ -438,8 +457,8 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     emit(
       state.copyWith(
         count: state.count + 1,
-        result: state.result..insert(0, data),
-        resultByMe: state.resultByMe..insert(0, data),
+        result: state.result..insert(index, data),
+        resultByMe: state.resultByMe..insert(index, data),
       ),
     );
     onPut?.call();
@@ -496,6 +515,44 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
         } else {
           if (replace != null) this.replace(data, replace);
           onDeleted?.call();
+        }
+        return value.isSuccessful;
+      });
+    });
+  }
+
+  Future<bool> seen(
+    T data, {
+    int index = 0,
+    String? placement,
+    T Function(T)? replace,
+    VoidCallback? onPut,
+    VoidCallback? onDone,
+    VoidCallback? onFailed,
+  }) {
+    if (isExist(data)) return Future.value(false);
+    emit(
+      state.copyWith(
+        count: state.count + 1,
+        result: state.result..insert(index, data),
+        resultByMe: state.resultByMe..insert(index, data),
+      ),
+    );
+    onPut?.call();
+    return execute(placement: placement ?? "seen[$T]", () {
+      return onCreateIfNotExist(data).then((value) {
+        if (!value.isSuccessful) {
+          emit(
+            state.copyWith(
+              count: state.count - 1,
+              result: state.result..remove(data),
+              resultByMe: state.resultByMe..remove(data),
+            ),
+          );
+          onFailed?.call();
+        } else {
+          if (replace != null) this.replace(data, replace);
+          onDone?.call();
         }
         return value.isSuccessful;
       });
@@ -648,6 +705,11 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
 
   @protected
   T? createNewObject(Object? args) => null;
+
+  @protected
+  Future<Response<T>> onCreateIfNotExist(T data) async {
+    return Response(status: Status.undefined);
+  }
 
   @protected
   Future<Response<int>> onCount() async {

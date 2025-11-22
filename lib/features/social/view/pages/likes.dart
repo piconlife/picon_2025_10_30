@@ -2,7 +2,9 @@ import 'package:app_color/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
+import 'package:in_app_navigator/route.dart';
 
+import '../../../../app/base/data_cubit.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/like.dart';
 import '../../../../data/models/user.dart';
@@ -10,6 +12,8 @@ import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/body.dart';
 import '../../../../roots/widgets/error.dart';
 import '../../../../roots/widgets/scaffold_shimmer.dart';
+import '../../../../routes/paths.dart';
+import '../../../user/view/cubits/following_cubit.dart';
 import '../../data/cubits/like_cubit.dart';
 import '../templates/item_feed_like.dart';
 
@@ -18,6 +22,16 @@ class LikesPage extends StatefulWidget {
   final User? user;
 
   const LikesPage({super.key, this.args, this.user});
+
+  static Future<void> open(BuildContext context) async {
+    context.open(
+      Routes.likes,
+      args: {
+        "$LikeCubit": DataCubit.of<LikeCubit>(context),
+        "$UserFollowingCubit": DataCubit.of<UserFollowingCubit>(context),
+      },
+    );
+  }
 
   @override
   State<LikesPage> createState() => _LikesPageState();

@@ -51,7 +51,7 @@ class StarCubit extends DataCubit<StarModel> {
     bool resultByMe = false,
   }) {
     if (resultByMe) {
-      return GetStarUseCase.i(UserHelper.uid, path);
+      return GetStarUseCase.i(path, UserHelper.uid);
     }
     return GetStarsByPaginationUseCase.i(
       path,

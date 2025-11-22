@@ -5,8 +5,10 @@ import 'package:app_color/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_entity/entity.dart';
+import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
 
+import '../../../../app/base/data_cubit.dart';
 import '../../../../data/constants/keys.dart';
 import '../../../../data/enums/privacy.dart';
 import '../../../../data/models/content.dart';
@@ -16,6 +18,10 @@ import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/layout.dart';
 import '../../../../roots/widgets/scaffold.dart';
 import '../../../../roots/widgets/transfluent_app_bar.dart';
+import '../../../../routes/paths.dart';
+import '../../../social/data/cubits/like_cubit.dart';
+import '../../../social/data/cubits/view_cubit.dart';
+import '../../../social/view/cubits/comment_cubit.dart';
 import 'photos/comments.dart';
 import 'photos/photos.dart';
 
@@ -23,6 +29,24 @@ class PreviewPhotosPage extends StatefulWidget {
   final Object? args;
 
   const PreviewPhotosPage({super.key, this.args});
+
+  static Future<void> open(
+    BuildContext context,
+    Content item,
+    int index,
+  ) async {
+    context.open(
+      Routes.previewPhotos,
+      args: {
+        "index": index,
+        "$Content": item,
+        "$LikeCubit": DataCubit.of<LikeCubit>(context),
+        "$ViewCubit": DataCubit.of<ViewCubit>(context),
+        "$CommentCubit": DataCubit.of<CommentCubit>(context),
+      },
+      configs: RouteConfigs(transitionType: TransitionType.fadeIn),
+    );
+  }
 
   @override
   State<PreviewPhotosPage> createState() => _PreviewPhotosPageState();

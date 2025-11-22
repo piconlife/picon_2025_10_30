@@ -51,7 +51,7 @@ class LikeCubit extends DataCubit<LikeModel> {
     bool resultByMe = false,
   }) {
     if (resultByMe) {
-      return GetLikeUseCase.i(UserHelper.uid, path);
+      return GetLikeUseCase.i(path, UserHelper.uid);
     }
     return GetLikesByPaginationUseCase.i(
       path,

@@ -35,6 +35,15 @@ class ViewCubit extends DataCubit<ViewModel> {
 
   @protected
   @override
+  Future<Response<ViewModel>> onCreateIfNotExist(ViewModel data) {
+    return GetViewUseCase.i(path, UserHelper.uid).then((value) {
+      if (!value.status.isResultNotFound) return value;
+      return onCreate(data);
+    });
+  }
+
+  @protected
+  @override
   Future<Response<ViewModel>> onDelete(ViewModel data) {
     return DeleteViewUseCase.i(path, data.id);
   }
@@ -47,7 +56,7 @@ class ViewCubit extends DataCubit<ViewModel> {
     bool resultByMe = false,
   }) {
     if (resultByMe) {
-      return GetViewUseCase.i(UserHelper.uid, path);
+      return GetViewUseCase.i(path, UserHelper.uid);
     }
     return GetViewsByPaginationUseCase.i(
       path,
