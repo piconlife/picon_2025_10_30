@@ -80,6 +80,7 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
       context,
       subject: item.title,
       body: item.description,
+      loaderBarrierColor: Colors.black12,
       urls: [item.photoUrl!],
     );
   }

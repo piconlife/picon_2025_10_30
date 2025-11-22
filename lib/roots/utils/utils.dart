@@ -60,6 +60,7 @@ class Utils {
     String? subject,
     String? title,
     String? body,
+    Color? loaderBarrierColor,
     List<String>? urls,
   }) async {
     if (urls != null && urls.length == 1 && subject == null && body == null) {
@@ -67,7 +68,7 @@ class Utils {
       return;
     }
     if (urls != null && urls.isNotEmpty) {
-      context.showLoader();
+      context.showLoader(barrierColor: loaderBarrierColor);
       DownloadHelper.downloadFilesOnly(urls).then((value) {
         if (context.mounted) context.hideLoader();
         if (value.isEmpty) return;
