@@ -6,8 +6,8 @@ import '../../roots/helpers/connectivity.dart';
 import '../models/user_memory.dart';
 import '../sources/local/user_memory.dart';
 import '../sources/remote/user_memory.dart';
-import '../use_cases/feed_video/get.dart';
 import '../use_cases/content/get.dart';
+import '../use_cases/feed_video/get.dart';
 
 class UserMemoryRepository extends RemoteDataRepository<UserMemory> {
   UserMemoryRepository({
