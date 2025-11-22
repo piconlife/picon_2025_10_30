@@ -3,12 +3,12 @@ import 'package:flutter_entity/entity.dart';
 import '../../models/feed.dart';
 import 'base.dart';
 
-class CreateFeedUseCase extends BaseFeedUseCase {
-  CreateFeedUseCase._();
+class FeedCreateUseCase extends FeedBaseUseCase {
+  FeedCreateUseCase._();
 
-  static CreateFeedUseCase? _i;
+  static FeedCreateUseCase? _i;
 
-  static CreateFeedUseCase get i => _i ??= CreateFeedUseCase._();
+  static FeedCreateUseCase get i => _i ??= FeedCreateUseCase._();
 
   Future<Response<FeedModel>> call(FeedModel data) async {
     return repository.create(data, createRefs: true);

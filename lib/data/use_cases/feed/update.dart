@@ -3,12 +3,12 @@ import 'package:flutter_entity/entity.dart';
 import '../../models/feed.dart';
 import 'base.dart';
 
-class UpdateFeedUseCase extends BaseFeedUseCase {
-  UpdateFeedUseCase._();
+class FeedUpdateUseCase extends FeedBaseUseCase {
+  FeedUpdateUseCase._();
 
-  static UpdateFeedUseCase? _i;
+  static FeedUpdateUseCase? _i;
 
-  static UpdateFeedUseCase get i => _i ??= UpdateFeedUseCase._();
+  static FeedUpdateUseCase get i => _i ??= FeedUpdateUseCase._();
 
   Future<Response<FeedModel>> call(String id, Map<String, dynamic> data) {
     return repository.updateById(id, data, resolveRefs: true, updateRefs: true);

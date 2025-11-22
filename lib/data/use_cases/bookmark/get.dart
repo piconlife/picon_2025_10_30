@@ -1,16 +1,16 @@
 import 'package:flutter_entity/entity.dart';
 
-import '../../models/like.dart';
+import '../../models/bookmark.dart';
 import 'base.dart';
 
-class GetLikesUseCase extends BaseFeedLikeUseCase {
-  GetLikesUseCase._();
+class BookmarkGetUseCase extends BookmarkBaseUseCase {
+  BookmarkGetUseCase._();
 
-  static GetLikesUseCase? _i;
+  static BookmarkGetUseCase? _i;
 
-  static GetLikesUseCase get i => _i ??= GetLikesUseCase._();
+  static BookmarkGetUseCase get i => _i ??= BookmarkGetUseCase._();
 
-  Future<Response<LikeModel>> call(String parentPath) {
-    return repository.get(params: getParams(parentPath));
+  Future<Response<BookmarkModel>> call(String id) {
+    return repository.getById(id, params: params);
   }
 }

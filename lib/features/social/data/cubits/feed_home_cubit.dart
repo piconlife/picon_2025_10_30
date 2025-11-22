@@ -18,7 +18,7 @@ class FeedHomeCubit extends DataCubit<FeedModel> {
     bool resultByMe = false,
   }) async {
     if (resultByMe) return Response();
-    return GetStarFeedsByPaginationUseCase.i(
+    return StaredFeedPaginationUseCase.i(
       initialSize: initialSize ?? 10,
       fetchingSize: fetchingSize ?? 5,
       snapshot: state.snapshot,
@@ -28,7 +28,7 @@ class FeedHomeCubit extends DataCubit<FeedModel> {
   @protected
   @override
   Future<Response<FeedModel>> onCreate(FeedModel data) =>
-      CreateFeedUseCase.i(data);
+      FeedCreateUseCase.i(data);
 
   @protected
   @override
@@ -37,7 +37,7 @@ class FeedHomeCubit extends DataCubit<FeedModel> {
   @protected
   @override
   Future<Response<FeedModel>> onDeleteById(String id) =>
-      DeleteFeedUseCase.i(id);
+      FeedDeleteUseCase.i(id);
 
   @protected
   @override
@@ -45,7 +45,7 @@ class FeedHomeCubit extends DataCubit<FeedModel> {
     FeedModel old,
     Map<String, dynamic> changes,
   ) {
-    return UpdateFeedUseCase.i(old.id, changes);
+    return FeedUpdateUseCase.i(old.id, changes);
   }
 
   void deletes(BuildContext context, int index, FeedModel data) {

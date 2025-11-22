@@ -2,14 +2,14 @@ import 'package:flutter_entity/entity.dart';
 
 import 'base.dart';
 
-class GetLikesCountUseCase extends BaseFeedLikeUseCase {
-  GetLikesCountUseCase._();
+class BookmarkCountUseCase extends BookmarkBaseUseCase {
+  BookmarkCountUseCase._();
 
-  static GetLikesCountUseCase? _i;
+  static BookmarkCountUseCase? _i;
 
-  static GetLikesCountUseCase get i => _i ??= GetLikesCountUseCase._();
+  static BookmarkCountUseCase get i => _i ??= BookmarkCountUseCase._();
 
-  Future<Response<int>> call(String parentPath) {
-    return repository.count(params: getParams(parentPath));
+  Future<Response<int>> call() {
+    return repository.count(params: params);
   }
 }

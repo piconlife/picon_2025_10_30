@@ -14,7 +14,7 @@ class VerifiedFeedCubit extends DataCubit<FeedModel> {
     bool resultByMe = false,
   }) async {
     if (resultByMe) return Response(status: Status.undefined);
-    return GetVerifiedFeedsByPaginationUseCase.i(
+    return VerifiedFeedPaginationUseCase.i(
       initialSize: initialSize ?? 10,
       fetchingSize: fetchingSize ?? 5,
       snapshot: state.snapshot,

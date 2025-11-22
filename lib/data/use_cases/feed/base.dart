@@ -1,7 +1,7 @@
 import '../../repositories/feed.dart';
 
-class BaseFeedUseCase {
+class FeedBaseUseCase {
   final FeedRepository repository;
 
-  BaseFeedUseCase() : repository = FeedRepository.i;
+  FeedBaseUseCase() : repository = FeedRepository.i;
 }

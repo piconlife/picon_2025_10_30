@@ -1,13 +1,12 @@
 import 'package:data_management/core.dart';
 
-import '../../repositories/like.dart';
+import '../../../app/helpers/user.dart';
+import '../../repositories/bookmark.dart';
 
-class BaseFeedLikeUseCase {
-  final LikeRepository repository;
+class BookmarkBaseUseCase {
+  final BookmarkRepository repository;
 
-  BaseFeedLikeUseCase() : repository = LikeRepository.i;
+  BookmarkBaseUseCase() : repository = BookmarkRepository.i;
 
-  IterableParams getParams(String parentPath) {
-    return IterableParams([parentPath]);
-  }
+  IterableParams get params => IterableParams([UserHelper.uid]);
 }

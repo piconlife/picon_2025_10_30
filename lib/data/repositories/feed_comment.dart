@@ -5,17 +5,17 @@ import '../models/feed_comment.dart';
 import '../sources/local/comment.dart';
 import '../sources/remote/feed_comment.dart';
 
-class FeedCommentRepository extends RemoteDataRepository<CommentModel> {
-  FeedCommentRepository({
+class CommentRepository extends RemoteDataRepository<CommentModel> {
+  CommentRepository({
     required super.source,
     super.backup,
     super.connectivity = ConnectivityHelper.connected,
   });
 
-  static FeedCommentRepository? _i;
+  static CommentRepository? _i;
 
-  static FeedCommentRepository get i =>
-      _i ??= FeedCommentRepository(
+  static CommentRepository get i =>
+      _i ??= CommentRepository(
         source: RemoteFeedCommentDataSource(),
         backup: LocalCommentDataSource(),
       );

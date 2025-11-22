@@ -1,19 +1,16 @@
 import 'package:flutter_entity/entity.dart';
 
-import '../../models/like.dart';
+import '../../models/bookmark.dart';
 import 'base.dart';
 
-class CreateLikeUseCase extends BaseFeedLikeUseCase {
-  CreateLikeUseCase._();
+class BookmarkCreateUseCase extends BookmarkBaseUseCase {
+  BookmarkCreateUseCase._();
 
-  static CreateLikeUseCase? _i;
+  static BookmarkCreateUseCase? _i;
 
-  static CreateLikeUseCase get i => _i ??= CreateLikeUseCase._();
+  static BookmarkCreateUseCase get i => _i ??= BookmarkCreateUseCase._();
 
-  Future<Response<LikeModel>> call(LikeModel data) async {
-    if (data.parentPath == null) {
-      return Response.failure("Parent path required!");
-    }
-    return repository.create(data, params: getParams(data.parentPath!));
+  Future<Response<BookmarkModel>> call(BookmarkModel data) async {
+    return repository.create(data, params: params);
   }
 }

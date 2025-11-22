@@ -6,13 +6,13 @@ import '../../constants/keys.dart';
 import '../../models/feed.dart';
 import 'base.dart';
 
-class GetVerifiedFeedsByPaginationUseCase extends BaseFeedUseCase {
-  GetVerifiedFeedsByPaginationUseCase._();
+class VerifiedFeedPaginationUseCase extends FeedBaseUseCase {
+  VerifiedFeedPaginationUseCase._();
 
-  static GetVerifiedFeedsByPaginationUseCase? _i;
+  static VerifiedFeedPaginationUseCase? _i;
 
-  static GetVerifiedFeedsByPaginationUseCase get i =>
-      _i ??= GetVerifiedFeedsByPaginationUseCase._();
+  static VerifiedFeedPaginationUseCase get i =>
+      _i ??= VerifiedFeedPaginationUseCase._();
 
   Future<Response<FeedModel>> call({
     int? initialSize,

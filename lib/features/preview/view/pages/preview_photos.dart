@@ -65,7 +65,7 @@ class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
   Future<void> _update(int index, Map<String, dynamic> data) async {
     final path = photos[index].contentPath.use;
     if (path.isEmpty) return;
-    await UpdateUseCase.i.call(path, data);
+    await ContentUpdateUseCase.i.call(path, data);
   }
 
   void _changePrivacy(Privacy privacy) {

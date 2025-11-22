@@ -3,12 +3,12 @@ import 'package:flutter_entity/entity.dart';
 import '../../models/content.dart';
 import 'base.dart';
 
-class GetsUseCase extends ContentBaseUseCase {
-  GetsUseCase._();
+class ContentGetsUseCase extends ContentBaseUseCase {
+  ContentGetsUseCase._();
 
-  static GetsUseCase? _i;
+  static ContentGetsUseCase? _i;
 
-  static GetsUseCase get i => _i ??= GetsUseCase._();
+  static ContentGetsUseCase get i => _i ??= ContentGetsUseCase._();
 
   Future<Response<ContentModel>> call(
     String path, {

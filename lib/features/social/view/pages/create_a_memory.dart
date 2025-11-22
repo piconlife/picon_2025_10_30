@@ -192,7 +192,7 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
       audience: Audience.everyone,
     );
     try {
-      final value = await CreatePhotoUseCase.i(data);
+      final value = await ContentCreateUseCase.i(data);
       if (value.isSuccessful) return data;
       if (!context.mounted) return null;
       final resubmission = await context.showAlert(
@@ -343,7 +343,7 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
     //   // referenceId: feed.id,
     //   // referencePath: feed.path,
     // );
-    CreateFeedUseCase.i(global).then((value) {
+    FeedCreateUseCase.i(global).then((value) {
       if (!context.mounted) return;
       if (value.isSuccessful) {
         _complete(context);

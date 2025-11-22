@@ -10,13 +10,13 @@ import 'base.dart';
 
 const kStaredNearbyFeedRadius = "stared_nearby_feed_radius";
 
-class GetStarFeedsByPaginationUseCase extends BaseFeedUseCase {
-  GetStarFeedsByPaginationUseCase._();
+class StaredFeedPaginationUseCase extends FeedBaseUseCase {
+  StaredFeedPaginationUseCase._();
 
-  static GetStarFeedsByPaginationUseCase? _i;
+  static StaredFeedPaginationUseCase? _i;
 
-  static GetStarFeedsByPaginationUseCase get i =>
-      _i ??= GetStarFeedsByPaginationUseCase._();
+  static StaredFeedPaginationUseCase get i =>
+      _i ??= StaredFeedPaginationUseCase._();
 
   Future<Response<FeedModel>> _filter({
     double? lat,

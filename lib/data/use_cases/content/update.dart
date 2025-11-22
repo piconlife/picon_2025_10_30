@@ -3,12 +3,12 @@ import 'package:flutter_entity/entity.dart';
 import '../../models/content.dart';
 import 'base.dart';
 
-class UpdateUseCase extends ContentBaseUseCase {
-  UpdateUseCase._();
+class ContentUpdateUseCase extends ContentBaseUseCase {
+  ContentUpdateUseCase._();
 
-  static UpdateUseCase? _i;
+  static ContentUpdateUseCase? _i;
 
-  static UpdateUseCase get i => _i ??= UpdateUseCase._();
+  static ContentUpdateUseCase get i => _i ??= ContentUpdateUseCase._();
 
   Future<Response<ContentModel>> call(
     String path,

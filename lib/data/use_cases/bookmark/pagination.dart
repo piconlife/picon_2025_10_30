@@ -2,26 +2,25 @@ import 'package:data_management/core.dart';
 import 'package:flutter_entity/entity.dart';
 
 import '../../constants/keys.dart';
-import '../../models/like.dart';
+import '../../models/bookmark.dart';
 import 'base.dart';
 
-class GetLikesByPaginationUseCase extends BaseFeedLikeUseCase {
-  GetLikesByPaginationUseCase._();
+class BookmarkPaginationUseCase extends BookmarkBaseUseCase {
+  BookmarkPaginationUseCase._();
 
-  static GetLikesByPaginationUseCase? _i;
+  static BookmarkPaginationUseCase? _i;
 
-  static GetLikesByPaginationUseCase get i {
-    return _i ??= GetLikesByPaginationUseCase._();
+  static BookmarkPaginationUseCase get i {
+    return _i ??= BookmarkPaginationUseCase._();
   }
 
-  Future<Response<LikeModel>> call(
-    String parentPath, {
+  Future<Response<BookmarkModel>> call({
     int? initialSize,
     int? fetchingSize,
     Object? snapshot,
   }) {
     return repository.getByQuery(
-      params: getParams(parentPath),
+      params: params,
       sorts: [DataSorting(Keys.i.timeMills, descending: true)],
       selections: [
         if (snapshot != null) DataSelection.startAfterDocument(snapshot),
