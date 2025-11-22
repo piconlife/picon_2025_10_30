@@ -10,7 +10,7 @@ class GetVideosUseCase extends BaseFeedVideoUseCase {
 
   static GetVideosUseCase get i => _i ??= GetVideosUseCase._();
 
-  Future<Response<FeedVideo>> call(String referencePath) {
+  Future<Response<VideoModel>> call(String referencePath) {
     return repository.get(params: getParams(referencePath));
   }
 }

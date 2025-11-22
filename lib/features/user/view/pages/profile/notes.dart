@@ -30,7 +30,7 @@ class _ProfileNotesSegmentState extends State<ProfileNotesSegment> {
   Widget build(BuildContext context) {
     final dimen = context.dimens;
     final isCurrentUser = UserHelper.isCurrentUser(widget.uid);
-    return BlocBuilder<UserNoteCubit, Response<UserNote>>(
+    return BlocBuilder<UserNoteCubit, Response<NoteModel>>(
       buildWhen: (previous, current) => current.requestCode == 0,
       builder: (context, state) {
         final result = state.result;

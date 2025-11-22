@@ -5,7 +5,7 @@ import '../models/content.dart';
 import '../sources/local/content.dart';
 import '../sources/remote/content.dart';
 
-class ContentRepository extends RemoteDataRepository<Content> {
+class ContentRepository extends RemoteDataRepository<ContentModel> {
   ContentRepository({
     required super.source,
     super.backup,

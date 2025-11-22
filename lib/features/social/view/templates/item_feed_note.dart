@@ -15,8 +15,8 @@ import 'feed_header.dart';
 
 class ItemFeedNote extends StatefulWidget {
   final int index;
-  final Feed item;
-  final Function(BuildContext context, Feed item)? onClick;
+  final FeedModel item;
+  final Function(BuildContext context, FeedModel item)? onClick;
 
   const ItemFeedNote({
     super.key,
@@ -58,7 +58,7 @@ class _ItemFeedNoteState extends State<ItemFeedNote> {
 }
 
 class _Body extends StatelessWidget {
-  final Feed item;
+  final FeedModel item;
 
   const _Body({required this.item});
 

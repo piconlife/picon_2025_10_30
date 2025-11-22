@@ -21,7 +21,7 @@ import '../../../utils/user_updater.dart';
 import '../../cubits/user_cubit.dart';
 
 class ProfileAboutsSegment extends StatefulWidget {
-  final User? user;
+  final UserModel? user;
 
   const ProfileAboutsSegment({super.key, this.user});
 
@@ -30,7 +30,7 @@ class ProfileAboutsSegment extends StatefulWidget {
 }
 
 class _ProfileAboutsSegmentState extends State<ProfileAboutsSegment> {
-  List<Map<String, dynamic>> _data(User user) {
+  List<Map<String, dynamic>> _data(UserModel user) {
     return [
       {
         "title": "Family Information",
@@ -176,7 +176,7 @@ class _ProfileAboutsSegmentState extends State<ProfileAboutsSegment> {
     ];
   }
 
-  void _update(String key, String title, User? user) async {
+  void _update(String key, String title, UserModel? user) async {
     if (key.isEmpty || user == null) return;
     final keys = UserKeys.i;
     final updater = UserInfoUpdater(context, user);
@@ -243,7 +243,7 @@ class _ProfileAboutsSegmentState extends State<ProfileAboutsSegment> {
         final currentUid = user.isCurrentUser;
         return ColoredBox(
           color: light,
-          child: BlocBuilder<UserCubit, Response<User>>(
+          child: BlocBuilder<UserCubit, Response<UserModel>>(
             builder: (context, state) {
               if (state.status.isLoading) {
                 return InAppScaffoldShimmer();

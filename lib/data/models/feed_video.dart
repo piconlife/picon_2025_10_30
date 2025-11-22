@@ -13,8 +13,8 @@ List<String> _keys = [
   Keys.i.videoUrl,
 ];
 
-class FeedVideo extends Content {
-  FeedVideo({
+class VideoModel extends ContentModel {
+  VideoModel({
     super.publisherId,
     super.id,
     super.timeMills,
@@ -23,8 +23,8 @@ class FeedVideo extends Content {
     super.videoUrl,
   });
 
-  factory FeedVideo.create({
-    User? publisher,
+  factory VideoModel.create({
+    UserModel? publisher,
     String? id,
     int? timeMills,
     String? parentId,
@@ -32,7 +32,7 @@ class FeedVideo extends Content {
     String? videoUrl,
   }) {
     publisher ??= UserHelper.user;
-    return FeedVideo(
+    return VideoModel(
       id: id,
       timeMills: timeMills,
       parentId: parentId,
@@ -42,9 +42,9 @@ class FeedVideo extends Content {
     );
   }
 
-  factory FeedVideo.from(Object? source) {
-    final data = Content.parse(source);
-    return FeedVideo(
+  factory VideoModel.from(Object? source) {
+    final data = ContentModel.parse(source);
+    return VideoModel(
       publisherId: data.publisherId,
       id: data.id,
       timeMills: data.timeMills,
@@ -54,7 +54,7 @@ class FeedVideo extends Content {
     );
   }
 
-  FeedVideo withFeedVideo({
+  VideoModel withFeedVideo({
     String? publisher,
     String? id,
     int? timeMills,
@@ -62,7 +62,7 @@ class FeedVideo extends Content {
     Privacy? privacy,
     String? videoUrl,
   }) {
-    return FeedVideo(
+    return VideoModel(
       publisherId: publisher ?? this.publisherId,
       id: id ?? this.id,
       timeMills: timeMills ?? this.timeMills,

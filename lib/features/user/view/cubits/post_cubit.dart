@@ -13,7 +13,7 @@ import '../../../../data/use_cases/user_post/update.dart';
 import '../../../../roots/services/translator.dart';
 import '../../../../roots/utils/utils.dart';
 
-class UserPostCubit extends DataCubit<UserPost> {
+class UserPostCubit extends DataCubit<PostModel> {
   final String uid;
 
   UserPostCubit(super.context, [String? uid]) : uid = uid ?? UserHelper.uid;
@@ -22,7 +22,7 @@ class UserPostCubit extends DataCubit<UserPost> {
   Future<Response<int>> onCount() => GetUserFeedCountUseCase.i(uid);
 
   @override
-  Future<Response<UserPost>> onFetch({
+  Future<Response<PostModel>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,
@@ -38,18 +38,18 @@ class UserPostCubit extends DataCubit<UserPost> {
 
   @protected
   @override
-  Future<Response<UserPost>> onDelete(UserPost data) => onDeleteById(data.id);
+  Future<Response<PostModel>> onDelete(PostModel data) => onDeleteById(data.id);
 
   @protected
   @override
-  Future<Response<UserPost>> onDeleteById(String id) {
+  Future<Response<PostModel>> onDeleteById(String id) {
     return DeleteUserPostUseCase.i(id);
   }
 
   @protected
   @override
-  Future<Response<UserPost>> onUpdate(
-    UserPost old,
+  Future<Response<PostModel>> onUpdate(
+    PostModel old,
     Map<String, dynamic> changes,
   ) {
     return UpdateUserPostUseCase.i(old.id, changes);
@@ -138,7 +138,7 @@ class UserPostCubit extends DataCubit<UserPost> {
     // ClipboardHelper.setText(data.description!);
   }
 
-  void translate(int index, UserPost item, ValueChanged<UserPost> notify) {
+  void translate(int index, PostModel item, ValueChanged<PostModel> notify) {
     final header = item.title ?? '';
     final body = item.description ?? '';
     if (!item.isTranslatable) return;

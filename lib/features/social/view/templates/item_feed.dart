@@ -21,7 +21,7 @@ import 'item_feed_video.dart';
 
 class ItemFeed extends StatefulWidget {
   final int index;
-  final Feed item;
+  final FeedModel item;
 
   const ItemFeed({super.key, required this.index, required this.item});
 

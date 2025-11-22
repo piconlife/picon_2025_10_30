@@ -29,7 +29,7 @@ List<String> _keys = [
   Keys.i.privacy,
 ];
 
-class Comment extends Content {
+class Comment extends ContentModel {
   Comment({
     // PUBLISHER
     super.publisherId,
@@ -107,7 +107,7 @@ class Comment extends Content {
   }
 
   factory Comment.from(dynamic source) {
-    final data = Content.parse(source);
+    final data = ContentModel.parse(source);
     return Comment(
       // PUBLISHER
       publisherId: data.publisherId,

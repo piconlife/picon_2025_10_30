@@ -1,13 +1,10 @@
-import 'package:data_management/core.dart';
-
+import '../../base/in_app_data_source.dart';
 import '../../constants/paths.dart';
-import '../../delegates/local.dart';
 import '../../models/user_avatar.dart';
 
-class LocalUserAvatarDataSource extends LocalDataSource<UserAvatar> {
-  LocalUserAvatarDataSource()
-    : super(delegate: LocalDataDelegate.i, path: Paths.userAvatars);
+class LocalUserAvatarDataSource extends InAppDataSource<AvatarModel> {
+  LocalUserAvatarDataSource() : super(Paths.userAvatars);
 
   @override
-  UserAvatar build(Object? source) => UserAvatar.parse(source);
+  AvatarModel build(Object? source) => AvatarModel.parse(source);
 }

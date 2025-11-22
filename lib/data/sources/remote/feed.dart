@@ -1,13 +1,10 @@
-import 'package:data_management/core.dart';
-
+import '../../base/firestore_data_source.dart';
 import '../../constants/paths.dart';
-import '../../delegates/firestore.dart';
 import '../../models/feed.dart';
 
-class RemoteFeedDataSource extends RemoteDataSource<Feed> {
-  RemoteFeedDataSource()
-    : super(delegate: FirestoreDataDelegate.i, path: Paths.feeds);
+class RemoteFeedDataSource extends FirestoreDataSource<FeedModel> {
+  RemoteFeedDataSource() : super(Paths.feeds);
 
   @override
-  Feed build(Object? source) => Feed.parse(source);
+  FeedModel build(Object? source) => FeedModel.parse(source);
 }

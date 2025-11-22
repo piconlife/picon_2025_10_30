@@ -35,7 +35,7 @@ import 'expandable_text.dart';
 
 class PhotoPreviewView extends StatefulWidget {
   final int index;
-  final List<Content> photos;
+  final List<ContentModel> photos;
   final ValueChanged<int> onChanged;
   final ValueChanged<int> onChangedPageType;
   final ValueChanged<Privacy> onChangePrivacy;
@@ -67,8 +67,8 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
   Set<int> downloads = {};
   Set<int> bookmarks = {};
 
-  Content get item {
-    return widget.photos.elementAtOrNull(widget.index) ?? Content();
+  ContentModel get item {
+    return widget.photos.elementAtOrNull(widget.index) ?? ContentModel();
   }
 
   void _onShare() {

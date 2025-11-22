@@ -14,7 +14,7 @@ import '../cubits/report_cubit.dart';
 
 class UserReportsPage extends StatelessWidget {
   final Object? args;
-  final User? user;
+  final UserModel? user;
 
   const UserReportsPage({super.key, this.args, this.user});
 
@@ -26,7 +26,7 @@ class UserReportsPage extends StatelessWidget {
         titleText:
             user != null ? "${user?.username ?? ""}'s reports" : "Reports",
       ),
-      body: BlocBuilder<UserReportCubit, Response<UserReport>>(
+      body: BlocBuilder<UserReportCubit, Response<ReportModel>>(
         builder: (context, response) {
           if (response.isLoading) return InAppScaffoldShimmer();
           if (!response.isValid) {

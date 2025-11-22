@@ -17,8 +17,8 @@ import 'feed_footer.dart';
 import 'feed_header.dart';
 
 class ItemUserFeedSponsored extends StatefulWidget {
-  final UserPost item;
-  final Function(BuildContext context, UserPost item)? onClick;
+  final PostModel item;
+  final Function(BuildContext context, PostModel item)? onClick;
 
   const ItemUserFeedSponsored({super.key, required this.item, this.onClick});
 
@@ -53,7 +53,7 @@ class _ItemUserFeedSponsoredState extends State<ItemUserFeedSponsored> {
 }
 
 class _Body extends StatelessWidget {
-  final UserPost item;
+  final PostModel item;
 
   const _Body({required this.item});
 

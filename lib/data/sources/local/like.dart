@@ -1,12 +1,9 @@
-import 'package:data_management/core.dart';
-
+import '../../base/in_app_data_source.dart';
 import '../../constants/paths.dart';
-import '../../delegates/local.dart';
 import '../../models/like.dart';
 
-class LocalLikeDataSource extends LocalDataSource<LikeModel> {
-  LocalLikeDataSource()
-    : super(delegate: LocalDataDelegate.i, path: Paths.refLikes);
+class LocalLikeDataSource extends InAppDataSource<LikeModel> {
+  LocalLikeDataSource() : super(Paths.refLikes);
 
   @override
   LikeModel build(Object? source) => LikeModel.parse(source);

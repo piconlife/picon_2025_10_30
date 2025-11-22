@@ -1,13 +1,10 @@
-import 'package:data_management/core.dart';
-
+import '../../base/firestore_data_source.dart';
 import '../../constants/paths.dart';
-import '../../delegates/firestore.dart';
 import '../../models/user_story.dart';
 
-class RemoteUserStoryDataSource extends RemoteDataSource<UserStory> {
-  RemoteUserStoryDataSource()
-    : super(delegate: FirestoreDataDelegate.i, path: Paths.userStories);
+class RemoteUserStoryDataSource extends FirestoreDataSource<StoryModel> {
+  RemoteUserStoryDataSource() : super(Paths.userStories);
 
   @override
-  UserStory build(Object? source) => UserStory.from(source);
+  StoryModel build(Object? source) => StoryModel.from(source);
 }

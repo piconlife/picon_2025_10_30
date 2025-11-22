@@ -8,33 +8,33 @@ import '../../../../data/use_cases/user_following/create.dart';
 import '../../../../data/use_cases/user_following/delete.dart';
 import '../../../../data/use_cases/user_following/get.dart';
 
-class UserFollowingCubit extends DataCubit<UserFollowing> {
+class UserFollowingCubit extends DataCubit<FollowingModel> {
   final String uid;
 
   UserFollowingCubit(super.context, [String? uid])
     : uid = uid ?? UserHelper.uid;
 
   @override
-  UserFollowing? createNewObject(Object? args) {
+  FollowingModel? createNewObject(Object? args) {
     if (uid.isEmpty) return null;
-    return UserFollowing.create(uid: uid);
+    return FollowingModel.create(uid: uid);
   }
 
   @override
   Future<Response<int>> onCount() => GetUserFollowingCountUseCase.i(uid);
 
   @override
-  Future<Response<UserFollowing>> onCreate(UserFollowing data) {
+  Future<Response<FollowingModel>> onCreate(FollowingModel data) {
     return CreateUserFollowingUseCase.i(data);
   }
 
   @override
-  Future<Response<UserFollowing>> onDelete(UserFollowing data) {
+  Future<Response<FollowingModel>> onDelete(FollowingModel data) {
     return DeleteUserFollowingUseCase.i(data.id);
   }
 
   @override
-  Future<Response<UserFollowing>> onFetch({
+  Future<Response<FollowingModel>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,

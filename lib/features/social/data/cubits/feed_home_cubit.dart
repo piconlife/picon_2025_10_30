@@ -8,11 +8,11 @@ import '../../../../data/use_cases/feed/delete.dart';
 import '../../../../data/use_cases/feed/get_stars.dart';
 import '../../../../data/use_cases/feed/update.dart';
 
-class FeedHomeCubit extends DataCubit<Feed> {
+class FeedHomeCubit extends DataCubit<FeedModel> {
   FeedHomeCubit(super.context);
 
   @override
-  Future<Response<Feed>> onFetch({
+  Future<Response<FeedModel>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,
@@ -27,23 +27,28 @@ class FeedHomeCubit extends DataCubit<Feed> {
 
   @protected
   @override
-  Future<Response<Feed>> onCreate(Feed data) => CreateFeedUseCase.i(data);
+  Future<Response<FeedModel>> onCreate(FeedModel data) =>
+      CreateFeedUseCase.i(data);
 
   @protected
   @override
-  Future<Response<Feed>> onDelete(Feed data) => onDeleteById(data.id);
+  Future<Response<FeedModel>> onDelete(FeedModel data) => onDeleteById(data.id);
 
   @protected
   @override
-  Future<Response<Feed>> onDeleteById(String id) => DeleteFeedUseCase.i(id);
+  Future<Response<FeedModel>> onDeleteById(String id) =>
+      DeleteFeedUseCase.i(id);
 
   @protected
   @override
-  Future<Response<Feed>> onUpdate(Feed old, Map<String, dynamic> changes) {
+  Future<Response<FeedModel>> onUpdate(
+    FeedModel old,
+    Map<String, dynamic> changes,
+  ) {
     return UpdateFeedUseCase.i(old.id, changes);
   }
 
-  void deletes(BuildContext context, int index, Feed data) {
+  void deletes(BuildContext context, int index, FeedModel data) {
     // Analytics.callAsync(name: 'delete_feed', reason: data.id, () async {
     //   emit(state.copyWith(result: state.result..removeAt(index)));
     //   final feedback = await DeleteFeedUseCase.i(data.id);
@@ -159,7 +164,7 @@ class FeedHomeCubit extends DataCubit<Feed> {
     // // ClipboardHelper.setText(data.description!);
   }
 
-  void translate(int index, Feed item, ValueChanged<Feed> notify) {
+  void translate(int index, FeedModel item, ValueChanged<FeedModel> notify) {
     // final header = item.title ?? '';
     // final body = item.description ?? '';
     // if (!item.isTranslatable) return;

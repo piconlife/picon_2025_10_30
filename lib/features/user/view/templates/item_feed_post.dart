@@ -15,8 +15,8 @@ import 'user_post_header.dart';
 
 class ItemUserFeedPost extends StatefulWidget {
   final int index;
-  final UserPost item;
-  final Function(BuildContext context, UserPost item)? onClick;
+  final PostModel item;
+  final Function(BuildContext context, PostModel item)? onClick;
 
   const ItemUserFeedPost({
     super.key,
@@ -30,7 +30,7 @@ class ItemUserFeedPost extends StatefulWidget {
 }
 
 class _ItemUserFeedPostState extends State<ItemUserFeedPost> {
-  late UserPost item = widget.item;
+  late PostModel item = widget.item;
 
   Future<void> _translate() async {
     context.read<UserPostCubit>().translate(widget.index, item, (value) {
@@ -41,7 +41,7 @@ class _ItemUserFeedPostState extends State<ItemUserFeedPost> {
   Future<void> _preview(int index) async {
     context.open(
       Routes.previewPhotos,
-      args: {"$Content": item, "index": index},
+      args: {"$ContentModel": item, "index": index},
       configs: RouteConfigs(transitionType: TransitionType.fadeIn),
     );
   }

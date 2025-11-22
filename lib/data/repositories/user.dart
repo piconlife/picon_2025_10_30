@@ -5,7 +5,7 @@ import '../models/user.dart';
 import '../sources/local/user.dart';
 import '../sources/remote/user.dart';
 
-class UserRepository extends RemoteDataRepository<User> {
+class UserRepository extends RemoteDataRepository<UserModel> {
   UserRepository({
     required super.source,
     super.backup,

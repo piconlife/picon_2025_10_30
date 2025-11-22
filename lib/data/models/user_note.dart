@@ -45,8 +45,8 @@ List<String> _keys = [
   Keys.i.contents,
 ];
 
-class UserNote extends Content {
-  UserNote({
+class NoteModel extends ContentModel {
+  NoteModel({
     // PUBLISHER
     super.publisherId,
     super.publisherPhotoUrl,
@@ -87,8 +87,8 @@ class UserNote extends Content {
     // super.views,
   });
 
-  factory UserNote.create({
-    User? publisher,
+  factory NoteModel.create({
+    UserModel? publisher,
     String? id,
     int? timeMills,
     String? title,
@@ -101,7 +101,7 @@ class UserNote extends Content {
     String? url,
     String? link,
     bool? verified,
-    Content? recent,
+    ContentModel? recent,
     Audience? audience,
     Privacy? privacy,
     FeedType? type,
@@ -113,7 +113,7 @@ class UserNote extends Content {
     int? starCount,
     int? viewCount,
     List<String>? bookmarks,
-    List<Content>? contents,
+    List<ContentModel>? contents,
     List<String>? comments,
     List<String>? likes,
     List<String>? reports,
@@ -122,7 +122,7 @@ class UserNote extends Content {
     List<String>? views,
   }) {
     publisher ??= UserHelper.user;
-    return UserNote(
+    return NoteModel(
       // PUBLISHER
       publisherId: publisher.id,
       publisherName: publisher.name,
@@ -156,7 +156,7 @@ class UserNote extends Content {
     );
   }
 
-  UserNote withUserNote({
+  NoteModel withUserNote({
     // PUBLISHER
     String? publisher,
     String? publisherPhoto,
@@ -171,14 +171,14 @@ class UserNote extends Content {
     String? path,
     String? parentId,
     String? parentPath,
-    List<Content>? photos,
+    List<ContentModel>? photos,
     int? priority,
     String? publisherId,
     String? description,
     String? url,
     String? link,
     bool? verified,
-    Content? recent,
+    ContentModel? recent,
     Audience? audience,
     Privacy? privacy,
     FeedType? type,
@@ -190,16 +190,16 @@ class UserNote extends Content {
     int? starCount,
     int? viewCount,
     List<String>? bookmarks,
-    List<Content>? contents,
+    List<ContentModel>? contents,
     List<String>? comments,
     List<String>? likes,
     List<String>? reports,
     List<String>? stars,
     List<String>? tags,
-    List<Content>? videos,
+    List<ContentModel>? videos,
     List<String>? views,
   }) {
-    return UserNote(
+    return NoteModel(
       // PUBLISHER
       publisherId: publisher ?? this.publisherId,
       publisherPhotoUrl: publisherPhoto ?? this.publisherPhotoUrl,
@@ -240,9 +240,9 @@ class UserNote extends Content {
     );
   }
 
-  factory UserNote.from(dynamic source) {
-    final data = Content.parse(source);
-    return UserNote(
+  factory NoteModel.from(dynamic source) {
+    final data = ContentModel.parse(source);
+    return NoteModel(
       // PUBLISHER
       publisherId: data.publisherId,
       // publisherPhoto: data.publisherPhotoUrl,

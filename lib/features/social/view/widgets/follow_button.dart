@@ -29,7 +29,7 @@ class _InAppFollowBuilderState extends State<InAppFollowBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserFollowingCubit, Response<UserFollowing>>(
+    return BlocBuilder<UserFollowingCubit, Response<FollowingModel>>(
       builder: (context, state) {
         final data = state.elementOf((e) => e.id == widget.id);
         return widget.builder(context, data != null, () {

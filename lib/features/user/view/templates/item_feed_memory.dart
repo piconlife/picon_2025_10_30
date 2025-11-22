@@ -18,8 +18,8 @@ import 'feed_footer.dart';
 import 'feed_header.dart';
 
 class ItemUserFeedMemory extends StatefulWidget {
-  final UserPost item;
-  final Function(BuildContext context, UserPost item)? onClick;
+  final PostModel item;
+  final Function(BuildContext context, PostModel item)? onClick;
 
   const ItemUserFeedMemory({super.key, required this.item, this.onClick});
 
@@ -28,7 +28,7 @@ class ItemUserFeedMemory extends StatefulWidget {
 }
 
 class _ItemUserFeedMemoryState extends State<ItemUserFeedMemory> {
-  String _title(User user) {
+  String _title(UserModel user) {
     final date = DateHelper.toRealtime(widget.item.timeMills);
     if (widget.item.isPublisher) {
       return "Updated your memory story at $date";
@@ -41,7 +41,7 @@ class _ItemUserFeedMemoryState extends State<ItemUserFeedMemory> {
     }
   }
 
-  String? _subtitle(User user) {
+  String? _subtitle(UserModel user) {
     return !widget.item.title.isValid
         ? DateHelper.toRealtime(widget.item.timeMills)
         : widget.item.title.isValid
@@ -77,7 +77,7 @@ class _ItemUserFeedMemoryState extends State<ItemUserFeedMemory> {
 }
 
 class _Body extends StatelessWidget {
-  final UserPost item;
+  final PostModel item;
 
   const _Body({required this.item});
 

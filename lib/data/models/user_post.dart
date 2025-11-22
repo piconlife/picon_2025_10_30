@@ -8,7 +8,7 @@ import '../enums/feed_type.dart';
 import '../enums/privacy.dart';
 import 'content.dart';
 
-class UserPost extends Content {
+class PostModel extends ContentModel {
   @override
   Iterable<String> get keys => [
     key.id,
@@ -29,7 +29,7 @@ class UserPost extends Content {
     key.starCountRef,
   ];
 
-  UserPost({
+  PostModel({
     super.id,
     super.timeMills,
     super.publisherId,
@@ -49,7 +49,7 @@ class UserPost extends Content {
     super.uiState,
   }) : super(contentType: ContentType.userPost);
 
-  UserPost.create({
+  PostModel.create({
     required String super.id,
     required super.timeMills,
     required String super.publisherId,
@@ -69,7 +69,7 @@ class UserPost extends Content {
          uiState: ContentUiState.processing,
        );
 
-  UserPost.createForAvatar({
+  PostModel.createForAvatar({
     required String super.id,
     required super.timeMills,
     required String super.publisherId,
@@ -84,7 +84,7 @@ class UserPost extends Content {
          uiState: ContentUiState.processing,
        );
 
-  UserPost.createForCover({
+  PostModel.createForCover({
     required String super.id,
     required super.timeMills,
     required String super.publisherId,
@@ -99,9 +99,10 @@ class UserPost extends Content {
          uiState: ContentUiState.processing,
        );
 
-  factory UserPost.parse(Object? source) {
-    final content = source is Content ? source : Content.parse(source);
-    return UserPost(
+  factory PostModel.parse(Object? source) {
+    final content =
+        source is ContentModel ? source : ContentModel.parse(source);
+    return PostModel(
       id: content.id,
       timeMills: content.timeMills,
       publisherId: content.publisherId,
@@ -118,7 +119,7 @@ class UserPost extends Content {
     );
   }
 
-  UserPost copyWith({
+  PostModel copyWith({
     String? id,
     int? timeMills,
     String? publisherId,
@@ -128,13 +129,13 @@ class UserPost extends Content {
     FeedType? type,
     String? title,
     String? description,
-    Content? content,
+    ContentModel? content,
     String? contentRef,
     List<String>? tags,
-    List<Content>? photos,
+    List<ContentModel>? photos,
     ContentUiState? uiState,
   }) {
-    return UserPost(
+    return PostModel(
       id: stringify(id, this.id),
       timeMills: stringify(timeMills, this.timeMills),
       publisherId: stringify(publisherId, this.publisherId),

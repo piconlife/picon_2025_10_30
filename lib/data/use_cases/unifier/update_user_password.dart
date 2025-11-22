@@ -13,7 +13,7 @@ class UpdateUserPasswordUseCase extends BaseUserUseCase {
   static UpdateUserPasswordUseCase get i =>
       _i ??= UpdateUserPasswordUseCase._();
 
-  Future<Response<User>> call({
+  Future<Response<UserModel>> call({
     required String uid,
     required String password,
   }) async {

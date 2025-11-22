@@ -25,7 +25,7 @@ class FeedVerifierPage extends StatelessWidget {
     final dimen = context.dimens;
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: BlocBuilder<VerifiedUsersCubit, Response<Selection<User>>>(
+      body: BlocBuilder<VerifiedUsersCubit, Response<Selection<UserModel>>>(
         builder: (context, state) {
           final result = state.result;
           if (result.isEmpty && state.status.isLoading) {

@@ -1,14 +1,13 @@
 import 'package:data_management/core.dart';
 
+import '../../base/firestore_data_source.dart';
 import '../../constants/paths.dart';
-import '../../delegates/firestore.dart';
 import '../../models/like.dart';
 
-class RemoteLikeDataSource extends RemoteDataSource<LikeModel> {
+class RemoteLikeDataSource extends FirestoreDataSource<LikeModel> {
   RemoteLikeDataSource()
     : super(
-        delegate: FirestoreDataDelegate.i,
-        path: Paths.refLikes,
+        Paths.refLikes,
         limitations: DataLimitations(maximumDeleteLimit: 1000),
       );
 

@@ -16,7 +16,7 @@ import '../templates/item_feed_placeholder.dart';
 
 class UserPostsPage extends StatelessWidget {
   final Object? args;
-  final User? user;
+  final UserModel? user;
 
   const UserPostsPage({super.key, this.args, this.user});
 
@@ -30,7 +30,7 @@ class UserPostsPage extends StatelessWidget {
                 ? "${user?.username ?? ""}'s feeds"
                 : "Feeds",
       ),
-      body: BlocBuilder<UserPostCubit, Response<UserPost>>(
+      body: BlocBuilder<UserPostCubit, Response<PostModel>>(
         builder: (context, response) {
           if (response.isLoading) return InAppScaffoldShimmer();
           if (!response.isValid) {

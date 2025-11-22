@@ -34,7 +34,7 @@ class UserProfilePage extends StatefulWidget {
 
 class _UserProfilePageState extends State<UserProfilePage>
     with SingleTickerProviderStateMixin {
-  User? user;
+  UserModel? user;
   String? uid;
   bool isCurrentUser = false;
 
@@ -43,7 +43,7 @@ class _UserProfilePageState extends State<UserProfilePage>
   @override
   void initState() {
     super.initState();
-    user = widget.args.findOrNull(key: "$User");
+    user = widget.args.findOrNull(key: "$UserModel");
     uid =
         user?.id ??
         widget.args.findOrNull(key: "uid") ??

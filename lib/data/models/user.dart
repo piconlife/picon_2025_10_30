@@ -178,7 +178,7 @@ class UserKeys extends AuthKeys {
   }
 }
 
-class User extends Auth<UserKeys> {
+class UserModel extends Auth<UserKeys> {
   int? activeTime;
   int? joiningTime;
 
@@ -279,7 +279,7 @@ class User extends Auth<UserKeys> {
     return text;
   }
 
-  User({
+  UserModel({
     // ROOT
     super.id = "",
     super.timeMills,
@@ -355,7 +355,7 @@ class User extends Auth<UserKeys> {
        _secondaryInfo = secondaryInfo;
 
   @override
-  User copy({
+  UserModel copy({
     // ROOT
     String? id,
     int? timeMills,
@@ -423,7 +423,7 @@ class User extends Auth<UserKeys> {
     UserInfo? primaryInfo,
     UserInfo? secondaryInfo,
   }) {
-    return User(
+    return UserModel(
       // ROOT
       id: id ?? this.id,
       timeMills: timeMills ?? this.timeMills,
@@ -493,9 +493,9 @@ class User extends Auth<UserKeys> {
     );
   }
 
-  factory User.parse(Object? source) {
+  factory UserModel.parse(Object? source) {
     final auth = Auth.from(source);
-    return User(
+    return UserModel(
       // ROOT
       id: auth.id,
       timeMills: auth.timeMills,
@@ -653,11 +653,11 @@ class User extends Auth<UserKeys> {
 
   @override
   bool operator ==(Object other) {
-    return other is User && other.id == id && other.json == json;
+    return other is UserModel && other.id == id && other.json == json;
   }
 
   @override
-  String toString() => "$User#$hashCode($filteredJson)";
+  String toString() => "$UserModel#$hashCode($filteredJson)";
 }
 
 class UserInfo {

@@ -55,7 +55,7 @@ class _OtpPageState extends State<OtpPage> {
 
     countdown.currentState?.restart();
     final auth = PhoneAuthenticator(phone: phone);
-    context.signInByPhone<User>(
+    context.signInByPhone<UserModel>(
       auth,
       onCodeSent: (token, _) {
         Startup.puts({StartupKeys.idToken: token});
@@ -90,7 +90,7 @@ class _OtpPageState extends State<OtpPage> {
     String smsCode,
   ) async {
     btnContinue.currentState?.showLoading();
-    final response = await context.verifyPhoneByOtp<User>(
+    final response = await context.verifyPhoneByOtp<UserModel>(
       OtpAuthenticator(token: token, smsCode: smsCode),
     );
     btnContinue.currentState?.hideLoading();

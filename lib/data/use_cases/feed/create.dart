@@ -10,7 +10,7 @@ class CreateFeedUseCase extends BaseFeedUseCase {
 
   static CreateFeedUseCase get i => _i ??= CreateFeedUseCase._();
 
-  Future<Response<Feed>> call(Feed data) async {
+  Future<Response<FeedModel>> call(FeedModel data) async {
     return repository.create(data, createRefs: true);
   }
 }

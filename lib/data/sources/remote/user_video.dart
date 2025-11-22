@@ -1,13 +1,10 @@
-import 'package:data_management/core.dart';
-
+import '../../base/firestore_data_source.dart';
 import '../../constants/paths.dart';
-import '../../delegates/firestore.dart';
 import '../../models/user_video.dart';
 
-class RemoteUserVideoDataSource extends RemoteDataSource<UserVideo> {
-  RemoteUserVideoDataSource()
-    : super(delegate: FirestoreDataDelegate.i, path: Paths.userVideos);
+class RemoteUserVideoDataSource extends FirestoreDataSource<VideoModel> {
+  RemoteUserVideoDataSource() : super(Paths.userVideos);
 
   @override
-  UserVideo build(Object? source) => UserVideo.from(source);
+  VideoModel build(Object? source) => VideoModel.from(source);
 }

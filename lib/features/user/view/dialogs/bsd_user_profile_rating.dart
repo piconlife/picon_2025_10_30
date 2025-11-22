@@ -13,11 +13,11 @@ import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/text_button.dart';
 
 class UserProfileRatingBSD extends StatelessWidget {
-  final User user;
+  final UserModel user;
 
   const UserProfileRatingBSD({super.key, required this.user});
 
-  static Future show(BuildContext context, User user) {
+  static Future show(BuildContext context, UserModel user) {
     return showModalBottomSheet(
       context: context,
       useSafeArea: true,

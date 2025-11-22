@@ -23,8 +23,8 @@ import 'feed_header.dart';
 
 class ItemFeedAvatar extends StatelessWidget {
   final int index;
-  final Feed item;
-  final Function(BuildContext context, Feed item)? onClick;
+  final FeedModel item;
+  final Function(BuildContext context, FeedModel item)? onClick;
 
   const ItemFeedAvatar({
     super.key,
@@ -33,7 +33,7 @@ class ItemFeedAvatar extends StatelessWidget {
     this.onClick,
   });
 
-  String _title(User user) {
+  String _title(UserModel user) {
     final date = DateHelper.toRealtime(item.timeMills);
     if (item.isPublisher) {
       return "Updated your profile content at $date";
@@ -46,7 +46,7 @@ class ItemFeedAvatar extends StatelessWidget {
     }
   }
 
-  String? _subtitle(User user) {
+  String? _subtitle(UserModel user) {
     return !item.title.isValid
         ? null
         : item.title.isValid
@@ -80,7 +80,7 @@ class ItemFeedAvatar extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  final Feed item;
+  final FeedModel item;
 
   const _Body({required this.item});
 

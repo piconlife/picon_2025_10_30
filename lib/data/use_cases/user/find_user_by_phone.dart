@@ -11,7 +11,7 @@ class FindUserByPhoneUseCase extends BaseUserUseCase {
 
   static FindUserByPhoneUseCase get i => _i ??= FindUserByPhoneUseCase._();
 
-  Future<Response<User>> call(String phone) {
+  Future<Response<UserModel>> call(String phone) {
     return repository.search(
       Checker(field: UserKeys.i.phone, value: phone, type: CheckerType.equal),
     );

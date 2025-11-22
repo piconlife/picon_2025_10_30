@@ -24,7 +24,7 @@ class FeedVerifiedPage extends StatelessWidget {
     final dimen = context.dimens;
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: BlocBuilder<VerifiedFeedCubit, Response<Feed>>(
+      body: BlocBuilder<VerifiedFeedCubit, Response<FeedModel>>(
         buildWhen: (previous, current) => current.requestCode == 0,
         builder: (context, state) {
           final result = state.result;

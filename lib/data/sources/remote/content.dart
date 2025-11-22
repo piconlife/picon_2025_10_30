@@ -1,13 +1,10 @@
-import 'package:data_management/core.dart';
-
+import '../../base/firestore_data_source.dart';
 import '../../constants/paths.dart';
-import '../../delegates/firestore.dart';
 import '../../models/content.dart';
 
-class RemoteContentDataSource extends RemoteDataSource<Content> {
-  RemoteContentDataSource()
-    : super(delegate: FirestoreDataDelegate.i, path: Paths.ref);
+class RemoteContentDataSource extends FirestoreDataSource<ContentModel> {
+  RemoteContentDataSource() : super(Paths.ref);
 
   @override
-  Content build(Object? source) => Content.parse(source);
+  ContentModel build(Object? source) => ContentModel.parse(source);
 }

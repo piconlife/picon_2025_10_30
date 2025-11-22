@@ -5,7 +5,7 @@ import '../models/user_post.dart';
 import '../sources/local/user_post.dart';
 import '../sources/remote/user_post.dart';
 
-class UserPostRepository extends RemoteDataRepository<UserPost> {
+class UserPostRepository extends RemoteDataRepository<PostModel> {
   UserPostRepository({
     required super.source,
     super.backup,

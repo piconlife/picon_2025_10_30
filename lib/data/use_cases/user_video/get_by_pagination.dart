@@ -14,7 +14,7 @@ class GetUserVideosByPaginationUseCase extends BaseUserVideoUseCase {
     return _i ??= GetUserVideosByPaginationUseCase._();
   }
 
-  Future<Response<UserVideo>> call({
+  Future<Response<VideoModel>> call({
     String? uid,
     int? initialSize,
     int? fetchingSize,

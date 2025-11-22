@@ -13,7 +13,7 @@ import '../../../../roots/widgets/image.dart';
 
 class UserFeedImageBody extends StatelessWidget {
   final String? description;
-  final List<Content>? photos;
+  final List<ContentModel>? photos;
   final ValueChanged<int>? onTap;
 
   const UserFeedImageBody({

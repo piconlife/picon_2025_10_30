@@ -10,7 +10,7 @@ class GetUserFollowersUseCase extends BaseUserFollowerUseCase {
 
   static GetUserFollowersUseCase get i => _i ??= GetUserFollowersUseCase._();
 
-  Future<Response<UserFollower>> call([String? uid]) {
+  Future<Response<FollowerModel>> call([String? uid]) {
     return repository.get(params: getParams(uid));
   }
 }

@@ -244,7 +244,7 @@ class _ChooseChannelPageState extends State<ChooseChannelPage> {
                         onTap:
                             () => context.open(
                               Routes.userChannel,
-                              args: {"$User": item.data},
+                              args: {"$UserModel": item.data},
                             ),
                         onFollow: instance.call,
                       );

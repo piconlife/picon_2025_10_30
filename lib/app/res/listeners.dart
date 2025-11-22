@@ -53,11 +53,11 @@ abstract final class InAppListeners {
         return;
       }
       if (!context.mounted) return;
-      AuthResponse<User> response;
+      AuthResponse<UserModel> response;
       if (type == OauthButtonType.apple) {
-        response = await context.signInWithApple<User>();
+        response = await context.signInWithApple<UserModel>();
       } else if (type == OauthButtonType.google) {
-        response = await context.signInWithGoogle<User>();
+        response = await context.signInWithGoogle<UserModel>();
       } else {
         context.hideLoader();
         context.showErrorSnackBar("Authorization not supported!");
@@ -91,7 +91,9 @@ abstract final class InAppListeners {
         return;
       }
       if (!context.mounted) return;
-      AuthResponse<User> response = await context.signOut<User>(id: id);
+      AuthResponse<UserModel> response = await context.signOut<UserModel>(
+        id: id,
+      );
       if (!context.mounted) return;
       if (!response.status.isAuthenticated) {
         context.hideLoader();
@@ -116,10 +118,12 @@ abstract final class InAppListeners {
         return false;
       }
       if (!context.mounted) return false;
-      AuthResponse<User> response = await context.signOut<User>(id: id);
+      AuthResponse<UserModel> response = await context.signOut<UserModel>(
+        id: id,
+      );
       if (!context.mounted) return false;
       if (!response.status.isAuthenticated) {
-        await context.deleteAccount<User>();
+        await context.deleteAccount<UserModel>();
         await Settings.clear();
         await InAppListeners.authorizationChanged(false);
         if (!context.mounted) return true;

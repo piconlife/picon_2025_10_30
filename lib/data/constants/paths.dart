@@ -8,6 +8,7 @@ class Paths {
   static const ads = "ads";
   static const avatars = "avatars";
   static const businesses = "businesses";
+  static const bookmarks = "bookmarks";
   static const businessAds = "$businesses/{${ParamKeys.uid}}/$ads";
   static const businessSponsors = "$businesses/{${ParamKeys.uid}}/$sponsors";
   static const channels = "channels";
@@ -39,6 +40,7 @@ class Paths {
   static const userNames = "user_names";
   static const videos = "videos";
   static const userAvatars = "$users/{${ParamKeys.uid}}/$avatars";
+  static const userBookmarks = "$users/{${ParamKeys.uid}}/$bookmarks";
   static const userBusiness = "$users/{${ParamKeys.uid}}/$businesses";
   static const userCovers = "$users/{${ParamKeys.uid}}/$covers";
   static const userFollowers = "$users/{${ParamKeys.uid}}/$followers";

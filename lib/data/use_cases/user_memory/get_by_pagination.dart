@@ -14,7 +14,7 @@ class GetUserMemoriesByPaginationUseCase extends BaseUserMemoryUseCase {
     return _i ??= GetUserMemoriesByPaginationUseCase._();
   }
 
-  Future<Response<UserMemory>> call({
+  Future<Response<MemoryModel>> call({
     String? uid,
     int? initialSize,
     int? fetchingSize,

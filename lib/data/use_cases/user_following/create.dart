@@ -12,7 +12,7 @@ class CreateUserFollowingUseCase extends BaseUserFollowingUseCase {
     return _i ??= CreateUserFollowingUseCase._();
   }
 
-  Future<Response<UserFollowing>> call(UserFollowing data) {
+  Future<Response<FollowingModel>> call(FollowingModel data) {
     return repository.create(data, params: params);
   }
 }

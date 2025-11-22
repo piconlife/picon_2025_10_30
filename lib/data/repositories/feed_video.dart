@@ -2,10 +2,10 @@ import 'package:data_management/data_management.dart';
 
 import '../../roots/helpers/connectivity.dart';
 import '../models/feed_video.dart';
-import '../sources/local/feed_video.dart';
+import '../sources/local/video.dart';
 import '../sources/remote/feed_video.dart';
 
-class FeedVideoRepository extends RemoteDataRepository<FeedVideo> {
+class FeedVideoRepository extends RemoteDataRepository<VideoModel> {
   FeedVideoRepository({
     required super.source,
     super.backup,
@@ -17,6 +17,6 @@ class FeedVideoRepository extends RemoteDataRepository<FeedVideo> {
   static FeedVideoRepository get i =>
       _i ??= FeedVideoRepository(
         source: RemoteFeedVideoDataSource(),
-        backup: LocalFeedVideoDataSource(),
+        backup: LocalVideoDataSource(),
       );
 }

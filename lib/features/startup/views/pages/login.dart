@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
     _continueWithPhoneOtp(context, value.result.first);
   }
 
-  void _continueWithPhoneOtp(BuildContext context, User user) {
+  void _continueWithPhoneOtp(BuildContext context, UserModel user) {
     final phone = user.phone.use;
     final email = user.email.use;
     final password = UserParser.decryptPassword(user.password).use;
@@ -100,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    context.signInByPhone<User>(
+    context.signInByPhone<UserModel>(
       PhoneAuthenticator(phone: phone),
       id: Routes.login,
       onCodeSent: (token, _) async {
@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
   void _login(BuildContext context, String email, String password) async {
     if (email.isEmpty || password.isEmpty) return;
     Analytics.callAsync(name: 'sign_in_by_email', () {
-      return context.signInByEmail<User>(
+      return context.signInByEmail<UserModel>(
         EmailAuthenticator(email: email, password: password),
         id: Routes.login,
         // onBiometric: (_) => context.show("biometric"),
@@ -162,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _loginWithBiometric(BuildContext context) {
-    context.signInByBiometric<User>(id: Routes.login);
+    context.signInByBiometric<UserModel>(id: Routes.login);
   }
 
   void _register(BuildContext context) {
@@ -173,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
     context.open(Routes.forgotPassword);
   }
 
-  void _finally(BuildContext context, AuthChanges<User> changes) {
+  void _finally(BuildContext context, AuthChanges<UserModel> changes) {
     if (!changes.status.isAuthenticated || changes.user == null) return;
     context.clear(Routes.main);
   }
@@ -182,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final dimen = context.dimens;
     final primary = context.primary;
-    return AuthObserver<User>(
+    return AuthObserver<UserModel>(
       ids: const [Routes.login],
       onError: (context, value) => context.showErrorSnackBar(value),
       onLoading: (_, value) => btnSubmitKey.currentState?.setLoading(value),
@@ -512,7 +512,7 @@ class _Footer extends StatelessWidget {
             child: CircleAvatar(
               radius: dimen.dp(25),
               backgroundColor: Colors.transparent,
-              child: AuthConsumer<User>(
+              child: AuthConsumer<UserModel>(
                 builder: (context, user) {
                   return InAppIcon(
                     Icons.fingerprint,

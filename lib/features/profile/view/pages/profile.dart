@@ -34,7 +34,7 @@ class _ProfilePageState extends State<ProfilePage> {
     context.open(Routes.info);
   }
 
-  void _visitProfile(BuildContext context, User? user) {
+  void _visitProfile(BuildContext context, UserModel? user) {
     context.openUserProfile(user: user);
   }
 

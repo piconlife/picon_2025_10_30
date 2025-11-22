@@ -11,7 +11,7 @@ import 'package:random_avatar/random_avatar.dart';
 import '../../../../app/helpers/user.dart';
 import '../../../../data/models/user.dart';
 
-class SuggestedUsersCubit extends Cubit<Response<Selection<User>>> {
+class SuggestedUsersCubit extends Cubit<Response<Selection<UserModel>>> {
   SuggestedUsersCubit() : super(Response());
 
   void fetch({int initialSize = 25, int fetchingSize = 50}) async {
@@ -27,7 +27,7 @@ class SuggestedUsersCubit extends Cubit<Response<Selection<User>>> {
             DateTime.now().toIso8601String(),
             trBackground: false,
           );
-          return User(
+          return UserModel(
             id: id,
             photo: svg,
             name: name,
@@ -44,7 +44,7 @@ class SuggestedUsersCubit extends Cubit<Response<Selection<User>>> {
     // });
   }
 
-  void update(BuildContext context, Selection<User> value) {
+  void update(BuildContext context, Selection<UserModel> value) {
     emit(
       state.copyWith(
         result: state.result.change(value, (e) {
@@ -61,7 +61,7 @@ class SuggestedUsersCubit extends Cubit<Response<Selection<User>>> {
     UserHelper.update(context, {UserKeys.i.approvals: field});
   }
 
-  void _attach(Response<User> response) {
+  void _attach(Response<UserModel> response) {
     final data =
         state.result.where((e) {
           return !UserHelper.followings.contains(e.id);

@@ -13,7 +13,7 @@ import '../enums/privacy.dart';
 
 const _equality = DeepCollectionEquality();
 
-class Content extends Entity<Keys> {
+class ContentModel extends Entity<Keys> {
   // ---------------------------------------------------------------------------
   // ----------------------------------COMMON-----------------------------------
   // ---------------------------------------------------------------------------
@@ -574,47 +574,47 @@ class Content extends Entity<Keys> {
   // ----------------------------------OBJECTS----------------------------------
   // ---------------------------------------------------------------------------
   // FIELDS
-  Content? _content;
-  Content? _recent;
+  ContentModel? _content;
+  ContentModel? _recent;
 
   // SETTERS
-  set content(Content? value) => _content = value;
+  set content(ContentModel? value) => _content = value;
 
-  set recent(Content? value) => _recent = value;
+  set recent(ContentModel? value) => _recent = value;
 
   // GETTERS
-  Content get content => _content ?? Content.empty();
+  ContentModel get content => _content ?? ContentModel.empty();
 
-  Content? get contentOrNull => _content;
+  ContentModel? get contentOrNull => _content;
 
-  Content get recent => _recent ?? Content.empty();
+  ContentModel get recent => _recent ?? ContentModel.empty();
 
-  Content? get recentOrNull => _recent;
+  ContentModel? get recentOrNull => _recent;
 
   // ---------------------------------------------------------------------------
   // -------------------------------LIST OF OBJECTS-----------------------------
   // ---------------------------------------------------------------------------
   // FIELDS
-  List<Content>? _contents;
-  List<Content>? _photos;
-  List<Content>? _videos;
+  List<ContentModel>? _contents;
+  List<ContentModel>? _photos;
+  List<ContentModel>? _videos;
 
   // SETTERS
-  set contents(List<Content>? value) => _contents = value;
+  set contents(List<ContentModel>? value) => _contents = value;
 
-  set photos(List<Content>? value) => _photos = value;
+  set photos(List<ContentModel>? value) => _photos = value;
 
-  set videos(List<Content>? value) => _videos = value;
+  set videos(List<ContentModel>? value) => _videos = value;
 
   // GETTERS
-  List<Content> get contents => _contents ?? _content?._contents ?? [];
+  List<ContentModel> get contents => _contents ?? _content?._contents ?? [];
 
-  List<Content> get photos => _normalizedPhotos;
+  List<ContentModel> get photos => _normalizedPhotos;
 
-  List<Content> get videos => _videos ?? _content?._videos ?? [];
+  List<ContentModel> get videos => _videos ?? _content?._videos ?? [];
 
-  List<Content> get _normalizedPhotos {
-    bool isPhoto(Content e) => e._photoUrl.isUrl;
+  List<ContentModel> get _normalizedPhotos {
+    bool isPhoto(ContentModel e) => e._photoUrl.isUrl;
     final x = normalizeContentData(this, (e) {
       final photos = e._photos?.where(isPhoto);
       if ((photos ?? []).isNotEmpty) return photos!.toList();
@@ -678,9 +678,9 @@ class Content extends Entity<Keys> {
   // ------------------------------):CONSTRUCTORS:(-----------------------------
   // ---------------------------------------------------------------------------
 
-  Content.empty();
+  ContentModel.empty();
 
-  Content({
+  ContentModel({
     // -------------------------------------------------------------------------
     // --------------------------------COMMON-----------------------------------
     // -------------------------------------------------------------------------
@@ -784,14 +784,14 @@ class Content extends Entity<Keys> {
     // -------------------------------------------------------------------------
     // ----------------------------------OBJECTS--------------------------------
     // -------------------------------------------------------------------------
-    Content? content,
-    Content? recent,
+    ContentModel? content,
+    ContentModel? recent,
     // -------------------------------------------------------------------------
     // -------------------------------LIST OF OBJECTS---------------------------
     // -------------------------------------------------------------------------
-    List<Content>? contents,
-    List<Content>? photos,
-    List<Content>? videos,
+    List<ContentModel>? contents,
+    List<ContentModel>? photos,
+    List<ContentModel>? videos,
     // -------------------------------------------------------------------------
     // ------------------------------(INTERNAL USE ONLY)------------------------
     // -------------------------------------------------------------------------
@@ -918,10 +918,10 @@ class Content extends Entity<Keys> {
        _translatedTitle = translatedTitle,
        _uiState = uiState;
 
-  factory Content.parse(Object? source) {
-    if (source is! Map) return Content.empty();
+  factory ContentModel.parse(Object? source) {
+    if (source is! Map) return ContentModel.empty();
     final key = Keys.i;
-    return Content(
+    return ContentModel(
       // -----------------------------------------------------------------------
       // --------------------------------COMMON---------------------------------
       // -----------------------------------------------------------------------
@@ -1026,18 +1026,18 @@ class Content extends Entity<Keys> {
       // -----------------------------------------------------------------------
       // ----------------------------------OBJECTS------------------------------
       // -----------------------------------------------------------------------
-      content: source.entityValue(key.content, Content.parse),
-      recent: source.entityValue(key.recent, Content.parse),
+      content: source.entityValue(key.content, ContentModel.parse),
+      recent: source.entityValue(key.recent, ContentModel.parse),
       // -----------------------------------------------------------------------
       // -------------------------------LIST OF OBJECTS-------------------------
       // -----------------------------------------------------------------------
-      contents: source.entityValues(key.contents, Content.parse),
-      photos: source.entityValues(key.photos, Content.parse),
-      videos: source.entityValues(key.videos, Content.parse),
+      contents: source.entityValues(key.contents, ContentModel.parse),
+      photos: source.entityValues(key.photos, ContentModel.parse),
+      videos: source.entityValues(key.videos, ContentModel.parse),
     );
   }
 
-  Content copy({
+  ContentModel copy({
     // -------------------------------------------------------------------------
     // --------------------------------COMMON-----------------------------------
     // -------------------------------------------------------------------------
@@ -1141,14 +1141,14 @@ class Content extends Entity<Keys> {
     // -------------------------------------------------------------------------
     // ----------------------------------OBJECTS--------------------------------
     // -------------------------------------------------------------------------
-    Content? content,
-    Content? recent,
+    ContentModel? content,
+    ContentModel? recent,
     // -------------------------------------------------------------------------
     // -------------------------------LIST OF OBJECTS---------------------------
     // -------------------------------------------------------------------------
-    List<Content>? contents,
-    List<Content>? photos,
-    List<Content>? videos,
+    List<ContentModel>? contents,
+    List<ContentModel>? photos,
+    List<ContentModel>? videos,
     // -------------------------------------------------------------------------
     // ------------------------------(INTERNAL USE ONLY)------------------------
     // -------------------------------------------------------------------------
@@ -1157,7 +1157,7 @@ class Content extends Entity<Keys> {
     String? translatedTitle,
     ContentUiState? uiState,
   }) {
-    return Content(
+    return ContentModel(
       // -----------------------------------------------------------------------
       // ---------------------------------COMMON--------------------------------
       // -----------------------------------------------------------------------
@@ -1696,7 +1696,7 @@ class Content extends Entity<Keys> {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (runtimeType != other.runtimeType) return false;
-    return other is Content &&
+    return other is ContentModel &&
         // ---------------------------------------------------------------------
         // --------------------------------COMMON-------------------------------
         // ---------------------------------------------------------------------
@@ -1816,7 +1816,7 @@ class Content extends Entity<Keys> {
   }
 
   @override
-  String toString() => "$Content#$hashCode($idOrNull)";
+  String toString() => "$ContentModel#$hashCode($idOrNull)";
 }
 
 int? _int(int? value) {
@@ -1866,8 +1866,8 @@ String? _objectRef(String? value) {
 }
 
 T? normalizeContentData<T extends Object?>(
-  Content? content,
-  T? Function(Content content) test,
+  ContentModel? content,
+  T? Function(ContentModel content) test,
 ) {
   if (content == null) return null;
   final data = test(content);

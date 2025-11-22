@@ -14,7 +14,7 @@ class GetUserStoriesByPaginationUseCase extends BaseUserStoryUseCase {
     return _i ??= GetUserStoriesByPaginationUseCase._();
   }
 
-  Future<Response<UserStory>> call({
+  Future<Response<StoryModel>> call({
     String? uid,
     int? initialSize,
     int? fetchingSize,

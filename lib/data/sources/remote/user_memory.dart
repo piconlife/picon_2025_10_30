@@ -1,13 +1,10 @@
-import 'package:data_management/core.dart';
-
+import '../../base/firestore_data_source.dart';
 import '../../constants/paths.dart';
-import '../../delegates/firestore.dart';
 import '../../models/user_memory.dart';
 
-class RemoteUserMemoryDataSource extends RemoteDataSource<UserMemory> {
-  RemoteUserMemoryDataSource()
-    : super(delegate: FirestoreDataDelegate.i, path: Paths.userMemories);
+class RemoteUserMemoryDataSource extends FirestoreDataSource<MemoryModel> {
+  RemoteUserMemoryDataSource() : super(Paths.userMemories);
 
   @override
-  UserMemory build(Object? source) => UserMemory.from(source);
+  MemoryModel build(Object? source) => MemoryModel.from(source);
 }

@@ -8,13 +8,13 @@ import '../../../../data/use_cases/user_avatar/create.dart';
 import '../../../../data/use_cases/user_avatar/delete.dart';
 import '../../../../data/use_cases/user_avatar/get_by_pagination.dart';
 
-class UserAvatarCubit extends DataCubit<UserAvatar> {
+class UserAvatarCubit extends DataCubit<AvatarModel> {
   final String uid;
 
   UserAvatarCubit(super.context, [String? uid]) : uid = uid ?? UserHelper.uid;
 
   @override
-  Future<Response<UserAvatar>> onFetch({
+  Future<Response<AvatarModel>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,
@@ -30,19 +30,19 @@ class UserAvatarCubit extends DataCubit<UserAvatar> {
 
   @protected
   @override
-  Future<Response<UserAvatar>> onCreate(UserAvatar data) async {
+  Future<Response<AvatarModel>> onCreate(AvatarModel data) async {
     return CreateUserAvatarUseCase.i(data).then((value) {
       return value.copyWith(data: data);
     });
   }
 
   @override
-  Future<Response<UserAvatar>> onDelete(UserAvatar data) {
+  Future<Response<AvatarModel>> onDelete(AvatarModel data) {
     return onDeleteById(data.id);
   }
 
   @override
-  Future<Response<UserAvatar>> onDeleteById(String id) async {
+  Future<Response<AvatarModel>> onDeleteById(String id) async {
     return DeleteUserAvatarUseCase.i(id);
   }
 }

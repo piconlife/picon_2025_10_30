@@ -45,7 +45,7 @@ import '../dialogs/bsd_user_profile_covers.dart';
 import '../dialogs/bsd_user_profile_rating.dart';
 
 class ProfileDetailsBar extends StatefulWidget {
-  final User? user;
+  final UserModel? user;
   final String? uid;
 
   const ProfileDetailsBar({super.key, this.user, required this.uid});
@@ -55,7 +55,7 @@ class ProfileDetailsBar extends StatefulWidget {
 }
 
 class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
-  void _editCoverPhoto(BuildContext context, User user) async {
+  void _editCoverPhoto(BuildContext context, UserModel user) async {
     final option = await context.showOptions(
       initialIndex: -1,
       title: "Choose action",
@@ -82,15 +82,15 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
     UserHelper.update(context, {UserKeys.i.coverPhoto: url});
   }
 
-  void _loadCoverPhotos(BuildContext context, User user) {
+  void _loadCoverPhotos(BuildContext context, UserModel user) {
     UserProfileCoversBSD.show(context, user).then((value) {
-      if (value is UserCover && context.mounted) {
+      if (value is CoverModel && context.mounted) {
         _changeCoverPhoto(context, value.photoUrl);
       }
     });
   }
 
-  void _editAvatar(BuildContext context, User user) async {
+  void _editAvatar(BuildContext context, UserModel user) async {
     final option = await context.showOptions(
       initialIndex: -1,
       title: "Choose action",
@@ -117,25 +117,25 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
     UserHelper.update(context, {UserKeys.i.photo: url});
   }
 
-  void _loadAvatars(BuildContext context, User user) async {
+  void _loadAvatars(BuildContext context, UserModel user) async {
     UserProfileAvatarsBSD.show(context, user).then((value) {
-      if (value is UserAvatar && context.mounted) {
+      if (value is AvatarModel && context.mounted) {
         _changeAvatar(context, value.photoUrl);
       }
     });
   }
 
-  void _editProfileName(BuildContext context, User user) async {
+  void _editProfileName(BuildContext context, UserModel user) async {
     final updater = UserInfoUpdater(context, user);
     return updater.updateFullname("Family name");
   }
 
-  void _editTitle(BuildContext context, User user) async {
+  void _editTitle(BuildContext context, UserModel user) async {
     final updater = UserInfoUpdater(context, user);
     return updater.updateTitle("Title");
   }
 
-  void _editBio(BuildContext context, User user) async {
+  void _editBio(BuildContext context, UserModel user) async {
     final updater = UserInfoUpdater(context, user);
     return updater.updateBiography("Biography");
   }
@@ -173,7 +173,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
     context.open(Routes.createAStory);
   }
 
-  void _makeACall(BuildContext context, User user) {
+  void _makeACall(BuildContext context, UserModel user) {
     if (user.isCurrentUser) {
       context.open(Routes.callingHome, args: widget.uid);
     } else if (user.calling.use) {
@@ -181,7 +181,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
     }
   }
 
-  void _makeAConversation(BuildContext context, User user) {
+  void _makeAConversation(BuildContext context, UserModel user) {
     if (user.isCurrentUser) {
       context.open(Routes.messagingChat, args: widget.uid);
     } else if (user.messaging.use) {
@@ -193,41 +193,41 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
 
   void _makeAFollower(BuildContext context, bool following) {}
 
-  void _seeCoverPhoto(BuildContext context, User user) {
+  void _seeCoverPhoto(BuildContext context, UserModel user) {
     if (user.coverPhoto == null || user.coverPhoto!.isEmpty) return;
     InAppBigPhotoDialog.show(context, user.coverPhoto);
   }
 
-  void _seeProfileStatus(BuildContext context, User user) {
+  void _seeProfileStatus(BuildContext context, UserModel user) {
     UserProfileRatingBSD.show(context, user);
   }
 
-  void _seeProfilePhoto(BuildContext context, User user) {
+  void _seeProfilePhoto(BuildContext context, UserModel user) {
     if (user.avatar == null || user.avatar!.isEmpty) return;
     InAppBigPhotoDialog.show(context, user.avatar);
   }
 
-  void _seePosts(BuildContext context, User user) {
+  void _seePosts(BuildContext context, UserModel user) {
     context.open(
       Routes.userFeeds,
       args: {
-        "$User": user,
+        "$UserModel": user,
         "$FeedHomeCubit": context.read<FeedHomeCubit>(),
         "$UserPostCubit": context.read<UserPostCubit>(),
       },
     );
   }
 
-  void _seeFollowers(BuildContext context, User user) {
-    context.open(Routes.userFollowers, args: {"$User": user});
+  void _seeFollowers(BuildContext context, UserModel user) {
+    context.open(Routes.userFollowers, args: {"$UserModel": user});
   }
 
-  void _seeFollowings(BuildContext context, User user) {
-    context.open(Routes.userFollowings, args: {"$User": user});
+  void _seeFollowings(BuildContext context, UserModel user) {
+    context.open(Routes.userFollowings, args: {"$UserModel": user});
   }
 
-  void _seeReports(BuildContext context, User user) {
-    context.open(Routes.userReports, args: {"$User": user});
+  void _seeReports(BuildContext context, UserModel user) {
+    context.open(Routes.userReports, args: {"$UserModel": user});
   }
 
   @override
@@ -461,7 +461,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  BlocBuilder<UserReportCubit, Response<UserReport>>(
+                  BlocBuilder<UserReportCubit, Response<ReportModel>>(
                     builder: (context, response) {
                       return _Counter(
                         text: "Reports",
@@ -471,7 +471,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
                       );
                     },
                   ),
-                  BlocBuilder<UserPostCubit, Response<UserPost>>(
+                  BlocBuilder<UserPostCubit, Response<PostModel>>(
                     builder: (context, response) {
                       return _Counter(
                         text: "Feeds",
@@ -483,7 +483,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
                   ),
                   BlocBuilder<
                     UserFollowerCubit,
-                    Response<Selection<UserFollower>>
+                    Response<Selection<FollowerModel>>
                   >(
                     builder: (context, response) {
                       return _Counter(
@@ -494,7 +494,7 @@ class _ProfileDetailsBarState extends State<ProfileDetailsBar> {
                       );
                     },
                   ),
-                  BlocBuilder<UserFollowingCubit, Response<UserFollowing>>(
+                  BlocBuilder<UserFollowingCubit, Response<FollowingModel>>(
                     builder: (context, response) {
                       return _Counter(
                         text: "Followings",

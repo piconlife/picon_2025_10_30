@@ -15,24 +15,29 @@ class UserFollowerKeys extends EntityKey {
   static UserFollowerKeys get i => _i ??= UserFollowerKeys._();
 }
 
-class UserFollower extends Entity<UserFollowerKeys> {
+class FollowerModel extends Entity<UserFollowerKeys> {
   final String? uid;
-  final User? user;
+  final UserModel? user;
 
-  UserFollower({super.id, super.timeMills, this.uid, this.user});
+  FollowerModel({super.id, super.timeMills, this.uid, this.user});
 
-  factory UserFollower.from(Object? source) {
-    if (source is! Map) return UserFollower();
+  factory FollowerModel.from(Object? source) {
+    if (source is! Map) return FollowerModel();
     final key = UserFollowerKeys.i;
-    return UserFollower(
+    return FollowerModel(
       id: source.entityValue(key.id),
       timeMills: source.entityValue(key.timeMills),
       uid: source.entityValue(key.uid),
     );
   }
 
-  UserFollower copy({String? id, String? uid, int? timeMills, User? user}) {
-    return UserFollower(
+  FollowerModel copy({
+    String? id,
+    String? uid,
+    int? timeMills,
+    UserModel? user,
+  }) {
+    return FollowerModel(
       id: id ?? this.id,
       timeMills: timeMills ?? this.timeMills,
       uid: uid ?? this.uid,

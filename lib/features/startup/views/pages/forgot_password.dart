@@ -99,11 +99,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     }
   }
 
-  void _verify(BuildContext context, User user) {
+  void _verify(BuildContext context, UserModel user) {
     final phone = user.phone.use;
     if (phone.isEmpty) return;
     btnSubmitKey.currentState?.showLoading();
-    context.signInByPhone<User>(
+    context.signInByPhone<UserModel>(
       PhoneAuthenticator(phone: phone),
       onCodeSent: (token, _) async {
         btnSubmitKey.currentState?.hideLoading();
@@ -129,12 +129,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     );
   }
 
-  void _login(BuildContext context, User user) async {
+  void _login(BuildContext context, UserModel user) async {
     final email = user.email.use;
     final password = UserParser.decryptPassword(user.password).use;
     if (email.isEmpty || password.isEmpty) return;
     btnSubmitKey.currentState?.showLoading();
-    final loggedIn = await context.signInByEmail<User>(
+    final loggedIn = await context.signInByEmail<UserModel>(
       EmailAuthenticator(email: email, password: password),
     );
     btnSubmitKey.currentState?.hideLoading();

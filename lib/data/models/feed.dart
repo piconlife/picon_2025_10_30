@@ -13,7 +13,7 @@ import 'content.dart';
 import 'user.dart';
 import 'user_post.dart';
 
-class Feed extends Content {
+class FeedModel extends ContentModel {
   @override
   Iterable<String> get keys => [
     key.id,
@@ -40,9 +40,9 @@ class Feed extends Content {
     key.type,
   ];
 
-  Feed.empty() : this._();
+  FeedModel.empty() : this._();
 
-  Feed._({
+  FeedModel._({
     super.id,
     super.timeMills,
     // PUBLISHER
@@ -68,14 +68,14 @@ class Feed extends Content {
     super.uiState,
   }) : super(contentType: ContentType.feed);
 
-  Feed.create({
+  FeedModel.create({
     required super.id,
     required super.timeMills,
     required super.type,
     required super.path,
     required super.content,
     super.recentRef,
-    User? publisher,
+    UserModel? publisher,
   }) : super(
          contentType: ContentType.feed,
          publisherId: publisher?.id ?? UserHelper.uid,
@@ -104,9 +104,9 @@ class Feed extends Content {
          uiState: ContentUiState.processing,
        );
 
-  factory Feed.parse(Object? source) {
-    final content = source is Feed ? source : Content.parse(source);
-    return Feed._(
+  factory FeedModel.parse(Object? source) {
+    final content = source is FeedModel ? source : ContentModel.parse(source);
+    return FeedModel._(
       id: content.id,
       timeMills: content.timeMills,
       // PUBLISHER
@@ -131,16 +131,16 @@ class Feed extends Content {
     );
   }
 
-  static Content normalize(Content raw) {
+  static ContentModel normalize(ContentModel raw) {
     final type = raw.contentType;
     if (type == ContentType.userPost) {
-      return UserPost.parse(raw);
+      return PostModel.parse(raw);
     } else {
       return raw;
     }
   }
 
-  Feed copyWith({
+  FeedModel copyWith({
     String? id,
     int? timeMills,
     String? publisherId,
@@ -156,12 +156,12 @@ class Feed extends Content {
     String? region,
     int? zip,
     String? path,
-    Content? content,
-    Content? recent,
+    ContentModel? content,
+    ContentModel? recent,
     FeedType? type,
     ContentUiState? uiState,
   }) {
-    return Feed._(
+    return FeedModel._(
       id: stringify(id, this.id),
       timeMills: stringify(timeMills, this.timeMills),
       publisherId: stringify(publisherId, this.publisherId),

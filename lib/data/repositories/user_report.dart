@@ -6,7 +6,7 @@ import '../models/user_report.dart';
 import '../sources/local/user_report.dart';
 import '../sources/remote/user_report.dart';
 
-class UserReportRepository extends RemoteDataRepository<UserReport> {
+class UserReportRepository extends RemoteDataRepository<ReportModel> {
   UserReportRepository({
     required super.source,
     super.backup,
@@ -22,8 +22,8 @@ class UserReportRepository extends RemoteDataRepository<UserReport> {
       );
 
   @override
-  Future<Response<UserReport>> modifier(
-    Response<UserReport> value,
+  Future<Response<ReportModel>> modifier(
+    Response<ReportModel> value,
     DataModifiers modifier,
   ) async {
     switch (modifier) {
@@ -55,12 +55,12 @@ class UserReportRepository extends RemoteDataRepository<UserReport> {
     }
   }
 
-  Future<Response<UserReport>> _modify(Response<UserReport> value) async {
+  Future<Response<ReportModel>> _modify(Response<ReportModel> value) async {
     if (value.isValid) {
       if (value.result.length == 1) {
         return value.copyWith(data: await _value(value.data));
       } else {
-        List<UserReport> list = [];
+        List<ReportModel> list = [];
         for (var i in value.result) {
           final data = await _value(i);
           if (data != null) list.add(data);
@@ -72,7 +72,7 @@ class UserReportRepository extends RemoteDataRepository<UserReport> {
     }
   }
 
-  Future<UserReport?> _value(UserReport? i) async {
+  Future<ReportModel?> _value(ReportModel? i) async {
     return i;
   }
 }

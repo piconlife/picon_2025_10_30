@@ -5,13 +5,13 @@ import '../../../../app/helpers/user.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../data/use_cases/user_post/get_photos_by_pagination.dart';
 
-class UserPhotoCubit extends DataCubit<UserPost> {
+class UserPhotoCubit extends DataCubit<PostModel> {
   final String uid;
 
   UserPhotoCubit(super.context, [String? uid]) : uid = uid ?? UserHelper.uid;
 
   @override
-  Future<Response<UserPost>> onFetch({
+  Future<Response<PostModel>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,

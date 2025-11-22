@@ -1,13 +1,10 @@
-import 'package:data_management/core.dart';
-
+import '../../base/in_app_data_source.dart';
 import '../../constants/paths.dart';
-import '../../delegates/local.dart';
 import '../../models/user_post.dart';
 
-class LocalUserPostDataSource extends LocalDataSource<UserPost> {
-  LocalUserPostDataSource()
-    : super(delegate: LocalDataDelegate.i, path: Paths.userPosts);
+class LocalUserPostDataSource extends InAppDataSource<PostModel> {
+  LocalUserPostDataSource() : super(Paths.userPosts);
 
   @override
-  UserPost build(Object? source) => UserPost.parse(source);
+  PostModel build(Object? source) => PostModel.parse(source);
 }

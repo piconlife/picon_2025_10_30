@@ -14,7 +14,7 @@ import '../templates/item_user_following.dart';
 
 class UserFollowingsPage extends StatefulWidget {
   final Object? args;
-  final User? user;
+  final UserModel? user;
 
   const UserFollowingsPage({super.key, this.args, this.user});
 
@@ -33,7 +33,7 @@ class _UserFollowingsPageState extends State<UserFollowingsPage> {
                 ? "${widget.user?.username ?? ""}'s followings"
                 : "Followings",
       ),
-      body: BlocBuilder<UserFollowingCubit, Response<UserFollowing>>(
+      body: BlocBuilder<UserFollowingCubit, Response<FollowingModel>>(
         builder: (context, response) {
           if (response.isLoading) {
             return InAppScaffoldShimmer();

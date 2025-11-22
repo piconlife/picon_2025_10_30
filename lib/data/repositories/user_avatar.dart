@@ -5,7 +5,7 @@ import '../models/user_avatar.dart';
 import '../sources/local/user_avatar.dart';
 import '../sources/remote/user_avatar.dart';
 
-class UserAvatarRepository extends RemoteDataRepository<UserAvatar> {
+class UserAvatarRepository extends RemoteDataRepository<AvatarModel> {
   UserAvatarRepository({
     required super.source,
     super.backup,

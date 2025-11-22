@@ -1,13 +1,10 @@
-import 'package:data_management/core.dart';
-
+import '../../base/firestore_data_source.dart';
 import '../../constants/paths.dart';
-import '../../delegates/firestore.dart';
 import '../../models/user_post.dart';
 
-class RemoteUserPostDataSource extends RemoteDataSource<UserPost> {
-  RemoteUserPostDataSource()
-    : super(delegate: FirestoreDataDelegate.i, path: Paths.userPosts);
+class RemoteUserPostDataSource extends FirestoreDataSource<PostModel> {
+  RemoteUserPostDataSource() : super(Paths.userPosts);
 
   @override
-  UserPost build(Object? source) => UserPost.parse(source);
+  PostModel build(Object? source) => PostModel.parse(source);
 }

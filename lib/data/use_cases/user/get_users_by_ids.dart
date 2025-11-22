@@ -11,7 +11,7 @@ class GetUsersByIdsUseCase extends BaseUserUseCase {
 
   static GetUsersByIdsUseCase get i => _i ??= GetUsersByIdsUseCase._();
 
-  Future<Response<User>> call(
+  Future<Response<UserModel>> call(
     Iterable<String> ids, {
     bool singletonMode = true,
   }) {

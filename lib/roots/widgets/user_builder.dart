@@ -7,9 +7,9 @@ import '../../data/use_cases/user/get.dart';
 
 class InAppUserBuilder extends StatefulWidget {
   final String? id;
-  final User? initial;
+  final UserModel? initial;
   final bool currentUser;
-  final Widget Function(BuildContext, User user) builder;
+  final Widget Function(BuildContext, UserModel user) builder;
 
   const InAppUserBuilder({
     super.key,
@@ -28,8 +28,9 @@ class _InAppUserBuilderState extends State<InAppUserBuilder> {
   Widget build(BuildContext context) {
     final id = widget.id ?? widget.initial?.id;
     if (widget.currentUser || UserHelper.isCurrentUser(id)) {
-      return AuthConsumer<User>(
-        builder: (context, value) => widget.builder(context, value ?? User()),
+      return AuthConsumer<UserModel>(
+        builder:
+            (context, value) => widget.builder(context, value ?? UserModel()),
       );
     }
     if (id != null && id.isNotEmpty) {
@@ -38,11 +39,11 @@ class _InAppUserBuilderState extends State<InAppUserBuilder> {
         builder: (context, snapshot) {
           return widget.builder(
             context,
-            snapshot.data?.data ?? widget.initial ?? User(),
+            snapshot.data?.data ?? widget.initial ?? UserModel(),
           );
         },
       );
     }
-    return widget.builder(context, widget.initial ?? User());
+    return widget.builder(context, widget.initial ?? UserModel());
   }
 }

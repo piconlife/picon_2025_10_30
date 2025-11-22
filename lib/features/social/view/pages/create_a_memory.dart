@@ -72,7 +72,7 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
   final deletes = <EditablePhoto>[].obx;
   final Map<int, UploadingSnapshot> _pendingSnapshots = {};
 
-  UserPost? old;
+  PostModel? old;
   FeedType type = FeedType.post;
 
   String get title => etHeader.text;
@@ -86,7 +86,7 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
   /// --------------------------------------------------------------------------
 
   void _init(BuildContext context) {
-    old = data?.findOrNull(key: "$UserPost");
+    old = data?.findOrNull(key: "$PostModel");
     if (old != null) {
       id = old!.id;
       type = old?.type ?? FeedType.none;
@@ -327,10 +327,10 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
   /// CREATE SECTION START
   /// --------------------------------------------------------------------------
 
-  void _createFeedForGlobal(BuildContext context, UserPost feed) {
+  void _createFeedForGlobal(BuildContext context, PostModel feed) {
     final id = feed.id;
     final path = PathProvider.generatePath(Paths.feeds, id);
-    final global = Feed.empty();
+    final global = FeedModel.empty();
     // final global = Feed(
     //   id: id,
     //   timeMills: feed.timeMills,
@@ -361,10 +361,10 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
     });
   }
 
-  void _createPost(BuildContext context, UserPost feed) {
+  void _createPost(BuildContext context, PostModel feed) {
     context.showLoader();
     final mPhotos =
-        photos.value.map((e) => e.rootData).whereType<Content>().toList();
+        photos.value.map((e) => e.rootData).whereType<ContentModel>().toList();
     context.read<UserPostCubit>().create(feed).then((value) {
       if (!context.mounted) return;
       if (value) {
@@ -393,7 +393,7 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
       context.showMessage("Please wait a second...!");
       return;
     }
-    final data = UserPost.create(
+    final data = PostModel.create(
       id: id,
       timeMills: Entity.generateTimeMills,
       publisherId: UserHelper.uid,

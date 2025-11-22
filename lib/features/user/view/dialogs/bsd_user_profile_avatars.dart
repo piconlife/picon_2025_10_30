@@ -22,7 +22,7 @@ class UserProfileAvatarsBSD extends StatelessWidget {
 
   const UserProfileAvatarsBSD({super.key, required this.activeUrl});
 
-  static Future show(BuildContext context, User user) {
+  static Future show(BuildContext context, UserModel user) {
     final cubit = context.read<UserAvatarCubit?>();
     return showModalBottomSheet(
       context: context,
@@ -45,7 +45,7 @@ class UserProfileAvatarsBSD extends StatelessWidget {
   Widget build(BuildContext context) {
     final dimen = context.dimens;
     final dark = context.dark;
-    return BlocBuilder<UserAvatarCubit, Response<UserAvatar>>(
+    return BlocBuilder<UserAvatarCubit, Response<AvatarModel>>(
       builder: (context, state) {
         return Container(
           width: double.infinity,

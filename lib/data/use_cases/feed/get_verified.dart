@@ -14,7 +14,7 @@ class GetVerifiedFeedsByPaginationUseCase extends BaseFeedUseCase {
   static GetVerifiedFeedsByPaginationUseCase get i =>
       _i ??= GetVerifiedFeedsByPaginationUseCase._();
 
-  Future<Response<Feed>> call({
+  Future<Response<FeedModel>> call({
     int? initialSize,
     int? fetchingSize,
     Object? snapshot,

@@ -140,7 +140,7 @@ class _PasswordPageState extends State<PasswordPage> {
     String password,
     Country country,
   ) {
-    context.signInByPhone<User>(
+    context.signInByPhone<UserModel>(
       PhoneAuthenticator(phone: phone),
       id: Routes.password,
       onCodeSent: (token, _) async {
@@ -176,19 +176,22 @@ class _PasswordPageState extends State<PasswordPage> {
       StartupKeys.phone: phone,
       StartupKeys.password: UserParser.encryptPassword(password),
     })) {
-      await context.signOut<User>(id: Routes.password);
+      await context.signOut<UserModel>(id: Routes.password);
       await Future.delayed(const Duration(seconds: 1));
       if (!context.mounted) return;
       final email = Startup.i.email.use;
       if (email.isEmpty || password.isEmpty) return;
-      context.signUpByEmail<User>(
+      context.signUpByEmail<UserModel>(
         EmailAuthenticator(email: email, password: password),
         id: Routes.password,
       );
     }
   }
 
-  Future<void> _finally(BuildContext context, AuthChanges<User> changes) async {
+  Future<void> _finally(
+    BuildContext context,
+    AuthChanges<UserModel> changes,
+  ) async {
     final user = changes.user;
     if (!changes.status.isAuthenticated || user == null) return;
 
@@ -232,7 +235,7 @@ class _PasswordPageState extends State<PasswordPage> {
   Widget build(BuildContext context) {
     final dimen = context.dimens;
     final primary = context.primary;
-    return AuthObserver<User>(
+    return AuthObserver<UserModel>(
       ids: const [Routes.password],
       onError: (context, value) => context.showErrorSnackBar(value),
       onLoading: (context, value) => btnSubmit.currentState?.setLoading(value),

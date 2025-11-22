@@ -10,7 +10,7 @@ class CreateUserUseCase extends BaseUserUseCase {
 
   static CreateUserUseCase get i => _i ??= CreateUserUseCase._();
 
-  Future<Response<User>> call({required User user}) {
+  Future<Response<UserModel>> call({required UserModel user}) {
     return repository.create(user);
   }
 }

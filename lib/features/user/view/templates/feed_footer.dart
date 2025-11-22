@@ -14,7 +14,7 @@ import '../../../../roots/widgets/pleasure_button.dart';
 import '../../../../roots/widgets/text.dart';
 
 class UserFeedFooter extends StatefulWidget {
-  final UserPost item;
+  final PostModel item;
   final void Function(List<String> likes) onLiked;
 
   const UserFeedFooter({super.key, required this.item, required this.onLiked});

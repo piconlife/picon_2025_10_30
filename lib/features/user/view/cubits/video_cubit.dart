@@ -5,13 +5,13 @@ import '../../../../app/helpers/user.dart';
 import '../../../../data/models/user_video.dart';
 import '../../../../data/use_cases/user_video/get_by_pagination.dart';
 
-class UserVideoCubit extends DataCubit<UserVideo> {
+class UserVideoCubit extends DataCubit<VideoModel> {
   final String uid;
 
   UserVideoCubit(super.context, [String? uid]) : uid = uid ?? UserHelper.uid;
 
   @override
-  Future<Response<UserVideo>> onFetch({
+  Future<Response<VideoModel>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,

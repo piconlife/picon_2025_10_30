@@ -7,7 +7,7 @@ import '../enums/content_state.dart';
 import '../enums/privacy.dart';
 import 'content.dart';
 
-class UserCover extends Content {
+class CoverModel extends ContentModel {
   @override
   Iterable<String> get keys => [
     key.id,
@@ -19,7 +19,7 @@ class UserCover extends Content {
     key.privacy,
   ];
 
-  UserCover({
+  CoverModel({
     super.id,
     super.timeMills,
     super.path,
@@ -30,7 +30,7 @@ class UserCover extends Content {
     super.uiState,
   });
 
-  UserCover.create({
+  CoverModel.create({
     required String super.id,
     required super.timeMills,
     required super.privacy,
@@ -45,9 +45,10 @@ class UserCover extends Content {
          ),
        );
 
-  factory UserCover.parse(Object? source) {
-    final content = source is Content ? source : Content.parse(source);
-    return UserCover(
+  factory CoverModel.parse(Object? source) {
+    final content =
+        source is ContentModel ? source : ContentModel.parse(source);
+    return CoverModel(
       id: content.id,
       timeMills: content.timeMills,
       path: content.path,
@@ -58,7 +59,7 @@ class UserCover extends Content {
     );
   }
 
-  UserCover copyWith({
+  CoverModel copyWith({
     String? id,
     int? timeMills,
     String? publisherId,
@@ -68,7 +69,7 @@ class UserCover extends Content {
     String? photoUrl,
     ContentUiState? uiState,
   }) {
-    return UserCover(
+    return CoverModel(
       id: stringify(id, this.id),
       timeMills: stringify(timeMills, this.timeMills),
       publisherId: stringify(publisherId, this.publisherId),

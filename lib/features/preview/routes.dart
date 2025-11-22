@@ -19,7 +19,7 @@ Map<String, RouteBuilder> get mPreviewRoutes {
 }
 
 Widget _previewPhotos(BuildContext context, Object? args) {
-  Content? content = args.getOrNull("$Content");
+  ContentModel? content = args.getOrNull("$ContentModel");
   LikeCubit? likeCubit = args.findOrNull(key: "$LikeCubit");
   ViewCubit? viewCubit = args.findOrNull(key: "$ViewCubit");
   CommentCubit? commentCubit = args.findOrNull(key: "$CommentCubit");

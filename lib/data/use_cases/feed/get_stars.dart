@@ -18,18 +18,18 @@ class GetStarFeedsByPaginationUseCase extends BaseFeedUseCase {
   static GetStarFeedsByPaginationUseCase get i =>
       _i ??= GetStarFeedsByPaginationUseCase._();
 
-  Future<Response<Feed>> _filter({
+  Future<Response<FeedModel>> _filter({
     double? lat,
     double? lon,
     double? radiusKm,
-    required Future<Response<Feed>> Function(double minLat, double maxLat)
+    required Future<Response<FeedModel>> Function(double minLat, double maxLat)
     callback,
   }) async {
     lat ??= UserHelper.user.latitude ?? 0;
     lon ??= UserHelper.user.longitude ?? 0;
     radiusKm ??= Configs.get(kStaredNearbyFeedRadius, defaultValue: 0) ?? 0;
     if (radiusKm <= 0) return callback(0, 0);
-    Response<Feed> response = Response();
+    Response<FeedModel> response = Response();
     final filtered = await GeoPointer(lat, lon).future(
       radiusKm: radiusKm,
       pointer: (e) => GeoPoint(e.latitude ?? 0, e.longitude ?? 0),
@@ -41,7 +41,7 @@ class GetStarFeedsByPaginationUseCase extends BaseFeedUseCase {
     return response.copyWith(result: filtered);
   }
 
-  Future<Response<Feed>> call({
+  Future<Response<FeedModel>> call({
     bool nearbyMode = false,
     int? initialSize,
     int fetchingSize = 10,

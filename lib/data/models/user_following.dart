@@ -13,22 +13,22 @@ class UserFollowingKeys extends EntityKey {
   Iterable<String> get keys => [id, timeMills, verified];
 }
 
-class UserFollowing extends Entity<UserFollowingKeys> {
+class FollowingModel extends Entity<UserFollowingKeys> {
   bool? verified;
 
-  User content = User();
+  UserModel content = UserModel();
 
-  UserFollowing.empty();
+  FollowingModel.empty();
 
-  UserFollowing._({super.id, super.timeMills, this.verified});
+  FollowingModel._({super.id, super.timeMills, this.verified});
 
-  UserFollowing.create({required String uid, super.timeMills, this.verified})
+  FollowingModel.create({required String uid, super.timeMills, this.verified})
     : super.auto(id: uid);
 
-  factory UserFollowing.parse(Object? source) {
-    if (source is! Map) return UserFollowing._();
+  factory FollowingModel.parse(Object? source) {
+    if (source is! Map) return FollowingModel._();
     final key = UserFollowingKeys.i;
-    return UserFollowing._(
+    return FollowingModel._(
       id: source.entityValue(key.id),
       timeMills: source.entityValue(key.timeMills),
       verified: source.entityValue(key.verified),
@@ -52,12 +52,12 @@ class UserFollowing extends Entity<UserFollowingKeys> {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is UserFollowing &&
+    return other is FollowingModel &&
         other.id == id &&
         other.timeMills == timeMills &&
         other.verified == verified;
   }
 
   @override
-  String toString() => "$UserFollowing#$hashCode($filteredJson)";
+  String toString() => "$FollowingModel#$hashCode($filteredJson)";
 }

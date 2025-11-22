@@ -21,8 +21,8 @@ import 'feed_header.dart';
 
 class ItemFeedCover extends StatelessWidget {
   final int index;
-  final Feed item;
-  final Function(BuildContext context, Feed item)? onClick;
+  final FeedModel item;
+  final Function(BuildContext context, FeedModel item)? onClick;
 
   const ItemFeedCover({
     super.key,
@@ -31,7 +31,7 @@ class ItemFeedCover extends StatelessWidget {
     this.onClick,
   });
 
-  String _title(User user) {
+  String _title(UserModel user) {
     final date = DateHelper.toRealtime(item.timeMills);
     if (item.isPublisher) {
       return "Updated your cover content at $date";
@@ -44,7 +44,7 @@ class ItemFeedCover extends StatelessWidget {
     }
   }
 
-  String? _subtitle(User user) {
+  String? _subtitle(UserModel user) {
     return !item.title.isValid
         ? null
         : item.title.isValid
@@ -78,7 +78,7 @@ class ItemFeedCover extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  final Feed item;
+  final FeedModel item;
 
   const _Body({required this.item});
 

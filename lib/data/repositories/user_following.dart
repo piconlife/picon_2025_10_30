@@ -7,7 +7,7 @@ import '../sources/local/user_following.dart';
 import '../sources/remote/user_following.dart';
 import '../use_cases/user/get.dart';
 
-class UserFollowingRepository extends RemoteDataRepository<UserFollowing> {
+class UserFollowingRepository extends RemoteDataRepository<FollowingModel> {
   UserFollowingRepository({
     required super.source,
     super.backup,
@@ -23,8 +23,8 @@ class UserFollowingRepository extends RemoteDataRepository<UserFollowing> {
       );
 
   @override
-  Future<Response<UserFollowing>> modifier(
-    Response<UserFollowing> value,
+  Future<Response<FollowingModel>> modifier(
+    Response<FollowingModel> value,
     DataModifiers modifier,
   ) async {
     switch (modifier) {
@@ -56,12 +56,14 @@ class UserFollowingRepository extends RemoteDataRepository<UserFollowing> {
     }
   }
 
-  Future<Response<UserFollowing>> _modify(Response<UserFollowing> value) async {
+  Future<Response<FollowingModel>> _modify(
+    Response<FollowingModel> value,
+  ) async {
     if (value.isValid) {
       if (value.result.length == 1) {
         return value.copyWith(data: await _value(value.data));
       } else {
-        List<UserFollowing> list = [];
+        List<FollowingModel> list = [];
         for (var i in value.result) {
           final data = await _value(i);
           if (data != null) list.add(data);
@@ -73,7 +75,7 @@ class UserFollowingRepository extends RemoteDataRepository<UserFollowing> {
     }
   }
 
-  Future<UserFollowing?> _value(UserFollowing? i) async {
+  Future<FollowingModel?> _value(FollowingModel? i) async {
     if (i == null) return null;
     return GetUserUseCase.i(i.id).then((value) {
       if (!value.isValid) return i;

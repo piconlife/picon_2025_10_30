@@ -9,7 +9,7 @@ import '../sources/remote/user_note.dart';
 import '../use_cases/content/get.dart';
 import '../use_cases/feed_video/get.dart';
 
-class UserNoteRepository extends RemoteDataRepository<UserNote> {
+class UserNoteRepository extends RemoteDataRepository<NoteModel> {
   UserNoteRepository({
     required super.source,
     super.backup,
@@ -25,8 +25,8 @@ class UserNoteRepository extends RemoteDataRepository<UserNote> {
       );
 
   @override
-  Future<Response<UserNote>> modifier(
-    Response<UserNote> value,
+  Future<Response<NoteModel>> modifier(
+    Response<NoteModel> value,
     DataModifiers modifier,
   ) async {
     switch (modifier) {
@@ -58,12 +58,12 @@ class UserNoteRepository extends RemoteDataRepository<UserNote> {
     }
   }
 
-  Future<Response<UserNote>> _modify(Response<UserNote> value) async {
+  Future<Response<NoteModel>> _modify(Response<NoteModel> value) async {
     if (value.isValid) {
       if (value.result.length == 1) {
         return value.copyWith(data: await _value(value.data));
       } else {
-        List<UserNote> list = [];
+        List<NoteModel> list = [];
         for (var i in value.result) {
           final data = await _value(i);
           if (data != null) list.add(data);
@@ -75,7 +75,7 @@ class UserNoteRepository extends RemoteDataRepository<UserNote> {
     }
   }
 
-  Future<UserNote?> _value(UserNote? i) async {
+  Future<NoteModel?> _value(NoteModel? i) async {
     if (i != null) {
       final photos = await GetsUseCase.i(i.path.use).then((value) {
         return value.result;

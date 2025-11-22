@@ -19,8 +19,8 @@ import 'feed_header.dart';
 
 class ItemFeedSponsored extends StatefulWidget {
   final int index;
-  final Feed item;
-  final Function(BuildContext context, Feed item)? onClick;
+  final FeedModel item;
+  final Function(BuildContext context, FeedModel item)? onClick;
 
   const ItemFeedSponsored({
     super.key,
@@ -62,7 +62,7 @@ class _ItemFeedSponsoredState extends State<ItemFeedSponsored> {
 }
 
 class _Body extends StatelessWidget {
-  final Feed item;
+  final FeedModel item;
 
   const _Body({required this.item});
 

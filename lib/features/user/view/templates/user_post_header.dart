@@ -21,7 +21,7 @@ import '../cubits/follower_cubit.dart';
 import '../cubits/post_cubit.dart';
 
 class UserPostHeader extends StatefulWidget {
-  final UserPost item;
+  final PostModel item;
   final VoidCallback onTranslate;
 
   const UserPostHeader({
@@ -74,7 +74,7 @@ class _UserPostHeaderState extends State<UserPostHeader> {
     context.open(
       Routes.createUserPost,
       args: {
-        "$Content": widget.item,
+        "$ContentModel": widget.item,
         "$FeedHomeCubit": context.read<FeedHomeCubit>(),
         "$UserPostCubit": context.read<UserPostCubit>(),
       },
@@ -175,7 +175,7 @@ class _UserPostHeaderState extends State<UserPostHeader> {
                         value: "follow",
                         child: BlocBuilder<
                           UserFollowerCubit,
-                          Response<Selection<UserFollower>>
+                          Response<Selection<FollowerModel>>
                         >(
                           bloc: followerCubit,
                           builder: (context, response) {

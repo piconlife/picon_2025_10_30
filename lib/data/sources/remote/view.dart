@@ -1,14 +1,13 @@
 import 'package:data_management/core.dart';
 
+import '../../base/firestore_data_source.dart';
 import '../../constants/paths.dart';
-import '../../delegates/firestore.dart';
 import '../../models/view.dart';
 
-class RemoteViewDataSource extends RemoteDataSource<ViewModel> {
+class RemoteViewDataSource extends FirestoreDataSource<ViewModel> {
   RemoteViewDataSource()
     : super(
-        delegate: FirestoreDataDelegate.i,
-        path: Paths.refViews,
+        Paths.refViews,
         limitations: DataLimitations(maximumDeleteLimit: 1000),
       );
 

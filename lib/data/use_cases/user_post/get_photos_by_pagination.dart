@@ -15,7 +15,7 @@ class GetUserPhotosByPaginationUseCase extends BaseUserPostUseCase {
     return _i ??= GetUserPhotosByPaginationUseCase._();
   }
 
-  Future<Response<UserPost>> call({
+  Future<Response<PostModel>> call({
     String? uid,
     int? initialSize,
     int? fetchingSize,

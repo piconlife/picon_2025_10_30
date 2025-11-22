@@ -3,7 +3,7 @@ import '../enums/audience.dart';
 import '../enums/privacy.dart';
 import 'content.dart';
 
-class Photo extends Content {
+class Photo extends ContentModel {
   @override
   Iterable<String> get keys => [
     Keys.i.id,
@@ -43,7 +43,7 @@ class Photo extends Content {
   });
 
   factory Photo.parse(Object? source) {
-    final content = Content.parse(source);
+    final content = ContentModel.parse(source);
     return Photo(
       id: content.id,
       timeMills: content.timeMills,

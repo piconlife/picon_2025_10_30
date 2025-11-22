@@ -44,7 +44,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   }
 
   void _submit(BuildContext context) async {
-    User? user = widget.args.findOrNull();
+    UserModel? user = widget.args.findOrNull();
     if (user == null) {
       context.showErrorSnackBar("User hasn't valid!");
       return;
@@ -68,7 +68,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       context.showErrorSnackBar(response.error);
       return;
     }
-    await context.signOut<User>();
+    await context.signOut<UserModel>();
     btnSubmitKey.currentState?.hideLoading();
     if (context.mounted) context.clear(Routes.login);
   }

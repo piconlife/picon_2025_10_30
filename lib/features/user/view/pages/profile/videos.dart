@@ -30,7 +30,7 @@ class _ProfileVideosSegmentState extends State<ProfileVideosSegment> {
   Widget build(BuildContext context) {
     final dimen = context.dimens;
     final isCurrentUser = UserHelper.isCurrentUser(widget.uid);
-    return BlocBuilder<UserVideoCubit, Response<UserVideo>>(
+    return BlocBuilder<UserVideoCubit, Response<VideoModel>>(
       buildWhen: (previous, current) => current.requestCode == 0,
       builder: (context, state) {
         final result = state.result;

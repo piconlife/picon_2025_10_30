@@ -29,12 +29,12 @@ import 'view/pages/profile.dart';
 import 'view/pages/reports.dart';
 
 extension UserRouteHelper on BuildContext {
-  Future<void> openUserProfile({String? uid, User? user}) async {
+  Future<void> openUserProfile({String? uid, UserModel? user}) async {
     open(
       Routes.userProfile,
       args: {
         "uid": uid,
-        "$User": user,
+        "$UserModel": user,
         "$FeedHomeCubit": read<FeedHomeCubit>(),
         "$UserCubit": read<UserCubit>(),
         "$UserFollowerCubit": read<UserFollowerCubit>(),
@@ -116,7 +116,7 @@ Widget _editUserSecondaryAddress(BuildContext context, Object? args) {
 }
 
 Widget _profile(BuildContext context, Object? args) {
-  User? user = args.findOrNull(key: "$User");
+  UserModel? user = args.findOrNull(key: "$UserModel");
   String? uid = user?.id ?? args.findOrNull(key: "uid") ?? args.findOrNull();
   FeedHomeCubit? feedHomeCubit = args.findOrNull(key: "$FeedHomeCubit");
   UserCubit? userCubit = args.findOrNull(key: "$UserCubit");
@@ -214,7 +214,7 @@ Widget _profile(BuildContext context, Object? args) {
 }
 
 Widget _profileReports(BuildContext context, Object? args) {
-  User? user = args.findOrNull(key: "$User");
+  UserModel? user = args.findOrNull(key: "$UserModel");
   UserReportCubit? reportCubit = args.findOrNull(key: "$UserReportCubit");
   return MultiBlocProvider(
     providers: [
@@ -231,7 +231,7 @@ Widget _profileReports(BuildContext context, Object? args) {
 }
 
 Widget _profileFeeds(BuildContext context, Object? args) {
-  User? user = args.findOrNull(key: "$User");
+  UserModel? user = args.findOrNull(key: "$UserModel");
   String? uid = user?.id ?? args.findOrNull(key: "uid") ?? args.findOrNull();
   FeedHomeCubit? feedHomeCubit = args.findOrNull(key: "$FeedHomeCubit");
   UserPostCubit? postCubit = args.findOrNull(key: "$UserPostCubit");
@@ -251,7 +251,7 @@ Widget _profileFeeds(BuildContext context, Object? args) {
 }
 
 Widget _profileFollowers(BuildContext context, Object? args) {
-  User? user = args.findOrNull(key: "$User");
+  UserModel? user = args.findOrNull(key: "$UserModel");
   UserFollowerCubit? followerCubit = args.findOrNull(key: "$UserFollowerCubit");
   return MultiBlocProvider(
     providers: [
@@ -268,7 +268,7 @@ Widget _profileFollowers(BuildContext context, Object? args) {
 }
 
 Widget _profileFollowings(BuildContext context, Object? args) {
-  User? user = args.findOrNull(key: "$User");
+  UserModel? user = args.findOrNull(key: "$UserModel");
   UserFollowingCubit? followingCubit = args.findOrNull(
     key: "$UserFollowingCubit",
   );

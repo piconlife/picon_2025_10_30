@@ -22,12 +22,12 @@ import 'feed_footer.dart';
 import 'feed_header.dart';
 
 class ItemUserFeedCover extends StatelessWidget {
-  final UserPost item;
-  final Function(BuildContext context, UserPost item)? onClick;
+  final PostModel item;
+  final Function(BuildContext context, PostModel item)? onClick;
 
   const ItemUserFeedCover({super.key, required this.item, this.onClick});
 
-  String _title(User user) {
+  String _title(UserModel user) {
     final date = DateHelper.toRealtime(item.timeMills);
     if (item.isPublisher) {
       return "Updated your cover content at $date";
@@ -40,7 +40,7 @@ class ItemUserFeedCover extends StatelessWidget {
     }
   }
 
-  String? _subtitle(User user) {
+  String? _subtitle(UserModel user) {
     return !item.title.isValid
         ? DateHelper.toRealtime(item.timeMills)
         : item.title.isValid
@@ -74,14 +74,14 @@ class ItemUserFeedCover extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  final UserPost item;
+  final PostModel item;
 
   const _Body({required this.item});
 
   Future<void> _preview(BuildContext context, int index) async {
     context.open(
       Routes.previewPhotos,
-      args: {"$Content": item, "index": index},
+      args: {"$ContentModel": item, "index": index},
       configs: RouteConfigs(transitionType: TransitionType.fadeIn),
     );
   }

@@ -19,7 +19,7 @@ class UserHelper {
 
   static String key = "__local_user__";
 
-  static User get user => User.parse(Preferences.getOrNull(key));
+  static UserModel get user => UserModel.parse(Preferences.getOrNull(key));
 
   static String get uid => user.id;
 
@@ -63,13 +63,13 @@ class UserHelper {
     return Preferences.setString(key, value);
   }
 
-  static Future<User> get([BuildContext? context]) {
+  static Future<UserModel> get([BuildContext? context]) {
     if (context == null) {
       return GetUserUseCase.i(uid).then((value) {
         return value.data ?? user;
       });
     }
-    return context.auth<User>().then((value) {
+    return context.auth<UserModel>().then((value) {
       return value ?? user;
     });
   }
@@ -79,7 +79,7 @@ class UserHelper {
     Map<String, dynamic> data,
   ) async {
     try {
-      await context.updateAccount<User>(data);
+      await context.updateAccount<UserModel>(data);
       return true;
     } catch (error) {
       return false;
@@ -96,7 +96,7 @@ class UserHelper {
   }
 
   static Future<bool> isLoggedIn(BuildContext context) {
-    return context.isLoggedIn<User>();
+    return context.isLoggedIn<UserModel>();
   }
 
   static Future<void> signOut(BuildContext context, [String? id]) {

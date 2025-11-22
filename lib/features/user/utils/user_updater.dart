@@ -23,7 +23,7 @@ class ChoosingRouteKeys {
 class UserInfoUpdater {
   final UserKeys keys;
   final BuildContext context;
-  final User user;
+  final UserModel user;
 
   UserInfoUpdater(this.context, this.user) : keys = UserKeys.i;
 

@@ -179,120 +179,121 @@ class _ChooseFollowingPageState extends State<ChooseFollowingPage> {
                   inputType: TextInputType.text,
                 ),
               ),
-              child:
-                  BlocBuilder<SuggestedUsersCubit, Response<Selection<User>>>(
-                    builder: (context, response) {
-                      if (response.isLoading && response.result.isEmpty) {
-                        return ListView.builder(
+              child: BlocBuilder<
+                SuggestedUsersCubit,
+                Response<Selection<UserModel>>
+              >(
+                builder: (context, response) {
+                  if (response.isLoading && response.result.isEmpty) {
+                    return ListView.builder(
+                      padding: EdgeInsets.only(
+                        left: dimen.dp(12),
+                        right: dimen.dp(12),
+                        bottom: dimen.dp(100),
+                      ),
+                      itemCount: initialSize,
+                      itemBuilder: (context, index) {
+                        return Padding(
                           padding: EdgeInsets.only(
-                            left: dimen.dp(12),
-                            right: dimen.dp(12),
-                            bottom: dimen.dp(100),
+                            top: response.result.isEmpty ? 0 : dimen.dp(24),
+                            bottom: dimen.dp(24),
                           ),
-                          itemCount: initialSize,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                top: response.result.isEmpty ? 0 : dimen.dp(24),
-                                bottom: dimen.dp(24),
-                              ),
-                              child: PlaceholderSuggestedUser(),
-                            );
-                          },
+                          child: PlaceholderSuggestedUser(),
                         );
-                      }
-                      if (response.result.isEmpty) {
-                        return Align(
-                          alignment: Alignment(0, -0.2),
-                          child: InAppException(
-                            "No suggested user found!",
-                            icon: InAppIcons.followers.regular,
-                            spaceBetween: dimen.dp(24),
-                          ),
-                        );
-                      }
-                      final items = response.result;
-                      if (response.isLoading) {
-                        items.addAll(
-                          List.generate(fetchingSize, (i) {
-                            return Selection(id: "", data: User());
-                          }),
-                        );
-                      } else if (response.isLoaded) {
-                        items.removeWhere((e) {
-                          return e.id.isEmpty;
-                        });
-                      }
+                      },
+                    );
+                  }
+                  if (response.result.isEmpty) {
+                    return Align(
+                      alignment: Alignment(0, -0.2),
+                      child: InAppException(
+                        "No suggested user found!",
+                        icon: InAppIcons.followers.regular,
+                        spaceBetween: dimen.dp(24),
+                      ),
+                    );
+                  }
+                  final items = response.result;
+                  if (response.isLoading) {
+                    items.addAll(
+                      List.generate(fetchingSize, (i) {
+                        return Selection(id: "", data: UserModel());
+                      }),
+                    );
+                  } else if (response.isLoaded) {
+                    items.removeWhere((e) {
+                      return e.id.isEmpty;
+                    });
+                  }
 
-                      return InAppSelection(
-                        controller: _controller,
-                        initialTags: _notifier.value,
-                        onSelectedTags: _changed,
-                        items: items,
-                        tagBuilder: (item) => item.id,
-                        searchBuilder: (query, item) {
-                          return item.data.name
-                              .toString()
-                              .toLowerCase()
-                              .contains(query.trim().toLowerCase());
-                        },
-                        builder: (context, instance) {
-                          final item = instance.data;
-                          if (item.id.isEmpty) {
-                            return PlaceholderSuggestedUser();
-                          }
-                          return ItemSuggestedUser(
-                            selection: item.copy(selected: instance.selected),
-                            onTap:
-                                () => context.open(
-                                  Routes.userProfile,
-                                  args: {"$User": item.data},
-                                ),
-                            onFollow: instance.call,
-                          );
-                        },
-                        listBuilder: (context, children) {
-                          if (children.isEmpty) {
-                            return InAppException("No suggested user matched!");
-                          }
-                          return ListView.separated(
-                            padding: EdgeInsets.only(
-                              left: dimen.dp(12),
-                              right: dimen.dp(12),
-                              bottom: dimen.dp(100),
+                  return InAppSelection(
+                    controller: _controller,
+                    initialTags: _notifier.value,
+                    onSelectedTags: _changed,
+                    items: items,
+                    tagBuilder: (item) => item.id,
+                    searchBuilder: (query, item) {
+                      return item.data.name.toString().toLowerCase().contains(
+                        query.trim().toLowerCase(),
+                      );
+                    },
+                    builder: (context, instance) {
+                      final item = instance.data;
+                      if (item.id.isEmpty) {
+                        return PlaceholderSuggestedUser();
+                      }
+                      return ItemSuggestedUser(
+                        selection: item.copy(selected: instance.selected),
+                        onTap:
+                            () => context.open(
+                              Routes.userProfile,
+                              args: {"$UserModel": item.data},
                             ),
-                            itemCount: children.length + 1,
-                            itemBuilder: (context, index) {
-                              if (index == children.length) {
-                                return Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(dimen.dp(12)),
-                                    child: InAppButton(
-                                      text: "MORE",
-                                      textStyle: TextStyle(color: primary),
-                                      backgroundColor: primary.t10,
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: dimen.dp(24),
-                                        vertical: dimen.dp(4),
-                                      ),
-                                      borderRadius: BorderRadius.circular(
-                                        dimen.dp(25),
-                                      ),
-                                      onTap: () => _loadMore(context),
-                                    ),
+                        onFollow: instance.call,
+                      );
+                    },
+                    listBuilder: (context, children) {
+                      if (children.isEmpty) {
+                        return InAppException("No suggested user matched!");
+                      }
+                      return ListView.separated(
+                        padding: EdgeInsets.only(
+                          left: dimen.dp(12),
+                          right: dimen.dp(12),
+                          bottom: dimen.dp(100),
+                        ),
+                        itemCount: children.length + 1,
+                        itemBuilder: (context, index) {
+                          if (index == children.length) {
+                            return Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(dimen.dp(12)),
+                                child: InAppButton(
+                                  text: "MORE",
+                                  textStyle: TextStyle(color: primary),
+                                  backgroundColor: primary.t10,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: dimen.dp(24),
+                                    vertical: dimen.dp(4),
                                   ),
-                                );
-                              }
-                              return children[index];
-                            },
-                            separatorBuilder: (context, index) {
-                              return SizedBox(height: dimen.dp(12));
-                            },
-                          );
+                                  borderRadius: BorderRadius.circular(
+                                    dimen.dp(25),
+                                  ),
+                                  onTap: () => _loadMore(context),
+                                ),
+                              ),
+                            );
+                          }
+                          return children[index];
+                        },
+                        separatorBuilder: (context, index) {
+                          return SizedBox(height: dimen.dp(12));
                         },
                       );
                     },
-                  ),
+                  );
+                },
+              ),
             ),
             ValueListenableBuilder(
               valueListenable: _notifier,

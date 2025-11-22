@@ -12,7 +12,7 @@ import '../../data/use_cases/user/update.dart';
 import '../../features/startup/preferences/startup.dart';
 import '../helpers/user.dart';
 
-class InAppAuthBackupDelegate extends AuthBackupDelegate<User> {
+class InAppAuthBackupDelegate extends AuthBackupDelegate<UserModel> {
   final _create = CreateUserUseCase.i;
   final _update = UpdateUserUseCase.i;
   final _delete = DeleteUserUseCase.i;
@@ -26,7 +26,7 @@ class InAppAuthBackupDelegate extends AuthBackupDelegate<User> {
       );
 
   @override
-  User build(Map source) => User.parse(source);
+  UserModel build(Map source) => UserModel.parse(source);
 
   @override
   Object? nonEncodableObjectParser(Object? current, Object? old) {
@@ -58,7 +58,7 @@ class InAppAuthBackupDelegate extends AuthBackupDelegate<User> {
   }
 
   @override
-  Future<void> onCreateUser(User data) async {
+  Future<void> onCreateUser(UserModel data) async {
     Map<String, dynamic> current = data.source;
     current.addAll(data.extra.use);
     current.addAll({
@@ -75,7 +75,7 @@ class InAppAuthBackupDelegate extends AuthBackupDelegate<User> {
       UserKeys.i.longitude: Startup.i.longitude,
       UserKeys.i.provider: Startup.i.provider,
     });
-    final user = User.parse(current);
+    final user = UserModel.parse(current);
     await _create(user: user);
 
     log("USER_CREATED");
@@ -85,7 +85,7 @@ class InAppAuthBackupDelegate extends AuthBackupDelegate<User> {
   Future<void> onDeleteUser(String id) => _delete(id);
 
   @override
-  Future<User?> onFetchUser(String id) => _fetch(id).then((v) => v.data);
+  Future<UserModel?> onFetchUser(String id) => _fetch(id).then((v) => v.data);
 
   @override
   Future<void> onUpdateUser(String id, Map<String, dynamic> data) {

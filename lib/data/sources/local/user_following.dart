@@ -1,13 +1,10 @@
-import 'package:data_management/core.dart';
-
+import '../../base/in_app_data_source.dart';
 import '../../constants/paths.dart';
-import '../../delegates/local.dart';
 import '../../models/user_following.dart';
 
-class LocalUserFollowingDataSource extends LocalDataSource<UserFollowing> {
-  LocalUserFollowingDataSource()
-    : super(delegate: LocalDataDelegate.i, path: Paths.userFollowings);
+class LocalUserFollowingDataSource extends InAppDataSource<FollowingModel> {
+  LocalUserFollowingDataSource() : super(Paths.userFollowings);
 
   @override
-  UserFollowing build(Object? source) => UserFollowing.parse(source);
+  FollowingModel build(Object? source) => FollowingModel.parse(source);
 }

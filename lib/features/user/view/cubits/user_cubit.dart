@@ -5,13 +5,13 @@ import '../../../../app/helpers/user.dart';
 import '../../../../data/models/user.dart';
 import '../../../../data/use_cases/user/get.dart';
 
-class UserCubit extends DataCubit<User> {
+class UserCubit extends DataCubit<UserModel> {
   final String uid;
 
   UserCubit(super.context, [String? uid]) : uid = uid ?? UserHelper.uid;
 
   @override
-  Future<Response<User>> onFetch({
+  Future<Response<UserModel>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,

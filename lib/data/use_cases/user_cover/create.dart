@@ -10,7 +10,7 @@ class CreateUserCoverUseCase extends BaseUserCoverUseCase {
 
   static CreateUserCoverUseCase get i => _i ??= CreateUserCoverUseCase._();
 
-  Future<Response<UserCover>> call(UserCover data) {
+  Future<Response<CoverModel>> call(CoverModel data) {
     return repository.create(data, params: params);
   }
 }

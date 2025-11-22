@@ -22,8 +22,8 @@ import 'feed_header.dart';
 
 class ItemFeedBusiness extends StatefulWidget {
   final int index;
-  final Feed item;
-  final Function(BuildContext context, Feed item)? onClick;
+  final FeedModel item;
+  final Function(BuildContext context, FeedModel item)? onClick;
 
   const ItemFeedBusiness({
     super.key,
@@ -66,7 +66,7 @@ class _ItemFeedBusinessState extends State<ItemFeedBusiness> {
 }
 
 class _Body extends StatefulWidget {
-  final Feed item;
+  final FeedModel item;
 
   const _Body({required this.item});
 
@@ -111,7 +111,7 @@ class _BodyState extends State<_Body> {
 
 class _Content extends StatelessWidget {
   final bool isExpanded;
-  final Content item;
+  final ContentModel item;
   final int index;
   final ValueChanged<bool>? onChanged;
 

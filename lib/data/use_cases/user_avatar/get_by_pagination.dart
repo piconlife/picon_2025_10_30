@@ -14,7 +14,7 @@ class GetUserAvatarsByPaginationUseCase extends BaseUserAvatarUseCase {
     return _i ??= GetUserAvatarsByPaginationUseCase._();
   }
 
-  Future<Response<UserAvatar>> call({
+  Future<Response<AvatarModel>> call({
     String? uid,
     int? initialSize,
     int? fetchingSize,

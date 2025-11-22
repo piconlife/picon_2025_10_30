@@ -1,13 +1,10 @@
-import 'package:data_management/core.dart';
-
+import '../../base/firestore_data_source.dart';
 import '../../constants/paths.dart';
-import '../../delegates/firestore.dart';
 import '../../models/user_follower.dart';
 
-class RemoteUserFollowerDataSource extends RemoteDataSource<UserFollower> {
-  RemoteUserFollowerDataSource()
-    : super(delegate: FirestoreDataDelegate.i, path: Paths.userFollowers);
+class RemoteUserFollowerDataSource extends FirestoreDataSource<FollowerModel> {
+  RemoteUserFollowerDataSource() : super(Paths.userFollowers);
 
   @override
-  UserFollower build(Object? source) => UserFollower.from(source);
+  FollowerModel build(Object? source) => FollowerModel.from(source);
 }

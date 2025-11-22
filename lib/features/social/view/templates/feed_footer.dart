@@ -22,7 +22,7 @@ import '../../data/cubits/like_cubit.dart';
 import '../cubits/comment_cubit.dart';
 
 class FeedFooter extends StatefulWidget {
-  final Feed item;
+  final FeedModel item;
 
   const FeedFooter({super.key, required this.item});
 

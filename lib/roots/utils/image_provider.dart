@@ -80,7 +80,7 @@ class EditablePhoto {
   Object? get data =>
       _data is MediaData
           ? _data.data
-          : _data is Content
+          : _data is ContentModel
           ? (_data).photoUrl
           : _data is String
           ? _data
@@ -97,7 +97,7 @@ class EditablePhoto {
   EditablePhoto.data(MediaData data)
     : this._(data: data, id: KeyGenerator.generateKey(extraKeySize: 5));
 
-  EditablePhoto.photo(Content photo) : this._(data: photo, id: photo.id);
+  EditablePhoto.photo(ContentModel photo) : this._(data: photo, id: photo.id);
 
   EditablePhoto copy([Object? data]) {
     return EditablePhoto._(id: id, data: data ?? this.data);

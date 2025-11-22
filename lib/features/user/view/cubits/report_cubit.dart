@@ -6,7 +6,7 @@ import '../../../../data/models/user_report.dart';
 import '../../../../data/use_cases/user_report/count.dart';
 import '../../../../data/use_cases/user_report/get_by_pagination.dart';
 
-class UserReportCubit extends DataCubit<UserReport> {
+class UserReportCubit extends DataCubit<ReportModel> {
   final String uid;
 
   UserReportCubit(super.context, [String? uid]) : uid = uid ?? UserHelper.uid;
@@ -15,7 +15,7 @@ class UserReportCubit extends DataCubit<UserReport> {
   Future<Response<int>> onCount() => GetUserReportCountUseCase.i(uid);
 
   @override
-  Future<Response<UserReport>> onFetch({
+  Future<Response<ReportModel>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,

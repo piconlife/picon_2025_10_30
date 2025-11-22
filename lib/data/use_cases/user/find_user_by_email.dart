@@ -11,7 +11,7 @@ class FindUserByEmailUseCase extends BaseUserUseCase {
 
   static FindUserByEmailUseCase get i => _i ??= FindUserByEmailUseCase._();
 
-  Future<Response<User>> call(String email) {
+  Future<Response<UserModel>> call(String email) {
     return repository.search(
       Checker(field: UserKeys.i.email, value: email, type: CheckerType.equal),
     );

@@ -8,7 +8,7 @@ import '../sources/local/user_video.dart';
 import '../sources/remote/user_video.dart';
 import '../use_cases/feed_video/get.dart';
 
-class UserVideoRepository extends RemoteDataRepository<UserVideo> {
+class UserVideoRepository extends RemoteDataRepository<VideoModel> {
   UserVideoRepository({
     required super.source,
     super.backup,
@@ -24,8 +24,8 @@ class UserVideoRepository extends RemoteDataRepository<UserVideo> {
       );
 
   @override
-  Future<Response<UserVideo>> modifier(
-    Response<UserVideo> value,
+  Future<Response<VideoModel>> modifier(
+    Response<VideoModel> value,
     DataModifiers modifier,
   ) async {
     switch (modifier) {
@@ -57,12 +57,12 @@ class UserVideoRepository extends RemoteDataRepository<UserVideo> {
     }
   }
 
-  Future<Response<UserVideo>> _modify(Response<UserVideo> value) async {
+  Future<Response<VideoModel>> _modify(Response<VideoModel> value) async {
     if (value.isValid) {
       if (value.result.length == 1) {
         return value.copyWith(data: await _value(value.data));
       } else {
-        List<UserVideo> list = [];
+        List<VideoModel> list = [];
         for (var i in value.result) {
           final data = await _value(i);
           if (data != null) list.add(data);
@@ -74,7 +74,7 @@ class UserVideoRepository extends RemoteDataRepository<UserVideo> {
     }
   }
 
-  Future<UserVideo?> _value(UserVideo? i) async {
+  Future<VideoModel?> _value(VideoModel? i) async {
     if (i != null) {
       return GetVideosUseCase.i(i.path.use).then((value) {
         return i.withUserVideo(videos: value.result);

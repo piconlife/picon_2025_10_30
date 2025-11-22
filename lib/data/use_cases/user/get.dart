@@ -10,7 +10,7 @@ class GetUserUseCase extends BaseUserUseCase {
 
   static GetUserUseCase get i => _i ??= GetUserUseCase._();
 
-  Future<Response<User>> call(String id, {bool singletonMode = true}) {
+  Future<Response<UserModel>> call(String id, {bool singletonMode = true}) {
     return repository.getById(id, singletonMode: singletonMode);
   }
 }

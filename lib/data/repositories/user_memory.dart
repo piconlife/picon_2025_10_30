@@ -9,7 +9,7 @@ import '../sources/remote/user_memory.dart';
 import '../use_cases/content/get.dart';
 import '../use_cases/feed_video/get.dart';
 
-class UserMemoryRepository extends RemoteDataRepository<UserMemory> {
+class UserMemoryRepository extends RemoteDataRepository<MemoryModel> {
   UserMemoryRepository({
     required super.source,
     super.backup,
@@ -25,8 +25,8 @@ class UserMemoryRepository extends RemoteDataRepository<UserMemory> {
       );
 
   @override
-  Future<Response<UserMemory>> modifier(
-    Response<UserMemory> value,
+  Future<Response<MemoryModel>> modifier(
+    Response<MemoryModel> value,
     DataModifiers modifier,
   ) async {
     switch (modifier) {
@@ -58,12 +58,12 @@ class UserMemoryRepository extends RemoteDataRepository<UserMemory> {
     }
   }
 
-  Future<Response<UserMemory>> _modify(Response<UserMemory> value) async {
+  Future<Response<MemoryModel>> _modify(Response<MemoryModel> value) async {
     if (value.isValid) {
       if (value.result.length == 1) {
         return value.copyWith(data: await _value(value.data));
       } else {
-        List<UserMemory> list = [];
+        List<MemoryModel> list = [];
         for (var i in value.result) {
           final data = await _value(i);
           if (data != null) list.add(data);
@@ -75,7 +75,7 @@ class UserMemoryRepository extends RemoteDataRepository<UserMemory> {
     }
   }
 
-  Future<UserMemory?> _value(UserMemory? i) async {
+  Future<MemoryModel?> _value(MemoryModel? i) async {
     if (i != null) {
       final photos = await GetsUseCase.i(i.path.use).then((value) {
         return value.result;

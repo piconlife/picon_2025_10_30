@@ -10,7 +10,7 @@ class DeleteUserPostUseCase extends BaseUserPostUseCase {
 
   static DeleteUserPostUseCase get i => _i ??= DeleteUserPostUseCase._();
 
-  Future<Response<UserPost>> call(String id) {
+  Future<Response<PostModel>> call(String id) {
     return repository.deleteById(id, deleteRefs: true, counter: true);
   }
 }

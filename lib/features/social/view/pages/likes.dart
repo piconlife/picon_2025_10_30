@@ -19,7 +19,7 @@ import '../templates/item_feed_like.dart';
 
 class LikesPage extends StatefulWidget {
   final Object? args;
-  final User? user;
+  final UserModel? user;
 
   const LikesPage({super.key, this.args, this.user});
 

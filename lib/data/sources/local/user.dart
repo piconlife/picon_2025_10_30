@@ -1,13 +1,10 @@
-import 'package:data_management/core.dart';
-
+import '../../base/in_app_data_source.dart';
 import '../../constants/paths.dart';
-import '../../delegates/local.dart';
 import '../../models/user.dart';
 
-class LocalUserDataSource extends LocalDataSource<User> {
-  LocalUserDataSource()
-    : super(delegate: LocalDataDelegate.i, path: Paths.users);
+class LocalUserDataSource extends InAppDataSource<UserModel> {
+  LocalUserDataSource() : super(Paths.users);
 
   @override
-  User build(Object? source) => User.parse(source);
+  UserModel build(Object? source) => UserModel.parse(source);
 }

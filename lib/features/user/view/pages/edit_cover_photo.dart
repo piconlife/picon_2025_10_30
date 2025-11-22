@@ -73,7 +73,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
   final privacy = ValueNotifier(Privacy.everyone);
   final feed = ValueNotifier(true);
 
-  User user = User();
+  UserModel user = UserModel();
   String? photoUrl;
   late String id = Entity.generateID;
 
@@ -190,7 +190,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
     }
 
     if (!mounted) return;
-    final updateAccountResponse = await context.updateAccount<User>({
+    final updateAccountResponse = await context.updateAccount<UserModel>({
       UserKeys.i.coverPhoto: photoUrl,
     });
     if (!mounted) return;
@@ -227,7 +227,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
     final mPublisherId = UserHelper.uid;
     final mTimeMills = Entity.generateTimeMills;
 
-    final mCover = UserCover.create(
+    final mCover = CoverModel.create(
       id: id,
       timeMills: mTimeMills,
       description: etText.text.isNotEmpty ? etText.text : null,
@@ -235,14 +235,14 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
       privacy: privacy.value,
     );
 
-    final mUserPost = UserPost.createForCover(
+    final mUserPost = PostModel.createForCover(
       id: id,
       timeMills: mTimeMills,
       publisherId: mPublisherId,
       content: mCover,
     );
 
-    final mFeed = Feed.create(
+    final mFeed = FeedModel.create(
       id: id,
       timeMills: mTimeMills,
       publisher: user,
@@ -361,7 +361,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
         ),
         body: ListView(
           children: [
-            AuthConsumer<User>(
+            AuthConsumer<UserModel>(
               builder: (context, user) {
                 return ValueListenableBuilder(
                   valueListenable: loading,

@@ -141,7 +141,7 @@ class InAppUserAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLocal) {
-      return AuthConsumer<User>(
+      return AuthConsumer<UserModel>(
         builder: (context, value) {
           return child(context, value?.photo ?? url ?? InAppPlaceholders.user);
         },

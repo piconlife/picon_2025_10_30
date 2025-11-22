@@ -13,7 +13,7 @@ import '../../../../roots/widgets/user_builder.dart';
 import '../../../social/view/widgets/follow_button.dart';
 
 class ItemUserFollowing extends StatelessWidget {
-  final UserFollowing data;
+  final FollowingModel data;
 
   const ItemUserFollowing({super.key, required this.data});
 

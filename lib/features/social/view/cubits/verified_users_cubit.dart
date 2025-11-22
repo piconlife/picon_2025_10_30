@@ -7,10 +7,10 @@ import '../../../../app/helpers/user.dart';
 import '../../../../data/models/user.dart';
 import '../../../../data/use_cases/user/get_users_by_ids.dart';
 
-class VerifiedUsersCubit extends DataCubit<Selection<User>> {
+class VerifiedUsersCubit extends DataCubit<Selection<UserModel>> {
   VerifiedUsersCubit(super.context);
 
-  Response<Selection<User>> _converter(Response<User> response) {
+  Response<Selection<UserModel>> _converter(Response<UserModel> response) {
     return Response.convert(response, (e) {
       return Selection(
         id: e.id,
@@ -21,7 +21,7 @@ class VerifiedUsersCubit extends DataCubit<Selection<User>> {
   }
 
   @override
-  Future<Response<Selection<User>>> onFetch({
+  Future<Response<Selection<UserModel>>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,
@@ -33,8 +33,8 @@ class VerifiedUsersCubit extends DataCubit<Selection<User>> {
   }
 
   @override
-  Future<Response<Selection<User>>> onUpdate(
-    Selection<User> old,
+  Future<Response<Selection<UserModel>>> onUpdate(
+    Selection<UserModel> old,
     Map<String, dynamic> changes,
   ) async {
     DataFieldValue field;

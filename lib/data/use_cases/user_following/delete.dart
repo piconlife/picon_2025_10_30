@@ -11,7 +11,7 @@ class DeleteUserFollowingUseCase extends BaseUserFollowingUseCase {
   static DeleteUserFollowingUseCase get i =>
       _i ??= DeleteUserFollowingUseCase._();
 
-  Future<Response<UserFollowing>> call(String id) {
+  Future<Response<FollowingModel>> call(String id) {
     return repository.deleteById(id, params: params);
   }
 }

@@ -7,7 +7,7 @@ import '../enums/content_state.dart';
 import '../enums/privacy.dart';
 import 'content.dart';
 
-class UserAvatar extends Content {
+class AvatarModel extends ContentModel {
   @override
   Iterable<String> get keys => [
     key.id,
@@ -19,7 +19,7 @@ class UserAvatar extends Content {
     key.privacy,
   ];
 
-  UserAvatar({
+  AvatarModel({
     super.id,
     super.timeMills,
     super.path,
@@ -30,7 +30,7 @@ class UserAvatar extends Content {
     super.uiState,
   });
 
-  UserAvatar.create({
+  AvatarModel.create({
     required String super.id,
     required super.timeMills,
     required super.privacy,
@@ -45,9 +45,10 @@ class UserAvatar extends Content {
          ),
        );
 
-  factory UserAvatar.parse(Object? source) {
-    final content = source is Content ? source : Content.parse(source);
-    return UserAvatar(
+  factory AvatarModel.parse(Object? source) {
+    final content =
+        source is ContentModel ? source : ContentModel.parse(source);
+    return AvatarModel(
       id: content.id,
       timeMills: content.timeMills,
       path: content.path,
@@ -58,7 +59,7 @@ class UserAvatar extends Content {
     );
   }
 
-  UserAvatar copyWith({
+  AvatarModel copyWith({
     String? id,
     int? timeMills,
     String? publisherId,
@@ -68,7 +69,7 @@ class UserAvatar extends Content {
     String? photoUrl,
     ContentUiState? uiState,
   }) {
-    return UserAvatar(
+    return AvatarModel(
       id: stringify(id, this.id),
       timeMills: stringify(timeMills, this.timeMills),
       publisherId: stringify(publisherId, this.publisherId),

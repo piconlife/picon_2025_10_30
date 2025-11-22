@@ -10,7 +10,7 @@ class CreateUserPostUseCase extends BaseUserPostUseCase {
 
   static CreateUserPostUseCase get i => _i ??= CreateUserPostUseCase._();
 
-  Future<Response<UserPost>> call(UserPost data) {
+  Future<Response<PostModel>> call(PostModel data) {
     return repository.create(data, params: params);
   }
 }

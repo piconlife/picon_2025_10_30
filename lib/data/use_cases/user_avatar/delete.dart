@@ -10,7 +10,7 @@ class DeleteUserAvatarUseCase extends BaseUserAvatarUseCase {
 
   static DeleteUserAvatarUseCase get i => _i ??= DeleteUserAvatarUseCase._();
 
-  Future<Response<UserAvatar>> call(String id) {
+  Future<Response<AvatarModel>> call(String id) {
     return repository.deleteById(id, params: params);
   }
 }

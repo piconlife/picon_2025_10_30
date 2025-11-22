@@ -1,13 +1,10 @@
-import 'package:data_management/core.dart';
-
+import '../../base/in_app_data_source.dart';
 import '../../constants/paths.dart';
-import '../../delegates/local.dart';
 import '../../models/user_memory.dart';
 
-class LocalUserMemoryDataSource extends LocalDataSource<UserMemory> {
-  LocalUserMemoryDataSource()
-    : super(delegate: LocalDataDelegate.i, path: Paths.userMemories);
+class LocalUserMemoryDataSource extends InAppDataSource<MemoryModel> {
+  LocalUserMemoryDataSource() : super(Paths.userMemories);
 
   @override
-  UserMemory build(Object? source) => UserMemory.from(source);
+  MemoryModel build(Object? source) => MemoryModel.from(source);
 }

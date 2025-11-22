@@ -14,7 +14,7 @@ import 'item_feed_video.dart';
 
 class ItemUserFeed extends StatelessWidget {
   final int index;
-  final UserPost item;
+  final PostModel item;
 
   const ItemUserFeed({super.key, required this.index, required this.item});
 

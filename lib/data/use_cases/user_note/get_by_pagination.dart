@@ -14,7 +14,7 @@ class GetUserNotesByPaginationUseCase extends BaseUserNoteUseCase {
     return _i ??= GetUserNotesByPaginationUseCase._();
   }
 
-  Future<Response<UserNote>> call({
+  Future<Response<NoteModel>> call({
     String? uid,
     int? initialSize,
     int? fetchingSize,

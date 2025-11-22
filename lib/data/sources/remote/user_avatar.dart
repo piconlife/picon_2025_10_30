@@ -1,13 +1,10 @@
-import 'package:data_management/core.dart';
-
+import '../../base/firestore_data_source.dart';
 import '../../constants/paths.dart';
-import '../../delegates/firestore.dart';
 import '../../models/user_avatar.dart';
 
-class RemoteUserAvatarDataSource extends RemoteDataSource<UserAvatar> {
-  RemoteUserAvatarDataSource()
-    : super(delegate: FirestoreDataDelegate.i, path: Paths.userAvatars);
+class RemoteUserAvatarDataSource extends FirestoreDataSource<AvatarModel> {
+  RemoteUserAvatarDataSource() : super(Paths.userAvatars);
 
   @override
-  UserAvatar build(Object? source) => UserAvatar.parse(source);
+  AvatarModel build(Object? source) => AvatarModel.parse(source);
 }

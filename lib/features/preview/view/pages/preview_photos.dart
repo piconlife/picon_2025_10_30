@@ -31,14 +31,14 @@ class PreviewPhotosPage extends StatefulWidget {
 
   static Future<void> open(
     BuildContext context,
-    Content item,
+    ContentModel item,
     int index,
   ) async {
     context.open(
       Routes.previewPhotos,
       args: {
         "index": index,
-        "$Content": item,
+        "$ContentModel": item,
         "$LikeCubit": DataCubit.of<LikeCubit>(context),
         "$ViewCubit": DataCubit.of<ViewCubit>(context),
         "$CommentCubit": DataCubit.of<CommentCubit>(context),
@@ -54,12 +54,13 @@ class PreviewPhotosPage extends StatefulWidget {
 class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
   int pageType = 0;
   int index = 0;
-  Content? content;
-  List<Content> photos = [];
+  ContentModel? content;
+  List<ContentModel> photos = [];
 
   late final controller = PageController(initialPage: index);
 
-  Content get selected => photos.elementAtOrNull(index) ?? Content.empty();
+  ContentModel get selected =>
+      photos.elementAtOrNull(index) ?? ContentModel.empty();
 
   Future<void> _update(int index, Map<String, dynamic> data) async {
     final path = photos[index].contentPath.use;
@@ -99,7 +100,7 @@ class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
   void initState() {
     super.initState();
     index = widget.args.get("index", 0);
-    content = widget.args.getOrNull("$Content");
+    content = widget.args.getOrNull("$ContentModel");
     photos = List.from(content?.photos ?? []);
   }
 

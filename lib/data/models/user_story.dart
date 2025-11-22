@@ -45,8 +45,8 @@ List<String> _keys = [
   Keys.i.contents,
 ];
 
-class UserStory extends Content {
-  UserStory({
+class StoryModel extends ContentModel {
+  StoryModel({
     // PUBLISHER
     super.publisherId,
     super.publisherPhotoUrl,
@@ -88,8 +88,8 @@ class UserStory extends Content {
     // super.views,
   });
 
-  factory UserStory.create({
-    User? publisher,
+  factory StoryModel.create({
+    UserModel? publisher,
     String? id,
     int? timeMills,
     String? title,
@@ -103,7 +103,7 @@ class UserStory extends Content {
     String? url,
     String? link,
     bool? verified,
-    Content? recent,
+    ContentModel? recent,
     Audience? audience,
     Privacy? privacy,
     FeedType? type,
@@ -115,7 +115,7 @@ class UserStory extends Content {
     int? starCount,
     int? viewCount,
     List<String>? bookmarks,
-    List<Content>? contents,
+    List<ContentModel>? contents,
     List<String>? comments,
     List<String>? likes,
     List<String>? photoUrls,
@@ -126,7 +126,7 @@ class UserStory extends Content {
     List<String>? views,
   }) {
     publisher ??= UserHelper.user;
-    return UserStory(
+    return StoryModel(
       // PUBLISHER
       publisherId: publisher.id,
       publisherName: publisher.name,
@@ -163,7 +163,7 @@ class UserStory extends Content {
     );
   }
 
-  UserStory withFeed({
+  StoryModel withFeed({
     // PUBLISHER
     String? publisher,
     String? publisherPhoto,
@@ -185,7 +185,7 @@ class UserStory extends Content {
     String? url,
     String? link,
     bool? verified,
-    Content? recent,
+    ContentModel? recent,
     Audience? audience,
     Privacy? privacy,
     FeedType? type,
@@ -197,7 +197,7 @@ class UserStory extends Content {
     int? starCount,
     int? viewCount,
     List<String>? bookmarks,
-    List<Content>? contents,
+    List<ContentModel>? contents,
     List<String>? comments,
     List<String>? likes,
     List<String>? photoUrls,
@@ -207,7 +207,7 @@ class UserStory extends Content {
     List<String>? videoUrls,
     List<String>? views,
   }) {
-    return UserStory(
+    return StoryModel(
       // PUBLISHER
       publisherId: publisher ?? this.publisherId,
       publisherPhotoUrl: publisherPhoto ?? this.publisherPhotoUrl,
@@ -249,9 +249,9 @@ class UserStory extends Content {
     );
   }
 
-  factory UserStory.from(dynamic source) {
-    final data = Content.parse(source);
-    return UserStory(
+  factory StoryModel.from(dynamic source) {
+    final data = ContentModel.parse(source);
+    return StoryModel(
       // PUBLISHER
       publisherId: data.publisherId,
       publisherPhotoUrl: data.publisherPhotoUrl,

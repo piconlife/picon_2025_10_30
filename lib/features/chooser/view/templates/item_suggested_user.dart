@@ -14,7 +14,7 @@ import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/text.dart';
 
 class ItemSuggestedUser extends StatelessWidget {
-  final Selection<User> selection;
+  final Selection<UserModel> selection;
   final VoidCallback? onTap;
   final VoidCallback? onFollow;
 

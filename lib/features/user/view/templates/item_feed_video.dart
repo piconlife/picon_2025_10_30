@@ -15,8 +15,8 @@ import 'feed_header.dart';
 import 'stared_feed_footer.dart';
 
 class ItemUserFeedVideo extends StatefulWidget {
-  final UserPost item;
-  final Function(BuildContext context, UserPost item)? onClick;
+  final PostModel item;
+  final Function(BuildContext context, PostModel item)? onClick;
 
   const ItemUserFeedVideo({super.key, required this.item, this.onClick});
 
@@ -25,7 +25,7 @@ class ItemUserFeedVideo extends StatefulWidget {
 }
 
 class _ItemUserFeedVideoState extends State<ItemUserFeedVideo> {
-  String? _subtitle(User user) {
+  String? _subtitle(UserModel user) {
     return widget.item.title.isNotValid
         ? DateHelper.toRealtime(widget.item.timeMills)
         : user.title.isValid
@@ -67,7 +67,7 @@ class _ItemUserFeedVideoState extends State<ItemUserFeedVideo> {
 }
 
 class _Body extends StatelessWidget {
-  final UserPost item;
+  final PostModel item;
 
   const _Body({required this.item});
 

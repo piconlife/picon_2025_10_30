@@ -706,7 +706,7 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
   }
 
   Widget _buildAuthProvider(Widget child) {
-    return AuthProvider<User>(
+    return AuthProvider<UserModel>(
       initialCheck: LocalConfigs.authInitialCheck,
       authorizer: Authorizer(
         delegate: InAppAuthDelegate(),

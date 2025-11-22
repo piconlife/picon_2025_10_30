@@ -19,7 +19,7 @@ import '../../data/cubits/feed_home_cubit.dart';
 
 class FeedHeaderMoreAction extends StatefulWidget {
   final int index;
-  final Feed item;
+  final FeedModel item;
   final VoidCallback? onTranslate;
 
   const FeedHeaderMoreAction({
@@ -73,7 +73,7 @@ class _FeedHeaderMoreActionState extends State<FeedHeaderMoreAction> {
     context.open(
       Routes.createUserPost,
       args: {
-        "$Content": widget.item,
+        "$ContentModel": widget.item,
         "$FeedHomeCubit": context.read<FeedHomeCubit>(),
         "$UserPostCubit": context.read<UserPostCubit>(),
       },
@@ -119,7 +119,7 @@ class _FeedHeaderMoreActionState extends State<FeedHeaderMoreAction> {
               value: "follow",
               child: BlocBuilder<
                 UserFollowerCubit,
-                Response<Selection<UserFollower>>
+                Response<Selection<FollowerModel>>
               >(
                 bloc: followerCubit,
                 builder: (context, response) {

@@ -5,13 +5,13 @@ import '../../../../app/helpers/user.dart';
 import '../../../../data/models/user_note.dart';
 import '../../../../data/use_cases/user_note/get_by_pagination.dart';
 
-class UserNoteCubit extends DataCubit<UserNote> {
+class UserNoteCubit extends DataCubit<NoteModel> {
   final String uid;
 
   UserNoteCubit(super.context, [String? uid]) : uid = uid ?? UserHelper.uid;
 
   @override
-  Future<Response<UserNote>> onFetch({
+  Future<Response<NoteModel>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,

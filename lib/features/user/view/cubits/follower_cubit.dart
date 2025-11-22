@@ -7,7 +7,7 @@ import '../../../../data/models/user_follower.dart';
 import '../../../../data/use_cases/user_follower/count.dart';
 import '../../../../data/use_cases/user_follower/get.dart';
 
-class UserFollowerCubit extends DataCubit<Selection<UserFollower>> {
+class UserFollowerCubit extends DataCubit<Selection<FollowerModel>> {
   final String? uid;
 
   UserFollowerCubit(super.context, [String? uid]) : uid = uid ?? UserHelper.uid;
@@ -16,7 +16,7 @@ class UserFollowerCubit extends DataCubit<Selection<UserFollower>> {
   Future<Response<int>> onCount() => GetUserFollowerCountUseCase.i(uid);
 
   @override
-  Future<Response<Selection<UserFollower>>> onFetch({
+  Future<Response<Selection<FollowerModel>>> onFetch({
     int? initialSize,
     int? fetchingSize,
     bool resultByMe = false,

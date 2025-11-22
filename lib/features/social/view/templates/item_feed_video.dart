@@ -19,8 +19,8 @@ import 'stared_feed_footer.dart';
 
 class ItemFeedVideo extends StatefulWidget {
   final int index;
-  final Feed item;
-  final Function(BuildContext context, Feed item)? onClick;
+  final FeedModel item;
+  final Function(BuildContext context, FeedModel item)? onClick;
 
   const ItemFeedVideo({
     super.key,
@@ -34,7 +34,7 @@ class ItemFeedVideo extends StatefulWidget {
 }
 
 class _ItemFeedVideoState extends State<ItemFeedVideo> {
-  String? _subtitle(User user) {
+  String? _subtitle(UserModel user) {
     return widget.item.title.isNotValid
         ? DateHelper.toRealtime(widget.item.timeMills)
         : user.title.isValid
@@ -90,7 +90,7 @@ class _ItemFeedVideoState extends State<ItemFeedVideo> {
 }
 
 class _Body extends StatelessWidget {
-  final Feed item;
+  final FeedModel item;
 
   const _Body({required this.item});
 

@@ -15,7 +15,7 @@ import '../../../../../roots/widgets/user_avatar.dart';
 import '../../../../../roots/widgets/user_builder.dart';
 
 class PhotoCommentsView extends StatefulWidget {
-  final Content photo;
+  final ContentModel photo;
   final ValueChanged<int> onChangedPageType;
 
   const PhotoCommentsView({

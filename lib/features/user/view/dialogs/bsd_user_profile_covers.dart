@@ -23,7 +23,7 @@ class UserProfileCoversBSD extends StatelessWidget {
 
   const UserProfileCoversBSD({super.key, required this.activeUrl});
 
-  static Future show(BuildContext context, User user) {
+  static Future show(BuildContext context, UserModel user) {
     final cubit = context.read<UserCoverCubit?>();
     return showModalBottomSheet(
       context: context,
@@ -46,7 +46,7 @@ class UserProfileCoversBSD extends StatelessWidget {
   Widget build(BuildContext context) {
     final dimen = context.dimens;
     final dark = context.dark;
-    return BlocBuilder<UserCoverCubit, Response<UserCover>>(
+    return BlocBuilder<UserCoverCubit, Response<CoverModel>>(
       builder: (context, state) {
         return Container(
           width: double.infinity,

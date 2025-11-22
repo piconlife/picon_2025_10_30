@@ -72,7 +72,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   late final feedCubit = DataCubit.of<FeedHomeCubit>(context);
   late final postCubit = DataCubit.of<UserPostCubit>(context);
 
-  Content? old;
+  ContentModel? old;
   FeedType type = FeedType.post;
 
   String get title => etHeader.text;
@@ -81,14 +81,14 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   bool get isUpdateMode => old != null;
 
-  bool get isUserPost => old is UserPost;
+  bool get isUserPost => old is PostModel;
 
   /// --------------------------------------------------------------------------
   /// BASE SECTION START
   /// --------------------------------------------------------------------------
 
   void _init(BuildContext context) {
-    old = data?.findOrNull(key: "$Content");
+    old = data?.findOrNull(key: "$ContentModel");
     if (old != null) {
       id = old!.id;
       type = old?.type ?? FeedType.none;
@@ -132,11 +132,14 @@ class _CreatePostPageState extends State<CreatePostPage> {
   /// PHOTO SECTION START
   /// --------------------------------------------------------------------------
 
-  List<Content> get currentPhotos {
-    return photos.value.map((i) => i.rootData).whereType<Content>().toList();
+  List<ContentModel> get currentPhotos {
+    return photos.value
+        .map((i) => i.rootData)
+        .whereType<ContentModel>()
+        .toList();
   }
 
-  List<Content> get deletedPhotos {
+  List<ContentModel> get deletedPhotos {
     if (old == null) return [];
     final current = currentPhotos;
     return old!.photos.where((e) => !current.contains(e)).toList();
@@ -234,7 +237,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
     final mTimeMills = Entity.generateTimeMills;
 
-    final mUserPost = UserPost.create(
+    final mUserPost = PostModel.create(
       id: id,
       timeMills: mTimeMills,
       publisherId: UserHelper.uid,
@@ -254,7 +257,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
               }).toList(),
     );
 
-    final mFeed = Feed.create(
+    final mFeed = FeedModel.create(
       id: id,
       timeMills: mTimeMills,
       path: PathProvider.generatePath(Paths.feeds, id),
@@ -347,8 +350,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
       return;
     }
 
-    void updateFeed(Feed old) {
-      final mOldUserPost = old.content as UserPost;
+    void updateFeed(FeedModel old) {
+      final mOldUserPost = old.content as PostModel;
       final mUpdatedUserPost = mOldUserPost.copyWith(
         title:
             isTitleChanged
@@ -397,7 +400,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
       );
     }
 
-    void updateUserPost(UserPost old) {
+    void updateUserPost(PostModel old) {
       final updated = old.copyWith(
         title:
             isTitleChanged
@@ -438,10 +441,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
       );
     }
 
-    if (old is UserPost) {
-      updateUserPost(old as UserPost);
+    if (old is PostModel) {
+      updateUserPost(old as PostModel);
     } else {
-      updateFeed(old as Feed);
+      updateFeed(old as FeedModel);
     }
   }
 
@@ -689,7 +692,7 @@ class _ItemPhoto extends StatelessWidget {
         },
       );
     }
-    if (data is Content) {
+    if (data is ContentModel) {
       return InAppUploadingImage(data: data.photoUrl);
     }
     return const SizedBox.shrink();

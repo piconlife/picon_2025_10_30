@@ -10,7 +10,10 @@ class GetsUseCase extends ContentBaseUseCase {
 
   static GetsUseCase get i => _i ??= GetsUseCase._();
 
-  Future<Response<Content>> call(String path, {bool singletonMode = true}) {
+  Future<Response<ContentModel>> call(
+    String path, {
+    bool singletonMode = true,
+  }) {
     return repository.get(
       singletonMode: singletonMode,
       params: getParams(path),

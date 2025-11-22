@@ -14,7 +14,7 @@ class GetUserCoversByPaginationUseCase extends BaseUserCoverUseCase {
     return _i ??= GetUserCoversByPaginationUseCase._();
   }
 
-  Future<Response<UserCover>> call({
+  Future<Response<CoverModel>> call({
     String? uid,
     int? initialSize,
     int? fetchingSize,

@@ -30,7 +30,7 @@ class _ProfileStoriesSegmentState extends State<ProfileStoriesSegment> {
   Widget build(BuildContext context) {
     final dimen = context.dimens;
     final isCurrentUser = UserHelper.isCurrentUser(widget.uid);
-    return BlocBuilder<UserMemoryCubit, Response<UserMemory>>(
+    return BlocBuilder<UserMemoryCubit, Response<MemoryModel>>(
       buildWhen: (previous, current) => current.requestCode == 0,
       builder: (context, state) {
         final result = state.result;

@@ -5,7 +5,7 @@ import '../models/feed.dart';
 import '../sources/local/feed.dart';
 import '../sources/remote/feed.dart';
 
-class FeedRepository extends RemoteDataRepository<Feed> {
+class FeedRepository extends RemoteDataRepository<FeedModel> {
   FeedRepository({
     required super.source,
     super.backup,

@@ -10,7 +10,7 @@ class CreateUserAvatarUseCase extends BaseUserAvatarUseCase {
 
   static CreateUserAvatarUseCase get i => _i ??= CreateUserAvatarUseCase._();
 
-  Future<Response<UserAvatar>> call(UserAvatar data) {
+  Future<Response<AvatarModel>> call(AvatarModel data) {
     return repository.create(data, params: params);
   }
 }

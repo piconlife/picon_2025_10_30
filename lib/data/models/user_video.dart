@@ -44,8 +44,8 @@ List<String> _keys = [
   Keys.i.contents,
 ];
 
-class UserVideo extends Content {
-  UserVideo({
+class VideoModel extends ContentModel {
+  VideoModel({
     // PUBLISHER
     super.publisherId,
     super.publisherPhotoUrl,
@@ -86,21 +86,21 @@ class UserVideo extends Content {
     // super.views,
   });
 
-  factory UserVideo.create({
-    User? publisher,
+  factory VideoModel.create({
+    UserModel? publisher,
     String? id,
     int? timeMills,
     String? title,
     String? path,
     String? parentId,
     String? parentPath,
-    List<Content>? photos,
+    List<ContentModel>? photos,
     int? priority,
     String? description,
     String? url,
     String? link,
     bool? verified,
-    Content? recent,
+    ContentModel? recent,
     Audience? audience,
     Privacy? privacy,
     FeedType? type,
@@ -112,17 +112,17 @@ class UserVideo extends Content {
     int? starCount,
     int? viewCount,
     List<String>? bookmarks,
-    List<Content>? contents,
+    List<ContentModel>? contents,
     List<String>? comments,
     List<String>? likes,
     List<String>? reports,
     List<String>? stars,
     List<String>? tags,
-    List<Content>? videos,
+    List<ContentModel>? videos,
     List<String>? views,
   }) {
     publisher ??= UserHelper.user;
-    return UserVideo(
+    return VideoModel(
       // PUBLISHER
       publisherId: publisher.id,
       publisherName: publisher.name,
@@ -158,7 +158,7 @@ class UserVideo extends Content {
     );
   }
 
-  UserVideo withUserVideo({
+  VideoModel withUserVideo({
     // PUBLISHER
     String? publisher,
     String? publisherPhoto,
@@ -173,13 +173,13 @@ class UserVideo extends Content {
     String? path,
     String? parentId,
     String? parentPath,
-    List<Content>? photos,
+    List<ContentModel>? photos,
     int? priority,
     String? description,
     String? url,
     String? link,
     bool? verified,
-    Content? recent,
+    ContentModel? recent,
     Audience? audience,
     Privacy? privacy,
     FeedType? type,
@@ -191,16 +191,16 @@ class UserVideo extends Content {
     int? starCount,
     int? viewCount,
     List<String>? bookmarks,
-    List<Content>? contents,
+    List<ContentModel>? contents,
     List<String>? comments,
     List<String>? likes,
     List<String>? reports,
     List<String>? stars,
     List<String>? tags,
-    List<Content>? videos,
+    List<ContentModel>? videos,
     List<String>? views,
   }) {
-    return UserVideo(
+    return VideoModel(
       // PUBLISHER
       publisherId: publisher ?? this.publisherId,
       publisherPhotoUrl: publisherPhoto ?? this.publisherPhotoUrl,
@@ -241,9 +241,9 @@ class UserVideo extends Content {
     );
   }
 
-  factory UserVideo.from(dynamic source) {
-    final data = Content.parse(source);
-    return UserVideo(
+  factory VideoModel.from(dynamic source) {
+    final data = ContentModel.parse(source);
+    return VideoModel(
       // PUBLISHER
       publisherId: data.publisherId,
       publisherPhotoUrl: data.publisherPhotoUrl,

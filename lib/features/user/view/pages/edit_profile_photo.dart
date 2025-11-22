@@ -76,7 +76,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
   final privacy = ValueNotifier(Privacy.everyone);
   final feed = ValueNotifier(true);
 
-  User user = User();
+  UserModel user = UserModel();
   String? photoUrl;
   late String id = Entity.generateID;
 
@@ -194,7 +194,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
     }
 
     if (!mounted) return;
-    final updateAccountResponse = await context.updateAccount<User>({
+    final updateAccountResponse = await context.updateAccount<UserModel>({
       UserKeys.i.photo: photoUrl,
     });
     if (!mounted) return;
@@ -231,7 +231,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
     final mPublisherId = UserHelper.uid;
     final mTimeMills = Entity.generateTimeMills;
 
-    final mAvatar = UserAvatar.create(
+    final mAvatar = AvatarModel.create(
       id: id,
       timeMills: mTimeMills,
       description: etText.text.isNotEmpty ? etText.text : null,
@@ -239,14 +239,14 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
       privacy: privacy.value,
     );
 
-    final mUserPost = UserPost.createForAvatar(
+    final mUserPost = PostModel.createForAvatar(
       id: id,
       timeMills: mTimeMills,
       publisherId: mPublisherId,
       content: mAvatar,
     );
 
-    final mFeed = Feed.create(
+    final mFeed = FeedModel.create(
       id: id,
       timeMills: mTimeMills,
       publisher: user,
@@ -369,7 +369,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
             children: [
               dimen.dp(40).h,
               Center(
-                child: AuthConsumer<User>(
+                child: AuthConsumer<UserModel>(
                   builder: (context, user) {
                     return ValueListenableBuilder(
                       valueListenable: loading,

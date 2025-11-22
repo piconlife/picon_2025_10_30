@@ -10,7 +10,7 @@ class UpdateUserPostUseCase extends BaseUserPostUseCase {
 
   static UpdateUserPostUseCase get i => _i ??= UpdateUserPostUseCase._();
 
-  Future<Response<UserPost>> call(String id, Map<String, dynamic> data) {
+  Future<Response<PostModel>> call(String id, Map<String, dynamic> data) {
     return repository.updateById(id, data, params: params);
   }
 }

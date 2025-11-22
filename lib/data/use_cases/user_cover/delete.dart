@@ -10,7 +10,7 @@ class DeleteUserCoverUseCase extends BaseUserCoverUseCase {
 
   static DeleteUserCoverUseCase get i => _i ??= DeleteUserCoverUseCase._();
 
-  Future<Response<UserCover>> call(String id) {
+  Future<Response<CoverModel>> call(String id) {
     return repository.deleteById(id, params: params);
   }
 }
