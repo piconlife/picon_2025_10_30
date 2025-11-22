@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
+import 'package:data_management/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:in_app_navigator/route.dart';
@@ -61,26 +62,28 @@ class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
   Content get selected => photos.elementAtOrNull(index) ?? Content.empty();
 
   Future<void> _update(int index, Map<String, dynamic> data) async {
-    final old = photos[index];
-    await UpdateUseCase.i.call(
-      path: old.contentPath.use,
-      id: old.id,
-      data: data,
-    );
+    final path = photos[index].contentPath.use;
+    if (path.isEmpty) return;
+    await UpdateUseCase.i.call(path, data);
   }
 
   void _changePrivacy(Privacy privacy) {
     final data = photos.removeAt(index);
     photos.insert(index, data..privacy = privacy);
     setState(() {});
-    _update(index, {Keys.i.privacy: privacy.name});
+    _update(index, {
+      Keys.i.privacy:
+          privacy.isEveryone ? DataFieldValue.delete() : privacy.name,
+    });
   }
 
   void _updateTag(String? tag) async {
     final data = photos.removeAt(index);
     photos.insert(index, data..description = tag);
     setState(() {});
-    _update(index, {Keys.i.description: tag});
+    _update(index, {
+      Keys.i.description: (tag ?? '').isEmpty ? DataFieldValue.delete() : tag,
+    });
   }
 
   void _changedIndex(int value) {

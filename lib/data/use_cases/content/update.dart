@@ -10,11 +10,9 @@ class UpdateUseCase extends ContentBaseUseCase {
 
   static UpdateUseCase get i => _i ??= UpdateUseCase._();
 
-  Future<Response<Content>> call({
-    required String path,
-    required String id,
-    required Map<String, dynamic> data,
-  }) {
-    return repository.updateById(id, data, params: getParams(path));
+  Future<Response<Content>> call(String path, Map<String, dynamic> data) async {
+    final pair = getPair(path);
+    if (pair == null) return Response(status: Status.invalid);
+    return repository.updateById(pair.a, data, params: pair.b);
   }
 }

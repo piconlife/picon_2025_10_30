@@ -10,7 +10,7 @@ class CreatePhotoUseCase extends ContentBaseUseCase {
 
   static CreatePhotoUseCase get i => _i ??= CreatePhotoUseCase._();
 
-  Future<Response<Content>> call(Content data) {
+  Future<Response<Content>> call(Content data) async {
     return repository.create(data, params: getParams(data.contentPath ?? ""));
   }
 }
