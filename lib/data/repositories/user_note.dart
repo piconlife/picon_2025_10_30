@@ -6,8 +6,8 @@ import '../../roots/helpers/connectivity.dart';
 import '../models/user_note.dart';
 import '../sources/local/user_note.dart';
 import '../sources/remote/user_note.dart';
+import '../use_cases/content/get.dart';
 import '../use_cases/feed_video/get.dart';
-import '../use_cases/photo/get.dart';
 
 class UserNoteRepository extends RemoteDataRepository<UserNote> {
   UserNoteRepository({
@@ -77,7 +77,7 @@ class UserNoteRepository extends RemoteDataRepository<UserNote> {
 
   Future<UserNote?> _value(UserNote? i) async {
     if (i != null) {
-      final photos = await GetPhotosUseCase.i(i.path.use).then((value) {
+      final photos = await GetsUseCase.i(i.path.use).then((value) {
         return value.result;
       });
       final videos = await GetVideosUseCase.i(i.path.use).then((value) {

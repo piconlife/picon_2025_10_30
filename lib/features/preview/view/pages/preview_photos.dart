@@ -4,7 +4,6 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/string.dart';
-import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
 
@@ -12,8 +11,7 @@ import '../../../../app/base/data_cubit.dart';
 import '../../../../data/constants/keys.dart';
 import '../../../../data/enums/privacy.dart';
 import '../../../../data/models/content.dart';
-import '../../../../data/models/photo.dart';
-import '../../../../data/use_cases/photo/update.dart';
+import '../../../../data/use_cases/content/update.dart';
 import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/layout.dart';
 import '../../../../roots/widgets/scaffold.dart';
@@ -62,10 +60,10 @@ class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
 
   Content get selected => photos.elementAtOrNull(index) ?? Content.empty();
 
-  Future<Response<Photo>> _update(int index, Map<String, dynamic> data) async {
+  Future<void> _update(int index, Map<String, dynamic> data) async {
     final old = photos[index];
-    return UpdateFeedPhotoUseCase.i.call(
-      referencePath: old.path.use,
+    await UpdateUseCase.i.call(
+      path: old.contentPath.use,
       id: old.id,
       data: data,
     );

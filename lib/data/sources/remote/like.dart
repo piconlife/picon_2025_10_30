@@ -8,7 +8,7 @@ class RemoteLikeDataSource extends RemoteDataSource<LikeModel> {
   RemoteLikeDataSource()
     : super(
         delegate: FirestoreDataDelegate.i,
-        path: Paths.feedLikes,
+        path: Paths.refLikes,
         limitations: DataLimitations(maximumDeleteLimit: 1000),
       );
 

@@ -6,7 +6,7 @@ import '../../models/feed_video.dart';
 
 class LocalFeedVideoDataSource extends LocalDataSource<FeedVideo> {
   LocalFeedVideoDataSource()
-    : super(delegate: LocalDataDelegate.i, path: Paths.feedVideos);
+    : super(delegate: LocalDataDelegate.i, path: Paths.refVideos);
 
   @override
   FeedVideo build(Object? source) => FeedVideo.from(source);

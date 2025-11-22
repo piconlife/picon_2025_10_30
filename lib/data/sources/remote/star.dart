@@ -8,7 +8,7 @@ class RemoteStarDataSource extends RemoteDataSource<StarModel> {
   RemoteStarDataSource()
     : super(
         delegate: FirestoreDataDelegate.i,
-        path: Paths.feedStars,
+        path: Paths.refStars,
         limitations: DataLimitations(maximumDeleteLimit: 1000),
       );
 

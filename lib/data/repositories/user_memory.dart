@@ -7,7 +7,7 @@ import '../models/user_memory.dart';
 import '../sources/local/user_memory.dart';
 import '../sources/remote/user_memory.dart';
 import '../use_cases/feed_video/get.dart';
-import '../use_cases/photo/get.dart';
+import '../use_cases/content/get.dart';
 
 class UserMemoryRepository extends RemoteDataRepository<UserMemory> {
   UserMemoryRepository({
@@ -77,7 +77,7 @@ class UserMemoryRepository extends RemoteDataRepository<UserMemory> {
 
   Future<UserMemory?> _value(UserMemory? i) async {
     if (i != null) {
-      final photos = await GetPhotosUseCase.i(i.path.use).then((value) {
+      final photos = await GetsUseCase.i(i.path.use).then((value) {
         return value.result;
       });
       final videos = await GetVideosUseCase.i(i.path.use).then((value) {

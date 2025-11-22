@@ -65,7 +65,7 @@ class _ProfilePhotosSegmentState extends State<ProfilePhotosSegment> {
             iconColor: isCurrentUser ? null : context.dark.t25,
             header: "No photos yet",
             body: "Currently no photos available.",
-            buttonText: isCurrentUser ? "Upload a photo" : null,
+            buttonText: isCurrentUser ? "Upload a content" : null,
             onButtonClick: () => _choose(context),
           );
         }

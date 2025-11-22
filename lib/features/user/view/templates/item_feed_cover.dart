@@ -30,12 +30,12 @@ class ItemUserFeedCover extends StatelessWidget {
   String _title(User user) {
     final date = DateHelper.toRealtime(item.timeMills);
     if (item.isPublisher) {
-      return "Updated your cover photo at $date";
+      return "Updated your cover content at $date";
     } else {
       if (user.gender == Gender.male) {
-        return "Update his cover photo at $date";
+        return "Update his cover content at $date";
       } else {
-        return "Update her cover photo at $date";
+        return "Update her cover content at $date";
       }
     }
   }

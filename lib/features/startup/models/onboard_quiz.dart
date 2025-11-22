@@ -56,7 +56,7 @@ class OnboardQuiz {
     final type = source['type'];
     final title = source['title'] ?? source['header'];
     final body = source['body'] ?? source['description'];
-    final image = source['image'] ?? source['photo'];
+    final image = source['image'] ?? source['content'];
     final tabs = source['tabs'];
     final tips = source['tips'];
     final options = source['options'];

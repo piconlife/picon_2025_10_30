@@ -6,7 +6,7 @@ import '../../models/star.dart';
 
 class LocalStarDataSource extends LocalDataSource<StarModel> {
   LocalStarDataSource()
-    : super(delegate: LocalDataDelegate.i, path: Paths.feedStars);
+    : super(delegate: LocalDataDelegate.i, path: Paths.refStars);
 
   @override
   StarModel build(Object? source) => StarModel.parse(source);

@@ -30,7 +30,7 @@ class InAppUploadPhoto extends StatelessWidget {
             InAppIcon(Remix.image_add_fill, color: primary, size: dimen.dp(40)),
             SizedBox(height: dimen.dp(8)),
             InAppText(
-              "Upload your photo",
+              "Upload your content",
               style: TextStyle(
                 color: dark,
                 fontSize: dimen.dp(16),
@@ -41,7 +41,7 @@ class InAppUploadPhoto extends StatelessWidget {
               'Just tap here to ',
               spans: [
                 TextSpan(text: "browse ", style: TextStyle(color: primary)),
-                TextSpan(text: "your gallery to\nupload photo"),
+                TextSpan(text: "your gallery to\nupload content"),
               ],
               textAlign: TextAlign.center,
               style: TextStyle(color: dark.t60, fontSize: dimen.dp(14)),

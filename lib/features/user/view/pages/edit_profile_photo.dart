@@ -181,7 +181,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
 
   void _update() async {
     if (!isValidUrl) {
-      context.showWarningSnackBar("User profile photo isn't valid!");
+      context.showWarningSnackBar("User profile content isn't valid!");
       return;
     }
 
@@ -324,7 +324,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
       theme: ThemeType.secondary,
       child: Scaffold(
         appBar: InAppAppbar(
-          titleText: "Update profile photo",
+          titleText: "Update profile content",
           actions: [
             InAppTextedAction(
               isOnboardingMode ? "Skip" : "Cancel",
@@ -422,7 +422,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
                 child: Column(
                   children: [
                     InAppText(
-                      "Select your profile photo",
+                      "Select your profile content",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: context.dark,

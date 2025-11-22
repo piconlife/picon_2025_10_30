@@ -21,7 +21,7 @@ class InAppReligion {
     if (source is! Map) return InAppReligion();
     id ??= source['key'] ?? source["id"];
     final label = source['name'] ?? source["label"];
-    final photo = source['photo'];
+    final photo = source['content'];
     final priority = source['priority'];
     return InAppReligion(
       id: id is String && id.isNotEmpty ? id : null,
@@ -66,6 +66,6 @@ class InAppReligion {
 
   @override
   String toString() {
-    return '$InAppReligion(id: $id, label: $label, photo: $photo, priority: $priority)';
+    return '$InAppReligion(id: $id, label: $label, content: $photo, priority: $priority)';
   }
 }

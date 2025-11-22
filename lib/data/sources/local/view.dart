@@ -6,7 +6,7 @@ import '../../models/view.dart';
 
 class LocalViewDataSource extends LocalDataSource<ViewModel> {
   LocalViewDataSource()
-    : super(delegate: LocalDataDelegate.i, path: Paths.feedViews);
+    : super(delegate: LocalDataDelegate.i, path: Paths.refViews);
 
   @override
   ViewModel build(Object? source) => ViewModel.parse(source);

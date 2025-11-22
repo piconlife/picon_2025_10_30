@@ -8,7 +8,7 @@ class RemoteViewDataSource extends RemoteDataSource<ViewModel> {
   RemoteViewDataSource()
     : super(
         delegate: FirestoreDataDelegate.i,
-        path: Paths.feedViews,
+        path: Paths.refViews,
         limitations: DataLimitations(maximumDeleteLimit: 1000),
       );
 

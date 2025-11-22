@@ -73,10 +73,15 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
 
   void _onShare() {
     if (!item.photoUrl.isValidWebUrl || !item.isPrivacyAllow) {
-      context.showMessage("This photo is personal");
+      context.showMessage("This content is personal");
       return;
     }
-    Utils.share(context, body: item.description, urls: [item.photoUrl!]);
+    Utils.share(
+      context,
+      subject: item.title,
+      body: item.description,
+      urls: [item.photoUrl!],
+    );
   }
 
   void _onBookmark() {

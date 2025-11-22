@@ -38,7 +38,7 @@ class _EditableCoverState extends State<EditableCover> {
       context,
       crop: true,
       cropOptions: InAppImageCropperOptions(
-        title: "Cover photo",
+        title: "Cover content",
         withAspectRatio: 1,
       ),
     );

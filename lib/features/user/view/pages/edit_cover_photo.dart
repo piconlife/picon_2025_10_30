@@ -95,7 +95,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
       return false;
     }
     final permission = await context.showAlert(
-      title: "Are you sure remove this cover photo?",
+      title: "Are you sure remove this cover content?",
       content: const AlertDialogContent(
         positiveButtonText: ActionNames.yes,
         negativeButtonText: ActionNames.no,
@@ -177,7 +177,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
 
   void _update() async {
     if (!isValidUrl) {
-      context.showWarningSnackBar("User cover photo isn't valid!");
+      context.showWarningSnackBar("User cover content isn't valid!");
       return;
     }
 
@@ -409,7 +409,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
               child: Column(
                 children: [
                   InAppText(
-                    "Select your cover photo",
+                    "Select your cover content",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: context.dark,

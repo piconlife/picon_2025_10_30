@@ -6,7 +6,7 @@ import '../../models/like.dart';
 
 class LocalLikeDataSource extends LocalDataSource<LikeModel> {
   LocalLikeDataSource()
-    : super(delegate: LocalDataDelegate.i, path: Paths.feedLikes);
+    : super(delegate: LocalDataDelegate.i, path: Paths.refLikes);
 
   @override
   LikeModel build(Object? source) => LikeModel.parse(source);

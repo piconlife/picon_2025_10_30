@@ -29,10 +29,10 @@ class Routes {
   static const username = "/username";
 
   // USER
-  static const addUserProfilePhoto = "/add-user-profile-photo";
-  static const addUserCoverPhoto = "/add-user-cover-photo";
-  static const editUserProfilePhoto = "/edit-user-profile-photo";
-  static const editUserCoverPhoto = "/edit-user-cover-photo";
+  static const addUserProfilePhoto = "/add-user-profile-content";
+  static const addUserCoverPhoto = "/add-user-cover-content";
+  static const editUserProfilePhoto = "/edit-user-profile-content";
+  static const editUserCoverPhoto = "/edit-user-cover-content";
   static const editUserPrimaryAddress = "/edit_user_primary_address";
   static const editUserSecondaryAddress = "/edit_user_secondary_address";
 

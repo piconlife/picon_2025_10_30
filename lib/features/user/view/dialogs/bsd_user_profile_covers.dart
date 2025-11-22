@@ -67,7 +67,7 @@ class UserProfileCoversBSD extends StatelessWidget {
             builder: (context, controller) {
               return Column(
                 children: [
-                  const InAppDialogHeader("Choose cover photo"),
+                  const InAppDialogHeader("Choose cover content"),
                   Divider(height: dimen.dp(1), color: context.dark.t05),
                   Expanded(
                     child: Builder(

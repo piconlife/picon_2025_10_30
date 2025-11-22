@@ -6,7 +6,7 @@ import '../../models/feed_video.dart';
 
 class RemoteFeedVideoDataSource extends RemoteDataSource<FeedVideo> {
   RemoteFeedVideoDataSource()
-    : super(delegate: FirestoreDataDelegate.i, path: Paths.feedVideos);
+    : super(delegate: FirestoreDataDelegate.i, path: Paths.refVideos);
 
   @override
   FeedVideo build(Object? source) => FeedVideo.from(source);

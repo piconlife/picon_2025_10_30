@@ -6,7 +6,7 @@ import '../../models/feed_comment.dart';
 
 class RemoteFeedCommentDataSource extends RemoteDataSource<CommentModel> {
   RemoteFeedCommentDataSource()
-    : super(delegate: FirestoreDataDelegate.i, path: Paths.feedComments);
+    : super(delegate: FirestoreDataDelegate.i, path: Paths.refComments);
 
   @override
   CommentModel build(Object? source) => CommentModel.parse(source);

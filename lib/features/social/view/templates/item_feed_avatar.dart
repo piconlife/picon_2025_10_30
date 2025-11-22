@@ -36,12 +36,12 @@ class ItemFeedAvatar extends StatelessWidget {
   String _title(User user) {
     final date = DateHelper.toRealtime(item.timeMills);
     if (item.isPublisher) {
-      return "Updated your profile photo at $date";
+      return "Updated your profile content at $date";
     } else {
       if (user.gender == Gender.male) {
-        return "Update his profile photo at $date";
+        return "Update his profile content at $date";
       } else {
-        return "Update her profile photo at $date";
+        return "Update her profile content at $date";
       }
     }
   }
