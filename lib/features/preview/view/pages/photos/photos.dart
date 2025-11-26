@@ -34,6 +34,8 @@ import '../../../../social/view/pages/likes.dart';
 import 'expandable_text.dart';
 
 class PhotoPreviewView extends StatefulWidget {
+  final bool cubitApplied;
+  final String path;
   final int index;
   final List<ContentModel> photos;
   final ValueChanged<int> onChanged;
@@ -43,7 +45,9 @@ class PhotoPreviewView extends StatefulWidget {
 
   const PhotoPreviewView({
     super.key,
+    this.cubitApplied = false,
     this.index = 0,
+    required this.path,
     required this.photos,
     required this.onChanged,
     required this.onChangedPageType,
@@ -59,13 +63,15 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
   final _isBookmarked = ValueNotifier(false);
   late final _pageController = PageController(initialPage: widget.index);
 
-  late final likeCubit = DataCubit.of<LikeCubit>(context);
-  late final viewCubit = DataCubit.of<ViewCubit>(context);
+  late final _downloadLabel = ValueNotifier(isDownloaded ? 2 : 0);
 
   bool _isExpandedText = false;
 
-  Set<int> downloads = {};
-  Set<int> bookmarks = {};
+  Set<String> downloads = {};
+
+  bool get isLocked => !item.isPrivacyAllow;
+
+  bool get isDownloaded => downloads.contains(item.photoUrl);
 
   ContentModel get item {
     return widget.photos.elementAtOrNull(widget.index) ?? ContentModel();
@@ -125,16 +131,37 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
     action();
   }
 
-  final _downloadLabel = ValueNotifier("Download");
-
+  //     private void downloadPhoto() {
+  //         if (mPhoto != null && (!UserCondition.isPrivate(mPhoto.getDocument_privacy()) || UserHelper.isCurrentUid(mPhoto.getUid()))) {
+  //             if (!mDownloadedIds.contains(mPhoto.getDid())) {
+  //                 mBinding.actionDownload.setText(getString(R.string.downloading));
+  //                 mViewModel.downloadBitmap(mPhoto.getDocument_photo_url(), ByteQuality.PHOTO_STANDARD_QUALITY, response -> {
+  //                     Bitmap bitmap = response.getResult();
+  //                     if (response.isSuccessful() && bitmap != null) {
+  //                         MediaProvider.saveImage(mContext, bitmap, task -> {
+  //                             if (task.isSuccessful()) {
+  //                                 mBinding.actionDownload.setText(getString(R.string.done));
+  //                                 mDownloadedIds.add(mPhoto.getDid());
+  //                             } else {
+  //                                 mBinding.actionDownload.setText(getString(R.string.download));
+  //                                 mDialog.toast(ExceptionMessage.EXCEPTION_TRY_AGAIN);
+  //                             }
+  //                         });
+  //                     }
+  //                 });
+  //             } else {
+  //                 mDialog.toast("Already downloaded!");
+  //             }
+  //         } else {
+  //             mDialog.toast("This photo is personal");
+  //         }
+  //     }
   void _download() async {
-    _downloadLabel.value = "Downloading";
-    await Future.delayed(Duration(seconds: 3));
-    downloads.add(widget.index);
-    _downloadLabel.value = "Done";
+    if (isLocked || isDownloaded) return;
+    // _downloadLabel.value = 1;
+    // downloads.add(item.photoUrl ?? '');
+    // _downloadLabel.value = 2;
   }
-
-  void _like() => likeCubit.toggle();
 
   void _seeLikes() {
     LikesPage.open(context);
@@ -145,6 +172,20 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
   void _changeIndex(int index) {
     if (widget.index == index) return;
     widget.onChanged(index);
+  }
+
+  void _like() {
+    DataCubit.of<LikeCubit>(context).toggle();
+  }
+
+  void _seen(_) {
+    DataCubit.of<ViewCubit>(context).seen(ViewModel.create(path: widget.path));
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(_seen);
+    super.initState();
   }
 
   @override
@@ -412,32 +453,34 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
       fontWeight: context.mediumFontWeight,
       fontSize: context.normalFontSize,
     );
+    Widget likes(int count) {
+      return InAppGesture(
+        onTap: widget.cubitApplied ? _seeLikes : null,
+        child: InAppText(Converter.toKMB(count, "Like", "Likes"), style: style),
+      );
+    }
+
+    Widget views(int count) {
+      return InAppText(Converter.toKMB(count, "View", "Views"), style: style);
+    }
+
     return InAppLayout(
       layout: LayoutType.row,
       children: [
-        BlocBuilder<LikeCubit, Response<LikeModel>>(
-          builder: (context, value) {
-            return InAppGesture(
-              onTap: _seeLikes,
-              child: InAppText(
-                Converter.toKMB(value.count, "Like", "Likes"),
-                style: style,
-              ),
-            );
-          },
-        ),
+        widget.cubitApplied
+            ? BlocBuilder<LikeCubit, Response<LikeModel>>(
+              builder: (context, value) => likes(value.count),
+            )
+            : likes(0),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: context.smallSpace),
           child: InAppText("-", style: style),
         ),
-        BlocBuilder<ViewCubit, Response<ViewModel>>(
-          builder: (context, value) {
-            return InAppText(
-              Converter.toKMB(value.count, "View", "Views"),
-              style: style,
-            );
-          },
-        ),
+        widget.cubitApplied
+            ? BlocBuilder<ViewCubit, Response<ViewModel>>(
+              builder: (context, value) => views(value.count),
+            )
+            : views(0),
       ],
     );
   }
@@ -484,42 +527,67 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
   }
 
   Widget _buildDownloadButton(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.lightAsFixed.t75,
-        borderRadius: BorderRadius.circular(context.largestRadius),
-      ),
-      padding: EdgeInsets.all(context.smallPadding),
-      alignment: Alignment.center,
-      child: InAppText(
-        ["Download", "Downloading...", "Downloaded", "Done", "Locked"][0],
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          color: context.darkAsFixed,
-          fontSize: context.mediumFontSize,
-        ),
-      ),
+    return ValueListenableBuilder(
+      valueListenable: _downloadLabel,
+      builder: (context, state, child) {
+        return InAppGesture(
+          onTap: isDownloaded || isLocked ? null : _download,
+          child: Container(
+            decoration: BoxDecoration(
+              color: context.lightAsFixed.t75,
+              borderRadius: BorderRadius.circular(context.largestRadius),
+            ),
+            padding: EdgeInsets.all(context.smallPadding),
+            alignment: Alignment.center,
+            child: InAppText(
+              ["Download", "Downloading...", "Downloaded", "Locked"][isLocked
+                  ? 3
+                  : isDownloaded
+                  ? 2
+                  : state],
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: context.darkAsFixed,
+                fontSize: context.mediumFontSize,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
   Widget _buildLikeButton(BuildContext context) {
+    Widget child(bool activated) {
+      return InAppPleasureButton(
+        icon: activated ? InAppIcons.heart.solid : InAppIcons.heart.regular,
+        iconColor:
+            activated
+                ? context.red
+                : (widget.cubitApplied
+                    ? context.lightAsFixed
+                    : context.lightAsFixed.withValues(alpha: 0.5)),
+        onTap: widget.cubitApplied ? _like : null,
+      );
+    }
+
+    if (!widget.cubitApplied) return child(false);
+
     return BlocBuilder<LikeCubit, Response<LikeModel>>(
       builder: (context, value) {
-        final activated = value.resultByMe.isNotEmpty;
-        return InAppPleasureButton(
-          icon: activated ? InAppIcons.heart.solid : InAppIcons.heart.regular,
-          iconColor: activated ? context.red : context.lightAsFixed,
-          onTap: _like,
-        );
+        return child(value.isExistByMe);
       },
     );
   }
 
   Widget _buildCommentButton(BuildContext context) {
     return InAppPleasureButton(
-      onTap: _comment,
+      onTap: widget.cubitApplied ? _comment : null,
       icon: InAppIcons.commentWithTreeDots.regular,
-      iconColor: context.lightAsFixed,
+      iconColor:
+          widget.cubitApplied
+              ? context.lightAsFixed
+              : context.lightAsFixed.withValues(alpha: 0.5),
     );
   }
 }

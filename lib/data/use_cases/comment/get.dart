@@ -3,7 +3,7 @@ import 'package:flutter_entity/entity.dart';
 import '../../models/feed_comment.dart';
 import 'base.dart';
 
-class GetCommentsUseCase extends BaseFeedCommentUseCase {
+class GetCommentsUseCase extends CommentBaseUseCase {
   GetCommentsUseCase._();
 
   static GetCommentsUseCase? _i;

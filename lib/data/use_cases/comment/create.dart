@@ -3,12 +3,12 @@ import 'package:flutter_entity/entity.dart';
 import '../../models/feed_comment.dart';
 import 'base.dart';
 
-class CreateFeedCommentUseCase extends BaseFeedCommentUseCase {
-  CreateFeedCommentUseCase._();
+class CommentCreateUseCase extends CommentBaseUseCase {
+  CommentCreateUseCase._();
 
-  static CreateFeedCommentUseCase? _i;
+  static CommentCreateUseCase? _i;
 
-  static CreateFeedCommentUseCase get i => _i ??= CreateFeedCommentUseCase._();
+  static CommentCreateUseCase get i => _i ??= CommentCreateUseCase._();
 
   Future<Response<CommentModel>> call(CommentModel data) {
     return repository.create(data, params: getParams(data.parentPath ?? ""));

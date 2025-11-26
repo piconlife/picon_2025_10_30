@@ -29,8 +29,8 @@ class ViewModel extends Entity<ViewKeys> {
   ViewModel._({super.id, super.timeMills, String? parentPath})
     : _parentPath = parentPath;
 
-  ViewModel.create({super.timeMills, required String parentPath})
-    : _parentPath = parentPath,
+  ViewModel.create({super.timeMills, required String path})
+    : _parentPath = path,
       super.auto(id: UserHelper.uid);
 
   factory ViewModel.parse(Object? source) {

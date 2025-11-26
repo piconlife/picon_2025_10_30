@@ -62,7 +62,7 @@ class _ItemFeedState extends State<ItemFeed> {
   }
 
   void _seen(_) {
-    viewCubit.seen(ViewModel.create(parentPath: path));
+    viewCubit.seen(ViewModel.create(path: path));
   }
 
   @override

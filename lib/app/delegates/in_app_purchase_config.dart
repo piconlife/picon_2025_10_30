@@ -61,20 +61,11 @@ class InAppPurchaseConfigDelegateImpl extends InAppPurchaseConfigDelegate {
   }
 
   @override
-  void paywallsLoaded(List<String> ids) {
-    Analytics.log("in_app_purchaser", 'paywalls_loaded', msg: ids.join(','));
-  }
+  void openPaywall(BuildContext context, VoidCallback onPurchased) {}
 
   @override
-  void statusChanged(bool status) {
-    Preferences.setBool(_kCachedStatus, status);
-    if (status) {
-      Preferences.setInt(
-        _kOfflineStatus,
-        DateTime.now().millisecondsSinceEpoch,
-      );
-    }
-    Analytics.log("in_app_purchaser", 'status', msg: status.toString());
+  void paywallsLoaded(List<String> ids) {
+    Analytics.log("in_app_purchaser", 'paywalls_loaded', msg: ids.join(','));
   }
 
   @override
@@ -91,4 +82,29 @@ class InAppPurchaseConfigDelegateImpl extends InAppPurchaseConfigDelegate {
   void restored(InAppPurchaseProfile profile) {
     Analytics.log("in_app_purchaser", 'restored', msg: profile.profileId);
   }
+
+  @override
+  void saveStoreStatus(bool status) {
+    Preferences.setBool(_kCachedStatus, status);
+    Preferences.setInt(
+      _kOfflineStatus,
+      status ? DateTime.now().millisecondsSinceEpoch : 0,
+    );
+    Analytics.log("in_app_purchaser", 'status', msg: status.toString());
+  }
+
+  @override
+  void showAd(
+    BuildContext context,
+    VoidCallback onLoaded, {
+    ValueChanged<bool>? onLoading,
+    ValueChanged<String>? onError,
+    bool lock = true,
+    bool force = false,
+    String? feature,
+    int? index,
+  }) {}
+
+  @override
+  void statusChanged(bool status) {}
 }

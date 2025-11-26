@@ -3,12 +3,12 @@ import 'package:flutter_entity/entity.dart';
 import '../../models/feed_comment.dart';
 import 'base.dart';
 
-class DeleteFeedCommentUseCase extends BaseFeedCommentUseCase {
-  DeleteFeedCommentUseCase._();
+class CommentDeleteUseCase extends CommentBaseUseCase {
+  CommentDeleteUseCase._();
 
-  static DeleteFeedCommentUseCase? _i;
+  static CommentDeleteUseCase? _i;
 
-  static DeleteFeedCommentUseCase get i => _i ??= DeleteFeedCommentUseCase._();
+  static CommentDeleteUseCase get i => _i ??= CommentDeleteUseCase._();
 
   Future<Response<CommentModel>> call({
     required String id,

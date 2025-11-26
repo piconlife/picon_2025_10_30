@@ -20,7 +20,7 @@ class ViewCubit extends DataCubit<ViewModel> {
   @override
   ViewModel? createNewObject(Object? args) {
     if (path.isEmpty) return null;
-    return ViewModel.create(parentPath: path);
+    return ViewModel.create(path: path);
   }
 
   @protected

@@ -5,7 +5,7 @@ import '../../constants/keys.dart';
 import '../../models/feed_comment.dart';
 import 'base.dart';
 
-class GetFeedCommentsByPaginationUseCase extends BaseFeedCommentUseCase {
+class GetFeedCommentsByPaginationUseCase extends CommentBaseUseCase {
   GetFeedCommentsByPaginationUseCase._();
 
   static GetFeedCommentsByPaginationUseCase? _i;

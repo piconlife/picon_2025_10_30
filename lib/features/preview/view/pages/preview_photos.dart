@@ -5,10 +5,11 @@ import 'package:app_color/extension.dart';
 import 'package:data_management/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/string.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:in_app_cache/in_app_cache.dart';
 import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
 
-import '../../../../app/base/data_cubit.dart';
 import '../../../../data/constants/keys.dart';
 import '../../../../data/enums/privacy.dart';
 import '../../../../data/models/content.dart';
@@ -36,13 +37,7 @@ class PreviewPhotosPage extends StatefulWidget {
   ) async {
     context.open(
       Routes.previewPhotos,
-      args: {
-        "index": index,
-        "$ContentModel": item,
-        "$LikeCubit": DataCubit.of<LikeCubit>(context),
-        "$ViewCubit": DataCubit.of<ViewCubit>(context),
-        "$CommentCubit": DataCubit.of<CommentCubit>(context),
-      },
+      args: {"index": index, "$ContentModel": item},
       configs: RouteConfigs(transitionType: TransitionType.fadeIn),
     );
   }
@@ -52,15 +47,45 @@ class PreviewPhotosPage extends StatefulWidget {
 }
 
 class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
+  late final controller = PageController(initialPage: index);
   int pageType = 0;
   int index = 0;
   ContentModel? content;
   List<ContentModel> photos = [];
 
-  late final controller = PageController(initialPage: index);
+  String path = '';
+  LikeCubit? likeCubit;
+  ViewCubit? viewCubit;
+  CommentCubit? commentCubit;
 
-  ContentModel get selected =>
-      photos.elementAtOrNull(index) ?? ContentModel.empty();
+  ContentModel get selected {
+    return photos.elementAtOrNull(index) ?? ContentModel.empty();
+  }
+
+  void _init() {
+    path = selected.contentPath ?? '';
+    if (path.isEmpty) {
+      likeCubit = null;
+      viewCubit = null;
+      commentCubit = null;
+      return;
+    }
+    likeCubit = Cache.put<LikeCubit>("like_cubit[$path]", () {
+      return LikeCubit(context, path, initialCount: selected.likeCount)
+        ..loadCounter()
+        ..load(resultByMe: true);
+    });
+    viewCubit = Cache.put<ViewCubit>("view_cubit[$path]", () {
+      return ViewCubit(context, path, initialCount: selected.viewCount)
+        ..loadCounter()
+        ..load(resultByMe: true);
+    });
+    commentCubit = Cache.put<CommentCubit>("comment_cubit[$path]", () {
+      return CommentCubit(context, path, initialCount: selected.commentCount)
+        ..loadCounter()
+        ..load();
+    });
+  }
 
   Future<void> _update(int index, Map<String, dynamic> data) async {
     final path = photos[index].contentPath.use;
@@ -90,6 +115,7 @@ class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
   void _changedIndex(int value) {
     if (index == value) return;
     setState(() => index = value);
+    _init();
   }
 
   void _changedPageType(int value) {
@@ -102,10 +128,28 @@ class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
     index = widget.args.get("index", 0);
     content = widget.args.getOrNull("$ContentModel");
     photos = List.from(content?.photos ?? []);
+    _init();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (path.isEmpty ||
+        likeCubit == null ||
+        viewCubit == null ||
+        commentCubit == null) {
+      return _buildLayout(false);
+    }
+    return MultiBlocProvider(
+      providers: [
+        if (likeCubit != null) BlocProvider.value(value: likeCubit!),
+        if (viewCubit != null) BlocProvider.value(value: viewCubit!),
+        if (commentCubit != null) BlocProvider.value(value: commentCubit!),
+      ],
+      child: _buildLayout(true),
+    );
+  }
+
+  Widget _buildLayout(bool cubitApplied) {
     return InAppScaffold(
       backgroundColor: Colors.black,
       resizeToAvoidBottomInset: false,
@@ -126,16 +170,19 @@ class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
             children: [
               PhotoPreviewView(
                 index: index,
+                cubitApplied: cubitApplied,
+                path: path,
                 photos: List.from(photos),
                 onChanged: _changedIndex,
                 onChangedPageType: _changedPageType,
                 onChangePrivacy: _changePrivacy,
                 onUpdateTag: _updateTag,
               ),
-              PhotoCommentsView(
-                photo: selected,
-                onChangedPageType: _changedPageType,
-              ),
+              if (cubitApplied)
+                PhotoCommentsView(
+                  photo: selected,
+                  onChangedPageType: _changedPageType,
+                ),
             ],
           ),
         ],
