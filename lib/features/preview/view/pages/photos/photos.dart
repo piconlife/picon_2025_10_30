@@ -42,6 +42,7 @@ class PhotoPreviewView extends StatefulWidget {
   final ValueChanged<int> onChangedPageType;
   final ValueChanged<Privacy> onChangePrivacy;
   final ValueChanged<String?> onUpdateTag;
+  final ValueChanged<bool> onBookmarked;
 
   const PhotoPreviewView({
     super.key,
@@ -53,6 +54,7 @@ class PhotoPreviewView extends StatefulWidget {
     required this.onChangedPageType,
     required this.onChangePrivacy,
     required this.onUpdateTag,
+    required this.onBookmarked,
   });
 
   @override
@@ -93,6 +95,7 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
 
   void _onBookmark() {
     _isBookmarked.value = !_isBookmarked.value;
+    widget.onBookmarked(_isBookmarked.value);
   }
 
   void _onChangePrivacy() async {

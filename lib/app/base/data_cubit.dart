@@ -562,6 +562,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   Future<bool> toggle({
     int? index,
     bool? exist,
+    T? data,
     Object? args,
     String? placement,
     T Function(T)? replace,
@@ -570,13 +571,9 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     ValueChanged<bool>? onToggled,
     ValueChanged<bool>? onFailed,
   }) async {
-    T? data;
-    if (index != null) {
-      data = state.result.elementAtOrNull(index);
-    }
+    if (index != null) data ??= state.result.elementAtOrNull(index);
     data ??= state.resultByMe.firstOrNull;
-
-    if (data != null) {
+    if (data != null && (exist == null || exist)) {
       return delete(
         data,
         placement: placement ?? "toggle:delete",
@@ -586,7 +583,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
         onFailed: onFailed != null ? () => onFailed(false) : null,
       );
     } else {
-      final data = createNewObject(args);
+      data ??= createNewObject(args);
       if (data == null) return false;
       return create(
         data,

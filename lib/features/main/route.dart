@@ -7,6 +7,7 @@ import '../social/data/cubits/feed_home_cubit.dart';
 import '../social/view/cubits/verified_feed_cubit.dart';
 import '../social/view/cubits/verified_users_cubit.dart';
 import '../user/view/cubits/avatar_cubit.dart';
+import '../user/view/cubits/bookmark_cubit.dart';
 import '../user/view/cubits/cover_cubit.dart';
 import '../user/view/cubits/follower_cubit.dart';
 import '../user/view/cubits/following_cubit.dart';
@@ -35,6 +36,7 @@ Widget _main(BuildContext context, Object? args) {
       BlocProvider(create: (context) => UserFollowingCubit(context)..load()),
 
       BlocProvider(create: (context) => UserAvatarCubit(context)),
+      BlocProvider(create: (context) => UserBookmarkCubit(context)..load()),
       BlocProvider(create: (context) => UserCoverCubit(context)),
       BlocProvider(create: (context) => UserCubit(context)),
       BlocProvider(create: (context) => UserMemoryCubit(context)),

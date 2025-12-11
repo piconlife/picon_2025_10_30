@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_navigator/generate.dart';
-import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
 
 import '../../data/models/user.dart';
 import '../../routes/paths.dart';
 import '../social/data/cubits/feed_home_cubit.dart';
 import 'view/cubits/avatar_cubit.dart';
+import 'view/cubits/bookmark_cubit.dart';
 import 'view/cubits/cover_cubit.dart';
 import 'view/cubits/follower_cubit.dart';
 import 'view/cubits/following_cubit.dart';
@@ -27,31 +27,6 @@ import 'view/pages/followings.dart';
 import 'view/pages/posts.dart';
 import 'view/pages/profile.dart';
 import 'view/pages/reports.dart';
-
-extension UserRouteHelper on BuildContext {
-  Future<void> openUserProfile({String? uid, UserModel? user}) async {
-    open(
-      Routes.userProfile,
-      args: {
-        "uid": uid,
-        "$UserModel": user,
-        "$FeedHomeCubit": read<FeedHomeCubit>(),
-        "$UserCubit": read<UserCubit>(),
-        "$UserFollowerCubit": read<UserFollowerCubit>(),
-        "$UserFollowingCubit": read<UserFollowingCubit>(),
-        "$UserMemoryCubit": read<UserMemoryCubit>(),
-        "$UserNoteCubit": read<UserNoteCubit>(),
-        "$UserPostCubit": read<UserPostCubit>(),
-        "$UserPhotoCubit": read<UserPhotoCubit>(),
-        "$UserReportCubit": read<UserReportCubit>(),
-        "$UserStoryCubit": read<UserStoryCubit>(),
-        "$UserVideoCubit": read<UserVideoCubit>(),
-        "$UserAvatarCubit": read<UserAvatarCubit>(),
-        "$UserCoverCubit": read<UserCoverCubit>(),
-      },
-    );
-  }
-}
 
 Map<String, RouteBuilder> get mUserRoutes {
   return {
@@ -135,6 +110,9 @@ Widget _profile(BuildContext context, Object? args) {
   UserVideoCubit? videoCubit = args.findOrNull(key: "$UserVideoCubit");
   UserAvatarCubit? avatarsCubit = args.findOrNull(key: "$UserAvatarCubit");
   UserCoverCubit? coversCubit = args.findOrNull(key: "$UserCoverCubit");
+  UserBookmarkCubit? userBookmarkCubit = args.findOrNull(
+    key: "$UserBookmarkCubit",
+  );
   return MultiBlocProvider(
     providers: [
       feedHomeCubit != null
@@ -207,6 +185,11 @@ Widget _profile(BuildContext context, Object? args) {
           : BlocProvider(
             create:
                 (context) => UserFollowingCubit(context, uid)..loadCounter(),
+          ),
+      userBookmarkCubit != null
+          ? BlocProvider.value(value: userBookmarkCubit..loadCounter())
+          : BlocProvider(
+            create: (context) => UserBookmarkCubit(context)..loadCounter(),
           ),
     ],
     child: UserProfilePage(args: args),

@@ -10,6 +10,7 @@ import 'package:in_app_cache/in_app_cache.dart';
 import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
 
+import '../../../../app/base/data_cubit.dart';
 import '../../../../data/constants/keys.dart';
 import '../../../../data/enums/privacy.dart';
 import '../../../../data/models/content.dart';
@@ -22,6 +23,7 @@ import '../../../../routes/paths.dart';
 import '../../../social/data/cubits/like_cubit.dart';
 import '../../../social/data/cubits/view_cubit.dart';
 import '../../../social/view/cubits/comment_cubit.dart';
+import '../../../user/view/cubits/bookmark_cubit.dart';
 import 'photos/comments.dart';
 import 'photos/photos.dart';
 
@@ -37,7 +39,11 @@ class PreviewPhotosPage extends StatefulWidget {
   ) async {
     context.open(
       Routes.previewPhotos,
-      args: {"index": index, "$ContentModel": item},
+      args: {
+        "index": index,
+        "$ContentModel": item,
+        "$UserBookmarkCubit": DataCubit.of<UserBookmarkCubit>(context),
+      },
       configs: RouteConfigs(transitionType: TransitionType.fadeIn),
     );
   }
@@ -48,6 +54,7 @@ class PreviewPhotosPage extends StatefulWidget {
 
 class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
   late final controller = PageController(initialPage: index);
+  late final bookmarkCubit = DataCubit.of<UserBookmarkCubit>(context);
   int pageType = 0;
   int index = 0;
   ContentModel? content;
@@ -122,6 +129,13 @@ class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
     setState(() => pageType = value);
   }
 
+  void _bookmarkToggle(bool status) {
+    // bookmarkCubit.toggle(
+    //   exist: status,
+    //   args: {"path": selected.path, "contentType": "PHOTO"},
+    // );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -177,6 +191,7 @@ class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
                 onChangedPageType: _changedPageType,
                 onChangePrivacy: _changePrivacy,
                 onUpdateTag: _updateTag,
+                onBookmarked: _bookmarkToggle,
               ),
               if (cubitApplied)
                 PhotoCommentsView(

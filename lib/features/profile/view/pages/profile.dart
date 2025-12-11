@@ -10,7 +10,7 @@ import '../../../../app/helpers/user.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../app/res/size.dart';
 import '../../../../data/models/user.dart';
-import '../../../../features/user/routes.dart';
+import '../../../../features/user/route_helper.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/body.dart';
 import '../../../../roots/widgets/gesture.dart';
