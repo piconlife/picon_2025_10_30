@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
@@ -8,6 +9,22 @@ import '../utils/file_details.dart';
 
 class DownloadHelper {
   const DownloadHelper._();
+
+  static String fileName(String url) {
+    url = url.split("?alt=").firstOrNull ?? url;
+    String fileName = path.basename(url);
+    return fileName;
+  }
+
+  static Future<Uint8List?> download(String url) async {
+    if (url.isEmpty) return null;
+    try {
+      final response = await http.get(Uri.parse(url));
+      return response.bodyBytes;
+    } catch (_) {
+      return null;
+    }
+  }
 
   static Future<File?> downloadFile(String url, [String? directoryPath]) async {
     if (url.isEmpty) return null;

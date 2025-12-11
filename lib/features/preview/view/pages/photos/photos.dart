@@ -9,15 +9,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/route.dart';
 import 'package:marquee/marquee.dart';
+import 'package:picon/app/helpers/device_storage.dart';
 
 import '../../../../../app/base/data_cubit.dart';
 import '../../../../../app/helpers/user.dart';
 import '../../../../../app/interfaces/bsd_privacy.dart';
 import '../../../../../app/res/icons.dart';
 import '../../../../../data/enums/privacy.dart';
+import '../../../../../data/models/bookmark.dart';
 import '../../../../../data/models/content.dart';
 import '../../../../../data/models/like.dart';
 import '../../../../../data/models/view.dart';
+import '../../../../../data/use_cases/bookmark/create.dart';
+import '../../../../../data/use_cases/bookmark/delete.dart';
+import '../../../../../data/use_cases/bookmark/is_exist.dart';
 import '../../../../../roots/utils/utils.dart';
 import '../../../../../roots/widgets/gesture.dart';
 import '../../../../../roots/widgets/hero.dart';
@@ -42,7 +47,6 @@ class PhotoPreviewView extends StatefulWidget {
   final ValueChanged<int> onChangedPageType;
   final ValueChanged<Privacy> onChangePrivacy;
   final ValueChanged<String?> onUpdateTag;
-  final ValueChanged<bool> onBookmarked;
 
   const PhotoPreviewView({
     super.key,
@@ -54,7 +58,6 @@ class PhotoPreviewView extends StatefulWidget {
     required this.onChangedPageType,
     required this.onChangePrivacy,
     required this.onUpdateTag,
-    required this.onBookmarked,
   });
 
   @override
@@ -62,7 +65,7 @@ class PhotoPreviewView extends StatefulWidget {
 }
 
 class _PhotoPreviewViewState extends State<PhotoPreviewView> {
-  final _isBookmarked = ValueNotifier(false);
+  final _isBookmarked = ValueNotifier<BookmarkModel?>(null);
   late final _pageController = PageController(initialPage: widget.index);
 
   late final _downloadLabel = ValueNotifier(isDownloaded ? 2 : 0);
@@ -94,8 +97,21 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
   }
 
   void _onBookmark() {
-    _isBookmarked.value = !_isBookmarked.value;
-    widget.onBookmarked(_isBookmarked.value);
+    BookmarkModel? data = _isBookmarked.value;
+    if (data != null) {
+      BookmarkDeleteUseCase.i(data.id).then((value) {
+        if (value.isSuccessful) return;
+        _isBookmarked.value = data;
+      });
+      _isBookmarked.value = null;
+      return;
+    }
+    data = BookmarkModel.create(path: item.contentPath, contentType: "PHOTO");
+    BookmarkCreateUseCase.i(data).then((value) {
+      if (value.isSuccessful) return;
+      _isBookmarked.value = null;
+    });
+    _isBookmarked.value = data;
   }
 
   void _onChangePrivacy() async {
@@ -134,36 +150,23 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
     action();
   }
 
-  //     private void downloadPhoto() {
-  //         if (mPhoto != null && (!UserCondition.isPrivate(mPhoto.getDocument_privacy()) || UserHelper.isCurrentUid(mPhoto.getUid()))) {
-  //             if (!mDownloadedIds.contains(mPhoto.getDid())) {
-  //                 mBinding.actionDownload.setText(getString(R.string.downloading));
-  //                 mViewModel.downloadBitmap(mPhoto.getDocument_photo_url(), ByteQuality.PHOTO_STANDARD_QUALITY, response -> {
-  //                     Bitmap bitmap = response.getResult();
-  //                     if (response.isSuccessful() && bitmap != null) {
-  //                         MediaProvider.saveImage(mContext, bitmap, task -> {
-  //                             if (task.isSuccessful()) {
-  //                                 mBinding.actionDownload.setText(getString(R.string.done));
-  //                                 mDownloadedIds.add(mPhoto.getDid());
-  //                             } else {
-  //                                 mBinding.actionDownload.setText(getString(R.string.download));
-  //                                 mDialog.toast(ExceptionMessage.EXCEPTION_TRY_AGAIN);
-  //                             }
-  //                         });
-  //                     }
-  //                 });
-  //             } else {
-  //                 mDialog.toast("Already downloaded!");
-  //             }
-  //         } else {
-  //             mDialog.toast("This photo is personal");
-  //         }
-  //     }
   void _download() async {
+    final photoUrl = item.photoUrl;
+    if (photoUrl == null) return;
     if (isLocked || isDownloaded) return;
-    // _downloadLabel.value = 1;
-    // downloads.add(item.photoUrl ?? '');
-    // _downloadLabel.value = 2;
+    _downloadLabel.value = 1;
+    try {
+      final status = await DeviceStorageHelper.saveToDeviceByUrl(
+        photoUrl,
+        DeviceStorageContentType.pictures,
+      );
+      if (status == null) {
+        _downloadLabel.value = 0;
+        return;
+      }
+    } catch (_) {}
+    downloads.add(item.photoUrl ?? '');
+    _downloadLabel.value = 2;
   }
 
   void _seeLikes() {
@@ -181,14 +184,31 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
     DataCubit.of<LikeCubit>(context).toggle();
   }
 
-  void _seen(_) {
+  void _loadSeen([_]) {
     DataCubit.of<ViewCubit>(context).seen(ViewModel.create(path: widget.path));
+  }
+
+  void _loadBookmark() {
+    if (item.path == null) return;
+    BookmarkIsExistUseCase.i(item.path!).then((value) {
+      _isBookmarked.value = value.data;
+    });
   }
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback(_seen);
+    WidgetsBinding.instance.addPostFrameCallback(_loadSeen);
+    _loadBookmark();
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant PhotoPreviewView oldWidget) {
+    if (oldWidget.index != widget.index) {
+      _loadBookmark();
+      _loadSeen();
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -241,11 +261,16 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
         children: [
           if (item.isPrivacyAllow) ...[
             _buildAction(context, InAppIcons.share.solid, _onShare),
-            _buildActionToggle(
-              context,
-              InAppIcons.save,
-              _onBookmark,
-              _isBookmarked,
+            ValueListenableBuilder(
+              valueListenable: _isBookmarked,
+              builder: (context, value, child) {
+                return _buildActionToggle(
+                  context,
+                  InAppIcons.save,
+                  _onBookmark,
+                  value != null,
+                );
+              },
             ),
           ] else ...[
             _buildActionPrivate(context),
@@ -274,7 +299,7 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
     BuildContext context,
     AndomieIcon icon,
     VoidCallback press,
-    ValueNotifier<bool> notifier,
+    bool selected,
   ) {
     return InAppGesture(
       onTap: press,
@@ -282,14 +307,9 @@ class _PhotoPreviewViewState extends State<PhotoPreviewView> {
         color: Colors.transparent,
         child: Padding(
           padding: EdgeInsets.all(context.smallPadding),
-          child: ValueListenableBuilder(
-            valueListenable: notifier,
-            builder: (context, value, child) {
-              return InAppIcon(
-                value ? icon.solid : icon.regular,
-                color: context.light,
-              );
-            },
+          child: InAppIcon(
+            selected ? icon.solid : icon.regular,
+            color: context.light,
           ),
         ),
       ),

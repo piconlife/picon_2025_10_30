@@ -129,13 +129,6 @@ class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
     setState(() => pageType = value);
   }
 
-  void _bookmarkToggle(bool status) {
-    // bookmarkCubit.toggle(
-    //   exist: status,
-    //   args: {"path": selected.path, "contentType": "PHOTO"},
-    // );
-  }
-
   @override
   void initState() {
     super.initState();
@@ -191,7 +184,6 @@ class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
                 onChangedPageType: _changedPageType,
                 onChangePrivacy: _changePrivacy,
                 onUpdateTag: _updateTag,
-                onBookmarked: _bookmarkToggle,
               ),
               if (cubitApplied)
                 PhotoCommentsView(
