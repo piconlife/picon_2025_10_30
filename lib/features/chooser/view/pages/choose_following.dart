@@ -20,6 +20,7 @@ import '../../../../roots/widgets/stack_button.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../routes/keys.dart';
 import '../../../../routes/paths.dart';
+import '../../../user/view/pages/profile.dart';
 import '../cubits/suggested_user_cubit.dart';
 import '../templates/item_suggested_user.dart';
 
@@ -244,11 +245,9 @@ class _ChooseFollowingPageState extends State<ChooseFollowingPage> {
                       }
                       return ItemSuggestedUser(
                         selection: item.copy(selected: instance.selected),
-                        onTap:
-                            () => context.open(
-                              Routes.userProfile,
-                              args: {"$UserModel": item.data},
-                            ),
+                        onTap: () {
+                          UserProfilePage.open(context, data: item.data);
+                        },
                         onFollow: instance.call,
                       );
                     },

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_navigator/generate.dart';
 import 'package:object_finder/object_finder.dart';
 
+import '../../data/models/content.dart';
 import '../../routes/paths.dart';
 import '../user/view/cubits/following_cubit.dart';
 import '../user/view/cubits/post_cubit.dart';
@@ -68,16 +69,19 @@ Widget _searchFeeds(BuildContext context, Object? args) {
 }
 
 Widget _comments(BuildContext context, Object? args) {
+  final content = args.findOrNull<ContentModel>(key: "$ContentModel");
+  final path = content?.contentPath;
+  if (path == null) return CommentsPage(args: args);
   final commentCubit = args.findOrNull<CommentCubit>(key: "$CommentCubit");
   return MultiBlocProvider(
     providers: [
       commentCubit != null
           ? BlocProvider.value(value: commentCubit..load())
           : BlocProvider(
-            create: (context) => CommentCubit(context, '')..load(),
+            create: (context) => CommentCubit(context, path)..load(),
           ),
     ],
-    child: CommentsPage(args: args),
+    child: CommentsPage(args: args, content: content),
   );
 }
 

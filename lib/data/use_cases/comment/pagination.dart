@@ -2,26 +2,26 @@ import 'package:data_management/core.dart';
 import 'package:flutter_entity/entity.dart';
 
 import '../../constants/keys.dart';
-import '../../models/feed_comment.dart';
+import '../../models/comment.dart';
 import 'base.dart';
 
-class GetFeedCommentsByPaginationUseCase extends CommentBaseUseCase {
-  GetFeedCommentsByPaginationUseCase._();
+class CommentPaginationUseCase extends CommentBaseUseCase {
+  CommentPaginationUseCase._();
 
-  static GetFeedCommentsByPaginationUseCase? _i;
+  static CommentPaginationUseCase? _i;
 
-  static GetFeedCommentsByPaginationUseCase get i {
-    return _i ??= GetFeedCommentsByPaginationUseCase._();
+  static CommentPaginationUseCase get i {
+    return _i ??= CommentPaginationUseCase._();
   }
 
   Future<Response<CommentModel>> call({
-    required String referencePath,
+    required String path,
     int? initialSize,
     int? fetchingSize,
     Object? snapshot,
   }) {
     return repository.getByQuery(
-      params: getParams(referencePath),
+      params: getParams(path),
       sorts: [DataSorting(Keys.i.timeMills, descending: true)],
       selections: [
         if (snapshot != null) DataSelection.startAfterDocument(snapshot),

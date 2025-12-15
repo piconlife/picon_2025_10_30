@@ -1,143 +1,138 @@
-import '../constants/keys.dart';
-import '../enums/gender.dart';
+import 'package:flutter_andomie/utils/path_replacer.dart';
+import 'package:flutter_entity/entity.dart';
+
+import '../../app/helpers/user.dart';
+import '../../roots/services/path_provider.dart';
+import '../constants/paths.dart';
+import '../enums/comment_type.dart';
 import '../enums/privacy.dart';
-import 'content.dart';
 
-List<String> _keys = [
-  // PUBLISHER
-  Keys.i.publisherId,
-  Keys.i.publisherPhotoUrl,
-  Keys.i.publisherProfession,
-  Keys.i.publisherName,
-  Keys.i.publisherShortName,
-  Keys.i.publisherTitle,
-  Keys.i.publisherAge,
-  Keys.i.publisherProfilePath,
-  Keys.i.publisherProfileUrl,
-  Keys.i.publisherReligion,
-  Keys.i.publisherLatitude,
-  Keys.i.publisherLongitude,
-  Keys.i.publisherGender,
+class CommentKeys extends EntityKey {
+  const CommentKeys._();
 
-  // OTHER
-  Keys.i.id,
-  Keys.i.timeMills,
-  Keys.i.parentId,
-  Keys.i.parentPath,
-  Keys.i.description,
-  Keys.i.photoUrl,
-  Keys.i.privacy,
-];
+  static const CommentKeys i = CommentKeys._();
 
-class Comment extends ContentModel {
-  Comment({
-    // PUBLISHER
-    super.publisherId,
-    super.publisherAge,
-    super.publisherPhotoUrl,
-    super.publisherProfession,
-    super.publisherProfilePath,
-    super.publisherProfileUrl,
-    super.publisherName,
-    super.publisherShortName,
-    super.publisherTitle,
-    super.publisherReligion,
-    super.publisherLatitude,
-    super.publisherLongitude,
-    super.publisherGender,
+  final content = "content";
+  final path = "path";
+  final pid = "pid";
+  final privacy = "privacy";
+  final parentPath = "parentPath";
+  final type = "type";
 
-    // OTHER
+  @override
+  Iterable<String> get keys => [
+    id,
+    timeMills,
+    content,
+    path,
+    pid,
+    privacy,
+    parentPath,
+    type,
+  ];
+}
+
+class CommentModel extends Entity<CommentKeys> {
+  String? content;
+  String? path;
+  String? publisher;
+  Privacy? _privacy;
+  String? parentPath;
+  CommentType? _type;
+
+  Privacy get privacy => _privacy ?? Privacy.everyone;
+
+  CommentType get type => _type ?? CommentType.none;
+
+  CommentModel.empty();
+
+  CommentModel._({
     super.id,
     super.timeMills,
-    super.parentId,
-    super.parentPath,
-    super.privacy,
-    super.photoUrl,
-    super.description,
-  });
-
-  Comment withComment({
-    // PUBLISHER
-    String? publisher,
-    int? publisherAge,
-    String? publisherPhoto,
-    String? publisherProfession,
-    String? publisherProfilePath,
-    String? publisherProfileUrl,
-    String? publisherName,
-    String? publisherShortName,
-    String? publisherTitle,
-    String? publisherReligion,
-    double? publisherLatitude,
-    double? publisherLongitude,
-    Gender? publisherGender,
-
-    // OTHER
-    String? id,
-    int? timeMills,
-    String? description,
-    String? parentId,
-    String? parentPath,
-    String? photoUrl,
+    this.content,
+    this.path,
+    this.publisher,
+    this.parentPath,
+    CommentType? type,
     Privacy? privacy,
-  }) {
-    return Comment(
-      // PUBLISHER
-      publisherId: publisher ?? this.publisherId,
-      publisherAge: publisherAge ?? this.publisherAge,
-      publisherPhotoUrl: publisherPhoto ?? this.publisherPhotoUrl,
-      publisherProfession: publisherProfession ?? this.publisherProfession,
-      publisherProfilePath: publisherProfilePath ?? this.publisherProfilePath,
-      publisherProfileUrl: publisherProfileUrl ?? this.publisherProfileUrl,
-      publisherName: publisherName ?? this.publisherName,
-      publisherShortName: publisherShortName ?? this.publisherShortName,
-      publisherTitle: publisherTitle ?? this.publisherTitle,
-      publisherReligion: publisherReligion ?? this.publisherReligion,
-      publisherLatitude: publisherLatitude ?? this.publisherLatitude,
-      publisherLongitude: publisherLongitude ?? this.publisherLongitude,
-      publisherGender: publisherGender ?? this.publisherGender,
-      // OTHER
-      id: id ?? this.id,
-      timeMills: timeMills ?? this.timeMills,
-      description: description ?? this.description,
-      parentPath: parentPath ?? this.parentPath,
-      photoUrl: photoUrl ?? this.photoUrl,
-      privacy: privacy ?? this.privacy,
-    );
-  }
+  }) : _type = type,
+       _privacy = privacy;
 
-  factory Comment.from(dynamic source) {
-    final data = ContentModel.parse(source);
-    return Comment(
-      // PUBLISHER
-      publisherId: data.publisherId,
-      publisherAge: data.publisherAge,
-      publisherPhotoUrl: data.publisherPhotoUrl,
-      publisherProfession: data.publisherProfession,
-      publisherProfilePath: data.publisherProfilePath,
-      publisherProfileUrl: data.publisherProfileUrl,
-      publisherName: data.publisherName,
-      publisherShortName: data.publisherShortName,
-      publisherTitle: data.publisherTitle,
-      publisherReligion: data.publisherReligion,
-      publisherLatitude: data.publisherLatitude,
-      publisherLongitude: data.publisherLongitude,
-      publisherGender: data.publisherGender,
+  CommentModel.create({
+    required String super.id,
+    required String this.parentPath,
+    required this.content,
+    super.timeMills,
+    String? path,
+    String? publisher,
+    CommentType? type,
+    Privacy? privacy,
+  }) : publisher = publisher ?? UserHelper.uid,
+       _type = type,
+       _privacy = privacy,
+       path = PathReplacer.replaceByIterable(
+         PathProvider.generatePath(Paths.refComments, id),
+         [parentPath],
+       ),
+       super.auto();
 
-      // OTHER
-      id: data.id,
-      timeMills: data.timeMills,
-      description: data.description,
-      parentId: data.parentId,
-      parentPath: data.parentPath,
-      photoUrl: data.photoUrl,
-      privacy: data.privacy,
+  factory CommentModel.parse(Object? source) {
+    if (source is! Map) return CommentModel.empty();
+    final key = CommentKeys.i;
+    return CommentModel._(
+      id: source.entityValue(key.id),
+      timeMills: source.entityValue(key.timeMills),
+      content: source.entityValue(key.content),
+      path: source.entityValue(key.path),
+      publisher: source.entityValue(key.pid),
+      parentPath: source.entityValue(key.parentPath),
+      privacy: source.entityValue(key.privacy, Privacy.parse),
+      type: source.entityValue(key.type, CommentType.parse),
     );
   }
 
   @override
+  CommentKeys makeKey() => CommentKeys.i;
+
+  @override
   Map<String, dynamic> get source {
-    final data = super.source.entries.where((item) => _keys.contains(item.key));
-    return Map.fromEntries(data);
+    return {
+      key.id: id,
+      key.timeMills: timeMills,
+      key.content: content,
+      key.path: path,
+      key.pid: publisher,
+      key.parentPath: parentPath,
+      key.privacy: privacy.name,
+      key.type: type.name,
+    };
   }
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      timeMills.hashCode ^
+      content.hashCode ^
+      path.hashCode ^
+      publisher.hashCode ^
+      parentPath.hashCode ^
+      privacy.hashCode ^
+      type.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! CommentModel) return false;
+    return id == other.id &&
+        timeMills == other.timeMills &&
+        content == other.content &&
+        path == other.path &&
+        publisher == other.publisher &&
+        parentPath == other.parentPath &&
+        privacy == other.privacy &&
+        type == other.type;
+  }
+
+  @override
+  String toString() => "$CommentModel#$hashCode($filtered)";
 }

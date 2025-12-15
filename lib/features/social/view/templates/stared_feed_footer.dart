@@ -7,7 +7,7 @@ import 'package:flutter_andomie/utils/converter.dart';
 import '../../../../app/base/countable_builder.dart';
 import '../../../../app/base/exist_by_me_builder.dart';
 import '../../../../app/res/icons.dart';
-import '../../../../data/models/feed_comment.dart';
+import '../../../../data/models/comment.dart';
 import '../../../../data/models/like.dart';
 import '../../../../data/models/star.dart';
 import '../../../../roots/widgets/gesture.dart';

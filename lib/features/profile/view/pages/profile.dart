@@ -3,6 +3,7 @@ import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_navigator/route.dart';
 
 import '../../../../app/constants/app.dart';
@@ -10,7 +11,6 @@ import '../../../../app/helpers/user.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../app/res/size.dart';
 import '../../../../data/models/user.dart';
-import '../../../../features/user/route_helper.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/body.dart';
 import '../../../../roots/widgets/gesture.dart';
@@ -21,9 +21,44 @@ import '../../../../roots/widgets/tiled_button.dart';
 import '../../../../roots/widgets/user_avatar.dart';
 import '../../../../roots/widgets/user_builder.dart';
 import '../../../../routes/paths.dart';
+import '../../../social/data/cubits/feed_home_cubit.dart';
+import '../../../user/view/cubits/avatar_cubit.dart';
+import '../../../user/view/cubits/cover_cubit.dart';
+import '../../../user/view/cubits/follower_cubit.dart';
+import '../../../user/view/cubits/following_cubit.dart';
+import '../../../user/view/cubits/memory_cubit.dart';
+import '../../../user/view/cubits/note_cubit.dart';
+import '../../../user/view/cubits/photo_cubit.dart';
+import '../../../user/view/cubits/post_cubit.dart';
+import '../../../user/view/cubits/report_cubit.dart';
+import '../../../user/view/cubits/story_cubit.dart';
+import '../../../user/view/cubits/user_cubit.dart';
+import '../../../user/view/cubits/video_cubit.dart';
+import '../../../user/view/pages/profile.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  static Future<void> open(BuildContext context) async {
+    context.open(
+      Routes.profile,
+      args: {
+        "$FeedHomeCubit": context.read<FeedHomeCubit>(),
+        "$UserCubit": context.read<UserCubit>(),
+        "$UserFollowerCubit": context.read<UserFollowerCubit>(),
+        "$UserFollowingCubit": context.read<UserFollowingCubit>(),
+        "$UserMemoryCubit": context.read<UserMemoryCubit>(),
+        "$UserNoteCubit": context.read<UserNoteCubit>(),
+        "$UserPostCubit": context.read<UserPostCubit>(),
+        "$UserPhotoCubit": context.read<UserPhotoCubit>(),
+        "$UserReportCubit": context.read<UserReportCubit>(),
+        "$UserStoryCubit": context.read<UserStoryCubit>(),
+        "$UserVideoCubit": context.read<UserVideoCubit>(),
+        "$UserAvatarCubit": context.read<UserAvatarCubit>(),
+        "$UserCoverCubit": context.read<UserCoverCubit>(),
+      },
+    );
+  }
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -35,7 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _visitProfile(BuildContext context, UserModel? user) {
-    context.openUserProfile(user: user);
+    UserProfilePage.open(context, data: user);
   }
 
   void _visitStore(BuildContext context) {

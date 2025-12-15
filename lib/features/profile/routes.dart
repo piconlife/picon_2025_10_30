@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_navigator/generate.dart';
-import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
 
 import '../../routes/paths.dart';
@@ -19,29 +18,6 @@ import '../user/view/cubits/story_cubit.dart';
 import '../user/view/cubits/user_cubit.dart';
 import '../user/view/cubits/video_cubit.dart';
 import 'view/pages/profile.dart';
-
-extension ProfileRouteHelper on BuildContext {
-  Future<void> openProfile() async {
-    open(
-      Routes.profile,
-      args: {
-        "$FeedHomeCubit": read<FeedHomeCubit>(),
-        "$UserCubit": read<UserCubit>(),
-        "$UserFollowerCubit": read<UserFollowerCubit>(),
-        "$UserFollowingCubit": read<UserFollowingCubit>(),
-        "$UserMemoryCubit": read<UserMemoryCubit>(),
-        "$UserNoteCubit": read<UserNoteCubit>(),
-        "$UserPostCubit": read<UserPostCubit>(),
-        "$UserPhotoCubit": read<UserPhotoCubit>(),
-        "$UserReportCubit": read<UserReportCubit>(),
-        "$UserStoryCubit": read<UserStoryCubit>(),
-        "$UserVideoCubit": read<UserVideoCubit>(),
-        "$UserAvatarCubit": read<UserAvatarCubit>(),
-        "$UserCoverCubit": read<UserCoverCubit>(),
-      },
-    );
-  }
-}
 
 Map<String, RouteBuilder> get mProfileRoutes {
   return {Routes.profile: _profile};

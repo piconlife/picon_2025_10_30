@@ -1,7 +1,7 @@
 import 'package:data_management/data_management.dart';
 
 import '../../roots/helpers/connectivity.dart';
-import '../models/feed_comment.dart';
+import '../models/comment.dart';
 import '../sources/local/comment.dart';
 import '../sources/remote/feed_comment.dart';
 

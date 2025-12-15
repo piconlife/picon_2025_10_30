@@ -3,6 +3,7 @@ import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
+import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/helpers/user.dart';
@@ -13,6 +14,7 @@ import '../../../../roots/preferences/preferences.dart';
 import '../../../../roots/widgets/action.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/body.dart';
+import '../../../../routes/paths.dart';
 import '../widgets/profile_details_bar.dart';
 import 'profile/abouts.dart';
 import 'profile/notes.dart';
@@ -27,6 +29,15 @@ class UserProfilePage extends StatefulWidget {
   final Object? args;
 
   const UserProfilePage({super.key, this.args});
+
+  static Future<void> open(
+    BuildContext context, {
+    String? uid,
+    UserModel? data,
+  }) async {
+    if ((uid ?? '').isEmpty && (data?.id ?? '').isEmpty) return;
+    context.open(Routes.userProfile, args: {"uid": uid, "$UserModel": data});
+  }
 
   @override
   State<UserProfilePage> createState() => _UserProfilePageState();

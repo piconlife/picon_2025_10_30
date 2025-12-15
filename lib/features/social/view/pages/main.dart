@@ -9,13 +9,13 @@ import 'package:in_app_navigator/route.dart';
 
 import '../../../../app/devs/nav_content.dart';
 import '../../../../app/res/icons.dart';
-import '../../../../features/profile/routes.dart';
 import '../../../../roots/widgets/floating_action_button.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/row.dart';
 import '../../../../roots/widgets/user_avatar.dart';
 import '../../../../routes/paths.dart';
 import '../../../main/views/widgets/search_box.dart';
+import '../../../profile/view/pages/profile.dart';
 import '../../../user/view/cubits/memory_cubit.dart';
 import '../../../user/view/cubits/note_cubit.dart';
 import '../../../user/view/cubits/post_cubit.dart';
@@ -109,9 +109,7 @@ class _FeedPageState extends State<FeedPage>
 
   void _finally(Object? value) {}
 
-  void _visitMenu(BuildContext context) {
-    context.openProfile();
-  }
+  void _visitMenu(BuildContext context) => ProfilePage.open(context);
 
   void _visitSearch(BuildContext context) {
     context.open(Routes.searchFeeds);

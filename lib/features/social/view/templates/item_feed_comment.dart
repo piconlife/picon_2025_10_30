@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/utils/date_helper.dart';
 
 import '../../../../app/res/icons.dart';
-import '../../../../data/models/feed_comment.dart';
+import '../../../../data/models/comment.dart';
 import '../../../../roots/widgets/column.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
@@ -67,12 +67,18 @@ class _ItemFeedCommentState extends State<ItemFeedComment> with ColorMixin {
                             ),
                           ),
                         ),
-                        _buildIcon(InAppIcons.comment.regular, widget.onReply),
-                        _buildIcon(
-                          InAppIcons.translate.regular,
-                          widget.onTranslate,
-                        ),
-                        _buildIcon(InAppIcons.moreX.regular, widget.onMore),
+                        if (widget.onReply != null)
+                          _buildIcon(
+                            InAppIcons.comment.regular,
+                            widget.onReply,
+                          ),
+                        if (widget.onTranslate != null)
+                          _buildIcon(
+                            InAppIcons.translate.regular,
+                            widget.onTranslate,
+                          ),
+                        if (widget.onMore != null)
+                          _buildIcon(InAppIcons.moreX.regular, widget.onMore),
                       ],
                     ),
                     InAppText(

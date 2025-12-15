@@ -1,6 +1,6 @@
 import 'package:flutter_entity/entity.dart';
 
-import '../../models/feed_comment.dart';
+import '../../models/comment.dart';
 import 'base.dart';
 
 class CommentDeleteUseCase extends CommentBaseUseCase {

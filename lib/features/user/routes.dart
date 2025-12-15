@@ -7,18 +7,11 @@ import '../../data/models/user.dart';
 import '../../routes/paths.dart';
 import '../social/data/cubits/feed_home_cubit.dart';
 import 'view/cubits/avatar_cubit.dart';
-import 'view/cubits/bookmark_cubit.dart';
 import 'view/cubits/cover_cubit.dart';
 import 'view/cubits/follower_cubit.dart';
 import 'view/cubits/following_cubit.dart';
-import 'view/cubits/memory_cubit.dart';
-import 'view/cubits/note_cubit.dart';
-import 'view/cubits/photo_cubit.dart';
 import 'view/cubits/post_cubit.dart';
 import 'view/cubits/report_cubit.dart';
-import 'view/cubits/story_cubit.dart';
-import 'view/cubits/user_cubit.dart';
-import 'view/cubits/video_cubit.dart';
 import 'view/pages/edit_address.dart';
 import 'view/pages/edit_cover_photo.dart';
 import 'view/pages/edit_profile_photo.dart';
@@ -91,109 +84,7 @@ Widget _editUserSecondaryAddress(BuildContext context, Object? args) {
 }
 
 Widget _profile(BuildContext context, Object? args) {
-  UserModel? user = args.findOrNull(key: "$UserModel");
-  String? uid = user?.id ?? args.findOrNull(key: "uid") ?? args.findOrNull();
-  FeedHomeCubit? feedHomeCubit = args.findOrNull(key: "$FeedHomeCubit");
-  UserCubit? userCubit = args.findOrNull(key: "$UserCubit");
-  UserFollowerCubit? userFollowerCubit = args.findOrNull(
-    key: "$UserFollowerCubit",
-  );
-  UserFollowingCubit? userFollowingCubit = args.findOrNull(
-    key: "$UserFollowingCubit",
-  );
-  UserMemoryCubit? memoryCubit = args.findOrNull(key: "$UserMemoryCubit");
-  UserNoteCubit? noteCubit = args.findOrNull(key: "$UserNoteCubit");
-  UserPhotoCubit? photoCubit = args.findOrNull(key: "$UserPhotoCubit");
-  UserPostCubit? postCubit = args.findOrNull(key: "$UserPostCubit");
-  UserReportCubit? reportCubit = args.findOrNull(key: "$UserReportCubit");
-  UserStoryCubit? storyCubit = args.findOrNull(key: "$UserStoryCubit");
-  UserVideoCubit? videoCubit = args.findOrNull(key: "$UserVideoCubit");
-  UserAvatarCubit? avatarsCubit = args.findOrNull(key: "$UserAvatarCubit");
-  UserCoverCubit? coversCubit = args.findOrNull(key: "$UserCoverCubit");
-  UserBookmarkCubit? userBookmarkCubit = args.findOrNull(
-    key: "$UserBookmarkCubit",
-  );
-  return MultiBlocProvider(
-    providers: [
-      feedHomeCubit != null
-          ? BlocProvider.value(value: feedHomeCubit)
-          : BlocProvider(create: (context) => FeedHomeCubit(context)),
-      avatarsCubit != null
-          ? BlocProvider.value(value: avatarsCubit..load())
-          : BlocProvider(
-            create: (context) => UserAvatarCubit(context, uid)..load(),
-          ),
-      coversCubit != null
-          ? BlocProvider.value(value: coversCubit..load())
-          : BlocProvider(
-            create: (context) => UserCoverCubit(context, uid)..load(),
-          ),
-      userCubit != null
-          ? BlocProvider.value(value: userCubit..load())
-          : BlocProvider(create: (context) => UserCubit(context, uid)..load()),
-      memoryCubit != null
-          ? BlocProvider.value(value: memoryCubit..load())
-          : BlocProvider(
-            create: (context) => UserMemoryCubit(context, uid)..load(),
-          ),
-      noteCubit != null
-          ? BlocProvider.value(value: noteCubit..load())
-          : BlocProvider(
-            create: (context) => UserNoteCubit(context, uid)..load(),
-          ),
-      photoCubit != null
-          ? BlocProvider.value(value: photoCubit..load())
-          : BlocProvider(
-            create: (context) => UserPhotoCubit(context, uid)..load(),
-          ),
-      postCubit != null
-          ? BlocProvider.value(
-            value:
-                postCubit
-                  ..load()
-                  ..loadCounter(),
-          )
-          : BlocProvider(
-            create:
-                (context) =>
-                    UserPostCubit(context, uid)
-                      ..load()
-                      ..loadCounter(),
-          ),
-      storyCubit != null
-          ? BlocProvider.value(value: storyCubit..load())
-          : BlocProvider(
-            create: (context) => UserStoryCubit(context, uid)..load(),
-          ),
-      videoCubit != null
-          ? BlocProvider.value(value: videoCubit..load())
-          : BlocProvider(
-            create: (context) => UserVideoCubit(context, uid)..load(),
-          ),
-      reportCubit != null
-          ? BlocProvider.value(value: reportCubit..loadCounter())
-          : BlocProvider(
-            create: (context) => UserReportCubit(context, uid)..loadCounter(),
-          ),
-      userFollowerCubit != null
-          ? BlocProvider.value(value: userFollowerCubit..loadCounter())
-          : BlocProvider(
-            create: (context) => UserFollowerCubit(context, uid)..loadCounter(),
-          ),
-      userFollowingCubit != null
-          ? BlocProvider.value(value: userFollowingCubit..loadCounter())
-          : BlocProvider(
-            create:
-                (context) => UserFollowingCubit(context, uid)..loadCounter(),
-          ),
-      userBookmarkCubit != null
-          ? BlocProvider.value(value: userBookmarkCubit..loadCounter())
-          : BlocProvider(
-            create: (context) => UserBookmarkCubit(context)..loadCounter(),
-          ),
-    ],
-    child: UserProfilePage(args: args),
-  );
+  return UserProfilePage(args: args);
 }
 
 Widget _profileReports(BuildContext context, Object? args) {
@@ -215,22 +106,7 @@ Widget _profileReports(BuildContext context, Object? args) {
 
 Widget _profileFeeds(BuildContext context, Object? args) {
   UserModel? user = args.findOrNull(key: "$UserModel");
-  String? uid = user?.id ?? args.findOrNull(key: "uid") ?? args.findOrNull();
-  FeedHomeCubit? feedHomeCubit = args.findOrNull(key: "$FeedHomeCubit");
-  UserPostCubit? postCubit = args.findOrNull(key: "$UserPostCubit");
-  return MultiBlocProvider(
-    providers: [
-      feedHomeCubit != null
-          ? BlocProvider.value(value: feedHomeCubit)
-          : BlocProvider(create: (context) => FeedHomeCubit(context)),
-      postCubit != null
-          ? BlocProvider.value(value: postCubit)
-          : BlocProvider(
-            create: (context) => UserPostCubit(context, uid)..load(),
-          ),
-    ],
-    child: UserPostsPage(args: args, user: user),
-  );
+  return UserPostsPage(args: args, user: user);
 }
 
 Widget _profileFollowers(BuildContext context, Object? args) {

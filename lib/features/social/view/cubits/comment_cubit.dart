@@ -2,78 +2,70 @@ import 'package:flutter/material.dart';
 import 'package:flutter_entity/entity.dart';
 
 import '../../../../app/base/data_cubit.dart';
-import '../../../../data/models/feed_comment.dart';
+import '../../../../data/models/comment.dart';
+import '../../../../data/use_cases/comment/count.dart';
+import '../../../../data/use_cases/comment/create.dart';
+import '../../../../data/use_cases/comment/delete.dart';
+import '../../../../data/use_cases/comment/gets.dart';
+import '../../../../data/use_cases/comment/pagination.dart';
+import '../../../../data/use_cases/comment/update.dart';
 
 class CommentCubit extends DataCubit<CommentModel> {
   final String path;
 
   CommentCubit(BuildContext context, this.path, {int? initialCount})
     : super(context, Response(count: initialCount));
-  //
-  // @override
-  // void count() {
-  //   if (path.isEmpty || state.count > 0) return;
-  //   GetFeedCommentsCountUseCase.i(path).then((value) {
-  //     emit(state.copyWith(count: value.data));
-  //   });
-  // }
-  //
-  // @override
-  // void fetch({int initialSize = 30, int fetchingSize = 15}) {
-  //   if (path.isEmpty) return;
-  //   emit(state.copyWith(status: Status.loading));
-  //   GetFeedCommentsByPaginationUseCase.i(
-  //     referencePath: path,
-  //     initialSize: initialSize,
-  //     fetchingSize: fetchingSize,
-  //     snapshot: state.snapshot,
-  //   ).then(_attach).catchError((error, stackTrace) {
-  //     emit(state.copyWith(status: Status.failure));
-  //   });
-  // }
-  //
-  // void update(CommentModel value) {
-  //   if (path.isEmpty) return;
-  //   emit(state.copyWith(data: value, requestCode: 202));
-  // }
-  //
-  // void _attach(Response<CommentModel> response) {
-  //   emit(
-  //     state.copyWith(
-  //       status: response.status,
-  //       snapshot: response.snapshot,
-  //       result: response.result,
-  //       requestCode: 0,
-  //     ),
-  //   );
-  // }
-  //
-  // @override
-  // Future<bool> create(CommentModel data) async {
-  //   if (path.isEmpty) return false;
-  //   return CreateFeedCommentUseCase.i(data).then((value) {
-  //     if (value.isSuccessful) {
-  //       emit(state.copyWith(result: state.result..insert(0, data)));
-  //     }
-  //     return value.isSuccessful;
-  //   });
-  // }
-  //
-  // @override
-  // Future<bool> deleteById(String id) async {
-  //   if (path.isEmpty) return false;
-  //   return DeleteFeedCommentUseCase.i(id: id, path: path).then((value) {
-  //     if (value.isSuccessful) {
-  //       emit(
-  //         state.copyWith(
-  //           result:
-  //               state.result..removeWhere((e) {
-  //                 return e.id == id;
-  //               }),
-  //         ),
-  //       );
-  //     }
-  //     return value.isSuccessful;
-  //   });
-  // }
+
+  @protected
+  @override
+  Future<Response<int>> onCount() => CommentCountUseCase.i(path);
+
+  @protected
+  @override
+  Future<Response<CommentModel>> onCreate(CommentModel data) {
+    return CommentCreateUseCase.i(data);
+  }
+
+  @protected
+  @override
+  Future<Response<CommentModel>> onDelete(CommentModel data) {
+    return onDeleteById(data.id);
+  }
+
+  @protected
+  @override
+  Future<Response<CommentModel>> onDeleteById(String id) {
+    return CommentDeleteUseCase.i.call(id: id, path: path);
+  }
+
+  @protected
+  @override
+  Future<Response<CommentModel>> onFetch({
+    int? initialSize,
+    int? fetchingSize,
+    bool resultByMe = false,
+  }) {
+    if (resultByMe) {
+      return CommentGetsUseCase.i(path, fetchForMe: true);
+    }
+    return CommentPaginationUseCase.i.call(
+      path: path,
+      initialSize: initialSize ?? 30,
+      fetchingSize: fetchingSize ?? 15,
+      snapshot: state.snapshot,
+    );
+  }
+
+  @protected
+  @override
+  Future<Response<CommentModel>> onUpdate(
+    CommentModel old,
+    Map<String, dynamic> changes,
+  ) async {
+    return CommentUpdateUseCase.i.call(
+      id: old.id,
+      path: path,
+      changes: changes,
+    );
+  }
 }

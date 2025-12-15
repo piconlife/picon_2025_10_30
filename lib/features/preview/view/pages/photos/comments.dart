@@ -4,15 +4,21 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_andomie/extensions/string.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_entity/entity.dart';
 
+import '../../../../../app/base/data_cubit.dart';
 import '../../../../../app/res/icons.dart';
 import '../../../../../app/styles/fonts.dart';
-import '../../../../../data/models/comment.dart';
+import '../../../../../app/widgets/comment_input_field.dart';
 import '../../../../../data/models/content.dart';
+import '../../../../../data/models/comment.dart';
+import '../../../../../roots/widgets/bottom_bar.dart';
 import '../../../../../roots/widgets/icon_button.dart';
 import '../../../../../roots/widgets/text.dart';
 import '../../../../../roots/widgets/user_avatar.dart';
 import '../../../../../roots/widgets/user_builder.dart';
+import '../../../../social/view/cubits/comment_cubit.dart';
 
 class PhotoCommentsView extends StatefulWidget {
   final ContentModel photo;
@@ -29,7 +35,7 @@ class PhotoCommentsView extends StatefulWidget {
 }
 
 class _PhotoCommentsViewState extends State<PhotoCommentsView> {
-  List<Comment> comments = [];
+  late final cubit = DataCubit.of<CommentCubit>(context);
 
   Future<void> _refresh() async {}
 
@@ -38,7 +44,11 @@ class _PhotoCommentsViewState extends State<PhotoCommentsView> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [_buildToolbar(context), Expanded(child: _buildBody(context))],
+      children: [
+        _buildToolbar(context),
+        Expanded(child: _buildBody(context)),
+        _buildBottomBar(context),
+      ],
     );
   }
 
@@ -117,66 +127,15 @@ class _PhotoCommentsViewState extends State<PhotoCommentsView> {
     );
   }
 
-  Widget _buildToolbar3(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: context.lightAsFixed.t10, width: 1),
+  Widget _buildBottomBar(BuildContext context) {
+    return InAppBottomBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 24),
+        child: CommentInputField(
+          onChanged: (v){},
         ),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: InAppUserBuilder(
-              id: widget.photo.publisherId,
-              builder: (context, user) {
-                return Row(
-                  children: [
-                    InAppUserAvatar(
-                      url: user.photo,
-                      border: 2,
-                      borderColor: context.lightAsFixed.t25,
-                      innerBorder: 2,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: context.mediumSpace,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          InAppText(
-                            user.name,
-                            style: TextStyle(
-                              color: context.lightAsFixed,
-                              fontSize: context.mediumFontSize,
-                              fontFamily: InAppFonts.secondary,
-                              fontWeight: context.semiBoldFontWeight,
-                            ),
-                          ),
-                          InAppText(
-                            user.onlineStatus,
-                            style: TextStyle(
-                              color: context.lightAsFixed.t75,
-                              fontWeight: context.lightFontWeight,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
-          InAppIconButton(
-            onTap: _close,
-            InAppIcons.close.regular,
-            iconColor: context.lightAsFixed,
-            primaryColor: context.lightAsFixed.t05,
-          ),
-        ],
       ),
     );
   }
@@ -184,20 +143,29 @@ class _PhotoCommentsViewState extends State<PhotoCommentsView> {
   Widget _buildBody(BuildContext context) {
     return RefreshIndicator(
       onRefresh: _refresh,
-      child: ListView.builder(
-        itemCount: comments.length,
-        itemBuilder: _buildListItem,
+      child: BlocBuilder<CommentCubit, Response<CommentModel>>(
+        builder: (context, state) {
+          final comments = state.result;
+          return ListView.builder(
+            itemCount: comments.length,
+            itemBuilder: (context, index) {
+              final data = comments.elementAtOrNull(index);
+              if (data == null) return _buildPlaceholder();
+              return _buildListItem(context, index, data);
+            },
+          );
+        },
       ),
     );
   }
 
-  Widget _buildListItem(BuildContext context, int index) {
-    final comment = comments.elementAt(index);
+  Widget _buildPlaceholder() {
+    return SizedBox();
+  }
+
+  Widget _buildListItem(BuildContext context, int index, CommentModel data) {
     return ListTile(
-      title: Text(
-        comment.description.use,
-        style: TextStyle(color: Colors.white),
-      ),
+      title: Text(data.content.use, style: TextStyle(color: Colors.white)),
     );
   }
 }

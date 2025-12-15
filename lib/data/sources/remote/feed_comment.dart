@@ -1,6 +1,6 @@
 import '../../base/firestore_data_source.dart';
 import '../../constants/paths.dart';
-import '../../models/feed_comment.dart';
+import '../../models/comment.dart';
 
 class RemoteFeedCommentDataSource extends FirestoreDataSource<CommentModel> {
   RemoteFeedCommentDataSource() : super(Paths.refComments);
