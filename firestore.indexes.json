@@ -5,138 +5,38 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "document_type",
-          "order": "ASCENDING"
+          "fieldPath": "timeMills",
+          "order": "DESCENDING"
         },
         {
-          "fieldPath": "uid",
-          "order": "ASCENDING"
+          "fieldPath": "publisherRating",
+          "order": "DESCENDING"
         },
         {
-          "fieldPath": "time_mills",
+          "fieldPath": "__name__",
           "order": "DESCENDING"
         }
-      ]
+      ],
+      "density": "SPARSE_ALL"
     },
     {
-      "collectionGroup": "feeds",
+      "collectionGroup": "posts",
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "time_mills",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "user_rating",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "feeds",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "uid",
+          "fieldPath": "type",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "time_mills",
+          "fieldPath": "timeMills",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "__name__",
           "order": "DESCENDING"
         }
-      ]
-    },
-    {
-      "collectionGroup": "feeds",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "user_rating",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "document_time_mills",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "feeds",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "user_rating",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "time_mills",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "feeds_v2",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "time_mills",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "user_rating",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "users",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "uid",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "user_joining_time",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "users",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "user_gender",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "user_profession",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "user_religion",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "user_rating",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "users",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "user_profession",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "user_rating",
-          "order": "DESCENDING"
-        }
-      ]
+      ],
+      "density": "SPARSE_ALL"
     }
   ],
   "fieldOverrides": [

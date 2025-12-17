@@ -27,10 +27,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -44,15 +41,14 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyChT8xDB4JdLlxqmx4yepCR1gXcqlvkVAs',
-    appId: '1:545857015300:web:9a6915c3f60935d1486f51',
-    messagingSenderId: '545857015300',
-    projectId: 'picon-bd',
-    authDomain: 'picon-bd.firebaseapp.com',
-    databaseURL:
-        'https://picon-bd-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'picon-bd.appspot.com',
-    measurementId: 'G-804ZGZSHX7',
+    apiKey: 'AIzaSyDeliB8fewrqASzhYHBlXh8eat2lgHf6RU',
+    appId: '1:680509866471:web:76063bcd03e8c204b6bd42',
+    messagingSenderId: '680509866471',
+    projectId: 'picon-co',
+    authDomain: 'picon-co.firebaseapp.com',
+    databaseURL: 'https://picon-co-default-rtdb.firebaseio.com',
+    storageBucket: 'picon-co.appspot.com',
+    measurementId: 'G-7NYG351LYL',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -71,21 +67,32 @@ class DefaultFirebaseOptions {
     projectId: 'picon-co',
     databaseURL: 'https://picon-co-default-rtdb.firebaseio.com',
     storageBucket: 'picon-co.appspot.com',
-    androidClientId:
-        '680509866471-02q9o6ho9pg0tvbvimbinmvn6oun4cma.apps.googleusercontent.com',
-    iosClientId:
-        '680509866471-f28triv3jc5u2mliqmoud1nd4p1omm29.apps.googleusercontent.com',
+    androidClientId: '680509866471-02q9o6ho9pg0tvbvimbinmvn6oun4cma.apps.googleusercontent.com',
+    iosClientId: '680509866471-f28triv3jc5u2mliqmoud1nd4p1omm29.apps.googleusercontent.com',
     iosBundleId: 'com.picon.picon',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBR6AcjpgOq6wjSxYmP8j9YzgC6kwvR2wk',
-    appId: '1:545857015300:ios:6a15f766168d3d1a486f51',
-    messagingSenderId: '545857015300',
-    projectId: 'picon-bd',
-    databaseURL:
-        'https://picon-bd-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'picon-bd.appspot.com',
-    iosBundleId: 'com.picon.picon.RunnerTests',
+    apiKey: 'AIzaSyAQtOv9ZqM8pwEtRyJdS5bZcSguac9CZHw',
+    appId: '1:680509866471:ios:dc78ee3463b3cda6b6bd42',
+    messagingSenderId: '680509866471',
+    projectId: 'picon-co',
+    databaseURL: 'https://picon-co-default-rtdb.firebaseio.com',
+    storageBucket: 'picon-co.appspot.com',
+    androidClientId: '680509866471-02q9o6ho9pg0tvbvimbinmvn6oun4cma.apps.googleusercontent.com',
+    iosClientId: '680509866471-f28triv3jc5u2mliqmoud1nd4p1omm29.apps.googleusercontent.com',
+    iosBundleId: 'com.picon.picon',
   );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyAV6xRkXfnqSRwFeZ8OU2SaNQYcmThvkpE',
+    appId: '1:680509866471:web:879bfe6ed6e3bfa4b6bd42',
+    messagingSenderId: '680509866471',
+    projectId: 'picon-co',
+    authDomain: 'picon-co.firebaseapp.com',
+    databaseURL: 'https://picon-co-default-rtdb.firebaseio.com',
+    storageBucket: 'picon-co.appspot.com',
+    measurementId: 'G-QMSWD9H5JH',
+  );
+
 }
