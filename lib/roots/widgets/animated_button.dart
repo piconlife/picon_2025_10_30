@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -151,6 +152,8 @@ class AnimatedButton extends StatefulWidget {
   final VoidCallback? onDoubleTap;
   final VoidCallback? onLongPress;
   final ValueChanged<bool>? onAnimating;
+  final ValueChanged<bool>? onHover;
+  final bool enableHoverAnimation;
   final Widget child;
 
   const AnimatedButton({
@@ -164,6 +167,8 @@ class AnimatedButton extends StatefulWidget {
     this.onDoubleTap,
     this.onLongPress,
     this.onAnimating,
+    this.onHover,
+    this.enableHoverAnimation = true,
     required this.child,
   });
 
@@ -173,6 +178,7 @@ class AnimatedButton extends StatefulWidget {
 
 class _AnimatedButtonState extends State<AnimatedButton> {
   final _key = GlobalKey<AndrossyAnimationState>();
+  bool _isHovering = false;
 
   AndrossyAnimationState? get state => _key.currentState;
 
@@ -195,10 +201,31 @@ class _AnimatedButtonState extends State<AnimatedButton> {
     widget.onLongPress?.call();
   }
 
+  void _onHoverEnter(PointerEnterEvent event) {
+    if (!_isHovering) {
+      setState(() => _isHovering = true);
+      widget.onHover?.call(true);
+      if (widget.enableHoverAnimation) {
+        state?.animateStart();
+      }
+    }
+  }
+
+  void _onHoverExit(PointerExitEvent event) {
+    if (_isHovering) {
+      setState(() => _isHovering = false);
+      widget.onHover?.call(false);
+      if (widget.enableHoverAnimation) {
+        state?.animateEnd();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final Map<Type, GestureRecognizerFactory> gestures = {};
     final gestureSettings = MediaQuery.maybeGestureSettingsOf(context);
+
     if (widget.onTap != null) {
       gestures[TapGestureRecognizer] =
           GestureRecognizerFactoryWithHandlers<TapGestureRecognizer>(
@@ -251,7 +278,7 @@ class _AnimatedButtonState extends State<AnimatedButton> {
           );
     }
 
-    return RawGestureDetector(
+    Widget child = RawGestureDetector(
       gestures: gestures,
       behavior: widget.behavior,
       excludeFromSemantics: widget.excludeFromSemantics,
@@ -262,6 +289,16 @@ class _AnimatedButtonState extends State<AnimatedButton> {
         child: widget.child,
       ),
     );
+
+    if (widget.onHover != null && kIsWeb) {
+      child = MouseRegion(
+        onEnter: _onHoverEnter,
+        onExit: _onHoverExit,
+        cursor: SystemMouseCursors.click,
+        child: child,
+      );
+    }
+    return child;
   }
 }
 
