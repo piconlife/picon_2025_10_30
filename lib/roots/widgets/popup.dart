@@ -1,30 +1,19 @@
 import 'package:flutter/material.dart';
 
-typedef AnchoredPopupArrowBuilder = Widget Function(BuildContext context);
-
-/// Enum to define the preferred position of the bubble
-enum Position {
-  detect,
-  top,
-  bottom,
-  left,
-  right,
-  topLeft,
-  topRight,
-  bottomLeft,
-  bottomRight,
-}
+typedef PopupArrowBuilder = Widget Function(BuildContext context);
 
 /// Main widget that wraps any child widget and shows a bubble popup when clicked
-class AnchoredPopup extends StatefulWidget {
+class Popup extends StatefulWidget {
   /// The widget that will be the anchor (clickable element)
   final Widget child;
 
   /// The content to show in the bubble popup
-  final Widget content;
+  final Widget? content;
+  final Widget Function(BuildContext context, VoidCallback callback)?
+  contentBuilder;
 
   /// Preferred position of the bubble relative to the anchor
-  final Position position;
+  final PopupPosition position;
 
   /// Background color of the bubble
   final Color backgroundColor;
@@ -40,6 +29,11 @@ class AnchoredPopup extends StatefulWidget {
 
   /// Whether to show the bubble on tap (true) or show it always (false)
   final bool showOnTap;
+  final bool showOnDoubleTap;
+  final bool showOnLongPressed;
+
+  final VoidCallback? onTap;
+  final VoidCallback? onDoubleTap;
 
   /// Callback when bubble is shown
   final VoidCallback? onShow;
@@ -47,52 +41,47 @@ class AnchoredPopup extends StatefulWidget {
   /// Callback when bubble is hidden
   final VoidCallback? onHide;
 
-  final AnchoredPopupArrowBuilder? arrowBuilder;
+  final PopupArrowBuilder? arrowBuilder;
 
-  const AnchoredPopup({
+  const Popup({
     super.key,
     required this.child,
-    required this.content,
-    this.position = Position.detect,
+    this.content,
+    this.contentBuilder,
+    this.position = PopupPosition.detect,
     this.backgroundColor = const Color(0xFF2C3E50),
     this.arrowSize = 8.0,
     this.borderRadius,
     this.maxWidth = 250.0,
     this.showOnTap = true,
+    this.showOnDoubleTap = false,
+    this.showOnLongPressed = false,
     this.arrowBuilder,
+    this.onTap,
+    this.onDoubleTap,
     this.onShow,
     this.onHide,
-  });
+  }) : assert(content != null || contentBuilder != null);
 
   @override
-  State<AnchoredPopup> createState() => _AnchoredPopupState();
+  State<Popup> createState() => _PopupState();
 }
 
-class _AnchoredPopupState extends State<AnchoredPopup> {
+class _PopupState extends State<Popup> {
   final GlobalKey _anchorKey = GlobalKey();
   OverlayEntry? _overlayEntry;
   bool _isShowing = false;
   Offset? _tapPosition;
 
-  @override
-  void initState() {
-    super.initState();
-    if (!widget.showOnTap) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _showBubble(null);
-      });
-    }
-  }
-
-  void _toggleBubble(Offset? tapPosition) {
+  void _toggle([Offset? tapPosition]) {
     if (_isShowing) {
-      _hideBubble();
+      _hide();
     } else {
-      _showBubble(tapPosition);
+      _show(tapPosition);
     }
   }
 
-  void _showBubble(Offset? tapPosition) {
+  void _show([Offset? tapPosition]) {
     if (_isShowing) return;
 
     final RenderBox? renderBox =
@@ -117,8 +106,8 @@ class _AnchoredPopupState extends State<AnchoredPopup> {
           borderRadius: widget.borderRadius,
           maxWidth: widget.maxWidth,
           arrowBuilder: widget.arrowBuilder,
-          onClose: _hideBubble,
-          child: widget.content,
+          onClose: _hide,
+          child: widget.contentBuilder?.call(context, _hide) ?? widget.content!,
         );
       },
     );
@@ -130,18 +119,29 @@ class _AnchoredPopupState extends State<AnchoredPopup> {
     widget.onShow?.call();
   }
 
-  void _hideBubble() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
-    setState(() {
-      _isShowing = false;
-    });
-    widget.onHide?.call();
+  void _hide() {
+    try {
+      _overlayEntry?.remove();
+      _overlayEntry = null;
+      setState(() {
+        _isShowing = false;
+      });
+      widget.onHide?.call();
+    } catch (_) {}
+  }
+
+  void _tap(Offset localPosition) {
+    final RenderBox? renderBox =
+        _anchorKey.currentContext?.findRenderObject() as RenderBox?;
+    if (renderBox != null) {
+      final globalPosition = renderBox.localToGlobal(localPosition);
+      _toggle(globalPosition);
+    }
   }
 
   @override
   void dispose() {
-    _hideBubble();
+    _hide();
     super.dispose();
   }
 
@@ -149,29 +149,24 @@ class _AnchoredPopupState extends State<AnchoredPopup> {
   Widget build(BuildContext context) {
     return GestureDetector(
       key: _anchorKey,
-      onTapDown:
-          widget.showOnTap
-              ? (details) {
-                final RenderBox? renderBox =
-                    _anchorKey.currentContext?.findRenderObject() as RenderBox?;
-                if (renderBox != null) {
-                  final localPosition = details.localPosition;
-                  final globalPosition = renderBox.localToGlobal(localPosition);
-                  _toggleBubble(globalPosition);
-                }
-              }
-              : null,
-      child: widget.child,
+      onTap: widget.onTap,
+      onDoubleTap: widget.onDoubleTap,
+      onTapDown: widget.showOnTap ? (d) => _tap(d.localPosition) : null,
+      onDoubleTapDown:
+          widget.showOnDoubleTap ? (d) => _tap(d.localPosition) : null,
+      onLongPressStart:
+          widget.showOnLongPressed ? (d) => _tap(d.localPosition) : null,
+      child: ColoredBox(color: Colors.transparent, child: widget.child),
     );
   }
 }
 
 /// The actual bubble popup widget with positioning logic (internal use)
 class _Overlay extends StatefulWidget {
-  final AnchoredPopupArrowBuilder? arrowBuilder;
+  final PopupArrowBuilder? arrowBuilder;
   final Offset anchorOffset;
   final Size anchorSize;
-  final Position position;
+  final PopupPosition position;
   final Widget child;
   final VoidCallback onClose;
   final Color backgroundColor;
@@ -201,8 +196,8 @@ class _Overlay extends StatefulWidget {
 class _OverlayState extends State<_Overlay>
     with SingleTickerProviderStateMixin {
   final GlobalKey _popupKey = GlobalKey();
-  Size _bubbleSize = Size.zero;
-  Position _actualPosition = Position.bottom;
+  Size _size = Size.zero;
+  PopupPosition _actualPosition = PopupPosition.bottom;
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
 
@@ -242,19 +237,19 @@ class _OverlayState extends State<_Overlay>
         _popupKey.currentContext?.findRenderObject() as RenderBox?;
     if (renderBox != null) {
       setState(() {
-        _bubbleSize = renderBox.size;
-        if (widget.position == Position.detect) {
+        _size = renderBox.size;
+        if (widget.position == PopupPosition.detect) {
           _actualPosition = _determineBestPosition();
         }
       });
     }
   }
 
-  Position _determineBestPosition() {
+  PopupPosition _determineBestPosition() {
     final screenSize = MediaQuery.of(context).size;
     const padding = 16.0;
-    final bubbleWidth = _bubbleSize.width + widget.arrowSize + padding * 2;
-    final bubbleHeight = _bubbleSize.height + widget.arrowSize + padding * 2;
+    final bubbleWidth = _size.width + widget.arrowSize + padding * 2;
+    final bubbleHeight = _size.height + widget.arrowSize + padding * 2;
 
     // If we have tap position, use it to determine the best position
     if (widget.tapPosition != null) {
@@ -263,9 +258,9 @@ class _OverlayState extends State<_Overlay>
 
     // Otherwise, check if preferred position fits
     switch (widget.position) {
-      case Position.top:
-      case Position.topLeft:
-      case Position.topRight:
+      case PopupPosition.top:
+      case PopupPosition.topLeft:
+      case PopupPosition.topRight:
         // Check if there's enough space above
         if (widget.anchorOffset.dy - bubbleHeight >= padding) {
           return widget.position;
@@ -277,9 +272,9 @@ class _OverlayState extends State<_Overlay>
         }
         break;
 
-      case Position.bottom:
-      case Position.bottomLeft:
-      case Position.bottomRight:
+      case PopupPosition.bottom:
+      case PopupPosition.bottomLeft:
+      case PopupPosition.bottomRight:
         // Check if there's enough space below
         if (widget.anchorOffset.dy + widget.anchorSize.height + bubbleHeight <=
             screenSize.height - padding) {
@@ -291,7 +286,7 @@ class _OverlayState extends State<_Overlay>
         }
         break;
 
-      case Position.left:
+      case PopupPosition.left:
         // Check if there's enough space on the left
         if (widget.anchorOffset.dx - bubbleWidth >= padding) {
           return widget.position;
@@ -299,11 +294,11 @@ class _OverlayState extends State<_Overlay>
         // Try right instead
         if (widget.anchorOffset.dx + widget.anchorSize.width + bubbleWidth <=
             screenSize.width - padding) {
-          return Position.right;
+          return PopupPosition.right;
         }
         break;
 
-      case Position.right:
+      case PopupPosition.right:
         // Check if there's enough space on the right
         if (widget.anchorOffset.dx + widget.anchorSize.width + bubbleWidth <=
             screenSize.width - padding) {
@@ -311,7 +306,7 @@ class _OverlayState extends State<_Overlay>
         }
         // Try left instead
         if (widget.anchorOffset.dx - bubbleWidth >= padding) {
-          return Position.left;
+          return PopupPosition.left;
         }
         break;
       default:
@@ -321,7 +316,11 @@ class _OverlayState extends State<_Overlay>
     return _findBestFallbackPosition(screenSize, bubbleWidth, bubbleHeight);
   }
 
-  Position _autoDetectPositionFromTap(Size screenSize, double pw, double ph) {
+  PopupPosition _autoDetectPositionFromTap(
+    Size screenSize,
+    double pw,
+    double ph,
+  ) {
     const padding = 16.0;
     final tapPos = widget.tapPosition!;
 
@@ -340,26 +339,26 @@ class _OverlayState extends State<_Overlay>
     final spaceRight = screenSize.width - tapPos.dx - padding;
 
     // Score each position based on tap location and available space
-    final scores = <Position, double>{};
+    final scores = <PopupPosition, double>{};
 
     // Top positions
     if (spaceTop >= ph) {
-      scores[Position.top] = spaceTop * (isTopSide ? 2.0 : 1.0);
+      scores[PopupPosition.top] = spaceTop * (isTopSide ? 2.0 : 1.0);
     }
 
     // Bottom positions
     if (spaceBottom >= ph) {
-      scores[Position.bottom] = spaceBottom * (!isTopSide ? 2.0 : 1.0);
+      scores[PopupPosition.bottom] = spaceBottom * (!isTopSide ? 2.0 : 1.0);
     }
 
     // Left positions
     if (spaceLeft >= pw) {
-      scores[Position.left] = spaceLeft * (isLeftSide ? 2.0 : 1.0);
+      scores[PopupPosition.left] = spaceLeft * (isLeftSide ? 2.0 : 1.0);
     }
 
     // Right positions
     if (spaceRight >= pw) {
-      scores[Position.right] = spaceRight * (!isLeftSide ? 2.0 : 1.0);
+      scores[PopupPosition.right] = spaceRight * (!isLeftSide ? 2.0 : 1.0);
     }
 
     // If no perfect fit, find best fallback
@@ -371,33 +370,37 @@ class _OverlayState extends State<_Overlay>
     return scores.entries.reduce((a, b) => a.value > b.value ? a : b).key;
   }
 
-  Position _convertToBottom(Position pos) {
+  PopupPosition _convertToBottom(PopupPosition pos) {
     switch (pos) {
-      case Position.top:
-        return Position.bottom;
-      case Position.topLeft:
-        return Position.bottomLeft;
-      case Position.topRight:
-        return Position.bottomRight;
+      case PopupPosition.top:
+        return PopupPosition.bottom;
+      case PopupPosition.topLeft:
+        return PopupPosition.bottomLeft;
+      case PopupPosition.topRight:
+        return PopupPosition.bottomRight;
       default:
         return pos;
     }
   }
 
-  Position _convertToTop(Position pos) {
+  PopupPosition _convertToTop(PopupPosition pos) {
     switch (pos) {
-      case Position.bottom:
-        return Position.top;
-      case Position.bottomLeft:
-        return Position.topLeft;
-      case Position.bottomRight:
-        return Position.topRight;
+      case PopupPosition.bottom:
+        return PopupPosition.top;
+      case PopupPosition.bottomLeft:
+        return PopupPosition.topLeft;
+      case PopupPosition.bottomRight:
+        return PopupPosition.topRight;
       default:
         return pos;
     }
   }
 
-  Position _findBestFallbackPosition(Size screenSize, double pw, double ph) {
+  PopupPosition _findBestFallbackPosition(
+    Size screenSize,
+    double pw,
+    double ph,
+  ) {
     const padding = 16.0;
 
     // Calculate available space in each direction
@@ -421,21 +424,21 @@ class _OverlayState extends State<_Overlay>
     ].reduce((a, b) => a > b ? a : b);
 
     if (maxSpace == spaceBottom) {
-      return Position.bottom;
+      return PopupPosition.bottom;
     } else if (maxSpace == spaceTop) {
-      return Position.top;
+      return PopupPosition.top;
     } else if (maxSpace == spaceRight) {
-      return Position.right;
+      return PopupPosition.right;
     } else {
-      return Position.left;
+      return PopupPosition.left;
     }
   }
 
-  PositionData _calculatePosition(BuildContext context) {
+  PopupPositionData _calculatePosition(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     const padding = 16.0;
-    final bubbleWidth = _bubbleSize.width > 0 ? _bubbleSize.width : 250.0;
-    final bubbleHeight = _bubbleSize.height > 0 ? _bubbleSize.height : 150.0;
+    final bubbleWidth = _size.width > 0 ? _size.width : 250.0;
+    final bubbleHeight = _size.height > 0 ? _size.height : 150.0;
 
     double left = 0;
     double top = 0;
@@ -450,8 +453,8 @@ class _OverlayState extends State<_Overlay>
         (widget.anchorOffset.dy + (widget.anchorSize.height / 2));
 
     switch (_actualPosition) {
-      case Position.top:
-      case Position.bottom:
+      case PopupPosition.top:
+      case PopupPosition.bottom:
         // Try to center bubble horizontally on tap/anchor point
         left = targetX - (bubbleWidth / 2);
 
@@ -464,7 +467,7 @@ class _OverlayState extends State<_Overlay>
         // Arrow points to tap position or anchor center
         arrowOffset = targetX - left;
 
-        if (_actualPosition == Position.top) {
+        if (_actualPosition == PopupPosition.top) {
           top = widget.anchorOffset.dy - bubbleHeight - widget.arrowSize - 8;
         } else {
           top =
@@ -475,15 +478,15 @@ class _OverlayState extends State<_Overlay>
         }
         break;
 
-      case Position.topLeft:
-      case Position.bottomLeft:
+      case PopupPosition.topLeft:
+      case PopupPosition.bottomLeft:
         left = widget.anchorOffset.dx;
         left = left.clamp(padding, screenSize.width - bubbleWidth - padding);
 
         // Arrow should point to the tap position or left side of anchor
         arrowOffset = targetX - left;
 
-        if (_actualPosition == Position.topLeft) {
+        if (_actualPosition == PopupPosition.topLeft) {
           top = widget.anchorOffset.dy - bubbleHeight - widget.arrowSize - 8;
         } else {
           top =
@@ -494,15 +497,15 @@ class _OverlayState extends State<_Overlay>
         }
         break;
 
-      case Position.topRight:
-      case Position.bottomRight:
+      case PopupPosition.topRight:
+      case PopupPosition.bottomRight:
         left = widget.anchorOffset.dx + widget.anchorSize.width - bubbleWidth;
         left = left.clamp(padding, screenSize.width - bubbleWidth - padding);
 
         // Arrow should point to the tap position or right side of anchor
         arrowOffset = targetX - left;
 
-        if (_actualPosition == Position.topRight) {
+        if (_actualPosition == PopupPosition.topRight) {
           top = widget.anchorOffset.dy - bubbleHeight - widget.arrowSize - 8;
         } else {
           top =
@@ -513,7 +516,7 @@ class _OverlayState extends State<_Overlay>
         }
         break;
 
-      case Position.left:
+      case PopupPosition.left:
         left = widget.anchorOffset.dx - bubbleWidth - widget.arrowSize - 8;
         left = left.clamp(padding, screenSize.width - bubbleWidth - padding);
 
@@ -527,7 +530,7 @@ class _OverlayState extends State<_Overlay>
         arrowOffset = targetY - top;
         break;
 
-      case Position.right:
+      case PopupPosition.right:
         left =
             widget.anchorOffset.dx +
             widget.anchorSize.width +
@@ -550,7 +553,7 @@ class _OverlayState extends State<_Overlay>
     // Final safety clamp for top
     top = top.clamp(padding, screenSize.height - bubbleHeight - padding);
 
-    return PositionData(left: left, top: top, arrowOffset: arrowOffset);
+    return PopupPositionData(left: left, top: top, arrowOffset: arrowOffset);
   }
 
   @override
@@ -584,19 +587,18 @@ class _OverlayState extends State<_Overlay>
             alignment: Alignment(
               // Calculate alignment based on tap position relative to bubble position
               ((tapPos.dx - position.left) /
-                          (_bubbleSize.width > 0 ? _bubbleSize.width : 250.0)) *
+                          (_size.width > 0 ? _size.width : 250.0)) *
                       2 -
                   1,
               ((tapPos.dy - position.top) /
-                          (_bubbleSize.height > 0
-                              ? _bubbleSize.height
-                              : 150.0)) *
+                          (_size.height > 0 ? _size.height : 150.0)) *
                       2 -
                   1,
             ),
             child: Material(
               key: _popupKey,
               color: Colors.transparent,
+              surfaceTintColor: Colors.transparent,
               child: _buildArrow(position),
             ),
           ),
@@ -605,8 +607,18 @@ class _OverlayState extends State<_Overlay>
     );
   }
 
-  Widget _buildArrow(PositionData position) {
-    if (widget.arrowBuilder != null) {}
+  Widget _buildArrow(PopupPositionData position) {
+    Widget child = Container(
+      constraints: BoxConstraints(maxWidth: widget.maxWidth ?? 250.0),
+      decoration: BoxDecoration(
+        color: widget.backgroundColor,
+        borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
+      ),
+      child: widget.child,
+    );
+    if (widget.arrowSize <= 0) {
+      return child;
+    }
     return CustomPaint(
       painter: PopupArrow(
         color: widget.backgroundColor,
@@ -615,24 +627,30 @@ class _OverlayState extends State<_Overlay>
         borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
         arrowOffset: position.arrowOffset,
       ),
-      child: Container(
-        constraints: BoxConstraints(maxWidth: widget.maxWidth ?? 250.0),
-        decoration: BoxDecoration(
-          color: widget.backgroundColor,
-          borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
-        ),
-        child: widget.child,
-      ),
+      child: child,
     );
   }
 }
 
-class PositionData {
+/// Enum to define the preferred position of the bubble
+enum PopupPosition {
+  detect,
+  top,
+  bottom,
+  left,
+  right,
+  topLeft,
+  topRight,
+  bottomLeft,
+  bottomRight,
+}
+
+class PopupPositionData {
   final double left;
   final double top;
   final double arrowOffset;
 
-  PositionData({
+  const PopupPositionData({
     required this.left,
     required this.top,
     required this.arrowOffset,
@@ -642,7 +660,7 @@ class PositionData {
 /// Custom painter to draw the bubble with an arrow
 class PopupArrow extends CustomPainter {
   final Color color;
-  final Position position;
+  final PopupPosition position;
   final double arrowSize;
   final BorderRadius borderRadius;
   final double arrowOffset;
@@ -665,23 +683,23 @@ class PopupArrow extends CustomPainter {
     final path = Path();
 
     switch (position) {
-      case Position.top:
-      case Position.topLeft:
-      case Position.topRight:
+      case PopupPosition.top:
+      case PopupPosition.topLeft:
+      case PopupPosition.topRight:
         // Arrow pointing down
         _drawBottomArrow(path, size);
         break;
-      case Position.bottom:
-      case Position.bottomLeft:
-      case Position.bottomRight:
+      case PopupPosition.bottom:
+      case PopupPosition.bottomLeft:
+      case PopupPosition.bottomRight:
         // Arrow pointing up
         _drawTopArrow(path, size);
         break;
-      case Position.left:
+      case PopupPosition.left:
         // Arrow pointing right
         _drawRightArrow(path, size);
         break;
-      case Position.right:
+      case PopupPosition.right:
         // Arrow pointing left
         _drawLeftArrow(path, size);
         break;

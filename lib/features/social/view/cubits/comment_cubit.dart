@@ -48,7 +48,7 @@ class CommentCubit extends DataCubit<CommentModel> {
     if (resultByMe) {
       return CommentGetsUseCase.i(path, fetchForMe: true);
     }
-    return CommentPaginationUseCase.i.call(
+    return CommentPaginationUseCase.i(
       path: path,
       initialSize: initialSize ?? 30,
       fetchingSize: fetchingSize ?? 15,

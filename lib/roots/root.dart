@@ -549,6 +549,12 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
     });
   }
 
+  Future<void> _initSounds() {
+    return Analytics.callAsync(name: "sounds", reason: 'init', () {
+      return kSounds.loadAllAssets(LocalConfigs.sounds);
+    });
+  }
+
   Future<void> _initSettings() {
     return Analytics.callAsync(name: "settings", reason: "init", () async {
       await Settings.init(
@@ -658,6 +664,7 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
       _initInterfaces();
       _initNavigator();
       _initNotifications();
+      _initSounds();
       _initStorage();
       _initSplash();
     });
@@ -693,6 +700,7 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
       Configs.i.dispose();
       Translation.i.dispose();
       ZotloService.i.dispose();
+      kSounds.dispose();
     });
     super.dispose();
   }

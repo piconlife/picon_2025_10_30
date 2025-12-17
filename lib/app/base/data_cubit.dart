@@ -447,7 +447,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
 
   Future<bool> create(
     T data, {
-    int index = 0,
+    int? index = 0,
     String? placement,
     T Function(T)? replace,
     VoidCallback? onPut,
@@ -457,8 +457,14 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     emit(
       state.copyWith(
         count: state.count + 1,
-        result: state.result..insert(index, data),
-        resultByMe: state.resultByMe..insert(index, data),
+        result:
+            index != null
+                ? (state.result..insert(index, data))
+                : (state.result..add(data)),
+        resultByMe:
+            index != null
+                ? (state.resultByMe..insert(index, data))
+                : (state.resultByMe..add(data)),
       ),
     );
     onPut?.call();
@@ -599,6 +605,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   Future<bool> update(
     Object identifier,
     Map<String, dynamic> changes, {
+    Map<String, dynamic> deletes = const {},
     required T Function(T, bool) modifier,
     String? placement,
     VoidCallback? onUpdated,
@@ -610,7 +617,10 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     if (old == null) return false;
     replace(old, (e) => modifier(e, false));
     onReplaced?.call();
-    return execute(placement: placement ?? "update", () {
+    return execute(placement: placement ?? "update", () async {
+      if (deletes.isNotEmpty) {
+        await onUpdate(old, deletes);
+      }
       return onUpdate(old, changes).then((value) {
         if (value.isSuccessful) {
           replace(identifier, (e) => modifier(e, true));

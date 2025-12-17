@@ -25,6 +25,7 @@ import 'package:in_app_settings/settings.dart';
 import 'package:in_app_translation/in_app_translation.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:picon/app/constants/app.dart';
 
 import '../app/app.dart';
 import '../app/configs/local.dart';
@@ -65,6 +66,7 @@ import 'services/storage.dart';
 import 'services/tracker.dart';
 import 'services/unique_id.dart';
 import 'services/zotlo_subscription.dart';
+import 'utils/sound.dart';
 import 'utils/system_ui.dart';
 import 'widgets/cover.dart';
 

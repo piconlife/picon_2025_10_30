@@ -85,6 +85,7 @@ abstract final class LocalConfigs {
     "time_of_day_notifications",
     "weekly_notifications",
   };
+  static Map<String, String> sounds = {'pop': 'reacts/pop.mp3'};
   static Set<String> translationSymmetricPaths = {};
 
   static bool inAppPurchaseLogs = true;

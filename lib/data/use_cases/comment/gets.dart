@@ -15,7 +15,7 @@ class CommentGetsUseCase extends CommentBaseUseCase {
 
   Future<Response<CommentModel>> call(
     String path, {
-    bool fetchForMe = true,
+    bool fetchForMe = false,
     int? limit,
   }) {
     return repository.getByQuery(

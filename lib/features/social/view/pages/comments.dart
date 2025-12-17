@@ -1,17 +1,20 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
+import 'package:data_management/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
+import '../../../../app/helpers/user.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../data/constants/paths.dart';
 import '../../../../data/enums/comment_type.dart';
 import '../../../../data/models/comment.dart';
 import '../../../../data/models/content.dart';
 import '../../../../data/models/user.dart';
+import '../../../../roots/extensions/time_ago.dart';
 import '../../../../roots/services/path_provider.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/body.dart';
@@ -28,6 +31,9 @@ import '../../utils/text_span_parser.dart';
 import '../cubits/comment_cubit.dart';
 import '../templates/nullable_body.dart';
 import '../widgets/comment_field.dart';
+import '../widgets/emotion_button.dart';
+
+const _themeCommentBox = Color(0xFFF0F2F5);
 
 class CommentsPage extends StatefulWidget {
   final Object? args;
@@ -95,11 +101,50 @@ class _CommentsPageState extends State<CommentsPage> with ColorMixin {
     );
     final model = CommentModel.create(
       id: id,
-      content: text,
+      text: text,
       path: path,
       parentPath: parentPath,
     );
-    cubit.create(model);
+    cubit.create(model, index: null);
+  }
+
+  void _react(CommentModel data, Emotions? emotion) {
+    _like(data, emotion?.name);
+  }
+
+  void _like(CommentModel data, String? react) {
+    final old = data.reactsUidAndSymbol[UserHelper.uid];
+    final isOld = old != null;
+    final isNew = react != null;
+    final newSymbol = '${UserHelper.uid}:$react';
+    final oldSymbol = '${UserHelper.uid}:$old';
+
+    cubit.update(
+      data,
+      {
+        CommentKeys.i.reacts:
+            isOld && !isNew
+                ? DataFieldValue.arrayRemove([oldSymbol])
+                : DataFieldValue.arrayUnion([newSymbol]),
+      },
+      deletes: {
+        if (isNew && isOld)
+          CommentKeys.i.reacts: DataFieldValue.arrayRemove([oldSymbol]),
+      },
+      modifier: (a, b) {
+        if (b) return a;
+        final reacts = a.reacts ?? [];
+        return a
+          ..reacts =
+              isOld && isNew
+                  ? (reacts
+                    ..remove(oldSymbol)
+                    ..add(newSymbol))
+                  : isOld
+                  ? (reacts..remove(oldSymbol))
+                  : (reacts..add(newSymbol));
+      },
+    );
   }
 
   void _delete(CommentModel data) {
@@ -146,13 +191,12 @@ class _CommentsPageState extends State<CommentsPage> with ColorMixin {
                         ),
                       );
                     }
-                    return ListView.separated(
+                    return ListView.builder(
                       itemCount: comments.length,
                       itemBuilder: (context, index) {
                         final data = comments[index];
                         return _buildComment(data, index);
                       },
-                      separatorBuilder: (context, index) => SizedBox(height: 8),
                     );
                   },
                 ),
@@ -176,6 +220,52 @@ class _CommentsPageState extends State<CommentsPage> with ColorMixin {
     );
   }
 
+  Widget _buildTimelineText(String text) {
+    return InAppText(
+      text,
+      style: TextStyle(color: dark, fontSize: 12, fontWeight: FontWeight.w600),
+    );
+  }
+
+  Widget _buildTimeline(CommentModel data) {
+    final timeAgo = data.dateTime.toTimeAgoShort(nowText: 'Now');
+    return Container(
+      margin: EdgeInsets.only(left: 12, top: 2),
+      child: InAppRow(
+        mainAxisSize: MainAxisSize.min,
+        spacing: 12,
+        children: [
+          _buildTimelineText(timeAgo),
+          EmotionButton(
+            initial: data.emotionByMe,
+            animation: EmotionAnimation.gif,
+            onTap: (emotion) => _react(data, emotion),
+            onChanged: (emotion) => _react(data, emotion),
+            builder: (context, emotion) {
+              return InAppRow(
+                spacing: 4,
+                children: [
+                  if (emotion != null) Emotion(emotion, size: 14),
+                  _buildTimelineText(emotion?.label ?? "Like"),
+                ],
+              );
+            },
+          ),
+          _buildTimelineText("Reply"),
+          Spacer(),
+          if (data.reactCount > 0)
+            InAppRow(
+              spacing: 4,
+              children: [
+                EmotionStack(emotions: data.emotions, iconSize: 14),
+                _buildTimelineText(data.reactCount.text),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildComment(CommentModel data, int index) {
     return InAppUserBuilder(
       id: data.publisher,
@@ -195,7 +285,6 @@ class _CommentsPageState extends State<CommentsPage> with ColorMixin {
   Widget _buildCommentText(CommentModel data, UserModel user, int index) {
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(color: light),
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: InAppRow(
         spacing: 12,
@@ -204,30 +293,36 @@ class _CommentsPageState extends State<CommentsPage> with ColorMixin {
         children: [
           _buildAvatar(user.id, user.photo),
           Flexible(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Color(0xFFF0F2F5),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: InAppColumn(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildAuthor(user.id, user.name),
-                  Text.rich(
-                    textSpanParser.parseAsTextSpan(
-                      data.content,
-                      onTagTap: (a, b) => _tagHandle(a, b, data, user),
-                    ),
-                    maxLines: 5,
-                    style: TextStyle(
-                      color: dark,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
+            child: InAppColumn(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: _themeCommentBox,
+                    borderRadius: BorderRadius.circular(15),
                   ),
-                ],
-              ),
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: InAppColumn(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildAuthor(user.id, user.name),
+                      Text.rich(
+                        textSpanParser.parseAsTextSpan(
+                          data.text,
+                          onTagTap: (a, b) => _tagHandle(a, b, data, user),
+                        ),
+                        style: TextStyle(
+                          color: dark,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                _buildTimeline(data),
+              ],
             ),
           ),
         ],
