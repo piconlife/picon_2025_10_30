@@ -10,11 +10,18 @@ import '../../../../data/models/like.dart';
 import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/body.dart';
+import '../../../../roots/widgets/column.dart';
 import '../../../../roots/widgets/error.dart';
+import '../../../../roots/widgets/gesture.dart';
+import '../../../../roots/widgets/icon.dart';
+import '../../../../roots/widgets/image.dart';
+import '../../../../roots/widgets/row.dart';
 import '../../../../roots/widgets/scaffold_shimmer.dart';
+import '../../../../roots/widgets/text.dart';
+import '../../../../roots/widgets/user_builder.dart';
 import '../../../../routes/paths.dart';
 import '../../data/cubits/like_cubit.dart';
-import '../templates/item_feed_like.dart';
+import '../widgets/follow_button.dart';
 
 class LikesPage extends StatefulWidget {
   final Object? args;
@@ -77,12 +84,135 @@ class _LikesPageState extends State<LikesPage> with ColorMixin {
               itemCount: response.result.length,
               itemBuilder: (context, index) {
                 final item = response.result.elementAt(index);
-                return ItemFeedLike(data: item);
+                return _buildItem(item);
               },
             );
           },
         ),
       ),
+    );
+  }
+
+  Widget _buildItem(LikeModel item) {
+    return InAppUserBuilder(
+      id: item.id,
+      builder: (context, user) {
+        return Container(
+          width: double.infinity,
+          color: light,
+          padding: EdgeInsets.all(12),
+          child: InAppRow(
+            spacing: 8,
+            children: [
+              SizedBox.square(
+                dimension: 50,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    InAppGesture(
+                      onTap: () {},
+                      child: Container(
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                          color: dark.withValues(alpha: 0.05),
+                          shape: BoxShape.circle,
+                        ),
+                        margin: EdgeInsets.only(right: 2, bottom: 2),
+                        child: InAppImage(user.avatar, fit: BoxFit.cover),
+                      ),
+                    ),
+                    if (user.isHeartUser || user.isCelebrityUser)
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: light,
+                          ),
+                          child: InAppIcon(
+                            (user.isHeartUser
+                                    ? InAppIcons.heart
+                                    : InAppIcons.star)
+                                .solid,
+                            size: 18,
+                            color:
+                                user.isHeartUser
+                                    ? context.red
+                                    : context.primary,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: InAppColumn(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if ((user.protectedName ?? '').isNotEmpty)
+                      InAppText(
+                        user.protectedName ?? user.username,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                          color: dark,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    InAppText(
+                      user.username,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(
+                        color: dark.withValues(alpha: 0.5),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              InAppFollowBuilder(
+                publisher: item.publisher,
+                builder: (context, selected, callback) {
+                  return InAppGesture(
+                    onTap: callback,
+                    child: Container(
+                      width: 90,
+                      height: 35,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color:
+                            selected
+                                ? secondary.withValues(alpha: 0.1)
+                                : secondary,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child:
+                          selected
+                              ? InAppIcon(Icons.check, color: secondary)
+                              : InAppText(
+                                'Follow',
+                                style: TextStyle(
+                                  color: lightAsFixed,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

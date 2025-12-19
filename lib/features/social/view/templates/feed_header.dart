@@ -103,7 +103,7 @@ class FeedHeaderFollowButton extends StatelessWidget {
     final dark = context.dark;
     final primary = context.primary;
     return InAppFollowBuilder(
-      id: publisher!,
+      publisher: publisher!,
       builder: (context, isFollowing, callback) {
         final splashColor = isFollowing ? dark.t05 : primary.t05;
         return InAppGesture(

@@ -52,7 +52,7 @@ dependencies:
   flutter_androssy_dialogs: ^1.0.13+1
   flutter_androssy_kits: ^1.0.13
   flutter_device_config: ^1.0.3
-  flutter_entity: ^1.2.3
+  flutter_entity: ^1.2.4
   flutter_local_storage: ^0.0.1
   flutter_text_parser: ^1.0.2
   data_type_detector: ^1.0.0

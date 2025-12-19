@@ -6,7 +6,7 @@ import '../../../../data/models/user_following.dart';
 import '../../../user/view/cubits/following_cubit.dart';
 
 class InAppFollowBuilder extends StatefulWidget {
-  final String id;
+  final String publisher;
   final Widget Function(
     BuildContext context,
     bool isFollowing,
@@ -16,7 +16,7 @@ class InAppFollowBuilder extends StatefulWidget {
 
   const InAppFollowBuilder({
     super.key,
-    required this.id,
+    required this.publisher,
     required this.builder,
   });
 
@@ -28,13 +28,19 @@ class _InAppFollowBuilderState extends State<InAppFollowBuilder> {
   late final cubit = context.read<UserFollowingCubit>();
 
   @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      cubit.exist(widget.publisher);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserFollowingCubit, Response<FollowingModel>>(
-      builder: (context, state) {
-        final data = state.elementOf((e) => e.id == widget.id);
-        return widget.builder(context, data != null, () {
-          // cubit.toggle(widget.id, data);
-        });
+      builder: (context, value) {
+        final activated = value.isExist(widget.publisher);
+        return widget.builder(context, activated, () {});
       },
     );
   }

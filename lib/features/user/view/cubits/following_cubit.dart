@@ -7,6 +7,7 @@ import '../../../../data/use_cases/user_following/count.dart';
 import '../../../../data/use_cases/user_following/create.dart';
 import '../../../../data/use_cases/user_following/delete.dart';
 import '../../../../data/use_cases/user_following/get.dart';
+import '../../../../data/use_cases/user_following/gets.dart';
 
 class UserFollowingCubit extends DataCubit<FollowingModel> {
   final String uid;
@@ -21,16 +22,26 @@ class UserFollowingCubit extends DataCubit<FollowingModel> {
   }
 
   @override
-  Future<Response<int>> onCount() => GetUserFollowingCountUseCase.i(uid);
+  Future<Response<int>> onCount() => UserFollowingCountUseCase.i(uid);
 
   @override
   Future<Response<FollowingModel>> onCreate(FollowingModel data) {
-    return CreateUserFollowingUseCase.i(data);
+    return UserFollowingCreateUseCase.i(data);
   }
 
   @override
   Future<Response<FollowingModel>> onDelete(FollowingModel data) {
-    return DeleteUserFollowingUseCase.i(data.id);
+    return onDeleteById(data.id);
+  }
+
+  @override
+  Future<Response<FollowingModel>> onDeleteById(String id) {
+    return UserFollowingDeleteUseCase.i(id);
+  }
+
+  @override
+  Future<Response<FollowingModel>> onGetById(String id) {
+    return UserFollowingGetUseCase.i(id);
   }
 
   @override
@@ -40,6 +51,6 @@ class UserFollowingCubit extends DataCubit<FollowingModel> {
     bool resultByMe = false,
   }) async {
     if (resultByMe) return Response(status: Status.undefined);
-    return GetUserFollowingsUseCase.i(uid);
+    return UserFollowingGetsUseCase.i(uid);
   }
 }

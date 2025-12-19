@@ -108,7 +108,7 @@ class ItemUserFollowing extends StatelessWidget {
               ),
               SizedBox(width: dimen.smallMargin),
               InAppFollowBuilder(
-                id: data.id,
+                publisher: data.id,
                 builder: (context, isFollowing, callback) {
                   return InAppGesture(
                     onTap: callback,

@@ -213,8 +213,9 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   @protected
   Response<T> handle(
     Response<T> value, {
-    bool resultByMe = false,
     String? placement,
+    bool resultByMe = false,
+    bool keepIds = false,
     bool modifyState = true,
   }) {
     Analytics.event(
@@ -229,14 +230,19 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     );
     if (!modifyState) return value;
     if (resultByMe) {
-      emit(state.copyWith(resultByMe: value.result));
+      emit(
+        state.copyWith(
+          resultByMe: {...state.resultByMe, ...value.result}.toList(),
+        ),
+      );
       return value;
     }
     emit(
       state.copyWith(
         status: value.status,
         snapshot: value.snapshot,
-        result: value.result,
+        result: {...state.result, ...value.result}.toList(),
+        exists: keepIds ? {...state.exists, ...value.exists} : null,
       ),
     );
     return value;
@@ -336,6 +342,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   Future<Response<T>> load({
     bool force = false,
     bool resultByMe = false,
+    bool keepIds = false,
     int? initialSize,
     int? fetchingSize,
   }) async {
@@ -346,6 +353,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
       placement: "initial",
       loader: force,
       resultByMe: resultByMe,
+      keepIds: keepIds,
       initialSize: initialSize,
       fetchingSize: fetchingSize,
     );
@@ -385,6 +393,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   Future<Response<T>> fetch({
     bool loader = false,
     bool resultByMe = false,
+    bool keepIds = false,
     String? placement,
     int? initialSize,
     int? fetchingSize,
@@ -399,7 +408,14 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
                 initialSize: initialSize,
                 resultByMe: resultByMe,
               ))
-          .then((e) => handle(e, resultByMe: resultByMe, placement: placement))
+          .then((e) {
+            return handle(
+              e,
+              resultByMe: resultByMe,
+              keepIds: keepIds,
+              placement: placement,
+            );
+          })
           .onError((e, st) => handleError(e, st, placement));
       return x;
     } catch (e) {
@@ -432,6 +448,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   Future<bool> refresh({
     bool loader = false,
     bool resultByMe = false,
+    bool keepIds = false,
     String? placement,
     int? initialSize,
     int? fetchingSize,
@@ -440,6 +457,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     return fetch(
       loader: loader,
       resultByMe: resultByMe,
+      keepIds: keepIds,
       placement: placement,
       initialSize: initialSize,
       fetchingSize: fetchingSize,
@@ -490,6 +508,23 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
         }
         return value.isSuccessful;
       });
+    });
+  }
+
+  Future<bool> exist(String identifier, {String? placement}) async {
+    if (state.exists.containsKey(identifier)) {
+      return state.exists[identifier]!;
+    }
+    return execute(placement: placement ?? "exist", () async {
+      final value = await onGetById(identifier);
+      final exists = Map<String, bool>.of(state.exists);
+      bool isExist = false;
+      if (value.isSuccessful && value.data != null) {
+        isExist = true;
+      }
+      exists[identifier] = isExist;
+      emit(state.copyWith(exists: exists));
+      return isExist;
     });
   }
 
@@ -651,6 +686,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     Duration duration = const Duration(milliseconds: 100),
     bool loader = false,
     bool resultByMe = false,
+    bool keepIds = false,
     int? initialSize,
     int? fetchingSize,
   }) {
@@ -662,6 +698,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
         callback: callback,
         loader: loader,
         resultByMe: resultByMe,
+        keepIds: keepIds,
         placement: placement,
         fetchingSize: fetchingSize,
         initialSize: initialSize,
@@ -740,6 +777,11 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
 
   @protected
   Future<Response<T>> onDeleteById(String id) async {
+    return Response(status: Status.undefined);
+  }
+
+  @protected
+  Future<Response<T>> onGetById(String id) async {
     return Response(status: Status.undefined);
   }
 

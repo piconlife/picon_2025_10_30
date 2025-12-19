@@ -143,7 +143,7 @@ class _ItemFeedLikeState extends State<ItemFeedLike> {
                         ),
                         if (!user.isCurrentUser)
                           InAppFollowBuilder(
-                            id: user.id,
+                            publisher: user.id,
                             builder: (context, isFollowing, callback) {
                               final x = isFollowing;
                               return InAppGesture(

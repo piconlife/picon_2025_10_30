@@ -3,14 +3,14 @@ import 'package:flutter_entity/entity.dart';
 import '../../models/user_following.dart';
 import 'base.dart';
 
-class GetUserFollowingsUseCase extends BaseUserFollowingUseCase {
-  GetUserFollowingsUseCase._();
+class UserFollowingGetUseCase extends BaseUserFollowingUseCase {
+  UserFollowingGetUseCase._();
 
-  static GetUserFollowingsUseCase? _i;
+  static UserFollowingGetUseCase? _i;
 
-  static GetUserFollowingsUseCase get i => _i ??= GetUserFollowingsUseCase._();
+  static UserFollowingGetUseCase get i => _i ??= UserFollowingGetUseCase._();
 
-  Future<Response<FollowingModel>> call([String? uid]) {
-    return repository.get(params: getParams(uid));
+  Future<Response<FollowingModel>> call(String id, [String? uid]) {
+    return repository.getById(id, params: getParams(uid));
   }
 }

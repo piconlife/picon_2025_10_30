@@ -2,13 +2,13 @@ import 'package:flutter_entity/entity.dart';
 
 import 'base.dart';
 
-class GetUserFollowingCountUseCase extends BaseUserFollowingUseCase {
-  GetUserFollowingCountUseCase._();
+class UserFollowingCountUseCase extends BaseUserFollowingUseCase {
+  UserFollowingCountUseCase._();
 
-  static GetUserFollowingCountUseCase? _i;
+  static UserFollowingCountUseCase? _i;
 
-  static GetUserFollowingCountUseCase get i =>
-      _i ??= GetUserFollowingCountUseCase._();
+  static UserFollowingCountUseCase get i =>
+      _i ??= UserFollowingCountUseCase._();
 
   Future<Response<int>> call([String? uid]) {
     return repository.count(params: getParams(uid));
