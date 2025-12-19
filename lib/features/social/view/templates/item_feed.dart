@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_cache/in_app_cache.dart';
 
 import '../../../../data/enums/feed_type.dart';
-import '../../../../data/models/feed.dart';
+import '../../../../data/models/content.dart';
 import '../../../../data/models/view.dart';
 import '../../data/cubits/like_cubit.dart';
 import '../../data/cubits/star_cubit.dart';
@@ -21,7 +21,7 @@ import 'item_feed_video.dart';
 
 class ItemFeed extends StatefulWidget {
   final int index;
-  final FeedModel item;
+  final ContentModel item;
 
   const ItemFeed({super.key, required this.index, required this.item});
 
@@ -36,33 +36,40 @@ class _ItemFeedState extends State<ItemFeed> {
   late ViewCubit viewCubit;
   late CommentCubit commentCubit;
 
+  late ContentModel item = widget.item;
+
   void _init() {
-    final path = widget.item.contentPath;
+    final path = item.contentPath;
     if (path == null || path.isEmpty) return;
     this.path = path;
     likeCubit = Cache.put("like_cubit[$path]", () {
-      return LikeCubit(context, path, initialCount: widget.item.likeCount)
+      return LikeCubit(context, path, initialCount: item.likeCount)
         ..loadCounter()
         ..load(resultByMe: true);
     });
     starCubit = Cache.put("star_cubit[$path]", () {
-      return StarCubit(context, path, initialCount: widget.item.starCount)
+      return StarCubit(context, path, initialCount: item.starCount)
         ..loadCounter()
         ..load(resultByMe: true);
     });
     viewCubit = Cache.put("view_cubit[$path]", () {
-      return ViewCubit(context, path, initialCount: widget.item.viewCount)
+      return ViewCubit(context, path, initialCount: item.viewCount)
         ..loadCounter()
         ..load(resultByMe: true);
     });
     commentCubit = Cache.put("comment_cubit[$path]", () {
-      return CommentCubit(context, path, initialCount: widget.item.commentCount)
+      return CommentCubit(context, path, initialCount: item.commentCount)
         ..loadCounter();
     });
   }
 
   void _seen(_) {
     viewCubit.seen(ViewModel.create(path: path));
+  }
+
+  void _translate() async {
+    final translated = await item.translateToggle();
+    setState(() => item = translated);
   }
 
   @override
@@ -76,6 +83,7 @@ class _ItemFeedState extends State<ItemFeed> {
   void didUpdateWidget(covariant ItemFeed oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.item != oldWidget.item) {
+      item = widget.item;
       _init();
     }
   }
@@ -95,27 +103,31 @@ class _ItemFeedState extends State<ItemFeed> {
   }
 
   Widget _buildLayout(BuildContext context) {
-    switch (widget.item.type) {
+    switch (item.type) {
       case FeedType.none:
       case FeedType.photo:
       case FeedType.post:
-        return ItemFeedPost(index: widget.index, item: widget.item);
+        return ItemFeedPost(
+          index: widget.index,
+          item: item,
+          onTranslate: _translate,
+        );
       case FeedType.ads:
-        return ItemFeedAds(index: widget.index, item: widget.item);
+        return ItemFeedAds(index: widget.index, item: item);
       case FeedType.avatar:
-        return ItemFeedAvatar(index: widget.index, item: widget.item);
+        return ItemFeedAvatar(index: widget.index, item: item);
       case FeedType.business:
-        return ItemFeedBusiness(index: widget.index, item: widget.item);
+        return ItemFeedBusiness(index: widget.index, item: item);
       case FeedType.cover:
-        return ItemFeedCover(index: widget.index, item: widget.item);
+        return ItemFeedCover(index: widget.index, item: item);
       case FeedType.note:
-        return ItemFeedNote(index: widget.index, item: widget.item);
+        return ItemFeedNote(index: widget.index, item: item);
       case FeedType.sponsored:
-        return ItemFeedSponsored(index: widget.index, item: widget.item);
+        return ItemFeedSponsored(index: widget.index, item: item);
       case FeedType.memory:
-        return ItemFeedMemory(index: widget.index, item: widget.item);
+        return ItemFeedMemory(index: widget.index, item: item);
       case FeedType.video:
-        return ItemFeedVideo(index: widget.index, item: widget.item);
+        return ItemFeedVideo(index: widget.index, item: item);
     }
   }
 }

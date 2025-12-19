@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 /// Main CommentInputField Widget
@@ -120,7 +121,9 @@ class _CommentInputFieldState extends State<CommentInputField> {
   void _pickImageFromGallery(int index) async {
     if (index == 0) {
       // Camera
-      final XFile? photo = await _imagePicker.pickImage(source: ImageSource.camera);
+      final XFile? photo = await _imagePicker.pickImage(
+        source: ImageSource.camera,
+      );
       if (photo != null) {
         widget.onSendImage?.call(File(photo.path));
         setState(() {
@@ -129,7 +132,9 @@ class _CommentInputFieldState extends State<CommentInputField> {
       }
     } else {
       // Gallery
-      final XFile? image = await _imagePicker.pickImage(source: ImageSource.gallery);
+      final XFile? image = await _imagePicker.pickImage(
+        source: ImageSource.gallery,
+      );
       if (image != null) {
         widget.onSendImage?.call(File(image.path));
         setState(() {
@@ -198,9 +203,7 @@ class _CommentInputFieldState extends State<CommentInputField> {
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.red.shade50,
-        border: Border(
-          bottom: BorderSide(color: Colors.grey[300]!),
-        ),
+        border: Border(bottom: BorderSide(color: Colors.grey[300]!)),
       ),
       child: Row(
         children: [
@@ -231,9 +234,7 @@ class _CommentInputFieldState extends State<CommentInputField> {
           Expanded(
             child: Container(
               height: 40,
-              child: CustomPaint(
-                painter: WaveformPainter(isPaused: _isPaused),
-              ),
+              child: CustomPaint(painter: WaveformPainter(isPaused: _isPaused)),
             ),
           ),
 
@@ -317,7 +318,9 @@ class _CommentInputFieldState extends State<CommentInputField> {
                       });
                     },
                     child: Icon(
-                      _showEmojiPicker ? Icons.keyboard : Icons.emoji_emotions_outlined,
+                      _showEmojiPicker
+                          ? Icons.keyboard
+                          : Icons.emoji_emotions_outlined,
                       color: Colors.grey[600],
                       size: 24,
                     ),
@@ -373,13 +376,13 @@ class _CommentInputFieldState extends State<CommentInputField> {
           // Send/Voice button (right side)
           _hasText
               ? IconButton(
-            icon: Icon(Icons.send, color: Colors.blue),
-            onPressed: _sendMessage,
-          )
+                icon: Icon(Icons.send, color: Colors.blue),
+                onPressed: _sendMessage,
+              )
               : IconButton(
-            icon: Icon(Icons.mic, color: Colors.grey[700]),
-            onPressed: _startRecording,
-          ),
+                icon: Icon(Icons.mic, color: Colors.grey[700]),
+                onPressed: _startRecording,
+              ),
         ],
       ),
     );
@@ -404,10 +407,7 @@ class _CommentInputFieldState extends State<CommentInputField> {
             children: [
               Text(
                 'Gallery',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               IconButton(
                 icon: Icon(Icons.close),
@@ -440,7 +440,11 @@ class _CommentInputFieldState extends State<CommentInputField> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.camera_alt, size: 40, color: Colors.grey[700]),
+                          Icon(
+                            Icons.camera_alt,
+                            size: 40,
+                            color: Colors.grey[700],
+                          ),
                           SizedBox(height: 4),
                           Text(
                             'Camera',
@@ -497,10 +501,7 @@ class _CommentInputFieldState extends State<CommentInputField> {
             children: [
               Text(
                 'More Options',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               IconButton(
                 icon: Icon(Icons.close),
@@ -609,14 +610,86 @@ class _CommentInputFieldState extends State<CommentInputField> {
 
   Widget _buildEmojiPicker() {
     List<String> emojis = [
-      '😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃',
-      '😉', '😊', '😇', '🥰', '😍', '🤩', '😘', '😗', '😚', '😙',
-      '🥲', '😋', '😛', '😜', '🤪', '😝', '🤑', '🤗', '🤭', '🤫',
-      '🤔', '🤐', '🤨', '😐', '😑', '😶', '😏', '😒', '🙄', '😬',
-      '🤥', '😌', '😔', '😪', '🤤', '😴', '😷', '🤒', '🤕', '🤢',
-      '🤮', '🤧', '🥵', '🥶', '🥴', '😵', '🤯', '🤠', '🥳', '🥸',
-      '😎', '🤓', '🧐', '😕', '😟', '🙁', '☹️', '😮', '😯', '😲',
-      '😳', '🥺', '😦', '😧', '😨', '😰', '😥', '😢', '😭', '😱',
+      '😀',
+      '😃',
+      '😄',
+      '😁',
+      '😆',
+      '😅',
+      '🤣',
+      '😂',
+      '🙂',
+      '🙃',
+      '😉',
+      '😊',
+      '😇',
+      '🥰',
+      '😍',
+      '🤩',
+      '😘',
+      '😗',
+      '😚',
+      '😙',
+      '🥲',
+      '😋',
+      '😛',
+      '😜',
+      '🤪',
+      '😝',
+      '🤑',
+      '🤗',
+      '🤭',
+      '🤫',
+      '🤔',
+      '🤐',
+      '🤨',
+      '😐',
+      '😑',
+      '😶',
+      '😏',
+      '😒',
+      '🙄',
+      '😬',
+      '🤥',
+      '😌',
+      '😔',
+      '😪',
+      '🤤',
+      '😴',
+      '😷',
+      '🤒',
+      '🤕',
+      '🤢',
+      '🤮',
+      '🤧',
+      '🥵',
+      '🥶',
+      '🥴',
+      '😵',
+      '🤯',
+      '🤠',
+      '🥳',
+      '🥸',
+      '😎',
+      '🤓',
+      '🧐',
+      '😕',
+      '😟',
+      '🙁',
+      '☹️',
+      '😮',
+      '😯',
+      '😲',
+      '😳',
+      '🥺',
+      '😦',
+      '😧',
+      '😨',
+      '😰',
+      '😥',
+      '😢',
+      '😭',
+      '😱',
     ];
 
     return Container(
@@ -657,10 +730,7 @@ class _CommentInputFieldState extends State<CommentInputField> {
                     widget.onSendEmoji?.call(emojis[index]);
                   },
                   child: Center(
-                    child: Text(
-                      emojis[index],
-                      style: TextStyle(fontSize: 28),
-                    ),
+                    child: Text(emojis[index], style: TextStyle(fontSize: 28)),
                   ),
                 );
               },
@@ -675,7 +745,7 @@ class _CommentInputFieldState extends State<CommentInputField> {
     // Placeholder GIF URLs (you would typically fetch these from an API like Giphy)
     List<String> gifs = List.generate(
       20,
-          (index) => 'https://picsum.photos/200/200?random=${index + 100}',
+      (index) => 'https://picsum.photos/200/200?random=${index + 100}',
     );
 
     return Container(
@@ -693,7 +763,10 @@ class _CommentInputFieldState extends State<CommentInputField> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
-                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
               ),
             ),
           ),
@@ -744,10 +817,38 @@ class _CommentInputFieldState extends State<CommentInputField> {
   Widget _buildAnimatedEmojiPicker() {
     // Animated emoji examples (these would be animated in a real implementation)
     List<String> animatedEmojis = [
-      '🎉', '🎊', '🎈', '🎁', '🏆', '⭐', '✨', '💫',
-      '🔥', '💥', '💢', '💦', '💨', '💫', '🌟', '✨',
-      '❤️', '💕', '💖', '💗', '💓', '💞', '💝', '💘',
-      '👏', '👍', '👎', '✌️', '🤞', '🤟', '🤘', '👌',
+      '🎉',
+      '🎊',
+      '🎈',
+      '🎁',
+      '🏆',
+      '⭐',
+      '✨',
+      '💫',
+      '🔥',
+      '💥',
+      '💢',
+      '💦',
+      '💨',
+      '💫',
+      '🌟',
+      '✨',
+      '❤️',
+      '💕',
+      '💖',
+      '💗',
+      '💓',
+      '💞',
+      '💝',
+      '💘',
+      '👏',
+      '👍',
+      '👎',
+      '✌️',
+      '🤞',
+      '🤟',
+      '🤘',
+      '👌',
     ];
 
     return Container(
@@ -760,10 +861,7 @@ class _CommentInputFieldState extends State<CommentInputField> {
             padding: EdgeInsets.all(8),
             child: Text(
               'Animated Emojis',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
           Expanded(
@@ -813,17 +911,19 @@ class WaveformPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = isPaused ? Colors.grey : Colors.red
-      ..strokeWidth = 2
-      ..strokeCap = StrokeCap.round;
+    final paint =
+        Paint()
+          ..color = isPaused ? Colors.grey : Colors.red
+          ..strokeWidth = 2
+          ..strokeCap = StrokeCap.round;
 
     final centerY = size.height / 2;
     final barCount = 30;
     final barWidth = size.width / barCount;
 
     for (int i = 0; i < barCount; i++) {
-      final height = (i % 3 == 0 ? 0.8 : (i % 2 == 0 ? 0.5 : 0.3)) * size.height / 2;
+      final height =
+          (i % 3 == 0 ? 0.8 : (i % 2 == 0 ? 0.5 : 0.3)) * size.height / 2;
       final x = i * barWidth + barWidth / 2;
 
       canvas.drawLine(

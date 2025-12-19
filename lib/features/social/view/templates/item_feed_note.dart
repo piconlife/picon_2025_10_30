@@ -6,7 +6,7 @@ import 'package:flutter_andomie/utils/date_helper.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/res/icons.dart';
-import '../../../../data/models/feed.dart';
+import '../../../../data/models/content.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/user_builder.dart';
 import '../widgets/menu_button.dart';
@@ -15,8 +15,8 @@ import 'feed_header.dart';
 
 class ItemFeedNote extends StatefulWidget {
   final int index;
-  final FeedModel item;
-  final Function(BuildContext context, FeedModel item)? onClick;
+  final ContentModel item;
+  final Function(BuildContext context, ContentModel item)? onClick;
 
   const ItemFeedNote({
     super.key,
@@ -58,7 +58,7 @@ class _ItemFeedNoteState extends State<ItemFeedNote> {
 }
 
 class _Body extends StatelessWidget {
-  final FeedModel item;
+  final ContentModel item;
 
   const _Body({required this.item});
 

@@ -81,29 +81,19 @@ class _UserPostHeaderState extends State<UserPostHeader> {
     );
   }
 
-  Future<void> _share(BuildContext context) async {
-    context.read<UserPostCubit>().share(context, widget.item.id);
-  }
+  Future<void> _share(BuildContext context) async {}
 
-  Future<void> _follow(BuildContext context) async {
-    context.read<UserPostCubit>().follow(context, widget.item.id);
-  }
+  Future<void> _follow(BuildContext context) async {}
 
-  Future<void> _copy(BuildContext context) async {
-    context.read<UserPostCubit>().copy(context, widget.item.id);
-  }
+  Future<void> _copy(BuildContext context) async {}
 
   Future<void> _translate(BuildContext context) async {
     widget.onTranslate();
   }
 
-  Future<void> _download(BuildContext context) async {
-    context.read<UserPostCubit>().download(context, widget.item.id);
-  }
+  Future<void> _download(BuildContext context) async {}
 
-  Future<void> _report(BuildContext context) async {
-    context.read<UserPostCubit>().report(context, widget.item.id);
-  }
+  Future<void> _report(BuildContext context) async {}
 
   @override
   Widget build(BuildContext context) {

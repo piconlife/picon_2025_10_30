@@ -7,7 +7,7 @@ import 'package:flutter_andomie/utils/date_helper.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/res/placeholders.dart';
-import '../../../../data/models/feed.dart';
+import '../../../../data/models/content.dart';
 import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/hero.dart';
@@ -22,14 +22,14 @@ import 'stared_feed_footer.dart';
 
 class ItemFeedPost extends StatefulWidget {
   final int index;
-  final FeedModel item;
-  final VoidCallback? onComment;
+  final ContentModel item;
+  final VoidCallback? onTranslate;
 
   const ItemFeedPost({
     super.key,
     required this.index,
     required this.item,
-    this.onComment,
+    this.onTranslate,
   });
 
   @override
@@ -38,7 +38,7 @@ class ItemFeedPost extends StatefulWidget {
 
 class _ItemFeedPostState extends State<ItemFeedPost> {
   String? _subtitle(UserModel user) {
-    return widget.item.content.title.isNotValid
+    return widget.item.isTitled
         ? DateHelper.toRealtime(widget.item.timeMills)
         : user.title.isValid
         ? user.title
@@ -61,7 +61,11 @@ class _ItemFeedPostState extends State<ItemFeedPost> {
                 avatar: user.photo,
                 state: widget.item.uiState,
                 actions: [
-                  FeedHeaderMoreAction(index: widget.index, item: widget.item),
+                  FeedHeaderMoreAction(
+                    index: widget.index,
+                    item: widget.item,
+                    onTranslate: widget.onTranslate,
+                  ),
                 ],
               );
             },
@@ -93,7 +97,7 @@ class _ItemFeedPostState extends State<ItemFeedPost> {
 }
 
 class _Body extends StatelessWidget {
-  final FeedModel item;
+  final ContentModel item;
 
   const _Body({required this.item});
 
@@ -107,7 +111,7 @@ class _Body extends StatelessWidget {
     final dimen = context.dimens;
     return Column(
       children: [
-        if (item.content.title.isValid) ...[
+        if (item.isTitled) ...[
           Divider(height: 1, indent: dimen.dp(16), endIndent: dimen.dp(16)),
           SizedBox(
             width: double.infinity,
@@ -120,7 +124,7 @@ class _Body extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InAppText(
-                    item.content.title,
+                    item.translatedTitle ?? item.title,
                     style: TextStyle(color: dark, fontSize: dimen.dp(16)),
                   ),
                   InAppText(
@@ -153,13 +157,13 @@ class _Body extends StatelessWidget {
           ),
         ],
         SizedBox(height: dimen.dp(12)),
-        if (item.content.description.use.isNotEmpty) ...[
+        if (item.isDescription) ...[
           Divider(height: dimen.dp(1)),
           Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(horizontal: dimen.dp(16)),
             child: AndrossyExpandableText(
-              item.content.description.use,
+              item.translatedDescription ?? item.description ?? '',
               initial: 50,
               style: TextStyle(fontSize: dimen.dp(16), color: dark),
             ),

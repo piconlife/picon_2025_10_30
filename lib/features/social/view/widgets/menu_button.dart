@@ -1,6 +1,6 @@
-import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/iterator.dart';
+import 'package:flutter_andomie/helpers/clipboard_helper.dart';
 import 'package:flutter_andomie/models/selection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
@@ -11,6 +11,7 @@ import '../../../../app/helpers/user.dart';
 import '../../../../data/models/content.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/user_follower.dart';
+import '../../../../roots/utils/utils.dart';
 import '../../../../roots/widgets/menu_button.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../user/view/cubits/follower_cubit.dart';
@@ -19,7 +20,7 @@ import '../../data/cubits/feed_home_cubit.dart';
 
 class FeedHeaderMoreAction extends StatefulWidget {
   final int index;
-  final FeedModel item;
+  final ContentModel item;
   final VoidCallback? onTranslate;
 
   const FeedHeaderMoreAction({
@@ -66,30 +67,58 @@ class _FeedHeaderMoreActionState extends State<FeedHeaderMoreAction> {
   }
 
   Future<void> _delete(BuildContext context) async {
-    context.read<FeedHomeCubit>().deletes(context, widget.index, widget.item);
-  }
-
-  Future<void> _edit(BuildContext context) async {
-    context.open(
-      Routes.createUserPost,
-      args: {
-        "$ContentModel": widget.item,
-        "$FeedHomeCubit": context.read<FeedHomeCubit>(),
-        "$UserPostCubit": context.read<UserPostCubit>(),
-      },
+    if (widget.item is! FeedModel) return;
+    context.read<FeedHomeCubit>().deletes(
+      context,
+      widget.index,
+      widget.item as FeedModel,
     );
   }
 
+  Future<void> _edit(BuildContext context) async {
+    context.open(Routes.createUserPost, args: {"$ContentModel": widget.item});
+  }
+
   Future<void> _share(BuildContext context) async {
-    context.read<UserPostCubit>().share(context, widget.item.id);
+    if (!widget.item.isShareMode) {
+      return;
+    }
+    Utils.share(
+      context,
+      subject:
+          widget.item.isTranslated
+              ? widget.item.translatedTitle ?? widget.item.title
+              : widget.item.title,
+      body:
+          widget.item.isTranslated
+              ? widget.item.translatedDescription ?? widget.item.description
+              : widget.item.description,
+      urls: widget.item.photoUrls,
+    );
   }
 
   Future<void> _follow(BuildContext context) async {
-    context.read<UserPostCubit>().follow(context, widget.item.id);
+    // context.read<UserFollowerCubit>().toggle(widget.item.id);
   }
 
   Future<void> _copy(BuildContext context) async {
-    context.read<UserPostCubit>().copy(context, widget.item.id);
+    if (!widget.item.isShareMode) return;
+    if (!widget.item.isDescription) return;
+    final title =
+        widget.item.isTranslated
+            ? widget.item.translatedTitle ?? widget.item.title ?? ''
+            : widget.item.title ?? '';
+    final description =
+        widget.item.isTranslated
+            ? widget.item.translatedDescription ?? widget.item.description ?? ''
+            : widget.item.description ?? '';
+    ClipboardHelper.setText(
+      title.isEmpty
+          ? description
+          : description.isEmpty
+          ? title
+          : "$title\n\n$description",
+    );
   }
 
   Future<void> _translate(BuildContext context) async {
@@ -106,7 +135,6 @@ class _FeedHeaderMoreActionState extends State<FeedHeaderMoreAction> {
 
   @override
   Widget build(BuildContext context) {
-    final dimen = context.dimens;
     return InAppMenuButton<String>(
       onChanged: _menu,
       itemBuilder: (context) {
@@ -136,11 +164,11 @@ class _FeedHeaderMoreActionState extends State<FeedHeaderMoreAction> {
             PopupMenuItem(value: "share", child: InAppText("Share")),
           if (widget.item.isShareMode && widget.item.isDescription)
             PopupMenuItem(value: "copy", child: InAppText("Copy")),
-          if (widget.item.isTranslatable)
+          if (widget.item.isTranslatable && widget.onTranslate != null)
             PopupMenuItem(
               value: "translate",
               child: InAppText(
-                widget.item.isTranslated ? "Translation cancel" : "Translate",
+                widget.item.isTranslated ? "Translation Cancel" : "Translate",
               ),
             ),
           if (widget.item.isShareMode && widget.item.isPhotoMode)

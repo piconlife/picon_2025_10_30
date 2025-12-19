@@ -10,7 +10,6 @@ import '../../../../app/res/icons.dart';
 import '../../../../app/res/placeholders.dart';
 import '../../../../data/enums/feed_type.dart';
 import '../../../../data/models/content.dart';
-import '../../../../data/models/feed.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/image.dart';
@@ -22,8 +21,8 @@ import 'feed_header.dart';
 
 class ItemFeedBusiness extends StatefulWidget {
   final int index;
-  final FeedModel item;
-  final Function(BuildContext context, FeedModel item)? onClick;
+  final ContentModel item;
+  final Function(BuildContext context, ContentModel item)? onClick;
 
   const ItemFeedBusiness({
     super.key,
@@ -66,7 +65,7 @@ class _ItemFeedBusinessState extends State<ItemFeedBusiness> {
 }
 
 class _Body extends StatefulWidget {
-  final FeedModel item;
+  final ContentModel item;
 
   const _Body({required this.item});
 
@@ -199,9 +198,9 @@ class _Content extends StatelessWidget {
               child: AndrossyImageGrid(
                 itemSpace: dimen.dp(2),
                 itemBackground: dark.t05,
-                itemCount: item.photoUrls?.length ?? 0,
+                itemCount: item.photoUrls.length,
                 itemBuilder: (context, index) {
-                  final image = item.photoUrls?.elementAtOrNull(index);
+                  final image = item.photoUrls.elementAtOrNull(index);
                   return InAppGesture(
                     scalerLowerBound: 1,
                     onTap: () {},

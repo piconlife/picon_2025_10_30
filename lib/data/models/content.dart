@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:collection/collection.dart';
 import 'package:data_management/core.dart';
 import 'package:flutter_entity/flutter_entity.dart';
+import 'package:in_app_translator/in_app_translator.dart';
 import 'package:picon/data/parsers/enum_parser.dart';
 
 import '../../app/helpers/user.dart';
@@ -179,7 +182,9 @@ class ContentModel extends Entity<Keys> {
 
   bool get isReported => reports.contains(UserHelper.uid);
 
-  bool get isDescription => (description ?? '').isNotEmpty;
+  bool get isDescription {
+    return (translatedDescription ?? description ?? '').isNotEmpty;
+  }
 
   bool get isTitled => (title ?? '').isNotEmpty;
 
@@ -647,12 +652,11 @@ class ContentModel extends Entity<Keys> {
   String? get translatedDescription => _normalizedTranslatedDescription;
 
   List<String> get translatedDescriptions =>
-      _translatedDescriptions ??
-      _content?._translatedDescriptions ??
-      descriptions;
+      _translatedDescriptions ?? _content?._translatedDescriptions ?? [];
 
-  String? get translatedTitle =>
-      _translatedTitle ?? _content?._translatedTitle ?? title;
+  String? get translatedTitle {
+    return _translatedTitle ?? _content?._translatedTitle;
+  }
 
   ContentUiState get uiState => _uiState ?? ContentUiState.none;
 
@@ -671,7 +675,33 @@ class ContentModel extends Entity<Keys> {
     if ((_content?._translatedDescriptions ?? []).isNotEmpty) {
       return _content!._translatedDescriptions!.first;
     }
-    return description;
+    return null;
+  }
+
+  Future<ContentModel> translateToggle({Locale? locale}) async {
+    if (isTranslated) {
+      return this
+        ..translatedTitle = null
+        ..translatedDescriptions = null;
+    }
+    locale ??= Locale('bn');
+    final title = this.title ?? '';
+    final descriptions = _normalizedDescriptions;
+    String? trTitle;
+    Map<String, String> trDescriptions = {};
+    if (title.isNotEmpty) {
+      trTitle = await Translator.shared.translate(title, locale);
+    }
+    for (final e in descriptions) {
+      if (e.isNotEmpty) {
+        final value = await Translator.shared.translate(e, locale);
+        trDescriptions[e] = value ?? e;
+      }
+    }
+    return this
+      ..translatedTitle = trTitle
+      ..translatedDescriptions =
+          trDescriptions.isEmpty ? null : trDescriptions.values.toList();
   }
 
   // ---------------------------------------------------------------------------

@@ -67,8 +67,10 @@ class DefaultFirebaseOptions {
     projectId: 'picon-co',
     databaseURL: 'https://picon-co-default-rtdb.firebaseio.com',
     storageBucket: 'picon-co.appspot.com',
-    androidClientId: '680509866471-02q9o6ho9pg0tvbvimbinmvn6oun4cma.apps.googleusercontent.com',
-    iosClientId: '680509866471-f28triv3jc5u2mliqmoud1nd4p1omm29.apps.googleusercontent.com',
+    androidClientId:
+        '680509866471-02q9o6ho9pg0tvbvimbinmvn6oun4cma.apps.googleusercontent.com',
+    iosClientId:
+        '680509866471-f28triv3jc5u2mliqmoud1nd4p1omm29.apps.googleusercontent.com',
     iosBundleId: 'com.picon.picon',
   );
 
@@ -79,8 +81,10 @@ class DefaultFirebaseOptions {
     projectId: 'picon-co',
     databaseURL: 'https://picon-co-default-rtdb.firebaseio.com',
     storageBucket: 'picon-co.appspot.com',
-    androidClientId: '680509866471-02q9o6ho9pg0tvbvimbinmvn6oun4cma.apps.googleusercontent.com',
-    iosClientId: '680509866471-f28triv3jc5u2mliqmoud1nd4p1omm29.apps.googleusercontent.com',
+    androidClientId:
+        '680509866471-02q9o6ho9pg0tvbvimbinmvn6oun4cma.apps.googleusercontent.com',
+    iosClientId:
+        '680509866471-f28triv3jc5u2mliqmoud1nd4p1omm29.apps.googleusercontent.com',
     iosBundleId: 'com.picon.picon',
   );
 
@@ -94,5 +98,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'picon-co.appspot.com',
     measurementId: 'G-QMSWD9H5JH',
   );
-
 }

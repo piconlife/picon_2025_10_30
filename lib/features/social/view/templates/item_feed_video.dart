@@ -7,7 +7,7 @@ import 'package:flutter_andomie/utils/date_helper.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/res/placeholders.dart';
-import '../../../../data/models/feed.dart';
+import '../../../../data/models/content.dart';
 import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/text.dart';
@@ -19,7 +19,7 @@ import 'stared_feed_footer.dart';
 
 class ItemFeedVideo extends StatefulWidget {
   final int index;
-  final FeedModel item;
+  final ContentModel item;
 
   const ItemFeedVideo({super.key, required this.index, required this.item});
 
@@ -83,7 +83,7 @@ class _ItemFeedVideoState extends State<ItemFeedVideo> {
 }
 
 class _Body extends StatelessWidget {
-  final FeedModel item;
+  final ContentModel item;
 
   const _Body({required this.item});
 

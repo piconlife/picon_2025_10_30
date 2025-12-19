@@ -13,7 +13,7 @@ class BookmarkIsExistUseCase extends BookmarkBaseUseCase {
   static BookmarkIsExistUseCase get i => _i ??= BookmarkIsExistUseCase._();
 
   Future<Response<BookmarkModel>> call(String path) async {
-    final x = await  repository.getByQuery(
+    final x = await repository.getByQuery(
       params: params,
       singletonMode: true,
       queries: [DataQuery(Keys.i.path, isEqualTo: path)],

@@ -8,7 +8,7 @@ import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/res/placeholders.dart';
 import '../../../../data/enums/gender.dart';
-import '../../../../data/models/feed.dart';
+import '../../../../data/models/content.dart';
 import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/image.dart';
@@ -19,8 +19,8 @@ import 'feed_header.dart';
 
 class ItemFeedMemory extends StatefulWidget {
   final int index;
-  final FeedModel item;
-  final Function(BuildContext context, FeedModel item)? onClick;
+  final ContentModel item;
+  final Function(BuildContext context, ContentModel item)? onClick;
 
   const ItemFeedMemory({
     super.key,
@@ -83,7 +83,7 @@ class _ItemFeedMemoryState extends State<ItemFeedMemory> {
 }
 
 class _Body extends StatelessWidget {
-  final FeedModel item;
+  final ContentModel item;
 
   const _Body({required this.item});
 
@@ -180,9 +180,9 @@ class _Body extends StatelessWidget {
                     child: AndrossyImageGrid(
                       itemSpace: dimen.dp(2),
                       itemBackground: dark.t05,
-                      itemCount: item.photoUrls?.length ?? 0,
+                      itemCount: item.photoUrls.length,
                       itemBuilder: (context, index) {
-                        final image = item.photoUrls?.elementAtOrNull(index);
+                        final image = item.photoUrls.elementAtOrNull(index);
                         return InAppGesture(
                           scalerLowerBound: 1,
                           onTap: () {},

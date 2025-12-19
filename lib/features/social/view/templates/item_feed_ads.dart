@@ -7,6 +7,7 @@ import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/res/icons.dart';
 import '../../../../data/enums/feed_type.dart';
+import '../../../../data/models/content.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
@@ -19,7 +20,7 @@ import 'feed_header.dart';
 
 class ItemFeedAds extends StatefulWidget {
   final int index;
-  final FeedModel item;
+  final ContentModel item;
   final Function(BuildContext context, FeedModel item)? onClick;
 
   const ItemFeedAds({
@@ -62,7 +63,7 @@ class _ItemFeedAdsState extends State<ItemFeedAds> {
 }
 
 class _Body extends StatelessWidget {
-  final FeedModel item;
+  final ContentModel item;
 
   const _Body({required this.item});
 

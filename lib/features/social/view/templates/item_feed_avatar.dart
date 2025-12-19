@@ -8,6 +8,7 @@ import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/res/placeholders.dart';
 import '../../../../data/enums/gender.dart';
+import '../../../../data/models/content.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/avatar.dart';
@@ -23,7 +24,7 @@ import 'feed_header.dart';
 
 class ItemFeedAvatar extends StatelessWidget {
   final int index;
-  final FeedModel item;
+  final ContentModel item;
   final Function(BuildContext context, FeedModel item)? onClick;
 
   const ItemFeedAvatar({
@@ -80,7 +81,7 @@ class ItemFeedAvatar extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  final FeedModel item;
+  final ContentModel item;
 
   const _Body({required this.item});
 

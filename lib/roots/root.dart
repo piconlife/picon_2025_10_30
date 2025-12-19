@@ -597,6 +597,12 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
     });
   }
 
+  void _initTranslator() {
+    return Analytics.call(name: "translator", reason: "init", () {
+      return Translator.init(delegate: InAppTranslatorDelegate());
+    });
+  }
+
   Future<void> _initUserTracker() {
     return Analytics.callAsync(name: "user_tracker", reason: "init", () async {
       await UserTracker.init(delegate: InAppUserTrackerDelegate());
@@ -653,6 +659,7 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
       await _initSettings();
       await _initLocation();
       await _initTranslation();
+      _initTranslator();
       _initAndomie();
       _initAndrossy();
       _initCustomizers();

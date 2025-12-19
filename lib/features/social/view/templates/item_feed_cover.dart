@@ -8,7 +8,7 @@ import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/res/placeholders.dart';
 import '../../../../data/enums/gender.dart';
-import '../../../../data/models/feed.dart';
+import '../../../../data/models/content.dart';
 import '../../../../data/models/user.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/hero.dart';
@@ -21,8 +21,8 @@ import 'feed_header.dart';
 
 class ItemFeedCover extends StatelessWidget {
   final int index;
-  final FeedModel item;
-  final Function(BuildContext context, FeedModel item)? onClick;
+  final ContentModel item;
+  final Function(BuildContext context, ContentModel item)? onClick;
 
   const ItemFeedCover({
     super.key,
@@ -78,7 +78,7 @@ class ItemFeedCover extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  final FeedModel item;
+  final ContentModel item;
 
   const _Body({required this.item});
 

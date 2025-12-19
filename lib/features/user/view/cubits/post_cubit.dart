@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/extensions/string.dart';
-import 'package:flutter_andomie/helpers/clipboard_helper.dart';
 import 'package:flutter_entity/entity.dart';
 
 import '../../../../app/base/data_cubit.dart';
@@ -11,7 +9,6 @@ import '../../../../data/use_cases/user_post/delete.dart';
 import '../../../../data/use_cases/user_post/get_by_pagination.dart';
 import '../../../../data/use_cases/user_post/update.dart';
 import '../../../../roots/services/translator.dart';
-import '../../../../roots/utils/utils.dart';
 
 class UserPostCubit extends DataCubit<PostModel> {
   final String uid;
@@ -53,47 +50,6 @@ class UserPostCubit extends DataCubit<PostModel> {
     Map<String, dynamic> changes,
   ) {
     return UpdateUserPostUseCase.i(old.id, changes);
-  }
-
-  void share(BuildContext context, String id) {
-    final index = state.result.indexWhere((e) => e.id == id);
-    if (index < 0) return;
-    final data = state.result.elementAtOrNull(index);
-    if (data == null || data.id != id) return;
-    if (!data.isShareMode) return;
-    Utils.share(
-      context,
-      subject:
-          data.isTranslated ? data.translatedTitle ?? data.title : data.title,
-      body:
-          data.isTranslated
-              ? data.translatedDescription ?? data.description
-              : data.description,
-      urls: data.photoUrls,
-    );
-  }
-
-  void copy(BuildContext context, String id) {
-    final index = state.result.indexWhere((e) => e.id == id);
-    if (index < 0) return;
-    final data = state.result.elementAtOrNull(index);
-    if (data == null || data.id != id) return;
-    if (!data.isShareMode) return;
-    if (!data.isDescription) return;
-    ClipboardHelper.setText(
-      data.isTranslated
-          ? data.translatedDescription ?? data.description.use
-          : data.description.use,
-    );
-  }
-
-  void follow(BuildContext context, String id) {
-    final index = state.result.indexWhere((e) => e.id == id);
-    if (index < 0) return;
-    final data = state.result.elementAtOrNull(index);
-    if (data == null || data.id != id) return;
-    // if (!data.isDescription) return;
-    // ClipboardHelper.setText(data.description!);
   }
 
   void download(BuildContext context, String id) {

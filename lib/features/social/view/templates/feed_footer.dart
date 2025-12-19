@@ -9,7 +9,7 @@ import 'package:flutter_entity/entity.dart';
 import '../../../../app/base/data_cubit.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/comment.dart';
-import '../../../../data/models/feed.dart';
+import '../../../../data/models/content.dart';
 import '../../../../data/models/like.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
@@ -21,7 +21,7 @@ import '../pages/comments.dart';
 import '../pages/likes.dart';
 
 class FeedFooter extends StatefulWidget {
-  final FeedModel item;
+  final ContentModel item;
 
   const FeedFooter({super.key, required this.item});
 

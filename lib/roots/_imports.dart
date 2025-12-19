@@ -23,9 +23,9 @@ import 'package:in_app_navigator/route.dart';
 import 'package:in_app_purchaser/in_app_purchaser.dart';
 import 'package:in_app_settings/settings.dart';
 import 'package:in_app_translation/in_app_translation.dart';
+import 'package:in_app_translator/translator.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:picon/app/constants/app.dart';
 
 import '../app/app.dart';
 import '../app/configs/local.dart';
