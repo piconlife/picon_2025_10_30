@@ -211,7 +211,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
   }
 
   @protected
-  void handle(
+  Response<T> handle(
     Response<T> value, {
     bool resultByMe = false,
     String? placement,
@@ -227,19 +227,27 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
         "placement": placement ?? "handle",
       },
     );
-    if (!modifyState) return;
-    if (resultByMe) return emit(state.copyWith(resultByMe: value.result));
-    return emit(
+    if (!modifyState) return value;
+    if (resultByMe) {
+      emit(state.copyWith(resultByMe: value.result));
+      return value;
+    }
+    emit(
       state.copyWith(
         status: value.status,
         snapshot: value.snapshot,
         result: value.result,
       ),
     );
+    return value;
   }
 
   @protected
-  void handleCount(int value, {String? placement, bool modifyState = true}) {
+  Response<int> handleCount(
+    int value, {
+    String? placement,
+    bool modifyState = true,
+  }) {
     Analytics.event(
       "data_cubit",
       reason: "ok",
@@ -250,12 +258,13 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
         "placement": placement ?? "handleCount",
       },
     );
-    if (!modifyState) return;
-    return emit(state.copyWith(count: value));
+    if (!modifyState) return Response(data: value);
+    emit(state.copyWith(count: value));
+    return Response(data: value);
   }
 
   @protected
-  void handleError([
+  Response<C> handleError<C extends Object>([
     Object? error,
     StackTrace? stackTrace,
     String? placement,
@@ -273,12 +282,13 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
         if (stackTrace != null) "stackTrace": stackTrace.toString(),
       },
     );
-    if (!modifyState) return;
-    return emit(state.copyWith(status: Status.error, error: error.toString()));
+    if (!modifyState) return Response.failure(error);
+    emit(state.copyWith(status: Status.error, error: error.toString()));
+    return Response.failure(error);
   }
 
   @protected
-  void handleCatchError([
+  Response<C> handleCatchError<C extends Object>([
     Object? error,
     StackTrace? stackTrace,
     String? placement,
@@ -296,10 +306,9 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
         if (stackTrace != null) "stackTrace": stackTrace.toString(),
       },
     );
-    if (!modifyState) return;
-    return emit(
-      state.copyWith(status: Status.failure, error: error.toString()),
-    );
+    if (!modifyState) return Response.failure(error);
+    emit(state.copyWith(status: Status.failure, error: error.toString()));
+    return Response.failure(error);
   }
 
   // ---------------------------------------------------------------------------
@@ -317,7 +326,6 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     placement ??= "execute<$C>";
     try {
       final feedback = await callback();
-      handle(state, placement: placement, modifyState: false);
       return feedback;
     } catch (e) {
       handleCatchError(e, null, placement, false);
@@ -325,16 +333,16 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     }
   }
 
-  Future<void> load({
+  Future<Response<T>> load({
     bool force = false,
     bool resultByMe = false,
     int? initialSize,
     int? fetchingSize,
   }) async {
     if (!force && state.result.isNotEmpty && state.requestCode != 201) {
-      return;
+      return Response(status: Status.invalid);
     }
-    fetch(
+    return fetch(
       placement: "initial",
       loader: force,
       resultByMe: resultByMe,
@@ -343,21 +351,21 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     );
   }
 
-  Future<void> loadCounter({bool force = false}) async {
+  Future<Response<int>> loadCounter({bool force = false}) async {
     if (!force &&
         state.data is num &&
         (state.data as num) > 0 &&
         state.requestCode != 201) {
-      return;
+      return Response(status: Status.invalid);
     }
-    count(placement: "initialCount");
+    return count(placement: "initialCount");
   }
 
   // ---------------------------------------------------------------------------
   // ------------------------------READ FUNCTIONS-------------------------------
   // ---------------------------------------------------------------------------
 
-  Future<int> count({
+  Future<Response<int>> count({
     bool loader = false,
     String? placement,
     Future<Response<int>> Function()? callback,
@@ -365,13 +373,12 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     placement ??= "count";
     try {
       loading(force: loader);
-      await (callback?.call() ?? onCount())
+      final x = await (callback?.call() ?? onCount())
           .then((e) => handleCount(e.data ?? 0, placement: placement))
           .onError((e, st) => handleError(e, st, placement));
-      return state.count;
+      return x;
     } catch (e) {
-      handleCatchError(e, null, placement);
-      return state.count;
+      return handleCatchError(e, null, placement);
     }
   }
 
@@ -386,18 +393,17 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     placement ??= resultByMe ? "fetchResultByMe" : "fetch";
     try {
       loading(force: loader && !resultByMe);
-      return await (callback?.call() ??
+      final x = await (callback?.call() ??
               onFetch(
                 fetchingSize: fetchingSize,
                 initialSize: initialSize,
                 resultByMe: resultByMe,
               ))
           .then((e) => handle(e, resultByMe: resultByMe, placement: placement))
-          .onError((e, st) => handleError(e, st, placement))
-          .then((_) => state);
+          .onError((e, st) => handleError(e, st, placement));
+      return x;
     } catch (e) {
-      handleCatchError(e, null, placement);
-      return state;
+      return handleCatchError(e, null, placement);
     }
   }
 
@@ -417,10 +423,9 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
                 initialSize: initialSize,
               ))
           .map((e) => handle(e, resultByMe: resultByMe, placement: placement))
-          .handleError((e, st) => handleError(e, st, placement))
-          .map((_) => state);
+          .handleError((e, st) => handleError(e, st, placement));
     } catch (e) {
-      handleCatchError(e, null, placement);
+      yield handleCatchError(e, null, placement);
     }
   }
 

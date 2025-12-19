@@ -1,20 +1,38 @@
-import 'package:app_color/app_color.dart';
 import 'package:flutter/material.dart';
 
-import '../../roots/widgets/icon.dart';
-import '../res/icons.dart';
+typedef CommentInputFieldWidgetBuilder<T> =
+    Widget Function(BuildContext context, T value);
 
 class CommentInputField extends StatefulWidget {
-  final ValueChanged<String> onChanged;
+  final String? text;
+  final String? hint;
+  final CommentInputFieldWidgetBuilder<String>? sendButton;
 
-  const CommentInputField({super.key, required this.onChanged});
+  const CommentInputField({super.key, this.text, this.hint, this.sendButton});
 
   @override
   State<CommentInputField> createState() => _CommentInputFieldState();
 }
 
 class _CommentInputFieldState extends State<CommentInputField> {
-  final editor = TextEditingController();
+  late TextEditingController editor = TextEditingController(
+    text: widget.text ?? '',
+  );
+
+  @override
+  void didUpdateWidget(covariant CommentInputField oldWidget) {
+    if (widget.text != oldWidget.text) {
+      editor.dispose();
+      editor = TextEditingController(text: widget.text ?? '');
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    editor.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +49,7 @@ class _CommentInputFieldState extends State<CommentInputField> {
         focusedBorder: border.copyWith(
           borderSide: BorderSide(color: Colors.white.withValues(alpha: .5)),
         ),
-        hintText: "Type something...",
+        hintText: widget.hint ?? "Type here...",
         contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         suffixIcon: _buildSubmitButton(),
         suffixIconConstraints: BoxConstraints(maxHeight: 40, minHeight: 40),
@@ -39,18 +57,12 @@ class _CommentInputFieldState extends State<CommentInputField> {
     );
   }
 
-  Widget _buildSubmitButton() {
+  Widget? _buildSubmitButton() {
+    if (widget.sendButton == null) return null;
     return ListenableBuilder(
       listenable: editor,
       builder: (context, child) {
-        return Container(
-          padding: EdgeInsets.all(8),
-          margin: EdgeInsets.symmetric(horizontal: 8),
-          child: InAppIcon(
-            editor.text.isEmpty ? InAppIcons.add.solid : InAppIcons.send.solid,
-            color: context.primary,
-          ),
-        );
+        return widget.sendButton!(context, editor.text.trim());
       },
     );
   }

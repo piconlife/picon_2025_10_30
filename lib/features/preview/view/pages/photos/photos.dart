@@ -9,9 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/route.dart';
 import 'package:marquee/marquee.dart';
-import 'package:picon/app/helpers/device_storage.dart';
 
 import '../../../../../app/base/data_cubit.dart';
+import '../../../../../app/helpers/device_storage.dart';
 import '../../../../../app/helpers/user.dart';
 import '../../../../../app/interfaces/bsd_privacy.dart';
 import '../../../../../app/res/icons.dart';

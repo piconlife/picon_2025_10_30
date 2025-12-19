@@ -22,7 +22,6 @@ import '../../../../roots/widgets/transfluent_app_bar.dart';
 import '../../../../routes/paths.dart';
 import '../../../social/data/cubits/like_cubit.dart';
 import '../../../social/data/cubits/view_cubit.dart';
-import '../../../social/view/cubits/comment_cubit.dart';
 import '../../../user/view/cubits/bookmark_cubit.dart';
 import 'photos/comments.dart';
 import 'photos/photos.dart';
@@ -63,7 +62,6 @@ class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
   String path = '';
   LikeCubit? likeCubit;
   ViewCubit? viewCubit;
-  CommentCubit? commentCubit;
 
   ContentModel get selected {
     return photos.elementAtOrNull(index) ?? ContentModel.empty();
@@ -74,7 +72,6 @@ class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
     if (path.isEmpty) {
       likeCubit = null;
       viewCubit = null;
-      commentCubit = null;
       return;
     }
     likeCubit = Cache.put<LikeCubit>("like_cubit[$path]", () {
@@ -86,11 +83,6 @@ class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
       return ViewCubit(context, path, initialCount: selected.viewCount)
         ..loadCounter()
         ..load(resultByMe: true);
-    });
-    commentCubit = Cache.put<CommentCubit>("comment_cubit[$path]", () {
-      return CommentCubit(context, path, initialCount: selected.commentCount)
-        ..loadCounter()
-        ..load();
     });
   }
 
@@ -140,17 +132,13 @@ class _PreviewPhotosPageState extends State<PreviewPhotosPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (path.isEmpty ||
-        likeCubit == null ||
-        viewCubit == null ||
-        commentCubit == null) {
+    if (path.isEmpty || likeCubit == null || viewCubit == null) {
       return _buildLayout(false);
     }
     return MultiBlocProvider(
       providers: [
         if (likeCubit != null) BlocProvider.value(value: likeCubit!),
         if (viewCubit != null) BlocProvider.value(value: viewCubit!),
-        if (commentCubit != null) BlocProvider.value(value: commentCubit!),
       ],
       child: _buildLayout(true),
     );

@@ -216,7 +216,7 @@ class _EmotionButtonState extends State<EmotionButton> {
           width: size * widget.quantityPerPage,
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
-            color: widget.darkTheme ? Colors.grey.shade900 : Colors.white,
+            color: widget.darkTheme ? Colors.grey.shade800 : Colors.white,
             borderRadius: BorderRadius.circular(50),
             boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 15)],
           ),
@@ -233,6 +233,11 @@ class _EmotionButtonState extends State<EmotionButton> {
                   final item = page.elementAtOrNull(index);
                   return AnimatedButton(
                     onTap: () {
+                      kSounds.pop();
+                      hide();
+                      if (item != null) _hold(item);
+                    },
+                    onLongPress: () {
                       kSounds.pop();
                       hide();
                       if (item != null) _hold(item);
