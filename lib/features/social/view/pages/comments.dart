@@ -3,6 +3,7 @@ import 'package:app_color/extension.dart';
 import 'package:data_management/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
+import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
@@ -147,6 +148,36 @@ class _CommentsPageState extends State<CommentsPage> with ColorMixin {
     );
   }
 
+  void _more(CommentModel data) async {
+    final index = await context.showOptions(
+      title: "Options",
+      options: ['Edit', "Delete"],
+      initialIndex: -1,
+    );
+    if (index == 0) {
+      _edit(data);
+      return;
+    }
+    if (index == 1) {
+      _delete(data);
+      return;
+    }
+  }
+
+  void _edit(CommentModel data) async {
+    final text = await context.showEditor(text: data.text);
+    cubit.update(
+      data,
+      {
+        CommentKeys.i.text:
+            (text ?? '').isEmpty ? DataFieldValue.delete() : text,
+      },
+      modifier: (old, updated) {
+        return old..text = text;
+      },
+    );
+  }
+
   void _delete(CommentModel data) {
     cubit.delete(data);
   }
@@ -251,7 +282,7 @@ class _CommentsPageState extends State<CommentsPage> with ColorMixin {
               );
             },
           ),
-          _buildTimelineText("Reply"),
+          // _buildTimelineText("Reply"),
           Spacer(),
           if (data.reactCount > 0)
             InAppRow(
@@ -297,28 +328,31 @@ class _CommentsPageState extends State<CommentsPage> with ColorMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: _themeCommentBox,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  child: InAppColumn(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildAuthor(user.id, user.name),
-                      Text.rich(
-                        textSpanParser.parseAsTextSpan(
-                          data.text,
-                          onTagTap: (a, b) => _tagHandle(a, b, data, user),
+                GestureDetector(
+                  onLongPress: () => _more(data),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: _themeCommentBox,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    child: InAppColumn(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildAuthor(user.id, user.name),
+                        Text.rich(
+                          textSpanParser.parseAsTextSpan(
+                            data.text,
+                            onTagTap: (a, b) => _tagHandle(a, b, data, user),
+                          ),
+                          style: TextStyle(
+                            color: dark,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                        style: TextStyle(
-                          color: dark,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 _buildTimeline(data),

@@ -575,7 +575,7 @@ class _OverlayState extends State<_Overlay>
           child: GestureDetector(
             onTap: widget.onClose,
             behavior: HitTestBehavior.translucent,
-            child: Container(color: Colors.transparent),
+            child: Container(color: Colors.black12),
           ),
         ),
         // The bubble with scale animation
