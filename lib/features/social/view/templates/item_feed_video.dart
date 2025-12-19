@@ -20,14 +20,8 @@ import 'stared_feed_footer.dart';
 class ItemFeedVideo extends StatefulWidget {
   final int index;
   final FeedModel item;
-  final Function(BuildContext context, FeedModel item)? onClick;
 
-  const ItemFeedVideo({
-    super.key,
-    required this.index,
-    required this.item,
-    this.onClick,
-  });
+  const ItemFeedVideo({super.key, required this.index, required this.item});
 
   @override
   State<ItemFeedVideo> createState() => _ItemFeedVideoState();
@@ -67,8 +61,7 @@ class _ItemFeedVideoState extends State<ItemFeedVideo> {
             index: widget.index,
             id: widget.item.id,
             path: widget.item.path.use,
-            onLiked: (value) {},
-            onStared: (value) {},
+            item: widget.item,
           ),
           SizedBox(height: dimen.dp(8)),
           if (widget.item.recent.title.isValid) ...[

@@ -23,13 +23,13 @@ import 'stared_feed_footer.dart';
 class ItemFeedPost extends StatefulWidget {
   final int index;
   final FeedModel item;
-  final Function(BuildContext context, FeedModel item)? onClick;
+  final VoidCallback? onComment;
 
   const ItemFeedPost({
     super.key,
     required this.index,
     required this.item,
-    this.onClick,
+    this.onComment,
   });
 
   @override
@@ -68,11 +68,10 @@ class _ItemFeedPostState extends State<ItemFeedPost> {
           ),
           _Body(item: widget.item),
           StaredFeedFooter(
+            item: widget.item,
             index: widget.index,
             id: widget.item.id,
             path: widget.item.path.use,
-            onLiked: (value) {},
-            onStared: (value) {},
           ),
           SizedBox(height: dimen.dp(8)),
           if (widget.item.recent.title.isValid) ...[

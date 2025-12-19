@@ -8,8 +8,8 @@ import 'package:flutter_entity/entity.dart';
 
 import '../../../../app/base/data_cubit.dart';
 import '../../../../app/res/icons.dart';
-import '../../../../data/models/feed.dart';
 import '../../../../data/models/comment.dart';
+import '../../../../data/models/feed.dart';
 import '../../../../data/models/like.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
@@ -70,7 +70,7 @@ class _FeedFooterState extends State<FeedFooter> {
           ),
           SizedBox(width: dimen.dp(8)),
           InAppGesture(
-            onTap: () {},
+            onTap: _seeComments,
             child: Padding(
               padding: EdgeInsets.all(dimen.dp(8)),
               child: InAppIcon(

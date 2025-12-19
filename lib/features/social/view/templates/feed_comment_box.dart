@@ -27,7 +27,6 @@ class FeedCommentBox extends StatelessWidget {
       child: InAppText(
         "Write a comment",
         style: TextStyle(color: dark, fontSize: dimen.dp(16)),
-        onClick: (c) {},
       ),
     );
   }

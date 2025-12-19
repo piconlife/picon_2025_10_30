@@ -3,11 +3,13 @@ import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/utils/converter.dart';
+import 'package:flutter_androssy_dialogs/dialogs.dart';
 
 import '../../../../app/base/countable_builder.dart';
 import '../../../../app/base/exist_by_me_builder.dart';
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/comment.dart';
+import '../../../../data/models/content.dart';
 import '../../../../data/models/like.dart';
 import '../../../../data/models/star.dart';
 import '../../../../roots/widgets/gesture.dart';
@@ -16,6 +18,8 @@ import '../../../../roots/widgets/text.dart';
 import '../../data/cubits/like_cubit.dart';
 import '../../data/cubits/star_cubit.dart';
 import '../cubits/comment_cubit.dart';
+import '../pages/comments.dart';
+import '../pages/likes.dart';
 import 'feed_comment_box.dart';
 
 class StaredFeedFooter extends StatefulWidget {
@@ -23,18 +27,16 @@ class StaredFeedFooter extends StatefulWidget {
   final String id;
   final String path;
   final int? likes;
+  final ContentModel item;
   final List<String>? stars;
   final List<String>? comments;
-  final void Function(List<String> likes) onLiked;
-  final void Function(List<String> stars) onStared;
 
   const StaredFeedFooter({
     super.key,
+    required this.item,
     required this.index,
     required this.id,
     required this.path,
-    required this.onLiked,
-    required this.onStared,
     this.likes,
     this.stars,
     this.comments,
@@ -45,6 +47,16 @@ class StaredFeedFooter extends StatefulWidget {
 }
 
 class _StaredFeedFooterState extends State<StaredFeedFooter> {
+  void _seeLikes() => LikesPage.open(context);
+
+  void _seeStars() {
+    context.showMessage(
+      "This ensures user protection. So you can\'t see them. ",
+    );
+  }
+
+  void _seeComments() => CommentsPage.open(context, widget.item);
+
   @override
   Widget build(BuildContext context) {
     final dark = context.dark;
@@ -59,9 +71,12 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
             SizedBox(width: dimen.dp(16)),
             CountableBuilder<LikeCubit, LikeModel>(
               builder: (context, value) {
-                return InAppText(
-                  Converter.toKMB(value, "Like", "Likes"),
-                  style: counterStyle,
+                return InAppGesture(
+                  onTap: _seeLikes,
+                  child: InAppText(
+                    Converter.toKMB(value, "Like", "Likes"),
+                    style: counterStyle,
+                  ),
                 );
               },
             ),
@@ -69,9 +84,12 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
             SizedBox(width: dimen.dp(8)),
             CountableBuilder<StarCubit, StarModel>(
               builder: (context, value) {
-                return InAppText(
-                  Converter.toKMB(value, "Star", "Stars"),
-                  style: counterStyle,
+                return InAppGesture(
+                  onTap: _seeStars,
+                  child: InAppText(
+                    Converter.toKMB(value, "Star", "Stars"),
+                    style: counterStyle,
+                  ),
                 );
               },
             ),
@@ -80,9 +98,12 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
             SizedBox(width: dimen.dp(8)),
             CountableBuilder<CommentCubit, CommentModel>(
               builder: (context, value) {
-                return InAppText(
-                  Converter.toKMB(value, "Comment", "Comments"),
-                  style: counterStyle,
+                return InAppGesture(
+                  onTap: _seeComments,
+                  child: InAppText(
+                    Converter.toKMB(value, "Comment", "Comments"),
+                    style: counterStyle,
+                  ),
                 );
               },
             ),
@@ -120,7 +141,7 @@ class _StaredFeedFooterState extends State<StaredFeedFooter> {
             SizedBox(width: dimen.dp(8)),
             Expanded(
               child: InAppGesture(
-                onTap: () {},
+                onTap: _seeComments,
                 child: FeedCommentBox(id: widget.id, path: widget.path),
               ),
             ),

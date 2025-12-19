@@ -13,7 +13,6 @@ import '../../../../roots/widgets/body.dart';
 import '../../../../roots/widgets/error.dart';
 import '../../../../roots/widgets/scaffold_shimmer.dart';
 import '../../../../routes/paths.dart';
-import '../../../user/view/cubits/following_cubit.dart';
 import '../../data/cubits/like_cubit.dart';
 import '../templates/item_feed_like.dart';
 
@@ -26,10 +25,7 @@ class LikesPage extends StatefulWidget {
   static Future<void> open(BuildContext context) async {
     context.open(
       Routes.likes,
-      args: {
-        "$LikeCubit": DataCubit.of<LikeCubit>(context),
-        "$UserFollowingCubit": DataCubit.of<UserFollowingCubit>(context),
-      },
+      args: {"$LikeCubit": DataCubit.of<LikeCubit>(context)},
     );
   }
 

@@ -23,36 +23,50 @@ class InAppMessageDialog extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          dimen.dp(16).h,
-          if (title.isValid) ...[
-            InAppText(
-              title!,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: textColor,
-                fontWeight: FontWeight.bold,
-                fontSize: dimen.dp(dimen.fontSize.larger),
-              ),
-            ),
-            dimen.dp(8).h,
-          ],
-          dimen.dp(8).h,
-          InAppText(
-            message,
-            maxLines: 5,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: title.isNotValid ? textColor : textColor.t75,
-              fontSize: dimen.dp(dimen.fontSize.medium),
+          Padding(
+            padding: EdgeInsets.only(left: 24, right: 24, bottom: 16, top: 24),
+            child: Column(
+              children: [
+                if ((title ?? '').isNotEmpty) ...[
+                  InAppText(
+                    title!,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: textColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: dimen.dp(dimen.fontSize.larger),
+                    ),
+                  ),
+                  SizedBox(height: (message ?? '').isNotEmpty ? 8 : 4),
+                ],
+                if ((message ?? '').isNotEmpty)
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: (title ?? '').isEmpty ? 16 : 0,
+                    ),
+                    child: InAppText(
+                      message,
+                      maxLines: 5,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: title.isNotValid ? textColor : textColor.t75,
+                        fontSize: dimen.dp(dimen.fontSize.large),
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
-          dimen.dp(24).h,
           Divider(height: dimen.dp(1)),
           InAppTextButton(
             "OK",
-            foregroundColor: context.primary,
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
             height: dimen.dp(54),
             width: double.infinity,
             onTap: () => AndrossyDialog.dismiss(),
