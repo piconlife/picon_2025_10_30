@@ -511,21 +511,43 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     });
   }
 
+  final Set<String> _pending = {};
+
+  /// Manual override (use on follow/unfollow)
+  void setExist(String id, bool value) {
+    final exists = Map<String, bool>.of(state.exists);
+    exists[id] = value;
+    emit(state.copyWith(exists: exists));
+  }
+
+  /// Clear cache (logout)
+  void clear() => emit(Response());
+
   Future<bool> exist(String identifier, {String? placement}) async {
     if (state.exists.containsKey(identifier)) {
       return state.exists[identifier]!;
     }
-    return execute(placement: placement ?? "exist", () async {
+
+    if (_pending.contains(identifier)) {
+      return false;
+    }
+
+    _pending.add(identifier);
+
+    try {
       final value = await onGetById(identifier);
+
       final exists = Map<String, bool>.of(state.exists);
-      bool isExist = false;
-      if (value.isSuccessful && value.data != null) {
-        isExist = true;
-      }
+      final isExist = value.isSuccessful && value.data != null;
+
       exists[identifier] = isExist;
+      _pending.remove(identifier);
+
       emit(state.copyWith(exists: exists));
       return isExist;
-    });
+    } finally {
+      _pending.remove(identifier);
+    }
   }
 
   Future<bool> delete(

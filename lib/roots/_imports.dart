@@ -26,6 +26,7 @@ import 'package:in_app_translation/in_app_translation.dart';
 import 'package:in_app_translator/translator.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:picon/roots/hive/config.dart';
 
 import '../app/app.dart';
 import '../app/configs/local.dart';
@@ -35,6 +36,7 @@ import '../app/customizers/dimen.dart';
 import '../app/delegates/auth.dart';
 import '../app/delegates/auth_backup.dart';
 import '../app/delegates/configs.dart';
+import '../app/delegates/hive.dart';
 import '../app/delegates/in_app_purchase_config.dart';
 import '../app/delegates/local_database.dart';
 import '../app/delegates/settings_backup.dart';

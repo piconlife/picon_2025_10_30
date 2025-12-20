@@ -5,7 +5,6 @@ import 'package:object_finder/object_finder.dart';
 
 import '../../data/models/content.dart';
 import '../../routes/paths.dart';
-import '../user/view/cubits/following_cubit.dart';
 import '../user/view/cubits/post_cubit.dart';
 import 'data/cubits/feed_home_cubit.dart';
 import 'data/cubits/like_cubit.dart';
@@ -88,20 +87,12 @@ Widget _comments(BuildContext context, Object? args) {
 Widget _likes(BuildContext context, Object? args) {
   String? path = args.findOrNull(key: "path");
   final likeCubit = args.findOrNull<LikeCubit>(key: "$LikeCubit");
-  final followingCubit = args.findOrNull<UserFollowingCubit>(
-    key: "$UserFollowingCubit",
-  );
   return MultiBlocProvider(
     providers: [
       likeCubit != null
           ? BlocProvider.value(value: likeCubit..load())
           : BlocProvider(
             create: (context) => LikeCubit(context, path ?? '')..load(),
-          ),
-      followingCubit != null
-          ? BlocProvider.value(value: followingCubit)
-          : BlocProvider(
-            create: (context) => UserFollowingCubit(context, path),
           ),
     ],
     child: LikesPage(args: args),

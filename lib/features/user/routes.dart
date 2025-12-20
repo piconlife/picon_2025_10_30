@@ -9,7 +9,6 @@ import '../social/data/cubits/feed_home_cubit.dart';
 import 'view/cubits/avatar_cubit.dart';
 import 'view/cubits/cover_cubit.dart';
 import 'view/cubits/follower_cubit.dart';
-import 'view/cubits/following_cubit.dart';
 import 'view/cubits/post_cubit.dart';
 import 'view/cubits/report_cubit.dart';
 import 'view/pages/edit_address.dart';
@@ -128,17 +127,5 @@ Widget _profileFollowers(BuildContext context, Object? args) {
 
 Widget _profileFollowings(BuildContext context, Object? args) {
   UserModel? user = args.findOrNull(key: "$UserModel");
-  UserFollowingCubit? followingCubit = args.findOrNull(
-    key: "$UserFollowingCubit",
-  );
-  return MultiBlocProvider(
-    providers: [
-      followingCubit != null
-          ? BlocProvider.value(value: followingCubit)
-          : BlocProvider(
-            create: (context) => UserFollowingCubit(context, user?.id),
-          ),
-    ],
-    child: UserFollowingsPage(args: args, user: user),
-  );
+  return UserFollowingsPage(args: args, user: user);
 }

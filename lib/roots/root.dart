@@ -483,7 +483,7 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
 
   Future<void> _initHive() {
     return Analytics.callAsync(name: "hive", reason: "init", () async {
-      await HiveInitializer.init();
+      await HiveInitializer.init(InAppHiveConfiguration());
     });
   }
 

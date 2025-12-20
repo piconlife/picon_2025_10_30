@@ -27,20 +27,39 @@ class InAppFollowBuilder extends StatefulWidget {
 class _InAppFollowBuilderState extends State<InAppFollowBuilder> {
   late final cubit = context.read<UserFollowingCubit>();
 
+  void _toggle(bool following) {
+    if (following) {
+      cubit.unfollow(widget.publisher);
+    } else {
+      cubit.follow(widget.publisher);
+    }
+  }
+
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       cubit.exist(widget.publisher);
     });
-    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant InAppFollowBuilder oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.publisher != widget.publisher) {
+      cubit.exist(widget.publisher);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserFollowingCubit, Response<FollowingModel>>(
+      buildWhen: (p, c) {
+        return p.isExist(widget.publisher) != c.isExist(widget.publisher);
+      },
       builder: (context, value) {
-        final activated = value.isExist(widget.publisher);
-        return widget.builder(context, activated, () {});
+        final following = value.isExist(widget.publisher);
+        return widget.builder(context, following, () => _toggle(following));
       },
     );
   }
