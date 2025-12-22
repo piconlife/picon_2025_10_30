@@ -3,8 +3,8 @@ class AppConstants {
 
   static const name = "PicON";
   static const nameKey = "app_name";
-  static const email = "techpek.contact@gmail.com";
-  static const website = "techpek.com";
+  static const email = "picon.contact@gmail.com";
+  static const website = "picon.com";
   static const description = "Train Your Core";
   static const descriptionKey = "app_description";
   static const logo = "assets/app/logo.png";
