@@ -12,39 +12,39 @@ mixin _AuthEmitMixin<T extends Auth> on _AuthorizerBase<T> {
     _args = args;
     _id = id;
 
-    if (!notifiable) {
-      if (!data.isLoading && data.data != null) _emitUser(data.data);
-      return data;
-    }
-
     if (data.isLoading) {
-      _emitLoading(true);
+      if (notifiable) _emitLoading(true);
       return data;
     }
 
-    _emitLoading(false);
-    _emitError(data);
-    _emitMessage(data);
-    _emitStatus(data);
+    if (notifiable) _emitLoading(false);
 
-    if (data.data != null) {
+    if (data.hasStatus) {
+      _emitStatus(data);
+      if (data.status == AuthStatus.unauthenticated) {
+        _emitUser(null);
+      } else if (data.data != null) {
+        _emitUser(data.data);
+      }
+    } else if (data.data != null) {
       _emitUser(data.data);
-    } else if (data.status == AuthStatus.unauthenticated) {
-      _emitUser(null);
     }
+
+    if (notifiable) {
+      if (data.isError) {
+        _emitError(data);
+      } else {
+        _clearError();
+      }
+      if (data.isMessage) _emitMessage(data);
+    }
+
     return data;
   }
 
   @override
   void _emitFromBackup(AuthResponse<T> data) {
     if (_disposed || !_backupEmitEnabled) return;
-
-    if (data.isLoading) {
-      _emitLoading(true);
-      return;
-    }
-
-    _emitLoading(false);
 
     if (data.hasStatus) {
       _emitStatus(data);
@@ -53,13 +53,17 @@ mixin _AuthEmitMixin<T extends Auth> on _AuthorizerBase<T> {
         return;
       }
     }
-
     if (data.data != null) _emitUser(data.data);
   }
 
   void _emitError(AuthResponse<T> data) {
     if (_disposed) return;
     if (data.isError) _errorNotifier.value = data.error;
+  }
+
+  void _clearError() {
+    if (_disposed) return;
+    if (_errorNotifier.value.isNotEmpty) _errorNotifier.value = '';
   }
 
   void _emitLoading(bool value) {

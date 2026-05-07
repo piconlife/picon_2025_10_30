@@ -41,12 +41,12 @@ mixin _AuthEmailMixin<T extends Auth>
       failureMsg: msg.signUpWithEmail.failure,
       authenticator: authenticator,
       onBiometric: onBiometric,
-      isSignUp: true,
-      signIn:
-          () => delegate.signUpWithEmailNPassword(
-            authenticator.email,
-            authenticator.password,
-          ),
+      signIn: () {
+        return delegate.signUpWithEmailNPassword(
+          authenticator.email,
+          authenticator.password,
+        );
+      },
       args: args,
       id: id,
       notifiable: notifiable,
@@ -92,7 +92,6 @@ mixin _AuthEmailMixin<T extends Auth>
       failureMsg: msg.signUpWithUsername.failure,
       authenticator: authenticator,
       onBiometric: onBiometric,
-      isSignUp: true,
       signIn:
           () => delegate.signUpWithUsernameNPassword(
             authenticator.username,
@@ -112,7 +111,6 @@ mixin _AuthEmailMixin<T extends Auth>
     required Authenticator authenticator,
     required _OAuthSignIn signIn,
     SignByBiometricCallback<T>? onBiometric,
-    bool isSignUp = false,
     Object? args,
     String? id,
     bool notifiable = true,
@@ -156,16 +154,13 @@ mixin _AuthEmailMixin<T extends Auth>
         );
       }
 
-      // Password is stored ONLY when biometric is enabled — and the
-      // [encryptor] hook is the integrator's contract for protecting it.
-      // If biometric is not requested, no password ever touches the cache.
       final wantsBiometric = onBiometric != null;
 
       final value = await _update(
         id: uid,
         hasAnonymous: hasAnonymous,
         onBiometric: onBiometric,
-        updateMode: !isSignUp,
+        updateMode: false,
         data: {
           keys.id: uid,
           keys.loggedIn: true,
@@ -183,6 +178,16 @@ mixin _AuthEmailMixin<T extends Auth>
 
       if (!_isOpAlive(opToken)) {
         return AuthResponse.failure('Cancelled', type: type);
+      }
+
+      if (value == null) {
+        return _failure(
+          msg.authorization,
+          type: type,
+          args: args,
+          id: id,
+          notifiable: notifiable,
+        );
       }
 
       return emit(

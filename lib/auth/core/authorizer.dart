@@ -55,13 +55,16 @@ class Authorizer<T extends Auth> extends _AuthorizerBase<T>
 
   static Authorizer? _i;
 
+  static Future<void>? _ioLock;
+
   factory Authorizer.of(BuildContext context) {
     try {
       return AuthProvider.authorizerOf<T>(context);
     } catch (e) {
       throw AuthProviderException(
         'No Authorizer<${AuthProvider.type}> found. '
-        'Ensure AuthProvider<${AuthProvider.type}> wraps the widget tree. (cause: $e)',
+        'Ensure AuthProvider<${AuthProvider.type}> wraps the widget tree. '
+        '(cause: $e)',
       );
     }
   }
@@ -74,10 +77,15 @@ class Authorizer<T extends Auth> extends _AuthorizerBase<T>
         'Call Authorizer.init<T>() or attach an instance first.',
       );
     }
+    if (current.isDisposed) {
+      throw AuthProviderException(
+        'Authorizer has been disposed. Re-initialise before use.',
+      );
+    }
     if (current is! Authorizer<T>) {
       throw AuthProviderException(
-        'Type mismatch: expected Authorizer<$T> '
-        'but the attached instance is ${current.runtimeType}.',
+        'Type mismatch: expected Authorizer<$T> but the attached instance '
+        'is ${current.runtimeType}.',
       );
     }
     return current;
@@ -90,15 +98,32 @@ class Authorizer<T extends Auth> extends _AuthorizerBase<T>
     bool initialCheck = true,
     bool listening = false,
   }) async {
-    final prev = _i;
-    if (prev != null) {
-      try {
-        prev.dispose();
-      } catch (_) {}
+    while (_ioLock != null) {
+      await _ioLock;
     }
-    final created = Authorizer<T>(delegate: delegate, backup: backup, msg: msg);
-    _i = created;
-    await created.initialize(initialCheck: initialCheck, listening: listening);
+    final completer = Completer<void>();
+    _ioLock = completer.future;
+    try {
+      final prev = _i;
+      if (prev != null) {
+        try {
+          prev.dispose();
+        } catch (_) {}
+      }
+      final created = Authorizer<T>(
+        delegate: delegate,
+        backup: backup,
+        msg: msg,
+      );
+      _i = created;
+      await created.initialize(
+        initialCheck: initialCheck,
+        listening: listening,
+      );
+    } finally {
+      completer.complete();
+      if (_ioLock == completer.future) _ioLock = null;
+    }
   }
 
   static void attach<T extends Auth>(Authorizer<T> authorizer) {
@@ -198,6 +223,16 @@ class Authorizer<T extends Auth> extends _AuthorizerBase<T>
 
       if (!_isOpAlive(opToken)) {
         return AuthResponse.failure('Cancelled', type: AuthType.none);
+      }
+
+      if (value == null) {
+        return _failure(
+          msg.authorization,
+          type: AuthType.none,
+          args: args,
+          id: id,
+          notifiable: notifiable,
+        );
       }
 
       return emit(

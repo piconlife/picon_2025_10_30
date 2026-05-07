@@ -15,7 +15,7 @@ mixin _AuthPhoneMixin<T extends Auth>
     String? id,
     bool notifiable = true,
   }) async {
-    emit(
+    final loadingResponse = await emit(
       const AuthResponse.loading(AuthType.otp),
       args: args,
       id: id,
@@ -106,12 +106,7 @@ mixin _AuthPhoneMixin<T extends Auth>
           onCodeAutoRetrievalTimeout?.call(verId);
         },
       );
-      return emit(
-        const AuthResponse.loading(AuthType.otp),
-        args: args,
-        id: id,
-        notifiable: notifiable,
-      );
+      return loadingResponse;
     } catch (error) {
       return _failure(
         msg.signInWithPhone.failure ?? error.toString(),
@@ -188,6 +183,16 @@ mixin _AuthPhoneMixin<T extends Auth>
 
       if (!_isOpAlive(opToken)) {
         return AuthResponse.failure('Cancelled', type: AuthType.phone);
+      }
+
+      if (value == null) {
+        return _failure(
+          msg.authorization,
+          type: AuthType.phone,
+          args: args,
+          id: id,
+          notifiable: notifiable,
+        );
       }
 
       return emit(

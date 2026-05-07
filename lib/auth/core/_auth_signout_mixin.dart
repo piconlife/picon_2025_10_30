@@ -14,8 +14,13 @@ mixin _AuthSignOutMixin<T extends Auth>
       notifiable: notifiable,
     );
 
+    final opToken = _beginOp();
+
     try {
       final response = await delegate.signOut();
+      if (!_isOpAlive(opToken)) {
+        return AuthResponse.failure('Cancelled', type: AuthType.logout);
+      }
       if (!response.isSuccessful) {
         return _failure(
           response.error,
@@ -28,21 +33,22 @@ mixin _AuthSignOutMixin<T extends Auth>
 
       final prev = _backupEmitEnabled;
       _backupEmitEnabled = false;
+      bool cleared;
       try {
-        await _clearLocal();
+        cleared = await _clearLocal();
       } finally {
         _backupEmitEnabled = prev;
       }
 
-      return emit(
-        AuthResponse.unauthenticated(
-          msg: msg.signOut.done,
-          type: AuthType.logout,
-        ),
-        args: args,
-        id: id,
-        notifiable: notifiable,
+      if (!_isOpAlive(opToken)) {
+        return AuthResponse.failure('Cancelled', type: AuthType.logout);
+      }
+
+      final response2 = AuthResponse<T>.unauthenticated(
+        msg: cleared ? msg.signOut.done : (msg.signOut.done ?? 'Signed out'),
+        type: AuthType.logout,
       );
+      return emit(response2, args: args, id: id, notifiable: notifiable);
     } catch (error) {
       return _failure(
         msg.signOut.failure ?? error.toString(),
@@ -66,6 +72,8 @@ mixin _AuthSignOutMixin<T extends Auth>
       notifiable: notifiable,
     );
 
+    final opToken = _beginOp();
+
     final data = await auth;
     if (data == null) {
       return emit(
@@ -81,6 +89,9 @@ mixin _AuthSignOutMixin<T extends Auth>
 
     try {
       final response = await delegate.delete();
+      if (!_isOpAlive(opToken)) {
+        return AuthResponse.failure('Cancelled', type: AuthType.delete);
+      }
       if (!response.isSuccessful) {
         return _failure(
           response.error.isNotEmpty
@@ -107,6 +118,10 @@ mixin _AuthSignOutMixin<T extends Auth>
         await _clearLocal();
       } finally {
         _backupEmitEnabled = prev;
+      }
+
+      if (!_isOpAlive(opToken)) {
+        return AuthResponse.failure('Cancelled', type: AuthType.delete);
       }
 
       return emit(

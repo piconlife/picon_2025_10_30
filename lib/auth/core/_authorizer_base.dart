@@ -34,6 +34,8 @@ abstract class _AuthorizerBase<T extends Auth> {
 
   bool _isOpAlive(int token) => !_disposed && _opGeneration == token;
 
+  bool get isDisposed => _disposed;
+
   Future<T?> get _cachedAuth => _backup.cache;
 
   Future<T?> get auth async {
@@ -53,8 +55,6 @@ abstract class _AuthorizerBase<T extends Auth> {
       return false;
     }
   }
-
-  bool get isDisposed => _disposed;
 
   Future<bool> _clearLocal() async {
     try {

@@ -56,6 +56,8 @@ abstract class AuthBackupDelegate<T extends Auth> {
 
   E? encryptor<E extends Object?>(String key, E? value) => value;
 
+  E? decryptor<E extends Object?>(String key, E? value) => value;
+
   Future<bool> set(T? data) => _w(key, data?.source);
 
   Future<bool> update(Map<String, dynamic> data) async {

@@ -24,7 +24,7 @@ mixin _AuthBiometricMixin<T extends Auth>
       final value = await _update(
         id: auth.id,
         updateMode: true,
-        data: {keys.biometric: enabled},
+        data: {keys.biometric: enabled, if (!enabled) keys.password: null},
       );
       return Response(status: Status.ok, data: value);
     } catch (error) {
@@ -75,33 +75,30 @@ mixin _AuthBiometricMixin<T extends Auth>
       }
 
       final provider = user.provider;
-      Response<Credential> current = Response<Credential>();
+      Response<Credential> current = Response<Credential>(status: Status.ok);
 
+      final storedPassword = user.password;
+      final plainPassword =
+          storedPassword == null
+              ? null
+              : _backup.decryptor<String>(keys.password, storedPassword);
+
+      final identity = user.email ?? user.username ?? '';
       final hasCredentials =
-          (user.email ?? user.username ?? '').isNotEmpty &&
-          (user.password ?? '').isNotEmpty;
+          identity.isNotEmpty && (plainPassword ?? '').isNotEmpty;
 
-      // We only re-attempt password sign-in if credentials are stored.
-      // For OAuth/phone/biometric-only flows, the device biometric
-      // success itself is treated as proof — re-fetch user instead.
       if (hasCredentials) {
         if (provider == 'EMAIL') {
           current = await delegate.signInWithEmailNPassword(
             user.email ?? '',
-            user.password ?? '',
+            plainPassword!,
           );
         } else if (provider == 'USERNAME') {
           current = await delegate.signInWithUsernameNPassword(
             user.username ?? '',
-            user.password ?? '',
+            plainPassword!,
           );
-        } else {
-          // Stored credentials but unsupported provider — treat as ok.
-          current = Response(status: Status.ok);
         }
-      } else {
-        // No stored credentials — biometric alone gates the cache.
-        current = Response(status: Status.ok);
       }
 
       if (!_isOpAlive(opToken)) {
@@ -129,6 +126,16 @@ mixin _AuthBiometricMixin<T extends Auth>
 
       if (!_isOpAlive(opToken)) {
         return AuthResponse.failure('Cancelled', type: AuthType.biometric);
+      }
+
+      if (value == null) {
+        return _failure(
+          msg.authorization,
+          type: AuthType.biometric,
+          args: args,
+          id: id,
+          notifiable: notifiable,
+        );
       }
 
       return emit(

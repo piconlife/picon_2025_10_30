@@ -9,21 +9,18 @@ mixin _AuthLifecycleMixin<T extends Auth>
       _subscription?.cancel();
     } catch (_) {}
     _subscription = null;
-    try {
-      _errorNotifier.dispose();
-    } catch (_) {}
-    try {
-      _loadingNotifier.dispose();
-    } catch (_) {}
-    try {
-      _messageNotifier.dispose();
-    } catch (_) {}
-    try {
-      _statusNotifier.dispose();
-    } catch (_) {}
-    try {
-      _userNotifier.dispose();
-    } catch (_) {}
+
+    for (final disposer in [
+      () => _errorNotifier.dispose(),
+      () => _loadingNotifier.dispose(),
+      () => _messageNotifier.dispose(),
+      () => _statusNotifier.dispose(),
+      () => _userNotifier.dispose(),
+    ]) {
+      try {
+        disposer();
+      } catch (_) {}
+    }
   }
 
   Future<void> initialize({
@@ -80,7 +77,7 @@ mixin _AuthLifecycleMixin<T extends Auth>
           _emitStatus(const AuthResponse.unauthenticated());
         }
       } else {
-        if (isCachedLoggedIn && cached != null) {
+        if (isCachedLoggedIn) {
           _emitStatus(AuthResponse.authenticated(cached));
           _emitUser(cached);
         } else {

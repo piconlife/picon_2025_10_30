@@ -7,17 +7,14 @@ mixin _AuthUpdateMixin<T extends Auth>
     String? id,
     bool notifiable = true,
   }) async {
-    final prevBackupEmit = _backupEmitEnabled;
-    _backupEmitEnabled = notifiable;
+    if (data.isEmpty) return _userNotifier.value;
     try {
       final ok = await _backup.update(data);
       if (!ok) return null;
       return _userNotifier.value;
     } catch (error) {
-      if (!_disposed) _errorNotifier.value = error.toString();
+      if (!_disposed && notifiable) _errorNotifier.value = error.toString();
       return null;
-    } finally {
-      _backupEmitEnabled = prevBackupEmit;
     }
   }
 

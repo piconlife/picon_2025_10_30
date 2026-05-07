@@ -247,6 +247,16 @@ mixin _AuthOAuthMixin<T extends Auth>
         return AuthResponse.failure('Cancelled', type: AuthType.oauth);
       }
 
+      if (value == null) {
+        return _failure(
+          msg.authorization,
+          type: AuthType.oauth,
+          args: args,
+          id: id,
+          notifiable: notifiable,
+        );
+      }
+
       return emit(
         AuthResponse.authenticated(value, msg: doneMsg, type: AuthType.oauth),
         args: args,
