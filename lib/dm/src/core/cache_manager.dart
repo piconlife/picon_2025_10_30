@@ -1,4 +1,4 @@
-import 'package:flutter_entity/entity.dart';
+import 'package:flutter_entity/entity.dart' show Response;
 
 class DataCacheManager {
   static DataCacheManager? _i;
