@@ -1,7 +1,6 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
-import 'package:data_management/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_andomie/utils/converter.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_andomie/utils/validator.dart';
 import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/helpers/user.dart';
+import '../../../../app/imports/data_management.dart' show DataFieldValue;
 import '../../../../app/res/icons.dart';
 import '../../../../data/constants/keys.dart';
 import '../../../../data/enums/privacy.dart';

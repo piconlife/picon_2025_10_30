@@ -1,5 +1,4 @@
-import 'package:data_management/core.dart';
-
+import '../../../app/imports/data_management.dart' show IterableParams;
 import '../../repositories/feed_video.dart';
 
 class BaseFeedVideoUseCase {

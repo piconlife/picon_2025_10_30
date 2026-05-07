@@ -1,5 +1,24 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:data_management/core.dart';
+import '../../app/imports/cloud_firestore.dart'
+    show
+        WriteBatch,
+        SetOptions,
+        FirebaseFirestore,
+        Query,
+        DocumentSnapshot,
+        FieldValue;
+import '../../app/imports/data_management.dart'
+    show
+        DataWriteBatch,
+        DataDelegate,
+        DataGetsSnapshot,
+        DataGetSnapshot,
+        DataQuery,
+        DataSelection,
+        DataSorting,
+        DataFetchOptions,
+        Checker,
+        DataFieldValue,
+        DataFieldValues;
 
 class FirestoreWriteBatch extends DataWriteBatch {
   late WriteBatch batch;

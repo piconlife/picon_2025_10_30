@@ -1,7 +1,8 @@
-import 'package:data_management/data_management.dart';
 import 'package:flutter_andomie/core.dart' hide Selection;
 import 'package:flutter_entity/entity.dart';
 
+import '../../app/imports/data_management.dart'
+    show RemoteDataRepository, DataModifiers;
 import '../../roots/helpers/connectivity.dart';
 import '../models/user_memory.dart';
 import '../sources/local/user_memory.dart';

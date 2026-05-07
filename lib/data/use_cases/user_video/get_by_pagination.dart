@@ -1,6 +1,7 @@
-import 'package:data_management/core.dart';
 import 'package:flutter_entity/entity.dart';
 
+import '../../../app/imports/data_management.dart'
+    show DataSorting, DataSelection, DataFetchOptions;
 import '../../constants/keys.dart';
 import '../../models/user_video.dart';
 import 'base.dart';

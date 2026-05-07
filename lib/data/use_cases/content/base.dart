@@ -1,5 +1,5 @@
-import 'package:data_management/core.dart';
-
+import '../../../app/imports/data_management.dart'
+    show IterableParams, DataFieldParams;
 import '../../repositories/content.dart';
 
 class Pair<A, B> {

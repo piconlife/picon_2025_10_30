@@ -1,7 +1,6 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
-import 'package:data_management/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/list.dart';
 import 'package:flutter_andomie/utils/key_generator.dart';
@@ -15,6 +14,8 @@ import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
+import '../../../../app/imports/data_management.dart'
+    show DataFieldValue, DataFieldValueWriter;
 import '../../../../app/interfaces/bsd_audience.dart';
 import '../../../../app/interfaces/bsd_privacy.dart';
 import '../../../../app/res/msg.dart';

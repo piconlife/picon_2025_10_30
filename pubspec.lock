@@ -385,22 +385,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.7"
-  data_management:
-    dependency: "direct main"
-    description:
-      name: data_management
-      sha256: "2a49ab50f4c4a9baf8763cbf4aff9672e63d5acda1ffd2907271434cc0787487"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.4.8"
-  data_management_local_delegate:
-    dependency: "direct main"
-    description:
-      name: data_management_local_delegate
-      sha256: "7c7e9514ffd582c4054747ebf2155493c77225f0b08ae5e6d56f3f3bcdd0665b"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.7"
   data_type_detector:
     dependency: "direct main"
     description:

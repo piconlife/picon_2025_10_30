@@ -1,7 +1,8 @@
-import 'package:data_management/core.dart';
 import 'package:flutter_entity/entity.dart';
 
 import '../../../app/helpers/user.dart';
+import '../../../app/imports/data_management.dart'
+    show DataQuery, DataFetchOptions;
 import '../../constants/keys.dart';
 import '../../models/comment.dart';
 import 'base.dart';

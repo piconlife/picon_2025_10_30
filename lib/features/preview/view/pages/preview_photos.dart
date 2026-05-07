@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
-import 'package:data_management/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/string.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +10,7 @@ import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/base/data_cubit.dart';
+import '../../../../app/imports/data_management.dart' show DataFieldValue;
 import '../../../../data/constants/keys.dart';
 import '../../../../data/enums/privacy.dart';
 import '../../../../data/models/content.dart';

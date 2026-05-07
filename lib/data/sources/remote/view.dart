@@ -1,5 +1,4 @@
-import 'package:data_management/core.dart';
-
+import '../../../app/imports/data_management.dart' show DataLimitations;
 import '../../base/firestore_data_source.dart';
 import '../../constants/paths.dart';
 import '../../models/view.dart';

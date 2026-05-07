@@ -1,6 +1,5 @@
-import 'package:data_management/core.dart';
-
 import '../../../app/helpers/user.dart';
+import '../../../app/imports/data_management.dart' show IterableParams;
 import '../../repositories/user_memory.dart';
 
 class BaseUserMemoryUseCase {

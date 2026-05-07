@@ -1,5 +1,24 @@
-import 'package:data_management/core.dart';
-import 'package:in_app_database/in_app_database.dart';
+import '../../app/imports/data_management.dart'
+    show
+        DataWriteBatch,
+        DataDelegate,
+        DataGetsSnapshot,
+        DataGetSnapshot,
+        DataQuery,
+        DataSelection,
+        DataSorting,
+        DataFetchOptions,
+        Checker,
+        DataFieldValue,
+        DataFieldValues;
+import '../../app/imports/in_app_database.dart'
+    show
+        InAppWriteBatch,
+        InAppDatabase,
+        InAppQueryReference,
+        InAppDocumentSnapshot,
+        InAppSetOptions,
+        InAppFieldValue;
 
 class LocalWriteBatch extends DataWriteBatch {
   late InAppWriteBatch batch;

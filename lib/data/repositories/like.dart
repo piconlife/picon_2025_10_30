@@ -1,5 +1,4 @@
-import 'package:data_management/data_management.dart';
-
+import '../../app/imports/data_management.dart' show RemoteDataRepository;
 import '../../roots/helpers/connectivity.dart';
 import '../models/like.dart';
 import '../sources/local/like.dart';

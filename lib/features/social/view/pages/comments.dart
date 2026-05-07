@@ -1,6 +1,5 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
-import 'package:data_management/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/in_app_navigator.dart';
 
 import '../../../../app/helpers/user.dart';
+import '../../../../app/imports/data_management.dart' show DataFieldValue;
 import '../../../../app/res/icons.dart';
 import '../../../../data/constants/paths.dart';
 import '../../../../data/enums/comment_type.dart';

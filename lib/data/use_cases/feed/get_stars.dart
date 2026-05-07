@@ -1,8 +1,14 @@
-import 'package:data_management/data_management.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_configs/configs.dart';
 
 import '../../../app/helpers/user.dart';
+import '../../../app/imports/data_management.dart'
+    show
+        IterableParams,
+        DataQuery,
+        DataSelection,
+        DataSorting,
+        DataFetchOptions;
 import '../../../app/utils/geo_pointer.dart';
 import '../../constants/keys.dart';
 import '../../models/feed.dart';
@@ -32,7 +38,7 @@ class StaredFeedPaginationUseCase extends FeedBaseUseCase {
     Response<FeedModel> response = Response();
     final filtered = await GeoPointer(lat, lon).future(
       radiusKm: radiusKm,
-      pointer: (e) => GeoPoint(e.latitude ?? 0, e.longitude ?? 0),
+      pointer: (e) => GeoPoint(e.latitude, e.longitude),
       callback: (minLat, maxLat) async {
         response = await callback(minLat, maxLat);
         return response.result;

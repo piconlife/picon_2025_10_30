@@ -1,9 +1,9 @@
-import 'package:data_management/core.dart';
 import 'package:flutter_andomie/models/selection.dart';
 import 'package:flutter_entity/entity.dart';
 
 import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
+import '../../../../app/imports/data_management.dart' show DataFieldValue;
 import '../../../../data/models/user.dart';
 import '../../../../data/use_cases/user/get_users_by_ids.dart';
 
