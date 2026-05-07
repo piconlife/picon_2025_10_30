@@ -1,4 +1,8 @@
+import 'package:collection/collection.dart' show MapEquality;
+
 import '../utils/set_options.dart' show DataSetOptions;
+
+const _e = MapEquality();
 
 abstract class DataBatchWriter {
   final String path;
@@ -55,16 +59,14 @@ class DataUpdateWriter extends DataBatchWriter {
   const DataUpdateWriter(super.path, this.data);
 
   @override
-  int get hashCode => Object.hash(path, data);
+  int get hashCode => Object.hash(path, _e.hash(data));
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (other.runtimeType != runtimeType) return false;
     if (other is! DataUpdateWriter) return false;
     if (other.path != path) return false;
-    if (other.data != data) return false;
-    return true;
+    return _e.equals(other.data, data);
   }
 
   @override
