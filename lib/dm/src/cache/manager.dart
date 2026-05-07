@@ -238,14 +238,13 @@ class CacheManager {
     Duration? ttl,
     ToJson<T> toJson,
   ) async {
-    if (!_storageReady) return;
+    await _ensureStorage();
     try {
       final effectiveTtl = ttl ?? config.defaultTtl;
       final expiresAt =
           effectiveTtl == null
               ? null
               : DateTime.now().add(effectiveTtl).toIso8601String();
-
       final payload = json.encode({
         'data': toJson(response.data as T),
         'expiresAt': expiresAt,
@@ -253,7 +252,7 @@ class CacheManager {
       await _storage.write(key, payload);
     } catch (e) {
       assert(() {
-        debugPrint('CacheManager storage error: $e');
+        debugPrint('CacheManager _writeToStorage error: $e');
         return true;
       }());
     }
@@ -263,7 +262,7 @@ class CacheManager {
     String key,
     FromJson<T> fromJson,
   ) async {
-    if (!_storageReady) return null;
+    await _ensureStorage();
     try {
       final raw = await _storage.read(key);
       if (raw == null) return null;
@@ -282,13 +281,16 @@ class CacheManager {
 
       final data = fromJson(map['data']);
       final response = Response<T>(data: data, status: Status.ok);
-
       final expiresAt =
           expiresAtRaw != null ? DateTime.parse(expiresAtRaw) : null;
       _db[key] = CacheEntry(response, expiresAt);
 
       return response;
-    } catch (_) {
+    } catch (e) {
+      assert(() {
+        debugPrint('CacheManager _readFromStorage error: $e');
+        return true;
+      }());
       return null;
     }
   }
