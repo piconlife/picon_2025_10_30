@@ -6,20 +6,22 @@ class DataIdGenerator {
 
   DataIdGenerator._(this.type);
 
-  static DataIdGenerator get I => DataIdGenerator._(DataByteType.x16);
+  static DataIdGenerator get i => DataIdGenerator._(DataByteType.x16);
 
   factory DataIdGenerator.generate(DataByteType type) =>
       DataIdGenerator._(type);
 
   int get length => type.value;
 
-  Uint8List get bytes {
+  late final Uint8List bytes = _generateBytes();
+
+  Uint8List _generateBytes() {
     final secure = Random.secure();
-    final bytes = Uint8List(length);
+    final result = Uint8List(length);
     for (var i = 0; i < length; i++) {
-      bytes[i] = secure.nextInt(256);
+      result[i] = secure.nextInt(256);
     }
-    return bytes;
+    return result;
   }
 
   String get key => DateTime.now().millisecondsSinceEpoch.toString();
@@ -28,14 +30,14 @@ class DataIdGenerator {
 
   String get secretIV => bytesToHex(bytes);
 
-  String bytesToHex(Uint8List bytes) {
-    var buffer = StringBuffer();
-    var hexChars = "0123456789ABCDEF";
-    for (var byte in bytes) {
+  static String bytesToHex(Uint8List bytes) {
+    final buffer = StringBuffer();
+    const hexChars = "0123456789ABCDEF";
+    for (final byte in bytes) {
       buffer.write(hexChars[(byte & 0xF0) >> 4]);
       buffer.write(hexChars[byte & 0x0F]);
     }
-    return "$buffer";
+    return buffer.toString();
   }
 }
 
