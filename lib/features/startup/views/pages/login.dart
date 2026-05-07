@@ -10,7 +10,7 @@ import 'package:in_app_analytics/analytics.dart';
 import 'package:in_app_navigator/route.dart';
 
 import '../../../../app/constants/app.dart';
-import '../../../../app/imports/am.dart'
+import '../../../../app/imports/auth_management.dart'
     show
         AuthListener,
         AuthHelper,

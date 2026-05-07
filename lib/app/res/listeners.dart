@@ -5,7 +5,7 @@ import 'package:in_app_purchaser/in_app_purchaser.dart';
 import 'package:in_app_settings/settings.dart';
 import 'package:in_app_translation/core.dart';
 
-import '../../app/imports/am.dart' show AuthResponse, AuthHelper;
+import '../../app/imports/auth_management.dart' show AuthResponse, AuthHelper;
 import '../../data/models/user.dart';
 import '../../roots/helpers/connectivity.dart';
 import '../../roots/services/notification.dart';

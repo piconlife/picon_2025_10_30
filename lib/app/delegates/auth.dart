@@ -1,15 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
-import 'package:flutter_entity/entity.dart';
-import 'package:local_auth/local_auth.dart';
-
-import '../../app/imports/am.dart'
-    show
-        AuthDelegate,
-        Credential,
-        AuthException,
-        AdditionalInfo,
-        Metadata,
-        Info;
+import '../imports/auth_management.dart'
+    show AuthDelegate, Credential, AuthException;
+import '../imports/firebase_auth.dart' hide AuthProvider;
+import '../imports/flutter_entity.dart' show Response, Status;
+import '../imports/local_auth.dart' show LocalAuthentication;
 
 String? _toMail(String prefix, String suffix, [String type = "com"]) {
   return "$prefix@$suffix.$type";
@@ -251,18 +244,17 @@ class InAppAuthDelegate extends AuthDelegate {
                 ? multiFactorSession
                 : null,
         timeout: timeout,
-        verificationCompleted:
-            (credential) => onComplete(
-              Credential(
-                providerId: credential.providerId,
-                verificationId: credential.verificationId,
-                signInMethod: credential.signInMethod,
-                smsCode: credential.smsCode,
-                accessToken: credential.token.toString(),
-              ),
+        verificationCompleted: (credential) {
+          onComplete(
+            Credential(
+              verificationId: credential.verificationId,
+              smsCode: credential.smsCode,
             ),
-        verificationFailed:
-            (e) => onFailed(AuthException(e.message ?? "", e.code)),
+          );
+        },
+        verificationFailed: (e) {
+          onFailed(AuthException(e.message ?? "", e.code));
+        },
         codeSent: onCodeSent,
         codeAutoRetrievalTimeout: onCodeAutoRetrievalTimeout,
       );
@@ -274,50 +266,12 @@ class InAppAuthDelegate extends AuthDelegate {
 
 extension on UserCredential {
   Credential get _credential {
-    final ai = additionalUserInfo;
-    final meta = user?.metadata;
     return Credential(
-      accessToken: credential?.accessToken,
-      additionalUserInfo:
-          ai != null
-              ? AdditionalInfo(
-                isNewUser: ai.isNewUser,
-                authorizationCode: ai.authorizationCode,
-                profile: ai.profile,
-                providerId: ai.providerId,
-                username: ai.username,
-              )
-              : null,
       credential: credential,
       displayName: user?.displayName,
       email: user?.email,
-      emailVerified: user?.emailVerified,
-      idToken: credential?.token.toString(),
-      isAnonymous: user?.isAnonymous,
-      metadata:
-          meta != null
-              ? Metadata(
-                creationTime: meta.creationTime,
-                lastSignInTime: meta.lastSignInTime,
-              )
-              : null,
-      multiFactor: user?.multiFactor,
       phoneNumber: user?.phoneNumber,
       photoURL: user?.photoURL,
-      providerId: credential?.providerId,
-      providerData:
-          user?.providerData.map((e) {
-            return Info(
-              providerId: e.providerId,
-              displayName: e.displayName,
-              email: e.email,
-              phoneNumber: e.phoneNumber,
-              photoURL: e.photoURL,
-              uid: e.uid,
-            );
-          }).toList(),
-      refreshToken: user?.refreshToken,
-      tenantId: user?.tenantId,
       uid: user?.uid ?? '',
     );
   }

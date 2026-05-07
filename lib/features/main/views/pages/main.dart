@@ -6,7 +6,7 @@ import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:in_app_navigator/route.dart';
 
 import '../../../../app/devs/nav_content.dart';
-import '../../../../app/imports/am.dart' show AuthListener;
+import '../../../../app/imports/auth_management.dart' show AuthListener;
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/user.dart';
 import '../../../../roots/preferences/preferences.dart';

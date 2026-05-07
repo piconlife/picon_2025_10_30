@@ -9,7 +9,7 @@ import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/route.dart';
 
 import '../../../../app/constants/app.dart';
-import '../../../../app/imports/am.dart'
+import '../../../../app/imports/auth_management.dart'
     show PhoneAuthenticator, AuthHelper, EmailAuthenticator;
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/user.dart';

@@ -9,7 +9,7 @@ import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
 
-import '../../../../app/imports/am.dart' show AuthHelper;
+import '../../../../app/imports/auth_management.dart' show AuthHelper;
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/user.dart';
 import '../../../../data/parsers/validations.dart';

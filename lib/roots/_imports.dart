@@ -42,7 +42,7 @@ import '../app/delegates/tracker.dart';
 import '../app/delegates/translation.dart';
 import '../app/delegates/translator.dart';
 import '../app/helpers/user.dart';
-import '../app/imports/am.dart' show AuthProvider, Authorizer;
+import '../app/imports/auth_management.dart' show AuthProvider, Authorizer;
 import '../app/interfaces/bsd_editor.dart';
 import '../app/interfaces/bsd_options.dart';
 import '../app/interfaces/dialog_alert.dart';

@@ -13,7 +13,7 @@ import 'package:in_app_translation/utils/country.dart';
 import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 
 import '../../../../app/constants/limitations.dart';
-import '../../../../app/imports/am.dart'
+import '../../../../app/imports/auth_management.dart'
     show
         AuthListener,
         AuthHelper,

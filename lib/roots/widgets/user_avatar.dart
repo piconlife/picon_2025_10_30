@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_androssy_kits/core/cached_network_image.dart';
 
-import '../../app/imports/am.dart' show AuthBuilder;
+import '../../app/imports/auth_management.dart' show AuthBuilder;
 import '../../app/res/placeholders.dart';
 import '../../data/models/user.dart';
 import 'gesture.dart';

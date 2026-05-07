@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../app/helpers/user.dart';
-import '../../app/imports/am.dart' show AuthBuilder;
+import '../../app/imports/auth_management.dart' show AuthBuilder;
 import '../../data/models/user.dart';
 import '../../data/use_cases/user/get.dart';
 

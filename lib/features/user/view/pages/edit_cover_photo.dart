@@ -13,7 +13,7 @@ import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
-import '../../../../app/imports/am.dart'
+import '../../../../app/imports/auth_management.dart'
     show
         AuthListener,
         AuthHelper,

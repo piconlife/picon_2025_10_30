@@ -6,7 +6,7 @@ import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:in_app_navigator/route.dart';
 import 'package:in_app_purchaser/in_app_purchaser.dart';
 
-import '../../app/imports/am.dart' show AuthHelper;
+import '../../app/imports/auth_management.dart' show AuthHelper;
 import '../../data/models/user.dart';
 import '../../data/use_cases/user/get.dart';
 import '../../roots/preferences/preferences.dart';
