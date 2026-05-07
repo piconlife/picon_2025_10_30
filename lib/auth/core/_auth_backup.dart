@@ -3,6 +3,10 @@ part of 'authorizer.dart';
 class _AuthBackup<T extends Auth> {
   final AuthBackupDelegate<T> delegate;
 
+  /// Callback used ONLY for backup-driven async events
+  /// (e.g. listener stream pushes). Sign-in flows emit directly via
+  /// [_AuthEmitMixin.emit] and must NOT route through this — that was
+  /// the source of double-emit / flicker bugs.
   final void Function(AuthResponse<T>) _emit;
 
   int _updateGeneration = 0;
@@ -25,7 +29,11 @@ class _AuthBackup<T extends Auth> {
     final value = await cache;
     if (value == null || !value.isLoggedIn) return null;
     if (!remotely) return value;
-    return delegate.onFetchUser(value.id);
+    try {
+      return await delegate.onFetchUser(value.id);
+    } catch (_) {
+      return value;
+    }
   }
 
   Future<bool> set(T? data) async {
@@ -33,13 +41,15 @@ class _AuthBackup<T extends Auth> {
     return setAsLocal(data);
   }
 
-  Future<bool> setAsLocal(T? data) async {
+  /// Persists [data] (or current cache if null) without emitting from here.
+  /// Caller decides whether to surface the change to the UI.
+  Future<bool> setAsLocal(T? data, {bool emit = false}) async {
     final current = await cache;
     final target = data ?? current;
     if (target == null) return false;
 
     final ok = await delegate.set(target).onError((_, __) => false);
-    if (ok) _emit(AuthResponse.data(target));
+    if (ok && emit) _emit(AuthResponse.data(target));
     return ok;
   }
 
@@ -63,6 +73,8 @@ class _AuthBackup<T extends Auth> {
     final merged = {...old, ...parsed}..removeWhere((_, v) => v == null);
     final updated = build(merged);
 
+    // Optimistic local write — but DO NOT emit yet. UI shouldn't see
+    // an unconfirmed update flicker if the remote call fails.
     final localOk = await setAsLocal(updated);
     if (!isCurrent()) return false;
     if (!localOk) return false;
@@ -70,11 +82,14 @@ class _AuthBackup<T extends Auth> {
     try {
       await onUpdateUser(local.id, data, false);
       if (!isCurrent()) return false;
+      // Remote OK — now confirm to UI.
+      _emit(AuthResponse.data(updated));
       return true;
     } catch (_) {
+      // Rollback silently to the previous local state.
       if (isCurrent()) {
-        _emit(AuthResponse.loading());
         await setAsLocal(local);
+        if (isCurrent()) _emit(AuthResponse.data(local));
       }
       return false;
     }
@@ -89,7 +104,7 @@ class _AuthBackup<T extends Auth> {
     if (id.isEmpty) return false;
 
     if (cacheUpdateMode) {
-      final ok = await delegate.update(data);
+      final ok = await delegate.update(data).catchError((_) => false);
       if (ok) {
         final refreshed = await cache;
         if (refreshed != null) _emit(AuthResponse.data(refreshed));
@@ -97,9 +112,14 @@ class _AuthBackup<T extends Auth> {
       return ok;
     }
 
-    final remote = await onFetchUser(id);
+    T? remote;
+    try {
+      remote = await onFetchUser(id);
+    } catch (_) {
+      remote = null;
+    }
 
-    if (remote == null || !remote.isAuthenticated) {
+    if (remote == null) {
       if (data.isEmpty) return false;
       final user = build(data);
       try {

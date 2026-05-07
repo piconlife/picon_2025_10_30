@@ -67,19 +67,20 @@ class Authorizer<T extends Auth> extends _AuthorizerBase<T>
   }
 
   static Authorizer<T> instanceOf<T extends Auth>() {
-    if (_i == null) {
+    final current = _i;
+    if (current == null) {
       throw AuthProviderException(
         'Authorizer has not been initialised. '
         'Call Authorizer.init<T>() or attach an instance first.',
       );
     }
-    if (_i is! Authorizer<T>) {
+    if (current is! Authorizer<T>) {
       throw AuthProviderException(
-        'Type mismatch: expected Authorizer<T> '
-        'but the attached instance is ${_i.runtimeType}.',
+        'Type mismatch: expected Authorizer<$T> '
+        'but the attached instance is ${current.runtimeType}.',
       );
     }
-    return _i as Authorizer<T>;
+    return current;
   }
 
   static Future<void> init<T extends Auth>({
@@ -89,11 +90,24 @@ class Authorizer<T extends Auth> extends _AuthorizerBase<T>
     bool initialCheck = true,
     bool listening = false,
   }) async {
-    _i = Authorizer<T>(delegate: delegate, backup: backup, msg: msg);
-    await _i!.initialize(initialCheck: initialCheck, listening: listening);
+    final prev = _i;
+    if (prev != null) {
+      try {
+        prev.dispose();
+      } catch (_) {}
+    }
+    final created = Authorizer<T>(delegate: delegate, backup: backup, msg: msg);
+    _i = created;
+    await created.initialize(initialCheck: initialCheck, listening: listening);
   }
 
   static void attach<T extends Auth>(Authorizer<T> authorizer) {
+    final prev = _i;
+    if (prev != null && !identical(prev, authorizer)) {
+      try {
+        prev.dispose();
+      } catch (_) {}
+    }
     _i = authorizer;
   }
 
@@ -112,7 +126,11 @@ class Authorizer<T extends Auth> extends _AuthorizerBase<T>
       final signedIn = await delegate.isSignIn();
       final data = signedIn ? await auth : null;
       if (data == null) {
-        if (signedIn) await delegate.signOut();
+        if (signedIn) {
+          try {
+            await delegate.signOut();
+          } catch (_) {}
+        }
         return AuthResponse.unauthenticated(type: AuthType.signedIn);
       }
       return AuthResponse.authenticated(data, type: AuthType.signedIn);
@@ -137,8 +155,15 @@ class Authorizer<T extends Auth> extends _AuthorizerBase<T>
       notifiable: notifiable,
     );
 
+    final opToken = _beginOp();
+
     try {
       final response = await delegate.signInAnonymously();
+
+      if (!_isOpAlive(opToken)) {
+        return AuthResponse.failure('Cancelled', type: AuthType.none);
+      }
+
       if (!response.isSuccessful) {
         return _failure(
           response.error,
@@ -170,6 +195,10 @@ class Authorizer<T extends Auth> extends _AuthorizerBase<T>
           keys.provider: 'GUEST',
         },
       );
+
+      if (!_isOpAlive(opToken)) {
+        return AuthResponse.failure('Cancelled', type: AuthType.none);
+      }
 
       return emit(
         AuthResponse.authenticated(

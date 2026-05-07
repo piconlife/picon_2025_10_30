@@ -44,6 +44,8 @@ mixin _AuthBiometricMixin<T extends Auth>
       notifiable: notifiable,
     );
 
+    final opToken = _beginOp();
+
     try {
       final user = await _cachedAuth;
       if (user == null || !user.isBiometric) {
@@ -59,6 +61,9 @@ mixin _AuthBiometricMixin<T extends Auth>
       }
 
       final response = await delegate.signInWithBiometric();
+      if (!_isOpAlive(opToken)) {
+        return AuthResponse.failure('Cancelled', type: AuthType.biometric);
+      }
       if (!response.isSuccessful) {
         return _failure(
           response.error,
@@ -70,12 +75,15 @@ mixin _AuthBiometricMixin<T extends Auth>
       }
 
       final provider = user.provider;
-      var current = Response<Credential>();
+      Response<Credential> current = Response<Credential>();
 
       final hasCredentials =
           (user.email ?? user.username ?? '').isNotEmpty &&
           (user.password ?? '').isNotEmpty;
 
+      // We only re-attempt password sign-in if credentials are stored.
+      // For OAuth/phone/biometric-only flows, the device biometric
+      // success itself is treated as proof — re-fetch user instead.
       if (hasCredentials) {
         if (provider == 'EMAIL') {
           current = await delegate.signInWithEmailNPassword(
@@ -87,7 +95,17 @@ mixin _AuthBiometricMixin<T extends Auth>
             user.username ?? '',
             user.password ?? '',
           );
+        } else {
+          // Stored credentials but unsupported provider — treat as ok.
+          current = Response(status: Status.ok);
         }
+      } else {
+        // No stored credentials — biometric alone gates the cache.
+        current = Response(status: Status.ok);
+      }
+
+      if (!_isOpAlive(opToken)) {
+        return AuthResponse.failure('Cancelled', type: AuthType.biometric);
       }
 
       if (!current.isSuccessful) {
@@ -102,11 +120,16 @@ mixin _AuthBiometricMixin<T extends Auth>
 
       final value = await _update(
         id: user.id,
+        updateMode: true,
         data: {
           keys.loggedIn: true,
           keys.loggedInTime: EntityHelper.generateTimeMills,
         },
       );
+
+      if (!_isOpAlive(opToken)) {
+        return AuthResponse.failure('Cancelled', type: AuthType.biometric);
+      }
 
       return emit(
         AuthResponse.authenticated(

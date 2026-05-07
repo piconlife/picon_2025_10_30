@@ -7,14 +7,14 @@ mixin _AuthSignOutMixin<T extends Auth>
     String? id,
     bool notifiable = true,
   }) async {
-    try {
-      emit(
-        AuthResponse.loading(AuthType.logout),
-        args: args,
-        id: id,
-        notifiable: notifiable,
-      );
+    emit(
+      AuthResponse.loading(AuthType.logout),
+      args: args,
+      id: id,
+      notifiable: notifiable,
+    );
 
+    try {
       final response = await delegate.signOut();
       if (!response.isSuccessful) {
         return _failure(
@@ -26,11 +26,12 @@ mixin _AuthSignOutMixin<T extends Auth>
         );
       }
 
+      final prev = _backupEmitEnabled;
       _backupEmitEnabled = false;
       try {
         await _clearLocal();
       } finally {
-        _backupEmitEnabled = true;
+        _backupEmitEnabled = prev;
       }
 
       return emit(
@@ -43,7 +44,6 @@ mixin _AuthSignOutMixin<T extends Auth>
         notifiable: notifiable,
       );
     } catch (error) {
-      _backupEmitEnabled = true;
       return _failure(
         msg.signOut.failure ?? error.toString(),
         type: AuthType.logout,
@@ -69,9 +69,8 @@ mixin _AuthSignOutMixin<T extends Auth>
     final data = await auth;
     if (data == null) {
       return emit(
-        AuthResponse.data(
-          data,
-          msg: msg.loggedIn.failure,
+        AuthResponse.failure(
+          msg.loggedIn.failure ?? 'Not logged in',
           type: AuthType.delete,
         ),
         args: args,
@@ -83,17 +82,32 @@ mixin _AuthSignOutMixin<T extends Auth>
     try {
       final response = await delegate.delete();
       if (!response.isSuccessful) {
-        return emit(
-          AuthResponse.data(data, msg: response.message, type: AuthType.delete),
+        return _failure(
+          response.error.isNotEmpty
+              ? response.error
+              : (msg.delete.failure ?? 'Delete failed'),
+          type: AuthType.delete,
           args: args,
           id: id,
           notifiable: notifiable,
         );
       }
 
-      await _clearLocal();
-      await _backup.onDeleteUser(data.id);
-      await delegate.signOut();
+      try {
+        await _backup.onDeleteUser(data.id);
+      } catch (_) {}
+
+      try {
+        await delegate.signOut();
+      } catch (_) {}
+
+      final prev = _backupEmitEnabled;
+      _backupEmitEnabled = false;
+      try {
+        await _clearLocal();
+      } finally {
+        _backupEmitEnabled = prev;
+      }
 
       return emit(
         AuthResponse.unauthenticated(
@@ -105,12 +119,9 @@ mixin _AuthSignOutMixin<T extends Auth>
         notifiable: notifiable,
       );
     } catch (error) {
-      return emit(
-        AuthResponse.data(
-          data,
-          msg: msg.delete.failure ?? error.toString(),
-          type: AuthType.delete,
-        ),
+      return _failure(
+        msg.delete.failure ?? error.toString(),
+        type: AuthType.delete,
         args: args,
         id: id,
         notifiable: notifiable,

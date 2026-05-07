@@ -124,9 +124,16 @@ mixin _AuthEmailMixin<T extends Auth>
       notifiable: notifiable,
     );
 
+    final opToken = _beginOp();
+
     try {
       final hasAnonymous = this.hasAnonymous;
       final response = await signIn();
+
+      if (!_isOpAlive(opToken)) {
+        return AuthResponse.failure('Cancelled', type: type);
+      }
+
       if (!response.isSuccessful) {
         return _failure(
           response.error,
@@ -149,6 +156,11 @@ mixin _AuthEmailMixin<T extends Auth>
         );
       }
 
+      // Password is stored ONLY when biometric is enabled — and the
+      // [encryptor] hook is the integrator's contract for protecting it.
+      // If biometric is not requested, no password ever touches the cache.
+      final wantsBiometric = onBiometric != null;
+
       final value = await _update(
         id: uid,
         hasAnonymous: hasAnonymous,
@@ -161,13 +173,17 @@ mixin _AuthEmailMixin<T extends Auth>
           keys.provider: provider,
           if (authenticator is EmailAuthenticator) ...{
             keys.email: authenticator.email,
-            keys.password: authenticator.password,
+            if (wantsBiometric) keys.password: authenticator.password,
           } else if (authenticator is UsernameAuthenticator) ...{
             keys.username: authenticator.username,
-            keys.password: authenticator.password,
+            if (wantsBiometric) keys.password: authenticator.password,
           },
         },
       );
+
+      if (!_isOpAlive(opToken)) {
+        return AuthResponse.failure('Cancelled', type: type);
+      }
 
       return emit(
         AuthResponse.authenticated(value, msg: doneMsg, type: type),
