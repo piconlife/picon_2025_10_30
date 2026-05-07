@@ -1,8 +1,8 @@
-import 'package:collection/collection.dart' show MapEquality;
+import 'package:collection/collection.dart' show DeepCollectionEquality;
 
 import '../utils/set_options.dart' show DataSetOptions;
 
-const _e = MapEquality();
+const _e = DeepCollectionEquality();
 
 abstract class DataBatchWriter {
   final String path;
@@ -20,11 +20,11 @@ abstract class DataBatchWriter {
   }
 
   @override
-  String toString() => '$DataBatchWriter#$hashCode{path: $path}';
+  String toString() => '$runtimeType#$hashCode{path: $path}';
 }
 
-class DataSetWriter extends DataBatchWriter {
-  final Object data;
+class DataSetWriter<T> extends DataBatchWriter {
+  final T data;
   final DataSetOptions options;
 
   const DataSetWriter(
@@ -39,8 +39,7 @@ class DataSetWriter extends DataBatchWriter {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (other.runtimeType != runtimeType) return false;
-    if (other is! DataSetWriter) return false;
+    if (other is! DataSetWriter<T>) return false;
     if (other.path != path) return false;
     if (other.data != data) return false;
     if (other.options != options) return false;
@@ -49,7 +48,7 @@ class DataSetWriter extends DataBatchWriter {
 
   @override
   String toString() {
-    return '$DataSetWriter#$hashCode{path: $path, data: $data, options: $options}';
+    return '$runtimeType#$hashCode{path: $path, data: $data, options: $options}';
   }
 }
 
@@ -71,7 +70,7 @@ class DataUpdateWriter extends DataBatchWriter {
 
   @override
   String toString() {
-    return '$DataUpdateWriter#$hashCode{path: $path, data: $data}';
+    return '$runtimeType#$hashCode{path: $path, data: $data}';
   }
 }
 
@@ -80,6 +79,6 @@ class DataDeleteWriter extends DataBatchWriter {
 
   @override
   String toString() {
-    return '$DataDeleteWriter#$hashCode{path: $path}';
+    return '$runtimeType#$hashCode{path: $path}';
   }
 }
