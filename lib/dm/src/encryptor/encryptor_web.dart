@@ -13,7 +13,7 @@ import 'dart:typed_data' show Uint8List;
 
 import 'package:web/web.dart' as web;
 
-import '_encryptor_stub.dart' show AesBackend;
+import 'encryptor_stub.dart' show AesBackend;
 
 class _WebAesBackend implements AesBackend {
   const _WebAesBackend();

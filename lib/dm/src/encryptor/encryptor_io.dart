@@ -2,7 +2,7 @@ import 'package:encrypt/encrypt.dart'
     as crypto
     show Encrypter, AESMode, Key, AES, IV, Encrypted;
 
-import '_encryptor_stub.dart' show AesBackend;
+import 'encryptor_stub.dart' show AesBackend;
 
 class _IoAesBackend implements AesBackend {
   const _IoAesBackend();

@@ -3,9 +3,9 @@ import 'dart:convert' show jsonEncode, jsonDecode;
 import 'package:flutter/foundation.dart' show debugPrint;
 
 import '../utils/configs.dart' show DataByteType, DataIdGenerator;
-import '_encryptor_stub.dart'
-    if (dart.library.io) '_encryptor_io.dart'
-    if (dart.library.html) '_encryptor_web.dart';
+import 'encryptor_stub.dart'
+    if (dart.library.io) 'encryptor_io.dart'
+    if (dart.library.html) 'encryptor_web.dart';
 
 typedef EncryptorRequestBuilder =
 Map<String, dynamic> Function(String request, String passcode);
