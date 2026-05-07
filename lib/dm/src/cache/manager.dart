@@ -22,7 +22,8 @@ class CacheManager {
 
   final LinkedHashMap<String, CacheEntry> _db = LinkedHashMap();
 
-  final Map<String, Future<dynamic>> _inFlight = {};
+  final Map<String, _TypedFlight<dynamic>> _inFlight = {};
+
   DateTime? _lastEviction;
 
   CacheManager({this.config = const CacheConfig()});
@@ -63,34 +64,39 @@ class CacheManager {
         return Response(error: "$e\n$st", status: Status.failure);
       }
     }
+
     final key = buildKey(T, name, keyProps);
+
     final cached = _readValid<T>(key);
     if (cached != null) {
       _stats.hits++;
       return cached;
     }
     _stats.misses++;
+
     if (config.deduplicateInFlight) {
-      final pending = _inFlight[key];
-      if (pending != null) {
+      final flight = _inFlight[key];
+      if (flight != null && flight is _TypedFlight<T>) {
         _stats.inFlightDedupes++;
-        return await pending as Response<T>;
+        return await flight.future;
       }
     }
 
-    final future = callback();
+    final typedFlight = _TypedFlight<T>(callback());
     if (config.deduplicateInFlight) {
-      _inFlight[key] = future;
+      _inFlight[key] = typedFlight;
     }
 
     try {
-      final result = await future;
+      final result = await typedFlight.future;
       if (result.isValid) _write(key, result, ttl);
       return result;
     } catch (e, st) {
       return Response(error: "$e\n$st", status: Status.failure);
     } finally {
-      _inFlight.remove(key);
+      if (identical(_inFlight[key], typedFlight)) {
+        _inFlight.remove(key);
+      }
     }
   }
 
@@ -126,6 +132,7 @@ class CacheManager {
     _db.clear();
     _inFlight.clear();
     _stats.reset();
+    _lastEviction = null;
   }
 
   int evictExpired() {
@@ -176,4 +183,10 @@ class CacheManager {
       _stats.evictions++;
     }
   }
+}
+
+class _TypedFlight<T extends Object> {
+  final Future<Response<T>> future;
+
+  _TypedFlight(this.future);
 }
