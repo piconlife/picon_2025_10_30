@@ -53,7 +53,10 @@ mixin _WriteTransformMixin {
       case DataFieldValueWriterType.set:
         final doc = value.value;
         if (doc == null || doc.isEmpty) return null;
-        final options = value.options as DataSetOptions;
+        final options =
+            value.options is DataSetOptions
+                ? value.options as DataSetOptions
+                : const DataSetOptions();
         batch.set(value.path, transformWrite(batch, doc, merge), options.merge);
         return value.path;
       case DataFieldValueWriterType.update:
@@ -87,6 +90,6 @@ mixin _WriteTransformMixin {
       batch.delete(path);
       return null;
     }
-    return path;
+    return transformWrite(batch, value, merge);
   }
 }

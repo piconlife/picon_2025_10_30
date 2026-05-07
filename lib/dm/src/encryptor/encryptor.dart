@@ -76,6 +76,10 @@ class DataEncryptor {
     );
   }
 
+  EncryptorRequestBuilder get request => _request;
+
+  EncryptorResponseBuilder get response => _response;
+
   static Map<String, dynamic> _defaultRequest(
     String ciphertext,
     String iv,
@@ -93,13 +97,15 @@ class DataEncryptor {
     return (ciphertext: c, iv: iv);
   }
 
-  /// Encrypts [data] (must be `Map<String, dynamic>`) with a fresh IV.
+  /// Encrypts [data] with a fresh IV per call.
   /// Throws [DataEncryptionError] on any failure.
   Future<Map<String, dynamic>> input(Map<String, dynamic> data) async {
     try {
       final iv = _freshIV();
       final ciphertext = await _backend.encrypt(jsonEncode(data), _key, iv);
       return _request(ciphertext, base64Encode(iv), passcode);
+    } on DataEncryptionError {
+      rethrow;
     } catch (e, s) {
       throw DataEncryptionError('encrypt', e, s);
     }
@@ -120,6 +126,8 @@ class DataEncryptor {
         throw const FormatException('decrypted payload is not a JSON object');
       }
       return decoded;
+    } on DataEncryptionError {
+      rethrow;
     } catch (e, s) {
       throw DataEncryptionError('decrypt', e, s);
     }
@@ -149,9 +157,8 @@ class DataEncryptor {
   }
 
   /// Generates a hex-encoded 32-byte key suitable for AES-256.
-  static String generateKey() {
-    return DataIdGenerator.generate(DataByteType.x32).secretKey;
-  }
+  static String generateKey() =>
+      DataIdGenerator.generate(DataByteType.x32).secretKey;
 }
 
 extension DataEncryptorHelper on DataEncryptor? {

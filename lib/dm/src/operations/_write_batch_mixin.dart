@@ -3,13 +3,10 @@ part of 'operation.dart';
 mixin _WriteBatchMixin on _ErrorHandlingMixin {
   DataDelegate get delegate;
 
-  /// Set [parallelEncryption] to true only if [DataEncryptor.input] is safe to
-  /// call concurrently. Stateful encryptors (e.g. one with a single mutable
-  /// cipher instance) must keep this false.
   Future<void> doWrite(
     List<DataBatchWriter> writers,
     DataEncryptor? encryptor, {
-    bool parallelEncryption = false,
+    bool parallelEncryption = true,
   }) async {
     if (writers.isEmpty) return;
     await guardAsync(() async {
