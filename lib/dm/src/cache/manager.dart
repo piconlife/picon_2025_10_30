@@ -1,11 +1,18 @@
+import 'dart:async' show unawaited;
 import 'dart:collection' show LinkedHashMap, UnmodifiableListView;
+import 'dart:convert' show json;
 
+import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:flutter_entity/entity.dart' show Response, Status;
 import 'package:meta/meta.dart' show visibleForTesting;
 
 import 'config.dart' show CacheConfig;
 import 'entry.dart' show CacheEntry;
 import 'stats.dart' show CacheStats;
+import 'storage.dart' show CacheStorageAdapter, defaultCacheStorage;
+
+typedef ToJson<T> = dynamic Function(T value);
+typedef FromJson<T> = T Function(dynamic json);
 
 class CacheManager {
   static CacheManager? _instance;
@@ -21,12 +28,28 @@ class CacheManager {
   final CacheStats _stats = CacheStats();
 
   final LinkedHashMap<String, CacheEntry> _db = LinkedHashMap();
-
   final Map<String, _TypedFlight<dynamic>> _inFlight = {};
+
+  final CacheStorageAdapter _storage;
+
+  bool _storageReady = false;
 
   DateTime? _lastEviction;
 
-  CacheManager({this.config = const CacheConfig()});
+  CacheManager({
+    this.config = const CacheConfig(),
+    CacheStorageAdapter? storage,
+  }) : _storage = storage ?? defaultCacheStorage();
+
+  Future<void> init() async {
+    if (_storageReady) return;
+    await _storage.init();
+    _storageReady = true;
+  }
+
+  Future<void> _ensureStorage() async {
+    if (!_storageReady) await init();
+  }
 
   CacheStats get stats => _stats.clone();
 
@@ -55,13 +78,15 @@ class CacheManager {
     bool enabled = true,
     Iterable<Object?> keyProps = const [],
     Duration? ttl,
+    ToJson<T>? toJson,
+    FromJson<T>? fromJson,
     required Future<Response<T>> Function() callback,
   }) async {
     if (!enabled) {
       try {
         return await callback();
       } catch (e, st) {
-        return Response(error: "$e\n$st", status: Status.failure);
+        return Response(error: '$e\n$st', status: Status.failure);
       }
     }
 
@@ -72,6 +97,15 @@ class CacheManager {
       _stats.hits++;
       return cached;
     }
+
+    if (fromJson != null) {
+      final persisted = await _readFromStorage<T>(key, fromJson);
+      if (persisted != null) {
+        _stats.hits++;
+        return persisted;
+      }
+    }
+
     _stats.misses++;
 
     if (config.deduplicateInFlight) {
@@ -89,10 +123,13 @@ class CacheManager {
 
     try {
       final result = await typedFlight.future;
-      if (result.isValid) _write(key, result, ttl);
+      if (result.isValid) {
+        _write(key, result, ttl);
+        if (toJson != null) await _writeToStorage(key, result, ttl, toJson);
+      }
       return result;
     } catch (e, st) {
-      return Response(error: "$e\n$st", status: Status.failure);
+      return Response(error: '$e\n$st', status: Status.failure);
     } finally {
       if (identical(_inFlight[key], typedFlight)) {
         _inFlight.remove(key);
@@ -103,9 +140,7 @@ class CacheManager {
   Response<T>? pick<T extends Object>(
     String name, {
     Iterable<Object?> keyProps = const [],
-  }) {
-    return _readValid<T>(buildKey(T, name, keyProps));
-  }
+  }) => _readValid<T>(buildKey(T, name, keyProps));
 
   Response<T>? pickByKey<T extends Object>(String key) => _readValid<T>(key);
 
@@ -114,25 +149,36 @@ class CacheManager {
     Response<T> response, {
     Iterable<Object?> keyProps = const [],
     Duration? ttl,
+    ToJson<T>? toJson,
   }) {
     if (!response.isValid) return;
-    _write(buildKey(T, name, keyProps), response, ttl);
+    final key = buildKey(T, name, keyProps);
+    _write(key, response, ttl);
+    if (toJson != null) {
+      unawaited(_writeToStorage(key, response, ttl, toJson));
+    }
   }
 
   void remove<T extends Object>(
     String name, {
     Iterable<Object?> keyProps = const [],
   }) {
-    _db.remove(buildKey(T, name, keyProps));
+    final key = buildKey(T, name, keyProps);
+    _db.remove(key);
+    unawaited(_storage.delete(key));
   }
 
-  void removeByKey(String key) => _db.remove(key);
+  void removeByKey(String key) {
+    _db.remove(key);
+    unawaited(_storage.delete(key));
+  }
 
   void clear() {
     _db.clear();
     _inFlight.clear();
     _stats.reset();
     _lastEviction = null;
+    unawaited(_storage.clear());
   }
 
   int evictExpired() {
@@ -142,6 +188,7 @@ class CacheManager {
     }
     for (final k in expiredKeys) {
       _db.remove(k);
+      unawaited(_storage.delete(k));
       _stats.expirations++;
     }
     return expiredKeys.length;
@@ -153,6 +200,7 @@ class CacheManager {
 
     if (entry.isExpired) {
       _db.remove(key);
+      unawaited(_storage.delete(key));
       _stats.expirations++;
       return null;
     }
@@ -183,10 +231,70 @@ class CacheManager {
       _stats.evictions++;
     }
   }
+
+  Future<void> _writeToStorage<T extends Object>(
+    String key,
+    Response<T> response,
+    Duration? ttl,
+    ToJson<T> toJson,
+  ) async {
+    if (!_storageReady) return;
+    try {
+      final effectiveTtl = ttl ?? config.defaultTtl;
+      final expiresAt =
+          effectiveTtl == null
+              ? null
+              : DateTime.now().add(effectiveTtl).toIso8601String();
+
+      final payload = json.encode({
+        'data': toJson(response.data as T),
+        'expiresAt': expiresAt,
+      });
+      await _storage.write(key, payload);
+    } catch (e) {
+      assert(() {
+        debugPrint('CacheManager storage error: $e');
+        return true;
+      }());
+    }
+  }
+
+  Future<Response<T>?> _readFromStorage<T extends Object>(
+    String key,
+    FromJson<T> fromJson,
+  ) async {
+    if (!_storageReady) return null;
+    try {
+      final raw = await _storage.read(key);
+      if (raw == null) return null;
+
+      final map = json.decode(raw) as Map<String, dynamic>;
+      final expiresAtRaw = map['expiresAt'] as String?;
+
+      if (expiresAtRaw != null) {
+        final expiresAt = DateTime.parse(expiresAtRaw);
+        if (DateTime.now().isAfter(expiresAt)) {
+          await _storage.delete(key);
+          _stats.expirations++;
+          return null;
+        }
+      }
+
+      final data = fromJson(map['data']);
+      final response = Response<T>(data: data, status: Status.ok);
+
+      final expiresAt =
+          expiresAtRaw != null ? DateTime.parse(expiresAtRaw) : null;
+      _db[key] = CacheEntry(response, expiresAt);
+
+      return response;
+    } catch (_) {
+      return null;
+    }
+  }
 }
 
 class _TypedFlight<T extends Object> {
   final Future<Response<T>> future;
-
   _TypedFlight(this.future);
 }
