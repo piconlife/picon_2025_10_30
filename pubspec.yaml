@@ -146,6 +146,7 @@ dependencies:
   device_storage: ^1.0.0
   audioplayers: ^6.6.0
   type_ahead_text_field: ^0.0.5
+  meta: ^1.17.0
 
 dev_dependencies:
   # ------------------------------------------------------------------------------------------------

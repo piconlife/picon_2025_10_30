@@ -1,6 +1,7 @@
 import 'dart:collection' show LinkedHashMap, UnmodifiableListView;
 
-import 'package:flutter_entity/entity.dart' show Response;
+import 'package:flutter_entity/entity.dart' show Response, Status;
+import 'package:meta/meta.dart' show visibleForTesting;
 
 import 'config.dart' show CacheConfig;
 import 'entry.dart' show CacheEntry;
@@ -11,6 +12,7 @@ class CacheManager {
 
   static CacheManager get i => _instance ??= CacheManager();
 
+  @visibleForTesting
   static void overrideInstance(CacheManager? instance) {
     _instance = instance;
   }
@@ -20,7 +22,7 @@ class CacheManager {
 
   final LinkedHashMap<String, CacheEntry> _db = LinkedHashMap();
 
-  final Map<String, Future<Response>> _inFlight = {};
+  final Map<String, Future<dynamic>> _inFlight = {};
 
   CacheManager({this.config = const CacheConfig()});
 
@@ -69,6 +71,7 @@ class CacheManager {
         if (result is Response<T>) return result;
       }
     }
+
     final future = callback();
     if (config.deduplicateInFlight) {
       _inFlight[key] = future;
@@ -78,6 +81,8 @@ class CacheManager {
       final result = await future;
       if (result.isValid) _write(key, result, ttl);
       return result;
+    } on Exception catch (e, _) {
+      return Response(error: e.toString(), status: Status.failure);
     } finally {
       _inFlight.remove(key);
     }
@@ -114,6 +119,7 @@ class CacheManager {
   void clear() {
     _db.clear();
     _inFlight.clear();
+    _stats.reset();
   }
 
   int evictExpired() {
@@ -148,6 +154,7 @@ class CacheManager {
   }
 
   void _write(String key, Response response, Duration? ttl) {
+    evictExpired();
     final effectiveTtl = ttl ?? config.defaultTtl;
     final expiresAt =
         effectiveTtl == null ? null : DateTime.now().add(effectiveTtl);
@@ -155,8 +162,7 @@ class CacheManager {
     _db[key] = CacheEntry(response, expiresAt);
     _stats.writes++;
     while (_db.length > config.maxSize) {
-      final oldestKey = _db.keys.first;
-      _db.remove(oldestKey);
+      _db.remove(_db.keys.first);
       _stats.evictions++;
     }
   }
