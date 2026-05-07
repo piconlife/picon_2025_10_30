@@ -1,73 +1,15 @@
 import 'package:async/async.dart';
 import 'package:flutter_entity/entity.dart';
 
-import 'checker.dart';
-import 'configs.dart';
-import 'encryptor.dart';
-import 'extensions.dart';
-import 'limitations.dart';
-import 'modifiers.dart';
-import 'operation.dart';
-import 'updating_info.dart';
+import '../operations/operation.dart';
+import '../utils/checker.dart';
+import '../utils/configs.dart';
+import '../utils/encryptor.dart';
+import '../utils/extensions.dart';
+import '../utils/limitations.dart';
+import '../utils/modifiers.dart';
+import '../utils/updating_info.dart';
 
-/// # Won't Use Directly
-/// You can use:
-/// * <b>[ApiDataSource]</b> : Use for Api related data.
-/// * <b>[FireStoreDataSource]</b> : Use for Firebase Cloud firestore related data.
-/// * <b>[RealtimeDataSource]</b> : Use for Firebase realtime database related data.
-/// * <b>[LocalDataSourceImpl]</b> : Use for local or save instance related data.
-///
-/// ## Abstract class representing a data source for handling operations related to entities of type [T].
-///
-/// ### A data source for handling cached data operations.
-///
-/// Example:
-/// ```dart
-/// class LocalUserDataSource extends LocalDataSourceImpl {
-///   // Implement local data source operations for User entities.
-/// }
-/// ```
-///
-/// ### A data source for handling api based data operations.
-///
-/// Example:
-/// ```dart
-/// class ApiUserDataSource extends ApiDataSource {
-///   // Implement api based data source operations for User entities.
-/// }
-/// ```
-///
-/// ### A data source for handling Firestore database operations.
-///
-/// Example:
-/// ```dart
-/// class FirestoreUserDataSource extends FirestoreDataSource {
-///   // Implement Firestore data source operations for User entities.
-/// }
-/// ```
-///
-/// ### A data source for handling Realtime database operations.
-///
-/// Example:
-/// ```dart
-/// class RealtimeUserDataSource extends RealtimeDataSource {
-///   // Implement real-time data source operations for User entities.
-/// }
-/// ```
-///
-/// ## Abstract class representing a generic data repository with methods for CRUD operations.
-///
-/// This abstract class defines the structure of a generic data repository.
-/// It is not intended to be used directly. Instead, use its implementations:
-/// * <b>[RemoteDataSource]</b> : Use for all remote database related data.
-/// * <b>[LocalDataSource]</b> : Use for all local database related data.
-///
-/// Example:
-/// ```dart
-/// final RemoteDataSource remoteUserDataSource = RemoteUserDataSource();
-/// final LocalDataSource localUserDataSource = LocalUserDataSource();
-/// ```
-///
 abstract class DataSource<T extends Entity> {
   final String path;
   final DataDelegate delegate;
@@ -114,15 +56,6 @@ abstract class DataSource<T extends Entity> {
     return "$a/$id";
   }
 
-  /// Method to check data by ID with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// repository.checkById(
-  ///   'userId123',
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   Future<Response<T>> checkById(
     String id, {
     DataFieldParams? params,
@@ -153,14 +86,6 @@ abstract class DataSource<T extends Entity> {
     });
   }
 
-  /// Method to clear data with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// repository.clear(
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   Future<Response<T>> clear({
     DataFieldParams? params,
     bool? resolveRefs,
@@ -210,16 +135,6 @@ abstract class DataSource<T extends Entity> {
     });
   }
 
-  /// Method to create data with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// T newData = //...;
-  /// repository.create(
-  ///   newData,
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   Future<Response<T>> create(
     String id,
     Map<String, dynamic> data, {
@@ -252,16 +167,6 @@ abstract class DataSource<T extends Entity> {
     });
   }
 
-  /// Method to create multiple data entries with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// List<T> newDataList = //...;
-  /// repository.creates(
-  ///   newDataList,
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   Future<Response<T>> creates(
     Iterable<DataWriter> writers, {
     DataFieldParams? params,
@@ -289,15 +194,6 @@ abstract class DataSource<T extends Entity> {
     });
   }
 
-  /// Method to delete data by ID with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// repository.deleteById(
-  ///   'userId123',
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   Future<Response<T>> deleteById(
     String id, {
     DataFieldParams? params,
@@ -333,16 +229,6 @@ abstract class DataSource<T extends Entity> {
     });
   }
 
-  /// Method to delete data by multiple IDs with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// List<String> idsToDelete = ['userId1', 'userId2'];
-  /// repository.deleteByIds(
-  ///   idsToDelete,
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   Future<Response<T>> deleteByIds(
     Iterable<String> ids, {
     DataFieldParams? params,
@@ -374,14 +260,6 @@ abstract class DataSource<T extends Entity> {
     });
   }
 
-  /// Method to get data with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// repository.get(
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   Future<Response<T>> get({
     DataFieldParams? params,
     bool onlyUpdates = false,
@@ -430,15 +308,6 @@ abstract class DataSource<T extends Entity> {
     });
   }
 
-  /// Method to get data by ID with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// repository.getById(
-  ///   'userId123',
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   Future<Response<T>> getById(
     String id, {
     DataFieldParams? params,
@@ -474,16 +343,6 @@ abstract class DataSource<T extends Entity> {
     });
   }
 
-  /// Method to get data by multiple IDs with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// List<String> idsToRetrieve = ['userId1', 'userId2'];
-  /// repository.getByIds(
-  ///   idsToRetrieve,
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   Future<Response<T>> getByIds(
     Iterable<String> ids, {
     DataFieldParams? params,
@@ -543,16 +402,6 @@ abstract class DataSource<T extends Entity> {
     });
   }
 
-  /// Method to get data by query with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// List<Query> queries = [Query.field('name', 'John')];
-  /// repository.getByQuery(
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  ///   queries: queries,
-  /// );
-  /// ```
   Future<Response<T>> getByQuery({
     DataFieldParams? params,
     Iterable<DataQuery> queries = const [],
@@ -611,14 +460,6 @@ abstract class DataSource<T extends Entity> {
     });
   }
 
-  /// Stream method to listen for data changes with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// repository.listen(
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   Stream<Response<T>> listen({
     DataFieldParams? params,
     bool? countable,
@@ -662,14 +503,6 @@ abstract class DataSource<T extends Entity> {
     });
   }
 
-  /// Method to listenCount data with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// repository.listenCount(
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   Stream<Response<int>> listenCount({
     DataFieldParams? params,
     Duration? interval,
@@ -684,15 +517,6 @@ abstract class DataSource<T extends Entity> {
     });
   }
 
-  /// Stream method to listen for data changes by ID with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// repository.listenById(
-  ///   'userId123',
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   Stream<Response<T>> listenById(
     String id, {
     DataFieldParams? params,
@@ -719,16 +543,6 @@ abstract class DataSource<T extends Entity> {
     });
   }
 
-  /// Stream method to listen for data changes by multiple IDs with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// List<String> idsToListen = ['userId1', 'userId2'];
-  /// repository.listenByIds(
-  ///   idsToListen,
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   Stream<Response<T>> listenByIds(
     Iterable<String> ids, {
     DataFieldParams? params,
@@ -803,16 +617,6 @@ abstract class DataSource<T extends Entity> {
     });
   }
 
-  /// Stream method to listen for data changes by query with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// List<Query> queries = [Query.field('name', 'John')];
-  /// repository.listenByQuery(
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  ///   queries: queries,
-  /// );
-  /// ```
   Stream<Response<T>> listenByQuery({
     DataFieldParams? params,
     Iterable<DataQuery> queries = const [],
@@ -868,16 +672,6 @@ abstract class DataSource<T extends Entity> {
     });
   }
 
-  /// Method to check data by query with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// Checker checker = Checker(field: 'status', value: 'active');
-  /// repository.search(
-  ///   checker,
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   Future<Response<T>> search(
     Checker checker, {
     DataFieldParams? params,
@@ -914,16 +708,6 @@ abstract class DataSource<T extends Entity> {
     });
   }
 
-  /// Method to update data by ID with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// repository.updateById(
-  ///   'userId123',
-  ///   {'status': 'inactive'},
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   Future<Response<T>> updateById(
     String id,
     Map<String, dynamic> data, {
@@ -960,19 +744,6 @@ abstract class DataSource<T extends Entity> {
     });
   }
 
-  /// Method to update data by multiple IDs with optional data source builder.
-  ///
-  /// Example:
-  /// ```dart
-  /// List<UpdatingInfo> updates = [
-  ///   UpdatingInfo('userId1', {'status': 'inactive'}),
-  ///   UpdatingInfo('userId2', {'status': 'active'}),
-  /// ];
-  /// repository.updateByIds(
-  ///   updates,
-  ///   params: Params({"field1": "value1", "field2": "value2"}),
-  /// );
-  /// ```
   Future<Response<T>> updateByIds(
     Iterable<DataWriter> updates, {
     DataFieldParams? params,
@@ -1013,22 +784,4 @@ abstract class DataSource<T extends Entity> {
   }
 
   T build(dynamic source);
-}
-
-abstract class LocalDataSource<T extends Entity> extends DataSource<T> {
-  const LocalDataSource({
-    required super.path,
-    required super.delegate,
-    super.encryptor,
-    super.limitations,
-  });
-}
-
-abstract class RemoteDataSource<T extends Entity> extends DataSource<T> {
-  const RemoteDataSource({
-    required super.path,
-    required super.delegate,
-    super.encryptor,
-    super.limitations,
-  });
 }
