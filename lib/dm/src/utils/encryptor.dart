@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'configs.dart';
 
 typedef EncryptorRequestBuilder =
-Map<String, dynamic> Function(String request, String passcode);
+    Map<String, dynamic> Function(String request, String passcode);
 
 typedef EncryptorResponseBuilder = dynamic Function(Map<String, dynamic> data);
 
@@ -55,7 +55,7 @@ Future<Map<String, dynamic>> _encode(_EncodePayload p) async {
 
 Future<Map<String, dynamic>> _decode(_DecodePayload p) async {
   try {
-    final value = await p.response(p.source);
+    final value = p.response(p.source);
     if (value is String) {
       final k = crypto.Key.fromUtf8(p.key);
       final iv = crypto.IV.fromUtf8(p.iv);
@@ -89,41 +89,37 @@ class DataEncryptor {
     required this.passcode,
     EncryptorRequestBuilder? request,
     EncryptorResponseBuilder? response,
-  })
-      : _request = request,
-        _response = response;
+  }) : _request = request,
+       _response = response;
 
   Future<Map<String, dynamic>> input(dynamic data) {
     if (data is! Map<String, dynamic>) return Future.value({});
-    return compute(_encode, _EncodePayload(
-      data: data,
-      key: key,
-      iv: iv,
-      passcode: passcode,
-      request: request,
-    ));
+    return compute(
+      _encode,
+      _EncodePayload(
+        data: data,
+        key: key,
+        iv: iv,
+        passcode: passcode,
+        request: request,
+      ),
+    );
   }
 
   Future<Map<String, dynamic>> output(dynamic data) {
     if (data is! Map<String, dynamic>) return Future.value({});
-    return compute(_decode, _DecodePayload(
-      source: data,
-      key: key,
-      iv: iv,
-      response: response,
-    ));
+    return compute(
+      _decode,
+      _DecodePayload(source: data, key: key, iv: iv, response: response),
+    );
   }
 
   static String generateKey([DataByteType type = DataByteType.x16]) {
-    return DataIdGenerator
-        .generate(type)
-        .secretKey;
+    return DataIdGenerator.generate(type).secretKey;
   }
 
   static String generateIV([DataByteType type = DataByteType.x8]) {
-    return DataIdGenerator
-        .generate(type)
-        .secretIV;
+    return DataIdGenerator.generate(type).secretIV;
   }
 }
 
