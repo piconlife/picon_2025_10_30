@@ -1,7 +1,7 @@
 import '../utils/checker.dart' show Checker;
 import '../utils/configs.dart'
     show DataQuery, DataSelection, DataSorting, DataFetchOptions;
-import '../utils/encryptor.dart' show DataEncryptor;
+import '../encryptor/encryptor.dart' show DataEncryptor;
 import '../utils/field_value_reader.dart'
     show
         DataFieldValueReaderType,

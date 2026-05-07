@@ -15,7 +15,7 @@ import '../utils/configs.dart'
         DataSorting,
         DataFetchOptions,
         DataFieldPath;
-import '../utils/encryptor.dart' show DataEncryptor, DataEncryptorHelper;
+import '../encryptor/encryptor.dart' show DataEncryptor, DataEncryptorHelper;
 import '../utils/extensions.dart' show DataMapHelper;
 import '../utils/limitations.dart' show DataLimitations;
 import '../utils/modifiers.dart' show DataModifiers;

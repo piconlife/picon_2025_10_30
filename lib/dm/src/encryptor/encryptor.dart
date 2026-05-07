@@ -1,9 +1,11 @@
-import 'dart:convert';
+import 'dart:convert' show jsonEncode, jsonDecode;
 
-import 'package:encrypt/encrypt.dart' as crypto;
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show debugPrint;
 
-import 'configs.dart';
+import '../utils/configs.dart' show DataByteType, DataIdGenerator;
+import '_encryptor_stub.dart'
+    if (dart.library.io) '_encryptor_io.dart'
+    if (dart.library.html) '_encryptor_web.dart';
 
 typedef EncryptorRequestBuilder =
 Map<String, dynamic> Function(String request, String passcode);
@@ -14,34 +16,30 @@ class DataEncryptor {
   final String key;
   final String iv;
   final String passcode;
+  final AesBackend _backend;
 
   final EncryptorRequestBuilder? _request;
   final EncryptorResponseBuilder? _response;
 
-  EncryptorResponseBuilder get response => _response ?? (a) => a["data"];
-  EncryptorRequestBuilder get request => _request ?? (a, b) => {"data": a};
+  EncryptorResponseBuilder get response => _response ?? (a) => a['data'];
 
-  const DataEncryptor({
+  EncryptorRequestBuilder get request => _request ?? (a, b) => {'data': a};
+
+  DataEncryptor({
     required this.key,
     required this.iv,
     required this.passcode,
     EncryptorRequestBuilder? request,
     EncryptorResponseBuilder? response,
   }) : _request = request,
-       _response = response;
-
-  crypto.Key get _key => crypto.Key.fromUtf8(key);
-
-  crypto.IV get _iv => crypto.IV.fromUtf8(iv);
-
-  crypto.Encrypter get _en =>
-      crypto.Encrypter(crypto.AES(_key, mode: crypto.AESMode.cbc));
+       _response = response,
+       _backend = createBackend();
 
   Future<Map<String, dynamic>> input(dynamic data) async {
     if (data is! Map<String, dynamic>) return {};
     try {
-      final encrypted = _en.encrypt(jsonEncode(data), iv: _iv);
-      return request(encrypted.base64, passcode);
+      final encrypted = await _backend.encrypt(jsonEncode(data), key, iv);
+      return request(encrypted, passcode);
     } catch (e, st) {
       debugPrint('DataEncryptor.input error: $e\n$st');
       return {};
@@ -53,9 +51,8 @@ class DataEncryptor {
     try {
       final value = response(data);
       if (value is! String) return {};
-      final encrypted = crypto.Encrypted.fromBase64(value);
-      final decoded = _en.decrypt(encrypted, iv: _iv);
-      return jsonDecode(decoded);
+      final decrypted = await _backend.decrypt(value, key, iv);
+      return jsonDecode(decrypted);
     } catch (e, st) {
       debugPrint('DataEncryptor.output error: $e\n$st');
       return {};
