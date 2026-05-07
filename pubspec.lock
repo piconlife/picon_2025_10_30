@@ -145,14 +145,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.3.0"
-  auth_management:
-    dependency: "direct main"
-    description:
-      name: auth_management
-      sha256: "4e74628a5ac9117b6c0f262abb8cdbd5bd6d11a59cc873f301e8cf0770509910"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.4.1"
   awesome_notifications:
     dependency: "direct main"
     description:

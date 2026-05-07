@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:app_color/app_color.dart';
-import 'package:auth_management/core/authorizer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
 import 'package:flutter/foundation.dart';
@@ -43,6 +42,7 @@ import '../app/delegates/tracker.dart';
 import '../app/delegates/translation.dart';
 import '../app/delegates/translator.dart';
 import '../app/helpers/user.dart';
+import '../app/imports/am.dart' show AuthProvider, Authorizer;
 import '../app/interfaces/bsd_editor.dart';
 import '../app/interfaces/bsd_options.dart';
 import '../app/interfaces/dialog_alert.dart';
@@ -57,7 +57,6 @@ import '../app/settings/remote.dart';
 import '../app/widgets/cached_network_image_error.dart';
 import '../app/widgets/cached_network_image_progress.dart';
 import '../data/models/user.dart';
-import '../imports/am.dart' show AuthProvider;
 import '../routes/delegate.dart';
 import 'helpers/connectivity.dart';
 import 'helpers/location.dart';

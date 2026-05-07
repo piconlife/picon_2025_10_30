@@ -1,8 +1,6 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
-import 'package:auth_management/core.dart';
-import 'package:auth_management/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/spacing.dart';
 import 'package:flutter_andomie/utils/path_replacer.dart';
@@ -12,11 +10,17 @@ import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
-import 'package:picon/data/models/user_post.dart';
-import 'package:picon/roots/widgets/gesture.dart';
 
 import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
+import '../../../../app/imports/am.dart'
+    show
+        AuthListener,
+        AuthHelper,
+        AuthStatus,
+        PhoneAuthenticator,
+        EmailAuthenticator,
+        AuthBuilder;
 import '../../../../app/interfaces/bsd_privacy.dart';
 import '../../../../app/interfaces/dialog_alert.dart';
 import '../../../../app/res/icons.dart';
@@ -29,6 +33,7 @@ import '../../../../data/enums/privacy.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/user.dart';
 import '../../../../data/models/user_cover.dart';
+import '../../../../data/models/user_post.dart' show PostModel;
 import '../../../../roots/contents/media.dart';
 import '../../../../roots/helpers/connectivity.dart';
 import '../../../../roots/services/storage.dart';
@@ -36,6 +41,7 @@ import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/body.dart';
 import '../../../../roots/widgets/bottom_bar.dart';
 import '../../../../roots/widgets/filled_button.dart';
+import '../../../../roots/widgets/gesture.dart' show InAppGesture;
 import '../../../../roots/widgets/padding.dart';
 import '../../../../roots/widgets/row.dart';
 import '../../../../roots/widgets/text.dart';

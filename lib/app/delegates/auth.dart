@@ -1,7 +1,15 @@
-import 'package:auth_management/core.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 import 'package:flutter_entity/entity.dart';
 import 'package:local_auth/local_auth.dart';
+
+import '../../app/imports/am.dart'
+    show
+        AuthDelegate,
+        Credential,
+        AuthException,
+        AdditionalInfo,
+        Metadata,
+        Info;
 
 String? _toMail(String prefix, String suffix, [String type = "com"]) {
   return "$prefix@$suffix.$type";
@@ -14,6 +22,15 @@ class InAppAuthDelegate extends AuthDelegate {
   InAppAuthDelegate();
 
   User? get user => FirebaseAuth.instance.currentUser;
+
+  @override
+  bool get isAnonymous => user?.isAnonymous ?? false;
+
+  @override
+  bool get isAuthenticated => user?.uid != null;
+
+  @override
+  Future<String?> get rawUid async => user?.uid;
 
   @override
   Future<Response<void>> delete() async {

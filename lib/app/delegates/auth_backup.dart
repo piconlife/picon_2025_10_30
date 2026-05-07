@@ -1,8 +1,8 @@
 import 'dart:developer';
 
-import 'package:auth_management/core.dart';
 import 'package:data_management/core.dart';
 
+import '../../app/imports/am.dart' show AuthBackupDelegate;
 import '../../data/models/user.dart';
 import '../../data/use_cases/user/create.dart';
 import '../../data/use_cases/user/delete_user.dart';

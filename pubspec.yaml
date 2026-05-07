@@ -45,7 +45,7 @@ dependencies:
 
   app_color: ^1.1.2
   app_dimen: ^1.0.11
-  auth_management: ^3.4.1
+  #  auth_management: ^3.4.1
   data_management: ^2.4.8
   data_management_local_delegate: ^1.0.7
   flutter_andomie: ^0.7.0

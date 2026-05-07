@@ -535,7 +535,7 @@ abstract class DataCubit<T extends Object> extends Cubit<Response<T>> {
     _pending.add(identifier);
 
     try {
-      final value = await onGetById(identifier);
+      final value = Response() ?? await onGetById(identifier);
 
       final exists = Map<String, bool>.of(state.exists);
       final isExist = value.isSuccessful && value.data != null;

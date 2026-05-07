@@ -1,12 +1,12 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_dimen/app_dimen.dart';
-import 'package:auth_management/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/spacing.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:in_app_navigator/route.dart';
 
 import '../../../../app/devs/nav_content.dart';
+import '../../../../app/imports/am.dart' show AuthListener;
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/user.dart';
 import '../../../../roots/preferences/preferences.dart';

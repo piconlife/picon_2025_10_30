@@ -5,8 +5,8 @@ import 'package:in_app_purchaser/in_app_purchaser.dart';
 import 'package:in_app_settings/settings.dart';
 import 'package:in_app_translation/core.dart';
 
+import '../../app/imports/am.dart' show AuthResponse, AuthHelper;
 import '../../data/models/user.dart';
-import '../../imports/am.dart' show AuthResponse, AuthHelper;
 import '../../roots/helpers/connectivity.dart';
 import '../../roots/services/notification.dart';
 import '../../roots/services/zotlo_subscription.dart';
