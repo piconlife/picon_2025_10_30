@@ -67,8 +67,7 @@ class CacheManager {
       final pending = _inFlight[key];
       if (pending != null) {
         _stats.inFlightDedupes++;
-        final result = await pending;
-        if (result is Response<T>) return result;
+        return await pending as Response<T>;
       }
     }
 
