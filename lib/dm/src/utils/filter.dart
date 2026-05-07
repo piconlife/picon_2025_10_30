@@ -1,5 +1,3 @@
-part of 'configs.dart';
-
 enum DataFilters {
   and,
   or,

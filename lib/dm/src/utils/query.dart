@@ -1,4 +1,4 @@
-part of 'configs.dart';
+import 'filter.dart' show DataFilter;
 
 class DataQuery {
   final Object field;

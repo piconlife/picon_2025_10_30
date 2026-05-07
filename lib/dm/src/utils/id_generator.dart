@@ -1,4 +1,5 @@
-part of 'configs.dart';
+import 'dart:math' show Random;
+import 'dart:typed_data' show Uint8List;
 
 class DataIdGenerator {
   final DataByteType type;

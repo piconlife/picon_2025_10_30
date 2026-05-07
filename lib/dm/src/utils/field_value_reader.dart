@@ -1,4 +1,11 @@
-import 'configs.dart';
+import 'package:collection/collection.dart' show DeepCollectionEquality;
+
+import 'fetch_options.dart' show DataFetchOptions;
+import 'query.dart' show DataQuery;
+import 'selection.dart' show DataSelection;
+import 'sorting.dart' show DataSorting;
+
+const _eq = DeepCollectionEquality();
 
 class DataFieldValueQueryOptions {
   final Iterable<DataQuery> queries;
@@ -16,10 +23,10 @@ class DataFieldValueQueryOptions {
   @override
   int get hashCode {
     return Object.hash(
-      queries.toString(),
-      selections.toString(),
-      sorts.toString(),
-      options.toString(),
+      _eq.hash(queries),
+      _eq.hash(selections),
+      _eq.hash(sorts),
+      options,
     );
   }
 
@@ -27,9 +34,9 @@ class DataFieldValueQueryOptions {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     return other is DataFieldValueQueryOptions &&
-        queries == other.queries &&
-        selections == other.selections &&
-        sorts == other.sorts &&
+        _eq.equals(queries, other.queries) &&
+        _eq.equals(selections, other.selections) &&
+        _eq.equals(sorts, other.sorts) &&
         options == other.options;
   }
 
@@ -39,12 +46,22 @@ class DataFieldValueQueryOptions {
   }
 }
 
-enum DataFieldValueReaderType { get, filter, count }
+enum DataFieldValueReaderType {
+  get,
+  filter,
+  count;
+
+  bool get isGet => this == get;
+
+  bool get isFilter => this == filter;
+
+  bool get isCount => this == count;
+}
 
 class DataFieldValueReader {
   final String path;
   final DataFieldValueReaderType type;
-  final Object? options;
+  final DataFieldValueQueryOptions? options;
 
   const DataFieldValueReader._({
     required this.path,
@@ -68,9 +85,7 @@ class DataFieldValueReader {
       );
 
   @override
-  int get hashCode {
-    return Object.hash(path, type, options.toString());
-  }
+  int get hashCode => Object.hash(path, type, options);
 
   @override
   bool operator ==(Object other) {

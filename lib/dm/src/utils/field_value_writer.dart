@@ -1,12 +1,26 @@
-import 'set_options.dart';
+import 'package:collection/collection.dart' show DeepCollectionEquality;
 
-enum DataFieldValueWriterType { set, update, delete }
+import 'set_options.dart' show DataSetOptions;
+
+const _eq = DeepCollectionEquality();
+
+enum DataFieldValueWriterType {
+  set,
+  update,
+  delete;
+
+  bool get isSet => this == set;
+
+  bool get isUpdate => this == update;
+
+  bool get isDelete => this == delete;
+}
 
 class DataFieldValueWriter {
   final String path;
   final DataFieldValueWriterType type;
   final Map<String, dynamic>? value;
-  final Object? options;
+  final DataSetOptions? options;
 
   const DataFieldValueWriter._({
     required this.path,
@@ -33,9 +47,7 @@ class DataFieldValueWriter {
     : this._(path: path, type: DataFieldValueWriterType.update, value: value);
 
   @override
-  int get hashCode {
-    return Object.hash(path, type, value.toString(), options.toString());
-  }
+  int get hashCode => Object.hash(path, type, _eq.hash(value), options);
 
   @override
   bool operator ==(Object other) {
@@ -43,7 +55,7 @@ class DataFieldValueWriter {
     return other is DataFieldValueWriter &&
         path == other.path &&
         type == other.type &&
-        value == other.value &&
+        _eq.equals(value, other.value) &&
         options == other.options;
   }
 

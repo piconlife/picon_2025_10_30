@@ -1,7 +1,6 @@
-import '../utils/checker.dart' show Checker;
-import '../utils/configs.dart'
-    show DataQuery, DataSelection, DataSorting, DataFetchOptions;
 import '../encryptor/encryptor.dart' show DataEncryptor;
+import '../utils/checker.dart' show Checker;
+import '../utils/fetch_options.dart' show DataFetchOptions;
 import '../utils/field_value_reader.dart'
     show
         DataFieldValueReaderType,
@@ -9,7 +8,10 @@ import '../utils/field_value_reader.dart'
         DataFieldValueReader;
 import '../utils/field_value_writer.dart'
     show DataFieldValueWriter, DataFieldValueWriterType;
+import '../utils/query.dart' show DataQuery;
+import '../utils/selection.dart' show DataSelection;
 import '../utils/set_options.dart' show DataSetOptions;
+import '../utils/sorting.dart' show DataSorting;
 import 'batch.dart' show DataWriteBatch;
 import 'delegate.dart' show DataDelegate;
 import 'snapshots.dart' show DataGetsSnapshot, DataGetSnapshot;

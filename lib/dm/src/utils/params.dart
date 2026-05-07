@@ -1,20 +1,9 @@
-part of 'configs.dart';
+import 'path_replacer.dart' show DataFieldReplacer;
 
-/// You can use like
-/// * [KeyParams]
-/// * [IterableParams]
 abstract class DataFieldParams {
   const DataFieldParams();
 }
 
-/// Replaces placeholders in the given [path] using the provided [params] map.
-///
-/// Example:
-/// ```dart
-/// FieldParams params = Params({'param1': 'value1', 'param2': 'value2'});     // Params: param1 = value1, param2 = value2
-/// String root = "/path/{param1}/endpoint/{param2}";                          // Input : /path/{param1}/endpoint/{param2}
-/// String path = params.generate(root);                                       // Output: /path/value1/endpoint/value2
-/// ```
 class KeyParams extends DataFieldParams {
   final Map<String, String> values;
 
@@ -32,14 +21,6 @@ class KeyParams extends DataFieldParams {
   String toString() => "$KeyParams($values)";
 }
 
-/// Replaces placeholders in the given [path] using values from the [params] iterable.
-///
-/// Example:
-/// ```dart
-/// FieldParams params = IterableParams(['value1', 'value2']);     // Params: param1 = value1, param2 = value2
-/// String root = "/path/{param1}/endpoint/{param2}";              // Input : /path/{param1}/endpoint/{param2}
-/// String path = params.generate(root);                           // Output: /path/value1/endpoint/value2
-/// ```
 class IterableParams extends DataFieldParams {
   final List<String> values;
 

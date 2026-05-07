@@ -2,7 +2,7 @@ import 'dart:convert' show jsonEncode, jsonDecode;
 
 import 'package:flutter/foundation.dart' show debugPrint;
 
-import '../utils/configs.dart' show DataByteType, DataIdGenerator;
+import '../utils/id_generator.dart' show DataByteType, DataIdGenerator;
 import 'encryptor_stub.dart'
     if (dart.library.io) 'encryptor_io.dart'
 if (dart.library.js_interop) 'encryptor_web.dart';

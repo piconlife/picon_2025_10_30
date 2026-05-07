@@ -7,15 +7,13 @@ import '../sources/base.dart' show DataSource;
 import '../sources/local.dart' show LocalDataSource;
 import '../sources/remote.dart' show RemoteDataSource;
 import '../utils/checker.dart' show Checker;
-import '../utils/configs.dart'
-    show
-        DataFieldParams,
-        DataQuery,
-        DataSelection,
-        DataSorting,
-        DataFetchOptions;
 import '../utils/database_type.dart' show DatabaseType;
+import '../utils/fetch_options.dart' show DataFetchOptions;
 import '../utils/modifiers.dart' show DataModifiers;
+import '../utils/params.dart' show DataFieldParams;
+import '../utils/query.dart' show DataQuery;
+import '../utils/selection.dart' show DataSelection;
+import '../utils/sorting.dart' show DataSorting;
 import '../utils/updating_info.dart' show DataWriter;
 
 typedef FutureConnectivityCallback = Future<bool> Function();

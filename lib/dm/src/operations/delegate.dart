@@ -1,6 +1,8 @@
 import '../utils/checker.dart' show Checker;
-import '../utils/configs.dart'
-    show DataQuery, DataSelection, DataSorting, DataFetchOptions;
+import '../utils/fetch_options.dart' show DataFetchOptions;
+import '../utils/query.dart' show DataQuery;
+import '../utils/selection.dart' show DataSelection;
+import '../utils/sorting.dart' show DataSorting;
 import 'batch.dart' show DataWriteBatch;
 import 'snapshots.dart' show DataGetsSnapshot, DataGetSnapshot;
 

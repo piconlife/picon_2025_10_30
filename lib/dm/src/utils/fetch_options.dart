@@ -1,5 +1,3 @@
-part of 'configs.dart';
-
 class DataFetchOptions {
   final bool fetchFromLast;
   final int? fetchingSize;

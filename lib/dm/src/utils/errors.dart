@@ -1,4 +1,4 @@
-abstract class DataException {
+abstract class DataException implements Exception {
   final String? _exp;
 
   const DataException([this._exp]);
@@ -7,7 +7,7 @@ abstract class DataException {
     if (_exp != null) {
       return _exp;
     } else {
-      return "DataProvider not initialization.";
+      return "DataProvider not initialized.";
     }
   }
 

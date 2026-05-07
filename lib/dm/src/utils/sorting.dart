@@ -1,5 +1,3 @@
-part of 'configs.dart';
-
 class DataSorting {
   final String field;
   final bool descending;
