@@ -43,9 +43,9 @@ abstract class DataSource<T extends Entity> {
     Future<Response<S>> Function() callback,
   ) async {
     try {
-      return callback();
-    } catch (error) {
-      return Response<S>(status: Status.failure, error: error.toString());
+      return await callback();
+    } catch (error, st) {
+      return Response<S>(status: Status.failure, error: "$error\n$st");
     }
   }
 
