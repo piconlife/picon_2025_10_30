@@ -51,6 +51,16 @@ class CacheManager {
     if (!_storageReady) await init();
   }
 
+  Future<void> _safeDelete(String key) async {
+    await _ensureStorage();
+    await _storage.delete(key);
+  }
+
+  Future<void> _safeClear() async {
+    await _ensureStorage();
+    await _storage.clear();
+  }
+
   CacheStats get stats => _stats.clone();
 
   Iterable<String> get keys => UnmodifiableListView(_db.keys.toList());
@@ -165,12 +175,12 @@ class CacheManager {
   }) {
     final key = buildKey(T, name, keyProps);
     _db.remove(key);
-    unawaited(_storage.delete(key));
+    unawaited(_safeDelete(key));
   }
 
   void removeByKey(String key) {
     _db.remove(key);
-    unawaited(_storage.delete(key));
+    unawaited(_safeDelete(key));
   }
 
   void clear() {
@@ -178,7 +188,7 @@ class CacheManager {
     _inFlight.clear();
     _stats.reset();
     _lastEviction = null;
-    unawaited(_storage.clear());
+    unawaited(_safeClear());
   }
 
   int evictExpired() {
@@ -188,7 +198,7 @@ class CacheManager {
     }
     for (final k in expiredKeys) {
       _db.remove(k);
-      unawaited(_storage.delete(k));
+      unawaited(_safeDelete(k));
       _stats.expirations++;
     }
     return expiredKeys.length;
@@ -200,7 +210,7 @@ class CacheManager {
 
     if (entry.isExpired) {
       _db.remove(key);
-      unawaited(_storage.delete(key));
+      unawaited(_safeDelete(key));
       _stats.expirations++;
       return null;
     }
@@ -283,7 +293,12 @@ class CacheManager {
       final response = Response<T>(data: data, status: Status.ok);
       final expiresAt =
           expiresAtRaw != null ? DateTime.parse(expiresAtRaw) : null;
+
       _db[key] = CacheEntry(response, expiresAt);
+      while (_db.length > config.maxSize) {
+        _db.remove(_db.keys.first);
+        _stats.evictions++;
+      }
 
       return response;
     } catch (e) {
