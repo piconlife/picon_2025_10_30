@@ -1,3 +1,6 @@
+import 'dart:async' show Completer;
+import 'dart:collection' show Queue;
+
 import '../encryptor/encryptor.dart' show DataEncryptor;
 import '../utils/checker.dart' show Checker;
 import '../utils/fetch_options.dart' show DataFetchOptions;
@@ -14,248 +17,73 @@ import '../utils/set_options.dart' show DataSetOptions;
 import '../utils/sorting.dart' show DataSorting;
 import 'batch.dart' show DataWriteBatch;
 import 'delegate.dart' show DataDelegate;
+import 'error_delegate.dart' show ErrorDelegate;
+import 'exception.dart' show DataOperationError;
 import 'snapshots.dart' show DataGetsSnapshot, DataGetSnapshot;
 import 'typedefs.dart' show Ignore;
 import 'writers.dart'
     show DataUpdateWriter, DataSetWriter, DataBatchWriter, DataDeleteWriter;
 
-class DataOperation {
+part '_cascade_delete_collector.dart';
+part '_create_mixin.dart';
+part '_delete_mixin.dart';
+part '_error_handling_mixin.dart';
+part '_hydrate_mixin.dart';
+part '_listen_mixin.dart';
+part '_query_mixin.dart';
+part '_read_resolve_mixin.dart';
+part '_semaphore.dart';
+part '_update_mixin.dart';
+part '_write_batch_mixin.dart';
+part '_write_transform_mixin.dart';
+
+class DataOperation
+    with
+        _ErrorHandlingMixin,
+        _WriteTransformMixin,
+        _ReadResolveMixin,
+        _HydrateMixin,
+        _CreateMixin,
+        _UpdateMixin,
+        _DeleteMixin,
+        _QueryMixin,
+        _ListenMixin,
+        _WriteBatchMixin {
+  @override
   final DataDelegate delegate;
 
-  DataOperation(this.delegate);
+  @override
+  final ErrorDelegate errorDelegate;
 
-  Map<String, dynamic> _w(DataWriteBatch batch, Map data, bool merge) {
-    dynamic handle(dynamic value) {
-      if (value is DataFieldValueWriter) {
-        switch (value.type) {
-          case DataFieldValueWriterType.set:
-            final doc = value.value ?? {};
-            if (doc.isEmpty) break;
-            final options = value.options as DataSetOptions;
-            batch.set(value.path, _w(batch, doc, merge), options.merge);
-            return value.path;
-          case DataFieldValueWriterType.update:
-            final doc = value.value ?? {};
-            if (doc.isEmpty) break;
-            batch.update(value.path, _w(batch, doc, merge));
-            return value.path;
-          case DataFieldValueWriterType.delete:
-            batch.delete(value.path);
-            return null;
-        }
-      } else if (value is Map) {
-        final path = value["path"];
+  @override
+  final DataOperationSemaphore refSemaphore;
 
-        if (path is! String || path.isEmpty) {
-          return _w(batch, value, merge);
-        }
+  DataOperation(
+    this.delegate, {
+    ErrorDelegate? errorDelegate,
+    int refConcurrency = 16,
+  }) : errorDelegate = errorDelegate ?? ErrorDelegate.printing(),
+       refSemaphore = DataOperationSemaphore(refConcurrency);
 
-        final create = value["create"];
-        if (create is Map && create.isNotEmpty) {
-          batch.set(path, _w(batch, create, merge), merge);
-          return path;
-        }
-
-        final update = value["update"];
-        if (update is Map && update.isNotEmpty) {
-          batch.update(path, _w(batch, update, merge));
-          return path;
-        }
-
-        final delete = value["delete"];
-        if (delete is bool && delete) {
-          batch.delete(path);
-          return null;
-        }
-
-        return _w(batch, value, merge);
-      } else if (value is List && value.isNotEmpty) {
-        return value.map(handle).where((e) => e != null).toList();
-      }
-
-      return value;
-    }
-
-    final entries =
-        data.entries.map((e) {
-          final k = e.key;
-          if (k is! String || k.isEmpty) return null;
-          final v =
-              e.value is DataFieldValueWriter ||
-                      k.startsWith("@") ||
-                      k.startsWith("#")
-                  ? handle(e.value)
-                  : e.value;
-          if (v == null) return null;
-          return MapEntry(k, v);
-        }).whereType<MapEntry<String, dynamic>>();
-
-    return Map.fromEntries(entries);
-  }
-
-  Future<Map<String, dynamic>> _r(
-    Map<String, dynamic> data,
-    Ignore? ignore,
-    bool countable,
-  ) async {
-    final result = Map<String, dynamic>.from(data);
-
-    for (final entry in data.entries) {
-      final key = entry.key;
-      final value = entry.value;
-
-      if (value is DataFieldValueReader) {
-        String fieldKey = key;
-        if (fieldKey.startsWith("@") || fieldKey.startsWith("#")) {
-          fieldKey = key.substring(1);
-        }
-        switch (value.type) {
-          case DataFieldValueReaderType.count:
-            final raw = await count(value.path);
-            final snap = raw ?? 0;
-            if (snap > 0) {
-              result[fieldKey] = snap;
-            }
-            break;
-          case DataFieldValueReaderType.get:
-            final raw = await getById(
-              value.path,
-              countable: countable,
-              resolveRefs: true,
-              ignore: ignore,
-            );
-            final snap = raw.doc;
-            if (snap.isNotEmpty) {
-              result[fieldKey] = snap;
-            }
-            break;
-          case DataFieldValueReaderType.filter:
-            final options = value.options as DataFieldValueQueryOptions;
-            final raw = await getByQuery(
-              value.path,
-              queries: options.queries,
-              selections: options.selections,
-              sorts: options.sorts,
-              options: options.options,
-              countable: countable,
-              resolveRefs: true,
-              ignore: ignore,
-            );
-            final snap = raw.docs;
-            if (snap.isNotEmpty) {
-              result[fieldKey] = snap.toList();
-            }
-            break;
-        }
-      } else if (key.startsWith('@') &&
-          (ignore == null || !ignore(key, value)) &&
-          value != null) {
-        final fieldKey = key.substring(1);
-
-        if (value is String && value.isNotEmpty) {
-          final raw = await getById(
-            value,
-            countable: countable,
-            resolveRefs: true,
-            ignore: ignore,
-          );
-          final snap = raw.doc;
-          if (snap.isNotEmpty) {
-            result[fieldKey] = snap;
-          }
-        } else if (value is List) {
-          final resolvedList = <Map<String, dynamic>>[];
-          for (final v in value) {
-            if (v is String && v.isNotEmpty) {
-              final raw = await getById(
-                v,
-                countable: countable,
-                resolveRefs: true,
-                ignore: ignore,
-              );
-              final snap = raw.doc;
-              if (snap.isNotEmpty) {
-                resolvedList.add(snap);
-              }
-            }
-          }
-          result[fieldKey] = resolvedList;
-        } else if (value is Map) {
-          final resolvedMap = <String, Map<String, dynamic>>{};
-          for (final entry in value.entries) {
-            final k = entry.key;
-            final v = entry.value;
-            if (v is String && v.isNotEmpty) {
-              final raw = await getById(
-                v,
-                countable: countable,
-                resolveRefs: true,
-                ignore: ignore,
-              );
-              final snap = raw.doc;
-              if (snap.isNotEmpty) {
-                resolvedMap[k] = snap;
-              }
-            }
-          }
-          result[fieldKey] = resolvedMap;
-        }
-      } else if (key.startsWith('#') &&
-          (ignore == null || !ignore(key, value)) &&
-          value != null) {
-        final fieldKey = key.substring(1);
-
-        if (value is String && value.isNotEmpty) {
-          final raw = await count(value);
-          if (raw != null && raw > 0) {
-            result[fieldKey] = raw;
-          }
-        } else if (value is List) {
-          final resolvedList = <int>[];
-          for (final v in value) {
-            if (v is String && v.isNotEmpty) {
-              final raw = await count(v);
-              if (raw != null && raw >= 0) {
-                resolvedList.add(raw);
-              }
-            }
-          }
-          result[fieldKey] = resolvedList;
-        } else if (value is Map) {
-          final resolvedMap = <String, int>{};
-          for (final entry in value.entries) {
-            final k = entry.key;
-            final v = entry.value;
-            if (v is String && v.isNotEmpty) {
-              final raw = await count(v);
-              if (raw != null && raw >= 0) {
-                resolvedMap[k] = raw;
-              }
-            }
-          }
-          result[fieldKey] = resolvedMap;
-        }
-      }
-    }
-
-    return result;
-  }
-
-  Future<int?> count(String path) => delegate.count(path);
+  @override
+  Future<int?> count(String path) => guardAsync<int?>(
+    () => delegate.count(path),
+    operation: 'count',
+    path: path,
+  );
 
   Future<void> create(
     String path,
     Map<String, dynamic> data, {
     bool merge = true,
     bool createRefs = false,
-  }) async {
-    if (!createRefs) return delegate.create(path, data, merge);
+  }) => doCreate(path, data, merge: merge, createRefs: createRefs);
 
-    final b = delegate.batch();
-    final w = _w(b, data, merge);
-    b.set(path, w, merge);
-    await b.commit();
-  }
+  Future<void> update(
+    String path,
+    Map<String, dynamic> data, {
+    bool updateRefs = false,
+  }) => doUpdate(path, data, updateRefs: updateRefs);
 
   Future<void> delete(
     String path, {
@@ -264,111 +92,14 @@ class DataOperation {
     Ignore? ignore,
     int batchLimit = 500,
     int? batchMaxLimit,
-  }) async {
-    if (!deleteRefs) return delegate.delete(path);
-
-    final List<String> toDelete = [];
-
-    Future<void> deepCollect(String docPath) async {
-      if (batchMaxLimit != null && batchMaxLimit <= toDelete.length) return;
-
-      final snap = await getById(
-        docPath,
-        countable: false,
-        resolveRefs: true,
-        ignore: ignore,
-      );
-
-      if (!snap.exists) return;
-
-      Future<void> handleRef(dynamic value) async {
-        if (value == null) return;
-
-        if (value is String && value.isNotEmpty) {
-          await deepCollect(value);
-        } else if (value is List) {
-          for (final v in value) {
-            await handleRef(v);
-          }
-        } else if (value is Map) {
-          for (final v in value.values) {
-            await handleRef(v);
-          }
-        }
-      }
-
-      Future<void> handleCountable(dynamic value) async {
-        if (batchMaxLimit != null && batchMaxLimit <= toDelete.length) return;
-        if (value == null) return;
-        if (value is String && value.isNotEmpty) {
-          final children = await getByQuery(
-            value,
-            countable: false,
-            resolveRefs: true,
-            ignore: ignore,
-          );
-          if (!children.exists || children.docs.isEmpty) return;
-          for (final child in children.docs) {
-            for (final entry in child.entries) {
-              final key = entry.key;
-              final value = entry.value;
-              if (key.startsWith('@')) {
-                await handleRef(value);
-              } else if (counter && key.startsWith('#')) {
-                await handleCountable(value);
-              }
-            }
-            final id = child['id'];
-            if (id is String && id.isNotEmpty) {
-              final childPath = "$value/$id";
-              toDelete.add(childPath);
-            }
-          }
-        } else if (value is List) {
-          for (final v in value) {
-            await handleCountable(v);
-          }
-        } else if (value is Map) {
-          for (final v in value.values) {
-            await handleCountable(v);
-          }
-        }
-      }
-
-      for (final entry in snap.doc.entries) {
-        final key = entry.key;
-        final value = entry.value;
-        if (key.startsWith('@')) {
-          await handleRef(value);
-        } else if (counter && key.startsWith('#')) {
-          await handleCountable(value);
-        }
-      }
-
-      toDelete.add(docPath);
-    }
-
-    await deepCollect(path);
-
-    final cappedList =
-        batchMaxLimit != null
-            ? toDelete.take(batchMaxLimit).toList()
-            : toDelete;
-
-    for (int i = 0; i < cappedList.length; i += batchLimit) {
-      final batch = delegate.batch();
-      final end =
-          (i + batchLimit > cappedList.length)
-              ? cappedList.length
-              : i + batchLimit;
-
-      for (final docPath in cappedList.sublist(i, end)) {
-        batch.delete(docPath);
-      }
-
-      await batch.commit();
-    }
-  }
+  }) => doDelete(
+    path,
+    counter: counter,
+    deleteRefs: deleteRefs,
+    ignore: ignore,
+    batchLimit: batchLimit,
+    batchMaxLimit: batchMaxLimit,
+  );
 
   Future<DataGetsSnapshot> get(
     String path, {
@@ -376,35 +107,28 @@ class DataOperation {
     bool resolveRefs = false,
     bool resolveDocChangesRefs = false,
     Ignore? ignore,
-  }) async {
-    final data = await delegate.get(path);
-    if (!data.exists) return DataGetsSnapshot();
-    if (!resolveRefs) return data;
+  }) => doGet(
+    path,
+    countable: countable,
+    resolveRefs: resolveRefs,
+    resolveDocChangesRefs: resolveDocChangesRefs,
+    ignore: ignore,
+  );
 
-    return data.copyWith(
-      docs: await Future.wait(data.docs.map((e) => _r(e, ignore, countable))),
-      docChanges:
-          resolveDocChangesRefs
-              ? await Future.wait(
-                data.docChanges.map((e) => _r(e, ignore, countable)),
-              )
-              : data.docChanges,
-    );
-  }
-
+  @override
   Future<DataGetSnapshot> getById(
     String path, {
     bool countable = true,
     bool resolveRefs = false,
     Ignore? ignore,
-  }) async {
-    final data = await delegate.getById(path);
-    if (!data.exists) return DataGetSnapshot();
-    if (!resolveRefs) return data;
+  }) => doGetById(
+    path,
+    countable: countable,
+    resolveRefs: resolveRefs,
+    ignore: ignore,
+  );
 
-    return data.copyWith(doc: await _r(data.doc, ignore, countable));
-  }
-
+  @override
   Future<DataGetsSnapshot> getByQuery(
     String path, {
     Iterable<DataQuery> queries = const [],
@@ -415,27 +139,33 @@ class DataOperation {
     bool resolveRefs = false,
     bool resolveDocChangesRefs = false,
     Ignore? ignore,
-  }) async {
-    final data = await delegate.getByQuery(
-      path,
-      queries: queries,
-      selections: selections,
-      sorts: sorts,
-      options: options,
-    );
-    if (!data.exists) return DataGetsSnapshot();
-    if (!resolveRefs) return data;
+  }) => doGetByQuery(
+    path,
+    queries: queries,
+    selections: selections,
+    sorts: sorts,
+    options: options,
+    countable: countable,
+    resolveRefs: resolveRefs,
+    resolveDocChangesRefs: resolveDocChangesRefs,
+    ignore: ignore,
+  );
 
-    return data.copyWith(
-      docs: await Future.wait(data.docs.map((e) => _r(e, ignore, countable))),
-      docChanges:
-          resolveDocChangesRefs
-              ? await Future.wait(
-                data.docChanges.map((e) => _r(e, ignore, countable)),
-              )
-              : data.docChanges,
-    );
-  }
+  Future<DataGetsSnapshot> search(
+    String path,
+    Checker checker, {
+    bool countable = true,
+    bool resolveRefs = false,
+    bool resolveDocChangesRefs = false,
+    Ignore? ignore,
+  }) => doSearch(
+    path,
+    checker,
+    countable: countable,
+    resolveRefs: resolveRefs,
+    resolveDocChangesRefs: resolveDocChangesRefs,
+    ignore: ignore,
+  );
 
   Stream<DataGetsSnapshot> listen(
     String path, {
@@ -443,36 +173,25 @@ class DataOperation {
     bool resolveRefs = false,
     bool resolveDocChangesRefs = false,
     Ignore? ignore,
-  }) {
-    return delegate.listen(path).asyncMap((data) async {
-      if (!data.exists) return DataGetsSnapshot();
-      if (!resolveRefs) return data;
-
-      return data.copyWith(
-        docs: await Future.wait(data.docs.map((e) => _r(e, ignore, countable))),
-        docChanges:
-            resolveDocChangesRefs
-                ? await Future.wait(
-                  data.docChanges.map((e) => _r(e, ignore, countable)),
-                )
-                : data.docChanges,
-      );
-    });
-  }
+  }) => doListen(
+    path,
+    countable: countable,
+    resolveRefs: resolveRefs,
+    resolveDocChangesRefs: resolveDocChangesRefs,
+    ignore: ignore,
+  );
 
   Stream<DataGetSnapshot> listenById(
     String path, {
     bool countable = true,
     bool resolveRefs = false,
     Ignore? ignore,
-  }) {
-    return delegate.listenById(path).asyncMap((data) async {
-      if (!data.exists) return DataGetSnapshot();
-      if (!resolveRefs) return data;
-
-      return data.copyWith(doc: await _r(data.doc, ignore, countable));
-    });
-  }
+  }) => doListenById(
+    path,
+    countable: countable,
+    resolveRefs: resolveRefs,
+    ignore: ignore,
+  );
 
   Stream<DataGetsSnapshot> listenByQuery(
     String path, {
@@ -484,85 +203,19 @@ class DataOperation {
     bool resolveRefs = false,
     bool resolveDocChangesRefs = false,
     Ignore? ignore,
-  }) {
-    return delegate
-        .listenByQuery(
-          path,
-          queries: queries,
-          selections: selections,
-          sorts: sorts,
-          options: options,
-        )
-        .asyncMap((data) async {
-          if (!data.exists) return DataGetsSnapshot();
-          if (!resolveRefs) return data;
+  }) => doListenByQuery(
+    path,
+    queries: queries,
+    selections: selections,
+    sorts: sorts,
+    options: options,
+    countable: countable,
+    resolveRefs: resolveRefs,
+    resolveDocChangesRefs: resolveDocChangesRefs,
+    ignore: ignore,
+  );
 
-          return data.copyWith(
-            docs: await Future.wait(
-              data.docs.map((e) => _r(e, ignore, countable)),
-            ),
-            docChanges:
-                resolveDocChangesRefs
-                    ? await Future.wait(
-                      data.docChanges.map((e) => _r(e, ignore, countable)),
-                    )
-                    : data.docChanges,
-          );
-        });
-  }
-
-  Future<DataGetsSnapshot> search(
-    String path,
-    Checker checker, {
-    bool countable = true,
-    bool resolveRefs = false,
-    bool resolveDocChangesRefs = false,
-    Ignore? ignore,
-  }) async {
-    final data = await delegate.search(path, checker);
-    if (!data.exists) return DataGetsSnapshot();
-    if (!resolveRefs) return data;
-
-    return data.copyWith(
-      docs: await Future.wait(data.docs.map((e) => _r(e, ignore, countable))),
-      docChanges:
-          resolveDocChangesRefs
-              ? await Future.wait(
-                data.docChanges.map((e) => _r(e, ignore, countable)),
-              )
-              : data.docChanges,
-    );
-  }
-
-  Future<void> update(
-    String path,
-    Map<String, dynamic> data, {
-    bool updateRefs = false,
-  }) async {
-    if (!updateRefs) return delegate.update(path, data);
-
-    final batch = delegate.batch();
-    final processedData = _w(batch, data, true);
-    batch.update(path, processedData);
-    await batch.commit();
-  }
-
-  Future<void> write(
-    List<DataBatchWriter> writers,
-    DataEncryptor? encryptor,
-  ) async {
-    final batch = delegate.batch();
-    for (var w in writers) {
-      if (w is DataSetWriter) {
-        final raw = encryptor != null ? await encryptor.input(w.data) : null;
-        batch.set(w.path, raw ?? w.data, w.options.merge);
-      } else if (w is DataUpdateWriter) {
-        final raw = encryptor != null ? await encryptor.input(w.data) : null;
-        batch.update(w.path, raw ?? w.data);
-      } else if (w is DataDeleteWriter) {
-        batch.delete(w.path);
-      }
-    }
-    return batch.commit();
+  Future<void> write(List<DataBatchWriter> writers, DataEncryptor? encryptor) {
+    return doWrite(writers, encryptor);
   }
 }
