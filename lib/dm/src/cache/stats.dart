@@ -11,6 +11,16 @@ class CacheStats {
     return total == 0 ? 0.0 : hits / total;
   }
 
+  CacheStats clone() {
+    return CacheStats()
+      ..hits = hits
+      ..misses = misses
+      ..writes = writes
+      ..evictions = evictions
+      ..expirations = expirations
+      ..inFlightDedupes = inFlightDedupes;
+  }
+
   Map<String, num> snapshot() => {
     'hits': hits,
     'misses': misses,

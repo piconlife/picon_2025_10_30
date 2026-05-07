@@ -23,10 +23,11 @@ class CacheManager {
   final LinkedHashMap<String, CacheEntry> _db = LinkedHashMap();
 
   final Map<String, Future<dynamic>> _inFlight = {};
+  DateTime? _lastEviction;
 
   CacheManager({this.config = const CacheConfig()});
 
-  CacheStats get stats => _stats;
+  CacheStats get stats => _stats.clone();
 
   Iterable<String> get keys => UnmodifiableListView(_db.keys.toList());
 
@@ -43,9 +44,9 @@ class CacheManager {
   ]) {
     final parts = <String>[name, type.toString()];
     for (final p in props) {
-      if (p != null) parts.add(p.toString());
+      if (p != null) parts.add(Uri.encodeComponent(p.toString()));
     }
-    return parts.join('|');
+    return parts.join('\x00');
   }
 
   Future<Response<T>> cache<T extends Object>(
@@ -55,7 +56,13 @@ class CacheManager {
     Duration? ttl,
     required Future<Response<T>> Function() callback,
   }) async {
-    if (!enabled) return callback();
+    if (!enabled) {
+      try {
+        return await callback();
+      } catch (e, st) {
+        return Response(error: "$e\n$st", status: Status.failure);
+      }
+    }
     final key = buildKey(T, name, keyProps);
     final cached = _readValid<T>(key);
     if (cached != null) {
@@ -80,8 +87,8 @@ class CacheManager {
       final result = await future;
       if (result.isValid) _write(key, result, ttl);
       return result;
-    } on Exception catch (e, _) {
-      return Response(error: e.toString(), status: Status.failure);
+    } catch (e, st) {
+      return Response(error: "$e\n$st", status: Status.failure);
     } finally {
       _inFlight.remove(key);
     }
@@ -153,10 +160,14 @@ class CacheManager {
   }
 
   void _write(String key, Response response, Duration? ttl) {
-    evictExpired();
+    final now = DateTime.now();
+    if (_lastEviction == null ||
+        now.difference(_lastEviction!) >= config.evictionInterval) {
+      evictExpired();
+      _lastEviction = now;
+    }
     final effectiveTtl = ttl ?? config.defaultTtl;
-    final expiresAt =
-        effectiveTtl == null ? null : DateTime.now().add(effectiveTtl);
+    final expiresAt = effectiveTtl == null ? null : now.add(effectiveTtl);
     _db.remove(key);
     _db[key] = CacheEntry(response, expiresAt);
     _stats.writes++;
