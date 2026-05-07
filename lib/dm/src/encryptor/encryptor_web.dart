@@ -18,49 +18,44 @@ import 'encryptor_stub.dart' show AesBackend;
 class _WebAesBackend implements AesBackend {
   const _WebAesBackend();
 
-  Uint8List _toBytes(String s) => Uint8List.fromList(utf8.encode(s));
-
-  Future<web.CryptoKey> _importKey(String key) async {
-    final keyBytes = _toBytes(key);
-    final cryptoKey =
-        await web.window.crypto.subtle
-            .importKey(
-              'raw',
-              keyBytes.buffer.toJS,
-              {'name': 'AES-CBC'}.jsify() as JSObject,
-              false,
-              ['encrypt', 'decrypt'].map((e) => e.toJS).toList().toJS,
-            )
-            .toDart;
-    return cryptoKey;
+  Future<web.CryptoKey> _importKey(Uint8List key) async {
+    return await web.window.crypto.subtle
+        .importKey(
+          'raw',
+          key.buffer.toJS,
+          {'name': 'AES-CBC'}.jsify() as JSObject,
+          false,
+          ['encrypt', 'decrypt'].map((e) => e.toJS).toList().toJS,
+        )
+        .toDart;
   }
 
   JSObject _aesCbc(Uint8List iv) =>
       {'name': 'AES-CBC', 'iv': iv.buffer.toJS}.jsify() as JSObject;
 
   @override
-  Future<String> encrypt(String plainText, String key, String iv) async {
+  Future<String> encrypt(String plainText, Uint8List key, Uint8List iv) async {
     final cryptoKey = await _importKey(key);
-    final dataBytes = _toBytes(plainText);
-
+    final dataBytes = Uint8List.fromList(utf8.encode(plainText));
     final encrypted =
         await web.window.crypto.subtle
-            .encrypt(_aesCbc(_toBytes(iv)), cryptoKey, dataBytes.buffer.toJS)
+            .encrypt(_aesCbc(iv), cryptoKey, dataBytes.buffer.toJS)
             .toDart;
-
     return base64Encode((encrypted as JSArrayBuffer).toDart.asUint8List());
   }
 
   @override
-  Future<String> decrypt(String cipherBase64, String key, String iv) async {
+  Future<String> decrypt(
+    String cipherBase64,
+    Uint8List key,
+    Uint8List iv,
+  ) async {
     final cryptoKey = await _importKey(key);
     final cipherBytes = base64Decode(cipherBase64);
-
     final decrypted =
         await web.window.crypto.subtle
-            .decrypt(_aesCbc(_toBytes(iv)), cryptoKey, cipherBytes.buffer.toJS)
+            .decrypt(_aesCbc(iv), cryptoKey, cipherBytes.buffer.toJS)
             .toDart;
-
     return utf8.decode((decrypted as JSArrayBuffer).toDart.asUint8List());
   }
 }

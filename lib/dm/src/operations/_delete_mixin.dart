@@ -23,6 +23,7 @@ mixin _DeleteMixin on _ErrorHandlingMixin {
       () => _cascadeDelete(
         path,
         counter: counter,
+        ignore: ignore,
         batchLimit: batchLimit,
         batchMaxLimit: batchMaxLimit,
       ),
@@ -34,6 +35,7 @@ mixin _DeleteMixin on _ErrorHandlingMixin {
   Future<void> _cascadeDelete(
     String root, {
     required bool counter,
+    required Ignore? ignore,
     required int batchLimit,
     int? batchMaxLimit,
   }) async {
@@ -41,6 +43,7 @@ mixin _DeleteMixin on _ErrorHandlingMixin {
       delegate: delegate,
       guard: guardAsync,
       counter: counter,
+      ignore: ignore,
       maxLimit: batchMaxLimit,
     );
 

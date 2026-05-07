@@ -1,6 +1,6 @@
 part of 'operation.dart';
 
-mixin _ListenMixin on _HydrateMixin {
+mixin _ListenMixin on _ErrorHandlingMixin, _HydrateMixin {
   DataDelegate get delegate;
 
   Stream<DataGetsSnapshot> doListen(
@@ -10,17 +10,20 @@ mixin _ListenMixin on _HydrateMixin {
     required bool resolveDocChangesRefs,
     required Ignore? ignore,
   }) {
-    return delegate
-        .listen(path)
-        .asyncMap(
-          (data) => hydrateMany(
-            data,
-            countable: countable,
-            resolveRefs: resolveRefs,
-            resolveDocChangesRefs: resolveDocChangesRefs,
-            ignore: ignore,
-          ),
-        );
+    return _guardStream(
+      () => delegate.listen(path),
+      operation: 'listen',
+      path: path,
+      empty: DataGetsSnapshot(),
+    ).asyncMap(
+      (data) => hydrateMany(
+        data,
+        countable: countable,
+        resolveRefs: resolveRefs,
+        resolveDocChangesRefs: resolveDocChangesRefs,
+        ignore: ignore,
+      ),
+    );
   }
 
   Stream<DataGetSnapshot> doListenById(
@@ -29,16 +32,19 @@ mixin _ListenMixin on _HydrateMixin {
     required bool resolveRefs,
     required Ignore? ignore,
   }) {
-    return delegate
-        .listenById(path)
-        .asyncMap(
-          (data) => hydrateOne(
-            data,
-            countable: countable,
-            resolveRefs: resolveRefs,
-            ignore: ignore,
-          ),
-        );
+    return _guardStream(
+      () => delegate.listenById(path),
+      operation: 'listenById',
+      path: path,
+      empty: DataGetSnapshot(),
+    ).asyncMap(
+      (data) => hydrateOne(
+        data,
+        countable: countable,
+        resolveRefs: resolveRefs,
+        ignore: ignore,
+      ),
+    );
   }
 
   Stream<DataGetsSnapshot> doListenByQuery(
@@ -52,22 +58,55 @@ mixin _ListenMixin on _HydrateMixin {
     required bool resolveDocChangesRefs,
     required Ignore? ignore,
   }) {
-    return delegate
-        .listenByQuery(
-          path,
-          queries: queries,
-          selections: selections,
-          sorts: sorts,
-          options: options,
-        )
-        .asyncMap(
-          (data) => hydrateMany(
-            data,
-            countable: countable,
-            resolveRefs: resolveRefs,
-            resolveDocChangesRefs: resolveDocChangesRefs,
-            ignore: ignore,
+    return _guardStream(
+      () => delegate.listenByQuery(
+        path,
+        queries: queries,
+        selections: selections,
+        sorts: sorts,
+        options: options,
+      ),
+      operation: 'listenByQuery',
+      path: path,
+      empty: DataGetsSnapshot(),
+    ).asyncMap(
+      (data) => hydrateMany(
+        data,
+        countable: countable,
+        resolveRefs: resolveRefs,
+        resolveDocChangesRefs: resolveDocChangesRefs,
+        ignore: ignore,
+      ),
+    );
+  }
+
+  Stream<T> _guardStream<T>(
+    Stream<T> Function() source, {
+    required String operation,
+    required String path,
+    required T empty,
+  }) async* {
+    try {
+      yield* source().handleError((Object e, StackTrace s) {
+        errorDelegate.onError(
+          DataOperationError(
+            operation: operation,
+            path: path,
+            cause: e,
+            stack: s,
           ),
         );
+      });
+    } catch (e, s) {
+      errorDelegate.onError(
+        DataOperationError(
+          operation: operation,
+          path: path,
+          cause: e,
+          stack: s,
+        ),
+      );
+      yield empty;
+    }
   }
 }

@@ -313,5 +313,6 @@ class CacheManager {
 
 class _TypedFlight<T extends Object> {
   final Future<Response<T>> future;
+
   _TypedFlight(this.future);
 }

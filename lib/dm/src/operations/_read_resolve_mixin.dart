@@ -53,7 +53,7 @@ mixin _ReadResolveMixin on _ErrorHandlingMixin {
         ),
       );
     }
-    await Future.wait(tasks);
+    await Future.wait(tasks, eagerError: false);
     return result;
   }
 
@@ -123,7 +123,7 @@ mixin _ReadResolveMixin on _ErrorHandlingMixin {
     final path = value.path;
     switch (value.type) {
       case DataFieldValueReaderType.count:
-        final raw = await guardAsync<int?>(
+        final raw = await _safe<int?>(
           () => refSemaphore.run(() => count(path)),
           operation: 'resolve.count',
           path: path,
@@ -134,10 +134,10 @@ mixin _ReadResolveMixin on _ErrorHandlingMixin {
           if (originalKey != fieldKey) result.remove(originalKey);
         }
         return;
+
       case DataFieldValueReaderType.get:
-        if (visited.contains(path)) return;
-        final next = {...visited, path};
-        final raw = await guardAsync<DataGetSnapshot>(
+        if (!visited.add(path)) return;
+        final raw = await _safe<DataGetSnapshot>(
           () => refSemaphore.run(
             () => getById(
               path,
@@ -156,15 +156,17 @@ mixin _ReadResolveMixin on _ErrorHandlingMixin {
           doc,
           ignore,
           countable,
-          visited: next,
+          visited: visited,
           depth: depth + 1,
         );
         result[fieldKey] = resolved;
         if (originalKey != fieldKey) result.remove(originalKey);
         return;
+
       case DataFieldValueReaderType.filter:
+        if (!visited.add(path)) return;
         final options = value.options as DataFieldValueQueryOptions;
-        final raw = await guardAsync<DataGetsSnapshot>(
+        final raw = await _safe<DataGetsSnapshot>(
           () => refSemaphore.run(
             () => getByQuery(
               path,
@@ -193,6 +195,7 @@ mixin _ReadResolveMixin on _ErrorHandlingMixin {
               depth: depth + 1,
             ),
           ),
+          eagerError: false,
         );
         result[fieldKey] = resolvedDocs;
         if (originalKey != fieldKey) result.remove(originalKey);
@@ -211,9 +214,8 @@ mixin _ReadResolveMixin on _ErrorHandlingMixin {
     int depth,
   ) async {
     Future<Map<String, dynamic>?> fetchOne(String p) async {
-      if (visited.contains(p)) return null;
-      final next = {...visited, p};
-      final raw = await guardAsync<DataGetSnapshot>(
+      if (!visited.add(p)) return null;
+      final raw = await _safe<DataGetSnapshot>(
         () => refSemaphore.run(
           () => getById(
             p,
@@ -232,23 +234,25 @@ mixin _ReadResolveMixin on _ErrorHandlingMixin {
         doc,
         ignore,
         countable,
-        visited: next,
+        visited: visited,
         depth: depth + 1,
       );
     }
 
     if (value is String) {
-      if (value.isEmpty) return;
+      if (value.isEmpty) {
+        result.remove(originalKey);
+        return;
+      }
       final snap = await fetchOne(value);
-      if (snap == null) return;
-      result[fieldKey] = snap;
       result.remove(originalKey);
+      if (snap != null) result[fieldKey] = snap;
     } else if (value is List) {
       final futures = <Future<Map<String, dynamic>?>>[];
       for (final v in value) {
         if (v is String && v.isNotEmpty) futures.add(fetchOne(v));
       }
-      final snaps = await Future.wait(futures);
+      final snaps = await Future.wait(futures, eagerError: false);
       final out = <Map<String, dynamic>>[];
       for (final s in snaps) {
         if (s != null) out.add(s);
@@ -266,13 +270,15 @@ mixin _ReadResolveMixin on _ErrorHandlingMixin {
           futures.add(fetchOne(v));
         }
       }
-      final snaps = await Future.wait(futures);
+      final snaps = await Future.wait(futures, eagerError: false);
       final out = <String, Map<String, dynamic>>{};
       for (var i = 0; i < keys.length; i++) {
         final s = snaps[i];
         if (s != null) out[keys[i]] = s;
       }
       result[fieldKey] = out;
+      result.remove(originalKey);
+    } else {
       result.remove(originalKey);
     }
   }
@@ -284,7 +290,7 @@ mixin _ReadResolveMixin on _ErrorHandlingMixin {
     dynamic value,
   ) async {
     Future<int?> fetchOne(String p) {
-      return guardAsync<int?>(
+      return _safe<int?>(
         () => refSemaphore.run(() => count(p)),
         operation: 'resolve.#',
         path: p,
@@ -292,18 +298,19 @@ mixin _ReadResolveMixin on _ErrorHandlingMixin {
     }
 
     if (value is String) {
-      if (value.isEmpty) return;
-      final raw = await fetchOne(value);
-      if (raw != null && raw > 0) {
-        result[fieldKey] = raw;
+      if (value.isEmpty) {
         result.remove(originalKey);
+        return;
       }
+      final raw = await fetchOne(value);
+      result.remove(originalKey);
+      if (raw != null && raw > 0) result[fieldKey] = raw;
     } else if (value is List) {
       final futures = <Future<int?>>[];
       for (final v in value) {
         if (v is String && v.isNotEmpty) futures.add(fetchOne(v));
       }
-      final results = await Future.wait(futures);
+      final results = await Future.wait(futures, eagerError: false);
       final out = <int>[];
       for (final r in results) {
         if (r != null && r >= 0) out.add(r);
@@ -321,7 +328,7 @@ mixin _ReadResolveMixin on _ErrorHandlingMixin {
           futures.add(fetchOne(v));
         }
       }
-      final results = await Future.wait(futures);
+      final results = await Future.wait(futures, eagerError: false);
       final out = <String, int>{};
       for (var i = 0; i < keys.length; i++) {
         final r = results[i];
@@ -329,6 +336,28 @@ mixin _ReadResolveMixin on _ErrorHandlingMixin {
       }
       result[fieldKey] = out;
       result.remove(originalKey);
+    } else {
+      result.remove(originalKey);
+    }
+  }
+
+  Future<T?> _safe<T>(
+    Future<T> Function() task, {
+    required String operation,
+    required String path,
+  }) async {
+    try {
+      return await guardAsync<T>(task, operation: operation, path: path);
+    } catch (e, s) {
+      errorDelegate.onError(
+        DataOperationError(
+          operation: operation,
+          path: path,
+          cause: e,
+          stack: s,
+        ),
+      );
+      return null;
     }
   }
 }

@@ -12,6 +12,7 @@ class _CascadeDeleteCollector {
   final DataDelegate delegate;
   final GuardAsync guard;
   final bool counter;
+  final Ignore? ignore;
   final int? maxLimit;
 
   final List<String> paths = [];
@@ -21,10 +22,14 @@ class _CascadeDeleteCollector {
     required this.delegate,
     required this.guard,
     required this.counter,
+    required this.ignore,
     required this.maxLimit,
   });
 
   bool get _full => maxLimit != null && paths.length >= maxLimit!;
+
+  bool _isIgnored(String key, dynamic value) =>
+      ignore != null && ignore!(key, value);
 
   Future<void> collect(String docPath) async {
     if (_full || !_visited.add(docPath)) return;
@@ -45,6 +50,7 @@ class _CascadeDeleteCollector {
       if (_full) break;
       final key = entry.key;
       final value = entry.value;
+      if (_isIgnored(key, value)) continue;
       if (key.startsWith('@')) {
         await _walkRef(value);
       } else if (counter && key.startsWith('#')) {

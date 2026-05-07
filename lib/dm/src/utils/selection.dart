@@ -12,13 +12,21 @@ enum DataSelections {
   none;
 
   bool get isNone => this == none;
+
   bool get isEndAt => this == endAt;
+
   bool get isEndAtDocument => this == endAtDocument;
+
   bool get isEndBefore => this == endBefore;
+
   bool get isEndBeforeDocument => this == endBeforeDocument;
+
   bool get isStartAfter => this == startAfter;
+
   bool get isStartAfterDocument => this == startAfterDocument;
+
   bool get isStartAt => this == startAt;
+
   bool get isStartAtDocument => this == startAtDocument;
 }
 
