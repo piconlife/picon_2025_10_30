@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart' show debugPrint;
 import '../utils/configs.dart' show DataByteType, DataIdGenerator;
 import 'encryptor_stub.dart'
     if (dart.library.io) 'encryptor_io.dart'
-    if (dart.library.html) 'encryptor_web.dart';
+if (dart.library.js_interop) 'encryptor_web.dart';
 
 typedef EncryptorRequestBuilder =
 Map<String, dynamic> Function(String request, String passcode);
@@ -52,7 +52,9 @@ class DataEncryptor {
       final value = response(data);
       if (value is! String) return {};
       final decrypted = await _backend.decrypt(value, key, iv);
-      return jsonDecode(decrypted);
+      final decoded = jsonDecode(decrypted);
+      if (decoded is! Map<String, dynamic>) return {};
+      return decoded;
     } catch (e, st) {
       debugPrint('DataEncryptor.output error: $e\n$st');
       return {};
