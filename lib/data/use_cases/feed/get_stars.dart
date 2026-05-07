@@ -4,7 +4,6 @@ import 'package:in_app_configs/configs.dart';
 import '../../../app/helpers/user.dart';
 import '../../../app/imports/data_management.dart'
     show
-        IterableParams,
         DataQuery,
         DataSelection,
         DataSorting,

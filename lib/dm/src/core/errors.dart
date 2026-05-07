@@ -5,7 +5,7 @@ abstract class DataException {
 
   String get message {
     if (_exp != null) {
-      return _exp!;
+      return _exp;
     } else {
       return "DataProvider not initialization.";
     }

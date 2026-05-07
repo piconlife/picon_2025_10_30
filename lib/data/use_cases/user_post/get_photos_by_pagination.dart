@@ -2,7 +2,6 @@ import 'package:flutter_entity/entity.dart';
 
 import '../../../app/imports/data_management.dart'
     show
-        IterableParams,
         DataQuery,
         DataSorting,
         DataSelection,
