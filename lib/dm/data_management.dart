@@ -1,13 +1,21 @@
 library;
 
+export 'src/cache/config.dart';
+export 'src/cache/entry.dart';
+export 'src/cache/manager.dart';
+export 'src/cache/stats.dart';
+export 'src/operations/batch.dart';
+export 'src/operations/delegate.dart';
 export 'src/operations/operation.dart';
+export 'src/operations/snapshots.dart';
+export 'src/operations/typedefs.dart';
+export 'src/operations/writers.dart';
 export 'src/repositories/base.dart';
 export 'src/repositories/local.dart';
 export 'src/repositories/remote.dart';
 export 'src/sources/base.dart';
 export 'src/sources/local.dart';
 export 'src/sources/remote.dart';
-export 'src/utils/cache_manager.dart';
 export 'src/utils/checker.dart';
 export 'src/utils/configs.dart';
 export 'src/utils/database_type.dart';

@@ -1,87 +1,28 @@
-import 'dart:async';
-import 'dart:collection';
+import 'dart:collection' show LinkedHashMap, UnmodifiableListView;
 
 import 'package:flutter_entity/entity.dart' show Response;
 
-class CacheConfig {
-  final int maxSize;
+import 'config.dart' show CacheConfig;
+import 'entry.dart' show CacheEntry;
+import 'stats.dart' show CacheStats;
 
-  final Duration? defaultTtl;
+class CacheManager {
+  static CacheManager? _instance;
 
-  final bool deduplicateInFlight;
+  static CacheManager get i => _instance ??= CacheManager();
 
-  const CacheConfig({
-    this.maxSize = 128,
-    this.defaultTtl,
-    this.deduplicateInFlight = true,
-  }) : assert(maxSize > 0, 'maxSize must be positive');
-}
-
-class CacheStats {
-  int hits = 0;
-  int misses = 0;
-  int evictions = 0;
-  int expirations = 0;
-  int inFlightDedupes = 0;
-  int writes = 0;
-
-  double get hitRate {
-    final total = hits + misses;
-    return total == 0 ? 0.0 : hits / total;
-  }
-
-  Map<String, num> snapshot() => {
-    'hits': hits,
-    'misses': misses,
-    'evictions': evictions,
-    'expirations': expirations,
-    'inFlightDedupes': inFlightDedupes,
-    'writes': writes,
-    'hitRate': hitRate,
-  };
-
-  void reset() {
-    hits = 0;
-    misses = 0;
-    evictions = 0;
-    expirations = 0;
-    inFlightDedupes = 0;
-    writes = 0;
-  }
-
-  @override
-  String toString() => 'CacheStats(${snapshot()})';
-}
-
-class _CacheEntry {
-  final Response response;
-  final DateTime? expiresAt;
-
-  _CacheEntry(this.response, this.expiresAt);
-
-  bool get isExpired {
-    final exp = expiresAt;
-    return exp != null && DateTime.now().isAfter(exp);
-  }
-}
-
-class DataCacheManager {
-  static DataCacheManager? _instance;
-
-  static DataCacheManager get i => _instance ??= DataCacheManager();
-
-  static void overrideInstance(DataCacheManager? instance) {
+  static void overrideInstance(CacheManager? instance) {
     _instance = instance;
   }
 
   final CacheConfig config;
   final CacheStats _stats = CacheStats();
 
-  final LinkedHashMap<String, _CacheEntry> _db = LinkedHashMap();
+  final LinkedHashMap<String, CacheEntry> _db = LinkedHashMap();
 
   final Map<String, Future<Response>> _inFlight = {};
 
-  DataCacheManager({this.config = const CacheConfig()});
+  CacheManager({this.config = const CacheConfig()});
 
   CacheStats get stats => _stats;
 
@@ -211,7 +152,7 @@ class DataCacheManager {
     final expiresAt =
         effectiveTtl == null ? null : DateTime.now().add(effectiveTtl);
     _db.remove(key);
-    _db[key] = _CacheEntry(response, expiresAt);
+    _db[key] = CacheEntry(response, expiresAt);
     _stats.writes++;
     while (_db.length > config.maxSize) {
       final oldestKey = _db.keys.first;

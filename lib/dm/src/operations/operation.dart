@@ -1,199 +1,21 @@
-import 'dart:async';
-
-import '../utils/checker.dart';
-import '../utils/configs.dart';
-import '../utils/encryptor.dart';
-
-typedef Ignore = bool Function(String key, Object? value);
-
-class DataGetSnapshot {
-  final Map<String, dynamic> doc;
-  final Object? snapshot;
-
-  bool get exists => doc.isNotEmpty;
-
-  const DataGetSnapshot({Map<String, dynamic>? doc, this.snapshot})
-    : doc = doc ?? const {};
-
-  DataGetSnapshot copyWith({Map<String, dynamic>? doc, Object? snapshot}) {
-    return DataGetSnapshot(
-      doc: doc ?? this.doc,
-      snapshot: snapshot ?? this.snapshot,
-    );
-  }
-}
-
-class DataGetsSnapshot {
-  final Iterable<Map<String, dynamic>> docs;
-  final Iterable<Map<String, dynamic>> docChanges;
-  final Object? snapshot;
-
-  bool get exists => docs.isNotEmpty;
-
-  const DataGetsSnapshot({
-    this.docs = const [],
-    this.docChanges = const [],
-    this.snapshot,
-  });
-
-  DataGetsSnapshot copyWith({
-    Iterable<Map<String, dynamic>>? docs,
-    Iterable<Map<String, dynamic>>? docChanges,
-    Object? snapshot,
-  }) {
-    return DataGetsSnapshot(
-      docs: docs ?? this.docs,
-      docChanges: docChanges ?? this.docChanges,
-      snapshot: snapshot ?? this.snapshot,
-    );
-  }
-}
-
-abstract class DataWriteBatch {
-  DataWriteBatch() {
-    init();
-  }
-
-  void init();
-
-  void delete(String path);
-
-  void set(String path, Object data, [bool merge = true]);
-
-  void update(String path, Map<String, dynamic> data);
-
-  Future<void> commit();
-}
-
-abstract class DataBatchWriter {
-  final String path;
-
-  const DataBatchWriter(this.path);
-
-  @override
-  int get hashCode => path.hashCode;
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other.runtimeType != runtimeType) return false;
-    return other is DataBatchWriter && other.path == path;
-  }
-
-  @override
-  String toString() => '$DataBatchWriter#$hashCode{path: $path}';
-}
-
-class DataSetWriter extends DataBatchWriter {
-  final Object data;
-  final DataSetOptions options;
-
-  const DataSetWriter(
-    super.path,
-    this.data, [
-    this.options = const DataSetOptions(),
-  ]);
-
-  @override
-  int get hashCode => Object.hash(path, data, options);
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other.runtimeType != runtimeType) return false;
-    if (other is! DataSetWriter) return false;
-    if (other.path != path) return false;
-    if (other.data != data) return false;
-    if (other.options != options) return false;
-    return true;
-  }
-
-  @override
-  String toString() {
-    return '$DataSetWriter#$hashCode{path: $path, data: $data, options: $options}';
-  }
-}
-
-class DataUpdateWriter extends DataBatchWriter {
-  final Map<String, dynamic> data;
-
-  const DataUpdateWriter(super.path, this.data);
-
-  @override
-  int get hashCode => Object.hash(path, data);
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other.runtimeType != runtimeType) return false;
-    if (other is! DataUpdateWriter) return false;
-    if (other.path != path) return false;
-    if (other.data != data) return false;
-    return true;
-  }
-
-  @override
-  String toString() {
-    return '$DataUpdateWriter#$hashCode{path: $path, data: $data}';
-  }
-}
-
-class DataDeleteWriter extends DataBatchWriter {
-  const DataDeleteWriter(super.path);
-
-  @override
-  String toString() {
-    return '$DataDeleteWriter#$hashCode{path: $path}';
-  }
-}
-
-abstract class DataDelegate {
-  const DataDelegate();
-
-  DataWriteBatch batch();
-
-  Object? updatingFieldValue(Object? value);
-
-  Object? queryFieldValue(Object? value) => value;
-
-  Future<int?> count(String path);
-
-  Future<void> create(
-    String path,
-    Map<String, dynamic> data, [
-    bool merge = true,
-  ]);
-
-  Future<void> delete(String path);
-
-  Future<DataGetsSnapshot> get(String path);
-
-  Future<DataGetSnapshot> getById(String path);
-
-  Future<DataGetsSnapshot> getByQuery(
-    String path, {
-    Iterable<DataQuery> queries = const [],
-    Iterable<DataSelection> selections = const [],
-    Iterable<DataSorting> sorts = const [],
-    DataFetchOptions options = const DataFetchOptions(),
-  });
-
-  Stream<DataGetsSnapshot> listen(String path);
-
-  Stream<DataGetSnapshot> listenById(String path);
-
-  Stream<DataGetsSnapshot> listenByQuery(
-    String path, {
-    Iterable<DataQuery> queries = const [],
-    Iterable<DataSelection> selections = const [],
-    Iterable<DataSorting> sorts = const [],
-    DataFetchOptions options = const DataFetchOptions(),
-  });
-
-  Future<DataGetsSnapshot> search(String path, Checker checker);
-
-  Future<void> update(String path, Map<String, dynamic> data);
-}
+import '../utils/checker.dart' show Checker;
+import '../utils/configs.dart'
+    show DataQuery, DataSelection, DataSorting, DataFetchOptions;
+import '../utils/encryptor.dart' show DataEncryptor;
+import '../utils/field_value_reader.dart'
+    show
+        DataFieldValueReaderType,
+        DataFieldValueQueryOptions,
+        DataFieldValueReader;
+import '../utils/field_value_writer.dart'
+    show DataFieldValueWriter, DataFieldValueWriterType;
+import '../utils/set_options.dart' show DataSetOptions;
+import 'batch.dart' show DataWriteBatch;
+import 'delegate.dart' show DataDelegate;
+import 'snapshots.dart' show DataGetsSnapshot, DataGetSnapshot;
+import 'typedefs.dart' show Ignore;
+import 'writers.dart'
+    show DataUpdateWriter, DataSetWriter, DataBatchWriter, DataDeleteWriter;
 
 class DataOperation {
   final DataDelegate delegate;

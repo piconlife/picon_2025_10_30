@@ -1,14 +1,25 @@
-import 'package:async/async.dart';
-import 'package:flutter_entity/entity.dart';
+import 'package:async/async.dart' show StreamGroup;
+import 'package:flutter_entity/entity.dart' show Entity, Response, Status;
 
-import '../operations/operation.dart';
-import '../utils/checker.dart';
-import '../utils/configs.dart';
-import '../utils/encryptor.dart';
-import '../utils/extensions.dart';
-import '../utils/limitations.dart';
-import '../utils/modifiers.dart';
-import '../utils/updating_info.dart';
+import '../operations/delegate.dart' show DataDelegate;
+import '../operations/operation.dart' show DataOperation;
+import '../operations/typedefs.dart' show Ignore;
+import '../operations/writers.dart' show DataBatchWriter;
+import '../utils/checker.dart' show Checker;
+import '../utils/configs.dart'
+    show
+        DataFieldParams,
+        DataFieldParamsHelper,
+        DataQuery,
+        DataSelection,
+        DataSorting,
+        DataFetchOptions,
+        DataFieldPath;
+import '../utils/encryptor.dart' show DataEncryptor, DataEncryptorHelper;
+import '../utils/extensions.dart' show DataMapHelper;
+import '../utils/limitations.dart' show DataLimitations;
+import '../utils/modifiers.dart' show DataModifiers;
+import '../utils/updating_info.dart' show DataWriter;
 
 abstract class DataSource<T extends Entity> {
   final String path;

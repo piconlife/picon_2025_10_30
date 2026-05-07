@@ -1,10 +1,11 @@
 import 'package:flutter_entity/entity.dart' show Entity, Response, Status;
 
-import '../operations/operation.dart' show Ignore, DataBatchWriter;
+import '../cache/manager.dart' show CacheManager;
+import '../operations/typedefs.dart' show Ignore;
+import '../operations/writers.dart' show DataBatchWriter;
 import '../sources/base.dart' show DataSource;
 import '../sources/local.dart' show LocalDataSource;
 import '../sources/remote.dart' show RemoteDataSource;
-import '../utils/cache_manager.dart' show DataCacheManager;
 import '../utils/checker.dart' show Checker;
 import '../utils/configs.dart'
     show
@@ -496,7 +497,7 @@ class DataRepository<T extends Entity> {
     bool? singletonMode,
   }) {
     return _modifier(DataModifiers.get, () async {
-      final feedback = await DataCacheManager.i.cache(
+      final feedback = await CacheManager.i.cache(
         "GET",
         enabled: isSingletonMode(singletonMode),
         keyProps: [
@@ -567,7 +568,7 @@ class DataRepository<T extends Entity> {
     bool? backupMode,
   }) {
     return _modifier(DataModifiers.getById, () async {
-      final feedback = await DataCacheManager.i.cache(
+      final feedback = await CacheManager.i.cache(
         "GET_BY_ID",
         enabled: isSingletonMode(singletonMode),
         keyProps: [id, params, countable, resolveRefs],
@@ -631,7 +632,7 @@ class DataRepository<T extends Entity> {
     bool? singletonMode,
   }) {
     return _modifier(DataModifiers.getByIds, () async {
-      final feedback = await DataCacheManager.i.cache(
+      final feedback = await CacheManager.i.cache(
         "GET_BY_IDS",
         enabled: isSingletonMode(singletonMode),
         keyProps: [...ids, params, resolveRefs, resolveDocChangesRefs],
@@ -701,7 +702,7 @@ class DataRepository<T extends Entity> {
     bool? singletonMode,
   }) {
     return _modifier(DataModifiers.getByQuery, () async {
-      final feedback = await DataCacheManager.i.cache(
+      final feedback = await CacheManager.i.cache(
         "GET_BY_QUERY",
         enabled: isSingletonMode(singletonMode),
         keyProps: [
