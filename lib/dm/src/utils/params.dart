@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart' show MapEquality, ListEquality;
+
 import 'path_replacer.dart' show DataFieldReplacer;
 
 abstract class DataFieldParams {
@@ -5,37 +7,49 @@ abstract class DataFieldParams {
 }
 
 class KeyParams extends DataFieldParams {
-  final Map<String, String> values;
+  static const _equality = MapEquality<String, String>();
 
-  const KeyParams(this.values);
+  final Map<String, String> _values;
+
+  KeyParams(Map<String, String> values)
+    : _values = Map<String, String>.unmodifiable(values);
+
+  Map<String, String> get values => _values;
 
   @override
-  int get hashCode => values.hashCode;
+  int get hashCode => _equality.hash(_values);
 
   @override
   bool operator ==(Object other) {
-    return other is KeyParams && other.values == values;
+    if (identical(this, other)) return true;
+    return other is KeyParams && _equality.equals(_values, other._values);
   }
 
   @override
-  String toString() => "$KeyParams($values)";
+  String toString() => 'KeyParams($_values)';
 }
 
 class IterableParams extends DataFieldParams {
-  final List<String> values;
+  static const _equality = ListEquality<String>();
 
-  const IterableParams(this.values);
+  final List<String> _values;
+
+  IterableParams(List<String> values)
+    : _values = List<String>.unmodifiable(values);
+
+  List<String> get values => _values;
 
   @override
-  int get hashCode => values.hashCode;
+  int get hashCode => _equality.hash(_values);
 
   @override
   bool operator ==(Object other) {
-    return other is IterableParams && other.values == values;
+    if (identical(this, other)) return true;
+    return other is IterableParams && _equality.equals(_values, other._values);
   }
 
   @override
-  String toString() => "$IterableParams($values)";
+  String toString() => 'IterableParams($_values)';
 }
 
 extension DataFieldParamsHelper on DataFieldParams? {
@@ -45,8 +59,7 @@ extension DataFieldParamsHelper on DataFieldParams? {
       return DataFieldReplacer.replace(root, params.values);
     } else if (params is IterableParams) {
       return DataFieldReplacer.replaceByIterable(root, params.values);
-    } else {
-      return root;
     }
+    return root;
   }
 }
