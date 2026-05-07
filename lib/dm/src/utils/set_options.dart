@@ -14,6 +14,6 @@ class DataSetOptions {
 
   @override
   String toString() {
-    return "$DataSetOptions#$hashCode(merge: $merge)";
+    return "DataSetOptions#$hashCode(merge: $merge)";
   }
 }

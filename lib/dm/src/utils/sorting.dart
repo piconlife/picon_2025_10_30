@@ -5,7 +5,7 @@ class DataSorting {
   const DataSorting(this.field, {this.descending = false});
 
   @override
-  int get hashCode => field.hashCode ^ descending.hashCode;
+  int get hashCode => Object.hash(field, descending);
 
   @override
   bool operator ==(Object other) {
@@ -16,6 +16,6 @@ class DataSorting {
 
   @override
   String toString() {
-    return "$DataSorting(field: $field, descending: $descending)";
+    return "DataSorting(field: $field, descending: $descending)";
   }
 }

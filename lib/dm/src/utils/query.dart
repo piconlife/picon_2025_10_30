@@ -1,6 +1,10 @@
+import 'package:collection/collection.dart' show ListEquality;
+
 import 'filter.dart' show DataFilter;
 
 class DataQuery {
+  static const _listEquality = ListEquality<Object?>();
+
   final Object field;
   final bool? isNull;
   final Object? isEqualTo;
@@ -11,12 +15,12 @@ class DataQuery {
   final Object? isGreaterThanOrEqualTo;
   final Object? arrayContains;
   final Object? arrayNotContains;
-  final Iterable<Object?>? arrayContainsAny;
-  final Iterable<Object?>? arrayNotContainsAny;
-  final Iterable<Object?>? whereIn;
-  final Iterable<Object?>? whereNotIn;
+  final List<Object?>? arrayContainsAny;
+  final List<Object?>? arrayNotContainsAny;
+  final List<Object?>? whereIn;
+  final List<Object?>? whereNotIn;
 
-  const DataQuery(
+  DataQuery(
     this.field, {
     this.isNull,
     this.isEqualTo,
@@ -27,30 +31,41 @@ class DataQuery {
     this.isGreaterThanOrEqualTo,
     this.arrayContains,
     this.arrayNotContains,
-    this.arrayContainsAny,
-    this.arrayNotContainsAny,
-    this.whereIn,
-    this.whereNotIn,
-  });
+    Iterable<Object?>? arrayContainsAny,
+    Iterable<Object?>? arrayNotContainsAny,
+    Iterable<Object?>? whereIn,
+    Iterable<Object?>? whereNotIn,
+  }) : arrayContainsAny = _freeze(arrayContainsAny),
+       arrayNotContainsAny = _freeze(arrayNotContainsAny),
+       whereIn = _freeze(whereIn),
+       whereNotIn = _freeze(whereNotIn);
 
-  const DataQuery.filter(DataFilter filter) : this(filter);
+  DataQuery.filter(DataFilter filter) : this(filter);
+
+  static List<Object?>? _freeze(Iterable<Object?>? source) =>
+      source == null ? null : List<Object?>.unmodifiable(source);
 
   DataQuery adjust(Object? Function(Object? value) converter) {
+    Object? convert(Object? v) => v == null ? null : converter(v);
+    List<Object?>? convertAll(List<Object?>? src) {
+      return src?.map(converter).toList(growable: false);
+    }
+
     return DataQuery(
       field,
       isNull: isNull,
-      isEqualTo: converter(isEqualTo),
-      isNotEqualTo: converter(isNotEqualTo),
-      isLessThan: converter(isLessThan),
-      isLessThanOrEqualTo: converter(isLessThanOrEqualTo),
-      isGreaterThan: converter(isGreaterThan),
-      isGreaterThanOrEqualTo: converter(isGreaterThanOrEqualTo),
-      arrayContains: converter(arrayContains),
-      arrayNotContains: converter(arrayNotContains),
-      arrayContainsAny: arrayContainsAny?.map(converter),
-      arrayNotContainsAny: arrayNotContainsAny?.map(converter),
-      whereIn: whereIn?.map(converter),
-      whereNotIn: whereNotIn?.map(converter),
+      isEqualTo: convert(isEqualTo),
+      isNotEqualTo: convert(isNotEqualTo),
+      isLessThan: convert(isLessThan),
+      isLessThanOrEqualTo: convert(isLessThanOrEqualTo),
+      isGreaterThan: convert(isGreaterThan),
+      isGreaterThanOrEqualTo: convert(isGreaterThanOrEqualTo),
+      arrayContains: convert(arrayContains),
+      arrayNotContains: convert(arrayNotContains),
+      arrayContainsAny: convertAll(arrayContainsAny),
+      arrayNotContainsAny: convertAll(arrayNotContainsAny),
+      whereIn: convertAll(whereIn),
+      whereNotIn: convertAll(whereNotIn),
     );
   }
 
@@ -66,16 +81,20 @@ class DataQuery {
     isGreaterThanOrEqualTo,
     arrayContains,
     arrayNotContains,
-    arrayContainsAny,
-    arrayNotContainsAny,
-    whereIn,
-    whereNotIn,
+    arrayContainsAny == null ? null : _listEquality.hash(arrayContainsAny),
+    arrayNotContainsAny == null
+        ? null
+        : _listEquality.hash(arrayNotContainsAny),
+    whereIn == null ? null : _listEquality.hash(whereIn),
+    whereNotIn == null ? null : _listEquality.hash(whereNotIn),
   );
 
   @override
   bool operator ==(Object other) {
+    if (identical(this, other)) return true;
     return other is DataQuery &&
         other.field == field &&
+        other.isNull == isNull &&
         other.isEqualTo == isEqualTo &&
         other.isNotEqualTo == isNotEqualTo &&
         other.isLessThan == isLessThan &&
@@ -84,15 +103,28 @@ class DataQuery {
         other.isGreaterThanOrEqualTo == isGreaterThanOrEqualTo &&
         other.arrayContains == arrayContains &&
         other.arrayNotContains == arrayNotContains &&
-        other.arrayContainsAny == arrayContainsAny &&
-        other.arrayNotContainsAny == arrayNotContainsAny &&
-        other.whereIn == whereIn &&
-        other.whereNotIn == whereNotIn &&
-        other.isNull == isNull;
+        _listEquality.equals(other.arrayContainsAny, arrayContainsAny) &&
+        _listEquality.equals(other.arrayNotContainsAny, arrayNotContainsAny) &&
+        _listEquality.equals(other.whereIn, whereIn) &&
+        _listEquality.equals(other.whereNotIn, whereNotIn);
   }
 
   @override
   String toString() {
-    return "$DataQuery(field: $field, isEqualTo: $isEqualTo, isNotEqualTo: $isNotEqualTo, isLessThan: $isLessThan, isLessThanOrEqualTo: $isLessThanOrEqualTo, isGreaterThan: $isGreaterThan, isGreaterThanOrEqualTo: $isGreaterThanOrEqualTo, arrayContains: $arrayContains, arrayNotContains: $arrayNotContains, arrayContainsAny: $arrayContainsAny, arrayNotContainsAny: $arrayNotContainsAny, whereIn: $whereIn, whereNotIn: $whereNotIn, isNull: $isNull)";
+    return 'DataQuery('
+        'field: $field, '
+        'isNull: $isNull, '
+        'isEqualTo: $isEqualTo, '
+        'isNotEqualTo: $isNotEqualTo, '
+        'isLessThan: $isLessThan, '
+        'isLessThanOrEqualTo: $isLessThanOrEqualTo, '
+        'isGreaterThan: $isGreaterThan, '
+        'isGreaterThanOrEqualTo: $isGreaterThanOrEqualTo, '
+        'arrayContains: $arrayContains, '
+        'arrayNotContains: $arrayNotContains, '
+        'arrayContainsAny: $arrayContainsAny, '
+        'arrayNotContainsAny: $arrayNotContainsAny, '
+        'whereIn: $whereIn, '
+        'whereNotIn: $whereNotIn)';
   }
 }
