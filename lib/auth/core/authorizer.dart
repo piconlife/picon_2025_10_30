@@ -1,20 +1,26 @@
-import 'dart:async';
+import 'dart:async' show StreamSubscription, Completer;
 
-import 'package:flutter/material.dart';
-import 'package:flutter_entity/entity.dart';
+import 'package:flutter/foundation.dart' show ValueNotifier;
+import 'package:flutter_entity/entity.dart' show EntityHelper, Response, Status;
 
-import '../delegates/backup.dart';
-import '../delegates/delegate.dart';
-import '../exceptions/exception.dart';
-import '../models/auth.dart';
-import '../models/auth_response.dart';
-import '../models/auth_status.dart';
-import '../models/auth_type.dart';
-import '../models/authenticator.dart';
-import '../models/credential.dart';
+import '../delegates/backup.dart' show AuthBackupDelegate;
+import '../delegates/delegate.dart' show AuthDelegate;
+import '../exceptions/exception.dart' show AuthException;
+import '../models/auth.dart' show Auth;
+import '../models/auth_response.dart' show AuthResponse;
+import '../models/auth_status.dart' show AuthStatus;
+import '../models/auth_type.dart' show AuthType;
+import '../models/authenticator.dart'
+    show
+        Authenticator,
+        EmailAuthenticator,
+        GuestAuthenticator,
+        OtpAuthenticator,
+        PhoneAuthenticator,
+        UsernameAuthenticator;
+import '../models/credential.dart' show Credential;
 import '../models/key.dart' show AuthKeys;
-import '../models/messages.dart';
-import '../widgets/provider.dart';
+import '../models/messages.dart' show AuthMessages;
 
 part '_auth_backup.dart';
 part '_auth_biometric_mixin.dart';
@@ -28,11 +34,6 @@ part '_auth_state_mixin.dart';
 part '_auth_update_mixin.dart';
 part '_authorizer_base.dart';
 
-typedef OnAuthMode = void Function(BuildContext context);
-typedef OnAuthError = void Function(BuildContext context, String error);
-typedef OnAuthMessage = void Function(BuildContext context, String message);
-typedef OnAuthLoading = void Function(BuildContext context, bool loading);
-typedef OnAuthStatus = void Function(BuildContext context, AuthStatus status);
 typedef IdentityBuilder = String Function(String uid);
 typedef SignByBiometricCallback<T extends Auth> =
     Future<bool?>? Function(T? auth);
@@ -57,33 +58,21 @@ class Authorizer<T extends Auth> extends _AuthorizerBase<T>
 
   static Future<void>? _ioLock;
 
-  factory Authorizer.of(BuildContext context) {
-    try {
-      return AuthProvider.authorizerOf<T>(context);
-    } catch (e) {
-      throw AuthProviderException(
-        'No Authorizer<${AuthProvider.type}> found. '
-        'Ensure AuthProvider<${AuthProvider.type}> wraps the widget tree. '
-        '(cause: $e)',
-      );
-    }
-  }
-
   static Authorizer<T> instanceOf<T extends Auth>() {
     final current = _i;
     if (current == null) {
-      throw AuthProviderException(
+      throw AuthException(
         'Authorizer has not been initialised. '
         'Call Authorizer.init<T>() or attach an instance first.',
       );
     }
     if (current.isDisposed) {
-      throw AuthProviderException(
+      throw AuthException(
         'Authorizer has been disposed. Re-initialise before use.',
       );
     }
     if (current is! Authorizer<T>) {
-      throw AuthProviderException(
+      throw AuthException(
         'Type mismatch: expected Authorizer<$T> but the attached instance '
         'is ${current.runtimeType}.',
       );
