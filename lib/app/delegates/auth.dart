@@ -16,32 +16,6 @@ class InAppAuthDelegate extends AuthDelegate {
   User? get user => FirebaseAuth.instance.currentUser;
 
   @override
-  Object credential(Provider provider, Credential credential) {
-    final token = credential.accessToken;
-    final idToken = credential.idToken;
-    switch (provider) {
-      case Provider.apple:
-        return OAuthProvider(
-          "apple.com",
-        ).credential(idToken: idToken, accessToken: token);
-      case Provider.facebook:
-        return FacebookAuthProvider.credential(token ?? "");
-      case Provider.google:
-        return GoogleAuthProvider.credential(
-          idToken: idToken,
-          accessToken: token,
-        );
-      case Provider.phone:
-        return PhoneAuthProvider.credential(
-          verificationId: credential.verificationId ?? '',
-          smsCode: credential.smsCode ?? '',
-        );
-      default:
-        throw UnimplementedError();
-    }
-  }
-
-  @override
   Future<Response<void>> delete() async {
     if (user != null) {
       try {
@@ -60,7 +34,7 @@ class InAppAuthDelegate extends AuthDelegate {
   }
 
   @override
-  Future<bool> isSignIn([Provider? provider]) async {
+  Future<bool> isSignIn() async {
     return firebaseAuth.currentUser != null;
   }
 
@@ -134,6 +108,15 @@ class InAppAuthDelegate extends AuthDelegate {
     } on FirebaseAuthException catch (error) {
       return Response(status: Status.failure, error: error.message);
     }
+  }
+
+  @override
+  Future<Response<Credential>> signInWithOtp(String verId, String smsCode) {
+    final credential = PhoneAuthProvider.credential(
+      verificationId: verId,
+      smsCode: smsCode,
+    );
+    return signInWithCredential(credential);
   }
 
   @override
@@ -219,7 +202,7 @@ class InAppAuthDelegate extends AuthDelegate {
   }
 
   @override
-  Future<Response<void>> signOut([Provider? provider]) async {
+  Future<Response<void>> signOut() async {
     try {
       await firebaseAuth.signOut();
       return Response(status: Status.ok);

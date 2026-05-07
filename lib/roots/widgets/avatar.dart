@@ -38,22 +38,18 @@ class InAppAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AndrossyGesture(
-      clickEffect: AndrossyGestureEffect(
-        primary:
-            scalerLowerBound < 1
-                ? AndrossyGestureAnimation.scale(
-                  lowerBound: scalerLowerBound,
-                  upperBound: scalerUpperBound,
-                )
-                : null,
-        secondary:
-            fadeLowerBound < 1
-                ? AndrossyGestureAnimation.fade(
-                  lowerBound: fadeLowerBound,
-                  upperBound: fadeUpperBound,
-                )
-                : null,
-      ),
+      effects: [
+        if (scalerLowerBound < 1)
+          GestureAnimation.scale(
+            lowerBound: scalerLowerBound,
+            upperBound: scalerUpperBound,
+          ),
+        if (fadeLowerBound < 1)
+          GestureAnimation.fade(
+            lowerBound: fadeLowerBound,
+            upperBound: fadeUpperBound,
+          ),
+      ],
       onTap: onTap,
       child: AndrossyAvatar(
         data ?? InAppPlaceholders.user,

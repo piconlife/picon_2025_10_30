@@ -38,10 +38,7 @@ class InAppTextedAction extends StatelessWidget {
       textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: dimen.dp(14)),
       textAllCaps: true,
       textColor: AndrossyButtonProperty.all(primary),
-      clickEffect: AndrossyGestureEffect(
-        primary: AndrossyGestureAnimation.scale(),
-        secondary: AndrossyGestureAnimation.fade(),
-      ),
+      clickEffects: [GestureAnimation.scale(), GestureAnimation.fade()],
       splashColor: isBackgroundMode ? null : primary.t02,
       highlightColor: isBackgroundMode ? null : primary.t05,
       onTap: onTap,

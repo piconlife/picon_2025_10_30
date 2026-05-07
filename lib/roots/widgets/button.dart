@@ -93,24 +93,20 @@ class InAppButton extends StatelessWidget {
       borderRadius: borderRadius,
       overlayColor: overlayColor,
       padding: padding,
-      clickEffect: AndrossyGestureEffect(
-        primary:
-            scalerLowerBound < 1
-                ? AndrossyGestureAnimation.scale(
-                  lowerBound: scalerLowerBound,
-                  upperBound: scalerUpperBound,
-                  duration: duration,
-                )
-                : null,
-        secondary:
-            fadeLowerBound < 1
-                ? AndrossyGestureAnimation.fade(
-                  lowerBound: fadeLowerBound,
-                  upperBound: fadeUpperBound,
-                  duration: duration,
-                )
-                : null,
-      ),
+      clickEffects: [
+        if (scalerLowerBound < 1)
+          GestureAnimation.scale(
+            lowerBound: scalerLowerBound,
+            upperBound: scalerUpperBound,
+            duration: duration,
+          ),
+        if (fadeLowerBound < 1)
+          GestureAnimation.fade(
+            lowerBound: fadeLowerBound,
+            upperBound: fadeUpperBound,
+            duration: duration,
+          ),
+      ],
       text: text,
       textStyle: (textStyle ?? TextStyle()).copyWith(
         fontFamily: textStyle?.fontFamily ?? InAppFonts.primary,

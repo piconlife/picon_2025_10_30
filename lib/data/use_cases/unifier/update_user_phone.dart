@@ -14,7 +14,7 @@ class UpdateUserPhoneUseCase extends BaseUserPhoneUnifierUseCase {
   Future<Response<PhoneUnifier>> call(String phone) async {
     try {
       final data = <String, dynamic>{
-        UnifierKeys.i.timeMills: Entity.generateTimeMills,
+        UnifierKeys.i.timeMills: EntityHelper.generateTimeMills,
         UnifierKeys.i.verified: true,
       };
       final value = await repository

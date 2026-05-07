@@ -579,7 +579,7 @@ class _Counter extends StatelessWidget {
       child: AndrossyGesture(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
-        clickEffect: AndrossyGestureEffect.scale(),
+        effects: [GestureAnimation.scale()],
         onTap: onClick,
         child: Center(
           child: Column(

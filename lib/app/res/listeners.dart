@@ -1,6 +1,3 @@
-import 'package:auth_management/core/auth_response.dart';
-import 'package:auth_management/core/helper.dart';
-import 'package:auth_management/widgets/oauth_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:flutter_entity/entity.dart';
@@ -9,6 +6,7 @@ import 'package:in_app_settings/settings.dart';
 import 'package:in_app_translation/core.dart';
 
 import '../../data/models/user.dart';
+import '../../imports/am.dart' show AuthResponse, AuthHelper;
 import '../../roots/helpers/connectivity.dart';
 import '../../roots/services/notification.dart';
 import '../../roots/services/zotlo_subscription.dart';
@@ -41,7 +39,7 @@ abstract final class InAppListeners {
 
   static Future<void> login(
     BuildContext context,
-    OauthButtonType type,
+    String type,
     VoidCallback? onLoggedIn,
   ) async {
     try {
@@ -54,9 +52,9 @@ abstract final class InAppListeners {
       }
       if (!context.mounted) return;
       AuthResponse<UserModel> response;
-      if (type == OauthButtonType.apple) {
+      if (type == "APPLE") {
         response = await context.signInWithApple<UserModel>();
-      } else if (type == OauthButtonType.google) {
+      } else if (type == "GOOGLE") {
         response = await context.signInWithGoogle<UserModel>();
       } else {
         context.hideLoader();

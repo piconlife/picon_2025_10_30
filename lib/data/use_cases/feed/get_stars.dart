@@ -73,7 +73,7 @@ class StaredFeedPaginationUseCase extends FeedBaseUseCase {
             DataSorting(Keys.i.timeMills, descending: true),
             DataSorting(Keys.i.publisherRating, descending: true),
           ],
-          options: DataPagingOptions(
+          options: DataFetchOptions(
             initialFetchSize: initialSize,
             fetchingSize: fetchingSize,
           ),

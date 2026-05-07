@@ -28,9 +28,10 @@ class _InAppUserBuilderState extends State<InAppUserBuilder> {
   Widget build(BuildContext context) {
     final id = widget.id ?? widget.initial?.id;
     if (widget.currentUser || UserHelper.isCurrentUser(id)) {
-      return AuthConsumer<UserModel>(
-        builder:
-            (context, value) => widget.builder(context, value ?? UserModel()),
+      return AuthBuilder<UserModel>(
+        builder: (context, value, child) {
+          return widget.builder(context, value ?? UserModel());
+        },
       );
     }
     if (id != null && id.isNotEmpty) {

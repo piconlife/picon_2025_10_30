@@ -2,12 +2,12 @@ import 'dart:developer';
 
 import 'package:auth_management/core.dart';
 import 'package:data_management/core.dart';
-import 'package:flutter_andomie/extensions.dart';
 
 import '../../data/models/user.dart';
 import '../../data/use_cases/user/create.dart';
 import '../../data/use_cases/user/delete_user.dart';
 import '../../data/use_cases/user/get.dart';
+import '../../data/use_cases/user/listen.dart';
 import '../../data/use_cases/user/update.dart';
 import '../../features/startup/preferences/startup.dart';
 import '../helpers/user.dart';
@@ -17,6 +17,7 @@ class InAppAuthBackupDelegate extends AuthBackupDelegate<UserModel> {
   final _update = UpdateUserUseCase.i;
   final _delete = DeleteUserUseCase.i;
   final _fetch = GetUserUseCase.i;
+  final _listen = ListenUserUseCase.i;
 
   InAppAuthBackupDelegate()
     : super(
@@ -60,7 +61,6 @@ class InAppAuthBackupDelegate extends AuthBackupDelegate<UserModel> {
   @override
   Future<void> onCreateUser(UserModel data) async {
     Map<String, dynamic> current = data.source;
-    current.addAll(data.extra.use);
     current.addAll({
       UserKeys.i.name: Startup.i.fullname,
       UserKeys.i.username: Startup.i.shortname,
@@ -88,7 +88,16 @@ class InAppAuthBackupDelegate extends AuthBackupDelegate<UserModel> {
   Future<UserModel?> onFetchUser(String id) => _fetch(id).then((v) => v.data);
 
   @override
-  Future<void> onUpdateUser(String id, Map<String, dynamic> data) {
+  Future<void> onUpdateUser(
+    String id,
+    Map<String, dynamic> data,
+    bool hasAnonymous,
+  ) {
     return _update(id, data);
+  }
+
+  @override
+  Stream<UserModel?> onListenUser(String id) {
+    return _listen(id).map((e) => e.data);
   }
 }

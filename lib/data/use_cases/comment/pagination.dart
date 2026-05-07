@@ -26,7 +26,7 @@ class CommentPaginationUseCase extends CommentBaseUseCase {
       selections: [
         if (snapshot != null) DataSelection.startAfterDocument(snapshot),
       ],
-      options: DataPagingOptions(
+      options: DataFetchOptions(
         initialFetchSize: initialSize,
         fetchingSize: fetchingSize,
       ),

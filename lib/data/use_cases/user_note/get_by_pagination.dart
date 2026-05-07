@@ -26,7 +26,7 @@ class GetUserNotesByPaginationUseCase extends BaseUserNoteUseCase {
       selections: [
         if (snapshot != null) DataSelection.startAfterDocument(snapshot),
       ],
-      options: DataPagingOptions(
+      options: DataFetchOptions(
         initialFetchSize: initialSize,
         fetchingSize: fetchingSize,
       ),

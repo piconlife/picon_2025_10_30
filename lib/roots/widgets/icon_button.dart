@@ -15,7 +15,7 @@ class InAppIconButton extends StatelessWidget {
   final double iconScale;
   final Color? iconColor;
   final Color? activatedIconColor;
-  final AndrossyGestureEffect? effect;
+  final GestureAnimation? effect;
   final VoidCallback? onTap;
 
   const InAppIconButton(
@@ -52,7 +52,7 @@ class InAppIconButton extends StatelessWidget {
         disabled: disableColor,
         activated: activatedColor,
       ),
-      clickEffect: effect ?? AndrossyGestureEffect.scale(),
+      clickEffects: [effect ?? GestureAnimation.scale()],
       indicatorColor: AndrossyButtonProperty.all(Colors.white),
       icon: data,
       iconColor: AndrossyButtonProperty(

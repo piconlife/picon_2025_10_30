@@ -75,7 +75,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
 
   UserModel user = UserModel();
   String? photoUrl;
-  late String id = Entity.generateID;
+  late String id = EntityHelper.generateID;
 
   bool get isValidUrl => photoUrl.isValidWebUrl;
 
@@ -225,7 +225,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
     }
 
     final mPublisherId = UserHelper.uid;
-    final mTimeMills = Entity.generateTimeMills;
+    final mTimeMills = EntityHelper.generateTimeMills;
 
     final mCover = CoverModel.create(
       id: id,
@@ -361,8 +361,8 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
         ),
         body: ListView(
           children: [
-            AuthConsumer<UserModel>(
-              builder: (context, user) {
+            AuthBuilder<UserModel>(
+              builder: (context, user, child) {
                 return ValueListenableBuilder(
                   valueListenable: loading,
                   builder: (context, value, child) {
@@ -384,7 +384,7 @@ class _EditUserCoverPhotoPageState extends State<EditUserCoverPhotoPage> {
                 builder: (context, value, child) {
                   return AndrossyButton(
                     primary: primary,
-                    clickEffect: AndrossyGestureEffect.scale(),
+                    clickEffects: [GestureAnimation.scale()],
                     text: value.label,
                     textSize: dimen.dp(16),
                     textColor: const AndrossyButtonProperty.all(Colors.white),

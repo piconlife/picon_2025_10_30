@@ -24,7 +24,7 @@ class CommentGetsUseCase extends CommentBaseUseCase {
         if (fetchForMe)
           DataQuery(Keys.i.publisherId, isEqualTo: UserHelper.uid),
       ],
-      options: DataPagingOptions(
+      options: DataFetchOptions(
         initialFetchSize: limit,
         fetchingSize: limit,
         fetchFromLast: limit != null,

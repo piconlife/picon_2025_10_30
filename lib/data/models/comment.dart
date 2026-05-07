@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter_andomie/utils/path_replacer.dart';
 import 'package:flutter_entity/entity.dart';
 
@@ -8,8 +7,6 @@ import '../../roots/services/path_provider.dart';
 import '../constants/paths.dart';
 import '../enums/comment_type.dart';
 import '../enums/privacy.dart';
-
-const _e = DeepCollectionEquality();
 
 class CommentKeys extends EntityKey {
   const CommentKeys._();
@@ -171,7 +168,7 @@ class CommentModel extends Entity<CommentKeys> {
       publisher,
       path,
       parentPath,
-      _e.hash(reacts),
+      hash(reacts),
       _privacy?.index,
       _type?.index,
     );
@@ -189,7 +186,7 @@ class CommentModel extends Entity<CommentKeys> {
         path == other.path &&
         publisher == other.publisher &&
         parentPath == other.parentPath &&
-        _e.equals(reacts, other.reacts) &&
+        equals(reacts, other.reacts) &&
         _privacy == other._privacy &&
         _type == other._type;
   }

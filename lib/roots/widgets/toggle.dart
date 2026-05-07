@@ -93,18 +93,19 @@ class _InAppToggleState extends State<InAppToggle> {
       splashFactory: widget.splashFactory,
       borderRadius: widget.splashBorderRadius,
       overlayColor: widget.overlayColor,
-      clickEffect: AndrossyGestureEffect(
-        primary: AndrossyGestureAnimation.scale(
+      effects: [
+        GestureAnimation.scale(
           lowerBound: widget.scalerLowerBound,
           upperBound: widget.scalerUpperBound,
           duration: widget.duration,
         ),
-        secondary: AndrossyGestureAnimation.fade(
+        GestureAnimation.fade(
           lowerBound: widget.fadeLowerBound,
           upperBound: widget.fadeUpperBound,
           duration: widget.duration,
         ),
-      ),
+      ],
+
       enableFeedback: widget.enableFeedback,
       onTap: _change,
       child: widget.builder(context, activated),

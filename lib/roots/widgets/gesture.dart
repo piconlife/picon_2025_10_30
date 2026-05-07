@@ -61,18 +61,20 @@ class InAppGesture extends StatelessWidget {
       splashFactory: splashFactory,
       borderRadius: splashBorderRadius,
       overlayColor: overlayColor,
-      clickEffect: AndrossyGestureEffect(
-        primary: AndrossyGestureAnimation.scale(
-          lowerBound: scalerLowerBound,
-          upperBound: scalerUpperBound,
-          duration: duration,
-        ),
-        secondary: AndrossyGestureAnimation.fade(
-          lowerBound: fadeLowerBound,
-          upperBound: fadeUpperBound,
-          duration: duration,
-        ),
-      ),
+      effects: [
+        if (scalerLowerBound < 1)
+          GestureAnimation.scale(
+            lowerBound: scalerLowerBound,
+            upperBound: scalerUpperBound,
+            duration: duration,
+          ),
+        if (fadeLowerBound < 1)
+          GestureAnimation.fade(
+            lowerBound: fadeLowerBound,
+            upperBound: fadeUpperBound,
+            duration: duration,
+          ),
+      ],
       enableFeedback: false,
       onTap:
           onTap != null

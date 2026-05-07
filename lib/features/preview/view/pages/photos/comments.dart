@@ -77,7 +77,8 @@ class _PhotoCommentsViewState extends State<PhotoCommentsView> with ColorMixin {
   }
 
   TextStyle _tagStyle(String sign) {
-    if (sign == '@') return TextStyle(color: light, fontWeight: FontWeight.bold);
+    if (sign == '@')
+      return TextStyle(color: light, fontWeight: FontWeight.bold);
     return TextStyle(color: blue);
   }
 

@@ -29,7 +29,7 @@ class GetUserPostsByPaginationUseCase extends BaseUserPostUseCase {
       selections: [
         if (snapshot != null) DataSelection.startAfterDocument(snapshot),
       ],
-      options: DataPagingOptions(
+      options: DataFetchOptions(
         initialFetchSize: initialSize,
         fetchingSize: fetchingSize,
       ),

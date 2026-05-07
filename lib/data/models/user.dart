@@ -1,13 +1,12 @@
 import 'dart:convert';
 
-import 'package:auth_management/core/auth.dart';
-import 'package:auth_management/core/provider.dart';
 import 'package:flutter_andomie/utils/date_helper.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:picon/data/parsers/enum_parser.dart';
 
 import '../../app/constants/limitations.dart';
 import '../../app/helpers/user.dart';
+import '../../imports/am.dart' show AuthKeys, Auth;
 import '../enums/gender.dart';
 import '../enums/lifestyle.dart';
 import '../enums/marital_status.dart';
@@ -97,7 +96,6 @@ class UserKeys extends AuthKeys {
     return [
       // ROOT INFO
       id,
-      idToken,
       timeMills,
       email,
       loggedIn,
@@ -283,11 +281,8 @@ class UserModel extends Auth<UserKeys> {
     // ROOT
     super.id = "",
     super.timeMills,
-    super.accessToken,
     super.biometric,
     super.email,
-    super.extra,
-    super.idToken,
     super.loggedIn,
     super.loggedInTime,
     super.loggedOutTime,
@@ -359,11 +354,8 @@ class UserModel extends Auth<UserKeys> {
     // ROOT
     String? id,
     int? timeMills,
-    String? accessToken,
     bool? biometric,
     String? email,
-    Map<String, dynamic>? extra,
-    String? idToken,
     bool? loggedIn,
     int? loggedInTime,
     int? loggedOutTime,
@@ -371,7 +363,7 @@ class UserModel extends Auth<UserKeys> {
     String? password,
     String? phone,
     String? photo,
-    Provider? provider,
+    String? provider,
     String? username,
     bool? verified,
 
@@ -427,11 +419,8 @@ class UserModel extends Auth<UserKeys> {
       // ROOT
       id: id ?? this.id,
       timeMills: timeMills ?? this.timeMills,
-      accessToken: accessToken ?? this.accessToken,
       biometric: biometric ?? this.biometric,
       email: email ?? this.email,
-      extra: extra ?? this.extra,
-      idToken: idToken ?? this.idToken,
       loggedIn: loggedIn ?? this.loggedIn,
       loggedInTime: loggedInTime ?? this.loggedInTime,
       loggedOutTime: loggedOutTime ?? this.loggedOutTime,
@@ -494,26 +483,23 @@ class UserModel extends Auth<UserKeys> {
   }
 
   factory UserModel.parse(Object? source) {
-    final auth = Auth.from(source);
+    final key = UserKeys.i;
     return UserModel(
       // ROOT
-      id: auth.id,
-      timeMills: auth.timeMills,
-      accessToken: auth.accessToken,
-      biometric: auth.biometric,
-      loggedIn: auth.loggedIn,
-      loggedInTime: auth.loggedInTime,
-      loggedOutTime: auth.loggedOutTime,
-      idToken: auth.idToken,
-      email: auth.email,
-      name: auth.name,
-      password: auth.password,
-      phone: auth.phone,
-      photo: auth.photo,
-      provider: auth.provider,
-      username: auth.username,
-      verified: auth.verified,
-      extra: auth.extra,
+      id: source.entityValue(key.id),
+      timeMills: source.entityValue(key.timeMills),
+      biometric: source.entityValue(key.biometric),
+      loggedIn: source.entityValue(key.loggedIn),
+      loggedInTime: source.entityValue(key.loggedInTime),
+      loggedOutTime: source.entityValue(key.loggedOutTime),
+      email: source.entityValue(key.email),
+      name: source.entityValue(key.name),
+      password: source.entityValue(key.password),
+      phone: source.entityValue(key.phone),
+      photo: source.entityValue(key.photo),
+      provider: source.entityValue(key.provider),
+      username: source.entityValue(key.username),
+      verified: source.entityValue(key.verified),
 
       // IN APP INFO
       activeTime: source.entityValue(UserKeys.i.activeTime),

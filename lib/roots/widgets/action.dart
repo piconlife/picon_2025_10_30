@@ -30,10 +30,7 @@ class InAppAction extends StatelessWidget {
         borderRadius: BorderRadius.circular(
           dimen.smallCorner - dimen.smallestCorner,
         ),
-        clickEffect: const AndrossyGestureEffect(
-          primary: AndrossyGestureAnimation.scale(),
-          secondary: AndrossyGestureAnimation.fade(),
-        ),
+        clickEffects: [GestureAnimation.scale(), GestureAnimation.fade()],
         icon: icon ?? InAppIcons.leading.regular,
         iconSize: dimen.normalIcon,
         iconColor: AndrossyButtonProperty(enabled: color, disabled: color.t50),

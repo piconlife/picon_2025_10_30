@@ -107,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
         if (Startup.puts({
           StartupKeys.idToken: token,
           StartupKeys.phone: phone,
-          StartupKeys.provider: Provider.phone.name,
+          StartupKeys.provider: "PHONE_NUMBER",
         })) {
           final value = await context.open(Routes.otp);
           if (!context.mounted) return;
@@ -173,8 +173,8 @@ class _LoginPageState extends State<LoginPage> {
     context.open(Routes.forgotPassword);
   }
 
-  void _finally(BuildContext context, AuthChanges<UserModel> changes) {
-    if (!changes.status.isAuthenticated || changes.user == null) return;
+  void _finally(BuildContext context, AuthStatus status) {
+    if (!status.isAuthenticated) return;
     context.clear(Routes.main);
   }
 
@@ -182,12 +182,12 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final dimen = context.dimens;
     final primary = context.primary;
-    return AuthObserver<UserModel>(
+    return AuthListener<UserModel>(
       ids: const [Routes.login],
       onError: (context, value) => context.showErrorSnackBar(value),
       onLoading: (_, value) => btnSubmitKey.currentState?.setLoading(value),
       onMessage: (context, value) => context.showSnackBar(value),
-      onChanges: _finally,
+      onStatus: _finally,
       child: StartupScreen(
         child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -512,8 +512,8 @@ class _Footer extends StatelessWidget {
             child: CircleAvatar(
               radius: dimen.dp(25),
               backgroundColor: Colors.transparent,
-              child: AuthConsumer<UserModel>(
-                builder: (context, user) {
+              child: AuthBuilder<UserModel>(
+                builder: (context, user, child) {
                   return InAppIcon(
                     Icons.fingerprint,
                     size: dimen.dp(40),

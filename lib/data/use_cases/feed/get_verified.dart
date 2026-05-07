@@ -26,7 +26,7 @@ class VerifiedFeedPaginationUseCase extends FeedBaseUseCase {
       queries: [DataQuery(Keys.i.publisherId, whereIn: UserHelper.approvals)],
       selections: [DataSelection.startAfterDocument(snapshot)],
       sorts: [DataSorting(Keys.i.timeMills, descending: true)],
-      options: DataPagingOptions(
+      options: DataFetchOptions(
         fetchingSize: fetchingSize,
         initialFetchSize: initialSize,
       ),

@@ -70,10 +70,7 @@ class InAppOutlinedButtonState extends State<InAppOutlinedButton> {
       borderOnly: true,
       loading: loading,
       textColor: AndrossyButtonProperty(enabled: widget.textColor),
-      clickEffect: const AndrossyGestureEffect(
-        primary: AndrossyGestureAnimation.scale(),
-        secondary: AndrossyGestureAnimation.fade(),
-      ),
+      clickEffects: [GestureAnimation.scale(), GestureAnimation.fade()],
       onTap: widget.onTap,
     );
   }

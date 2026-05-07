@@ -94,7 +94,7 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
       privacy.set(Privacy.parse(old?.privacy));
     } else {
       id = KeyGenerator.generateKey(
-        timeMills: Entity.generateTimeMills,
+        timeMills: EntityHelper.generateTimeMills,
         extraKeySize: 5,
       );
       type = data.findByKey("$FeedType", defaultValue: FeedType.post);
@@ -184,7 +184,7 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
   }) async {
     final data = Photo.create(
       id: id,
-      timeMills: Entity.generateTimeMills,
+      timeMills: EntityHelper.generateTimeMills,
       publisherId: UserHelper.uid,
       path: PathProvider.generatePath(photosPath, id),
       photoUrl: url,
@@ -299,7 +299,7 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
       final isAllUploaded = photos.length == this.photos.value.length;
       if (isAllUploaded) {
         final updates = {
-          Keys.i.updatedAt: Entity.generateTimeMills,
+          Keys.i.updatedAt: EntityHelper.generateTimeMills,
           Keys.i.description: description,
           Keys.i.photoUrls: photos,
         };
@@ -395,7 +395,7 @@ class _CreateAMemoryPageState extends State<CreateAMemoryPage> {
     }
     final data = PostModel.create(
       id: id,
-      timeMills: Entity.generateTimeMills,
+      timeMills: EntityHelper.generateTimeMills,
       publisherId: UserHelper.uid,
       path: path,
       audience: audience.value,

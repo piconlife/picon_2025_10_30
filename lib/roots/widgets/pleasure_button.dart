@@ -36,10 +36,7 @@ class InAppPleasureButton extends StatelessWidget {
                 });
               }
               : null,
-      clickEffect: AndrossyGestureEffect.scale(
-        lowerBound: 0,
-        duration: duration,
-      ),
+      clickEffects: [GestureAnimation.scale(lowerBound: 0, duration: duration)],
       icon: icon,
       iconColor: AndrossyButtonProperty.all(iconColor ?? Colors.grey),
       iconSize: iconSize ?? 24,

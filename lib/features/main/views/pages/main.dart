@@ -44,7 +44,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     final dimen = context.dimens;
-    return AuthObserver<UserModel>(
+    return AuthListener<UserModel>(
       onError: (context, value) => context.showErrorSnackBar(value),
       onLoading: (context, value) {
         if (value) {

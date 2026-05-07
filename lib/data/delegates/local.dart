@@ -94,7 +94,7 @@ class LocalDataDelegate extends DataDelegate {
     Iterable<DataQuery> queries = const [],
     Iterable<DataSelection> selections = const [],
     Iterable<DataSorting> sorts = const [],
-    DataPagingOptions options = const DataPagingOptions(),
+    DataFetchOptions options = const DataFetchOptions(),
   }) {
     return LocalQueryHelper.query(
       _db.collection(path),
@@ -135,7 +135,7 @@ class LocalDataDelegate extends DataDelegate {
     Iterable<DataQuery> queries = const [],
     Iterable<DataSelection> selections = const [],
     Iterable<DataSorting> sorts = const [],
-    DataPagingOptions options = const DataPagingOptions(),
+    DataFetchOptions options = const DataFetchOptions(),
   }) {
     return LocalQueryHelper.query(
       _db.collection(path),
@@ -214,7 +214,7 @@ class LocalQueryHelper {
     Iterable<DataQuery> queries = const [],
     Iterable<DataSelection> selections = const [],
     Iterable<DataSorting> sorts = const [],
-    DataPagingOptions options = const DataPagingOptions(),
+    DataFetchOptions options = const DataFetchOptions(),
   }) {
     var isFetchingMode = true;
     final fetchingSizeInit = options.initialSize ?? 0;

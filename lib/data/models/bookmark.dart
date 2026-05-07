@@ -29,8 +29,8 @@ class BookmarkModel extends ContentModel {
     required super.path,
     required super.contentType,
   }) : super(
-         id: id ?? Entity.generateID,
-         timeMills: timeMills ?? Entity.generateTimeMills,
+         id: id ?? EntityHelper.generateID,
+         timeMills: timeMills ?? EntityHelper.generateTimeMills,
          publisherId: publisherId ?? UserHelper.uid,
        );
 

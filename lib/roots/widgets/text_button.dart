@@ -107,10 +107,7 @@ class InAppTextButtonState extends State<InAppTextButton> {
       ),
       borderColor: widget.borderColor,
       borderWidth: widget.borderWidth,
-      clickEffect: const AndrossyGestureEffect(
-        primary: AndrossyGestureAnimation.scale(),
-        secondary: AndrossyGestureAnimation.fade(),
-      ),
+      clickEffects: [GestureAnimation.scale(), GestureAnimation.fade()],
       padding: widget.padding,
       onTap: widget.onTap,
     );

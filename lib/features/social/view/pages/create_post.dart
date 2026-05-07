@@ -156,7 +156,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     final photoId = snapshot.id;
     final data = Photo.create(
       id: photoId,
-      timeMills: Entity.generateTimeMills,
+      timeMills: EntityHelper.generateTimeMills,
       publisherId: UserHelper.uid,
       path: PathProvider.generatePath(photosPath, photoId),
       audience: audience.value,
@@ -235,7 +235,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
       return;
     }
 
-    final mTimeMills = Entity.generateTimeMills;
+    final mTimeMills = EntityHelper.generateTimeMills;
 
     final mUserPost = PostModel.create(
       id: id,
@@ -342,7 +342,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     };
 
     if (updates.isNotEmpty) {
-      updates[Keys.i.updatedAt] = Entity.generateTimeMills;
+      updates[Keys.i.updatedAt] = EntityHelper.generateTimeMills;
     }
 
     if (updates.isEmpty) {
@@ -377,7 +377,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
       feedCubit.update(
         old.id,
         {
-          Keys.i.updatedAt: Entity.generateTimeMills,
+          Keys.i.updatedAt: EntityHelper.generateTimeMills,
           Keys.i.contentRef: DataFieldValueWriter.update(
             mOldUserPost.path!,
             updates,

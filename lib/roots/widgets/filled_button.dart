@@ -107,10 +107,7 @@ class InAppFilledButtonState extends State<InAppFilledButton> {
           enabled: widget.textStyle.color,
           disabled: widget.disabledTextColor,
         ),
-        clickEffect: const AndrossyGestureEffect(
-          primary: AndrossyGestureAnimation.scale(),
-          secondary: AndrossyGestureAnimation.fade(),
-        ),
+        clickEffects: [GestureAnimation.scale(), GestureAnimation.fade()],
         onTap: widget.onTap,
       ),
     );

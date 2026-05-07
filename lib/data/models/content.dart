@@ -1,20 +1,17 @@
-import 'dart:ui';
+import 'dart:ui' show Locale;
 
-import 'package:collection/collection.dart';
-import 'package:data_management/core.dart';
-import 'package:flutter_entity/flutter_entity.dart';
-import 'package:in_app_translator/in_app_translator.dart';
-import 'package:picon/data/parsers/enum_parser.dart';
+import 'package:data_management/core.dart' show DataFieldValueWriter;
+import 'package:flutter_entity/entity.dart' show Entity, EntityObjectHelper;
+import 'package:in_app_translator/translator.dart' show Translator;
 
-import '../../app/helpers/user.dart';
-import '../constants/keys.dart';
-import '../enums/audience.dart';
-import '../enums/content_state.dart';
-import '../enums/feed_type.dart';
-import '../enums/gender.dart';
-import '../enums/privacy.dart';
-
-const _equality = DeepCollectionEquality();
+import '../../app/helpers/user.dart' show UserHelper;
+import '../constants/keys.dart' show Keys;
+import '../enums/audience.dart' show Audience;
+import '../enums/content_state.dart' show ContentUiState;
+import '../enums/feed_type.dart' show FeedType;
+import '../enums/gender.dart' show Gender;
+import '../enums/privacy.dart' show Privacy;
+import '../parsers/enum_parser.dart' show EnumParser;
 
 class ContentModel extends Entity<Keys> {
   // ---------------------------------------------------------------------------
@@ -1680,19 +1677,19 @@ class ContentModel extends Entity<Keys> {
     // -------------------------------------------------------------------------
     // ------------------------------LIST OF STRINGS----------------------------
     // -------------------------------------------------------------------------
-    _equality.hash(_bookmarks),
-    _equality.hash(_comments),
-    _equality.hash(_descriptions),
-    _equality.hash(_likes),
-    _equality.hash(_photosRef),
-    _equality.hash(_photoIds),
-    _equality.hash(_photoUrls),
-    _equality.hash(_reports),
-    _equality.hash(_stars),
-    _equality.hash(_tags),
-    _equality.hash(_videoIds),
-    _equality.hash(_videoUrls),
-    _equality.hash(_views),
+    hash(_bookmarks),
+    hash(_comments),
+    hash(_descriptions),
+    hash(_likes),
+    hash(_photosRef),
+    hash(_photoIds),
+    hash(_photoUrls),
+    hash(_reports),
+    hash(_stars),
+    hash(_tags),
+    hash(_videoIds),
+    hash(_videoUrls),
+    hash(_views),
 
     // -------------------------------------------------------------------------
     // -----------------------------------ENUMS---------------------------------
@@ -1709,15 +1706,15 @@ class ContentModel extends Entity<Keys> {
     // -------------------------------------------------------------------------
     // -------------------------------LIST OF OBJECTS---------------------------
     // -------------------------------------------------------------------------
-    _equality.hash(_contents),
-    _equality.hash(_photos),
-    _equality.hash(_videos),
+    hash(_contents),
+    hash(_photos),
+    hash(_videos),
 
     // -------------------------------------------------------------------------
     // -----------------------------(INTERNAL USE ONLY)-------------------------
     // -------------------------------------------------------------------------
     _translatedDescription,
-    _equality.hash(_translatedDescriptions),
+    hash(_translatedDescriptions),
     _translatedTitle,
     _uiState,
   ]);
@@ -1806,19 +1803,19 @@ class ContentModel extends Entity<Keys> {
         // ---------------------------------------------------------------------
         // ------------------------------LIST OF STRINGS------------------------
         // ---------------------------------------------------------------------
-        _equality.equals(_bookmarks, other._bookmarks) &&
-        _equality.equals(_comments, other._comments) &&
-        _equality.equals(_descriptions, other._descriptions) &&
-        _equality.equals(_likes, other._likes) &&
-        _equality.equals(_photosRef, other._photosRef) &&
-        _equality.equals(_photoIds, other._photoIds) &&
-        _equality.equals(_photoUrls, other._photoUrls) &&
-        _equality.equals(_reports, other._reports) &&
-        _equality.equals(_stars, other._stars) &&
-        _equality.equals(_tags, other._tags) &&
-        _equality.equals(_videoIds, other._videoIds) &&
-        _equality.equals(_videoUrls, other._videoUrls) &&
-        _equality.equals(_views, other._views) &&
+        equals(_bookmarks, other._bookmarks) &&
+        equals(_comments, other._comments) &&
+        equals(_descriptions, other._descriptions) &&
+        equals(_likes, other._likes) &&
+        equals(_photosRef, other._photosRef) &&
+        equals(_photoIds, other._photoIds) &&
+        equals(_photoUrls, other._photoUrls) &&
+        equals(_reports, other._reports) &&
+        equals(_stars, other._stars) &&
+        equals(_tags, other._tags) &&
+        equals(_videoIds, other._videoIds) &&
+        equals(_videoUrls, other._videoUrls) &&
+        equals(_views, other._views) &&
         // ---------------------------------------------------------------------
         // -----------------------------------ENUMS-----------------------------
         // ---------------------------------------------------------------------
@@ -1833,9 +1830,9 @@ class ContentModel extends Entity<Keys> {
         // ---------------------------------------------------------------------
         // -------------------------------LIST OF OBJECTS-----------------------
         // ---------------------------------------------------------------------
-        _equality.equals(_contents, other._contents) &&
-        _equality.equals(_photos, other._photos) &&
-        _equality.equals(_videos, other._videos) &&
+        equals(_contents, other._contents) &&
+        equals(_photos, other._photos) &&
+        equals(_videos, other._videos) &&
         // ---------------------------------------------------------------------
         // ------------------------------(INTERNAL USE ONLY)--------------------
         // ---------------------------------------------------------------------

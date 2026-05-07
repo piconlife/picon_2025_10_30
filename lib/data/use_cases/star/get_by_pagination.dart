@@ -26,7 +26,7 @@ class GetStarsByPaginationUseCase extends BaseFeedStarUseCase {
       selections: [
         if (snapshot != null) DataSelection.startAfterDocument(snapshot),
       ],
-      options: DataPagingOptions(
+      options: DataFetchOptions(
         initialFetchSize: initialSize,
         fetchingSize: fetchingSize,
       ),

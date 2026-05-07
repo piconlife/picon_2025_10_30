@@ -609,17 +609,17 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
     });
   }
 
-  Future<void> _initUniqueId() {
-    return Analytics.callAsync(
-      name: "unique_id_service",
-      reason: "init",
-      () async {
-        if (Configs.get("application/firebase_app", defaultValue: false)) {
-          return;
-        }
-        await UniqueIdService.init();
-      },
-    );
+  Future<void> _initUniqueId() async {
+    // return Analytics.callAsync(
+    //   name: "unique_id_service",
+    //   reason: "init",
+    //   () async {
+    //     if (Configs.get("application/firebase_app", defaultValue: false)) {
+    //       return;
+    //     }
+    //     await UniqueIdService.init();
+    //   },
+    // );
   }
 
   Future<void> _initZotlo() async {

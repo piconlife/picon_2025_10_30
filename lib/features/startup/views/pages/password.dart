@@ -147,7 +147,7 @@ class _PasswordPageState extends State<PasswordPage> {
         if (Startup.puts({
           StartupKeys.idToken: token,
           StartupKeys.phone: phone,
-          StartupKeys.provider: Provider.phone.id,
+          StartupKeys.provider: "PHONE_NUMBER",
         })) {
           final value = await context.open(Routes.otp);
           if (!context.mounted) return;
@@ -188,12 +188,8 @@ class _PasswordPageState extends State<PasswordPage> {
     }
   }
 
-  Future<void> _finally(
-    BuildContext context,
-    AuthChanges<UserModel> changes,
-  ) async {
-    final user = changes.user;
-    if (!changes.status.isAuthenticated || user == null) return;
+  Future<void> _finally(BuildContext context, AuthStatus status) async {
+    if (!status.isAuthenticated) return;
 
     final phone = Startup.i.phone;
     if (phone != null) await CreateUserPhoneUseCase.i(phone);
@@ -235,12 +231,12 @@ class _PasswordPageState extends State<PasswordPage> {
   Widget build(BuildContext context) {
     final dimen = context.dimens;
     final primary = context.primary;
-    return AuthObserver<UserModel>(
+    return AuthListener<UserModel>(
       ids: const [Routes.password],
       onError: (context, value) => context.showErrorSnackBar(value),
       onLoading: (context, value) => btnSubmit.currentState?.setLoading(value),
       onMessage: (context, value) => context.showSnackBar(value),
-      onChanges: _finally,
+      onStatus: _finally,
       child: StartupScreen(
         child: Scaffold(
           backgroundColor: Colors.transparent,

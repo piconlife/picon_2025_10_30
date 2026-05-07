@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:app_color/app_color.dart';
-import 'package:auth_management/core/auth_provider.dart';
 import 'package:auth_management/core/authorizer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
@@ -26,7 +25,6 @@ import 'package:in_app_translation/in_app_translation.dart';
 import 'package:in_app_translator/translator.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:picon/roots/hive/config.dart';
 
 import '../app/app.dart';
 import '../app/configs/local.dart';
@@ -59,6 +57,7 @@ import '../app/settings/remote.dart';
 import '../app/widgets/cached_network_image_error.dart';
 import '../app/widgets/cached_network_image_progress.dart';
 import '../data/models/user.dart';
+import '../imports/am.dart' show AuthProvider;
 import '../routes/delegate.dart';
 import 'helpers/connectivity.dart';
 import 'helpers/location.dart';
@@ -66,7 +65,6 @@ import 'hive/initializer.dart';
 import 'services/notification.dart';
 import 'services/storage.dart';
 import 'services/tracker.dart';
-import 'services/unique_id.dart';
 import 'services/zotlo_subscription.dart';
 import 'utils/sound.dart';
 import 'utils/system_ui.dart';

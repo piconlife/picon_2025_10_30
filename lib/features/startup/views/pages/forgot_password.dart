@@ -110,7 +110,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         if (Startup.puts({
           StartupKeys.idToken: token,
           StartupKeys.phone: phone,
-          StartupKeys.provider: Provider.phone.name,
+          StartupKeys.provider: "PHONE_NUMBER",
         })) {
           final value = await context.open(Routes.otp);
           if (!context.mounted) return;

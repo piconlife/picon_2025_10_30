@@ -14,7 +14,7 @@ class UpdateUserNameUseCase extends BaseUserNameUnifierUseCase {
   Future<Response<NameUnifier>> call(String username) async {
     try {
       final data = <String, dynamic>{
-        UnifierKeys.i.timeMills: Entity.generateTimeMills,
+        UnifierKeys.i.timeMills: EntityHelper.generateTimeMills,
         UnifierKeys.i.verified: true,
       };
       final value = await repository

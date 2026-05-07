@@ -36,10 +36,10 @@ class _OtpPageState extends State<OtpPage> {
   final etOtp = TextEditingController();
 
   String? get providerText {
-    final provider = Provider.from(Startup.i.provider);
-    if (provider.isPhone) {
+    final provider = Startup.i.provider;
+    if (provider == "PHONE_NUMBER") {
       return Startup.i.phone;
-    } else if (provider.isEmail) {
+    } else if (provider == "EMAIL") {
       return Startup.i.email;
     } else {
       return null;
@@ -81,17 +81,24 @@ class _OtpPageState extends State<OtpPage> {
       return;
     }
 
-    _verify(context, token, code);
+    final phone = Startup.i.phone;
+    if (phone == null || phone.isEmpty || !isValidNumber(phone)) {
+      context.showErrorSnackBar("Phone number isn't valid!");
+      return;
+    }
+
+    _verify(context, token, code, phone);
   }
 
   Future<void> _verify(
     BuildContext context,
     String token,
     String smsCode,
+    String phone,
   ) async {
     btnContinue.currentState?.showLoading();
     final response = await context.verifyPhoneByOtp<UserModel>(
-      OtpAuthenticator(token: token, smsCode: smsCode),
+      OtpAuthenticator.phone(token: token, code: smsCode, phone: phone),
     );
     btnContinue.currentState?.hideLoading();
     if (!context.mounted) return;

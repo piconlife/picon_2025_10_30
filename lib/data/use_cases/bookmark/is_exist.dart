@@ -17,7 +17,7 @@ class BookmarkIsExistUseCase extends BookmarkBaseUseCase {
       params: params,
       singletonMode: true,
       queries: [DataQuery(Keys.i.path, isEqualTo: path)],
-      options: DataPagingOptions(initialFetchSize: 1, fetchingSize: 1),
+      options: DataFetchOptions(initialFetchSize: 1, fetchingSize: 1),
     );
     return x;
   }

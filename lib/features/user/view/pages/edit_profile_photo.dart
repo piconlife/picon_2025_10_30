@@ -78,7 +78,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
 
   UserModel user = UserModel();
   String? photoUrl;
-  late String id = Entity.generateID;
+  late String id = EntityHelper.generateID;
 
   bool get isValidUrl => photoUrl.isValidWebUrl;
 
@@ -229,7 +229,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
     }
 
     final mPublisherId = UserHelper.uid;
-    final mTimeMills = Entity.generateTimeMills;
+    final mTimeMills = EntityHelper.generateTimeMills;
 
     final mAvatar = AvatarModel.create(
       id: id,
@@ -369,8 +369,8 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
             children: [
               dimen.dp(40).h,
               Center(
-                child: AuthConsumer<UserModel>(
-                  builder: (context, user) {
+                child: AuthBuilder<UserModel>(
+                  builder: (context, user, child) {
                     return ValueListenableBuilder(
                       valueListenable: loading,
                       builder: (context, value, child) {
@@ -393,7 +393,7 @@ class _EditUserProfilePhotoPageState extends State<EditUserProfilePhotoPage> {
                   builder: (context, value, child) {
                     return AndrossyButton(
                       primary: primary,
-                      clickEffect: AndrossyGestureEffect.scale(),
+                      clickEffects: [GestureAnimation.scale()],
                       text: value.label,
                       textSize: dimen.dp(16),
                       textColor: const AndrossyButtonProperty.all(Colors.white),
