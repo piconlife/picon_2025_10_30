@@ -30,6 +30,12 @@ mixin _RepoWriteMixin<T extends Entity>
     bool? lazyMode,
     bool? backupMode,
   }) {
+    if (id.isEmpty) {
+      return Future.value(Response(status: Status.invalidId));
+    }
+    if (data.isEmpty) {
+      return Future.value(Response(status: Status.invalid));
+    }
     return dualWrite(
       DataModifiers.create,
       backupMode: backupMode,
@@ -71,6 +77,9 @@ mixin _RepoWriteMixin<T extends Entity>
     bool? lazyMode,
     bool? backupMode,
   }) {
+    if (writers.isEmpty) {
+      return Future.value(Response(status: Status.invalid));
+    }
     return dualWrite(
       DataModifiers.creates,
       backupMode: backupMode,
@@ -95,6 +104,9 @@ mixin _RepoWriteMixin<T extends Entity>
     bool? lazyMode,
     bool? backupMode,
   }) {
+    if (id.isEmpty || data.isEmpty) {
+      return Future.value(Response(status: Status.invalid));
+    }
     return dualWrite(
       DataModifiers.updateById,
       backupMode: backupMode,
@@ -120,6 +132,9 @@ mixin _RepoWriteMixin<T extends Entity>
     bool? lazyMode,
     bool? backupMode,
   }) {
+    if (updates.isEmpty) {
+      return Future.value(Response(status: Status.invalid));
+    }
     return dualWrite(
       DataModifiers.updateByIds,
       backupMode: backupMode,
@@ -145,6 +160,9 @@ mixin _RepoWriteMixin<T extends Entity>
     bool? lazyMode,
     bool? backupMode,
   }) {
+    if (id.isEmpty) {
+      return Future.value(Response(status: Status.invalidId));
+    }
     return dualWrite(
       DataModifiers.deleteById,
       backupMode: backupMode,
@@ -171,6 +189,9 @@ mixin _RepoWriteMixin<T extends Entity>
     bool? lazyMode,
     bool? backupMode,
   }) {
+    if (ids.isEmpty) {
+      return Future.value(Response(status: Status.invalid));
+    }
     return dualWrite(
       DataModifiers.deleteByIds,
       backupMode: backupMode,
@@ -212,6 +233,9 @@ mixin _RepoWriteMixin<T extends Entity>
   }
 
   Future<Response<void>> write(List<DataBatchWriter> writers) {
+    if (writers.isEmpty) {
+      return Future.value(Response(status: Status.invalid));
+    }
     return runOnPrimary((source) async {
       final response = await source.write(writers);
       return response.isSuccessful

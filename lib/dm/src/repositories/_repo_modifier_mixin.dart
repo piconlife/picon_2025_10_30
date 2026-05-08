@@ -16,13 +16,17 @@ mixin _RepoModifierMixin<T extends Entity> on _RepoExecutorMixin<T> {
 
   Future<Response<T>> modifier(Response<T> value, DataModifiers modifier);
 
-  Future<Response<T>> applyModifier(
+  Future<Response<S>> applyModifier<S extends Object>(
     DataModifiers modifierId,
-    Future<Response<T>> Function() callback,
+    Future<Response<S>> Function() callback,
   ) async {
     try {
       final value = await callback();
-      return await modifier(value, modifierId);
+      if (value is Response<T>) {
+        final modified = await modifier(value as Response<T>, modifierId);
+        if (modified is Response<S>) return modified as Response<S>;
+      }
+      return value;
     } catch (error, stack) {
       errorDelegate.onError(
         DataOperationError(
@@ -35,11 +39,11 @@ mixin _RepoModifierMixin<T extends Entity> on _RepoExecutorMixin<T> {
     }
   }
 
-  Stream<Response<T>> applyStreamModifier(
+  Stream<Response<S>> applyStreamModifier<S extends Object>(
     DataModifiers modifierId,
-    Stream<Response<T>> Function() callback,
+    Stream<Response<S>> Function() callback,
   ) async* {
-    Stream<Response<T>> source;
+    Stream<Response<S>> source;
     try {
       source = callback();
     } catch (error, stack) {
@@ -55,7 +59,14 @@ mixin _RepoModifierMixin<T extends Entity> on _RepoExecutorMixin<T> {
     }
     await for (final value in source) {
       try {
-        yield await modifier(value, modifierId);
+        if (value is Response<T>) {
+          final modified = await modifier(value as Response<T>, modifierId);
+          if (modified is Response<S>) {
+            yield modified as Response<S>;
+            continue;
+          }
+        }
+        yield value;
       } catch (error, stack) {
         errorDelegate.onError(
           DataOperationError(

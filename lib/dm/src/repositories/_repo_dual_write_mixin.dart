@@ -8,15 +8,15 @@ mixin _RepoDualWriteMixin<T extends Entity>
     bool? backupMode,
     bool? lazyMode,
   }) {
-    return applyModifier(modifierId, () async {
-      if (shouldUseBackup(backupMode)) {
-        if (shouldUseLazy(lazyMode)) {
-          runOnBackupLazy(write);
-        } else {
-          await runOnBackup(write);
-        }
+    return applyModifier<T>(modifierId, () async {
+      final primaryResponse = await runOnPrimary(write);
+      if (!shouldUseBackup(backupMode)) return primaryResponse;
+      if (shouldUseLazy(lazyMode)) {
+        runOnBackupLazy(write);
+      } else {
+        await runOnBackup(write);
       }
-      return runOnPrimary(write);
+      return primaryResponse;
     });
   }
 }

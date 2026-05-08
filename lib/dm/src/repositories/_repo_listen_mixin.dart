@@ -10,7 +10,7 @@ mixin _RepoListenMixin<T extends Entity>
     bool resolveDocChangesRefs = false,
     Ignore? ignore,
   }) {
-    return applyStreamModifier(DataModifiers.listen, () {
+    return applyStreamModifier<T>(DataModifiers.listen, () {
       return streamOnPrimary(
         (source) => source.listen(
           params: params,
@@ -40,7 +40,10 @@ mixin _RepoListenMixin<T extends Entity>
     bool resolveRefs = false,
     Ignore? ignore,
   }) {
-    return applyStreamModifier(DataModifiers.listenById, () {
+    if (id.isEmpty) {
+      return Stream.value(Response(status: Status.invalidId));
+    }
+    return applyStreamModifier<T>(DataModifiers.listenById, () {
       return streamOnPrimary(
         (source) => source.listenById(
           id,
@@ -61,7 +64,10 @@ mixin _RepoListenMixin<T extends Entity>
     bool resolveDocChangesRefs = false,
     Ignore? ignore,
   }) {
-    return applyStreamModifier(DataModifiers.listenByIds, () {
+    if (ids.isEmpty) {
+      return Stream.value(Response(status: Status.invalid));
+    }
+    return applyStreamModifier<T>(DataModifiers.listenByIds, () {
       return streamOnPrimary(
         (source) => source.listenByIds(
           ids,
@@ -87,7 +93,7 @@ mixin _RepoListenMixin<T extends Entity>
     bool resolveDocChangesRefs = false,
     Ignore? ignore,
   }) {
-    return applyStreamModifier(DataModifiers.listenByQuery, () {
+    return applyStreamModifier<T>(DataModifiers.listenByQuery, () {
       return streamOnPrimary(
         (source) => source.listenByQuery(
           params: params,

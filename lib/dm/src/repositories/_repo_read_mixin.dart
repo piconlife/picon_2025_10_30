@@ -16,6 +16,9 @@ mixin _RepoReadMixin<T extends Entity>
     bool? lazyMode,
     bool? backupMode,
   }) {
+    if (id.isEmpty) {
+      return Future.value(Response(status: Status.invalidId));
+    }
     return readWithFallback(
       modifierId: DataModifiers.checkById,
       params: params,
@@ -35,16 +38,14 @@ mixin _RepoReadMixin<T extends Entity>
     );
   }
 
-  Future<Response<int>> count({
-    DataFieldParams? params,
-    bool? backupMode,
-  }) async {
-    final feedback = await runOnPrimary(
-      (source) => source.count(params: params),
-    );
-    if (feedback.isValid || !shouldUseBackup(backupMode)) return feedback;
-    final backup = await runOnBackup((source) => source.count(params: params));
-    return backup;
+  Future<Response<int>> count({DataFieldParams? params, bool? backupMode}) {
+    return applyModifier<int>(DataModifiers.count, () async {
+      final feedback = await runOnPrimary(
+        (source) => source.count(params: params),
+      );
+      if (feedback.isValid || !shouldUseBackup(backupMode)) return feedback;
+      return runOnBackup((source) => source.count(params: params));
+    });
   }
 
   Future<Response<T>> get({
@@ -101,6 +102,9 @@ mixin _RepoReadMixin<T extends Entity>
     bool? singletonMode,
     bool? backupMode,
   }) {
+    if (id.isEmpty) {
+      return Future.value(Response(status: Status.invalidId));
+    }
     return readWithFallback(
       modifierId: DataModifiers.getById,
       params: params,
@@ -136,6 +140,9 @@ mixin _RepoReadMixin<T extends Entity>
     bool? backupMode,
     bool? singletonMode,
   }) {
+    if (ids.isEmpty) {
+      return Future.value(Response(status: Status.invalid));
+    }
     final stableIds = ids.toList()..sort();
     return readWithFallback(
       modifierId: DataModifiers.getByIds,
@@ -226,6 +233,9 @@ mixin _RepoReadMixin<T extends Entity>
     bool? lazyMode,
     bool? backupMode,
   }) {
+    if (checker.field.isEmpty) {
+      return Future.value(Response(status: Status.invalid));
+    }
     return readWithFallback(
       modifierId: DataModifiers.search,
       params: params,

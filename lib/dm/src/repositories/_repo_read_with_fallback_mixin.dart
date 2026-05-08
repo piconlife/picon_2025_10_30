@@ -15,7 +15,7 @@ mixin _RepoReadWithFallbackMixin<T extends Entity>
     String? cacheKey,
     List<Object?> cacheKeyProps = const [],
   }) {
-    return applyModifier(modifierId, () async {
+    return applyModifier<T>(modifierId, () async {
       final feedback =
           cacheKey == null
               ? await runOnPrimary(read)
