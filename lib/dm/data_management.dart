@@ -2,7 +2,7 @@ library;
 
 export 'src/cache/config.dart';
 export 'src/cache/entry.dart';
-export 'src/cache/manager.dart';
+export 'src/cache/base.dart';
 export 'src/cache/stats.dart';
 export 'src/cache/storage.dart';
 export 'src/encryptor/encryptor.dart';

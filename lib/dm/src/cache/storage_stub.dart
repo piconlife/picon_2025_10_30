@@ -1,3 +1,7 @@
+import 'dart:typed_data' show Uint8List;
+
+import 'package:meta/meta.dart' show visibleForOverriding;
+
 abstract class CacheStorageAdapter {
   const CacheStorageAdapter();
 
@@ -38,3 +42,6 @@ class _NoOpStorage extends CacheStorageAdapter {
 
 CacheStorageAdapter defaultCacheStorage({String prefix = 'cm:'}) =>
     const _NoOpStorage();
+
+@visibleForOverriding
+Uint8List dummyBytes() => Uint8List(0);

@@ -2,10 +2,11 @@ import 'dart:async' show unawaited;
 import 'dart:collection' show LinkedHashMap, UnmodifiableListView;
 import 'dart:convert' show json;
 
-import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:flutter_entity/entity.dart' show Response, Status;
 import 'package:meta/meta.dart' show visibleForTesting;
 
+import '../operations/error_delegate.dart' show ErrorDelegate;
+import '../operations/exception.dart' show DataOperationError;
 import 'config.dart' show CacheConfig;
 import 'entry.dart' show CacheEntry;
 import 'stats.dart' show CacheStats;
@@ -25,6 +26,7 @@ class CacheManager {
   }
 
   final CacheConfig config;
+  final ErrorDelegate errorDelegate;
   final CacheStats _stats = CacheStats();
 
   final LinkedHashMap<String, CacheEntry> _db = LinkedHashMap();
@@ -33,18 +35,24 @@ class CacheManager {
   final CacheStorageAdapter _storage;
 
   bool _storageReady = false;
-
+  int _generation = 0;
   DateTime? _lastEviction;
 
   CacheManager({
     this.config = const CacheConfig(),
     CacheStorageAdapter? storage,
-  }) : _storage = storage ?? defaultCacheStorage();
+    ErrorDelegate? errorDelegate,
+  }) : _storage = storage ?? defaultCacheStorage(),
+       errorDelegate = errorDelegate ?? ErrorDelegate.printing;
 
   Future<void> init() async {
     if (_storageReady) return;
-    await _storage.init();
-    _storageReady = true;
+    try {
+      await _storage.init();
+      _storageReady = true;
+    } catch (e, s) {
+      _report('cache.storage.init', e, s);
+    }
   }
 
   Future<void> _ensureStorage() async {
@@ -53,12 +61,26 @@ class CacheManager {
 
   Future<void> _safeDelete(String key) async {
     await _ensureStorage();
-    await _storage.delete(key);
+    try {
+      await _storage.delete(key);
+    } catch (e, s) {
+      _report('cache.storage.delete', e, s, key: key);
+    }
   }
 
   Future<void> _safeClear() async {
     await _ensureStorage();
-    await _storage.clear();
+    try {
+      await _storage.clear();
+    } catch (e, s) {
+      _report('cache.storage.clear', e, s);
+    }
+  }
+
+  void _report(String op, Object error, StackTrace stack, {String? key}) {
+    errorDelegate.onError(
+      DataOperationError(operation: op, path: key, cause: error, stack: stack),
+    );
   }
 
   CacheStats get stats => _stats.clone();
@@ -95,8 +117,9 @@ class CacheManager {
     if (!enabled) {
       try {
         return await callback();
-      } catch (e, st) {
-        return Response(error: '$e\n$st', status: Status.failure);
+      } catch (e, s) {
+        _report('cache.callback', e, s);
+        return Response(error: '$e\n$s', status: Status.failure);
       }
     }
 
@@ -126,6 +149,7 @@ class CacheManager {
       }
     }
 
+    final generationAtStart = _generation;
     final typedFlight = _TypedFlight<T>(callback());
     if (config.deduplicateInFlight) {
       _inFlight[key] = typedFlight;
@@ -133,13 +157,16 @@ class CacheManager {
 
     try {
       final result = await typedFlight.future;
-      if (result.isValid) {
+      if (result.isValid && _generation == generationAtStart) {
         _write(key, result, ttl);
-        if (toJson != null) await _writeToStorage(key, result, ttl, toJson);
+        if (toJson != null) {
+          unawaited(_writeToStorage(key, result, ttl, toJson));
+        }
       }
       return result;
-    } catch (e, st) {
-      return Response(error: '$e\n$st', status: Status.failure);
+    } catch (e, s) {
+      _report('cache.callback', e, s, key: key);
+      return Response(error: '$e\n$s', status: Status.failure);
     } finally {
       if (identical(_inFlight[key], typedFlight)) {
         _inFlight.remove(key);
@@ -188,6 +215,7 @@ class CacheManager {
     _inFlight.clear();
     _stats.reset();
     _lastEviction = null;
+    _generation++;
     unawaited(_safeClear());
   }
 
@@ -221,6 +249,8 @@ class CacheManager {
       _db[key] = entry;
       return response;
     }
+    _db.remove(key);
+    unawaited(_safeDelete(key));
     return null;
   }
 
@@ -250,21 +280,20 @@ class CacheManager {
   ) async {
     await _ensureStorage();
     try {
+      final data = response.data;
+      if (data == null) return;
       final effectiveTtl = ttl ?? config.defaultTtl;
       final expiresAt =
           effectiveTtl == null
               ? null
               : DateTime.now().add(effectiveTtl).toIso8601String();
       final payload = json.encode({
-        'data': toJson(response.data as T),
+        'data': toJson(data),
         'expiresAt': expiresAt,
       });
       await _storage.write(key, payload);
-    } catch (e) {
-      assert(() {
-        debugPrint('CacheManager _writeToStorage error: $e');
-        return true;
-      }());
+    } catch (e, s) {
+      _report('cache.storage.write', e, s, key: key);
     }
   }
 
@@ -279,21 +308,24 @@ class CacheManager {
 
       final map = json.decode(raw) as Map<String, dynamic>;
       final expiresAtRaw = map['expiresAt'] as String?;
+      final expiresAt =
+          expiresAtRaw != null ? DateTime.parse(expiresAtRaw) : null;
 
-      if (expiresAtRaw != null) {
-        final expiresAt = DateTime.parse(expiresAtRaw);
-        if (DateTime.now().isAfter(expiresAt)) {
-          await _storage.delete(key);
-          _stats.expirations++;
-          return null;
-        }
+      if (expiresAt != null && DateTime.now().isAfter(expiresAt)) {
+        await _storage.delete(key);
+        _stats.expirations++;
+        return null;
       }
 
       final data = fromJson(map['data']);
       final response = Response<T>(data: data, status: Status.ok);
-      final expiresAt =
-          expiresAtRaw != null ? DateTime.parse(expiresAtRaw) : null;
 
+      final now = DateTime.now();
+      if (_lastEviction == null ||
+          now.difference(_lastEviction!) >= config.evictionInterval) {
+        evictExpired();
+        _lastEviction = now;
+      }
       _db[key] = CacheEntry(response, expiresAt);
       while (_db.length > config.maxSize) {
         _db.remove(_db.keys.first);
@@ -301,11 +333,8 @@ class CacheManager {
       }
 
       return response;
-    } catch (e) {
-      assert(() {
-        debugPrint('CacheManager _readFromStorage error: $e');
-        return true;
-      }());
+    } catch (e, s) {
+      _report('cache.storage.read', e, s, key: key);
       return null;
     }
   }

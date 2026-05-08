@@ -1,6 +1,6 @@
 import 'package:flutter_entity/entity.dart' show Entity, Response, Status;
 
-import '../cache/manager.dart' show CacheManager;
+import '../cache/base.dart' show CacheManager;
 import '../operations/error_delegate.dart' show ErrorDelegate;
 import '../operations/exception.dart' show DataOperationError;
 import '../operations/typedefs.dart' show Ignore;
