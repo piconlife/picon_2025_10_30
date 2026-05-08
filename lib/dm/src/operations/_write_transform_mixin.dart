@@ -57,7 +57,11 @@ mixin _WriteTransformMixin {
             value.options is DataSetOptions
                 ? value.options as DataSetOptions
                 : const DataSetOptions();
-        batch.set(value.path, transformWrite(batch, doc, merge), options.merge);
+        batch.set(
+          value.path,
+          transformWrite(batch, doc, merge),
+          merge: options.merge,
+        );
         return value.path;
       case DataFieldValueWriterType.update:
         final doc = value.value;
@@ -77,7 +81,7 @@ mixin _WriteTransformMixin {
     }
     final create = value['create'];
     if (create is Map && create.isNotEmpty) {
-      batch.set(path, transformWrite(batch, create, merge), merge);
+      batch.set(path, transformWrite(batch, create, merge), merge: merge);
       return path;
     }
     final update = value['update'];

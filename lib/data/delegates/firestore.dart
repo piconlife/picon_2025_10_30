@@ -21,34 +21,31 @@ import '../../app/imports/data_management.dart'
         DataFieldValues;
 
 class FirestoreWriteBatch extends DataWriteBatch {
-  late WriteBatch batch;
+  late final WriteBatch _batch;
   final FirebaseFirestore db;
 
-  FirestoreWriteBatch(this.db);
-
-  @override
-  void init() {
-    batch = db.batch();
+  FirestoreWriteBatch(this.db) {
+    _batch = db.batch();
   }
 
   @override
-  Future<void> commit() async {
-    await batch.commit();
+  void onDelete(String path) {
+    _batch.delete(db.doc(path));
   }
 
   @override
-  void delete(String path) {
-    batch.delete(db.doc(path));
+  void onSet(String path, Object data, {bool merge = true}) {
+    _batch.set(db.doc(path), data, SetOptions(merge: merge));
   }
 
   @override
-  void set(String path, Object data, [bool merge = true]) {
-    batch.set(db.doc(path), data, SetOptions(merge: merge));
+  void onUpdate(String path, Map<String, dynamic> data) {
+    _batch.update(db.doc(path), data);
   }
 
   @override
-  void update(String path, Map<String, dynamic> data) {
-    batch.update(db.doc(path), data);
+  Future<void> onCommit() async {
+    await _batch.commit();
   }
 }
 
@@ -70,9 +67,8 @@ class FirestoreDataDelegate extends DataDelegate {
 
   @override
   Future<int?> count(String path) async {
-    return _db.collection(path).count().get().then((snapshot) {
-      return snapshot.count;
-    });
+    final snapshot = await _db.collection(path).count().get();
+    return snapshot.count;
   }
 
   @override
@@ -90,21 +86,22 @@ class FirestoreDataDelegate extends DataDelegate {
   }
 
   @override
-  Future<DataGetsSnapshot> get(String path) {
-    return _db.collection(path).get().then((snapshot) {
-      return DataGetsSnapshot(
-        snapshot: snapshot,
-        docs: snapshot.docs.map((e) => e.data()),
-        docChanges: snapshot.docChanges.map((e) => e.doc.data()).whereType(),
-      );
-    });
+  Future<DataGetsSnapshot> get(String path) async {
+    final snapshot = await _db.collection(path).get();
+    return DataGetsSnapshot(
+      snapshot: snapshot,
+      docs: snapshot.docs.map((e) => e.data()).toList(growable: false),
+      docChanges: snapshot.docChanges
+          .map((e) => e.doc.data())
+          .whereType<Map<String, dynamic>>()
+          .toList(growable: false),
+    );
   }
 
   @override
-  Future<DataGetSnapshot> getById(String path) {
-    return _db.doc(path).get().then((snapshot) {
-      return DataGetSnapshot(snapshot: snapshot, doc: snapshot.data());
-    });
+  Future<DataGetSnapshot> getById(String path) async {
+    final snapshot = await _db.doc(path).get();
+    return DataGetSnapshot(snapshot: snapshot, doc: snapshot.data());
   }
 
   @override
@@ -114,20 +111,23 @@ class FirestoreDataDelegate extends DataDelegate {
     Iterable<DataSelection> selections = const [],
     Iterable<DataSorting> sorts = const [],
     DataFetchOptions options = const DataFetchOptions(),
-  }) {
-    return FirestoreQueryHelper.query(
-      _db.collection(path),
-      queries: queries,
-      selections: selections,
-      sorts: sorts,
-      options: options,
-    ).get().then((snapshot) {
-      return DataGetsSnapshot(
-        snapshot: snapshot,
-        docs: snapshot.docs.map((e) => e.data()),
-        docChanges: snapshot.docChanges.map((e) => e.doc.data()).whereType(),
-      );
-    });
+  }) async {
+    final snapshot =
+        await FirestoreQueryHelper.query(
+          _db.collection(path),
+          queries: queries,
+          selections: selections,
+          sorts: sorts,
+          options: options,
+        ).get();
+    return DataGetsSnapshot(
+      snapshot: snapshot,
+      docs: snapshot.docs.map((e) => e.data()).toList(growable: false),
+      docChanges: snapshot.docChanges
+          .map((e) => e.doc.data())
+          .whereType<Map<String, dynamic>>()
+          .toList(growable: false),
+    );
   }
 
   @override
@@ -135,8 +135,11 @@ class FirestoreDataDelegate extends DataDelegate {
     return _db.collection(path).snapshots().map((snapshot) {
       return DataGetsSnapshot(
         snapshot: snapshot,
-        docs: snapshot.docs.map((e) => e.data()),
-        docChanges: snapshot.docChanges.map((e) => e.doc.data()).whereType(),
+        docs: snapshot.docs.map((e) => e.data()).toList(growable: false),
+        docChanges: snapshot.docChanges
+            .map((e) => e.doc.data())
+            .whereType<Map<String, dynamic>>()
+            .toList(growable: false),
       );
     });
   }
@@ -165,24 +168,27 @@ class FirestoreDataDelegate extends DataDelegate {
     ).snapshots().map((snapshot) {
       return DataGetsSnapshot(
         snapshot: snapshot,
-        docs: snapshot.docs.map((e) => e.data()),
-        docChanges: snapshot.docChanges.map((e) => e.doc.data()).whereType(),
+        docs: snapshot.docs.map((e) => e.data()).toList(growable: false),
+        docChanges: snapshot.docChanges
+            .map((e) => e.doc.data())
+            .whereType<Map<String, dynamic>>()
+            .toList(growable: false),
       );
     });
   }
 
   @override
-  Future<DataGetsSnapshot> search(String path, Checker checker) {
-    return FirestoreQueryHelper.search(
-      _db.collection(path),
-      checker,
-    ).get().then((snapshot) {
-      return DataGetsSnapshot(
-        snapshot: snapshot,
-        docs: snapshot.docs.map((e) => e.data()),
-        docChanges: snapshot.docChanges.map((e) => e.doc.data()).whereType(),
-      );
-    });
+  Future<DataGetsSnapshot> search(String path, Checker checker) async {
+    final snapshot =
+        await FirestoreQueryHelper.search(_db.collection(path), checker).get();
+    return DataGetsSnapshot(
+      snapshot: snapshot,
+      docs: snapshot.docs.map((e) => e.data()).toList(growable: false),
+      docChanges: snapshot.docChanges
+          .map((e) => e.doc.data())
+          .whereType<Map<String, dynamic>>()
+          .toList(growable: false),
+    );
   }
 
   @override
@@ -195,15 +201,18 @@ class FirestoreDataDelegate extends DataDelegate {
     if (value is! DataFieldValue) return value;
     switch (value.type) {
       case DataFieldValues.arrayUnion:
-        return FieldValue.arrayUnion(value.value as List);
+        final list = value.value;
+        return list is List ? FieldValue.arrayUnion(list) : value;
       case DataFieldValues.arrayRemove:
-        return FieldValue.arrayRemove(value.value as List);
+        final list = value.value;
+        return list is List ? FieldValue.arrayRemove(list) : value;
       case DataFieldValues.delete:
         return FieldValue.delete();
       case DataFieldValues.serverTimestamp:
         return FieldValue.serverTimestamp();
       case DataFieldValues.increment:
-        return FieldValue.increment(value.value as num);
+        final n = value.value;
+        return n is num ? FieldValue.increment(n) : value;
       case DataFieldValues.none:
         return value;
     }
@@ -218,7 +227,7 @@ class FirestoreQueryHelper {
     final value = checker.value;
     final type = checker.type;
 
-    if (value is String) {
+    if (value is String && value.isNotEmpty) {
       if (type.isContains) {
         ref = ref.orderBy(field).startAt([value]).endAt(['$value\uf8ff']);
       } else {
@@ -241,77 +250,62 @@ class FirestoreQueryHelper {
     final fetchingSize = options.fetchingSize ?? fetchingSizeInit;
     final isValidLimit = fetchingSize > 0;
 
-    if (queries.isNotEmpty) {
-      for (final i in queries) {
-        final field = i.field;
-        ref = ref.where(
-          field,
-          arrayContains: i.arrayContains,
-          arrayContainsAny: i.arrayContainsAny,
-          isEqualTo: i.isEqualTo,
-          isNotEqualTo: i.isNotEqualTo,
-          isGreaterThan: i.isGreaterThan,
-          isGreaterThanOrEqualTo: i.isGreaterThanOrEqualTo,
-          isLessThan: i.isLessThan,
-          isLessThanOrEqualTo: i.isLessThanOrEqualTo,
-          isNull: i.isNull,
-          whereIn: i.whereIn,
-          whereNotIn: i.whereNotIn,
-        );
-      }
+    for (final i in queries) {
+      ref = ref.where(
+        i.field,
+        arrayContains: i.arrayContains,
+        arrayContainsAny: i.arrayContainsAny?.toList(),
+        isEqualTo: i.isEqualTo,
+        isNotEqualTo: i.isNotEqualTo,
+        isGreaterThan: i.isGreaterThan,
+        isGreaterThanOrEqualTo: i.isGreaterThanOrEqualTo,
+        isLessThan: i.isLessThan,
+        isLessThanOrEqualTo: i.isLessThanOrEqualTo,
+        isNull: i.isNull,
+        whereIn: i.whereIn?.toList(),
+        whereNotIn: i.whereNotIn?.toList(),
+      );
     }
 
-    if (sorts.isNotEmpty) {
-      for (final i in sorts) {
-        ref = ref.orderBy(i.field, descending: i.descending);
-      }
+    for (final i in sorts) {
+      ref = ref.orderBy(i.field, descending: i.descending);
     }
 
-    if (selections.isNotEmpty) {
-      for (final i in selections) {
-        final type = i.type;
-        final value = i.value;
-        final values = i.values;
-        final isValidValues = values != null && values.isNotEmpty;
-        final isValidSnapshot = value is DocumentSnapshot;
-        isFetchingMode = (isValidValues || isValidSnapshot) && !type.isNone;
-        if (isValidValues) {
-          if (type.isEndAt) {
-            ref = ref.endAt(values);
-          } else if (type.isEndBefore) {
-            ref = ref.endBefore(values);
-          } else if (type.isStartAfter) {
-            ref = ref.startAfter(values);
-          } else if (type.isStartAt) {
-            ref = ref.startAt(values);
-          }
-        } else if (isValidSnapshot) {
-          if (type.isEndAtDocument) {
-            ref = ref.endAtDocument(value);
-          } else if (type.isEndBeforeDocument) {
-            ref = ref.endBeforeDocument(value);
-          } else if (type.isStartAfterDocument) {
-            ref = ref.startAfterDocument(value);
-          } else if (type.isStartAtDocument) {
-            ref = ref.startAtDocument(value);
-          }
+    for (final i in selections) {
+      final type = i.type;
+      final value = i.value;
+      final values = i.values;
+      final isValidValues = values != null && values.isNotEmpty;
+      final isValidSnapshot = value is DocumentSnapshot;
+      isFetchingMode = (isValidValues || isValidSnapshot) && !type.isNone;
+      if (isValidValues) {
+        final list = values.toList();
+        if (type.isEndAt) {
+          ref = ref.endAt(list);
+        } else if (type.isEndBefore) {
+          ref = ref.endBefore(list);
+        } else if (type.isStartAfter) {
+          ref = ref.startAfter(list);
+        } else if (type.isStartAt) {
+          ref = ref.startAt(list);
+        }
+      } else if (isValidSnapshot) {
+        if (type.isEndAtDocument) {
+          ref = ref.endAtDocument(value);
+        } else if (type.isEndBeforeDocument) {
+          ref = ref.endBeforeDocument(value);
+        } else if (type.isStartAfterDocument) {
+          ref = ref.startAfterDocument(value);
+        } else if (type.isStartAtDocument) {
+          ref = ref.startAtDocument(value);
         }
       }
     }
 
     if (isValidLimit) {
-      if (options.fetchFromLast) {
-        if (isFetchingMode) {
-          ref = ref.limitToLast(fetchingSize);
-        } else {
-          ref = ref.limitToLast(fetchingSizeInit);
-        }
-      } else {
-        if (isFetchingMode) {
-          ref = ref.limit(fetchingSize);
-        } else {
-          ref = ref.limit(fetchingSizeInit);
-        }
+      final size = isFetchingMode ? fetchingSize : fetchingSizeInit;
+      if (size > 0) {
+        ref = options.fetchFromLast ? ref.limitToLast(size) : ref.limit(size);
       }
     }
     return ref;

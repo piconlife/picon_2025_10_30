@@ -20,13 +20,14 @@ mixin _WriteBatchMixin on _ErrorHandlingMixin {
         final w = writers[i];
         final encrypted = payloads[i];
         if (w is DataSetWriter) {
-          batch.set(w.path, encrypted ?? w.data, w.options.merge);
+          batch.set(w.path, encrypted ?? w.data, merge: w.options.merge);
         } else if (w is DataUpdateWriter) {
           batch.update(w.path, encrypted ?? w.data);
         } else if (w is DataDeleteWriter) {
           batch.delete(w.path);
         }
       }
+      if (batch.isEmpty) return;
       await batch.commit();
     }, operation: 'write');
   }

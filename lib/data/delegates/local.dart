@@ -21,34 +21,31 @@ import '../../app/imports/in_app_database.dart'
         InAppFieldValue;
 
 class LocalWriteBatch extends DataWriteBatch {
-  late InAppWriteBatch batch;
+  late final InAppWriteBatch _batch;
   final InAppDatabase db;
 
-  LocalWriteBatch(this.db);
-
-  @override
-  void init() {
-    batch = db.batch();
+  LocalWriteBatch(this.db) {
+    _batch = db.batch();
   }
 
   @override
-  Future<void> commit() async {
-    await batch.commit();
+  void onDelete(String path) {
+    _batch.delete(db.doc(path));
   }
 
   @override
-  void delete(String path) {
-    batch.delete(db.doc(path));
+  void onSet(String path, Object data, {bool merge = true}) {
+    _batch.set(db.doc(path), data, InAppSetOptions(merge: merge));
   }
 
   @override
-  void set(String path, Object data, [bool merge = true]) {
-    batch.set(db.doc(path), data, InAppSetOptions(merge: merge));
+  void onUpdate(String path, Map<String, dynamic> data) {
+    _batch.update(db.doc(path), data);
   }
 
   @override
-  void update(String path, Map<String, dynamic> data) {
-    batch.update(db.doc(path), data);
+  Future<void> onCommit() async {
+    await _batch.commit();
   }
 }
 
@@ -69,10 +66,9 @@ class LocalDataDelegate extends DataDelegate {
   DataWriteBatch batch() => LocalWriteBatch(_db);
 
   @override
-  Future<int?> count(String path) {
-    return _db.collection(path).count().get().then((snapshot) {
-      return snapshot.count;
-    });
+  Future<int?> count(String path) async {
+    final snapshot = await _db.collection(path).count().get();
+    return snapshot.count;
   }
 
   @override
@@ -90,21 +86,25 @@ class LocalDataDelegate extends DataDelegate {
   }
 
   @override
-  Future<DataGetsSnapshot> get(String path) {
-    return _db.collection(path).get().then((snapshot) {
-      return DataGetsSnapshot(
-        snapshot: snapshot,
-        docs: snapshot.docs.map((e) => e.data).whereType(),
-        docChanges: snapshot.docChanges.map((e) => e.doc.data).whereType(),
-      );
-    });
+  Future<DataGetsSnapshot> get(String path) async {
+    final snapshot = await _db.collection(path).get();
+    return DataGetsSnapshot(
+      snapshot: snapshot,
+      docs: snapshot.docs
+          .map((e) => e.data)
+          .whereType<Map<String, dynamic>>()
+          .toList(growable: false),
+      docChanges: snapshot.docChanges
+          .map((e) => e.doc.data)
+          .whereType<Map<String, dynamic>>()
+          .toList(growable: false),
+    );
   }
 
   @override
-  Future<DataGetSnapshot> getById(String path) {
-    return _db.doc(path).get().then((snapshot) {
-      return DataGetSnapshot(snapshot: snapshot, doc: snapshot.data);
-    });
+  Future<DataGetSnapshot> getById(String path) async {
+    final snapshot = await _db.doc(path).get();
+    return DataGetSnapshot(snapshot: snapshot, doc: snapshot.data);
   }
 
   @override
@@ -114,20 +114,26 @@ class LocalDataDelegate extends DataDelegate {
     Iterable<DataSelection> selections = const [],
     Iterable<DataSorting> sorts = const [],
     DataFetchOptions options = const DataFetchOptions(),
-  }) {
-    return LocalQueryHelper.query(
-      _db.collection(path),
-      queries: queries,
-      selections: selections,
-      sorts: sorts,
-      options: options,
-    ).get().then((snapshot) {
-      return DataGetsSnapshot(
-        snapshot: snapshot,
-        docs: snapshot.docs.map((e) => e.data).whereType(),
-        docChanges: snapshot.docChanges.map((e) => e.doc.data).whereType(),
-      );
-    });
+  }) async {
+    final snapshot =
+        await LocalQueryHelper.query(
+          _db.collection(path),
+          queries: queries,
+          selections: selections,
+          sorts: sorts,
+          options: options,
+        ).get();
+    return DataGetsSnapshot(
+      snapshot: snapshot,
+      docs: snapshot.docs
+          .map((e) => e.data)
+          .whereType<Map<String, dynamic>>()
+          .toList(growable: false),
+      docChanges: snapshot.docChanges
+          .map((e) => e.doc.data)
+          .whereType<Map<String, dynamic>>()
+          .toList(growable: false),
+    );
   }
 
   @override
@@ -135,8 +141,14 @@ class LocalDataDelegate extends DataDelegate {
     return _db.collection(path).snapshots().map((snapshot) {
       return DataGetsSnapshot(
         snapshot: snapshot,
-        docs: snapshot.docs.map((e) => e.data).whereType(),
-        docChanges: snapshot.docChanges.map((e) => e.doc.data).whereType(),
+        docs: snapshot.docs
+            .map((e) => e.data)
+            .whereType<Map<String, dynamic>>()
+            .toList(growable: false),
+        docChanges: snapshot.docChanges
+            .map((e) => e.doc.data)
+            .whereType<Map<String, dynamic>>()
+            .toList(growable: false),
       );
     });
   }
@@ -165,23 +177,33 @@ class LocalDataDelegate extends DataDelegate {
     ).snapshots().map((snapshot) {
       return DataGetsSnapshot(
         snapshot: snapshot,
-        docs: snapshot.docs.map((e) => e.data).whereType(),
-        docChanges: snapshot.docChanges.map((e) => e.doc.data).whereType(),
+        docs: snapshot.docs
+            .map((e) => e.data)
+            .whereType<Map<String, dynamic>>()
+            .toList(growable: false),
+        docChanges: snapshot.docChanges
+            .map((e) => e.doc.data)
+            .whereType<Map<String, dynamic>>()
+            .toList(growable: false),
       );
     });
   }
 
   @override
-  Future<DataGetsSnapshot> search(String path, Checker checker) {
-    return LocalQueryHelper.search(_db.collection(path), checker).get().then((
-      snapshot,
-    ) {
-      return DataGetsSnapshot(
-        snapshot: snapshot,
-        docs: snapshot.docs.map((e) => e.data).whereType(),
-        docChanges: snapshot.docChanges.map((e) => e.doc.data).whereType(),
-      );
-    });
+  Future<DataGetsSnapshot> search(String path, Checker checker) async {
+    final snapshot =
+        await LocalQueryHelper.search(_db.collection(path), checker).get();
+    return DataGetsSnapshot(
+      snapshot: snapshot,
+      docs: snapshot.docs
+          .map((e) => e.data)
+          .whereType<Map<String, dynamic>>()
+          .toList(growable: false),
+      docChanges: snapshot.docChanges
+          .map((e) => e.doc.data)
+          .whereType<Map<String, dynamic>>()
+          .toList(growable: false),
+    );
   }
 
   @override
@@ -194,15 +216,18 @@ class LocalDataDelegate extends DataDelegate {
     if (value is! DataFieldValue) return value;
     switch (value.type) {
       case DataFieldValues.arrayUnion:
-        return InAppFieldValue.arrayUnion(value.value as List);
+        final list = value.value;
+        return list is List ? InAppFieldValue.arrayUnion(list) : value;
       case DataFieldValues.arrayRemove:
-        return InAppFieldValue.arrayRemove(value.value as List);
+        final list = value.value;
+        return list is List ? InAppFieldValue.arrayRemove(list) : value;
       case DataFieldValues.delete:
         return InAppFieldValue.delete();
       case DataFieldValues.serverTimestamp:
         return InAppFieldValue.timestamp();
       case DataFieldValues.increment:
-        return InAppFieldValue.increment(value.value as num);
+        final n = value.value;
+        return n is num ? InAppFieldValue.increment(n) : value;
       case DataFieldValues.none:
         return value;
     }
@@ -217,7 +242,7 @@ class LocalQueryHelper {
     final value = checker.value;
     final type = checker.type;
 
-    if (value is String) {
+    if (value is String && value.isNotEmpty) {
       if (type.isContains) {
         ref = ref.orderBy(field).startAt([value]).endAt(['$value\uf8ff']);
       } else {
@@ -240,78 +265,64 @@ class LocalQueryHelper {
     final fetchingSize = options.fetchingSize ?? fetchingSizeInit;
     final isValidLimit = fetchingSize > 0;
 
-    if (queries.isNotEmpty) {
-      for (final i in queries) {
-        ref = ref.where(
-          i.field,
-          arrayContains: i.arrayContains,
-          arrayNotContains: i.arrayNotContains,
-          arrayContainsAny: i.arrayContainsAny,
-          arrayNotContainsAny: i.arrayNotContainsAny,
-          isEqualTo: i.isEqualTo,
-          isNotEqualTo: i.isNotEqualTo,
-          isGreaterThan: i.isGreaterThan,
-          isGreaterThanOrEqualTo: i.isGreaterThanOrEqualTo,
-          isLessThan: i.isLessThan,
-          isLessThanOrEqualTo: i.isLessThanOrEqualTo,
-          isNull: i.isNull,
-          whereIn: i.whereIn,
-          whereNotIn: i.whereNotIn,
-        );
-      }
+    for (final i in queries) {
+      ref = ref.where(
+        i.field,
+        arrayContains: i.arrayContains,
+        arrayNotContains: i.arrayNotContains,
+        arrayContainsAny: i.arrayContainsAny?.toList(),
+        arrayNotContainsAny: i.arrayNotContainsAny,
+        isEqualTo: i.isEqualTo,
+        isNotEqualTo: i.isNotEqualTo,
+        isGreaterThan: i.isGreaterThan,
+        isGreaterThanOrEqualTo: i.isGreaterThanOrEqualTo,
+        isLessThan: i.isLessThan,
+        isLessThanOrEqualTo: i.isLessThanOrEqualTo,
+        isNull: i.isNull,
+        whereIn: i.whereIn?.toList(),
+        whereNotIn: i.whereNotIn?.toList(),
+      );
     }
 
-    if (sorts.isNotEmpty) {
-      for (final i in sorts) {
-        ref = ref.orderBy(i.field, descending: i.descending);
-      }
+    for (final i in sorts) {
+      ref = ref.orderBy(i.field, descending: i.descending);
     }
 
-    if (selections.isNotEmpty) {
-      for (final i in selections) {
-        final type = i.type;
-        final value = i.value;
-        final values = i.values;
-        final isValidValues = values != null && values.isNotEmpty;
-        final isValidSnapshot = value is InAppDocumentSnapshot;
-        isFetchingMode = (isValidValues || isValidSnapshot) && !type.isNone;
-        if (isValidValues) {
-          if (type.isEndAt) {
-            ref = ref.endAt(values);
-          } else if (type.isEndBefore) {
-            ref = ref.endBefore(values);
-          } else if (type.isStartAfter) {
-            ref = ref.startAfter(values);
-          } else if (type.isStartAt) {
-            ref = ref.startAt(values);
-          }
-        } else if (isValidSnapshot) {
-          if (type.isEndAtDocument) {
-            ref = ref.endAtDocument(value);
-          } else if (type.isEndBeforeDocument) {
-            ref = ref.endBeforeDocument(value);
-          } else if (type.isStartAfterDocument) {
-            ref = ref.startAfterDocument(value);
-          } else if (type.isStartAtDocument) {
-            ref = ref.startAtDocument(value);
-          }
+    for (final i in selections) {
+      final type = i.type;
+      final value = i.value;
+      final values = i.values;
+      final isValidValues = values != null && values.isNotEmpty;
+      final isValidSnapshot = value is InAppDocumentSnapshot;
+      isFetchingMode = (isValidValues || isValidSnapshot) && !type.isNone;
+      if (isValidValues) {
+        final list = values.toList();
+        if (type.isEndAt) {
+          ref = ref.endAt(list);
+        } else if (type.isEndBefore) {
+          ref = ref.endBefore(list);
+        } else if (type.isStartAfter) {
+          ref = ref.startAfter(list);
+        } else if (type.isStartAt) {
+          ref = ref.startAt(list);
+        }
+      } else if (isValidSnapshot) {
+        if (type.isEndAtDocument) {
+          ref = ref.endAtDocument(value);
+        } else if (type.isEndBeforeDocument) {
+          ref = ref.endBeforeDocument(value);
+        } else if (type.isStartAfterDocument) {
+          ref = ref.startAfterDocument(value);
+        } else if (type.isStartAtDocument) {
+          ref = ref.startAtDocument(value);
         }
       }
     }
 
     if (isValidLimit) {
-      if (options.fetchFromLast) {
-        if (isFetchingMode) {
-          ref = ref.limitToLast(fetchingSize);
-        } else {
-          ref = ref.limitToLast(fetchingSizeInit);
-        }
-      } else {
-        if (isFetchingMode) {
-          ref = ref.limit(fetchingSize);
-        } else {
-          ref = ref.limit(fetchingSizeInit);
-        }
+      final size = isFetchingMode ? fetchingSize : fetchingSizeInit;
+      if (size > 0) {
+        ref = options.fetchFromLast ? ref.limitToLast(size) : ref.limit(size);
       }
     }
     return ref;

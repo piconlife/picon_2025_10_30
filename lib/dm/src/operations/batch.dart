@@ -1,15 +1,52 @@
 abstract class DataWriteBatch {
-  DataWriteBatch() {
-    init();
+  bool _committed = false;
+  int _operationCount = 0;
+
+  int get operationCount => _operationCount;
+
+  bool get isEmpty => _operationCount == 0;
+
+  bool get isNotEmpty => _operationCount > 0;
+
+  bool get isCommitted => _committed;
+
+  void onDelete(String path);
+
+  void onSet(String path, Object data, {bool merge = true});
+
+  void onUpdate(String path, Map<String, dynamic> data);
+
+  Future<void> onCommit();
+
+  void delete(String path) {
+    _ensureNotCommitted();
+    onDelete(path);
+    _operationCount++;
   }
 
-  void init();
+  void set(String path, Object data, {bool merge = true}) {
+    _ensureNotCommitted();
+    onSet(path, data, merge: merge);
+    _operationCount++;
+  }
 
-  void delete(String path);
+  void update(String path, Map<String, dynamic> data) {
+    _ensureNotCommitted();
+    onUpdate(path, Map<String, dynamic>.unmodifiable(data));
+    _operationCount++;
+  }
 
-  void set(String path, Object data, [bool merge = true]);
+  Future<void> commit() async {
+    _ensureNotCommitted();
+    _committed = true;
+    await onCommit();
+  }
 
-  void update(String path, Map<String, dynamic> data);
-
-  Future<void> commit();
+  void _ensureNotCommitted() {
+    if (_committed) {
+      throw StateError(
+        'DataWriteBatch has already been committed and cannot be reused.',
+      );
+    }
+  }
 }
