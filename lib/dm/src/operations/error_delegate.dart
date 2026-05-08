@@ -3,8 +3,6 @@ import 'package:flutter/foundation.dart' show debugPrint;
 import 'exception.dart' show DataOperationError;
 
 abstract class ErrorDelegate {
-  const ErrorDelegate();
-
   void onError(DataOperationError error);
 
   static const ErrorDelegate silent = _SilentErrorDelegate();
