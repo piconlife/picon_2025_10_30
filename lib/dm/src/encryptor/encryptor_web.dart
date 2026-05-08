@@ -15,6 +15,8 @@ import 'package:web/web.dart' as web;
 
 import 'encryptor_stub.dart' show AesBackend;
 
+export 'encryptor_stub.dart' show AesBackend;
+
 class _WebAesBackend implements AesBackend {
   const _WebAesBackend();
 

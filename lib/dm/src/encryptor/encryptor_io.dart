@@ -6,6 +6,8 @@ import 'package:encrypt/encrypt.dart'
 
 import 'encryptor_stub.dart' show AesBackend;
 
+export 'encryptor_stub.dart' show AesBackend;
+
 class _IoAesBackend implements AesBackend {
   const _IoAesBackend();
 
