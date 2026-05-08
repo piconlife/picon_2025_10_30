@@ -62,7 +62,7 @@ class DataOperation
     this.delegate, {
     ErrorDelegate? errorDelegate,
     int refConcurrency = 16,
-  }) : errorDelegate = errorDelegate ?? ErrorDelegate.printing(),
+  }) : errorDelegate = errorDelegate ?? ErrorDelegate.printing,
        refSemaphore = DataOperationSemaphore(refConcurrency);
 
   @override
