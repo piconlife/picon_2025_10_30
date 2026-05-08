@@ -3,7 +3,7 @@ import 'package:flutter_entity/entity.dart' show Entity, Response, Status;
 
 import '../encryptor/encryptor.dart' show DataEncryptor;
 import '../operations/delegate.dart' show DataDelegate;
-import '../operations/operation.dart' show DataOperation;
+import '../operations/base.dart' show DataOperation;
 import '../operations/typedefs.dart' show Ignore;
 import '../operations/writers.dart' show DataBatchWriter;
 import '../utils/checker.dart' show Checker;

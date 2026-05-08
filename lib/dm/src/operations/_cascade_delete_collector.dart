@@ -1,4 +1,4 @@
-part of 'operation.dart';
+part of 'base.dart';
 
 typedef GuardAsync =
     Future<T?> Function<T>(

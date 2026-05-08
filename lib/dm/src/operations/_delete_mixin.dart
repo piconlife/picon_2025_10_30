@@ -1,4 +1,4 @@
-part of 'operation.dart';
+part of 'base.dart';
 
 mixin _DeleteMixin on _ErrorHandlingMixin {
   DataDelegate get delegate;

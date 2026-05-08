@@ -1,4 +1,4 @@
-part of 'operation.dart';
+part of 'base.dart';
 
 mixin _UpdateMixin on _ErrorHandlingMixin, _WriteTransformMixin {
   DataDelegate get delegate;

@@ -8,7 +8,7 @@ export 'src/cache/storage.dart';
 export 'src/encryptor/encryptor.dart';
 export 'src/operations/batch.dart';
 export 'src/operations/delegate.dart';
-export 'src/operations/operation.dart';
+export 'src/operations/base.dart';
 export 'src/operations/snapshots.dart';
 export 'src/operations/typedefs.dart';
 export 'src/operations/writers.dart';

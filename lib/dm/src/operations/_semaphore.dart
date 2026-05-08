@@ -1,4 +1,4 @@
-part of 'operation.dart';
+part of 'base.dart';
 
 class DataOperationSemaphore {
   final int _max;

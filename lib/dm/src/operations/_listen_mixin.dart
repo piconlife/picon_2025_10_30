@@ -1,4 +1,4 @@
-part of 'operation.dart';
+part of 'base.dart';
 
 mixin _ListenMixin on _ErrorHandlingMixin, _HydrateMixin {
   DataDelegate get delegate;

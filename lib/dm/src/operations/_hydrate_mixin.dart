@@ -1,4 +1,4 @@
-part of 'operation.dart';
+part of 'base.dart';
 
 mixin _HydrateMixin on _ReadResolveMixin {
   Future<DataGetSnapshot> hydrateOne(

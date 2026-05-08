@@ -1,4 +1,4 @@
-part of 'operation.dart';
+part of 'base.dart';
 
 mixin _QueryMixin on _ErrorHandlingMixin, _HydrateMixin {
   DataDelegate get delegate;
