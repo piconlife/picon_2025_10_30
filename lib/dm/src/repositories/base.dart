@@ -64,7 +64,7 @@ class DataRepository<T extends Entity>
 
   final FutureConnectivityCallback? _connectivity;
 
-  const DataRepository.local({
+  DataRepository.local({
     this.id,
     this.backupMode = true,
     this.lazyMode = true,
@@ -80,7 +80,7 @@ class DataRepository<T extends Entity>
        _connectivity = connectivity,
        errorDelegate = errorDelegate ?? ErrorDelegate.printing;
 
-  const DataRepository.remote({
+  DataRepository.remote({
     this.id,
     this.backupMode = true,
     this.lazyMode = true,
@@ -115,7 +115,7 @@ class DataRepository<T extends Entity>
     return value;
   }
 
-  Future<void> restore({
+  Future<Response<void>> restore({
     DataFieldParams? params,
     bool onlyUpdates = false,
     bool? countable,
@@ -125,8 +125,14 @@ class DataRepository<T extends Entity>
     bool createRefs = false,
     bool merge = true,
     bool? lazyMode,
+    bool? backupMode,
   }) async {
-    if (!restoreMode || !shouldUseBackup(null)) return;
+    if (!restoreMode) {
+      return Response(status: Status.canceled, error: 'restoreMode disabled');
+    }
+    if (!shouldUseBackup(backupMode)) {
+      return Response(status: Status.canceled, error: 'backup unavailable');
+    }
     final backup = await runOnBackup((source) {
       return source.get(
         params: params,
@@ -137,7 +143,9 @@ class DataRepository<T extends Entity>
         ignore: ignore,
       );
     });
-    if (!backup.isValid) return;
+    if (!backup.isValid) {
+      return Response(status: backup.status, error: backup.error);
+    }
     await _writeBackToPrimary(
       backup.result,
       params: params,
@@ -145,5 +153,6 @@ class DataRepository<T extends Entity>
       merge: merge,
       useLazy: shouldUseLazy(lazyMode),
     );
+    return Response(status: Status.ok);
   }
 }

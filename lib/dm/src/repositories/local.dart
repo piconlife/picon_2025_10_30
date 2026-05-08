@@ -3,7 +3,7 @@ import 'package:flutter_entity/entity.dart' show Entity;
 import 'base.dart' show DataRepository;
 
 class LocalDataRepository<T extends Entity> extends DataRepository<T> {
-  const LocalDataRepository({
+  LocalDataRepository({
     super.id,
     required super.source,
     super.backup,
