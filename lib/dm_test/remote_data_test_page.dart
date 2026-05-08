@@ -1,43 +1,14 @@
-import 'dart:async' show StreamSubscription;
+import 'dart:async';
 
-import 'package:flutter/material.dart'
-    show
-        StatefulWidget,
-        State,
-        BuildContext,
-        Widget,
-        Text,
-        EdgeInsets,
-        TextStyle,
-        SizedBox,
-        VoidCallback,
-        AppBar,
-        CrossAxisAlignment,
-        Colors,
-        SingleChildScrollView,
-        Container,
-        Wrap,
-        Expanded,
-        Column,
-        Padding,
-        Scaffold,
-        ElevatedButton;
-import 'package:flutter_entity/entity.dart' show Response, EntityHelper;
+import 'package:flutter/material.dart';
+import 'package:flutter_entity/entity.dart';
 
-import 'product.dart' show Product, ProductKey;
-import 'product_use_cases.dart'
-    show
-        createProductUseCase,
-        getAllProductsUseCase,
-        getProductByIdUseCase,
-        updateProductUseCase,
-        deleteProductUseCase,
-        getProductsByQueryUseCase,
-        searchProductsUseCase,
-        countProductsUseCase,
-        listenAllProductsUseCase,
-        listenProductByIdUseCase,
-        listenProductsByQueryUseCase;
+import '../dm/src/utils/checker.dart' show Checker;
+import '../dm/src/utils/fetch_options.dart' show DataFetchOptions;
+import '../dm/src/utils/query.dart' show DataQuery;
+import '../dm/src/utils/sorting.dart' show DataSorting;
+import 'product.dart';
+import 'product_repository.dart';
 
 class RemoteDataTestPage extends StatefulWidget {
   const RemoteDataTestPage({super.key});
@@ -47,156 +18,226 @@ class RemoteDataTestPage extends StatefulWidget {
 }
 
 class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
-  String _log = 'Press a button to test';
-  StreamSubscription? _sub;
+  final _repo = ProductRepository();
+  String _log = '';
 
-  void _setLog(String msg) => setState(() => _log = msg);
-
-  String _format(Response r) {
-    if (r.isValid) return 'OK: ${r.result}';
-    return 'FAIL [${r.status}]: ${r.error}';
-  }
+  void _log_(String msg) => setState(() => _log = msg);
 
   Future<void> _create() async {
+    final names = [
+      'Laptop',
+      'Phone',
+      'Tablet',
+      'Watch',
+      'Speaker',
+      'Camera',
+      'Headphone',
+      'Monitor',
+    ];
+    final categories = [
+      'electronics',
+      'gadgets',
+      'accessories',
+      'audio',
+      'display',
+    ];
+    final tagPool = [
+      'new',
+      'sale',
+      'hot',
+      'trending',
+      'limited',
+      'popular',
+      'featured',
+    ];
+
+    final rnd = DateTime.now().millisecondsSinceEpoch;
+    final name = names[rnd % names.length];
+    final category = categories[rnd % categories.length];
+    final price = double.parse((10 + (rnd % 990)).toStringAsFixed(2));
+    final stock = 1 + (rnd % 100);
+    final tags = (tagPool..shuffle()).take(2).toList();
+
     final p = Product(
-      id: EntityHelper.generateID,
-      name: 'Test Item',
-      price: 99.9,
-      category: 'electronics',
-      tags: ['new', 'sale'],
-      stock: 50,
+      id: rnd.toString(),
+      name: '$name ${rnd % 1000}',
+      price: price,
+      category: category,
+      tags: tags,
+      stock: stock,
     );
-    final res = await createProductUseCase(p);
-    _setLog('CREATE => ${_format(res)}');
-  }
-
-  Future<void> _getAll() async {
-    final res = await getAllProductsUseCase();
-    _setLog('GET ALL => ${_format(res)}');
-  }
-
-  Future<void> _getById() async {
-    final all = await getAllProductsUseCase();
-    final id = all.result.firstOrNull?.id ?? '';
-    if (id.isEmpty) return _setLog('GET BY ID => no data');
-    final res = await getProductByIdUseCase(id);
-    _setLog('GET BY ID [$id] => ${_format(res)}');
+    final res = await _repo.create(p);
+    _log_(
+      res.isValid
+          ? 'Created: ${p.name} | ${p.category} | ৳${p.price}'
+          : 'Error: ${res.error}',
+    );
   }
 
   Future<void> _update() async {
-    final all = await getAllProductsUseCase();
-    final id = all.result.firstOrNull?.id ?? '';
-    if (id.isEmpty) return _setLog('UPDATE => no data');
-    final res = await updateProductUseCase(id, {
-      ProductKey.price: 199.9,
-      ProductKey.stock: 10,
-    });
-    _setLog('UPDATE [$id] => ${_format(res)}');
+    final res = await _repo.get();
+    final id = res.result.firstOrNull?.id ?? '';
+    if (id.isEmpty) return _log_('No data to update');
+    final r = await _repo.updateById(id, {ProductKey.price: 199.9});
+    _log_(r.isValid ? 'Updated: $id' : 'Error: ${r.error}');
   }
 
-  Future<void> _delete() async {
-    final all = await getAllProductsUseCase();
-    final id = all.result.lastOrNull?.id ?? '';
-    if (id.isEmpty) return _setLog('DELETE => no data');
-    final res = await deleteProductUseCase(id);
-    _setLog('DELETE [$id] => ${_format(res)}');
+  Future<void> _delete(String id) async {
+    final r = await _repo.deleteById(id);
+    _log_(r.isValid ? 'Deleted: $id' : 'Error: ${r.error}');
+  }
+
+  Future<void> _get() async {
+    final res = await _repo.get();
+    _log_(
+      res.isValid ? 'Got ${res.result.length} items' : 'Error: ${res.error}',
+    );
+  }
+
+  Future<void> _getById() async {
+    final res = await _repo.get();
+    final id = res.result.firstOrNull?.id ?? '';
+    if (id.isEmpty) return _log_('No data');
+    final r = await _repo.getById(id);
+    _log_(
+      r.isValid ? 'Got: ${r.result.firstOrNull?.name}' : 'Error: ${r.error}',
+    );
   }
 
   Future<void> _query() async {
-    final res = await getProductsByQueryUseCase('electronics');
-    _setLog('QUERY [category=electronics] => ${_format(res)}');
+    final res = await _repo.getByQuery(
+      queries: [DataQuery(ProductKey.category, isEqualTo: 'electronics')],
+      sorts: [DataSorting(ProductKey.price)],
+      options: const DataFetchOptions.limit(10),
+    );
+    _log_(
+      res.isValid ? 'Query: ${res.result.length} items' : 'Error: ${res.error}',
+    );
   }
 
   Future<void> _search() async {
-    final res = await searchProductsUseCase('Test');
-    _setLog('SEARCH [name contains Test] => ${_format(res)}');
+    final res = await _repo.search(Checker.contains(ProductKey.name, 'Item'));
+    _log_(
+      res.isValid
+          ? 'Search: ${res.result.length} items'
+          : 'Error: ${res.error}',
+    );
   }
 
   Future<void> _count() async {
-    final res = await countProductsUseCase();
-    _setLog('COUNT => ${_format(res)}');
-  }
-
-  void _listenAll() {
-    _sub?.cancel();
-    _setLog('LISTEN ALL => waiting...');
-    _sub = listenAllProductsUseCase().listen((res) {
-      _setLog('LISTEN ALL => ${_format(res)}');
-    });
-  }
-
-  void _listenById() async {
-    final all = await getAllProductsUseCase();
-    final id = all.result.firstOrNull?.id ?? '';
-    if (id.isEmpty) return _setLog('LISTEN BY ID => no data');
-    _sub?.cancel();
-    _setLog('LISTEN BY ID [$id] => waiting...');
-    _sub = listenProductByIdUseCase(id).listen((res) {
-      _setLog('LISTEN BY ID => ${_format(res)}');
-    });
-  }
-
-  void _listenByQuery() {
-    _sub?.cancel();
-    _setLog('LISTEN QUERY => waiting...');
-    _sub = listenProductsByQueryUseCase('electronics').listen((res) {
-      _setLog('LISTEN QUERY => ${_format(res)}');
-    });
-  }
-
-  void _cancelListen() {
-    _sub?.cancel();
-    _sub = null;
-    _setLog('Listener cancelled');
-  }
-
-  @override
-  void dispose() {
-    _sub?.cancel();
-    super.dispose();
+    final res = await _repo.count();
+    _log_('Count: ${res.result.firstOrNull}');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('DM Test')),
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              color: Colors.black12,
-              height: 80,
-              child: SingleChildScrollView(
-                child: Text(_log, style: const TextStyle(fontSize: 12)),
+      appBar: AppBar(title: const Text('Remote Data Test')),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Operations',
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
-            ),
-            const SizedBox(height: 12),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    _btn('Create', _create),
-                    _btn('Get All', _getAll),
-                    _btn('Get By Id', _getById),
-                    _btn('Update', _update),
-                    _btn('Delete', _delete),
-                    _btn('Query', _query),
-                    _btn('Search', _search),
-                    _btn('Count', _count),
-                    _btn('Listen All', _listenAll),
-                    _btn('Listen By Id', _listenById),
-                    _btn('Listen By Query', _listenByQuery),
-                    _btn('Cancel Listen', _cancelListen),
-                  ],
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  _btn('Create', _create),
+                  _btn('Update (first)', _update),
+                  _btn('Get All', _get),
+                  _btn('Get By Id', _getById),
+                  _btn('Query', _query),
+                  _btn('Search', _search),
+                  _btn('Count', _count),
+                ],
+              ),
+              const Divider(),
+
+              if (_log.isNotEmpty)
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(8),
+                  color: Colors.black12,
+                  child: Text(_log, style: const TextStyle(fontSize: 12)),
                 ),
+              const SizedBox(height: 12),
+
+              const Text(
+                'Count (stream)',
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
-            ),
-          ],
+              StreamBuilder<Response<int>>(
+                stream: _repo.listenCount(),
+                builder: (context, s) {
+                  final count = s.data?.result.firstOrNull ?? 0;
+                  return Text('Total products: $count');
+                },
+              ),
+              const Divider(),
+
+              const Text(
+                'First Item (stream by id)',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              FutureBuilder<Response<Product>>(
+                future: _repo.get(),
+                builder: (context, snap) {
+                  final id = snap.data?.result.firstOrNull?.id ?? '';
+                  if (id.isEmpty) return const Text('No data');
+                  return StreamBuilder<Response<Product>>(
+                    stream: _repo.listenById(id),
+                    builder: (context, s) {
+                      final item = s.data?.result.firstOrNull;
+                      if (item == null) return const Text('Loading...');
+                      return ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(item.name),
+                        subtitle: Text(
+                          'Price: ${item.price} | Stock: ${item.stock}',
+                        ),
+                        trailing: Text(item.category),
+                      );
+                    },
+                  );
+                },
+              ),
+              const Divider(),
+
+              const Text(
+                'All Products (stream)',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              StreamBuilder<Response<Product>>(
+                stream: _repo.listen(),
+                builder: (context, s) {
+                  final items = s.data?.result ?? [];
+                  if (items.isEmpty) return const Text('No data');
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: items.length,
+                    itemBuilder: (_, i) {
+                      final item = items[i];
+                      return ListTile(
+                        onLongPress: () => _delete(item.id),
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(item.name),
+                        subtitle: Text('₹${item.price} | ${item.category}'),
+                        trailing: Text('Stock: ${item.stock}'),
+                      );
+                    },
+                  );
+                },
+              ),
+              const SizedBox(height: 40),
+            ],
+          ),
         ),
       ),
     );

@@ -139,14 +139,6 @@ mixin _SourceWriteMixin<T extends Entity>
   }) {
     if (id.isEmpty) return Future.value(Response(status: Status.invalidId));
     return execute(() async {
-      final old = await getById(
-        id,
-        countable: false,
-        params: params,
-        resolveRefs: resolveRefs ?? deleteRefs,
-        ignore: ignore,
-      );
-      if (!old.isValid) return old;
       final p = ref(params, DataModifiers.deleteById, id);
       await operation.delete(
         p,
@@ -156,7 +148,7 @@ mixin _SourceWriteMixin<T extends Entity>
         batchLimit: limitations.batchLimit,
         batchMaxLimit: limitations.maximumDeleteLimit,
       );
-      return Response(status: Status.ok, backups: [old.data!]);
+      return Response(status: Status.ok);
     });
   }
 
