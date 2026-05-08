@@ -10,6 +10,7 @@ mixin _RepoDualWriteMixin<T extends Entity>
   }) {
     return applyModifier<T>(modifierId, () async {
       final primaryResponse = await runOnPrimary(write);
+      if (!primaryResponse.isSuccessful) return primaryResponse;
       if (!shouldUseBackup(backupMode)) return primaryResponse;
       if (shouldUseLazy(lazyMode)) {
         runOnBackupLazy(write);

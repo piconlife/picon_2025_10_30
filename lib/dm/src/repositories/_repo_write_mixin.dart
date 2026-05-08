@@ -232,15 +232,16 @@ mixin _RepoWriteMixin<T extends Entity>
     );
   }
 
-  Future<Response<void>> write(List<DataBatchWriter> writers) {
+  Future<Response<void>> write(List<DataBatchWriter> writers) async {
     if (writers.isEmpty) {
-      return Future.value(Response(status: Status.invalid));
+      return Response(status: Status.invalid);
     }
-    return runOnPrimary((source) async {
-      final response = await source.write(writers);
-      return response.isSuccessful
-          ? Response.ok()
-          : Response.failure(response.error);
+    final response = await runOnPrimary<Object>((source) async {
+      final r = await source.write(writers);
+      return r.isSuccessful
+          ? Response<Object>(status: Status.ok)
+          : Response<Object>(status: r.status, error: r.error);
     });
+    return Response(status: response.status, error: response.error);
   }
 }
