@@ -29,7 +29,7 @@ Future<Response<Product>> getProductByIdUseCase(String id) {
 }
 
 Future<Response<Product>> getAllProductsUseCase() {
-  return _repo.get();
+  return _repo.get(singletonMode: false);
 }
 
 Future<Response<Product>> getProductsByQueryUseCase(String category) {

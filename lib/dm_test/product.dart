@@ -6,9 +6,20 @@ class ProductKey extends EntityKey {
   static const category = 'category';
   static const tags = 'tags';
   static const stock = 'stock';
+
+  @override
+  Iterable<String> get keys => [
+    id,
+    timeMills,
+    name,
+    price,
+    category,
+    tags,
+    stock,
+  ];
 }
 
-class Product extends Entity {
+class Product extends Entity<ProductKey> {
   final String name;
   final double price;
   final String category;
@@ -23,6 +34,9 @@ class Product extends Entity {
     required this.tags,
     required this.stock,
   });
+
+  @override
+  ProductKey makeKey() => ProductKey();
 
   factory Product.from(dynamic source) {
     final map = source is Map<String, dynamic> ? source : <String, dynamic>{};

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:in_app_navigator/route.dart';
 import 'package:in_app_translation/in_app_translation.dart';
 import 'package:picon/app/constants/app.dart';
+import 'package:picon/dm_test/remote_data_test_page.dart';
 import 'package:picon/roots/widgets/appbar.dart';
 
 import '../../../../roots/widgets/column.dart';
@@ -36,6 +37,7 @@ class _IntroPageState extends State<IntroPage>
 
   @override
   Widget build(BuildContext context) {
+    return RemoteDataTestPage();
     return StartupScreen(
       child: Scaffold(
         backgroundColor: Colors.transparent,

@@ -85,7 +85,7 @@ class DataRepository<T extends Entity>
     this.backupMode = true,
     this.lazyMode = true,
     this.restoreMode = true,
-    this.singletonMode = true,
+    this.singletonMode = false,
     required RemoteDataSource<T> source,
     LocalDataSource<T>? backup,
     FutureConnectivityCallback? connectivity,
