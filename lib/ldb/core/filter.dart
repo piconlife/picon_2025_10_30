@@ -1,7 +1,7 @@
 import '../../lq/src/filter.dart' show Filter;
 
 class InAppFilter extends Filter {
-  InAppFilter(
+  const InAppFilter(
     super.field, {
     super.isEqualTo,
     super.isNotEqualTo,

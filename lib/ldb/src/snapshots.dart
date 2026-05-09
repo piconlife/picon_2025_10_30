@@ -93,7 +93,7 @@ class InAppDocumentSnapshot extends InAppSnapshot {
 
   InAppDocument? get data => _doc;
 
-  bool get exists => _doc != null && _doc!.isNotEmpty;
+  bool get exists => _doc != null && _doc.isNotEmpty;
 
   const InAppDocumentSnapshot(this.id, [this._doc]);
 

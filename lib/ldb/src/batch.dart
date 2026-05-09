@@ -2,7 +2,6 @@ import 'database.dart';
 
 enum _BatchOperationType { set, update, delete }
 
-/// Internal operation details
 class _BatchOperation {
   final _BatchOperationType type;
   final InAppDocumentReference document;
@@ -22,7 +21,6 @@ class InAppWriteBatch {
 
   final List<_BatchOperation> _operations = [];
 
-  /// Add a `set` operation
   void set(
     InAppDocumentReference document,
     Object data, [
@@ -39,7 +37,6 @@ class InAppWriteBatch {
     );
   }
 
-  /// Add an `update` operation
   void update(InAppDocumentReference document, Map<String, dynamic> data) {
     _operations.add(
       _BatchOperation(
@@ -50,14 +47,12 @@ class InAppWriteBatch {
     );
   }
 
-  /// Add a `delete` operation
   void delete(InAppDocumentReference document) {
     _operations.add(
       _BatchOperation(type: _BatchOperationType.delete, document: document),
     );
   }
 
-  /// Execute all operations directly (not as Firestore batch)
   Future<void> commit() async {
     for (final op in _operations) {
       switch (op.type) {
