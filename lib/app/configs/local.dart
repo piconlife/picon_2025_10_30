@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:in_app_configs/configs.dart';
-import 'package:in_app_database/in_app_database.dart';
 import 'package:object_finder/object_finder.dart';
 
+import '../../app/imports/in_app_database.dart';
 import '../../app/interfaces/bsd_audience.dart';
 import '../../app/interfaces/bsd_privacy.dart';
 import '../../app/interfaces/dialog_big_photo.dart';

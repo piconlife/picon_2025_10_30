@@ -1,5 +1,4 @@
-import 'package:in_app_database/in_app_database.dart';
-
+import '../../app/imports/in_app_database.dart';
 import '../../roots/hive/database.dart';
 import '../configs/local.dart';
 
