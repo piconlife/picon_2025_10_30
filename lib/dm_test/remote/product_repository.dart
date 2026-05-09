@@ -1,5 +1,5 @@
-import '../dm/src/repositories/remote.dart' show RemoteDataRepository;
-import '../roots/helpers/connectivity.dart' show ConnectivityHelper;
+import '../../dm/src/repositories/remote.dart' show RemoteDataRepository;
+import '../../roots/helpers/connectivity.dart' show ConnectivityHelper;
 import 'product.dart' show Product;
 import 'product_local_source.dart' show ProductLocalSource;
 import 'product_remote_source.dart' show ProductRemoteSource;

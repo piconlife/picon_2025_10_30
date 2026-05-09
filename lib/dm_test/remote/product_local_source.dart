@@ -1,5 +1,5 @@
-import '../data/delegates/local.dart' show LocalDataDelegate;
-import '../dm/src/sources/local.dart' show LocalDataSource;
+import '../../data/delegates/local.dart' show LocalDataDelegate;
+import '../../dm/src/sources/local.dart' show LocalDataSource;
 import 'product.dart' show Product;
 
 class ProductLocalSource extends LocalDataSource<Product> {

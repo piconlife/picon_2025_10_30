@@ -1,5 +1,5 @@
-import '../data/delegates/firestore.dart' show FirestoreDataDelegate;
-import '../dm/src/sources/remote.dart' show RemoteDataSource;
+import '../../data/delegates/firestore.dart' show FirestoreDataDelegate;
+import '../../dm/src/sources/remote.dart' show RemoteDataSource;
 import 'product.dart' show Product;
 
 class ProductRemoteSource extends RemoteDataSource<Product> {
