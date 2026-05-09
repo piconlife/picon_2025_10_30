@@ -13,18 +13,21 @@ mixin _SourceExecuteMixin<T extends Entity> {
 
   Stream<Response<S>> _executeStream<S extends Object>(
     Stream<Response<S>> Function() callback,
-  ) async* {
+  ) {
     Stream<Response<S>> source;
     try {
       source = callback();
     } catch (error, st) {
-      yield Response<S>(status: Status.failure, error: '$error\n$st');
-      return;
+      return Stream.value(
+        Response<S>(status: Status.failure, error: '$error\n$st'),
+      );
     }
-    try {
-      yield* source;
-    } catch (error, st) {
-      yield Response<S>(status: Status.failure, error: '$error\n$st');
-    }
+    return source.transform(
+      StreamTransformer<Response<S>, Response<S>>.fromHandlers(
+        handleError: (error, st, sink) {
+          sink.add(Response<S>(status: Status.failure, error: '$error\n$st'));
+        },
+      ),
+    );
   }
 }

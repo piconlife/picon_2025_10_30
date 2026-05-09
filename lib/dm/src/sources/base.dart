@@ -1,3 +1,5 @@
+import 'dart:async' show StreamTransformer;
+
 import 'package:async/async.dart' show StreamGroup;
 import 'package:flutter_entity/entity.dart' show Entity, Response, Status;
 
