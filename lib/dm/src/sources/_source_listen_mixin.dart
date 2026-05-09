@@ -103,6 +103,11 @@ mixin _SourceListenMixin<T extends Entity> on _SourceReadBaseMixin<T> {
         });
       }
       final p = _ref(params, DataModifiers.listenByIds);
+      final adjustedQueries = [
+        DataQuery(DataFieldPath.documentId, whereIn: ids),
+      ].map(
+        (e) => e.adjust(delegate.resolveFieldPath, delegate.resolveFieldValue),
+      );
       return operation
           .listenByQuery(
             p,
@@ -110,7 +115,7 @@ mixin _SourceListenMixin<T extends Entity> on _SourceReadBaseMixin<T> {
             resolveRefs: resolveRefs,
             resolveDocChangesRefs: resolveDocChangesRefs,
             ignore: ignore,
-            queries: [DataQuery(DataFieldPath.documentId, whereIn: ids)],
+            queries: adjustedQueries,
           )
           .asyncMap((event) async {
             if (event.docs.isEmpty) {

@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:picon/app/imports/data_management.dart';
 
-import '../dm/src/utils/checker.dart' show Checker;
-import '../dm/src/utils/fetch_options.dart' show DataFetchOptions;
-import '../dm/src/utils/query.dart' show DataQuery;
+import '../app/imports/flutter_entity.dart';
 import 'product.dart';
 import 'product_repository.dart';
 
@@ -24,6 +23,39 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
   void _log_(String msg) => setState(() => _log = msg);
 
   Future<void> _create() async {
+    final tagPool = [
+      'new',
+      'sale',
+      'hot',
+      'trending',
+      'limited',
+      'popular',
+      'featured',
+    ];
+
+    final rnd = DateTime.now().millisecondsSinceEpoch;
+    final price = double.parse((10 + (rnd % 990)).toStringAsFixed(2));
+    final stock = 1 + (rnd % 100);
+    final tags = (tagPool..shuffle()).take(2).toList();
+
+    final p = Product(
+      id: _id,
+      name: 'Headphone ${rnd % 1000}',
+      price: price,
+      category: 'accessories',
+      tags: tags,
+      stock: stock,
+    );
+    final res = await _repo.create(p);
+
+    _log_(
+      res.isValid
+          ? 'Created: ${p.name} | ${p.category} | ৳${p.price}'
+          : 'Error: ${res.error}',
+    );
+  }
+
+  Future<void> _createRandom() async {
     final names = [
       'Laptop',
       'Phone',
@@ -81,7 +113,22 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
 
   Future<void> _delete(String id) async {
     final r = await _repo.deleteById(id);
-    _log_(r.isValid ? 'Deleted: $id' : 'Error: ${r.error}');
+    _log_(r.isSuccessful ? 'Deleted: $id' : 'Error: ${r.error}');
+  }
+
+  Future<void> _checkById() async {
+    final r = await _repo.checkById(_id);
+    _log_(r.isSuccessful ? 'Checked' : 'Error: ${r.error}');
+  }
+
+  Future<void> _deleteByIds() async {
+    final r = await _repo.deleteByIds([_id]);
+    _log_(r.isSuccessful ? 'Deleted' : 'Error: ${r.error}');
+  }
+
+  Future<void> _deleteAll() async {
+    final r = await _repo.clear();
+    _log_(r.isSuccessful ? 'Cleared' : 'Error: ${r.error}');
   }
 
   Future<void> _get() async {
@@ -99,15 +146,13 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
   }
 
   Future<void> _getByIds() async {
-    final r = await _repo.getByIds([_id, '1778320415854']);
-    _log_(
-      r.isValid ? 'Got ${r.result.length} items' : 'Error: ${r.error}',
-    );
+    final r = await _repo.getByIds([_id, _id]);
+    _log_(r.isValid ? 'Got ${r.result.length} items' : 'Error: ${r.error}');
   }
 
   Future<void> _query() async {
     final res = await _repo.getByQuery(
-      queries: [DataQuery(ProductKey.category, isEqualTo: 'electronics')],
+      queries: [DataQuery(ProductKey.category, isEqualTo: 'accessories')],
       options: const DataFetchOptions.limit(10),
     );
     _log_(
@@ -116,10 +161,12 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
   }
 
   Future<void> _search() async {
-    final res = await _repo.search(Checker.contains(ProductKey.name, 'Item'));
+    final res = await _repo.search(
+      Checker.contains(ProductKey.category, 'access'),
+    );
     _log_(
       res.isValid
-          ? 'Search: ${res.result.length} items'
+          ? 'Search: ${res.result.length} items: ${res.result.map((e) => e.category).join(', ')}'
           : 'Error: ${res.error}',
     );
   }
@@ -149,6 +196,8 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
                 runSpacing: 8,
                 children: [
                   _btn('Create', _create),
+                  _btn('CreateRandom', _createRandom),
+                  _btn('Check By Id', _checkById),
                   _btn('Update (first)', _update),
                   _btn('Get All', _get),
                   _btn('Get By Id', _getById),
@@ -156,6 +205,8 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
                   _btn('Query', _query),
                   _btn('Search', _search),
                   _btn('Count', _count),
+                  _btn('Delete By Ids', _deleteByIds),
+                  _btn('Clear', _deleteAll),
                 ],
               ),
               const Divider(),
@@ -169,67 +220,122 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
                 ),
               const SizedBox(height: 12),
 
-              // const Text(
-              //   'Count (stream)',
-              //   style: TextStyle(fontWeight: FontWeight.bold),
-              // ),
-              // StreamBuilder<Response<int>>(
-              //   stream: _repo.listenCount(interval: Duration(minutes: 5)),
-              //   builder: (context, s) {
-              //     final count = s.data?.result.firstOrNull ?? 0;
-              //     return Text('Total products: $count');
-              //   },
-              // ),
-              // const Divider(),
-              //
-              // const Text(
-              //   'First Item (stream by id)',
-              //   style: TextStyle(fontWeight: FontWeight.bold),
-              // ),
-              // StreamBuilder<Response<Product>>(
-              //   stream: _repo.listenById(_id),
-              //   builder: (context, s) {
-              //     final item = s.data?.result.firstOrNull;
-              //     if (item == null) return const Text('Loading...');
-              //     return ListTile(
-              //       contentPadding: EdgeInsets.zero,
-              //       title: Text(item.name),
-              //       subtitle: Text(
-              //         'Price: ${item.price} | Stock: ${item.stock}',
-              //       ),
-              //       trailing: Text(item.category),
-              //     );
-              //   },
-              // ),
-              // const Divider(),
-              //
-              // const Text(
-              //   'All Products (stream)',
-              //   style: TextStyle(fontWeight: FontWeight.bold),
-              // ),
-              // StreamBuilder<Response<Product>>(
-              //   stream: _repo.listen(),
-              //   builder: (context, s) {
-              //     final items = s.data?.result ?? [];
-              //     if (items.isEmpty) return const Text('No data');
-              //     return ListView.builder(
-              //       shrinkWrap: true,
-              //       physics: const NeverScrollableScrollPhysics(),
-              //       itemCount: items.length,
-              //       itemBuilder: (_, i) {
-              //         final item = items[i];
-              //         return ListTile(
-              //           onLongPress: () => _delete(item.id),
-              //           contentPadding: EdgeInsets.zero,
-              //           title: Text(item.name),
-              //           subtitle: Text('₹${item.price} | ${item.category}'),
-              //           trailing: Text('Stock: ${item.id}'),
-              //         );
-              //       },
-              //     );
-              //   },
-              // ),
-              // const SizedBox(height: 40),
+              const Text(
+                'Listen Count',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              StreamBuilder<Response<int>>(
+                stream: _repo.listenCount(interval: Duration(seconds: 5)),
+                builder: (context, s) {
+                  final count = s.data?.result.firstOrNull ?? 0;
+                  return Text('Total products: $count');
+                },
+              ),
+              const Divider(),
+
+              const Text(
+                'Listen By Id',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              StreamBuilder<Response<Product>>(
+                stream: _repo.listenById(_id),
+                builder: (context, s) {
+                  final item = s.data?.result.firstOrNull;
+                  if (s.data?.isLoading == true) {
+                    return const Text('Loading...');
+                  }
+                  if (item == null) return const Text('No data');
+                  return ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(item.name),
+                    subtitle: Text(
+                      'Price: ${item.price} | Stock: ${item.stock}',
+                    ),
+                    trailing: Text(item.category),
+                  );
+                },
+              ),
+              const Divider(),
+              const Text(
+                'Listen By Ids',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              StreamBuilder<Response<Product>>(
+                stream: _repo.listenByIds([_id]),
+                builder: (context, s) {
+                  final item = s.data?.result.firstOrNull;
+                  if (s.data?.isLoading == true) {
+                    return const Text('Loading...');
+                  }
+                  if (item == null) return const Text('No data');
+                  return ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(item.name),
+                    subtitle: Text(
+                      'Price: ${item.price} | Stock: ${item.stock}',
+                    ),
+                    trailing: Text(item.category),
+                  );
+                },
+              ),
+              const Divider(),
+              const Text(
+                'Listen',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              StreamBuilder<Response<Product>>(
+                stream: _repo.listen(),
+                builder: (context, s) {
+                  final items = s.data?.result ?? [];
+                  if (items.isEmpty) return const Text('No data');
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: items.take(2).length,
+                    itemBuilder: (_, i) {
+                      final item = items[i];
+                      return ListTile(
+                        onLongPress: () => _delete(item.id),
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(item.name),
+                        subtitle: Text('₹${item.price} | ${item.category}'),
+                        trailing: Text('Stock: ${item.id}'),
+                      );
+                    },
+                  );
+                },
+              ),
+              const Divider(),
+              const Text(
+                'Listen By Query',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              StreamBuilder<Response<Product>>(
+                stream: _repo.listenByQuery(
+                  queries: [DataQuery(ProductKey.price, isGreaterThan: 100)],
+                  sorts: [DataSorting(ProductKey.price)],
+                ),
+                builder: (context, s) {
+                  final items = s.data?.result ?? [];
+                  if (items.isEmpty) return const Text('No data');
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: items.take(2).length,
+                    itemBuilder: (_, i) {
+                      final item = items[i];
+                      return ListTile(
+                        onLongPress: () => _delete(item.id),
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(item.name),
+                        subtitle: Text('₹${item.price} | ${item.category}'),
+                        trailing: Text('Stock: ${item.id}'),
+                      );
+                    },
+                  );
+                },
+              ),
+              const SizedBox(height: 40),
             ],
           ),
         ),
