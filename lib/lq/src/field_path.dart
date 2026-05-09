@@ -4,13 +4,14 @@ enum FieldPathType { documentId }
 
 @immutable
 class FieldPath {
+  static const String documentIdKey = '__name__';
+  static const String defaultIdField = 'id';
+
   final List<String> segments;
 
   const FieldPath._(this.segments);
 
-  static FieldPathType get documentId {
-    return FieldPathType.documentId;
-  }
+  static FieldPathType get documentId => FieldPathType.documentId;
 
   factory FieldPath(String path) {
     if (path.isEmpty) {
@@ -29,15 +30,32 @@ class FieldPath {
   }
 
   static Object? resolve(Map<String, dynamic> doc, Object field) {
+    if (field is FieldPathType) {
+      if (field == FieldPathType.documentId) return doc[defaultIdField];
+      return null;
+    }
     if (field is String) {
+      if (field == documentIdKey) return doc[defaultIdField];
       if (!field.contains('.')) return doc[field];
       return _resolveDotted(doc, field.split('.'));
     }
     if (field is FieldPath) {
-      if (field.segments.length == 1) return doc[field.segments.first];
+      if (field.segments.length == 1) {
+        final first = field.segments.first;
+        if (first == documentIdKey) return doc[defaultIdField];
+        return doc[first];
+      }
       return _resolveDotted(doc, field.segments);
     }
     return doc[field];
+  }
+
+  static String stableKey(Object field) {
+    if (field is FieldPathType) {
+      if (field == FieldPathType.documentId) return documentIdKey;
+    }
+    if (field is FieldPath) return field.path;
+    return field.toString();
   }
 
   static Object? _resolveDotted(Map<String, dynamic> doc, List<String> parts) {

@@ -107,7 +107,7 @@ class QueryBuilder {
       _addOp(FilterOp(predicate));
 
   QueryBuilder orderBy(Object field, {bool descending = false}) {
-    final fieldKey = field is FieldPath ? field.path : field.toString();
+    final fieldKey = FieldPath.stableKey(field);
     final next = Sorting(fieldKey, descending: descending);
     final newOrders = <Sorting>[
       ..._orders.where((s) => s.field != fieldKey),
