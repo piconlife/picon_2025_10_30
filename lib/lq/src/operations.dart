@@ -39,6 +39,9 @@ final class FilterOp extends QueryOp {
     Iterable<Object?>? whereNotIn,
     bool? isNull,
   }) {
+    final resolvedField =
+        field is String && field.contains('.') ? FieldPath(field) : field;
+
     final whereInSet = _toSet(whereIn);
     final whereNotInSet = _toSet(whereNotIn);
     final containsAnySet = _toSet(arrayContainsAny);
@@ -47,7 +50,7 @@ final class FilterOp extends QueryOp {
     return FilterOp((doc) {
       return FilterEngine.matchesConditions(
         doc,
-        field: field,
+        field: resolvedField,
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
         isLessThan: isLessThan,
@@ -93,7 +96,11 @@ final class FilterOp extends QueryOp {
       };
     }
 
-    final field = filter.field;
+    final rawField = filter.field;
+    final field =
+        rawField is String && rawField.contains('.')
+            ? FieldPath(rawField)
+            : rawField;
     final isEqualTo = filter.isEqualTo;
     final isNotEqualTo = filter.isNotEqualTo;
     final isLessThan = filter.isLessThan;
