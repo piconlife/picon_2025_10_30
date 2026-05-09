@@ -3,13 +3,17 @@ part of 'database.dart';
 abstract class InAppCollectionReference extends InAppReference {
   final String path;
   final String id;
+  final InAppDocumentReference? _parent;
 
   const InAppCollectionReference({
     required super.db,
     required super.reference,
     required this.path,
     required this.id,
-  });
+    InAppDocumentReference? parent,
+  }) : _parent = parent;
+
+  InAppDocumentReference? get parent => _parent;
 
   Future<List<String>> get keys async {
     final paths = await _db._k(path);
@@ -49,14 +53,15 @@ abstract class InAppCollectionReference extends InAppReference {
 
   String push() => _id;
 
-  InAppDocumentReference doc(String field) {
+  InAppDocumentReference doc([String? path]) {
+    final field = path ?? _id;
     if (field.isEmpty) {
-      throw ArgumentError.value(field, 'field', 'Document id cannot be empty.');
+      throw ArgumentError.value(field, 'path', 'Document id cannot be empty.');
     }
     if (field.contains('/')) {
       throw ArgumentError.value(
         field,
-        'field',
+        'path',
         'Document id cannot contain "/".',
       );
     }
@@ -68,16 +73,18 @@ abstract class InAppCollectionReference extends InAppReference {
     );
   }
 
-  Future<InAppDocumentSnapshot?> add(InAppDocument data) {
+  Future<InAppDocumentReference> add(InAppDocument data) async {
     final raw = data[_idField] ?? data[_idFieldSecondary];
-    final id = raw is String && raw.isNotEmpty ? raw : _id;
+    final newId = raw is String && raw.isNotEmpty ? raw : _id;
     final payload = Map<String, InAppValue>.of(data);
-    payload[_idField] = id;
-    return doc(id).set(payload);
+    payload[_idField] = newId;
+    final ref = doc(newId);
+    await ref.set(payload);
+    return ref;
   }
 
-  Future<InAppQuerySnapshot?> set(
-    List<InAppDocumentSnapshot> data, {
+  Future<InAppQuerySnapshot?> setAll(
+    List<InAppQueryDocumentSnapshot> data, {
     bool notifiable = false,
   }) async {
     final query = InAppQuerySnapshot(id, data);
@@ -94,7 +101,7 @@ abstract class InAppCollectionReference extends InAppReference {
     return ok ? query : null;
   }
 
-  Future<bool> delete({bool notifiable = false}) async {
+  Future<bool> deleteAll({bool notifiable = false}) async {
     final ok = await _db._w(
       reference: reference,
       collectionPath: path,
@@ -118,7 +125,9 @@ abstract class InAppCollectionReference extends InAppReference {
     return ok;
   }
 
-  Future<InAppQuerySnapshot> get() async {
+  Future<InAppQuerySnapshot> get([
+    InAppSource source = InAppSource.cache,
+  ]) async {
     final result = await _db._r(
       reference: reference,
       collectionPath: path,
@@ -129,7 +138,7 @@ abstract class InAppCollectionReference extends InAppReference {
     return result is InAppQuerySnapshot ? result : InAppQuerySnapshot(id);
   }
 
-  Stream<InAppQuerySnapshot> snapshots() {
+  Stream<InAppQuerySnapshot> snapshots({bool includeMetadataChanges = false}) {
     final n = _db._addNotifier(path);
     return Stream<InAppQuerySnapshot>.multi((controller) {
       void update() {

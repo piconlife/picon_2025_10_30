@@ -62,10 +62,11 @@ class InAppDocumentReference extends InAppReference {
       reference: '$reference/$field',
       path: '$path/$field',
       id: field,
+      parent: this,
     );
   }
 
-  Future<InAppDocumentSnapshot?> set(
+  Future<void> set(
     InAppDocument data, [
     InAppSetOptions options = InAppSetOptions.defaults,
   ]) async {
@@ -74,8 +75,9 @@ class InAppDocumentReference extends InAppReference {
     final payload = Map<String, InAppValue>.of(data);
     payload[_idField] = mId;
 
-    if (options.merge) {
-      return update(payload);
+    if (options.isMerge) {
+      await update(payload, onlyFields: options.mergeFields);
+      return;
     }
 
     final ok = await _db._w(
@@ -86,15 +88,32 @@ class InAppDocumentReference extends InAppReference {
       type: InAppWriteType.document,
       value: payload,
     );
-    final snap = ok ? InAppDocumentSnapshot(mId, payload) : null;
+    final snap = ok ? InAppDocumentSnapshot(mId, payload, this) : null;
     _n<void>(null, snap);
     _db._log(ok ? 'done!' : 'failed!', action: 'set', field: id);
-    return snap;
+    if (!ok) {
+      throw InAppDatabaseException(
+        'Failed to set document at "$path".',
+        code: 'set-failed',
+      );
+    }
   }
 
-  Future<InAppDocumentSnapshot?> update(InAppDocument data) async {
+  Future<void> update(InAppDocument data, {List<Object>? onlyFields}) async {
     final base = await get();
-    final merged = InAppMerger(base.data).merge(data);
+    Set<String>? onlySet;
+    if (onlyFields != null) {
+      onlySet = <String>{};
+      for (final f in onlyFields) {
+        if (f is String) {
+          onlySet.add(f);
+        } else if (f is InAppFieldPath) {
+          if (f.isDocumentId) continue;
+          onlySet.add(f.segments.join('.'));
+        }
+      }
+    }
+    final merged = InAppMerger(base.data()).merge(data, onlyFields: onlySet);
     merged[_idField] = id;
     final ok = await _db._w(
       reference: reference,
@@ -104,13 +123,18 @@ class InAppDocumentReference extends InAppReference {
       type: InAppWriteType.document,
       value: merged,
     );
-    final snap = ok ? InAppDocumentSnapshot(id, merged) : null;
+    final snap = ok ? InAppDocumentSnapshot(id, merged, this) : null;
     _n<void>(null, snap);
     _db._log(ok ? 'done!' : 'failed!', action: 'update', field: id);
-    return snap;
+    if (!ok) {
+      throw InAppDatabaseException(
+        'Failed to update document at "$path".',
+        code: 'update-failed',
+      );
+    }
   }
 
-  Future<bool> delete() async {
+  Future<void> delete() async {
     final ok = await _db._w(
       reference: reference,
       collectionPath: _p.path,
@@ -132,10 +156,17 @@ class InAppDocumentReference extends InAppReference {
     }
     _n<void>(null, null);
     _db._log(ok ? 'done!' : 'failed!', action: 'delete', field: id);
-    return ok;
+    if (!ok) {
+      throw InAppDatabaseException(
+        'Failed to delete document at "$path".',
+        code: 'delete-failed',
+      );
+    }
   }
 
-  Future<InAppDocumentSnapshot> get() async {
+  Future<InAppDocumentSnapshot> get([
+    InAppSource source = InAppSource.cache,
+  ]) async {
     final result = await _db._r(
       reference: reference,
       collectionPath: _p.path,
@@ -143,15 +174,20 @@ class InAppDocumentReference extends InAppReference {
       documentId: id,
       type: InAppReadType.document,
     );
-    return result is InAppDocumentSnapshot ? result : InAppDocumentSnapshot(id);
+    if (result is InAppDocumentSnapshot) {
+      return result.copy(reference: this);
+    }
+    return InAppDocumentSnapshot(id, null, this);
   }
 
-  Stream<InAppDocumentSnapshot> snapshots() {
+  Stream<InAppDocumentSnapshot> snapshots({
+    bool includeMetadataChanges = false,
+  }) {
     final n = _db._addChildNotifier(_p.path, id);
     return Stream<InAppDocumentSnapshot>.multi((controller) {
       void update() {
         if (controller.isClosed) return;
-        controller.add(n.value ?? InAppDocumentSnapshot(id));
+        controller.add(n.value ?? InAppDocumentSnapshot(id, null, this));
       }
 
       n.addListener(update);

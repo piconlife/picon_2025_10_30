@@ -29,11 +29,11 @@ class _BatchSnapshot {
 }
 
 class InAppWriteBatch {
-  final InAppDatabase _db;
+  final InAppDatabase _firestore;
   final List<_BatchOp> _operations = [];
   bool _committed = false;
 
-  InAppWriteBatch._(this._db);
+  InAppWriteBatch._(this._firestore);
 
   factory InAppWriteBatch() => InAppWriteBatch._(InAppDatabase.instance);
 
@@ -50,7 +50,7 @@ class InAppWriteBatch {
   void set(
     InAppDocumentReference document,
     InAppDocument data, [
-    InAppSetOptions options = InAppSetOptions.defaults,
+    InAppSetOptions? options,
   ]) {
     _ensureNotCommitted();
     _ensureSameDatabase(document);
@@ -59,7 +59,7 @@ class InAppWriteBatch {
         type: _BatchOpType.set,
         document: document,
         data: Map<String, InAppValue>.of(data),
-        options: options,
+        options: options ?? InAppSetOptions.defaults,
       ),
     );
   }
@@ -109,13 +109,11 @@ class InAppWriteBatch {
     final snapshots = <_BatchSnapshot>[];
     for (final op in ops) {
       final existing = await op.document.get();
+      final data = existing.data();
       snapshots.add(
         _BatchSnapshot(
           document: op.document,
-          previousData:
-              existing.data == null
-                  ? null
-                  : Map<String, InAppValue>.of(existing.data!),
+          previousData: data == null ? null : Map<String, InAppValue>.of(data),
           existed: existing.exists,
         ),
       );
@@ -126,28 +124,13 @@ class InAppWriteBatch {
   Future<void> _executeOp(_BatchOp op) async {
     switch (op.type) {
       case _BatchOpType.set:
-        final result = await op.document.set(op.data!, op.options);
-        if (result == null) {
-          throw InAppDatabaseException(
-            'Batch set failed for "${op.document.path}".',
-          );
-        }
+        await op.document.set(op.data!, op.options);
         break;
       case _BatchOpType.update:
-        final result = await op.document.update(op.data!);
-        if (result == null) {
-          throw InAppDatabaseException(
-            'Batch update failed for "${op.document.path}".',
-          );
-        }
+        await op.document.update(op.data!);
         break;
       case _BatchOpType.delete:
-        final ok = await op.document.delete();
-        if (!ok) {
-          throw InAppDatabaseException(
-            'Batch delete failed for "${op.document.path}".',
-          );
-        }
+        await op.document.delete();
         break;
     }
   }
@@ -162,7 +145,9 @@ class InAppWriteBatch {
         if (snap.existed && snap.previousData != null) {
           await snap.document.set(snap.previousData!);
         } else {
-          await snap.document.delete();
+          try {
+            await snap.document.delete();
+          } catch (_) {}
         }
       } catch (_) {}
     }
@@ -177,7 +162,7 @@ class InAppWriteBatch {
   }
 
   void _ensureSameDatabase(InAppDocumentReference document) {
-    if (!identical(document.database, _db)) {
+    if (!identical(document.firestore, _firestore)) {
       throw ArgumentError(
         'The document "${document.path}" belongs to a different InAppDatabase instance.',
       );

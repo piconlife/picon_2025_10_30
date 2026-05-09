@@ -107,7 +107,7 @@ class LocalDataDelegate extends DataDelegate {
   @override
   Future<DataGetSnapshot> getById(String path) async {
     final snapshot = await _db.doc(path).get();
-    return DataGetSnapshot(snapshot: snapshot, doc: snapshot.data);
+    return DataGetSnapshot(snapshot: snapshot, doc: snapshot.data());
   }
 
   @override
@@ -159,7 +159,7 @@ class LocalDataDelegate extends DataDelegate {
   @override
   Stream<DataGetSnapshot> listenById(String path) {
     return _db.doc(path).snapshots().map((snapshot) {
-      return DataGetSnapshot(snapshot: snapshot, doc: snapshot.data);
+      return DataGetSnapshot(snapshot: snapshot, doc: snapshot.data());
     });
   }
 
@@ -236,7 +236,7 @@ class LocalDataDelegate extends DataDelegate {
       case DataFieldValues.delete:
         return InAppFieldValue.delete();
       case DataFieldValues.serverTimestamp:
-        return InAppFieldValue.timestamp();
+        return InAppFieldValue.serverTimestamp();
       case DataFieldValues.increment:
         final n = value.value;
         return n is num ? InAppFieldValue.increment(n) : value;

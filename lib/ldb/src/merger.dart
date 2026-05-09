@@ -6,19 +6,36 @@ class InAppMerger {
   InAppMerger(InAppDocument? root)
     : root = Map<String, InAppValue>.of(root ?? const {});
 
-  InAppDocument merge(InAppDocument updates) {
+  InAppDocument merge(InAppDocument updates, {Set<String>? onlyFields}) {
     final extra = <String, InAppValue>{};
     for (final entry in updates.entries) {
       final field = entry.key;
+      if (onlyFields != null && !_matchesAnyField(field, onlyFields)) continue;
       final fieldValue = entry.value;
       if (fieldValue is InAppFieldValue) {
         _apply(field, fieldValue, root[field]);
+      } else if (fieldValue is Map<String, InAppValue>) {
+        final base = root[field];
+        if (base is Map) {
+          final nested = InAppMerger(Map<String, InAppValue>.from(base));
+          root[field] = nested.merge(fieldValue);
+        } else {
+          extra[field] = fieldValue;
+        }
       } else {
         extra[field] = fieldValue;
       }
     }
     if (extra.isNotEmpty) root.addAll(extra);
     return root;
+  }
+
+  static bool _matchesAnyField(String field, Set<String> only) {
+    if (only.contains(field)) return true;
+    for (final f in only) {
+      if (f.startsWith('$field.')) return true;
+    }
+    return false;
   }
 
   void _apply(String field, InAppFieldValue fieldValue, Object? baseValue) {
@@ -42,7 +59,7 @@ class InAppMerger {
       case InAppFieldValues.increment:
         _applyIncrement(field, baseValue, modifier);
         break;
-      case InAppFieldValues.timestamp:
+      case InAppFieldValues.serverTimestamp:
         _applyTimestamp(field, modifier);
         break;
       case InAppFieldValues.toggle:
@@ -83,7 +100,11 @@ class InAppMerger {
   void _applyArrayUnion(String field, Object? base, Object? modifier) {
     if ((base is List || base == null) && modifier is List) {
       final src = base is List ? base : const <Object?>[];
-      final merged = <Object?>[...src, ...modifier];
+      final seen = <Object?>{...src};
+      final merged = <Object?>[...src];
+      for (final e in modifier) {
+        if (seen.add(e)) merged.add(e);
+      }
       root[field] = merged;
     }
   }
@@ -100,7 +121,7 @@ class InAppMerger {
   }
 
   void _applyTimestamp(String field, Object? modifier) {
-    final now = DateTime.now();
+    final now = DateTime.now().toUtc();
     final asNumber = modifier is bool ? modifier : false;
     root[field] = asNumber ? now.millisecondsSinceEpoch : now.toIso8601String();
   }

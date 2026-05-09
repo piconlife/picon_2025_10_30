@@ -5,7 +5,7 @@ enum InAppFieldValues {
   arrayUnion,
   delete,
   increment,
-  timestamp,
+  serverTimestamp,
   toggle,
   none,
 }
@@ -46,8 +46,8 @@ class InAppFieldValue {
     return InAppFieldValue(value, InAppFieldValues.increment);
   }
 
-  factory InAppFieldValue.timestamp([bool asNumberTimestamp = false]) {
-    return InAppFieldValue(asNumberTimestamp, InAppFieldValues.timestamp);
+  factory InAppFieldValue.serverTimestamp([bool asNumberTimestamp = false]) {
+    return InAppFieldValue(asNumberTimestamp, InAppFieldValues.serverTimestamp);
   }
 
   factory InAppFieldValue.toggle([bool? initial]) {

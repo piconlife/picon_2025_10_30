@@ -9,16 +9,20 @@ import '../../lq/src/builder.dart' show QueryBuilder;
 import '../../lq/src/query.dart' show Query;
 import '../../lq/src/selection.dart' show Selection, Selections;
 import '../../lq/src/sorting.dart' show Sorting;
+import '../core/document_change_type.dart' show InAppDocumentChangeType;
+import '../core/field_path.dart' show InAppFieldPath;
 import '../core/field_value.dart' show InAppFieldValue, InAppFieldValues;
 import '../core/paging_options.dart' show InAppPagingOptions;
 import '../core/path.dart' show PathModifier;
+import '../core/source.dart' show InAppSource;
 import 'batch.dart' show InAppWriteBatch;
 import 'delegate.dart' show InAppDatabaseDelegate;
 import 'pointer.dart' show InAppPointer;
+import 'transaction.dart' show InAppTransaction, InAppTransactionHandler;
 
+part 'aggregate.dart';
 part 'base.dart';
 part 'collection.dart';
-part 'counter.dart';
 part 'document.dart';
 part 'merger.dart';
 part 'notifier.dart';
@@ -265,7 +269,30 @@ class InAppDatabase extends ChangeNotifier {
     }
   }
 
-  InAppWriteBatch batch() => InAppWriteBatch();
+  Future<void> terminate() async => dispose();
+
+  Future<void> clearPersistence() async {
+    if (!isInitialized) return;
+    final paths = await _delegate.paths(_name);
+    for (final p in paths) {
+      await _delegate.delete(_name, p);
+    }
+  }
+
+  InAppWriteBatch batch() => InAppWriteBatch.of(this);
+
+  Future<T> runTransaction<T>(
+    InAppTransactionHandler<T> handler, {
+    int maxAttempts = 5,
+    Duration timeout = const Duration(seconds: 30),
+  }) {
+    return InAppTransaction.run<T>(
+      this,
+      handler,
+      maxAttempts: maxAttempts,
+      timeout: timeout,
+    );
+  }
 
   InAppQueryReference collection(String field) {
     if (field.isEmpty) {
@@ -313,6 +340,17 @@ class InAppDatabase extends ChangeNotifier {
       i += 2;
     }
     return current as InAppQueryReference;
+  }
+
+  InAppQueryReference collectionGroup(String collectionId) {
+    if (collectionId.isEmpty || collectionId.contains('/')) {
+      throw ArgumentError.value(
+        collectionId,
+        'collectionId',
+        'Collection group id must be non-empty and not contain "/".',
+      );
+    }
+    return collection(collectionId);
   }
 
   InAppDocumentReference doc(String documentPath) {
@@ -450,20 +488,20 @@ class InAppDatabase extends ChangeNotifier {
           return const InAppFailureSnapshot('Data not found.');
         }
         if (type.isCollection) {
-          final docs = <InAppDocumentSnapshot>[];
+          final docs = <InAppQueryDocumentSnapshot>[];
           value.forEach((k, v) {
             if (k is! String) return;
             final parsed = v is String ? jsonDecode(v) : v;
             if (parsed is! Map) return;
             final doc = Map<String, InAppValue>.from(parsed);
             if (doc.isEmpty) return;
-            docs.add(InAppDocumentSnapshot(k, doc));
+            docs.add(InAppQueryDocumentSnapshot(k, doc));
           });
           return InAppQuerySnapshot(collectionId, docs);
         } else if (type.isDocument) {
-          final raw = value[documentId];
-          if (raw == null) return InAppDocumentSnapshot(documentId);
-          final parsed = raw is String ? jsonDecode(raw) : raw;
+          final entry = value[documentId];
+          if (entry == null) return InAppDocumentSnapshot(documentId);
+          final parsed = entry is String ? jsonDecode(entry) : entry;
           final doc =
               parsed is Map ? Map<String, InAppValue>.from(parsed) : null;
           return InAppDocumentSnapshot(documentId, doc);

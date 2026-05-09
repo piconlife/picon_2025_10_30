@@ -44,13 +44,18 @@ class InAppQueryNotifier extends _InAppNotifier<InAppQuerySnapshot?> {
       return;
     }
     final id = value.id;
-    final filtered = <InAppDocumentSnapshot>[];
+    final filtered = <InAppQueryDocumentSnapshot>[];
     for (final d in value.docs) {
-      final data = d.data;
-      if (data != null && data.isNotEmpty) filtered.add(d);
+      final data = d.data();
+      if (data.isNotEmpty) filtered.add(d);
     }
     if (id.isNotEmpty && filtered.isNotEmpty) {
-      super.value = InAppQuerySnapshot(id, filtered);
+      super.value = InAppQuerySnapshot(
+        id,
+        filtered,
+        value.docChanges,
+        value.metadata,
+      );
     } else {
       super.value = null;
     }
@@ -82,9 +87,9 @@ class InAppDocumentNotifier extends _InAppNotifier<InAppDocumentSnapshot?> {
       return;
     }
     final vId = value.id;
-    final data = value.data;
+    final data = value.data();
     if (vId.isNotEmpty && data != null && data.isNotEmpty) {
-      super.value = InAppDocumentSnapshot(vId, data);
+      super.value = value;
     } else {
       super.value = null;
     }

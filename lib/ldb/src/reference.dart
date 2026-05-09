@@ -7,6 +7,8 @@ abstract class InAppReference {
   const InAppReference({required this.reference, required InAppDatabase db})
     : _db = db;
 
+  InAppDatabase get firestore => _db;
+
   InAppDatabase get database => _db;
 
   String get _id => _db._version._id;

@@ -5,46 +5,43 @@ class InAppQueryReference extends InAppCollectionReference {
   final List<Selection> _s;
   final List<Sorting> _o;
   final InAppPagingOptions _op;
-  final bool _cm;
 
   const InAppQueryReference({
     required super.db,
     required super.reference,
     required super.path,
     required super.id,
+    super.parent,
     List<Query> queries = const [],
     List<Selection> selections = const [],
     List<Sorting> sorts = const [],
     InAppPagingOptions options = const InAppPagingOptions(),
-    bool counterMode = false,
   }) : _q = queries,
        _s = selections,
        _o = sorts,
-       _op = options,
-       _cm = counterMode;
+       _op = options;
 
   InAppQueryReference _copyWith({
     List<Query>? queries,
     List<Selection>? selections,
     List<Sorting>? sorts,
     InAppPagingOptions? options,
-    bool? counterMode,
   }) {
     return InAppQueryReference(
       db: _db,
       reference: reference,
       path: path,
       id: id,
+      parent: _parent,
       queries: queries ?? _q,
       selections: selections ?? _s,
       sorts: sorts ?? _o,
       options: options ?? _op,
-      counterMode: counterMode ?? _cm,
     );
   }
 
-  InAppCounterReference count() {
-    return InAppCounterReference(db: _db, reference: reference, parent: this);
+  InAppAggregateQuery count() {
+    return InAppAggregateQuery(db: _db, reference: reference, parent: this);
   }
 
   InAppQueryReference _limit(int limit, [bool fetchFromLast = false]) {
@@ -65,18 +62,31 @@ class InAppQueryReference extends InAppCollectionReference {
   InAppQueryReference limitToLast(int limit) => _limit(limit, true);
 
   InAppQueryReference orderBy(Object field, {bool descending = false}) {
-    if (field is! String || field.isEmpty) return this;
+    final fieldKey = _resolveField(field);
+    if (fieldKey == null || fieldKey.isEmpty) return this;
     final sorts = List<Sorting>.of(_o)
-      ..add(Sorting(field, descending: descending));
+      ..add(Sorting(fieldKey, descending: descending));
     return _copyWith(sorts: sorts);
   }
 
+  String? _resolveField(Object field) {
+    if (field is String) return field;
+    if (field is InAppFieldPath) {
+      if (field.isDocumentId) return _idField;
+      return field.segments.join('.');
+    }
+    return null;
+  }
+
   InAppQueryReference _selection(Object? snapshot, Selections type) {
-    if (snapshot is! InAppDocument && snapshot is! Iterable<InAppValue>) {
+    Object? value = snapshot;
+    if (snapshot is InAppDocumentSnapshot) {
+      value = snapshot.data();
+    }
+    if (value is! InAppDocument && value is! Iterable<InAppValue>) {
       return this;
     }
-    final selections = List<Selection>.of(_s)
-      ..add(Selection.from(snapshot, type));
+    final selections = List<Selection>.of(_s)..add(Selection.from(value, type));
     return _copyWith(selections: selections);
   }
 
@@ -96,9 +106,10 @@ class InAppQueryReference extends InAppCollectionReference {
     Iterable<Object?>? whereNotIn,
     bool? isNull,
   }) {
+    final fieldKey = _resolveField(field) ?? '';
     final queries = List<Query>.of(_q)..add(
       Query(
-        field,
+        fieldKey,
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
         isLessThan: isLessThan,
@@ -117,25 +128,25 @@ class InAppQueryReference extends InAppCollectionReference {
     return _copyWith(queries: queries);
   }
 
-  InAppQueryReference endAtDocument(InAppValue? snapshot) =>
+  InAppQueryReference endAtDocument(Object? snapshot) =>
       _selection(snapshot, Selections.endAtDocument);
 
   InAppQueryReference endAt(Iterable<InAppValue>? values) =>
       _selection(values, Selections.endAt);
 
-  InAppQueryReference endBeforeDocument(InAppValue? snapshot) =>
+  InAppQueryReference endBeforeDocument(Object? snapshot) =>
       _selection(snapshot, Selections.endBeforeDocument);
 
   InAppQueryReference endBefore(Iterable<InAppValue>? values) =>
       _selection(values, Selections.endBefore);
 
-  InAppQueryReference startAfterDocument(InAppValue? snapshot) =>
+  InAppQueryReference startAfterDocument(Object? snapshot) =>
       _selection(snapshot, Selections.startAfterDocument);
 
   InAppQueryReference startAfter(Iterable<InAppValue>? values) =>
       _selection(values, Selections.startAfter);
 
-  InAppQueryReference startAtDocument(InAppValue? snapshot) =>
+  InAppQueryReference startAtDocument(Object? snapshot) =>
       _selection(snapshot, Selections.startAtDocument);
 
   InAppQueryReference startAt(Iterable<InAppValue>? values) =>
@@ -145,13 +156,13 @@ class InAppQueryReference extends InAppCollectionReference {
       _q.isNotEmpty || _o.isNotEmpty || _s.isNotEmpty || _op.hasLimit;
 
   @override
-  Future<InAppQuerySnapshot> get() async {
-    if (!_hasPipeline) return super.get();
+  Future<InAppQuerySnapshot> get([
+    InAppSource source = InAppSource.cache,
+  ]) async {
+    if (!_hasPipeline) return super.get(source);
 
-    final raw = await super.get();
-    final data = raw.docs
-        .map((e) => e.data ?? const <String, InAppValue>{})
-        .toList(growable: false);
+    final raw = await super.get(source);
+    final data = raw.docs.map((e) => e.data()).toList(growable: false);
 
     QueryBuilder builder = QueryBuilder(data);
 
@@ -222,17 +233,17 @@ class InAppQueryReference extends InAppCollectionReference {
     }
 
     final processed = await builder.execute();
-    final docs = <InAppDocumentSnapshot>[];
+    final docs = <InAppQueryDocumentSnapshot>[];
     for (final e in processed) {
       final i = e[_idField] ?? e[_idFieldSecondary];
       final docId = i is String && i.isNotEmpty ? i : _id;
-      docs.add(InAppDocumentSnapshot(docId, e));
+      docs.add(InAppQueryDocumentSnapshot(docId, e, doc(docId)));
     }
-    return InAppQuerySnapshot(raw.id, docs);
+    return InAppQuerySnapshot(raw.id, docs, raw.docChanges, raw.metadata);
   }
 
   @override
-  Stream<InAppQuerySnapshot> snapshots() {
+  Stream<InAppQuerySnapshot> snapshots({bool includeMetadataChanges = false}) {
     final n = _db._addNotifier(path);
     return Stream<InAppQuerySnapshot>.multi((controller) {
       void update() {
