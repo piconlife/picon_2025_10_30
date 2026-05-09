@@ -1,6 +1,7 @@
 import 'package:flutter_entity/entity.dart';
 
 class ProductKey extends EntityKey {
+  static const id_ = 'id';
   static const name = 'name';
   static const price = 'price';
   static const category = 'category';
@@ -9,7 +10,7 @@ class ProductKey extends EntityKey {
 
   @override
   Iterable<String> get keys => [
-    id,
+    id_,
     timeMills,
     name,
     price,
@@ -33,7 +34,7 @@ class Product extends Entity<ProductKey> {
     required this.category,
     required this.tags,
     required this.stock,
-  });
+  }) : super.auto();
 
   @override
   ProductKey makeKey() => ProductKey();
@@ -41,7 +42,7 @@ class Product extends Entity<ProductKey> {
   factory Product.from(dynamic source) {
     final map = source is Map<String, dynamic> ? source : <String, dynamic>{};
     return Product(
-      id: EntityHelper.generateID,
+      id: map[ProductKey.id_] ?? '',
       name: map[ProductKey.name] ?? '',
       price: (map[ProductKey.price] ?? 0).toDouble(),
       category: map[ProductKey.category] ?? '',
@@ -52,6 +53,7 @@ class Product extends Entity<ProductKey> {
 
   @override
   Map<String, dynamic> get source => {
+    ProductKey.id_: id,
     ProductKey.name: name,
     ProductKey.price: price,
     ProductKey.category: category,

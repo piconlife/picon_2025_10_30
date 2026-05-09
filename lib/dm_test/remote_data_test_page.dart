@@ -20,6 +20,7 @@ class RemoteDataTestPage extends StatefulWidget {
 class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
   final _repo = ProductRepository();
   String _log = '';
+  final String _id = '1778309191067';
 
   void _log_(String msg) => setState(() => _log = msg);
 
@@ -75,11 +76,8 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
   }
 
   Future<void> _update() async {
-    final res = await _repo.get();
-    final id = res.result.firstOrNull?.id ?? '';
-    if (id.isEmpty) return _log_('No data to update');
-    final r = await _repo.updateById(id, {ProductKey.price: 199.9});
-    _log_(r.isValid ? 'Updated: $id' : 'Error: ${r.error}');
+    final r = await _repo.updateById(_id, {ProductKey.price: 199.9});
+    _log_(r.isValid ? 'Updated: $_id' : 'Error: ${r.error}');
   }
 
   Future<void> _delete(String id) async {
@@ -95,10 +93,7 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
   }
 
   Future<void> _getById() async {
-    final res = await _repo.get();
-    final id = res.result.firstOrNull?.id ?? '';
-    if (id.isEmpty) return _log_('No data');
-    final r = await _repo.getById(id);
+    final r = await _repo.getById(_id);
     _log_(
       r.isValid ? 'Got: ${r.result.firstOrNull?.name}' : 'Error: ${r.error}',
     );
@@ -168,42 +163,35 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
                 ),
               const SizedBox(height: 12),
 
-              const Text(
-                'Count (stream)',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              StreamBuilder<Response<int>>(
-                stream: _repo.listenCount(),
-                builder: (context, s) {
-                  final count = s.data?.result.firstOrNull ?? 0;
-                  return Text('Total products: $count');
-                },
-              ),
+              // const Text(
+              //   'Count (stream)',
+              //   style: TextStyle(fontWeight: FontWeight.bold),
+              // ),
+              // StreamBuilder<Response<int>>(
+              //   stream: _repo.listenCount(interval: Duration(minutes: 5)),
+              //   builder: (context, s) {
+              //     final count = s.data?.result.firstOrNull ?? 0;
+              //     return Text('Total products: $count');
+              //   },
+              // ),
               const Divider(),
 
               const Text(
                 'First Item (stream by id)',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              FutureBuilder<Response<Product>>(
-                future: _repo.get(),
-                builder: (context, snap) {
-                  final id = snap.data?.result.firstOrNull?.id ?? '';
-                  if (id.isEmpty) return const Text('No data');
-                  return StreamBuilder<Response<Product>>(
-                    stream: _repo.listenById(id),
-                    builder: (context, s) {
-                      final item = s.data?.result.firstOrNull;
-                      if (item == null) return const Text('Loading...');
-                      return ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(item.name),
-                        subtitle: Text(
-                          'Price: ${item.price} | Stock: ${item.stock}',
-                        ),
-                        trailing: Text(item.category),
-                      );
-                    },
+              StreamBuilder<Response<Product>>(
+                stream: _repo.listenById(_id),
+                builder: (context, s) {
+                  final item = s.data?.result.firstOrNull;
+                  if (item == null) return const Text('Loading...');
+                  return ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(item.name),
+                    subtitle: Text(
+                      'Price: ${item.price} | Stock: ${item.stock}',
+                    ),
+                    trailing: Text(item.category),
                   );
                 },
               ),
@@ -229,7 +217,7 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
                         contentPadding: EdgeInsets.zero,
                         title: Text(item.name),
                         subtitle: Text('₹${item.price} | ${item.category}'),
-                        trailing: Text('Stock: ${item.stock}'),
+                        trailing: Text('Stock: ${item.id}'),
                       );
                     },
                   );
