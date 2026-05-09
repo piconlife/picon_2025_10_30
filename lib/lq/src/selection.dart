@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 enum Selections {
   endAt,
   endAtDocument,
@@ -28,6 +30,7 @@ enum Selections {
   bool get isStartAtDocument => this == startAtDocument;
 }
 
+@immutable
 class Selection {
   final Object? value;
   final Selections type;

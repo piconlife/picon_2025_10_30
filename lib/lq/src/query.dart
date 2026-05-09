@@ -1,5 +1,8 @@
+import 'package:meta/meta.dart';
+
 import 'filter.dart' show Filter;
 
+@immutable
 class Query {
   final Object field;
   final Object? isEqualTo;

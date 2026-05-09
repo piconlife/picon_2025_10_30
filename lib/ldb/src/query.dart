@@ -247,15 +247,19 @@ class InAppQueryReference extends InAppCollectionReference {
             builder = builder.limit(fetchingSize);
           }
         }
-        return builder.execute(isSorting ? sortingSize * data.length : 0).then((
-          processed,
-        ) {
-          final docs =
-              processed.map((e) {
-                return InAppDocumentSnapshot(_id, e);
-              }).toList();
-          return InAppQuerySnapshot(raw.id, docs);
-        });
+        return builder
+            .execute(
+              delay: Duration(
+                milliseconds: isSorting ? sortingSize * data.length : 0,
+              ),
+            )
+            .then((processed) {
+              final docs =
+                  processed.map((e) {
+                    return InAppDocumentSnapshot(_id, e);
+                  }).toList();
+              return InAppQuerySnapshot(raw.id, docs);
+            });
       });
     } else {
       return super.get();
