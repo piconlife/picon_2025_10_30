@@ -1,6 +1,3 @@
-import 'package:meta/meta.dart';
-
-@internal
 abstract final class Comparators {
   const Comparators._();
 
@@ -56,7 +53,7 @@ abstract final class Comparators {
     }
     if (a is Comparable && b is Comparable && a.runtimeType == b.runtimeType) {
       try {
-        return (a as Comparable).compareTo(b);
+        return a.compareTo(b);
       } catch (_) {
         return null;
       }
