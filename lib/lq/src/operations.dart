@@ -102,8 +102,8 @@ final class CursorOp extends QueryOp {
       final a = FieldPath.resolve(doc, sort.field);
       final b = values[i];
       if (a == null && b == null) continue;
-      if (a == null) return sort.descending ? 1 : -1;
-      if (b == null) return sort.descending ? -1 : 1;
+      if (a == null) return sort.descending ? -1 : 1;
+      if (b == null) return sort.descending ? 1 : -1;
       final cmp = Comparators.compare(a, b);
       if (cmp != 0) return sort.descending ? -cmp : cmp;
     }
@@ -233,13 +233,19 @@ abstract final class QueryExecutor {
         }
         return data.sublist(0, c);
       case DistinctOp(field: final field):
+        if (field == null) {
+          final seen = <_DocKey>{};
+          final out = <QueryDocument>[];
+          for (final doc in data) {
+            if (seen.add(_DocKey(doc))) out.add(doc);
+          }
+          return out;
+        }
         final seen = <Object?>{};
         final out = <QueryDocument>[];
         for (final doc in data) {
-          final key =
-              field == null
-                  ? _stableMapHash(doc)
-                  : FieldPath.resolve(doc, field);
+          final raw = FieldPath.resolve(doc, field);
+          final key = raw is Map || raw is Iterable ? _DocKey(raw) : raw;
           if (seen.add(key)) out.add(doc);
         }
         return out;
@@ -273,12 +279,85 @@ abstract final class QueryExecutor {
       return 0;
     });
   }
+}
 
-  static int _stableMapHash(Map map) {
-    var hash = 0;
-    for (final entry in map.entries) {
-      hash ^= Object.hash(entry.key, entry.value);
+final class _DocKey {
+  final Object? value;
+  late final int _hash = _hashOf(value);
+
+  _DocKey(this.value);
+
+  @override
+  int get hashCode => _hash;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is _DocKey && _deepEquals(value, other.value);
+  }
+
+  static int _hashOf(Object? v) {
+    if (v == null) return 0;
+    if (v is Map) {
+      final keys = v.keys.toList()..sort((a, b) => '$a'.compareTo('$b'));
+      var h = 17;
+      for (final k in keys) {
+        h = 0x1fffffff & (h * 31 + k.hashCode);
+        h = 0x1fffffff & (h * 31 + _hashOf(v[k]));
+      }
+      return h;
     }
-    return hash;
+    if (v is Set) {
+      var h = 0;
+      for (final e in v) {
+        h ^= _hashOf(e);
+      }
+      return 0x1fffffff & (h * 31 + v.length);
+    }
+    if (v is Iterable) {
+      var h = 19;
+      for (final e in v) {
+        h = 0x1fffffff & (h * 31 + _hashOf(e));
+      }
+      return h;
+    }
+    return v.hashCode;
+  }
+
+  static bool _deepEquals(Object? a, Object? b) {
+    if (identical(a, b)) return true;
+    if (a == null || b == null) return a == b;
+    if (a is Map && b is Map) {
+      if (a.length != b.length) return false;
+      for (final k in a.keys) {
+        if (!b.containsKey(k)) return false;
+        if (!_deepEquals(a[k], b[k])) return false;
+      }
+      return true;
+    }
+    if (a is List && b is List) {
+      if (a.length != b.length) return false;
+      for (var i = 0; i < a.length; i++) {
+        if (!_deepEquals(a[i], b[i])) return false;
+      }
+      return true;
+    }
+    if (a is Set && b is Set) {
+      if (a.length != b.length) return false;
+      for (final e in a) {
+        if (!b.contains(e)) return false;
+      }
+      return true;
+    }
+    if (a is Iterable && b is Iterable) {
+      final ai = a.iterator;
+      final bi = b.iterator;
+      while (ai.moveNext()) {
+        if (!bi.moveNext()) return false;
+        if (!_deepEquals(ai.current, bi.current)) return false;
+      }
+      return !bi.moveNext();
+    }
+    return a == b;
   }
 }
