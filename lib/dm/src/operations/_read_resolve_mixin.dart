@@ -102,7 +102,7 @@ mixin _ReadResolveMixin on _ReadMixin {
     final path = value.path;
     switch (value.type) {
       case DataFieldValueReaderType.count:
-        final raw = await _safe<int?>(
+        final raw = await _guardAsync<int?>(
           () => refSemaphore.run(() => count(path)),
           operation: 'resolve.count',
           path: path,
@@ -116,7 +116,7 @@ mixin _ReadResolveMixin on _ReadMixin {
 
       case DataFieldValueReaderType.get:
         if (!visited.add(path)) return;
-        final raw = await _safe<DataGetSnapshot>(
+        final raw = await _guardAsync<DataGetSnapshot>(
           () => refSemaphore.run(
             () => getById(
               path,
@@ -145,7 +145,7 @@ mixin _ReadResolveMixin on _ReadMixin {
       case DataFieldValueReaderType.filter:
         if (!visited.add(path)) return;
         final options = value.options as DataFieldValueQueryOptions;
-        final raw = await _safe<DataGetsSnapshot>(
+        final raw = await _guardAsync<DataGetsSnapshot>(
           () => refSemaphore.run(
             () => getByQuery(
               path,
@@ -194,7 +194,7 @@ mixin _ReadResolveMixin on _ReadMixin {
   ) async {
     Future<Map<String, dynamic>?> fetchOne(String p) async {
       if (!visited.add(p)) return null;
-      final raw = await _safe<DataGetSnapshot>(
+      final raw = await _guardAsync<DataGetSnapshot>(
         () => refSemaphore.run(
           () => getById(
             p,
@@ -269,7 +269,7 @@ mixin _ReadResolveMixin on _ReadMixin {
     dynamic value,
   ) async {
     Future<int?> fetchOne(String p) {
-      return _safe<int?>(
+      return _guardAsync<int?>(
         () => refSemaphore.run(() => count(p)),
         operation: 'resolve.#',
         path: p,
@@ -317,26 +317,6 @@ mixin _ReadResolveMixin on _ReadMixin {
       result.remove(originalKey);
     } else {
       result.remove(originalKey);
-    }
-  }
-
-  Future<T?> _safe<T>(
-    Future<T> Function() task, {
-    required String operation,
-    required String path,
-  }) async {
-    try {
-      return await _guardAsync<T>(task, operation: operation, path: path);
-    } catch (e, s) {
-      errorDelegate.onError(
-        DataOperationError(
-          operation: operation,
-          path: path,
-          cause: e,
-          stack: s,
-        ),
-      );
-      return null;
     }
   }
 }

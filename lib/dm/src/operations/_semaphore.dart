@@ -18,11 +18,16 @@ class DataOperationSemaphore {
     try {
       return await task();
     } finally {
-      if (_waiters.isEmpty) {
-        _active--;
-      } else {
-        _waiters.removeFirst().complete();
-      }
+      _release();
+    }
+  }
+
+  void _release() {
+    if (_waiters.isEmpty) {
+      if (_active > 0) _active--;
+    } else {
+      final c = _waiters.removeFirst();
+      if (!c.isCompleted) c.complete();
     }
   }
 }

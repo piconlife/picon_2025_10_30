@@ -17,8 +17,10 @@ mixin _WriteTransformMixin {
       final k = entry.key;
       if (k is! String || k.isEmpty) continue;
       final v = entry.value;
-      final shouldHandle = v is DataFieldValueWriter || _isPrefixedKey(k);
-      final processed = shouldHandle ? _handle(batch, v, merge) : v;
+      final processed = _handle(batch, v, merge);
+      if (processed == null && _isPrefixedKey(k) == false && v == null) {
+        continue;
+      }
       if (processed == null) continue;
       out[k] = processed;
     }
