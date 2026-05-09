@@ -171,165 +171,168 @@ class _LocalDataTestPageState extends State<LocalDataTestPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Local Data Test')),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Operations',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _btn('Create', _create),
-                  _btn('CreateRandom', _createRandom),
-                  _btn('Check By Id', _checkById),
-                  _btn('Update (first)', _update),
-                  _btn('Get All', _get),
-                  _btn('Get By Id', _getById),
-                  _btn('Get By Ids', _getByIds),
-                  _btn('Query', _query),
-                  _btn('Search', _search),
-                  _btn('Count', _count),
-                  _btn('Delete By Ids', _deleteByIds),
-                  _btn('Clear', _deleteAll),
-                ],
-              ),
-              const Divider(),
-
-              if (_log.isNotEmpty)
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(8),
-                  color: Colors.black12,
-                  child: Text(_log, style: const TextStyle(fontSize: 12)),
+    return Theme(
+      data: ThemeData.dark(),
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Local Data Test')),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Operations',
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-              const SizedBox(height: 12),
-
-              const Text(
-                'Listen Count',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              StreamBuilder<Response<int>>(
-                stream: _repo.listenCount(interval: Duration(seconds: 5)),
-                builder: (context, s) {
-                  final count = s.data?.result.firstOrNull ?? 0;
-                  return Text('Total notes: $count');
-                },
-              ),
-              const Divider(),
-
-              const Text(
-                'Listen By Id',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              StreamBuilder<Response<Note>>(
-                stream: _repo.listenById(_id),
-                builder: (context, s) {
-                  final item = s.data?.result.firstOrNull;
-                  if (s.data?.isLoading == true) {
-                    return const Text('Loading...');
-                  }
-                  if (item == null) return const Text('No data');
-                  return ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(item.title),
-                    subtitle: Text('${item.body} | pinned: ${item.pinned}'),
-                    trailing: Text(item.color),
-                  );
-                },
-              ),
-              const Divider(),
-              const Text(
-                'Listen By Ids',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              StreamBuilder<Response<Note>>(
-                stream: _repo.listenByIds([_id]),
-                builder: (context, s) {
-                  final item = s.data?.result.firstOrNull;
-                  if (s.data?.isLoading == true) {
-                    return const Text('Loading...');
-                  }
-                  if (item == null) return const Text('No data');
-                  return ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(item.title),
-                    subtitle: Text('${item.body} | pinned: ${item.pinned}'),
-                    trailing: Text(item.color),
-                  );
-                },
-              ),
-              const Divider(),
-              const Text(
-                'Listen',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              StreamBuilder<Response<Note>>(
-                stream: _repo.listen(),
-                builder: (context, s) {
-                  final items = s.data?.result ?? [];
-                  if (items.isEmpty) return const Text('No data');
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: items.take(2).length,
-                    itemBuilder: (_, i) {
-                      final item = items[i];
-                      return ListTile(
-                        onLongPress: () => _delete(item.id),
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(item.title),
-                        subtitle: Text(
-                          '${item.color} | ${item.tags.join(", ")}',
-                        ),
-                        trailing: Text('Pinned: ${item.pinned}'),
-                      );
-                    },
-                  );
-                },
-              ),
-              const Divider(),
-              const Text(
-                'Listen By Query',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              StreamBuilder<Response<Note>>(
-                stream: _repo.listenByQuery(
-                  queries: [DataQuery(NoteKey.i.pinned, isEqualTo: true)],
-                  sorts: [DataSorting(NoteKey.i.timeMills)],
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    _btn('Create', _create),
+                    _btn('CreateRandom', _createRandom),
+                    _btn('Check By Id', _checkById),
+                    _btn('Update (first)', _update),
+                    _btn('Get All', _get),
+                    _btn('Get By Id', _getById),
+                    _btn('Get By Ids', _getByIds),
+                    _btn('Query', _query),
+                    _btn('Search', _search),
+                    _btn('Count', _count),
+                    _btn('Delete By Ids', _deleteByIds),
+                    _btn('Clear', _deleteAll),
+                  ],
                 ),
-                builder: (context, s) {
-                  final items = s.data?.result ?? [];
-                  if (items.isEmpty) return const Text('No data');
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: items.take(2).length,
-                    itemBuilder: (_, i) {
-                      final item = items[i];
-                      return ListTile(
-                        onLongPress: () => _delete(item.id),
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(item.title),
-                        subtitle: Text(
-                          '${item.color} | ${item.tags.join(", ")}',
-                        ),
-                        trailing: Text('Pinned: ${item.pinned}'),
-                      );
-                    },
-                  );
-                },
-              ),
-              const SizedBox(height: 40),
-            ],
+                const Divider(),
+
+                if (_log.isNotEmpty)
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(8),
+                    color: Colors.black12,
+                    child: Text(_log, style: const TextStyle(fontSize: 12)),
+                  ),
+                const SizedBox(height: 12),
+
+                const Text(
+                  'Listen Count',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                StreamBuilder<Response<int>>(
+                  stream: _repo.listenCount(interval: Duration(seconds: 5)),
+                  builder: (context, s) {
+                    final count = s.data?.result.firstOrNull ?? 0;
+                    return Text('Total notes: $count');
+                  },
+                ),
+                const Divider(),
+
+                const Text(
+                  'Listen By Id',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                StreamBuilder<Response<Note>>(
+                  stream: _repo.listenById(_id),
+                  builder: (context, s) {
+                    final item = s.data?.result.firstOrNull;
+                    if (s.data?.isLoading == true) {
+                      return const Text('Loading...');
+                    }
+                    if (item == null) return const Text('No data');
+                    return ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(item.title),
+                      subtitle: Text('${item.body} | pinned: ${item.pinned}'),
+                      trailing: Text(item.color),
+                    );
+                  },
+                ),
+                const Divider(),
+                const Text(
+                  'Listen By Ids',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                StreamBuilder<Response<Note>>(
+                  stream: _repo.listenByIds([_id]),
+                  builder: (context, s) {
+                    final item = s.data?.result.firstOrNull;
+                    if (s.data?.isLoading == true) {
+                      return const Text('Loading...');
+                    }
+                    if (item == null) return const Text('No data');
+                    return ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(item.title),
+                      subtitle: Text('${item.body} | pinned: ${item.pinned}'),
+                      trailing: Text(item.color),
+                    );
+                  },
+                ),
+                const Divider(),
+                const Text(
+                  'Listen',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                StreamBuilder<Response<Note>>(
+                  stream: _repo.listen(),
+                  builder: (context, s) {
+                    final items = s.data?.result ?? [];
+                    if (items.isEmpty) return const Text('No data');
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: items.take(2).length,
+                      itemBuilder: (_, i) {
+                        final item = items[i];
+                        return ListTile(
+                          onLongPress: () => _delete(item.id),
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(item.title),
+                          subtitle: Text(
+                            '${item.color} | ${item.tags.join(", ")}',
+                          ),
+                          trailing: Text('Pinned: ${item.pinned}'),
+                        );
+                      },
+                    );
+                  },
+                ),
+                const Divider(),
+                const Text(
+                  'Listen By Query',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                StreamBuilder<Response<Note>>(
+                  stream: _repo.listenByQuery(
+                    queries: [DataQuery(NoteKey.i.pinned, isEqualTo: true)],
+                    sorts: [DataSorting(NoteKey.i.timeMills)],
+                  ),
+                  builder: (context, s) {
+                    final items = s.data?.result ?? [];
+                    if (items.isEmpty) return const Text('No data');
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: items.take(2).length,
+                      itemBuilder: (_, i) {
+                        final item = items[i];
+                        return ListTile(
+                          onLongPress: () => _delete(item.id),
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(item.title),
+                          subtitle: Text(
+                            '${item.color} | ${item.tags.join(", ")}',
+                          ),
+                          trailing: Text('Pinned: ${item.pinned}'),
+                        );
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(height: 40),
+              ],
+            ),
           ),
         ),
       ),
