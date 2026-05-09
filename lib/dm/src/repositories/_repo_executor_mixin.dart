@@ -74,10 +74,12 @@ mixin _RepoExecutorMixin<T extends Entity> {
       yield Response(status: Status.failure, error: error.toString());
       return;
     }
-    yield* source.handleError((Object error, StackTrace stack) {
+    try {
+      yield* source;
+    } catch (error, stack) {
       _report('streamOnPrimary.event', error, stack);
-      return Response<S>(status: Status.failure, error: error.toString());
-    });
+      yield Response<S>(status: Status.failure, error: error.toString());
+    }
   }
 
   void _report(String operation, Object error, StackTrace stack) {

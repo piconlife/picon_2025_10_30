@@ -57,26 +57,37 @@ mixin _RepoModifierMixin<T extends Entity> on _RepoExecutorMixin<T> {
       yield Response(status: Status.failure, error: error.toString());
       return;
     }
-    await for (final value in source) {
-      try {
-        if (value is Response<T>) {
-          final modified = await modifier(value as Response<T>, modifierId);
-          if (modified is Response<S>) {
-            yield modified as Response<S>;
-            continue;
+    try {
+      await for (final value in source) {
+        try {
+          if (value is Response<T>) {
+            final modified = await modifier(value as Response<T>, modifierId);
+            if (modified is Response<S>) {
+              yield modified as Response<S>;
+              continue;
+            }
           }
+          yield value;
+        } catch (error, stack) {
+          errorDelegate.onError(
+            DataOperationError(
+              operation: 'repository.streamModifier.$modifierId',
+              cause: error,
+              stack: stack,
+            ),
+          );
+          yield Response(status: Status.failure, error: error.toString());
         }
-        yield value;
-      } catch (error, stack) {
-        errorDelegate.onError(
-          DataOperationError(
-            operation: 'repository.streamModifier.$modifierId',
-            cause: error,
-            stack: stack,
-          ),
-        );
-        yield Response(status: Status.failure, error: error.toString());
       }
+    } catch (error, stack) {
+      errorDelegate.onError(
+        DataOperationError(
+          operation: 'repository.streamModifier.source.$modifierId',
+          cause: error,
+          stack: stack,
+        ),
+      );
+      yield Response(status: Status.failure, error: error.toString());
     }
   }
 }
