@@ -3,7 +3,7 @@ part of 'base.dart';
 mixin _DeleteMixin on _ErrorHandlingMixin {
   DataDelegate get delegate;
 
-  Future<void> doDelete(
+  Future<void> _doDelete(
     String path, {
     required bool counter,
     required bool deleteRefs,
@@ -12,14 +12,14 @@ mixin _DeleteMixin on _ErrorHandlingMixin {
     int? batchMaxLimit,
   }) async {
     if (!deleteRefs) {
-      await guardAsync(
+      await _guardAsync(
         () => delegate.delete(path),
         operation: 'delete',
         path: path,
       );
       return;
     }
-    await guardAsync(
+    await _guardAsync(
       () => _cascadeDelete(
         path,
         counter: counter,
@@ -41,13 +41,13 @@ mixin _DeleteMixin on _ErrorHandlingMixin {
   }) async {
     final collector = _CascadeDeleteCollector(
       delegate: delegate,
-      guard: guardAsync,
+      guard: _guardAsync,
       counter: counter,
       ignore: ignore,
       maxLimit: batchMaxLimit,
     );
 
-    await collector.collect(root);
+    await collector._collect(root);
     await _commitDeletions(collector.paths, root, batchLimit);
   }
 
@@ -62,7 +62,7 @@ mixin _DeleteMixin on _ErrorHandlingMixin {
       for (var j = i; j < end; j++) {
         batch.delete(paths[j]);
       }
-      await guardAsync(
+      await _guardAsync(
         () => batch.commit(),
         operation: 'delete.commit',
         path: root,

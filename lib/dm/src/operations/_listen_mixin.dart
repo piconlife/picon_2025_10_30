@@ -3,7 +3,7 @@ part of 'base.dart';
 mixin _ListenMixin on _ErrorHandlingMixin, _HydrateMixin {
   DataDelegate get delegate;
 
-  Stream<DataGetsSnapshot> doListen(
+  Stream<DataGetsSnapshot> _doListen(
     String path, {
     required bool countable,
     required bool resolveRefs,
@@ -16,7 +16,7 @@ mixin _ListenMixin on _ErrorHandlingMixin, _HydrateMixin {
       path: path,
       empty: DataGetsSnapshot(),
     ).asyncMap(
-      (data) => hydrateMany(
+      (data) => _hydrateMany(
         data,
         countable: countable,
         resolveRefs: resolveRefs,
@@ -26,7 +26,7 @@ mixin _ListenMixin on _ErrorHandlingMixin, _HydrateMixin {
     );
   }
 
-  Stream<DataGetSnapshot> doListenById(
+  Stream<DataGetSnapshot> _doListenById(
     String path, {
     required bool countable,
     required bool resolveRefs,
@@ -38,7 +38,7 @@ mixin _ListenMixin on _ErrorHandlingMixin, _HydrateMixin {
       path: path,
       empty: DataGetSnapshot(),
     ).asyncMap(
-      (data) => hydrateOne(
+      (data) => _hydrateOne(
         data,
         countable: countable,
         resolveRefs: resolveRefs,
@@ -47,7 +47,7 @@ mixin _ListenMixin on _ErrorHandlingMixin, _HydrateMixin {
     );
   }
 
-  Stream<DataGetsSnapshot> doListenByQuery(
+  Stream<DataGetsSnapshot> _doListenByQuery(
     String path, {
     required Iterable<DataQuery> queries,
     required Iterable<DataSelection> selections,
@@ -70,7 +70,7 @@ mixin _ListenMixin on _ErrorHandlingMixin, _HydrateMixin {
       path: path,
       empty: DataGetsSnapshot(),
     ).asyncMap(
-      (data) => hydrateMany(
+      (data) => _hydrateMany(
         data,
         countable: countable,
         resolveRefs: resolveRefs,
@@ -78,35 +78,5 @@ mixin _ListenMixin on _ErrorHandlingMixin, _HydrateMixin {
         ignore: ignore,
       ),
     );
-  }
-
-  Stream<T> _guardStream<T>(
-    Stream<T> Function() source, {
-    required String operation,
-    required String path,
-    required T empty,
-  }) async* {
-    try {
-      yield* source().handleError((Object e, StackTrace s) {
-        errorDelegate.onError(
-          DataOperationError(
-            operation: operation,
-            path: path,
-            cause: e,
-            stack: s,
-          ),
-        );
-      });
-    } catch (e, s) {
-      errorDelegate.onError(
-        DataOperationError(
-          operation: operation,
-          path: path,
-          cause: e,
-          stack: s,
-        ),
-      );
-      yield empty;
-    }
   }
 }

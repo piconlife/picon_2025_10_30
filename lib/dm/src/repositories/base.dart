@@ -1,4 +1,5 @@
 import 'package:flutter_entity/entity.dart' show Entity, Response, Status;
+import 'package:meta/meta.dart' show protected;
 
 import '../cache/base.dart' show CacheManager;
 import '../operations/error_delegate.dart' show ErrorDelegate;
@@ -107,6 +108,7 @@ class DataRepository<T extends Entity>
   @override
   bool get isLocalDB => type == DatabaseType.local;
 
+  @protected
   @override
   Future<Response<T>> modifier(
     Response<T> value,

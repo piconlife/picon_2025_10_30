@@ -10,8 +10,8 @@ mixin _RepoListenMixin<T extends Entity>
     bool resolveDocChangesRefs = false,
     Ignore? ignore,
   }) {
-    return applyStreamModifier<T>(DataModifiers.listen, () {
-      return streamOnPrimary(
+    return _applyStreamModifier<T>(DataModifiers.listen, () {
+      return _streamOnPrimary(
         (source) => source.listen(
           params: params,
           countable: countable,
@@ -28,7 +28,7 @@ mixin _RepoListenMixin<T extends Entity>
     DataFieldParams? params,
     Duration? interval,
   }) {
-    return streamOnPrimary(
+    return _streamOnPrimary(
       (source) => source.listenCount(params: params, interval: interval),
     );
   }
@@ -43,8 +43,8 @@ mixin _RepoListenMixin<T extends Entity>
     if (id.isEmpty) {
       return Stream.value(Response(status: Status.invalidId));
     }
-    return applyStreamModifier<T>(DataModifiers.listenById, () {
-      return streamOnPrimary(
+    return _applyStreamModifier<T>(DataModifiers.listenById, () {
+      return _streamOnPrimary(
         (source) => source.listenById(
           id,
           params: params,
@@ -67,8 +67,8 @@ mixin _RepoListenMixin<T extends Entity>
     if (ids.isEmpty) {
       return Stream.value(Response(status: Status.invalid));
     }
-    return applyStreamModifier<T>(DataModifiers.listenByIds, () {
-      return streamOnPrimary(
+    return _applyStreamModifier<T>(DataModifiers.listenByIds, () {
+      return _streamOnPrimary(
         (source) => source.listenByIds(
           ids,
           params: params,
@@ -93,8 +93,8 @@ mixin _RepoListenMixin<T extends Entity>
     bool resolveDocChangesRefs = false,
     Ignore? ignore,
   }) {
-    return applyStreamModifier<T>(DataModifiers.listenByQuery, () {
-      return streamOnPrimary(
+    return _applyStreamModifier<T>(DataModifiers.listenByQuery, () {
+      return _streamOnPrimary(
         (source) => source.listenByQuery(
           params: params,
           queries: queries,

@@ -1,7 +1,7 @@
 part of 'base.dart';
 
 mixin _HydrateMixin on _ReadResolveMixin {
-  Future<DataGetSnapshot> hydrateOne(
+  Future<DataGetSnapshot> _hydrateOne(
     DataGetSnapshot? data, {
     required bool countable,
     required bool resolveRefs,
@@ -9,11 +9,11 @@ mixin _HydrateMixin on _ReadResolveMixin {
   }) async {
     if (data == null || !data.exists) return DataGetSnapshot();
     if (!resolveRefs) return data;
-    final resolved = await this.resolveRefs(data.doc, ignore, countable);
+    final resolved = await this._resolveRefs(data.doc, ignore, countable);
     return data.copyWith(doc: resolved);
   }
 
-  Future<DataGetsSnapshot> hydrateMany(
+  Future<DataGetsSnapshot> _hydrateMany(
     DataGetsSnapshot? data, {
     required bool countable,
     required bool resolveRefs,
@@ -23,13 +23,13 @@ mixin _HydrateMixin on _ReadResolveMixin {
     if (data == null || !data.exists) return DataGetsSnapshot();
     if (!resolveRefs) return data;
     final docs = await Future.wait(
-      data.docs.map((e) => this.resolveRefs(e, ignore, countable)),
+      data.docs.map((e) => this._resolveRefs(e, ignore, countable)),
     );
     final docChanges =
         resolveDocChangesRefs
             ? await Future.wait(
               data.docChanges.map(
-                (e) => this.resolveRefs(e, ignore, countable),
+                (e) => this._resolveRefs(e, ignore, countable),
               ),
             )
             : data.docChanges;

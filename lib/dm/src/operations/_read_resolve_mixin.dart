@@ -1,34 +1,13 @@
 part of 'base.dart';
 
-mixin _ReadResolveMixin on _ErrorHandlingMixin {
+mixin _ReadResolveMixin on _ReadMixin {
   static const _refPrefix = '@';
   static const _countPrefix = '#';
   static const _maxDepth = 8;
 
   DataOperationSemaphore get refSemaphore;
 
-  Future<int?> count(String path);
-
-  Future<DataGetSnapshot> getById(
-    String path, {
-    bool countable = true,
-    bool resolveRefs = false,
-    Ignore? ignore,
-  });
-
-  Future<DataGetsSnapshot> getByQuery(
-    String path, {
-    Iterable<DataQuery> queries = const [],
-    Iterable<DataSelection> selections = const [],
-    Iterable<DataSorting> sorts = const [],
-    DataFetchOptions options = const DataFetchOptions(),
-    bool countable = true,
-    bool resolveRefs = false,
-    bool resolveDocChangesRefs = false,
-    Ignore? ignore,
-  });
-
-  Future<Map<String, dynamic>> resolveRefs(
+  Future<Map<String, dynamic>> _resolveRefs(
     Map<String, dynamic> data,
     Ignore? ignore,
     bool countable, {
@@ -152,7 +131,7 @@ mixin _ReadResolveMixin on _ErrorHandlingMixin {
         if (raw == null || !raw.exists) return;
         final doc = raw.doc;
         if (doc.isEmpty) return;
-        final resolved = await resolveRefs(
+        final resolved = await _resolveRefs(
           doc,
           ignore,
           countable,
@@ -187,7 +166,7 @@ mixin _ReadResolveMixin on _ErrorHandlingMixin {
         if (docs.isEmpty) return;
         final resolvedDocs = await Future.wait(
           docs.map(
-            (d) => resolveRefs(
+            (d) => _resolveRefs(
               d,
               ignore,
               countable,
@@ -230,7 +209,7 @@ mixin _ReadResolveMixin on _ErrorHandlingMixin {
       if (raw == null || !raw.exists) return null;
       final doc = raw.doc;
       if (doc.isEmpty) return null;
-      return resolveRefs(
+      return _resolveRefs(
         doc,
         ignore,
         countable,
@@ -347,7 +326,7 @@ mixin _ReadResolveMixin on _ErrorHandlingMixin {
     required String path,
   }) async {
     try {
-      return await guardAsync<T>(task, operation: operation, path: path);
+      return await _guardAsync<T>(task, operation: operation, path: path);
     } catch (e, s) {
       errorDelegate.onError(
         DataOperationError(

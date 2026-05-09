@@ -12,7 +12,7 @@ mixin _RepoModifierMixin<T extends Entity> on _RepoExecutorMixin<T> {
 
   bool _shouldUseLazy([bool? override]) => override ?? lazyMode;
 
-  bool shouldUseSingleton([bool? override]) => override ?? singletonMode;
+  bool _shouldUseSingleton([bool? override]) => override ?? singletonMode;
 
   Future<Response<T>> modifier(Response<T> value, DataModifiers modifier);
 
@@ -39,7 +39,7 @@ mixin _RepoModifierMixin<T extends Entity> on _RepoExecutorMixin<T> {
     }
   }
 
-  Stream<Response<S>> applyStreamModifier<S extends Object>(
+  Stream<Response<S>> _applyStreamModifier<S extends Object>(
     DataModifiers modifierId,
     Stream<Response<S>> Function() callback,
   ) async* {

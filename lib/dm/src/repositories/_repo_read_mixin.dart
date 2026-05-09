@@ -19,7 +19,7 @@ mixin _RepoReadMixin<T extends Entity>
     if (id.isEmpty) {
       return Future.value(Response(status: Status.invalidId));
     }
-    return readWithFallback(
+    return _readWithFallback(
       modifierId: DataModifiers.checkById,
       params: params,
       createRefs: createRefs,
@@ -61,7 +61,7 @@ mixin _RepoReadMixin<T extends Entity>
     bool? backupMode,
     bool? singletonMode,
   }) {
-    return readWithFallback(
+    return _readWithFallback(
       modifierId: DataModifiers.get,
       params: params,
       createRefs: createRefs,
@@ -105,7 +105,7 @@ mixin _RepoReadMixin<T extends Entity>
     if (id.isEmpty) {
       return Future.value(Response(status: Status.invalidId));
     }
-    return readWithFallback(
+    return _readWithFallback(
       modifierId: DataModifiers.getById,
       params: params,
       createRefs: createRefs,
@@ -144,7 +144,7 @@ mixin _RepoReadMixin<T extends Entity>
       return Future.value(Response(status: Status.invalid));
     }
     final stableIds = ids.toList()..sort();
-    return readWithFallback(
+    return _readWithFallback(
       modifierId: DataModifiers.getByIds,
       params: params,
       createRefs: createRefs,
@@ -184,7 +184,7 @@ mixin _RepoReadMixin<T extends Entity>
     bool? backupMode,
     bool? singletonMode,
   }) {
-    return readWithFallback(
+    return _readWithFallback(
       modifierId: DataModifiers.getByQuery,
       params: params,
       createRefs: createRefs,
@@ -236,7 +236,7 @@ mixin _RepoReadMixin<T extends Entity>
     if (checker.field.isEmpty) {
       return Future.value(Response(status: Status.invalid));
     }
-    return readWithFallback(
+    return _readWithFallback(
       modifierId: DataModifiers.search,
       params: params,
       createRefs: createRefs,

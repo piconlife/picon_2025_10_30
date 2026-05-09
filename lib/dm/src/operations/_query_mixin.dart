@@ -3,19 +3,19 @@ part of 'base.dart';
 mixin _QueryMixin on _ErrorHandlingMixin, _HydrateMixin {
   DataDelegate get delegate;
 
-  Future<DataGetsSnapshot> doGet(
+  Future<DataGetsSnapshot> _doGet(
     String path, {
     required bool countable,
     required bool resolveRefs,
     required bool resolveDocChangesRefs,
     required Ignore? ignore,
   }) async {
-    final data = await guardAsync<DataGetsSnapshot>(
+    final data = await _guardAsync<DataGetsSnapshot>(
       () => delegate.get(path),
       operation: 'get',
       path: path,
     );
-    return hydrateMany(
+    return _hydrateMany(
       data,
       countable: countable,
       resolveRefs: resolveRefs,
@@ -24,18 +24,18 @@ mixin _QueryMixin on _ErrorHandlingMixin, _HydrateMixin {
     );
   }
 
-  Future<DataGetSnapshot> doGetById(
+  Future<DataGetSnapshot> _doGetById(
     String path, {
     required bool countable,
     required bool resolveRefs,
     required Ignore? ignore,
   }) async {
-    final data = await guardAsync<DataGetSnapshot>(
+    final data = await _guardAsync<DataGetSnapshot>(
       () => delegate.getById(path),
       operation: 'getById',
       path: path,
     );
-    return hydrateOne(
+    return _hydrateOne(
       data,
       countable: countable,
       resolveRefs: resolveRefs,
@@ -43,7 +43,7 @@ mixin _QueryMixin on _ErrorHandlingMixin, _HydrateMixin {
     );
   }
 
-  Future<DataGetsSnapshot> doGetByQuery(
+  Future<DataGetsSnapshot> _doGetByQuery(
     String path, {
     required Iterable<DataQuery> queries,
     required Iterable<DataSelection> selections,
@@ -54,7 +54,7 @@ mixin _QueryMixin on _ErrorHandlingMixin, _HydrateMixin {
     required bool resolveDocChangesRefs,
     required Ignore? ignore,
   }) async {
-    final data = await guardAsync<DataGetsSnapshot>(
+    final data = await _guardAsync<DataGetsSnapshot>(
       () => delegate.getByQuery(
         path,
         queries: queries,
@@ -65,7 +65,7 @@ mixin _QueryMixin on _ErrorHandlingMixin, _HydrateMixin {
       operation: 'getByQuery',
       path: path,
     );
-    return hydrateMany(
+    return _hydrateMany(
       data,
       countable: countable,
       resolveRefs: resolveRefs,
@@ -74,7 +74,7 @@ mixin _QueryMixin on _ErrorHandlingMixin, _HydrateMixin {
     );
   }
 
-  Future<DataGetsSnapshot> doSearch(
+  Future<DataGetsSnapshot> _doSearch(
     String path,
     Checker checker, {
     required bool countable,
@@ -82,12 +82,12 @@ mixin _QueryMixin on _ErrorHandlingMixin, _HydrateMixin {
     required bool resolveDocChangesRefs,
     required Ignore? ignore,
   }) async {
-    final data = await guardAsync<DataGetsSnapshot>(
+    final data = await _guardAsync<DataGetsSnapshot>(
       () => delegate.search(path, checker),
       operation: 'search',
       path: path,
     );
-    return hydrateMany(
+    return _hydrateMany(
       data,
       countable: countable,
       resolveRefs: resolveRefs,

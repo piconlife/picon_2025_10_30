@@ -3,24 +3,24 @@ part of 'base.dart';
 mixin _CreateMixin on _ErrorHandlingMixin, _WriteTransformMixin {
   DataDelegate get delegate;
 
-  Future<void> doCreate(
+  Future<void> _doCreate(
     String path,
     Map<String, dynamic> data, {
     required bool merge,
     required bool createRefs,
   }) async {
     if (!createRefs) {
-      await guardAsync(
+      await _guardAsync(
         () => delegate.create(path, data, merge),
         operation: 'create',
         path: path,
       );
       return;
     }
-    await guardAsync(
+    await _guardAsync(
       () async {
         final batch = delegate.batch();
-        final transformed = transformWrite(batch, data, merge);
+        final transformed = _transformWrite(batch, data, merge);
         batch.set(path, transformed, merge: merge);
         await batch.commit();
       },

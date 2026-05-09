@@ -31,7 +31,7 @@ class _CascadeDeleteCollector {
   bool _isIgnored(String key, dynamic value) =>
       ignore != null && ignore!(key, value);
 
-  Future<void> collect(String docPath) async {
+  Future<void> _collect(String docPath) async {
     if (_full || !_visited.add(docPath)) return;
 
     final snap = await guard<DataGetSnapshot>(
@@ -62,7 +62,7 @@ class _CascadeDeleteCollector {
   Future<void> _walkRef(dynamic value) async {
     if (_full || value == null) return;
     if (value is String) {
-      if (value.isNotEmpty) await collect(value);
+      if (value.isNotEmpty) await _collect(value);
     } else if (value is List) {
       for (final v in value) {
         if (_full) break;

@@ -54,7 +54,7 @@ mixin _RepoExecutorMixin<T extends Entity> {
     });
   }
 
-  void runOnPrimaryLazy<S extends Object>(
+  void _runOnPrimaryLazy<S extends Object>(
     Future<Response<S>> Function(DataSource<T> source) callback,
   ) {
     _runOnPrimary(callback).catchError((Object error, StackTrace stack) {
@@ -63,7 +63,7 @@ mixin _RepoExecutorMixin<T extends Entity> {
     });
   }
 
-  Stream<Response<S>> streamOnPrimary<S extends Object>(
+  Stream<Response<S>> _streamOnPrimary<S extends Object>(
     Stream<Response<S>> Function(DataSource<T> source) callback,
   ) async* {
     Stream<Response<S>> source;

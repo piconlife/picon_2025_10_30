@@ -7,7 +7,7 @@ mixin _WriteTransformMixin {
   static bool _isPrefixedKey(String k) =>
       k.isNotEmpty && (k.startsWith(_refPrefix) || k.startsWith(_countPrefix));
 
-  Map<String, dynamic> transformWrite(
+  Map<String, dynamic> _transformWrite(
     DataWriteBatch batch,
     Map data,
     bool merge,
@@ -59,14 +59,14 @@ mixin _WriteTransformMixin {
                 : const DataSetOptions();
         batch.set(
           value.path,
-          transformWrite(batch, doc, merge),
+          _transformWrite(batch, doc, merge),
           merge: options.merge,
         );
         return value.path;
       case DataFieldValueWriterType.update:
         final doc = value.value;
         if (doc == null || doc.isEmpty) return null;
-        batch.update(value.path, transformWrite(batch, doc, merge));
+        batch.update(value.path, _transformWrite(batch, doc, merge));
         return value.path;
       case DataFieldValueWriterType.delete:
         batch.delete(value.path);
@@ -77,16 +77,16 @@ mixin _WriteTransformMixin {
   dynamic _handleMap(DataWriteBatch batch, Map value, bool merge) {
     final path = value['path'];
     if (path is! String || path.isEmpty) {
-      return transformWrite(batch, value, merge);
+      return _transformWrite(batch, value, merge);
     }
     final create = value['create'];
     if (create is Map && create.isNotEmpty) {
-      batch.set(path, transformWrite(batch, create, merge), merge: merge);
+      batch.set(path, _transformWrite(batch, create, merge), merge: merge);
       return path;
     }
     final update = value['update'];
     if (update is Map && update.isNotEmpty) {
-      batch.update(path, transformWrite(batch, update, merge));
+      batch.update(path, _transformWrite(batch, update, merge));
       return path;
     }
     final delete = value['delete'];
@@ -94,6 +94,6 @@ mixin _WriteTransformMixin {
       batch.delete(path);
       return null;
     }
-    return transformWrite(batch, value, merge);
+    return _transformWrite(batch, value, merge);
   }
 }

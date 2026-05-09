@@ -31,16 +31,19 @@ part '_error_handling_mixin.dart';
 part '_hydrate_mixin.dart';
 part '_listen_mixin.dart';
 part '_query_mixin.dart';
+part '_read_mixin.dart';
 part '_read_resolve_mixin.dart';
 part '_semaphore.dart';
 part '_update_mixin.dart';
 part '_write_batch_mixin.dart';
+part '_write_encrypt_mixin.dart';
 part '_write_transform_mixin.dart';
 
 class DataOperation
     with
         _ErrorHandlingMixin,
         _WriteTransformMixin,
+        _ReadMixin,
         _ReadResolveMixin,
         _HydrateMixin,
         _CreateMixin,
@@ -48,6 +51,7 @@ class DataOperation
         _DeleteMixin,
         _QueryMixin,
         _ListenMixin,
+        _WriteEncryptMixin,
         _WriteBatchMixin {
   @override
   final DataDelegate delegate;
@@ -66,7 +70,7 @@ class DataOperation
        refSemaphore = DataOperationSemaphore(refConcurrency);
 
   @override
-  Future<int?> count(String path) => guardAsync<int?>(
+  Future<int?> count(String path) => _guardAsync<int?>(
     () => delegate.count(path),
     operation: 'count',
     path: path,
@@ -77,13 +81,13 @@ class DataOperation
     Map<String, dynamic> data, {
     bool merge = true,
     bool createRefs = false,
-  }) => doCreate(path, data, merge: merge, createRefs: createRefs);
+  }) => _doCreate(path, data, merge: merge, createRefs: createRefs);
 
   Future<void> update(
     String path,
     Map<String, dynamic> data, {
     bool updateRefs = false,
-  }) => doUpdate(path, data, updateRefs: updateRefs);
+  }) => _doUpdate(path, data, updateRefs: updateRefs);
 
   Future<void> delete(
     String path, {
@@ -92,7 +96,7 @@ class DataOperation
     Ignore? ignore,
     int batchLimit = 500,
     int? batchMaxLimit,
-  }) => doDelete(
+  }) => _doDelete(
     path,
     counter: counter,
     deleteRefs: deleteRefs,
@@ -107,7 +111,7 @@ class DataOperation
     bool resolveRefs = false,
     bool resolveDocChangesRefs = false,
     Ignore? ignore,
-  }) => doGet(
+  }) => _doGet(
     path,
     countable: countable,
     resolveRefs: resolveRefs,
@@ -121,7 +125,7 @@ class DataOperation
     bool countable = true,
     bool resolveRefs = false,
     Ignore? ignore,
-  }) => doGetById(
+  }) => _doGetById(
     path,
     countable: countable,
     resolveRefs: resolveRefs,
@@ -139,7 +143,7 @@ class DataOperation
     bool resolveRefs = false,
     bool resolveDocChangesRefs = false,
     Ignore? ignore,
-  }) => doGetByQuery(
+  }) => _doGetByQuery(
     path,
     queries: queries,
     selections: selections,
@@ -158,7 +162,7 @@ class DataOperation
     bool resolveRefs = false,
     bool resolveDocChangesRefs = false,
     Ignore? ignore,
-  }) => doSearch(
+  }) => _doSearch(
     path,
     checker,
     countable: countable,
@@ -173,7 +177,7 @@ class DataOperation
     bool resolveRefs = false,
     bool resolveDocChangesRefs = false,
     Ignore? ignore,
-  }) => doListen(
+  }) => _doListen(
     path,
     countable: countable,
     resolveRefs: resolveRefs,
@@ -186,7 +190,7 @@ class DataOperation
     bool countable = true,
     bool resolveRefs = false,
     Ignore? ignore,
-  }) => doListenById(
+  }) => _doListenById(
     path,
     countable: countable,
     resolveRefs: resolveRefs,
@@ -203,7 +207,7 @@ class DataOperation
     bool resolveRefs = false,
     bool resolveDocChangesRefs = false,
     Ignore? ignore,
-  }) => doListenByQuery(
+  }) => _doListenByQuery(
     path,
     queries: queries,
     selections: selections,
@@ -216,6 +220,6 @@ class DataOperation
   );
 
   Future<void> write(List<DataBatchWriter> writers, DataEncryptor? encryptor) {
-    return doWrite(writers, encryptor);
+    return _doWrite(writers, encryptor);
   }
 }

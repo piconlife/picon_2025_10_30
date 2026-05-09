@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_entity/entity.dart';
 
 import '../dm/src/utils/checker.dart' show Checker;
 import '../dm/src/utils/fetch_options.dart' show DataFetchOptions;

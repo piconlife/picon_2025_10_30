@@ -2,7 +2,7 @@ part of 'base.dart';
 
 mixin _RepoReadWithFallbackMixin<T extends Entity>
     on _RepoExecutorMixin<T>, _RepoModifierMixin<T> {
-  Future<Response<T>> readWithFallback({
+  Future<Response<T>> _readWithFallback({
     required DataModifiers modifierId,
     required Future<Response<T>> Function(DataSource<T> source) read,
     DataFieldParams? params,
@@ -21,7 +21,7 @@ mixin _RepoReadWithFallbackMixin<T extends Entity>
               ? await _runOnPrimary(read)
               : await CacheManager.i.cache(
                 cacheKey,
-                enabled: shouldUseSingleton(singletonMode),
+                enabled: _shouldUseSingleton(singletonMode),
                 keyProps: cacheKeyProps,
                 callback: () => _runOnPrimary(read),
               );
@@ -60,7 +60,7 @@ mixin _RepoReadWithFallbackMixin<T extends Entity>
     }
 
     if (useLazy) {
-      runOnPrimaryLazy(task);
+      _runOnPrimaryLazy(task);
     } else {
       await _runOnPrimary(task);
     }
