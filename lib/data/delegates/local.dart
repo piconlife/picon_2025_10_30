@@ -10,7 +10,9 @@ import '../../app/imports/data_management.dart'
         DataFetchOptions,
         Checker,
         DataFieldValue,
-        DataFieldValues;
+        DataFieldValues,
+        DataFieldPath,
+        DataFieldPaths;
 import '../../app/imports/in_app_database.dart'
     show
         InAppWriteBatch,
@@ -18,7 +20,8 @@ import '../../app/imports/in_app_database.dart'
         InAppQueryReference,
         InAppDocumentSnapshot,
         InAppSetOptions,
-        InAppFieldValue;
+        InAppFieldValue,
+        InAppFieldPath;
 
 class LocalWriteBatch extends DataWriteBatch {
   late final InAppWriteBatch _batch;
@@ -212,7 +215,16 @@ class LocalDataDelegate extends DataDelegate {
   }
 
   @override
-  Object? updatingFieldValue(Object? value) {
+  Object resolveFieldPath(Object field) {
+    if (field is! DataFieldPath) return field;
+    return switch (field.type) {
+      DataFieldPaths.documentId => InAppFieldPath.documentId,
+      DataFieldPaths.none => field,
+    };
+  }
+
+  @override
+  Object? resolveFieldValue(Object? value) {
     if (value is! DataFieldValue) return value;
     switch (value.type) {
       case DataFieldValues.arrayUnion:

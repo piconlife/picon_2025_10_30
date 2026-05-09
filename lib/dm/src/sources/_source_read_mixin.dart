@@ -125,13 +125,16 @@ mixin _SourceReadMixin<T extends Entity> on _SourceReadBaseMixin<T> {
         );
       }
       final p = _ref(params, DataModifiers.getByIds);
+      final queries = [DataQuery(DataFieldPath.documentId, whereIn: ids)].map(
+        (e) => e.adjust(delegate.resolveFieldPath, delegate.resolveFieldValue),
+      );
       final event = await operation.getByQuery(
         p,
         countable: countable ?? true,
         resolveRefs: resolveRefs,
         resolveDocChangesRefs: resolveDocChangesRefs,
         ignore: ignore,
-        queries: [DataQuery(DataFieldPath.documentId, whereIn: ids)],
+        queries: queries,
       );
       if (event.docs.isEmpty) return Response(status: Status.notFound);
       final result = await _buildAll(event.docs);
@@ -155,16 +158,13 @@ mixin _SourceReadMixin<T extends Entity> on _SourceReadBaseMixin<T> {
     return _execute(() async {
       final p = _ref(params, DataModifiers.getByQuery);
       final adjustedQueries = queries.map(
-        (e) => e.adjust(delegate.queryFieldValue),
-      );
-      final adjustedSelections = selections.map(
-        (e) => e.adjust(delegate.queryFieldValue),
+        (e) => e.adjust(delegate.resolveFieldPath, delegate.resolveFieldValue),
       );
       final event = await operation.getByQuery(
         p,
         countable: countable ?? true,
         queries: adjustedQueries,
-        selections: adjustedSelections,
+        selections: selections,
         sorts: sorts,
         options: options,
         resolveRefs: resolveRefs && !onlyUpdates,

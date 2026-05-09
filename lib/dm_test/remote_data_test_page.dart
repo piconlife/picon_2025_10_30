@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../dm/src/utils/checker.dart' show Checker;
 import '../dm/src/utils/fetch_options.dart' show DataFetchOptions;
 import '../dm/src/utils/query.dart' show DataQuery;
-import '../dm/src/utils/sorting.dart' show DataSorting;
 import 'product.dart';
 import 'product_repository.dart';
 
@@ -99,10 +98,16 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
     );
   }
 
+  Future<void> _getByIds() async {
+    final r = await _repo.getByIds([_id, '1778320415854']);
+    _log_(
+      r.isValid ? 'Got ${r.result.length} items' : 'Error: ${r.error}',
+    );
+  }
+
   Future<void> _query() async {
     final res = await _repo.getByQuery(
       queries: [DataQuery(ProductKey.category, isEqualTo: 'electronics')],
-      sorts: [DataSorting(ProductKey.price)],
       options: const DataFetchOptions.limit(10),
     );
     _log_(
@@ -147,6 +152,7 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
                   _btn('Update (first)', _update),
                   _btn('Get All', _get),
                   _btn('Get By Id', _getById),
+                  _btn('Get By Ids', _getByIds),
                   _btn('Query', _query),
                   _btn('Search', _search),
                   _btn('Count', _count),

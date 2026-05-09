@@ -11,9 +11,9 @@ abstract class DataDelegate {
 
   DataWriteBatch batch();
 
-  Object? updatingFieldValue(Object? value);
+  Object resolveFieldPath(Object field) => field;
 
-  Object? queryFieldValue(Object? value) => value;
+  Object? resolveFieldValue(Object? value) => value;
 
   Future<int?> count(String path);
 

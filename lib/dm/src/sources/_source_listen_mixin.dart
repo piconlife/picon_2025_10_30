@@ -150,16 +150,13 @@ mixin _SourceListenMixin<T extends Entity> on _SourceReadBaseMixin<T> {
     return _executeStream(() {
       final p = _ref(params, DataModifiers.listenByQuery);
       final adjustedQueries = queries.map(
-        (e) => e.adjust(delegate.queryFieldValue),
-      );
-      final adjustedSelections = selections.map(
-        (e) => e.adjust(delegate.queryFieldValue),
+        (e) => e.adjust(delegate.resolveFieldPath, delegate.resolveFieldValue),
       );
       return operation
           .listenByQuery(
             p,
             queries: adjustedQueries,
-            selections: adjustedSelections,
+            selections: selections,
             sorts: sorts,
             options: options,
             countable: countable ?? false,

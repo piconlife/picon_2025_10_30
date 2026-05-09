@@ -5,7 +5,8 @@ import '../../app/imports/cloud_firestore.dart'
         FirebaseFirestore,
         Query,
         DocumentSnapshot,
-        FieldValue;
+        FieldValue,
+        FieldPath;
 import '../../app/imports/data_management.dart'
     show
         DataWriteBatch,
@@ -18,7 +19,9 @@ import '../../app/imports/data_management.dart'
         DataFetchOptions,
         Checker,
         DataFieldValue,
-        DataFieldValues;
+        DataFieldValues,
+        DataFieldPath,
+        DataFieldPaths;
 
 class FirestoreWriteBatch extends DataWriteBatch {
   late final WriteBatch _batch;
@@ -197,7 +200,16 @@ class FirestoreDataDelegate extends DataDelegate {
   }
 
   @override
-  Object? updatingFieldValue(Object? value) {
+  Object resolveFieldPath(Object field) {
+    if (field is! DataFieldPath) return field;
+    return switch (field.type) {
+      DataFieldPaths.documentId => FieldPath.documentId,
+      DataFieldPaths.none => field,
+    };
+  }
+
+  @override
+  Object? resolveFieldValue(Object? value) {
     if (value is! DataFieldValue) return value;
     switch (value.type) {
       case DataFieldValues.arrayUnion:

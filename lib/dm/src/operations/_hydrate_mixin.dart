@@ -28,9 +28,7 @@ mixin _HydrateMixin on _ReadResolveMixin {
     final docChanges =
         resolveDocChangesRefs
             ? await Future.wait(
-              data.docChanges.map(
-                (e) => _resolveRefs(e, ignore, countable),
-              ),
+              data.docChanges.map((e) => _resolveRefs(e, ignore, countable)),
             )
             : data.docChanges;
     return data.copyWith(docs: docs, docChanges: docChanges);

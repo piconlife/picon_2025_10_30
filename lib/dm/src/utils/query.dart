@@ -45,27 +45,30 @@ class DataQuery {
   static List<Object?>? _freeze(Iterable<Object?>? source) =>
       source == null ? null : List<Object?>.unmodifiable(source);
 
-  DataQuery adjust(Object? Function(Object? value) converter) {
-    Object? convert(Object? v) => v == null ? null : converter(v);
-    List<Object?>? convertAll(List<Object?>? src) {
-      return src?.map(converter).toList(growable: false);
+  DataQuery adjust(
+    Object Function(Object value) key,
+    Object? Function(Object? value) value,
+  ) {
+    Object? convertValue(Object? v) => v == null ? null : value(v);
+    List<Object?>? convertAllValues(List<Object?>? src) {
+      return src?.map(value).toList(growable: false);
     }
 
     return DataQuery(
-      field,
+      key(field),
       isNull: isNull,
-      isEqualTo: convert(isEqualTo),
-      isNotEqualTo: convert(isNotEqualTo),
-      isLessThan: convert(isLessThan),
-      isLessThanOrEqualTo: convert(isLessThanOrEqualTo),
-      isGreaterThan: convert(isGreaterThan),
-      isGreaterThanOrEqualTo: convert(isGreaterThanOrEqualTo),
-      arrayContains: convert(arrayContains),
-      arrayNotContains: convert(arrayNotContains),
-      arrayContainsAny: convertAll(arrayContainsAny),
-      arrayNotContainsAny: convertAll(arrayNotContainsAny),
-      whereIn: convertAll(whereIn),
-      whereNotIn: convertAll(whereNotIn),
+      isEqualTo: convertValue(isEqualTo),
+      isNotEqualTo: convertValue(isNotEqualTo),
+      isLessThan: convertValue(isLessThan),
+      isLessThanOrEqualTo: convertValue(isLessThanOrEqualTo),
+      isGreaterThan: convertValue(isGreaterThan),
+      isGreaterThanOrEqualTo: convertValue(isGreaterThanOrEqualTo),
+      arrayContains: convertValue(arrayContains),
+      arrayNotContains: convertValue(arrayNotContains),
+      arrayContainsAny: convertAllValues(arrayContainsAny),
+      arrayNotContainsAny: convertAllValues(arrayNotContainsAny),
+      whereIn: convertAllValues(whereIn),
+      whereNotIn: convertAllValues(whereNotIn),
     );
   }
 
