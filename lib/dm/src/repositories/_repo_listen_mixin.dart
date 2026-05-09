@@ -36,7 +36,11 @@ mixin _RepoListenMixin<T extends Entity>
       );
       if (primary.isValid) return primary;
       if (!_shouldUseBackup(backupMode)) return primary;
-      return _runOnBackup((source) => source.count(params: params));
+      final backup = await _runOnBackup(
+        (source) => source.count(params: params),
+      );
+      if (backup.isValid) return backup;
+      return primary;
     });
   }
 
