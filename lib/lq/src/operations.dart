@@ -20,7 +20,7 @@ final class FilterOp extends QueryOp {
   const FilterOp(this.predicate);
 
   factory FilterOp.fromFilter(Filter filter) {
-    return FilterOp((doc) => FilterEngine.matchesFilter(doc, filter));
+    return FilterOp(_compile(filter));
   }
 
   factory FilterOp.fromConditions({
@@ -64,6 +64,72 @@ final class FilterOp extends QueryOp {
       );
     });
   }
+
+  static DocumentPredicate _compile(Filter filter) {
+    if (filter.type.isAndFilter) {
+      final children = (filter.field as List<Filter>)
+          .map(_compile)
+          .toList(growable: false);
+      if (children.isEmpty) return _alwaysTrue;
+      if (children.length == 1) return children[0];
+      return (doc) {
+        for (var i = 0; i < children.length; i++) {
+          if (!children[i](doc)) return false;
+        }
+        return true;
+      };
+    }
+    if (filter.type.isOrFilter) {
+      final children = (filter.field as List<Filter>)
+          .map(_compile)
+          .toList(growable: false);
+      if (children.isEmpty) return _alwaysFalse;
+      if (children.length == 1) return children[0];
+      return (doc) {
+        for (var i = 0; i < children.length; i++) {
+          if (children[i](doc)) return true;
+        }
+        return false;
+      };
+    }
+
+    final field = filter.field;
+    final isEqualTo = filter.isEqualTo;
+    final isNotEqualTo = filter.isNotEqualTo;
+    final isLessThan = filter.isLessThan;
+    final isLessThanOrEqualTo = filter.isLessThanOrEqualTo;
+    final isGreaterThan = filter.isGreaterThan;
+    final isGreaterThanOrEqualTo = filter.isGreaterThanOrEqualTo;
+    final arrayContains = filter.arrayContains;
+    final arrayNotContains = filter.arrayNotContains;
+    final containsAnySet = _toSet(filter.arrayContainsAny);
+    final notContainsAnySet = _toSet(filter.arrayNotContainsAny);
+    final whereInSet = _toSet(filter.whereIn);
+    final whereNotInSet = _toSet(filter.whereNotIn);
+    final isNull = filter.isNull;
+
+    return (doc) => FilterEngine.matchesConditions(
+      doc,
+      field: field,
+      isEqualTo: isEqualTo,
+      isNotEqualTo: isNotEqualTo,
+      isLessThan: isLessThan,
+      isLessThanOrEqualTo: isLessThanOrEqualTo,
+      isGreaterThan: isGreaterThan,
+      isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+      arrayContains: arrayContains,
+      arrayNotContains: arrayNotContains,
+      arrayContainsAny: containsAnySet,
+      arrayNotContainsAny: notContainsAnySet,
+      whereInSet: whereInSet,
+      whereNotInSet: whereNotInSet,
+      isNull: isNull,
+    );
+  }
+
+  static bool _alwaysTrue(QueryDocument _) => true;
+
+  static bool _alwaysFalse(QueryDocument _) => false;
 
   static Set<Object?>? _toSet(Iterable<Object?>? values) {
     if (values == null) return null;
@@ -250,12 +316,11 @@ abstract final class QueryExecutor {
         }
         return out;
       case MapOp(transform: final t):
-        final out = List<QueryDocument>.generate(
+        return List<QueryDocument>.generate(
           data.length,
           (i) => t(data[i]),
           growable: false,
         );
-        return out;
       case SortOp():
       case CursorOp():
         throw const InvalidQueryException(

@@ -70,11 +70,32 @@ class Collection {
 
   Stream<List<CollectionChange>> get changes => _changes.stream;
 
-  Stream<List<Map<String, dynamic>>> snapshots() async* {
-    yield documents;
-    await for (final _ in _changes.stream) {
-      yield documents;
-    }
+  Stream<List<Map<String, dynamic>>> snapshots() {
+    late StreamController<List<Map<String, dynamic>>> ctrl;
+    StreamSubscription<List<CollectionChange>>? sub;
+    ctrl = StreamController<List<Map<String, dynamic>>>(
+      onListen: () {
+        if (_changes.isClosed) {
+          ctrl.add(documents);
+          ctrl.close();
+          return;
+        }
+        sub = _changes.stream.listen(
+          (_) {
+            if (!ctrl.isClosed) ctrl.add(documents);
+          },
+          onError: (Object e, StackTrace s) {
+            if (!ctrl.isClosed) ctrl.addError(e, s);
+          },
+          onDone: () {
+            if (!ctrl.isClosed) ctrl.close();
+          },
+        );
+        ctrl.add(documents);
+      },
+      onCancel: () => sub?.cancel(),
+    );
+    return ctrl.stream;
   }
 
   int get length => _docs.length;
@@ -145,8 +166,16 @@ class Collection {
   }
 
   void batch(void Function(BatchScope scope) operations) {
+    final snapshot = Map<DocumentId, Map<String, dynamic>>.of(_docs);
     final scope = BatchScope._(this);
-    operations(scope);
+    try {
+      operations(scope);
+    } catch (_) {
+      _docs
+        ..clear()
+        ..addAll(snapshot);
+      rethrow;
+    }
     if (scope._pending.isNotEmpty) {
       _emit(List<CollectionChange>.unmodifiable(scope._pending));
     }

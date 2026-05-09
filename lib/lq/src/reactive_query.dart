@@ -13,23 +13,44 @@ class ReactiveQuery {
     required QueryBuilder Function(QueryBuilder builder) query,
   }) => ReactiveQuery._(source, query);
 
-  Stream<QueryDocuments> watch() async* {
-    yield _execute();
-    await for (final _ in _collection.changes) {
-      yield _execute();
-    }
+  Stream<QueryDocuments> watch() {
+    late StreamController<QueryDocuments> ctrl;
+    StreamSubscription<List<CollectionChange>>? sub;
+    ctrl = StreamController<QueryDocuments>(
+      onListen: () {
+        sub = _collection.changes.listen(
+          (_) {
+            if (ctrl.isClosed) return;
+            try {
+              ctrl.add(_execute());
+            } catch (e, s) {
+              ctrl.addError(e, s);
+            }
+          },
+          onError: (Object e, StackTrace s) {
+            if (!ctrl.isClosed) ctrl.addError(e, s);
+          },
+          onDone: () {
+            if (!ctrl.isClosed) ctrl.close();
+          },
+        );
+        try {
+          ctrl.add(_execute());
+        } catch (e, s) {
+          ctrl.addError(e, s);
+        }
+      },
+      onCancel: () => sub?.cancel(),
+    );
+    return ctrl.stream;
   }
 
-  Stream<QueryDocument?> watchFirst() async* {
-    await for (final batch in watch()) {
-      yield batch.isEmpty ? null : batch.first;
-    }
+  Stream<QueryDocument?> watchFirst() {
+    return watch().map((batch) => batch.isEmpty ? null : batch.first);
   }
 
-  Stream<int> watchCount() async* {
-    await for (final batch in watch()) {
-      yield batch.length;
-    }
+  Stream<int> watchCount() {
+    return watch().map((batch) => batch.length);
   }
 
   QueryDocuments now() => _execute();
