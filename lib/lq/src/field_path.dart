@@ -1,10 +1,16 @@
 import 'package:meta/meta.dart';
 
+enum FieldPathType { documentId }
+
 @immutable
 class FieldPath {
   final List<String> segments;
 
   const FieldPath._(this.segments);
+
+  static FieldPathType get documentId {
+    return FieldPathType.documentId;
+  }
 
   factory FieldPath(String path) {
     if (path.isEmpty) {
