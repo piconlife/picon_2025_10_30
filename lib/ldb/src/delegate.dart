@@ -2,6 +2,8 @@ import '../core/path.dart' show PathDetails;
 import 'database.dart' show InAppWriteLimitation;
 
 abstract class InAppDatabaseDelegate {
+  const InAppDatabaseDelegate();
+
   Future<bool> init(String dbName);
 
   Future<bool> delete(String dbName, String path);

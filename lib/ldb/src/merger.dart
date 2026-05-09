@@ -3,16 +3,16 @@ part of 'database.dart';
 class InAppMerger {
   final InAppDocument root;
 
-  InAppMerger(InAppDocument? root) : root = Map.from(root ?? {});
+  InAppMerger(InAppDocument? root)
+    : root = Map<String, InAppValue>.of(root ?? const {});
 
   InAppDocument merge(InAppDocument updates) {
-    Map<String, dynamic> extra = {};
-    for (var entry in updates.entries) {
+    final extra = <String, InAppValue>{};
+    for (final entry in updates.entries) {
       final field = entry.key;
       final fieldValue = entry.value;
-      final baseValue = root[field];
       if (fieldValue is InAppFieldValue) {
-        _apply(field, fieldValue, baseValue);
+        _apply(field, fieldValue, root[field]);
       } else {
         extra[field] = fieldValue;
       }
@@ -21,63 +21,77 @@ class InAppMerger {
     return root;
   }
 
-  void _apply(String field, InAppFieldValue fieldValue, dynamic baseValue) {
+  void _apply(String field, InAppFieldValue fieldValue, Object? baseValue) {
     final modifier = fieldValue.value;
-    final type = fieldValue.type;
-    switch (type) {
+    switch (fieldValue.type) {
       case InAppFieldValues.arrayFilter:
-        return _applyArrayFilter(field, baseValue, modifier);
+        _applyArrayFilter(field, baseValue, modifier);
+        break;
       case InAppFieldValues.arrayRemove:
-        return _applyArrayRemove(field, baseValue, modifier);
+        _applyArrayRemove(field, baseValue, modifier);
+        break;
       case InAppFieldValues.arrayUnify:
-        return _applyArrayUnify(field, baseValue);
+        _applyArrayUnify(field, baseValue);
+        break;
       case InAppFieldValues.arrayUnion:
-        return _applyArrayUnion(field, baseValue, modifier);
+        _applyArrayUnion(field, baseValue, modifier);
+        break;
       case InAppFieldValues.delete:
-        return _applyDelete(field);
+        _applyDelete(field);
+        break;
       case InAppFieldValues.increment:
-        return _applyIncrement(field, baseValue, modifier);
+        _applyIncrement(field, baseValue, modifier);
+        break;
       case InAppFieldValues.timestamp:
-        return _applyTimestamp(field, modifier);
+        _applyTimestamp(field, modifier);
+        break;
       case InAppFieldValues.toggle:
-        return _applyToggle(field, baseValue, modifier);
+        _applyToggle(field, baseValue, modifier);
+        break;
       case InAppFieldValues.none:
-        return;
+        break;
     }
   }
 
-  void _applyArrayFilter(String field, dynamic base, dynamic modifier) {
+  void _applyArrayFilter(String field, Object? base, Object? modifier) {
     if (base is List && modifier is bool Function(Object?)) {
-      final mergedList = List.from(base.where(modifier));
-      root[field] = mergedList.isEmpty ? null : mergedList;
+      final merged = base.where(modifier).toList(growable: false);
+      root[field] = merged.isEmpty ? null : merged;
     }
   }
 
-  void _applyArrayRemove(String field, dynamic base, dynamic modifier) {
+  void _applyArrayRemove(String field, Object? base, Object? modifier) {
     if (base is List && modifier is List) {
-      final filteredList = base.where((i) => !modifier.contains(i)).toList();
-      root[field] = filteredList;
+      final removeSet = modifier.toSet();
+      root[field] = base
+          .where((e) => !removeSet.contains(e))
+          .toList(growable: false);
     }
   }
 
-  void _applyArrayUnify(String field, dynamic base) {
+  void _applyArrayUnify(String field, Object? base) {
     if (base is List) {
-      final mergedList = base.toSet().toList();
-      root[field] = mergedList;
+      final seen = <Object?>{};
+      final merged = <Object?>[];
+      for (final e in base) {
+        if (seen.add(e)) merged.add(e);
+      }
+      root[field] = merged;
     }
   }
 
-  void _applyArrayUnion(String field, dynamic base, dynamic modifier) {
-    if (base is List? && modifier is List) {
-      final mergedList = List.from(base ?? [])..addAll(modifier);
-      root[field] = mergedList;
+  void _applyArrayUnion(String field, Object? base, Object? modifier) {
+    if ((base is List || base == null) && modifier is List) {
+      final src = base is List ? base : const <Object?>[];
+      final merged = <Object?>[...src, ...modifier];
+      root[field] = merged;
     }
   }
 
-  void _applyIncrement(String field, dynamic base, dynamic modifier) {
-    if (base is num? && modifier is num) {
-      final newValue = (base ?? 0) + modifier;
-      root[field] = newValue;
+  void _applyIncrement(String field, Object? base, Object? modifier) {
+    if ((base is num || base == null) && modifier is num) {
+      final current = base is num ? base : 0;
+      root[field] = current + modifier;
     }
   }
 
@@ -85,19 +99,14 @@ class InAppMerger {
     root.remove(field);
   }
 
-  void _applyTimestamp(String field, dynamic modifier) {
+  void _applyTimestamp(String field, Object? modifier) {
     final now = DateTime.now();
-    root[field] =
-        (modifier is bool ? modifier : false)
-            ? now.millisecondsSinceEpoch
-            : now.toString();
+    final asNumber = modifier is bool ? modifier : false;
+    root[field] = asNumber ? now.millisecondsSinceEpoch : now.toIso8601String();
   }
 
-  void _applyToggle(String field, dynamic base, dynamic modifier) {
-    if (base is bool?) {
-      base ??= (modifier is bool ? modifier : false);
-      final newValue = !base;
-      root[field] = newValue;
-    }
+  void _applyToggle(String field, Object? base, Object? modifier) {
+    final current = base is bool ? base : (modifier is bool ? modifier : false);
+    root[field] = !current;
   }
 }

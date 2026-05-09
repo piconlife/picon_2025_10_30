@@ -11,183 +11,151 @@ class InAppDocumentReference extends InAppReference {
     required InAppCollectionReference parent,
   }) : _p = parent;
 
-  String get path => "${_p.path}/$id";
+  String get path => '${_p.path}/$id';
+
+  InAppCollectionReference get parent => _p;
 
   InAppQueryNotifier? get _cn {
-    final x = _db._notifiers[_p.path];
-    return x is InAppQueryNotifier ? x : null;
+    final n = _db._notifiers[_p.path];
+    return n is InAppQueryNotifier ? n : null;
   }
 
   InAppDocumentNotifier? get _dn => _cn?.children[id];
 
   T _n<T>(T value, [InAppDocumentSnapshot? snapshot]) {
-    if (_cn != null) _p._notify();
-    if (_dn != null) {
+    final cn = _cn;
+    if (cn != null && !cn.isDisposed) _p._notify();
+    final dn = _dn;
+    if (dn != null && !dn.isDisposed) {
       if (snapshot == null) {
-        get().then((value) => _dn!.value = value);
+        get()
+            .then((s) {
+              if (!dn.isDisposed) dn.value = s;
+            })
+            .catchError((_) {});
       } else {
-        _dn!.value = snapshot;
+        dn.value = snapshot;
       }
     }
     return value;
   }
 
-  void _notify([InAppDocumentSnapshot? snapshot]) => _n(null, snapshot);
+  void _notify([InAppDocumentSnapshot? snapshot]) => _n<void>(null, snapshot);
 
   InAppQueryReference collection(String field) {
+    if (field.isEmpty) {
+      throw ArgumentError.value(
+        field,
+        'field',
+        'Collection id cannot be empty.',
+      );
+    }
+    if (field.contains('/')) {
+      throw ArgumentError.value(
+        field,
+        'field',
+        'Collection id cannot contain "/".',
+      );
+    }
     return InAppQueryReference(
       db: _db,
-      reference: "$reference/$field",
-      path: "$path/$field",
+      reference: '$reference/$field',
+      path: '$path/$field',
       id: field,
     );
   }
 
-  /// Method to set data in the document.
-  ///
-  /// Parameters:
-  /// - [data]: The data to be set in the document.
-  ///
-  /// Example:
-  /// ```dart
-  /// documentRef.set({'name': 'John', 'age': 30});
-  /// ```
   Future<InAppDocumentSnapshot?> set(
     InAppDocument data, [
-    InAppSetOptions options = const InAppSetOptions(),
-  ]) {
-    final i = data[_idField];
-    final mId = i is String ? i : id;
-    data[_idField] = mId;
+    InAppSetOptions options = InAppSetOptions.defaults,
+  ]) async {
+    final raw = data[_idField];
+    final mId = raw is String && raw.isNotEmpty ? raw : id;
+    final payload = Map<String, InAppValue>.of(data);
+    payload[_idField] = mId;
+
     if (options.merge) {
-      return update(data);
-    } else {
-      return _db
-          ._w(
-            reference: reference,
-            collectionPath: _p.path,
-            collectionId: _p.id,
-            documentId: mId,
-            type: InAppWriteType.document,
-            value: data,
-          )
-          .then(_n)
-          .then((value) {
-            _db._log(value ? "done!" : "failed!", action: "set", field: id);
-            return value;
-          })
-          .then((value) => value ? InAppDocumentSnapshot(mId, data) : null);
+      return update(payload);
     }
+
+    final ok = await _db._w(
+      reference: reference,
+      collectionPath: _p.path,
+      collectionId: _p.id,
+      documentId: mId,
+      type: InAppWriteType.document,
+      value: payload,
+    );
+    final snap = ok ? InAppDocumentSnapshot(mId, payload) : null;
+    _n<void>(null, snap);
+    _db._log(ok ? 'done!' : 'failed!', action: 'set', field: id);
+    return snap;
   }
 
-  /// Method to update data in the document.
-  ///
-  /// Parameters:
-  /// - [data]: The data to be updated in the document.
-  ///
-  /// Example:
-  /// ```dart
-  /// documentRef.update({
-  ///     'name': Mr. X,
-  ///     'age': InAppFieldValue.increment(2),
-  ///     'balance': InAppFieldValue.increment(-10.2),
-  ///     'hobbies': InAppFieldValue.arrayUnion(['swimming']),
-  ///     'skills': InAppFieldValue.arrayRemove(['coding', 'gaming']),
-  ///     'timestamp': InAppFieldValue.serverTimestamp(),
-  ///     'extra': InAppFieldValue.delete(),
-  ///   });
-  /// ```
-  Future<InAppDocumentSnapshot?> update(InAppDocument data) {
-    return get().then((base) {
-      final current = InAppMerger(base.data).merge(data);
-      current[_idField] = id;
-      return _db
-          ._w(
-            reference: reference,
-            collectionPath: _p.path,
-            collectionId: _p.id,
-            documentId: id,
-            type: InAppWriteType.document,
-            value: current,
-          )
-          .then(_n)
-          .then((value) {
-            _db._log(value ? "done!" : "failed!", action: "update", field: id);
-            return value;
-          })
-          .then((value) => value ? InAppDocumentSnapshot(_id, current) : null);
-    });
+  Future<InAppDocumentSnapshot?> update(InAppDocument data) async {
+    final base = await get();
+    final merged = InAppMerger(base.data).merge(data);
+    merged[_idField] = id;
+    final ok = await _db._w(
+      reference: reference,
+      collectionPath: _p.path,
+      collectionId: _p.id,
+      documentId: id,
+      type: InAppWriteType.document,
+      value: merged,
+    );
+    final snap = ok ? InAppDocumentSnapshot(id, merged) : null;
+    _n<void>(null, snap);
+    _db._log(ok ? 'done!' : 'failed!', action: 'update', field: id);
+    return snap;
   }
 
-  /// Method to delete the document.
-  ///
-  /// Example:
-  /// ```dart
-  /// documentRef.delete();
-  /// ```
-  Future<bool> delete() {
-    return _db
-        ._w(
-          reference: reference,
+  Future<bool> delete() async {
+    final ok = await _db._w(
+      reference: reference,
+      collectionPath: _p.path,
+      collectionId: _p.id,
+      documentId: id,
+      type: InAppWriteType.document,
+    );
+    if (ok) {
+      final remaining = await _p.get();
+      if (!remaining.exists) {
+        await _db._w(
+          type: InAppWriteType.collection,
+          reference: _p.reference,
           collectionPath: _p.path,
           collectionId: _p.id,
-          documentId: id,
-          type: InAppWriteType.document,
-        )
-        .then<bool>((value) {
-          if (value) {
-            return _p.get().then((value) {
-              if (!value.exists) {
-                return _db._w(
-                  type: InAppWriteType.collection,
-                  reference: _p.reference,
-                  collectionPath: _p.path,
-                  collectionId: _p.id,
-                  documentId: _p.id,
-                );
-              } else {
-                return true;
-              }
-            });
-          } else {
-            return value;
-          }
-        })
-        .then(_n)
-        .then((value) {
-          _db._log(value ? "done!" : "failed!", action: "delete", field: id);
-          return value;
-        });
+          documentId: _p.id,
+        );
+      }
+    }
+    _n<void>(null, null);
+    _db._log(ok ? 'done!' : 'failed!', action: 'delete', field: id);
+    return ok;
   }
 
-  /// Method to get all data in the document.
-  ///
-  /// Example:
-  /// ```dart
-  /// Data documentData = documentRef.get();
-  /// ```
-  Future<InAppDocumentSnapshot> get() {
-    return _db
-        ._r(
-          reference: reference,
-          collectionPath: _p.path,
-          collectionId: _p.id,
-          documentId: id,
-          type: InAppReadType.document,
-        )
-        .then((value) {
-          return value is InAppDocumentSnapshot
-              ? value
-              : InAppDocumentSnapshot(id);
-        });
+  Future<InAppDocumentSnapshot> get() async {
+    final result = await _db._r(
+      reference: reference,
+      collectionPath: _p.path,
+      collectionId: _p.id,
+      documentId: id,
+      type: InAppReadType.document,
+    );
+    return result is InAppDocumentSnapshot ? result : InAppDocumentSnapshot(id);
   }
 
   Stream<InAppDocumentSnapshot> snapshots() {
     final n = _db._addChildNotifier(_p.path, id);
-    return Stream.multi((c) {
-      void update() => c.add(n.value ?? InAppDocumentSnapshot(id));
+    return Stream<InAppDocumentSnapshot>.multi((controller) {
+      void update() {
+        if (controller.isClosed) return;
+        controller.add(n.value ?? InAppDocumentSnapshot(id));
+      }
+
       n.addListener(update);
-      c.onCancel = () => n.removeListener(update);
+      controller.onCancel = () => n.removeListener(update);
       _notify();
     });
   }

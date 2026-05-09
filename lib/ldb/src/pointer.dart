@@ -1,40 +1,47 @@
 class InAppPointer {
+  final List<String> components;
+
   InAppPointer(String path)
-    : components =
-          path.split('/').where((element) => element.isNotEmpty).toList();
+    : components = List.unmodifiable(
+        path.split('/').where((e) => e.isNotEmpty),
+      );
 
   String get path => components.join('/');
 
-  final List<String> components;
-
-  String get id => components.last;
+  String get id => components.isEmpty ? '' : components.last;
 
   bool isCollection() => components.length.isOdd;
 
-  bool isDocument() => components.length.isEven;
+  bool isDocument() => components.length.isEven && components.isNotEmpty;
 
   String collectionPath(String collectionPath) {
-    assert(isDocument());
+    assert(
+      isDocument(),
+      'Collections can only be created from a document path.',
+    );
     return '$path/$collectionPath';
   }
 
   String documentPath(String documentPath) {
-    assert(isCollection());
+    assert(
+      isCollection(),
+      'Documents can only be created from a collection path.',
+    );
     return '$path/$documentPath';
   }
 
   String? parentPath() {
-    if (components.length < 2) {
-      return null;
-    }
-
-    List<String> parentComponents = List<String>.from(components)..removeLast();
-    return parentComponents.join('/');
+    if (components.length < 2) return null;
+    return components.sublist(0, components.length - 1).join('/');
   }
 
   @override
-  bool operator ==(Object other) => other is InAppPointer && other.path == path;
+  bool operator ==(Object other) =>
+      identical(this, other) || other is InAppPointer && other.path == path;
 
   @override
   int get hashCode => path.hashCode;
+
+  @override
+  String toString() => 'InAppPointer($path)';
 }

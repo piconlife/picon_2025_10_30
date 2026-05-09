@@ -20,16 +20,22 @@ class InAppFieldValue {
     return InAppFieldValue(where, InAppFieldValues.arrayFilter);
   }
 
-  factory InAppFieldValue.arrayRemove(List<dynamic> elements) {
-    return InAppFieldValue(elements, InAppFieldValues.arrayRemove);
+  factory InAppFieldValue.arrayRemove(List<Object?> elements) {
+    return InAppFieldValue(
+      List.unmodifiable(elements),
+      InAppFieldValues.arrayRemove,
+    );
   }
 
   factory InAppFieldValue.arrayUnify() {
-    return InAppFieldValue(null, InAppFieldValues.arrayUnify);
+    return const InAppFieldValue(null, InAppFieldValues.arrayUnify);
   }
 
-  factory InAppFieldValue.arrayUnion(List<dynamic> elements) {
-    return InAppFieldValue(elements, InAppFieldValues.arrayUnion);
+  factory InAppFieldValue.arrayUnion(List<Object?> elements) {
+    return InAppFieldValue(
+      List.unmodifiable(elements),
+      InAppFieldValues.arrayUnion,
+    );
   }
 
   factory InAppFieldValue.delete() {
@@ -47,4 +53,7 @@ class InAppFieldValue {
   factory InAppFieldValue.toggle([bool? initial]) {
     return InAppFieldValue(initial, InAppFieldValues.toggle);
   }
+
+  @override
+  String toString() => 'InAppFieldValue(type: $type, value: $value)';
 }

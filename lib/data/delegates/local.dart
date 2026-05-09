@@ -37,6 +37,7 @@ class LocalWriteBatch extends DataWriteBatch {
 
   @override
   void onSet(String path, Object data, {bool merge = true}) {
+    if (data is! Map<String, dynamic>) return;
     _batch.set(db.doc(path), data, InAppSetOptions(merge: merge));
   }
 

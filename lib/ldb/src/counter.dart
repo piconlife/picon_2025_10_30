@@ -9,27 +9,24 @@ class InAppCounterReference extends InAppReference {
     required InAppCollectionReference parent,
   }) : _p = parent;
 
-  Future<InAppCounterSnapshot> get() {
-    return _p.get().then((value) {
-      return InAppCounterSnapshot(_p.id, value, value.docs.length);
-    });
+  InAppCollectionReference get parent => _p;
+
+  Future<InAppCounterSnapshot> get() async {
+    final query = await _p.get();
+    return InAppCounterSnapshot(_p.id, query, query.docs.length);
   }
 
   Stream<InAppCounterSnapshot> snapshots() {
     final n = _db._addNotifier(_p.path);
-    return Stream.multi((c) {
+    return Stream<InAppCounterSnapshot>.multi((controller) {
       void update() {
-        c.add(
-          InAppCounterSnapshot(
-            _p.id,
-            n.value ?? InAppQuerySnapshot(_p.id),
-            n.value?.docs.length ?? 0,
-          ),
-        );
+        if (controller.isClosed) return;
+        final snap = n.value ?? InAppQuerySnapshot(_p.id);
+        controller.add(InAppCounterSnapshot(_p.id, snap, snap.docs.length));
       }
 
       n.addListener(update);
-      c.onCancel = () => n.removeListener(update);
+      controller.onCancel = () => n.removeListener(update);
       _p._notify();
     });
   }
