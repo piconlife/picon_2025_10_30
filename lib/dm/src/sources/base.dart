@@ -22,6 +22,7 @@ part '_source_encryption_mixin.dart';
 part '_source_execute_mixin.dart';
 part '_source_listen_mixin.dart';
 part '_source_path_mixin.dart';
+part '_source_read_base_mixin.dart';
 part '_source_read_mixin.dart';
 part '_source_write_mixin.dart';
 
@@ -30,6 +31,7 @@ abstract class DataSource<T extends Entity>
         _SourceExecuteMixin<T>,
         _SourceEncryptionMixin<T>,
         _SourcePathMixin<T>,
+        _SourceReadBaseMixin<T>,
         _SourceReadMixin<T>,
         _SourceWriteMixin<T>,
         _SourceListenMixin<T> {
@@ -43,7 +45,7 @@ abstract class DataSource<T extends Entity>
   final DataLimitations limitations;
 
   @override
-  final DataEncryptor? encryptor;
+  final DataEncryptor? _encryptor;
 
   late final DataOperation _operation = DataOperation(delegate);
 
@@ -53,9 +55,9 @@ abstract class DataSource<T extends Entity>
   DataSource({
     required this.path,
     required this.delegate,
-    this.encryptor,
+    DataEncryptor? encryptor,
     this.limitations = const DataLimitations(),
-  });
+  }) : _encryptor = encryptor;
 
   @override
   T build(dynamic source);

@@ -1,7 +1,7 @@
 part of 'base.dart';
 
 mixin _SourceExecuteMixin<T extends Entity> {
-  Future<Response<S>> execute<S extends Object>(
+  Future<Response<S>> _execute<S extends Object>(
     Future<Response<S>> Function() callback,
   ) async {
     try {
@@ -11,7 +11,7 @@ mixin _SourceExecuteMixin<T extends Entity> {
     }
   }
 
-  Stream<Response<S>> executeStream<S extends Object>(
+  Stream<Response<S>> _executeStream<S extends Object>(
     Stream<Response<S>> Function() callback,
   ) {
     Stream<Response<S>> source;

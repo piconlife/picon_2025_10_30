@@ -27,9 +27,9 @@ mixin _SourceWriteMixin<T extends Entity>
   }) {
     if (id.isEmpty) return Future.value(Response(status: Status.invalidId));
     if (data.isEmpty) return Future.value(Response(status: Status.invalid));
-    return execute(() async {
-      final p = ref(params, DataModifiers.create, id);
-      final encrypted = await encryptDoc(data);
+    return _execute(() async {
+      final p = _ref(params, DataModifiers.create, id);
+      final encrypted = await _encryptDoc(data);
       final payload = encrypted ?? data;
       await operation.create(p, payload, merge: merge, createRefs: createRefs);
       return Response(status: Status.ok, data: build(data));
@@ -43,7 +43,7 @@ mixin _SourceWriteMixin<T extends Entity>
     bool createRefs = false,
   }) {
     if (writers.isEmpty) return Future.value(Response(status: Status.invalid));
-    return execute(() async {
+    return _execute(() async {
       final results = await Future.wait(
         writers.map(
           (e) => create(
@@ -74,8 +74,8 @@ mixin _SourceWriteMixin<T extends Entity>
     if (id.isEmpty || data.isEmpty) {
       return Future.value(Response(status: Status.invalid));
     }
-    return execute(() async {
-      final p = ref(params, DataModifiers.updateById, id);
+    return _execute(() async {
+      final p = _ref(params, DataModifiers.updateById, id);
       final adjusted = data.map(
         (k, v) => MapEntry(k, delegate.updatingFieldValue(v)),
       );
@@ -92,7 +92,7 @@ mixin _SourceWriteMixin<T extends Entity>
       );
       final base = existing.data?.filtered ?? <String, dynamic>{};
       base.addAll(adjusted);
-      final encrypted = await encryptDoc(base);
+      final encrypted = await _encryptDoc(base);
       if (encrypted == null) return Response(status: Status.nullable);
       await operation.update(p, encrypted, updateRefs: updateRefs);
       return Response(status: Status.ok);
@@ -107,7 +107,7 @@ mixin _SourceWriteMixin<T extends Entity>
     bool updateRefs = false,
   }) {
     if (writers.isEmpty) return Future.value(Response(status: Status.invalid));
-    return execute(() async {
+    return _execute(() async {
       final results = await Future.wait(
         writers.map(
           (e) => updateById(
@@ -138,8 +138,8 @@ mixin _SourceWriteMixin<T extends Entity>
     bool counter = false,
   }) {
     if (id.isEmpty) return Future.value(Response(status: Status.invalidId));
-    return execute(() async {
-      final p = ref(params, DataModifiers.deleteById, id);
+    return _execute(() async {
+      final p = _ref(params, DataModifiers.deleteById, id);
       await operation.delete(
         p,
         deleteRefs: deleteRefs,
@@ -161,7 +161,7 @@ mixin _SourceWriteMixin<T extends Entity>
     bool counter = false,
   }) {
     if (ids.isEmpty) return Future.value(Response(status: Status.invalid));
-    return execute(() async {
+    return _execute(() async {
       final results = await Future.wait(
         ids.map(
           (e) => deleteById(
@@ -190,8 +190,8 @@ mixin _SourceWriteMixin<T extends Entity>
     Ignore? ignore,
     bool counter = false,
   }) {
-    return execute(() async {
-      final p = ref(params, DataModifiers.clear);
+    return _execute(() async {
+      final p = _ref(params, DataModifiers.clear);
       final value = await operation.get(
         p,
         countable: false,
@@ -218,8 +218,8 @@ mixin _SourceWriteMixin<T extends Entity>
 
   Future<Response<void>> write(List<DataBatchWriter> writers) {
     if (writers.isEmpty) return Future.value(Response(status: Status.invalid));
-    return execute(() async {
-      await operation.write(writers, isEncryptor ? encryptor : null);
+    return _execute(() async {
+      await operation.write(writers, isEncryptor ? _encryptor : null);
       return Response(status: Status.ok);
     });
   }

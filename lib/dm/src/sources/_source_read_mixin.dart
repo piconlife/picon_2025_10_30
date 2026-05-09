@@ -1,15 +1,6 @@
 part of 'base.dart';
 
-mixin _SourceReadMixin<T extends Entity>
-    on _SourceExecuteMixin<T>, _SourceEncryptionMixin<T>, _SourcePathMixin<T> {
-  DataDelegate get delegate;
-
-  DataOperation get operation;
-
-  DataLimitations get limitations;
-
-  T build(dynamic source);
-
+mixin _SourceReadMixin<T extends Entity> on _SourceReadBaseMixin<T> {
   Future<Response<T>> checkById(
     String id, {
     DataFieldParams? params,
@@ -17,8 +8,8 @@ mixin _SourceReadMixin<T extends Entity>
     bool resolveRefs = false,
     Ignore? ignore,
   }) {
-    return execute(() async {
-      final p = ref(params, DataModifiers.checkById, id);
+    return _execute(() async {
+      final p = _ref(params, DataModifiers.checkById, id);
       final data = await operation.getById(
         p,
         countable: countable ?? false,
@@ -26,7 +17,7 @@ mixin _SourceReadMixin<T extends Entity>
         ignore: ignore,
       );
       if (!data.exists) return Response(status: Status.notFound);
-      final v = await decryptDoc(data.doc);
+      final v = await _decryptDoc(data.doc);
       return Response(
         status: Status.ok,
         data: build(v),
@@ -36,8 +27,8 @@ mixin _SourceReadMixin<T extends Entity>
   }
 
   Future<Response<int>> count({DataFieldParams? params}) {
-    return execute(() async {
-      final p = ref(params, DataModifiers.count);
+    return _execute(() async {
+      final p = _ref(params, DataModifiers.count);
       final value = await operation.count(p);
       return Response(status: Status.ok, data: value);
     });
@@ -51,8 +42,8 @@ mixin _SourceReadMixin<T extends Entity>
     bool resolveDocChangesRefs = false,
     Ignore? ignore,
   }) {
-    return execute(() async {
-      final p = ref(params, DataModifiers.get);
+    return _execute(() async {
+      final p = _ref(params, DataModifiers.get);
       final event = await operation.get(
         p,
         countable: countable ?? true,
@@ -85,8 +76,8 @@ mixin _SourceReadMixin<T extends Entity>
     Ignore? ignore,
   }) {
     if (id.isEmpty) return Future.value(Response(status: Status.invalidId));
-    return execute(() async {
-      final p = ref(params, DataModifiers.getById, id);
+    return _execute(() async {
+      final p = _ref(params, DataModifiers.getById, id);
       final event = await operation.getById(
         p,
         countable: countable ?? true,
@@ -96,7 +87,7 @@ mixin _SourceReadMixin<T extends Entity>
       if (!event.exists) {
         return Response(status: Status.notFound, snapshot: event.snapshot);
       }
-      final v = await decryptDoc(event.doc);
+      final v = await _decryptDoc(event.doc);
       return Response(
         status: Status.ok,
         data: build(v),
@@ -114,7 +105,7 @@ mixin _SourceReadMixin<T extends Entity>
     Ignore? ignore,
   }) {
     if (ids.isEmpty) return Future.value(Response(status: Status.invalid));
-    return execute(() async {
+    return _execute(() async {
       if (limitations.whereIn > 0 && ids.length > limitations.whereIn) {
         final results = await Future.wait(
           ids.map(
@@ -133,7 +124,7 @@ mixin _SourceReadMixin<T extends Entity>
           result: results.map((e) => e.data).whereType<T>().toList(),
         );
       }
-      final p = ref(params, DataModifiers.getByIds);
+      final p = _ref(params, DataModifiers.getByIds);
       final event = await operation.getByQuery(
         p,
         countable: countable ?? true,
@@ -161,8 +152,8 @@ mixin _SourceReadMixin<T extends Entity>
     bool resolveDocChangesRefs = false,
     Ignore? ignore,
   }) {
-    return execute(() async {
-      final p = ref(params, DataModifiers.getByQuery);
+    return _execute(() async {
+      final p = _ref(params, DataModifiers.getByQuery);
       final adjustedQueries = queries.map(
         (e) => e.adjust(delegate.queryFieldValue),
       );
@@ -208,8 +199,8 @@ mixin _SourceReadMixin<T extends Entity>
     if (checker.field.isEmpty) {
       return Future.value(Response(status: Status.invalid));
     }
-    return execute(() async {
-      final p = ref(params, DataModifiers.search);
+    return _execute(() async {
+      final p = _ref(params, DataModifiers.search);
       final event = await operation.search(
         p,
         checker,
@@ -223,15 +214,5 @@ mixin _SourceReadMixin<T extends Entity>
       if (result.isEmpty) return Response(status: Status.notFound);
       return Response(status: Status.ok, result: result, snapshot: event);
     });
-  }
-
-  Future<List<T>> _buildAll(Iterable<Map<String, dynamic>> docs) async {
-    final out = <T>[];
-    for (final i in docs) {
-      if (i.isEmpty) continue;
-      final v = await decryptDoc(i);
-      out.add(build(v));
-    }
-    return out;
   }
 }

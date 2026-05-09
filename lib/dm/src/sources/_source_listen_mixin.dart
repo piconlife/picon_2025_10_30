@@ -1,15 +1,6 @@
 part of 'base.dart';
 
-mixin _SourceListenMixin<T extends Entity>
-    on _SourceExecuteMixin<T>, _SourceEncryptionMixin<T>, _SourcePathMixin<T> {
-  DataDelegate get delegate;
-
-  DataOperation get operation;
-
-  DataLimitations get limitations;
-
-  T build(dynamic source);
-
+mixin _SourceListenMixin<T extends Entity> on _SourceReadBaseMixin<T> {
   Stream<Response<T>> listen({
     DataFieldParams? params,
     bool? countable,
@@ -18,8 +9,8 @@ mixin _SourceListenMixin<T extends Entity>
     bool resolveDocChangesRefs = false,
     Ignore? ignore,
   }) {
-    return executeStream(() {
-      final p = ref(params, DataModifiers.listen);
+    return _executeStream(() {
+      final p = _ref(params, DataModifiers.listen);
       return operation
           .listen(
             p,
@@ -61,8 +52,8 @@ mixin _SourceListenMixin<T extends Entity>
     Ignore? ignore,
   }) {
     if (id.isEmpty) return Stream.value(Response(status: Status.invalidId));
-    return executeStream(() {
-      final p = ref(params, DataModifiers.listenById, id);
+    return _executeStream(() {
+      final p = _ref(params, DataModifiers.listenById, id);
       return operation
           .listenById(
             p,
@@ -72,7 +63,7 @@ mixin _SourceListenMixin<T extends Entity>
           )
           .asyncMap((event) async {
             if (!event.exists) return Response(status: Status.notFound);
-            final v = await decryptDoc(event.doc);
+            final v = await _decryptDoc(event.doc);
             return Response(status: Status.ok, data: build(v), snapshot: event);
           });
     });
@@ -87,7 +78,7 @@ mixin _SourceListenMixin<T extends Entity>
     Ignore? ignore,
   }) {
     if (ids.isEmpty) return Stream.value(Response(status: Status.invalid));
-    return executeStream(() {
+    return _executeStream(() {
       if (limitations.whereIn > 0 && ids.length > limitations.whereIn) {
         final map = <String, T>{};
         return StreamGroup.merge(
@@ -111,7 +102,7 @@ mixin _SourceListenMixin<T extends Entity>
           );
         });
       }
-      final p = ref(params, DataModifiers.listenByIds);
+      final p = _ref(params, DataModifiers.listenByIds);
       return operation
           .listenByQuery(
             p,
@@ -156,8 +147,8 @@ mixin _SourceListenMixin<T extends Entity>
     bool resolveDocChangesRefs = false,
     Ignore? ignore,
   }) {
-    return executeStream(() {
-      final p = ref(params, DataModifiers.listenByQuery);
+    return _executeStream(() {
+      final p = _ref(params, DataModifiers.listenByQuery);
       final adjustedQueries = queries.map(
         (e) => e.adjust(delegate.queryFieldValue),
       );
@@ -205,8 +196,8 @@ mixin _SourceListenMixin<T extends Entity>
     DataFieldParams? params,
     Duration? interval,
   }) {
-    return executeStream(() {
-      final p = ref(params, DataModifiers.listenCount);
+    return _executeStream(() {
+      final p = _ref(params, DataModifiers.listenCount);
       return Stream.periodic(interval ?? const Duration(seconds: 10)).asyncMap((
         _,
       ) async {
@@ -214,15 +205,5 @@ mixin _SourceListenMixin<T extends Entity>
         return Response(data: e, status: Status.ok);
       });
     });
-  }
-
-  Future<List<T>> _buildAll(Iterable<Map<String, dynamic>> docs) async {
-    final out = <T>[];
-    for (final i in docs) {
-      if (i.isEmpty) continue;
-      final v = await decryptDoc(i);
-      out.add(build(v));
-    }
-    return out;
   }
 }
