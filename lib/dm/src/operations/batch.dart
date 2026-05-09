@@ -26,13 +26,15 @@ abstract class DataWriteBatch {
 
   void set(String path, Object data, {bool merge = true}) {
     _ensureNotCommitted();
-    onSet(path, data, merge: merge);
+    final payload =
+        data is Map<String, dynamic> ? Map<String, dynamic>.from(data) : data;
+    onSet(path, payload, merge: merge);
     _operationCount++;
   }
 
   void update(String path, Map<String, dynamic> data) {
     _ensureNotCommitted();
-    onUpdate(path, Map<String, dynamic>.unmodifiable(data));
+    onUpdate(path, Map<String, dynamic>.from(data));
     _operationCount++;
   }
 

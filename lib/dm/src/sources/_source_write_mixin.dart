@@ -30,7 +30,7 @@ mixin _SourceWriteMixin<T extends Entity>
     return _execute(() async {
       final p = _ref(params, DataModifiers.create, id);
       final encrypted = await _encryptDoc(data);
-      final payload = encrypted ?? data;
+      final payload = encrypted ?? Map<String, dynamic>.from(data);
       await operation.create(p, payload, merge: merge, createRefs: createRefs);
       return Response(status: Status.ok, data: build(data));
     });
@@ -76,9 +76,10 @@ mixin _SourceWriteMixin<T extends Entity>
     }
     return _execute(() async {
       final p = _ref(params, DataModifiers.updateById, id);
-      final adjusted = data.map(
-        (k, v) => MapEntry(k, delegate.updatingFieldValue(v)),
-      );
+      final adjusted = <String, dynamic>{
+        for (final entry in data.entries)
+          entry.key: delegate.updatingFieldValue(entry.value),
+      };
       if (!isEncryptor) {
         await operation.update(p, adjusted, updateRefs: updateRefs);
         return Response(status: Status.ok);
@@ -90,8 +91,7 @@ mixin _SourceWriteMixin<T extends Entity>
         resolveRefs: resolveRefs ?? updateRefs,
         ignore: ignore,
       );
-      final base = existing.data?.filtered ?? <String, dynamic>{};
-      base.addAll(adjusted);
+      final base = <String, dynamic>{...?existing.data?.filtered, ...adjusted};
       final encrypted = await _encryptDoc(base);
       if (encrypted == null) return Response(status: Status.nullable);
       await operation.update(p, encrypted, updateRefs: updateRefs);

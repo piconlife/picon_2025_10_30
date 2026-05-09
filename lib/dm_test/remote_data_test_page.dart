@@ -19,7 +19,8 @@ class RemoteDataTestPage extends StatefulWidget {
 class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
   final _repo = ProductRepository();
   String _log = '';
-  final String _id = '1778309191067';
+
+  String get _id => '1778319785575';
 
   void _log_(String msg) => setState(() => _log = msg);
 
@@ -76,7 +77,7 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
 
   Future<void> _update() async {
     final r = await _repo.updateById(_id, {ProductKey.price: 199.9});
-    _log_(r.isValid ? 'Updated: $_id' : 'Error: ${r.error}');
+    _log_(r.isSuccessful ? 'Updated: $_id' : 'Error: ${r.error}');
   }
 
   Future<void> _delete(String id) async {
@@ -85,7 +86,7 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
   }
 
   Future<void> _get() async {
-    final res = await _repo.get();
+    final res = await _repo.get(backupMode: true);
     _log_(
       res.isValid ? 'Got ${res.result.length} items' : 'Error: ${res.error}',
     );

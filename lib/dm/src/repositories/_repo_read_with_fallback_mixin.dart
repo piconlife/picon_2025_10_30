@@ -25,23 +25,27 @@ mixin _RepoReadWithFallbackMixin<T extends Entity>
                 keyProps: cacheKeyProps,
                 callback: () => _runOnPrimary(read),
               );
-      if (feedback.isValid || !_shouldUseBackup(backupMode)) return feedback;
+
+      if (feedback.isValid) {
+        if (!_shouldUseBackup(backupMode)) return feedback;
+        await _syncToBackup(
+          feedback.result,
+          params: params,
+          createRefs: createRefs ?? resolveRefs,
+          merge: merge,
+          useLazy: _shouldUseLazy(lazyMode),
+        );
+        return feedback;
+      }
+
+      if (!_shouldUseBackup(backupMode)) return feedback;
 
       final backup = await _runOnBackup(read);
-      if (!backup.isValid) return backup;
-
-      await _writeBackToPrimary(
-        backup.result,
-        params: params,
-        createRefs: createRefs ?? resolveRefs,
-        merge: merge,
-        useLazy: _shouldUseLazy(lazyMode),
-      );
       return backup;
     });
   }
 
-  Future<void> _writeBackToPrimary(
+  Future<void> _syncToBackup(
     Iterable<T> result, {
     required DataFieldParams? params,
     required bool createRefs,
@@ -49,6 +53,7 @@ mixin _RepoReadWithFallbackMixin<T extends Entity>
     required bool useLazy,
   }) async {
     if (result.isEmpty) return;
+    if (optional == null) return;
     final writers = result.map((e) => DataWriter(id: e.id, data: e.filtered));
     Future<Response<T>> task(DataSource<T> source) {
       return source.creates(
@@ -60,9 +65,9 @@ mixin _RepoReadWithFallbackMixin<T extends Entity>
     }
 
     if (useLazy) {
-      _runOnPrimaryLazy(task);
+      _runOnBackupLazy(task);
     } else {
-      await _runOnPrimary(task);
+      await _runOnBackup(task);
     }
   }
 }

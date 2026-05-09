@@ -9,9 +9,10 @@ mixin _CreateMixin on _ErrorHandlingMixin, _WriteTransformMixin {
     required bool merge,
     required bool createRefs,
   }) async {
+    final safe = Map<String, dynamic>.from(data);
     if (!createRefs) {
       await _guardAsync(
-        () => delegate.create(path, data, merge),
+        () => delegate.create(path, safe, merge),
         operation: 'create',
         path: path,
       );
@@ -20,7 +21,7 @@ mixin _CreateMixin on _ErrorHandlingMixin, _WriteTransformMixin {
     await _guardAsync(
       () async {
         final batch = delegate.batch();
-        final transformed = _transformWrite(batch, data, merge);
+        final transformed = _transformWrite(batch, safe, merge);
         batch.set(path, transformed, merge: merge);
         await batch.commit();
       },
