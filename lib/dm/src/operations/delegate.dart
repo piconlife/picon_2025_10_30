@@ -11,7 +11,7 @@ abstract class DataDelegate {
 
   DataWriteBatch batch();
 
-  Object resolveFieldPath(Object field) => field;
+  Object resolveFieldPath(Object field, String documentId) => field;
 
   Object? resolveFieldValue(Object? value) => value;
 

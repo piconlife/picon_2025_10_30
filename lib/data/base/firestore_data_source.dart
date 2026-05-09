@@ -5,6 +5,6 @@ import '../delegates/firestore.dart' show FirestoreDataDelegate;
 
 abstract class FirestoreDataSource<T extends Entity>
     extends RemoteDataSource<T> {
-  FirestoreDataSource(String path, {super.limitations})
+  FirestoreDataSource(String path, {super.documentId = 'id', super.limitations})
     : super(path: path, delegate: FirestoreDataDelegate.i);
 }

@@ -46,7 +46,8 @@ class DataQuery {
       source == null ? null : List<Object?>.unmodifiable(source);
 
   DataQuery adjust(
-    Object Function(Object value) key,
+    String documentId,
+    Object Function(Object field, String documentId) field,
     Object? Function(Object? value) value,
   ) {
     Object? convertValue(Object? v) => v == null ? null : value(v);
@@ -55,7 +56,7 @@ class DataQuery {
     }
 
     return DataQuery(
-      key(field),
+      field(this.field, documentId),
       isNull: isNull,
       isEqualTo: convertValue(isEqualTo),
       isNotEqualTo: convertValue(isNotEqualTo),

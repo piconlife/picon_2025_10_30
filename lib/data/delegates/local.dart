@@ -20,8 +20,7 @@ import '../../app/imports/in_app_database.dart'
         InAppQueryReference,
         InAppDocumentSnapshot,
         InAppSetOptions,
-        InAppFieldValue,
-        InAppFieldPath;
+        InAppFieldValue;
 
 class LocalWriteBatch extends DataWriteBatch {
   late final InAppWriteBatch _batch;
@@ -215,10 +214,10 @@ class LocalDataDelegate extends DataDelegate {
   }
 
   @override
-  Object resolveFieldPath(Object field) {
+  Object resolveFieldPath(Object field, String documentId) {
     if (field is! DataFieldPath) return field;
     return switch (field.type) {
-      DataFieldPaths.documentId => InAppFieldPath.documentId,
+      DataFieldPaths.documentId => documentId,
       DataFieldPaths.none => field,
     };
   }

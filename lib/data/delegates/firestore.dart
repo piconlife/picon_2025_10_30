@@ -200,7 +200,7 @@ class FirestoreDataDelegate extends DataDelegate {
   }
 
   @override
-  Object resolveFieldPath(Object field) {
+  Object resolveFieldPath(Object field, String documentId) {
     if (field is! DataFieldPath) return field;
     return switch (field.type) {
       DataFieldPaths.documentId => FieldPath.documentId,

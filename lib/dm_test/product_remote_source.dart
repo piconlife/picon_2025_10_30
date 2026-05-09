@@ -4,7 +4,11 @@ import 'product.dart' show Product;
 
 class ProductRemoteSource extends RemoteDataSource<Product> {
   ProductRemoteSource()
-    : super(path: 'products', delegate: FirestoreDataDelegate.instance);
+    : super(
+        path: 'products',
+        documentId: 'id',
+        delegate: FirestoreDataDelegate.instance,
+      );
 
   @override
   Product build(dynamic source) => Product.from(source);

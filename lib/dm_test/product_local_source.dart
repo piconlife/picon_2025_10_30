@@ -4,7 +4,11 @@ import 'product.dart' show Product;
 
 class ProductLocalSource extends LocalDataSource<Product> {
   ProductLocalSource()
-    : super(path: 'products', delegate: LocalDataDelegate.instance);
+    : super(
+        path: 'products',
+        documentId: 'id',
+        delegate: LocalDataDelegate.instance,
+      );
 
   @override
   Product build(dynamic source) => Product.from(source);

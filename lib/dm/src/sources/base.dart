@@ -22,6 +22,7 @@ import '../utils/updating_info.dart' show DataWriter;
 
 part '_source_encryption_mixin.dart';
 part '_source_execute_mixin.dart';
+part '_source_field_mixin.dart';
 part '_source_listen_mixin.dart';
 part '_source_path_mixin.dart';
 part '_source_read_base_mixin.dart';
@@ -32,6 +33,7 @@ abstract class DataSource<T extends Entity>
     with
         _SourceExecuteMixin<T>,
         _SourceEncryptionMixin<T>,
+        _SourceFieldMixin,
         _SourcePathMixin<T>,
         _SourceReadBaseMixin<T>,
         _SourceReadMixin<T>,
@@ -39,6 +41,9 @@ abstract class DataSource<T extends Entity>
         _SourceListenMixin<T> {
   @override
   final String path;
+
+  @override
+  final String documentId;
 
   @override
   final DataDelegate delegate;
@@ -56,6 +61,7 @@ abstract class DataSource<T extends Entity>
 
   DataSource({
     required this.path,
+    required this.documentId,
     required this.delegate,
     DataEncryptor? encryptor,
     this.limitations = const DataLimitations(),

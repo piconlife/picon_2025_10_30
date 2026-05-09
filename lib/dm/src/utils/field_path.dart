@@ -17,6 +17,11 @@ class DataFieldPath {
     return const DataFieldPath(null, DataFieldPaths.documentId);
   }
 
+  DataFieldPath resolveWithDocId(String field) {
+    if (type != DataFieldPaths.documentId) return this;
+    return DataFieldPath(field);
+  }
+
   @override
   String toString() => "$DataFieldPath(field: $field, type: $type)";
 }

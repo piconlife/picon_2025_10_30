@@ -1,11 +1,7 @@
 import 'package:flutter_entity/entity.dart';
 
 import '../../../app/imports/data_management.dart'
-    show
-        DataQuery,
-        DataSorting,
-        DataSelection,
-        DataFetchOptions;
+    show DataQuery, DataSorting, DataSelection, DataFetchOptions;
 import '../../constants/keys.dart';
 import '../../enums/feed_type.dart';
 import '../../models/user_post.dart';
