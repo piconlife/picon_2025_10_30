@@ -203,8 +203,15 @@ mixin _SourceListenMixin<T extends Entity> on _SourceReadBaseMixin<T> {
       return Stream.periodic(interval ?? const Duration(seconds: 10)).asyncMap((
         _,
       ) async {
-        final e = await operation.count(p);
-        return Response(data: e, status: Status.ok);
+        try {
+          final e = await operation.count(p);
+          if (e == null) {
+            return Response(status: Status.networkError);
+          }
+          return Response(data: e, status: Status.ok);
+        } catch (error) {
+          return Response(status: Status.networkError, error: error.toString());
+        }
       });
     });
   }

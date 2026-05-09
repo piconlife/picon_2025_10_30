@@ -27,10 +27,17 @@ mixin _RepoListenMixin<T extends Entity>
   Stream<Response<int>> listenCount({
     DataFieldParams? params,
     Duration? interval,
-  }) {
-    return _streamOnPrimary(
-      (source) => source.listenCount(params: params, interval: interval),
-    );
+    bool? backupMode,
+  }) async* {
+    final tick = interval ?? const Duration(seconds: 10);
+    yield* Stream.periodic(tick).asyncMap((_) async {
+      final primary = await _runOnPrimary(
+        (source) => source.count(params: params),
+      );
+      if (primary.isValid) return primary;
+      if (!_shouldUseBackup(backupMode)) return primary;
+      return _runOnBackup((source) => source.count(params: params));
+    });
   }
 
   Stream<Response<T>> listenById(
