@@ -1,22 +1,24 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:picon/app/imports/data_management.dart';
+import 'package:flutter_entity/entity.dart' show Response;
 
-import '../../app/imports/flutter_entity.dart';
-import '../local/note_page.dart';
-import 'product.dart';
-import 'product_repository.dart';
+import '../../dm/src/utils/checker.dart' show Checker;
+import '../../dm/src/utils/fetch_options.dart' show DataFetchOptions;
+import '../../dm/src/utils/query.dart' show DataQuery;
+import '../../dm/src/utils/sorting.dart' show DataSorting;
+import 'note.dart';
+import 'note_repository.dart';
 
-class RemoteDataTestPage extends StatefulWidget {
-  const RemoteDataTestPage({super.key});
+class LocalDataTestPage extends StatefulWidget {
+  const LocalDataTestPage({super.key});
 
   @override
-  State<RemoteDataTestPage> createState() => _RemoteDataTestPageState();
+  State<LocalDataTestPage> createState() => _LocalDataTestPageState();
 }
 
-class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
-  final _repo = ProductRepository();
+class _LocalDataTestPageState extends State<LocalDataTestPage> {
+  final _repo = NoteRepository();
   String _log = '';
 
   String get _id => '1778319785575';
@@ -25,90 +27,82 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
 
   Future<void> _create() async {
     final tagPool = [
-      'new',
-      'sale',
-      'hot',
-      'trending',
-      'limited',
-      'popular',
-      'featured',
+      'work',
+      'personal',
+      'idea',
+      'todo',
+      'urgent',
+      'reminder',
+      'draft',
     ];
+    final colors = ['yellow', 'blue', 'green', 'pink', 'white'];
 
     final rnd = DateTime.now().millisecondsSinceEpoch;
-    final price = double.parse((10 + (rnd % 990)).toStringAsFixed(2));
-    final stock = 1 + (rnd % 100);
     final tags = (tagPool..shuffle()).take(2).toList();
+    final color = colors[rnd % colors.length];
 
-    final p = Product(
+    final n = Note(
       id: _id,
-      name: 'Headphone ${rnd % 1000}',
-      price: price,
-      category: 'accessories',
+      title: 'Note ${rnd % 1000}',
+      body: 'This is a sample note body created at $rnd',
       tags: tags,
-      stock: stock,
+      pinned: rnd % 2 == 0,
+      color: color,
     );
-    final res = await _repo.create(p);
+    final res = await _repo.create(n);
 
     _log_(
       res.isValid
-          ? 'Created: ${p.name} | ${p.category} | ৳${p.price}'
+          ? 'Created: ${n.title} | ${n.color} | pinned: ${n.pinned}'
           : 'Error: ${res.error}',
     );
   }
 
   Future<void> _createRandom() async {
-    final names = [
-      'Laptop',
-      'Phone',
-      'Tablet',
-      'Watch',
-      'Speaker',
-      'Camera',
-      'Headphone',
-      'Monitor',
+    final titles = [
+      'Meeting',
+      'Idea',
+      'Shopping',
+      'Reminder',
+      'Quote',
+      'Task',
+      'Journal',
+      'Recipe',
     ];
-    final categories = [
-      'electronics',
-      'gadgets',
-      'accessories',
-      'audio',
-      'display',
-    ];
+    final colors = ['yellow', 'blue', 'green', 'pink', 'white'];
     final tagPool = [
-      'new',
-      'sale',
-      'hot',
-      'trending',
-      'limited',
-      'popular',
-      'featured',
+      'work',
+      'personal',
+      'idea',
+      'todo',
+      'urgent',
+      'reminder',
+      'draft',
     ];
 
     final rnd = DateTime.now().millisecondsSinceEpoch;
-    final name = names[rnd % names.length];
-    final category = categories[rnd % categories.length];
-    final price = double.parse((10 + (rnd % 990)).toStringAsFixed(2));
-    final stock = 1 + (rnd % 100);
+    final title = titles[rnd % titles.length];
+    final color = colors[rnd % colors.length];
     final tags = (tagPool..shuffle()).take(2).toList();
 
-    final p = Product(
+    final n = Note(
       id: rnd.toString(),
-      name: '$name ${rnd % 1000}',
-      price: price,
-      category: category,
+      title: '$title ${rnd % 1000}',
+      body: 'Body content for $title at $rnd',
       tags: tags,
-      stock: stock,
+      pinned: rnd % 2 == 0,
+      color: color,
     );
-    final res = await _repo.create(p);
+    final res = await _repo.create(n);
     _log_(
       res.isValid
-          ? 'Created: ${p.name} | ${p.category} | ৳${p.price}'
+          ? 'Created: ${n.title} | ${n.color} | pinned: ${n.pinned}'
           : 'Error: ${res.error}',
     );
   }
 
   Future<void> _update() async {
-    final r = await _repo.updateById(_id, {ProductKey.price: 199.9});
+    final r = await _repo.updateById(_id, {NoteKey.i.pinned: true});
     _log_(r.isSuccessful ? 'Updated: $_id' : 'Error: ${r.error}');
   }
 
@@ -142,7 +136,7 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
   Future<void> _getById() async {
     final r = await _repo.getById(_id);
     _log_(
-      r.isValid ? 'Got: ${r.result.firstOrNull?.name}' : 'Error: ${r.error}',
+      r.isValid ? 'Got: ${r.result.firstOrNull?.title}' : 'Error: ${r.error}',
     );
   }
 
@@ -153,7 +147,7 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
 
   Future<void> _query() async {
     final res = await _repo.getByQuery(
-      queries: [DataQuery(ProductKey.category, isEqualTo: 'accessories')],
+      queries: [DataQuery(NoteKey.i.color, isEqualTo: 'yellow')],
       options: const DataFetchOptions.limit(10),
     );
     _log_(
@@ -162,12 +156,10 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
   }
 
   Future<void> _search() async {
-    final res = await _repo.search(
-      Checker.contains(ProductKey.category, 'access'),
-    );
+    final res = await _repo.search(Checker.contains(NoteKey.i.title, 'Note'));
     _log_(
       res.isValid
-          ? 'Search: ${res.result.length} items: ${res.result.map((e) => e.category).join(', ')}'
+          ? 'Search: ${res.result.length} items: ${res.result.map((e) => e.title).join(', ')}'
           : 'Error: ${res.error}',
     );
   }
@@ -179,9 +171,8 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
 
   @override
   Widget build(BuildContext context) {
-    return LocalDataTestPage();
     return Scaffold(
-      appBar: AppBar(title: const Text('Remote Data Test')),
+      appBar: AppBar(title: const Text('Local Data Test')),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -230,7 +221,7 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
                 stream: _repo.listenCount(interval: Duration(seconds: 5)),
                 builder: (context, s) {
                   final count = s.data?.result.firstOrNull ?? 0;
-                  return Text('Total products: $count');
+                  return Text('Total notes: $count');
                 },
               ),
               const Divider(),
@@ -239,7 +230,7 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
                 'Listen By Id',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              StreamBuilder<Response<Product>>(
+              StreamBuilder<Response<Note>>(
                 stream: _repo.listenById(_id),
                 builder: (context, s) {
                   final item = s.data?.result.firstOrNull;
@@ -249,11 +240,9 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
                   if (item == null) return const Text('No data');
                   return ListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: Text(item.name),
-                    subtitle: Text(
-                      'Price: ${item.price} | Stock: ${item.stock}',
-                    ),
-                    trailing: Text(item.category),
+                    title: Text(item.title),
+                    subtitle: Text('${item.body} | pinned: ${item.pinned}'),
+                    trailing: Text(item.color),
                   );
                 },
               ),
@@ -262,7 +251,7 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
                 'Listen By Ids',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              StreamBuilder<Response<Product>>(
+              StreamBuilder<Response<Note>>(
                 stream: _repo.listenByIds([_id]),
                 builder: (context, s) {
                   final item = s.data?.result.firstOrNull;
@@ -272,11 +261,9 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
                   if (item == null) return const Text('No data');
                   return ListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: Text(item.name),
-                    subtitle: Text(
-                      'Price: ${item.price} | Stock: ${item.stock}',
-                    ),
-                    trailing: Text(item.category),
+                    title: Text(item.title),
+                    subtitle: Text('${item.body} | pinned: ${item.pinned}'),
+                    trailing: Text(item.color),
                   );
                 },
               ),
@@ -285,7 +272,7 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
                 'Listen',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              StreamBuilder<Response<Product>>(
+              StreamBuilder<Response<Note>>(
                 stream: _repo.listen(),
                 builder: (context, s) {
                   final items = s.data?.result ?? [];
@@ -299,9 +286,11 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
                       return ListTile(
                         onLongPress: () => _delete(item.id),
                         contentPadding: EdgeInsets.zero,
-                        title: Text(item.name),
-                        subtitle: Text('₹${item.price} | ${item.category}'),
-                        trailing: Text('Stock: ${item.id}'),
+                        title: Text(item.title),
+                        subtitle: Text(
+                          '${item.color} | ${item.tags.join(", ")}',
+                        ),
+                        trailing: Text('Pinned: ${item.pinned}'),
                       );
                     },
                   );
@@ -312,10 +301,10 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
                 'Listen By Query',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              StreamBuilder<Response<Product>>(
+              StreamBuilder<Response<Note>>(
                 stream: _repo.listenByQuery(
-                  queries: [DataQuery(ProductKey.price, isGreaterThan: 100)],
-                  sorts: [DataSorting(ProductKey.price)],
+                  queries: [DataQuery(NoteKey.i.pinned, isEqualTo: true)],
+                  sorts: [DataSorting(NoteKey.i.timeMills)],
                 ),
                 builder: (context, s) {
                   final items = s.data?.result ?? [];
@@ -329,9 +318,11 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
                       return ListTile(
                         onLongPress: () => _delete(item.id),
                         contentPadding: EdgeInsets.zero,
-                        title: Text(item.name),
-                        subtitle: Text('₹${item.price} | ${item.category}'),
-                        trailing: Text('Stock: ${item.id}'),
+                        title: Text(item.title),
+                        subtitle: Text(
+                          '${item.color} | ${item.tags.join(", ")}',
+                        ),
+                        trailing: Text('Pinned: ${item.pinned}'),
                       );
                     },
                   );
