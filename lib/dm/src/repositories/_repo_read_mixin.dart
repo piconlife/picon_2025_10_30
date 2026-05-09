@@ -39,12 +39,12 @@ mixin _RepoReadMixin<T extends Entity>
   }
 
   Future<Response<int>> count({DataFieldParams? params, bool? backupMode}) {
-    return applyModifier<int>(DataModifiers.count, () async {
-      final feedback = await runOnPrimary(
+    return _applyModifier<int>(DataModifiers.count, () async {
+      final feedback = await _runOnPrimary(
         (source) => source.count(params: params),
       );
-      if (feedback.isValid || !shouldUseBackup(backupMode)) return feedback;
-      return runOnBackup((source) => source.count(params: params));
+      if (feedback.isValid || !_shouldUseBackup(backupMode)) return feedback;
+      return _runOnBackup((source) => source.count(params: params));
     });
   }
 

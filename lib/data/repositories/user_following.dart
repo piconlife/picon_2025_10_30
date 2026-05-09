@@ -46,7 +46,7 @@ class UserFollowingRepository extends RemoteDataRepository<FollowingModel> {
       case DataModifiers.deleteByIds:
       case DataModifiers.search:
       case DataModifiers.updateById:
-      case DataModifiers.updateByIds:
+      case DataModifiers.updateByWriters:
         return value;
       case DataModifiers.count:
         // TODO: Handle this case.

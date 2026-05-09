@@ -99,17 +99,17 @@ mixin _SourceWriteMixin<T extends Entity>
     });
   }
 
-  Future<Response<T>> updateByIds(
-    Iterable<DataWriter> updates, {
+  Future<Response<T>> updateByWriters(
+    Iterable<DataWriter> writers, {
     DataFieldParams? params,
     bool? resolveRefs,
     Ignore? ignore,
     bool updateRefs = false,
   }) {
-    if (updates.isEmpty) return Future.value(Response(status: Status.invalid));
+    if (writers.isEmpty) return Future.value(Response(status: Status.invalid));
     return execute(() async {
       final results = await Future.wait(
-        updates.map(
+        writers.map(
           (e) => updateById(
             e.id,
             e.data,
@@ -122,7 +122,7 @@ mixin _SourceWriteMixin<T extends Entity>
       );
       final ok = results.where((e) => e.isSuccessful);
       return Response(
-        status: ok.length == updates.length ? Status.ok : Status.canceled,
+        status: ok.length == writers.length ? Status.ok : Status.canceled,
         snapshot: results,
         backups: results.map((e) => e.data).whereType<T>().toList(),
       );

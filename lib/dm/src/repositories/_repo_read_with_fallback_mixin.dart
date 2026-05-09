@@ -15,19 +15,19 @@ mixin _RepoReadWithFallbackMixin<T extends Entity>
     String? cacheKey,
     List<Object?> cacheKeyProps = const [],
   }) {
-    return applyModifier<T>(modifierId, () async {
+    return _applyModifier<T>(modifierId, () async {
       final feedback =
           cacheKey == null
-              ? await runOnPrimary(read)
+              ? await _runOnPrimary(read)
               : await CacheManager.i.cache(
                 cacheKey,
                 enabled: shouldUseSingleton(singletonMode),
                 keyProps: cacheKeyProps,
-                callback: () => runOnPrimary(read),
+                callback: () => _runOnPrimary(read),
               );
-      if (feedback.isValid || !shouldUseBackup(backupMode)) return feedback;
+      if (feedback.isValid || !_shouldUseBackup(backupMode)) return feedback;
 
-      final backup = await runOnBackup(read);
+      final backup = await _runOnBackup(read);
       if (!backup.isValid) return backup;
 
       await _writeBackToPrimary(
@@ -35,7 +35,7 @@ mixin _RepoReadWithFallbackMixin<T extends Entity>
         params: params,
         createRefs: createRefs ?? resolveRefs,
         merge: merge,
-        useLazy: shouldUseLazy(lazyMode),
+        useLazy: _shouldUseLazy(lazyMode),
       );
       return backup;
     });
@@ -62,7 +62,7 @@ mixin _RepoReadWithFallbackMixin<T extends Entity>
     if (useLazy) {
       runOnPrimaryLazy(task);
     } else {
-      await runOnPrimary(task);
+      await _runOnPrimary(task);
     }
   }
 }

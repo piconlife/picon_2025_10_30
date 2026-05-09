@@ -7,16 +7,16 @@ mixin _RepoModifierMixin<T extends Entity> on _RepoExecutorMixin<T> {
 
   bool get singletonMode;
 
-  bool shouldUseBackup([bool? override]) =>
+  bool _shouldUseBackup([bool? override]) =>
       optional != null && (override ?? backupMode);
 
-  bool shouldUseLazy([bool? override]) => override ?? lazyMode;
+  bool _shouldUseLazy([bool? override]) => override ?? lazyMode;
 
   bool shouldUseSingleton([bool? override]) => override ?? singletonMode;
 
   Future<Response<T>> modifier(Response<T> value, DataModifiers modifier);
 
-  Future<Response<S>> applyModifier<S extends Object>(
+  Future<Response<S>> _applyModifier<S extends Object>(
     DataModifiers modifierId,
     Future<Response<S>> Function() callback,
   ) async {

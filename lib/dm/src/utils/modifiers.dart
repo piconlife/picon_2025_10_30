@@ -17,5 +17,5 @@ enum DataModifiers {
   listenCount,
   search,
   updateById,
-  updateByIds,
+  updateByWriters,
 }

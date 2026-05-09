@@ -36,7 +36,7 @@ mixin _RepoWriteMixin<T extends Entity>
     if (data.isEmpty) {
       return Future.value(Response(status: Status.invalid));
     }
-    return dualWrite(
+    return _dualWrite(
       DataModifiers.create,
       backupMode: backupMode,
       lazyMode: lazyMode,
@@ -80,7 +80,7 @@ mixin _RepoWriteMixin<T extends Entity>
     if (writers.isEmpty) {
       return Future.value(Response(status: Status.invalid));
     }
-    return dualWrite(
+    return _dualWrite(
       DataModifiers.creates,
       backupMode: backupMode,
       lazyMode: lazyMode,
@@ -107,7 +107,7 @@ mixin _RepoWriteMixin<T extends Entity>
     if (id.isEmpty || data.isEmpty) {
       return Future.value(Response(status: Status.invalid));
     }
-    return dualWrite(
+    return _dualWrite(
       DataModifiers.updateById,
       backupMode: backupMode,
       lazyMode: lazyMode,
@@ -123,8 +123,8 @@ mixin _RepoWriteMixin<T extends Entity>
     );
   }
 
-  Future<Response<T>> updateByIds(
-    Iterable<DataWriter> updates, {
+  Future<Response<T>> updateByWriters(
+    Iterable<DataWriter> writers, {
     DataFieldParams? params,
     bool? resolveRefs,
     Ignore? ignore,
@@ -132,16 +132,16 @@ mixin _RepoWriteMixin<T extends Entity>
     bool? lazyMode,
     bool? backupMode,
   }) {
-    if (updates.isEmpty) {
+    if (writers.isEmpty) {
       return Future.value(Response(status: Status.invalid));
     }
-    return dualWrite(
-      DataModifiers.updateByIds,
+    return _dualWrite(
+      DataModifiers.updateByWriters,
       backupMode: backupMode,
       lazyMode: lazyMode,
       write:
-          (source) => source.updateByIds(
-            updates,
+          (source) => source.updateByWriters(
+            writers,
             params: params,
             resolveRefs: resolveRefs,
             ignore: ignore,
@@ -163,7 +163,7 @@ mixin _RepoWriteMixin<T extends Entity>
     if (id.isEmpty) {
       return Future.value(Response(status: Status.invalidId));
     }
-    return dualWrite(
+    return _dualWrite(
       DataModifiers.deleteById,
       backupMode: backupMode,
       lazyMode: lazyMode,
@@ -192,7 +192,7 @@ mixin _RepoWriteMixin<T extends Entity>
     if (ids.isEmpty) {
       return Future.value(Response(status: Status.invalid));
     }
-    return dualWrite(
+    return _dualWrite(
       DataModifiers.deleteByIds,
       backupMode: backupMode,
       lazyMode: lazyMode,
@@ -217,7 +217,7 @@ mixin _RepoWriteMixin<T extends Entity>
     bool? lazyMode,
     bool? backupMode,
   }) {
-    return dualWrite(
+    return _dualWrite(
       DataModifiers.clear,
       backupMode: backupMode,
       lazyMode: lazyMode,
@@ -236,7 +236,7 @@ mixin _RepoWriteMixin<T extends Entity>
     if (writers.isEmpty) {
       return Response(status: Status.invalid);
     }
-    final response = await runOnPrimary<Object>((source) async {
+    final response = await _runOnPrimary<Object>((source) async {
       final r = await source.write(writers);
       return r.isSuccessful
           ? Response<Object>(status: Status.ok)

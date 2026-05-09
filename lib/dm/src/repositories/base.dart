@@ -130,10 +130,10 @@ class DataRepository<T extends Entity>
     if (!restoreMode) {
       return Response(status: Status.canceled, error: 'restoreMode disabled');
     }
-    if (!shouldUseBackup(backupMode)) {
+    if (!_shouldUseBackup(backupMode)) {
       return Response(status: Status.canceled, error: 'backup unavailable');
     }
-    final backup = await runOnBackup((source) {
+    final backup = await _runOnBackup((source) {
       return source.get(
         params: params,
         countable: countable,
@@ -151,7 +151,7 @@ class DataRepository<T extends Entity>
       params: params,
       createRefs: createRefs,
       merge: merge,
-      useLazy: shouldUseLazy(lazyMode),
+      useLazy: _shouldUseLazy(lazyMode),
     );
     return Response(status: Status.ok);
   }

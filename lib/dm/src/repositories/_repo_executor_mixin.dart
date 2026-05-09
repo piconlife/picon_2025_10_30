@@ -13,7 +13,7 @@ mixin _RepoExecutorMixin<T extends Entity> {
 
   ErrorDelegate get errorDelegate;
 
-  Future<Response<S>> runOnPrimary<S extends Object>(
+  Future<Response<S>> _runOnPrimary<S extends Object>(
     Future<Response<S>> Function(DataSource<T> source) callback,
   ) async {
     try {
@@ -28,7 +28,7 @@ mixin _RepoExecutorMixin<T extends Entity> {
     }
   }
 
-  Future<Response<S>> runOnBackup<S extends Object>(
+  Future<Response<S>> _runOnBackup<S extends Object>(
     Future<Response<S>> Function(DataSource<T> source) callback,
   ) async {
     final backup = optional;
@@ -45,10 +45,10 @@ mixin _RepoExecutorMixin<T extends Entity> {
     }
   }
 
-  void runOnBackupLazy<S extends Object>(
+  void _runOnBackupLazy<S extends Object>(
     Future<Response<S>> Function(DataSource<T> source) callback,
   ) {
-    runOnBackup(callback).catchError((Object error, StackTrace stack) {
+    _runOnBackup(callback).catchError((Object error, StackTrace stack) {
       _report('runOnBackupLazy', error, stack);
       return Response<S>(status: Status.failure, error: error.toString());
     });
@@ -57,7 +57,7 @@ mixin _RepoExecutorMixin<T extends Entity> {
   void runOnPrimaryLazy<S extends Object>(
     Future<Response<S>> Function(DataSource<T> source) callback,
   ) {
-    runOnPrimary(callback).catchError((Object error, StackTrace stack) {
+    _runOnPrimary(callback).catchError((Object error, StackTrace stack) {
       _report('runOnPrimaryLazy', error, stack);
       return Response<S>(status: Status.failure, error: error.toString());
     });

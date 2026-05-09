@@ -174,56 +174,56 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
               //     return Text('Total products: $count');
               //   },
               // ),
-              const Divider(),
-
-              const Text(
-                'First Item (stream by id)',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              StreamBuilder<Response<Product>>(
-                stream: _repo.listenById(_id),
-                builder: (context, s) {
-                  final item = s.data?.result.firstOrNull;
-                  if (item == null) return const Text('Loading...');
-                  return ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(item.name),
-                    subtitle: Text(
-                      'Price: ${item.price} | Stock: ${item.stock}',
-                    ),
-                    trailing: Text(item.category),
-                  );
-                },
-              ),
-              const Divider(),
-
-              const Text(
-                'All Products (stream)',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              StreamBuilder<Response<Product>>(
-                stream: _repo.listen(),
-                builder: (context, s) {
-                  final items = s.data?.result ?? [];
-                  if (items.isEmpty) return const Text('No data');
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: items.length,
-                    itemBuilder: (_, i) {
-                      final item = items[i];
-                      return ListTile(
-                        onLongPress: () => _delete(item.id),
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(item.name),
-                        subtitle: Text('₹${item.price} | ${item.category}'),
-                        trailing: Text('Stock: ${item.id}'),
-                      );
-                    },
-                  );
-                },
-              ),
-              const SizedBox(height: 40),
+              // const Divider(),
+              //
+              // const Text(
+              //   'First Item (stream by id)',
+              //   style: TextStyle(fontWeight: FontWeight.bold),
+              // ),
+              // StreamBuilder<Response<Product>>(
+              //   stream: _repo.listenById(_id),
+              //   builder: (context, s) {
+              //     final item = s.data?.result.firstOrNull;
+              //     if (item == null) return const Text('Loading...');
+              //     return ListTile(
+              //       contentPadding: EdgeInsets.zero,
+              //       title: Text(item.name),
+              //       subtitle: Text(
+              //         'Price: ${item.price} | Stock: ${item.stock}',
+              //       ),
+              //       trailing: Text(item.category),
+              //     );
+              //   },
+              // ),
+              // const Divider(),
+              //
+              // const Text(
+              //   'All Products (stream)',
+              //   style: TextStyle(fontWeight: FontWeight.bold),
+              // ),
+              // StreamBuilder<Response<Product>>(
+              //   stream: _repo.listen(),
+              //   builder: (context, s) {
+              //     final items = s.data?.result ?? [];
+              //     if (items.isEmpty) return const Text('No data');
+              //     return ListView.builder(
+              //       shrinkWrap: true,
+              //       physics: const NeverScrollableScrollPhysics(),
+              //       itemCount: items.length,
+              //       itemBuilder: (_, i) {
+              //         final item = items[i];
+              //         return ListTile(
+              //           onLongPress: () => _delete(item.id),
+              //           contentPadding: EdgeInsets.zero,
+              //           title: Text(item.name),
+              //           subtitle: Text('₹${item.price} | ${item.category}'),
+              //           trailing: Text('Stock: ${item.id}'),
+              //         );
+              //       },
+              //     );
+              //   },
+              // ),
+              // const SizedBox(height: 40),
             ],
           ),
         ),
