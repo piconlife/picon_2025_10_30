@@ -75,17 +75,6 @@ class DataSelection {
     return v is List<Object?> ? v : null;
   }
 
-  DataSelection adjust(Object? Function(Object? value) converter) {
-    final v = value;
-    if (v is List<Object?>) {
-      return DataSelection._(
-        List<Object?>.unmodifiable(v.map(converter)),
-        type: type,
-      );
-    }
-    return DataSelection._(converter(v), type: type);
-  }
-
   @override
   int get hashCode {
     final v = value;
