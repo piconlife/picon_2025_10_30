@@ -3,10 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_entity/entity.dart' show Response;
 
-import '../../dm/src/utils/checker.dart' show Checker;
-import '../../dm/src/utils/fetch_options.dart' show DataFetchOptions;
-import '../../dm/src/utils/query.dart' show DataQuery;
-import '../../dm/src/utils/sorting.dart' show DataSorting;
+import '../../app/imports/data_management.dart';
 import 'note.dart';
 import 'note_repository.dart';
 
@@ -227,7 +224,6 @@ class _LocalDataTestPageState extends State<LocalDataTestPage> {
                   },
                 ),
                 const Divider(),
-
                 const Text(
                   'Listen By Id',
                   style: TextStyle(fontWeight: FontWeight.bold),
