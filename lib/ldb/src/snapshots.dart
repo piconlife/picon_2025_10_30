@@ -130,13 +130,8 @@ class InAppDocumentChange extends InAppSnapshot {
 }
 
 class InAppDocumentChangeSnapshot extends InAppDocumentChange {
-  const InAppDocumentChangeSnapshot({required InAppQueryDocumentSnapshot doc})
-    : super(
-        type: InAppDocumentChangeType.modified,
-        oldIndex: -1,
-        newIndex: -1,
-        doc: doc,
-      );
+  const InAppDocumentChangeSnapshot({required super.doc})
+    : super(type: InAppDocumentChangeType.modified, oldIndex: -1, newIndex: -1);
 }
 
 class InAppQuerySnapshot extends InAppSnapshot {
@@ -228,14 +223,6 @@ class InAppAggregateQuerySnapshot extends InAppSnapshot {
 
   @override
   String toString() => 'InAppAggregateQuerySnapshot(count: $count)';
-}
-
-@Deprecated('Use InAppAggregateQuerySnapshot instead.')
-class InAppCounterSnapshot extends InAppAggregateQuerySnapshot {
-  final String id;
-
-  const InAppCounterSnapshot(this.id, InAppQuerySnapshot query, [int count = 0])
-    : super(count: count, query: query);
 }
 
 class InAppFailureSnapshot extends InAppSnapshot {

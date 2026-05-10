@@ -1,4 +1,4 @@
-import 'dart:async';
+import 'dart:async' show Stream, Completer;
 import 'dart:convert' show jsonDecode, jsonEncode;
 import 'dart:developer' show log;
 

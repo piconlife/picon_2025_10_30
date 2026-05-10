@@ -1,5 +1,12 @@
 import 'batch.dart' show InAppWriteBatch;
-import 'database.dart';
+import 'database.dart'
+    show
+        InAppDatabase,
+        InAppDocumentSnapshot,
+        InAppDocumentReference,
+        InAppDocument,
+        InAppSetOptions,
+        InAppValue;
 
 enum _TxnOpType { set, update, delete }
 

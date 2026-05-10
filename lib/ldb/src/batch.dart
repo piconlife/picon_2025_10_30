@@ -1,4 +1,10 @@
-import 'database.dart';
+import 'database.dart'
+    show
+        InAppDatabase,
+        InAppDocumentReference,
+        InAppDocument,
+        InAppSetOptions,
+        InAppValue;
 
 enum _BatchOpType { set, update, delete }
 
