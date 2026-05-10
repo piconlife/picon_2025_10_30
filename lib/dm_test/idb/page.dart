@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'
     show
         StatefulWidget,
@@ -55,7 +56,7 @@ class _LocalDataTestPageState extends State<LocalDataTestPage> {
 
   static const _id = '1778319785575';
 
-  InAppQueryReference get _notes => _db.collection('notes');
+  InAppQueryReference get _notes => _db.collection('notes_v2');
 
   InAppDocumentReference _noteDoc(String id) => _notes.doc(id);
 
@@ -69,6 +70,7 @@ class _LocalDataTestPageState extends State<LocalDataTestPage> {
       await action();
     } catch (e) {
       _log_('$label error: $e');
+      rethrow;
     }
   }
 
@@ -287,57 +289,48 @@ class _LocalDataTestPageState extends State<LocalDataTestPage> {
       data: ThemeData.dark(),
       child: Scaffold(
         appBar: AppBar(title: const Text('InAppDatabase Test')),
+        floatingActionButton: SingleChildScrollView(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.transparent, Colors.black],
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                _btn('Create', _create),
+                _btn('CreateRandom (add)', _createRandom),
+                _btn('Update', _update),
+                _btn('Set Merge', _setMerge),
+                _btn('Toggle Pin', _toggle),
+                _btn('Remove Tag', _removeTag),
+                _btn('Delete Field', _deleteField),
+                _btn('Batch (3 ops)', _batch),
+                _btn('Transaction', _transaction),
+                _btn('Subcollection', _subcollection),
+                _btn('Check By Id', _checkById),
+                _btn('Get All', _get),
+                _btn('Get By Id', _getById),
+                _btn('Query (color)', _query),
+                _btn('whereIn', _queryWhereIn),
+                _btn('arrayContains', _queryArrayContains),
+                _btn('Range', _queryRange),
+                _btn('Search', _search),
+                _btn('Count', _count),
+                _btn('Delete By Id', () => _delete(_id)),
+                _btn('Clear All', _deleteAll),
+              ],
+            ),
+          ),
+        ),
         body: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const _Section('Write Operations'),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    _btn('Create', _create),
-                    _btn('CreateRandom (add)', _createRandom),
-                    _btn('Update', _update),
-                    _btn('Set Merge', _setMerge),
-                    _btn('Toggle Pin', _toggle),
-                    _btn('Remove Tag', _removeTag),
-                    _btn('Delete Field', _deleteField),
-                    _btn('Batch (3 ops)', _batch),
-                    _btn('Transaction', _transaction),
-                    _btn('Subcollection', _subcollection),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                const _Section('Read Operations'),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    _btn('Check By Id', _checkById),
-                    _btn('Get All', _get),
-                    _btn('Get By Id', _getById),
-                    _btn('Query (color)', _query),
-                    _btn('whereIn', _queryWhereIn),
-                    _btn('arrayContains', _queryArrayContains),
-                    _btn('Range', _queryRange),
-                    _btn('Search', _search),
-                    _btn('Count', _count),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                const _Section('Destructive'),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    _btn('Delete By Id', () => _delete(_id)),
-                    _btn('Clear All', _deleteAll),
-                  ],
-                ),
-                const Divider(),
                 if (_log.isNotEmpty)
                   Container(
                     width: double.infinity,
@@ -464,7 +457,14 @@ class _LocalDataTestPageState extends State<LocalDataTestPage> {
   }
 
   Widget _btn(String label, VoidCallback onTap) {
-    return ElevatedButton(onPressed: onTap, child: Text(label));
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        color: Colors.transparent,
+        padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+        child: Text(label),
+      ),
+    );
   }
 }
 

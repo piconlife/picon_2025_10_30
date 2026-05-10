@@ -35,17 +35,83 @@ class Note {
     this.updatedAt,
   });
 
+  static String _asString(Object? v, [String fallback = '']) {
+    if (v == null) return fallback;
+    if (v is String) return v;
+    return v.toString();
+  }
+
+  static bool _asBool(Object? v, [bool fallback = false]) {
+    if (v is bool) return v;
+    if (v is num) return v != 0;
+    if (v is String) {
+      final s = v.toLowerCase();
+      if (s == 'true' || s == '1') return true;
+      if (s == 'false' || s == '0') return false;
+    }
+    return fallback;
+  }
+
+  static int _asInt(Object? v, [int fallback = 0]) {
+    if (v == null) return fallback;
+    if (v is int) return v;
+    if (v is num) return v.toInt();
+    if (v is String) {
+      final n = int.tryParse(v);
+      if (n != null) return n;
+      final d = double.tryParse(v);
+      if (d != null) return d.toInt();
+      final t = DateTime.tryParse(v);
+      if (t != null) return t.toUtc().millisecondsSinceEpoch;
+    }
+    if (v is DateTime) return v.toUtc().millisecondsSinceEpoch;
+    return fallback;
+  }
+
+  static int? _asIntOrNull(Object? v) {
+    if (v == null) return null;
+    if (v is int) return v;
+    if (v is num) return v.toInt();
+    if (v is String) {
+      final n = int.tryParse(v);
+      if (n != null) return n;
+      final d = double.tryParse(v);
+      if (d != null) return d.toInt();
+      final t = DateTime.tryParse(v);
+      if (t != null) return t.toUtc().millisecondsSinceEpoch;
+    }
+    if (v is DateTime) return v.toUtc().millisecondsSinceEpoch;
+    return null;
+  }
+
+  static List<String> _asStringList(Object? v) {
+    if (v is List) {
+      return v
+          .map((e) => e?.toString() ?? '')
+          .where((e) => e.isNotEmpty)
+          .toList(growable: false);
+    }
+    if (v is String && v.isNotEmpty) {
+      return v
+          .split(',')
+          .map((e) => e.trim())
+          .where((e) => e.isNotEmpty)
+          .toList(growable: false);
+    }
+    return const [];
+  }
+
   factory Note.fromMap(InAppDocument map) {
     return Note(
-      id: (map[NoteKey.id] ?? '') as String,
-      title: (map[NoteKey.title] ?? '') as String,
-      body: (map[NoteKey.body] ?? '') as String,
-      tags: (map[NoteKey.tags] as List?)?.cast<String>() ?? const [],
-      pinned: (map[NoteKey.pinned] ?? false) as bool,
-      color: (map[NoteKey.color] ?? 'white') as String,
-      views: (map[NoteKey.views] ?? 0) as int,
-      createdAt: map[NoteKey.createdAt] as int?,
-      updatedAt: map[NoteKey.updatedAt] as int?,
+      id: _asString(map[NoteKey.id]),
+      title: _asString(map[NoteKey.title]),
+      body: _asString(map[NoteKey.body]),
+      tags: _asStringList(map[NoteKey.tags]),
+      pinned: _asBool(map[NoteKey.pinned]),
+      color: _asString(map[NoteKey.color], 'white'),
+      views: _asInt(map[NoteKey.views]),
+      createdAt: _asIntOrNull(map[NoteKey.createdAt]),
+      updatedAt: _asIntOrNull(map[NoteKey.updatedAt]),
     );
   }
 

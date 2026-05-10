@@ -46,8 +46,12 @@ class InAppFieldValue {
     return InAppFieldValue(value, InAppFieldValues.increment);
   }
 
-  factory InAppFieldValue.serverTimestamp([bool asNumberTimestamp = false]) {
+  factory InAppFieldValue.serverTimestamp([bool asNumberTimestamp = true]) {
     return InAppFieldValue(asNumberTimestamp, InAppFieldValues.serverTimestamp);
+  }
+
+  factory InAppFieldValue.serverTimestampAsString() {
+    return const InAppFieldValue(false, InAppFieldValues.serverTimestamp);
   }
 
   factory InAppFieldValue.toggle([bool? initial]) {

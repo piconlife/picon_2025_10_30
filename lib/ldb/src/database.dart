@@ -1,10 +1,9 @@
 import 'dart:async' show Stream, Completer;
 import 'dart:convert' show jsonDecode, jsonEncode;
 import 'dart:developer' show log;
-import 'dart:ui' show VoidCallback;
 
 import 'package:flutter/foundation.dart'
-    show ChangeNotifier, kReleaseMode, ValueNotifier;
+    show ChangeNotifier, kReleaseMode, ValueNotifier, VoidCallback;
 
 import '../../lq/src/builder.dart' show QueryBuilder;
 import '../../lq/src/query.dart' show Query;
@@ -44,6 +43,9 @@ class InAppDatabase extends ChangeNotifier {
   InAppDatabaseVersion _version;
   bool _disposed = false;
 
+  Object? _lastError;
+  StackTrace? _lastErrorStack;
+
   String get name => _name == _defaultName ? 'default' : _name;
 
   String get versionCode => _version.code;
@@ -69,6 +71,15 @@ class InAppDatabase extends ChangeNotifier {
 
   bool get isInitialized => isInitializedAs(_name);
 
+  Object? consumeLastError() {
+    final e = _lastError;
+    _lastError = null;
+    _lastErrorStack = null;
+    return e;
+  }
+
+  StackTrace? get lastErrorStack => _lastErrorStack;
+
   void _log(Object? msg, {String field = '', String action = ''}) {
     if (!showLogs || kReleaseMode) return;
     var text = msg.toString();
@@ -78,6 +89,27 @@ class InAppDatabase extends ChangeNotifier {
       text = '$action: $text';
     }
     log(text, name: 'IN_APP_DATABASE');
+  }
+
+  static Object? _sanitize(Object? v) {
+    if (v == null || v is num || v is bool || v is String) return v;
+    if (v is DateTime) return v.toUtc().toIso8601String();
+    if (v is Duration) return v.inMicroseconds;
+    if (v is Uri) return v.toString();
+    if (v is BigInt) return v.toString();
+    if (v is Map) {
+      final r = <String, Object?>{};
+      v.forEach((k, val) => r['$k'] = _sanitize(val));
+      return r;
+    }
+    if (v is Iterable) {
+      return v.map(_sanitize).toList(growable: false);
+    }
+    try {
+      return v.toString();
+    } catch (_) {
+      return null;
+    }
   }
 
   Future<T> _serial<T>(String key, Future<T> Function() task) {
@@ -531,7 +563,9 @@ class InAppDatabase extends ChangeNotifier {
           }
           return any || filter != null;
         });
-      } catch (e) {
+      } catch (e, st) {
+        _lastError = e;
+        _lastErrorStack = st;
         _log(e, action: 'delete', field: collectionPath);
         return false;
       }
@@ -563,16 +597,23 @@ class InAppDatabase extends ChangeNotifier {
     try {
       return await _execute(() async {
         final ref = _version._ref(collectionPath);
-        final raw = await _delegate.read(_name, ref);
+        Object? raw;
+        try {
+          raw = await _delegate.read(_name, ref);
+        } catch (_) {
+          raw = null;
+        }
         Object? value = raw;
         if (raw is String) {
           try {
             value = jsonDecode(raw);
           } catch (_) {
-            return const InAppFailureSnapshot('Corrupted data.');
+            value = null;
           }
         }
         if (value is! Map) {
+          if (type.isCollection) return InAppQuerySnapshot(collectionId);
+          if (type.isDocument) return InAppDocumentSnapshot(documentId);
           return const InAppFailureSnapshot('Data not found.');
         }
         if (type.isCollection) {
@@ -610,7 +651,9 @@ class InAppDatabase extends ChangeNotifier {
         }
         return const InAppErrorSnapshot('Unsupported read type.');
       });
-    } catch (e) {
+    } catch (e, st) {
+      _lastError = e;
+      _lastErrorStack = st;
       _log(e, action: 'read', field: collectionPath);
       return InAppFailureSnapshot(e.toString());
     }
@@ -621,18 +664,30 @@ class InAppDatabase extends ChangeNotifier {
     Map<String, Object?> base,
     bool isJson,
   ) async {
-    if (base.isEmpty) return isJson ? jsonEncode(<String, Object?>{}) : base;
+    if (base.isEmpty) return null;
     final l = await _delegate.limitation(_name, PathModifier.format(path));
     if (l == null || l.isUnlimited) {
-      return isJson ? jsonEncode(base) : base;
+      return isJson ? _safeEncode(base) : base;
     }
     final entries = base.entries;
-    if (entries.length <= l.limit) return isJson ? jsonEncode(base) : base;
+    if (entries.length <= l.limit) return isJson ? _safeEncode(base) : base;
     final list = entries.toList(growable: false);
     final selected =
         l.limitByRecent ? list.reversed.take(l.limit) : list.take(l.limit);
     final reduced = Map<String, Object?>.fromEntries(selected);
-    return isJson ? jsonEncode(reduced) : reduced;
+    return isJson ? _safeEncode(reduced) : reduced;
+  }
+
+  static String _safeEncode(Object? data) {
+    return jsonEncode(
+      data,
+      toEncodable: (Object? v) {
+        final s = _sanitize(v);
+        if (s == null || s is num || s is bool || s is String) return s;
+        if (s is List || s is Map) return s;
+        return s.toString();
+      },
+    );
   }
 
   Future<bool> _w({
@@ -668,7 +723,12 @@ class InAppDatabase extends ChangeNotifier {
     try {
       return await _execute(() async {
         final ref = _version._ref(collectionPath);
-        final root = await _delegate.read(_name, ref);
+        Object? root;
+        try {
+          root = await _delegate.read(_name, ref);
+        } catch (_) {
+          root = null;
+        }
         Object? raw = root;
         if (root is String) {
           try {
@@ -684,9 +744,9 @@ class InAppDatabase extends ChangeNotifier {
           if (value != null && value.isNotEmpty) {
             final cleaned = <String, Object?>{};
             value.forEach((k, v) {
-              if (v != null) cleaned[k] = v;
+              if (v != null) cleaned[k] = _sanitize(v);
             });
-            base[documentId] = isJson ? jsonEncode(cleaned) : cleaned;
+            base[documentId] = isJson ? _safeEncode(cleaned) : cleaned;
           } else {
             base.remove(documentId);
           }
@@ -696,7 +756,8 @@ class InAppDatabase extends ChangeNotifier {
               if (v == null) {
                 base.remove(k);
               } else {
-                base[k] = isJson ? jsonEncode(v) : v;
+                final s = _sanitize(v);
+                base[k] = isJson ? _safeEncode(s) : s;
               }
             });
           } else {
@@ -705,9 +766,18 @@ class InAppDatabase extends ChangeNotifier {
         }
 
         final payload = await _wb(collectionPath, base, isJson);
-        return _delegate.write(_name, ref, payload);
+        final ok = await _delegate.write(_name, ref, payload);
+        if (!ok) {
+          throw const InAppDatabaseException(
+            'Delegate write returned false.',
+            code: 'delegate-write-failed',
+          );
+        }
+        return ok;
       });
-    } catch (e) {
+    } catch (e, st) {
+      _lastError = e;
+      _lastErrorStack = st;
       _log(e, action: 'write', field: collectionPath);
       return false;
     }
