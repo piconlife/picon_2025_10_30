@@ -839,10 +839,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_svg
-      sha256: "1ded017b39c8e15c8948ea855070a5ff8ff8b3d5e83f3446e02d6bb12add7ad9"
+      sha256: "35882981abcbfb8c15b286f0cd690ff25bac12d95eff3e25ee207f37d4c42e7f"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.4"
+    version: "2.3.0"
   flutter_terms_viewer:
     dependency: "direct main"
     description:
@@ -1061,6 +1061,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  in_app_database:
+    dependency: "direct main"
+    description:
+      name: in_app_database
+      sha256: ed59528b13cb5bcfe9ad2b4964962f264c8fb25edb8657592e3d66a648de2092
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
   in_app_navigator:
     dependency: "direct main"
     description:
@@ -1077,6 +1085,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.1"
+  in_app_query:
+    dependency: transitive
+    description:
+      name: in_app_query
+      sha256: c04e6a03257c22357889bda9b62ccda64bf3133360530ba3a2b0ccfe2df7ccb3
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   in_app_remote:
     dependency: "direct main"
     description:
@@ -2038,10 +2054,10 @@ packages:
     dependency: transitive
     description:
       name: video_player_avfoundation
-      sha256: af0e5b8a7a4876fb37e7cc8cb2a011e82bb3ecfa45844ef672e32cb14a1f259e
+      sha256: a39d6f28f8069564d8cc17396472f958dd9eaddf2d5c8e90aad4d793ac369bf3
       url: "https://pub.dev"
     source: hosted
-    version: "2.9.4"
+    version: "2.9.6"
   video_player_platform_interface:
     dependency: transitive
     description:
@@ -2118,10 +2134,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: ba7d5750e3441caa1bbe31d9e516348fcf8dfcb32aa29ef87a844a59f4d1f1d0
+      sha256: a1fc9eb9248baa05dfc12ed5b66e377b3e23f095eec078e0371622b9033810d9
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.0"
+    version: "6.2.0"
   win32_registry:
     dependency: transitive
     description:
