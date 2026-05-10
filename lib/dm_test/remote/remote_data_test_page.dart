@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:picon/app/imports/data_management.dart';
 
 import '../../app/imports/flutter_entity.dart';
-import '../local/note_page.dart';
+import '../idb/page.dart';
 import 'product.dart';
 import 'product_repository.dart';
 
