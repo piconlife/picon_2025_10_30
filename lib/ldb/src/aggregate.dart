@@ -21,20 +21,28 @@ class InAppAggregateQuery extends InAppReference {
   Stream<InAppAggregateQuerySnapshot> snapshots() {
     final n = _db._addNotifier(_p.path);
     return Stream<InAppAggregateQuerySnapshot>.multi((controller) {
-      void update() {
+      InAppAggregateQuerySnapshot? last;
+      void emit(InAppAggregateQuerySnapshot snap) {
         if (controller.isClosed) return;
-        final snap = n.value ?? InAppQuerySnapshot(_p.id);
-        controller.add(
-          InAppAggregateQuerySnapshot(count: snap.docs.length, query: snap),
-        );
+        if (last == snap) return;
+        last = snap;
+        controller.add(snap);
       }
 
-      n.addListener(update);
-      controller.onCancel = () => n.removeListener(update);
-      _p._notify();
+      void listener() {
+        final snap = n.value ?? InAppQuerySnapshot(_p.id);
+        emit(InAppAggregateQuerySnapshot(count: snap.docs.length, query: snap));
+      }
+
+      n.addListener(listener);
+      controller.onCancel = () => n.removeListener(listener);
+
+      Future<void>(() async {
+        try {
+          final s = await get();
+          emit(s);
+        } catch (_) {}
+      });
     });
   }
 }
-
-@Deprecated('Use InAppAggregateQuery instead.')
-typedef InAppCounterReference = InAppAggregateQuery;

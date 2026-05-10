@@ -141,14 +141,26 @@ abstract class InAppCollectionReference extends InAppReference {
   Stream<InAppQuerySnapshot> snapshots({bool includeMetadataChanges = false}) {
     final n = _db._addNotifier(path);
     return Stream<InAppQuerySnapshot>.multi((controller) {
-      void update() {
+      InAppQuerySnapshot? last;
+      void emit(InAppQuerySnapshot snap) {
         if (controller.isClosed) return;
-        controller.add(n.value ?? InAppQuerySnapshot(id));
+        if (last == snap) return;
+        last = snap;
+        controller.add(snap);
       }
 
-      n.addListener(update);
-      controller.onCancel = () => n.removeListener(update);
-      _notify();
+      void listener() => emit(n.value ?? InAppQuerySnapshot(id));
+
+      n.addListener(listener);
+      controller.onCancel = () => n.removeListener(listener);
+
+      Future<void>(() async {
+        try {
+          final s = await get();
+          emit(s);
+          if (!n.isDisposed) n.value = s;
+        } catch (_) {}
+      });
     });
   }
 }

@@ -246,18 +246,31 @@ class InAppQueryReference extends InAppCollectionReference {
   Stream<InAppQuerySnapshot> snapshots({bool includeMetadataChanges = false}) {
     final n = _db._addNotifier(path);
     return Stream<InAppQuerySnapshot>.multi((controller) {
-      void update() {
+      InAppQuerySnapshot? last;
+      void emit(InAppQuerySnapshot snap) {
         if (controller.isClosed) return;
+        if (last == snap) return;
+        last = snap;
+        controller.add(snap);
+      }
+
+      void listener() {
         get()
             .then((s) {
-              if (!controller.isClosed) controller.add(s);
+              if (!controller.isClosed) emit(s);
             })
             .catchError((_) {});
       }
 
-      n.addListener(update);
-      controller.onCancel = () => n.removeListener(update);
-      _notify();
+      n.addListener(listener);
+      controller.onCancel = () => n.removeListener(listener);
+
+      Future<void>(() async {
+        try {
+          final s = await get();
+          emit(s);
+        } catch (_) {}
+      });
     });
   }
 }

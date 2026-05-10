@@ -185,14 +185,26 @@ class InAppDocumentReference extends InAppReference {
   }) {
     final n = _db._addChildNotifier(_p.path, id);
     return Stream<InAppDocumentSnapshot>.multi((controller) {
-      void update() {
+      InAppDocumentSnapshot? last;
+      void emit(InAppDocumentSnapshot snap) {
         if (controller.isClosed) return;
-        controller.add(n.value ?? InAppDocumentSnapshot(id, null, this));
+        if (last == snap) return;
+        last = snap;
+        controller.add(snap);
       }
 
-      n.addListener(update);
-      controller.onCancel = () => n.removeListener(update);
-      _notify();
+      void listener() => emit(n.value ?? InAppDocumentSnapshot(id, null, this));
+
+      n.addListener(listener);
+      controller.onCancel = () => n.removeListener(listener);
+
+      Future<void>(() async {
+        try {
+          final s = await get();
+          emit(s);
+          if (!n.isDisposed) n.value = s;
+        } catch (_) {}
+      });
     });
   }
 }

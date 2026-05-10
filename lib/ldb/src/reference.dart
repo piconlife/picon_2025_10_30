@@ -15,7 +15,7 @@ abstract class InAppReference {
 
   String get _idField => _db._version._idRef;
 
-  String get _idFieldSecondary => '_id';
+  String get _idFieldSecondary => _db._version._isV1 ? 'id' : '_id';
 
   @override
   bool operator ==(Object other) =>

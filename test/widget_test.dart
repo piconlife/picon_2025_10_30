@@ -272,7 +272,8 @@ void main() {
 
       final snap = await ref.get();
       expect(snap.data()?['title'], 'Hello');
-      expect(snap.id, 'users/u1/posts/p1');
+      expect(ref.path, 'users/u1/posts/p1');
+      expect(snap.reference?.path, 'users/u1/posts/p1');
     });
 
     test('deep paths via doc() helper', () async {
@@ -281,6 +282,70 @@ void main() {
 
       final snap = await db.doc('users/u1/posts/p1').get();
       expect(snap.data()?['title'], 'Hello');
+      expect(ref.path, 'users/u1/posts/p1');
+    });
+  });
+
+  group('Streams', () {
+    test('document snapshots emit on initial subscribe and updates', () async {
+      final ref = db.doc('users/u1');
+      await ref.set({'name': 'Alice'});
+
+      final emissions = <InAppDocumentSnapshot>[];
+      final sub = ref.snapshots().listen(emissions.add);
+
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+      expect(
+        emissions.length,
+        greaterThanOrEqualTo(1),
+        reason: 'should emit initial snapshot',
+      );
+      expect(emissions.last.data()?['name'], 'Alice');
+
+      await ref.update({'name': 'Bob'});
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+
+      expect(
+        emissions.length,
+        greaterThanOrEqualTo(2),
+        reason: 'should emit after update',
+      );
+      expect(emissions.last.data()?['name'], 'Bob');
+
+      await sub.cancel();
+    });
+
+    test('collection snapshots emit on add', () async {
+      final col = db.collection('users');
+
+      final emissions = <InAppQuerySnapshot>[];
+      final sub = col.snapshots().listen(emissions.add);
+
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+      expect(emissions.length, greaterThanOrEqualTo(1));
+      expect(emissions.last.size, 0);
+
+      await col.add({'name': 'Alice'});
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+
+      expect(emissions.length, greaterThanOrEqualTo(2));
+      expect(emissions.last.size, 1);
+
+      await sub.cancel();
+    });
+
+    test('aggregate snapshots emit count updates', () async {
+      final col = db.collection('users');
+      final emissions = <InAppAggregateQuerySnapshot>[];
+      final sub = col.count().snapshots().listen(emissions.add);
+
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+      await col.add({'name': 'Alice'});
+      await col.add({'name': 'Bob'});
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+
+      expect(emissions.last.count, 2);
+      await sub.cancel();
     });
   });
 
