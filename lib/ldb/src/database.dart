@@ -20,6 +20,14 @@ import 'delegate.dart' show InAppDatabaseDelegate;
 import 'pointer.dart' show InAppPointer;
 import 'transaction.dart' show InAppTransaction, InAppTransactionHandler;
 
+part '../mixins/delete.dart';
+part '../mixins/error.dart';
+part '../mixins/executor.dart';
+part '../mixins/logger.dart';
+part '../mixins/notifier_manager.dart';
+part '../mixins/reader.dart';
+part '../mixins/serial.dart';
+part '../mixins/writer.dart';
 part 'aggregate.dart';
 part 'base.dart';
 part 'collection.dart';
@@ -33,19 +41,49 @@ part 'version.dart';
 
 enum InAppDatabaseType { json, map }
 
-class InAppDatabase extends ChangeNotifier {
+class InAppDatabase extends ChangeNotifier
+    with
+        _ErrorMixin,
+        _LoggerMixin,
+        _SerialMixin,
+        _NotifierManagerMixin,
+        _ExecutorMixin,
+        _ReaderMixin,
+        _WriterMixin,
+        _DeleterMixin {
+  @override
   String _name;
+
+  @override
   final bool showLogs;
+
+  @override
   final InAppDatabaseDelegate _delegate;
+
+  @override
   final InAppDatabaseType _type;
-  final Map<String, _InAppNotifier> _notifiers = {};
-  final Map<String, Future<void>> _serialQueue = {};
+
+  @override
   InAppDatabaseVersion _version;
   bool _disposed = false;
 
-  Object? _lastError;
-  StackTrace? _lastErrorStack;
+  final ValueNotifier<bool> initializing = ValueNotifier(false);
+  final ValueNotifier<bool> activating = ValueNotifier(false);
+  final ValueNotifier<bool> creating = ValueNotifier(false);
+  final ValueNotifier<bool> deleting = ValueNotifier(false);
 
+  InAppDatabase._({
+    this.showLogs = false,
+    required String name,
+    InAppDatabaseType? type,
+    InAppDatabaseVersion? version,
+    required InAppDatabaseDelegate delegate,
+  }) : _name = name,
+       _type = type ?? InAppDatabaseType.json,
+       _version = version ?? InAppDatabaseVersion.v1,
+       _delegate = delegate;
+
+  @override
   String get name => _name == _defaultName ? 'default' : _name;
 
   String get versionCode => _version.code;
@@ -53,6 +91,12 @@ class InAppDatabase extends ChangeNotifier {
   set versionCode(String code) => version(InAppDatabaseVersion.custom(code));
 
   String get ref => _version._ref();
+
+  @override
+  bool get isDisposed => _disposed;
+
+  @override
+  bool get isInitialized => isInitializedAs(_name);
 
   Future<List<String>> get keys async {
     final paths = await _delegate.paths(_name);
@@ -67,101 +111,6 @@ class InAppDatabase extends ChangeNotifier {
       if (first.isNotEmpty) result.add(first);
     }
     return result.toList(growable: false);
-  }
-
-  bool get isInitialized => isInitializedAs(_name);
-
-  Object? consumeLastError() {
-    final e = _lastError;
-    _lastError = null;
-    _lastErrorStack = null;
-    return e;
-  }
-
-  StackTrace? get lastErrorStack => _lastErrorStack;
-
-  void _log(Object? msg, {String field = '', String action = ''}) {
-    if (!showLogs || kReleaseMode) return;
-    var text = msg.toString();
-    if (field.isNotEmpty) {
-      text = '${action.isEmpty ? field : '$action($field)'}: $text';
-    } else if (action.isNotEmpty) {
-      text = '$action: $text';
-    }
-    log(text, name: 'IN_APP_DATABASE');
-  }
-
-  static Object? _sanitize(Object? v) {
-    if (v == null || v is num || v is bool || v is String) return v;
-    if (v is DateTime) return v.toUtc().toIso8601String();
-    if (v is Duration) return v.inMicroseconds;
-    if (v is Uri) return v.toString();
-    if (v is BigInt) return v.toString();
-    if (v is Map) {
-      final r = <String, Object?>{};
-      v.forEach((k, val) => r['$k'] = _sanitize(val));
-      return r;
-    }
-    if (v is Iterable) {
-      return v.map(_sanitize).toList(growable: false);
-    }
-    try {
-      return v.toString();
-    } catch (_) {
-      return null;
-    }
-  }
-
-  Future<T> _serial<T>(String key, Future<T> Function() task) {
-    final prev = _serialQueue[key] ?? Future<void>.value();
-    final completer = Completer<T>();
-    late final Future<void> next;
-    next =
-        (() async {
-          try {
-            await prev;
-          } catch (_) {}
-          try {
-            final r = await task();
-            if (!completer.isCompleted) completer.complete(r);
-          } catch (e, st) {
-            if (!completer.isCompleted) completer.completeError(e, st);
-          } finally {
-            if (identical(_serialQueue[key], next)) {
-              _serialQueue.remove(key);
-            }
-          }
-        })();
-    _serialQueue[key] = next;
-    return completer.future;
-  }
-
-  void _maybeCleanupNotifier(String path) {
-    final n = _notifiers[path];
-    if (n == null) return;
-    if (n is InAppQueryNotifier) {
-      final hasActiveChild = n.children.values.any((c) => c.hasActiveListeners);
-      if (!n.hasActiveListeners && !hasActiveChild) {
-        _notifiers.remove(path);
-        n.dispose();
-      }
-    } else {
-      if (!n.hasActiveListeners) {
-        _notifiers.remove(path);
-        n.dispose();
-      }
-    }
-  }
-
-  void _maybeCleanupChild(String parentPath, String id) {
-    final parent = _notifiers[parentPath];
-    if (parent is! InAppQueryNotifier) return;
-    final child = parent.children[id];
-    if (child != null && !child.hasActiveListeners) {
-      parent.children.remove(id);
-      child.dispose();
-    }
-    _maybeCleanupNotifier(parentPath);
   }
 
   static InAppDatabase? _i;
@@ -191,22 +140,6 @@ class InAppDatabase extends ChangeNotifier {
   static List<String> get databases => List.unmodifiable(_databases.keys);
 
   static bool isInitializedAs(String name) => _databases[name] ?? false;
-
-  InAppDatabase._({
-    this.showLogs = false,
-    required String name,
-    InAppDatabaseType? type,
-    InAppDatabaseVersion? version,
-    required InAppDatabaseDelegate delegate,
-  }) : _name = name,
-       _type = type ?? InAppDatabaseType.json,
-       _version = version ?? InAppDatabaseVersion.v1,
-       _delegate = delegate;
-
-  final ValueNotifier<bool> initializing = ValueNotifier(false);
-  final ValueNotifier<bool> activating = ValueNotifier(false);
-  final ValueNotifier<bool> creating = ValueNotifier(false);
-  final ValueNotifier<bool> deleting = ValueNotifier(false);
 
   static Completer<bool>? _initCompleter;
 
@@ -361,12 +294,7 @@ class InAppDatabase extends ChangeNotifier {
 
   Future<void> terminate() async {
     if (_disposed) return;
-    final pending = List<Future<void>>.of(_serialQueue.values);
-    for (final f in pending) {
-      try {
-        await f;
-      } catch (_) {}
-    }
+    await _drainSerial();
     dispose();
   }
 
@@ -489,308 +417,11 @@ class InAppDatabase extends ChangeNotifier {
     return ref as InAppDocumentReference;
   }
 
-  InAppQueryNotifier _addNotifier(
-    String reference, [
-    InAppQuerySnapshot? value,
-  ]) {
-    final existing = _notifiers[reference];
-    if (existing is InAppQueryNotifier && !existing.isDisposed) {
-      if (value != null) existing.value = value;
-      return existing;
-    }
-    if (existing != null && existing.isDisposed) {
-      _notifiers.remove(reference);
-    }
-    final created = InAppQueryNotifier(value);
-    _notifiers[reference] = created;
-    return created;
-  }
-
-  InAppDocumentNotifier _addChildNotifier(
-    String reference,
-    String id, [
-    InAppDocumentSnapshot? value,
-  ]) {
-    return _addNotifier(reference).set(id, value);
-  }
-
-  static const Duration _retryDelay = Duration(milliseconds: 250);
-  static const int _maxRetries = 3;
-
-  Future<T> _execute<T>(
-    Future<T> Function() callback, [
-    int attempt = 0,
-  ]) async {
-    if (_disposed) {
-      throw const InAppDatabaseException('Database has been disposed.');
-    }
-    if (!isInitialized) {
-      throw InAppDatabaseException('$InAppDatabase($name) not initialized.');
-    }
-    try {
-      return await callback();
-    } on ArgumentError {
-      rethrow;
-    } on StateError {
-      rethrow;
-    } on InAppDatabaseException {
-      rethrow;
-    } catch (e) {
-      if (attempt >= _maxRetries) rethrow;
-      await Future<void>.delayed(_retryDelay * (attempt + 1));
-      return _execute(callback, attempt + 1);
-    }
-  }
-
-  Future<bool> _delete(
-    String collectionPath, {
-    bool related = true,
-    Iterable<String> Function(String path, Iterable<String>)? filter,
-  }) async {
-    final ref = _version._ref(collectionPath);
-    return _serial(collectionPath, () async {
-      try {
-        return await _execute(() async {
-          if (!related) return _delegate.delete(_name, ref);
-          final paths = await _delegate.paths(_name);
-          final keys =
-              filter != null
-                  ? filter(ref, paths)
-                  : paths.where((p) => p == ref || p.startsWith('$ref/'));
-          var any = false;
-          for (final k in keys) {
-            if (await _delegate.delete(_name, k)) any = true;
-          }
-          return any || filter != null;
-        });
-      } catch (e, st) {
-        _lastError = e;
-        _lastErrorStack = st;
-        _log(e, action: 'delete', field: collectionPath);
-        return false;
-      }
-    });
-  }
-
-  Future<Iterable<String>> _k(String path) async {
-    try {
-      return await _execute(() async {
-        final paths = await _delegate.paths(_name);
-        final r = _version._ref(path);
-        return paths
-            .where((p) => p == r || p.startsWith('$r/'))
-            .toList(growable: false);
-      });
-    } catch (e) {
-      _log(e, action: 'keys', field: path);
-      return const <String>[];
-    }
-  }
-
-  Future<InAppSnapshot> _r({
-    required InAppReadType type,
-    required String reference,
-    required String collectionPath,
-    required String collectionId,
-    required String documentId,
-  }) async {
-    try {
-      return await _execute(() async {
-        final ref = _version._ref(collectionPath);
-        Object? raw;
-        try {
-          raw = await _delegate.read(_name, ref);
-        } catch (_) {
-          raw = null;
-        }
-        Object? value = raw;
-        if (raw is String) {
-          try {
-            value = jsonDecode(raw);
-          } catch (_) {
-            value = null;
-          }
-        }
-        if (value is! Map) {
-          if (type.isCollection) return InAppQuerySnapshot(collectionId);
-          if (type.isDocument) return InAppDocumentSnapshot(documentId);
-          return const InAppFailureSnapshot('Data not found.');
-        }
-        if (type.isCollection) {
-          final docs = <InAppQueryDocumentSnapshot>[];
-          value.forEach((k, v) {
-            if (k is! String) return;
-            Object? parsed = v;
-            if (v is String) {
-              try {
-                parsed = jsonDecode(v);
-              } catch (_) {
-                return;
-              }
-            }
-            if (parsed is! Map) return;
-            final doc = Map<String, InAppValue>.from(parsed);
-            if (doc.isEmpty) return;
-            docs.add(InAppQueryDocumentSnapshot(k, doc));
-          });
-          return InAppQuerySnapshot(collectionId, docs);
-        } else if (type.isDocument) {
-          final entry = value[documentId];
-          if (entry == null) return InAppDocumentSnapshot(documentId);
-          Object? parsed = entry;
-          if (entry is String) {
-            try {
-              parsed = jsonDecode(entry);
-            } catch (_) {
-              return InAppDocumentSnapshot(documentId);
-            }
-          }
-          final doc =
-              parsed is Map ? Map<String, InAppValue>.from(parsed) : null;
-          return InAppDocumentSnapshot(documentId, doc);
-        }
-        return const InAppErrorSnapshot('Unsupported read type.');
-      });
-    } catch (e, st) {
-      _lastError = e;
-      _lastErrorStack = st;
-      _log(e, action: 'read', field: collectionPath);
-      return InAppFailureSnapshot(e.toString());
-    }
-  }
-
-  Future<Object?> _wb(
-    String path,
-    Map<String, Object?> base,
-    bool isJson,
-  ) async {
-    if (base.isEmpty) return null;
-    final l = await _delegate.limitation(_name, PathModifier.format(path));
-    if (l == null || l.isUnlimited) {
-      return isJson ? _safeEncode(base) : base;
-    }
-    final entries = base.entries;
-    if (entries.length <= l.limit) return isJson ? _safeEncode(base) : base;
-    final list = entries.toList(growable: false);
-    final selected =
-        l.limitByRecent ? list.reversed.take(l.limit) : list.take(l.limit);
-    final reduced = Map<String, Object?>.fromEntries(selected);
-    return isJson ? _safeEncode(reduced) : reduced;
-  }
-
-  static String _safeEncode(Object? data) {
-    return jsonEncode(
-      data,
-      toEncodable: (Object? v) {
-        final s = _sanitize(v);
-        if (s == null || s is num || s is bool || s is String) return s;
-        if (s is List || s is Map) return s;
-        return s.toString();
-      },
-    );
-  }
-
-  Future<bool> _w({
-    required InAppWriteType type,
-    required String reference,
-    required String collectionPath,
-    required String collectionId,
-    required String documentId,
-    InAppDocument? value,
-  }) {
-    return _serial(
-      collectionPath,
-      () => _wInner(
-        type: type,
-        reference: reference,
-        collectionPath: collectionPath,
-        collectionId: collectionId,
-        documentId: documentId,
-        value: value,
-      ),
-    );
-  }
-
-  Future<bool> _wInner({
-    required InAppWriteType type,
-    required String reference,
-    required String collectionPath,
-    required String collectionId,
-    required String documentId,
-    InAppDocument? value,
-  }) async {
-    final isJson = _type == InAppDatabaseType.json;
-    try {
-      return await _execute(() async {
-        final ref = _version._ref(collectionPath);
-        Object? root;
-        try {
-          root = await _delegate.read(_name, ref);
-        } catch (_) {
-          root = null;
-        }
-        Object? raw = root;
-        if (root is String) {
-          try {
-            raw = jsonDecode(root);
-          } catch (_) {
-            raw = null;
-          }
-        }
-        final base =
-            raw is Map ? Map<String, Object?>.from(raw) : <String, Object?>{};
-
-        if (type.isDocument) {
-          if (value != null && value.isNotEmpty) {
-            final cleaned = <String, Object?>{};
-            value.forEach((k, v) {
-              if (v != null) cleaned[k] = _sanitize(v);
-            });
-            base[documentId] = isJson ? _safeEncode(cleaned) : cleaned;
-          } else {
-            base.remove(documentId);
-          }
-        } else if (type.isCollection) {
-          if (value != null) {
-            value.forEach((k, v) {
-              if (v == null) {
-                base.remove(k);
-              } else {
-                final s = _sanitize(v);
-                base[k] = isJson ? _safeEncode(s) : s;
-              }
-            });
-          } else {
-            base.clear();
-          }
-        }
-
-        final payload = await _wb(collectionPath, base, isJson);
-        final ok = await _delegate.write(_name, ref, payload);
-        if (!ok) {
-          throw const InAppDatabaseException(
-            'Delegate write returned false.',
-            code: 'delegate-write-failed',
-          );
-        }
-        return ok;
-      });
-    } catch (e, st) {
-      _lastError = e;
-      _lastErrorStack = st;
-      _log(e, action: 'write', field: collectionPath);
-      return false;
-    }
-  }
-
   @override
   void dispose() {
     if (_disposed) return;
     _disposed = true;
-    for (final n in _notifiers.values) {
-      n.dispose();
-    }
-    _notifiers.clear();
+    _disposeAllNotifiers();
     _serialQueue.clear();
     initializing.dispose();
     activating.dispose();

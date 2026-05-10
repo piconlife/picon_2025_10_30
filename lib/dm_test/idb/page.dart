@@ -56,7 +56,7 @@ class _LocalDataTestPageState extends State<LocalDataTestPage> {
 
   static const _id = '1778319785575';
 
-  InAppQueryReference get _notes => _db.collection('notes_v2');
+  InAppQueryReference get _notes => _db.collection('notes_v2').doc('v1').collection('notes');
 
   InAppDocumentReference _noteDoc(String id) => _notes.doc(id);
 
