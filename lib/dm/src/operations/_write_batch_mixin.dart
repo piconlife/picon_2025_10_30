@@ -18,7 +18,7 @@ mixin _WriteBatchMixin on _WriteEncryptMixin {
       );
       for (var start = 0; start < writers.length; start += batchLimit) {
         final end = (start + batchLimit).clamp(0, writers.length);
-        final batch = delegate.batch();
+        final batch = delegate.onBatch();
         for (var i = start; i < end; i++) {
           final w = writers[i];
           final encrypted = payloads[i];

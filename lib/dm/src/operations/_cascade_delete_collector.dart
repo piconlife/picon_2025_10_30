@@ -35,7 +35,7 @@ class _CascadeDeleteCollector {
     if (_full || !_visited.add(docPath)) return;
 
     final snap = await guard<DataGetSnapshot>(
-      () => delegate.getById(docPath),
+      () => delegate.onGetById(docPath),
       operation: 'delete.collect',
       path: docPath,
     );
@@ -95,7 +95,7 @@ class _CascadeDeleteCollector {
 
   Future<void> _collectChildren(String collectionPath) async {
     final children = await guard<DataGetsSnapshot>(
-      () => delegate.getByQuery(collectionPath),
+      () => delegate.onGetByQuery(collectionPath),
       operation: 'delete.children',
       path: collectionPath,
     );

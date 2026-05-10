@@ -11,7 +11,7 @@ mixin _UpdateMixin on _ErrorHandlingMixin, _WriteTransformMixin {
     final safe = Map<String, dynamic>.from(data);
     if (!updateRefs) {
       await _guardAsync(
-        () => delegate.update(path, safe),
+        () => delegate.onUpdate(path, safe),
         operation: 'update',
         path: path,
       );
@@ -19,7 +19,7 @@ mixin _UpdateMixin on _ErrorHandlingMixin, _WriteTransformMixin {
     }
     await _guardAsync(
       () async {
-        final batch = delegate.batch();
+        final batch = delegate.onBatch();
         final processed = _transformWrite(batch, safe, true);
         batch.update(path, processed);
         await batch.commit();

@@ -9,7 +9,7 @@ export 'src/encryptor/encryptor.dart';
 export 'src/operations/base.dart';
 export 'src/operations/batch.dart';
 export 'src/operations/delegate.dart';
-export 'src/operations/multicast_data_delegate.dart';
+export 'src/operations/multicast_delegate.dart';
 export 'src/operations/snapshots.dart';
 export 'src/operations/typedefs.dart';
 export 'src/operations/writers.dart';

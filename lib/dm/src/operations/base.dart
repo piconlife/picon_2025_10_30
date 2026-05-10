@@ -72,7 +72,7 @@ class DataOperation
 
   @override
   Future<int?> count(String path) => _guardAsync<int?>(
-    () => delegate.count(path),
+    () => delegate.onCount(path),
     operation: 'count',
     path: path,
   );

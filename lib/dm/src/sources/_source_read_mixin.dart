@@ -128,8 +128,8 @@ mixin _SourceReadMixin<T extends Entity> on _SourceReadBaseMixin<T> {
       final queries = [DataQuery(DataFieldPath.documentId, whereIn: ids)].map(
         (e) => e.adjust(
           documentId,
-          delegate.resolveFieldPath,
-          delegate.resolveFieldValue,
+          delegate.onResolveFieldPath,
+          delegate.onResolveFieldValue,
         ),
       );
       final event = await operation.getByQuery(
@@ -164,8 +164,8 @@ mixin _SourceReadMixin<T extends Entity> on _SourceReadBaseMixin<T> {
       final adjustedQueries = queries.map(
         (e) => e.adjust(
           documentId,
-          delegate.resolveFieldPath,
-          delegate.resolveFieldValue,
+          delegate.onResolveFieldPath,
+          delegate.onResolveFieldValue,
         ),
       );
       final event = await operation.getByQuery(

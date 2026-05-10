@@ -11,7 +11,7 @@ mixin _QueryMixin on _ErrorHandlingMixin, _HydrateMixin {
     required Ignore? ignore,
   }) async {
     final data = await _guardAsync<DataGetsSnapshot>(
-      () => delegate.get(path),
+      () => delegate.onGet(path),
       operation: 'get',
       path: path,
     );
@@ -31,7 +31,7 @@ mixin _QueryMixin on _ErrorHandlingMixin, _HydrateMixin {
     required Ignore? ignore,
   }) async {
     final data = await _guardAsync<DataGetSnapshot>(
-      () => delegate.getById(path),
+      () => delegate.onGetById(path),
       operation: 'getById',
       path: path,
     );
@@ -55,7 +55,7 @@ mixin _QueryMixin on _ErrorHandlingMixin, _HydrateMixin {
     required Ignore? ignore,
   }) async {
     final data = await _guardAsync<DataGetsSnapshot>(
-      () => delegate.getByQuery(
+      () => delegate.onGetByQuery(
         path,
         queries: queries,
         selections: selections,
@@ -83,7 +83,7 @@ mixin _QueryMixin on _ErrorHandlingMixin, _HydrateMixin {
     required Ignore? ignore,
   }) async {
     final data = await _guardAsync<DataGetsSnapshot>(
-      () => delegate.search(path, checker),
+      () => delegate.onSearch(path, checker),
       operation: 'search',
       path: path,
     );

@@ -78,7 +78,7 @@ mixin _SourceWriteMixin<T extends Entity>
       final p = _ref(params, DataModifiers.updateById, id);
       final adjusted = <String, dynamic>{
         for (final entry in data.entries)
-          entry.key: delegate.resolveFieldValue(entry.value),
+          entry.key: delegate.onResolveFieldValue(entry.value),
       };
       if (!isEncryptor) {
         await operation.update(p, adjusted, updateRefs: updateRefs);

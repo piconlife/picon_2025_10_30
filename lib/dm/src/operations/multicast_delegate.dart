@@ -37,20 +37,6 @@ abstract class MulticastDataDelegate extends DataDelegate {
       _countCache.length +
       _queryCache.length;
 
-  Stream<DataGetsSnapshot> onListen(String path);
-
-  Stream<DataGetSnapshot> onListenById(String path);
-
-  Stream<DataAggregateSnapshot> onListenCount(String path);
-
-  Stream<DataGetsSnapshot> onListenByQuery(
-    String path, {
-    Iterable<DataQuery> queries = const [],
-    Iterable<DataSelection> selections = const [],
-    Iterable<DataSorting> sorts = const [],
-    DataFetchOptions options = const DataFetchOptions(),
-  });
-
   Future<void> dispose() async {
     if (_disposed) return;
     _disposed = true;
@@ -84,21 +70,30 @@ abstract class MulticastDataDelegate extends DataDelegate {
   }
 
   @override
-  Stream<DataGetsSnapshot> listen(String path) {
-    if (!multicastListen) return onListen(path);
-    return _multicast(_listenCache, path, () => onListen(path));
+  Stream<DataGetsSnapshot> listen(String path);
+
+  @override
+  Stream<DataGetsSnapshot> onListen(String path) {
+    if (!multicastListen) return listen(path);
+    return _multicast(_listenCache, path, () => listen(path));
   }
 
   @override
-  Stream<DataGetSnapshot> listenById(String path) {
-    if (!multicastListenById) return onListenById(path);
-    return _multicast(_docCache, path, () => onListenById(path));
+  Stream<DataGetSnapshot> listenById(String path);
+
+  @override
+  Stream<DataGetSnapshot> onListenById(String path) {
+    if (!multicastListenById) return listenById(path);
+    return _multicast(_docCache, path, () => listenById(path));
   }
 
   @override
-  Stream<DataAggregateSnapshot> listenCount(String path) {
-    if (!multicastListenCount) return onListenCount(path);
-    return _multicast(_countCache, path, () => onListenCount(path));
+  Stream<DataAggregateSnapshot> listenCount(String path);
+
+  @override
+  Stream<DataAggregateSnapshot> onListenCount(String path) {
+    if (!multicastListenCount) return listenCount(path);
+    return _multicast(_countCache, path, () => listenCount(path));
   }
 
   @override
@@ -108,8 +103,17 @@ abstract class MulticastDataDelegate extends DataDelegate {
     Iterable<DataSelection> selections = const [],
     Iterable<DataSorting> sorts = const [],
     DataFetchOptions options = const DataFetchOptions(),
+  });
+
+  @override
+  Stream<DataGetsSnapshot> onListenByQuery(
+    String path, {
+    Iterable<DataQuery> queries = const [],
+    Iterable<DataSelection> selections = const [],
+    Iterable<DataSorting> sorts = const [],
+    DataFetchOptions options = const DataFetchOptions(),
   }) {
-    Stream<DataGetsSnapshot> source() => onListenByQuery(
+    Stream<DataGetsSnapshot> source() => listenByQuery(
       path,
       queries: queries,
       selections: selections,
@@ -173,10 +177,11 @@ class _MulticastStream<T> {
   final Stream<T> Function() _factory;
   final void Function() _onTearDown;
   final StreamController<T> _broadcast = StreamController<T>.broadcast();
+  final Set<StreamController<T>> _views = {};
 
   StreamSubscription<T>? _upstream;
-  T? _last;
-  bool _hasLast = false;
+  ({T value})? _last;
+  int _listenerCount = 0;
   bool _disposed = false;
 
   _MulticastStream(this._factory, this._onTearDown);
@@ -189,8 +194,11 @@ class _MulticastStream<T> {
 
     view = StreamController<T>(
       onListen: () {
+        _listenerCount++;
+        _views.add(view);
         _ensureUpstream();
-        if (_hasLast && !view.isClosed) view.add(_last as T);
+        final last = _last;
+        if (last != null && !view.isClosed) view.add(last.value);
         sub = _broadcast.stream.listen(
           (event) {
             if (!view.isClosed) view.add(event);
@@ -204,6 +212,8 @@ class _MulticastStream<T> {
         );
       },
       onCancel: () async {
+        _listenerCount--;
+        _views.remove(view);
         await sub?.cancel();
         sub = null;
         _maybeTearDown();
@@ -215,23 +225,26 @@ class _MulticastStream<T> {
 
   void _ensureUpstream() {
     if (_upstream != null || _disposed) return;
-    _upstream = _factory().listen(
-      (event) {
-        _last = event;
-        _hasLast = true;
-        if (!_broadcast.isClosed) _broadcast.add(event);
-      },
-      onError: (Object e, StackTrace s) {
-        if (!_broadcast.isClosed) _broadcast.addError(e, s);
-      },
-      onDone: () {
-        if (!_broadcast.isClosed) _broadcast.close();
-      },
-    );
+    try {
+      _upstream = _factory().listen(
+        (event) {
+          _last = (value: event);
+          if (!_broadcast.isClosed) _broadcast.add(event);
+        },
+        onError: (Object e, StackTrace s) {
+          if (!_broadcast.isClosed) _broadcast.addError(e, s);
+        },
+        onDone: () {
+          if (!_broadcast.isClosed) _broadcast.close();
+        },
+      );
+    } catch (e, s) {
+      if (!_broadcast.isClosed) _broadcast.addError(e, s);
+    }
   }
 
   void _maybeTearDown() {
-    if (_broadcast.hasListener || _disposed) return;
+    if (_listenerCount > 0 || _disposed) return;
     _disposed = true;
     _upstream?.cancel();
     _upstream = null;
@@ -244,6 +257,11 @@ class _MulticastStream<T> {
     _disposed = true;
     await _upstream?.cancel();
     _upstream = null;
+    final viewsSnapshot = List<StreamController<T>>.from(_views);
+    _views.clear();
     if (!_broadcast.isClosed) await _broadcast.close();
+    for (final v in viewsSnapshot) {
+      if (!v.isClosed) await v.close();
+    }
   }
 }

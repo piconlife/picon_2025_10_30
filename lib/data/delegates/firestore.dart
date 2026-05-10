@@ -199,23 +199,23 @@ class FirestoreDataDelegate extends MulticastDataDelegate {
   }
 
   @override
-  Stream<DataGetsSnapshot> onListen(String path) {
+  Stream<DataGetsSnapshot> listen(String path) {
     return _db.collection(path).snapshots().map(_docs);
   }
 
   @override
-  Stream<DataGetSnapshot> onListenById(String path) {
+  Stream<DataGetSnapshot> listenById(String path) {
     return _db.doc(path).snapshots().map(_doc);
   }
 
   @override
-  Stream<DataAggregateSnapshot> onListenCount(String path) async* {
+  Stream<DataAggregateSnapshot> listenCount(String path) async* {
     yield await _safeCount(path);
     yield* Stream.periodic(countInterval).asyncMap((_) => _safeCount(path));
   }
 
   @override
-  Stream<DataGetsSnapshot> onListenByQuery(
+  Stream<DataGetsSnapshot> listenByQuery(
     String path, {
     Iterable<DataQuery> queries = const [],
     Iterable<DataSelection> selections = const [],

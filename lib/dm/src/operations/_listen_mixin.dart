@@ -11,7 +11,7 @@ mixin _ListenMixin on _ErrorHandlingMixin, _HydrateMixin {
     required Ignore? ignore,
   }) {
     return _guardStream(
-      () => delegate.listen(path),
+      () => delegate.onListen(path),
       operation: 'listen',
       path: path,
       empty: DataGetsSnapshot(),
@@ -28,7 +28,7 @@ mixin _ListenMixin on _ErrorHandlingMixin, _HydrateMixin {
 
   Stream<DataAggregateSnapshot> _doListenCount(String path) {
     return _guardStream(
-      () => delegate.listenCount(path),
+      () => delegate.onListenCount(path),
       operation: 'listenCount',
       path: path,
       empty: const DataAggregateSnapshot(),
@@ -42,7 +42,7 @@ mixin _ListenMixin on _ErrorHandlingMixin, _HydrateMixin {
     required Ignore? ignore,
   }) {
     return _guardStream(
-      () => delegate.listenById(path),
+      () => delegate.onListenById(path),
       operation: 'listenById',
       path: path,
       empty: DataGetSnapshot(),
@@ -68,7 +68,7 @@ mixin _ListenMixin on _ErrorHandlingMixin, _HydrateMixin {
     required Ignore? ignore,
   }) {
     return _guardStream(
-      () => delegate.listenByQuery(
+      () => delegate.onListenByQuery(
         path,
         queries: queries,
         selections: selections,

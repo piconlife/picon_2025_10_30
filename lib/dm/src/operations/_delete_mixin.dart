@@ -13,7 +13,7 @@ mixin _DeleteMixin on _ErrorHandlingMixin {
   }) async {
     if (!deleteRefs) {
       await _guardAsync(
-        () => delegate.delete(path),
+        () => delegate.onDelete(path),
         operation: 'delete',
         path: path,
       );
@@ -58,7 +58,7 @@ mixin _DeleteMixin on _ErrorHandlingMixin {
   ) async {
     for (var i = 0; i < paths.length; i += batchLimit) {
       final end = (i + batchLimit).clamp(0, paths.length);
-      final batch = delegate.batch();
+      final batch = delegate.onBatch();
       for (var j = i; j < end; j++) {
         batch.delete(paths[j]);
       }

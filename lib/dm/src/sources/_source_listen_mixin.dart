@@ -128,8 +128,8 @@ mixin _SourceListenMixin<T extends Entity> on _SourceReadBaseMixin<T> {
       ].map(
         (e) => e.adjust(
           documentId,
-          delegate.resolveFieldPath,
-          delegate.resolveFieldValue,
+          delegate.onResolveFieldPath,
+          delegate.onResolveFieldValue,
         ),
       );
       return operation
@@ -181,8 +181,8 @@ mixin _SourceListenMixin<T extends Entity> on _SourceReadBaseMixin<T> {
       final adjustedQueries = queries.map(
         (e) => e.adjust(
           documentId,
-          delegate.resolveFieldPath,
-          delegate.resolveFieldValue,
+          delegate.onResolveFieldPath,
+          delegate.onResolveFieldValue,
         ),
       );
       return operation
