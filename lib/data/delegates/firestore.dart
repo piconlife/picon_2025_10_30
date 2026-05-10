@@ -1,12 +1,5 @@
-import '../../app/imports/cloud_firestore.dart'
-    show
-        WriteBatch,
-        SetOptions,
-        FirebaseFirestore,
-        Query,
-        DocumentSnapshot,
-        FieldValue,
-        FieldPath;
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../app/imports/data_management.dart'
     show
         DataWriteBatch,
@@ -66,6 +59,39 @@ class FirestoreDataDelegate extends DataDelegate {
     return _i ??= FirestoreDataDelegate._(FirebaseFirestore.instance);
   }
 
+  Map<String, dynamic> _withId(String id, Object? data) {
+    if (data == null || data is! Map) return <String, dynamic>{'id': id};
+    return <String, dynamic>{
+      ...data.map((k, v) => MapEntry(k.toString(), v)),
+      'id': id,
+    };
+  }
+
+  DataAggregateSnapshot _agg(AggregateQuerySnapshot snapshot) {
+    return DataAggregateSnapshot(count: snapshot.count, snapshot: snapshot);
+  }
+
+  DataGetSnapshot _doc(DocumentSnapshot snapshot) {
+    return DataGetSnapshot(
+      doc: _withId(snapshot.id, snapshot.data()),
+      snapshot: snapshot,
+    );
+  }
+
+  DataGetsSnapshot _docs(QuerySnapshot snapshot) {
+    final docs = snapshot.docs
+        .map((e) => _withId(e.id, e.data()))
+        .toList(growable: false);
+    final docChanges = snapshot.docChanges
+        .map((e) => _withId(e.doc.id, e.doc.data()))
+        .toList(growable: false);
+    return DataGetsSnapshot(
+      docs: docs,
+      docChanges: docChanges,
+      snapshot: snapshot,
+    );
+  }
+
   @override
   DataWriteBatch batch() => FirestoreWriteBatch(_db);
 
@@ -92,20 +118,13 @@ class FirestoreDataDelegate extends DataDelegate {
   @override
   Future<DataGetsSnapshot> get(String path) async {
     final snapshot = await _db.collection(path).get();
-    return DataGetsSnapshot(
-      snapshot: snapshot,
-      docs: snapshot.docs.map((e) => e.data()).toList(growable: false),
-      docChanges: snapshot.docChanges
-          .map((e) => e.doc.data())
-          .whereType<Map<String, dynamic>>()
-          .toList(growable: false),
-    );
+    return _docs(snapshot);
   }
 
   @override
   Future<DataGetSnapshot> getById(String path) async {
     final snapshot = await _db.doc(path).get();
-    return DataGetSnapshot(snapshot: snapshot, doc: snapshot.data());
+    return _doc(snapshot);
   }
 
   @override
@@ -124,44 +143,25 @@ class FirestoreDataDelegate extends DataDelegate {
           sorts: sorts,
           options: options,
         ).get();
-    return DataGetsSnapshot(
-      snapshot: snapshot,
-      docs: snapshot.docs.map((e) => e.data()).toList(growable: false),
-      docChanges: snapshot.docChanges
-          .map((e) => e.doc.data())
-          .whereType<Map<String, dynamic>>()
-          .toList(growable: false),
-    );
+    return _docs(snapshot);
   }
 
   @override
   Stream<DataGetsSnapshot> listen(String path) {
-    return _db.collection(path).snapshots().map((snapshot) {
-      return DataGetsSnapshot(
-        snapshot: snapshot,
-        docs: snapshot.docs.map((e) => e.data()).toList(growable: false),
-        docChanges: snapshot.docChanges
-            .map((e) => e.doc.data())
-            .whereType<Map<String, dynamic>>()
-            .toList(growable: false),
-      );
-    });
+    return _db.collection(path).snapshots().map(_docs);
   }
 
   @override
   Stream<DataAggregateSnapshot> listenCount(String path) {
-    return Stream.periodic(Duration(seconds: 10)).asyncMap((_) {
-      return _db.collection(path).count().get().then((snapshot) {
-        return DataAggregateSnapshot(snapshot: snapshot, count: snapshot.count);
-      });
+    return Stream.periodic(Duration(seconds: 30)).asyncMap((_) async {
+      final snapshot = await _db.collection(path).count().get();
+      return _agg(snapshot);
     });
   }
 
   @override
   Stream<DataGetSnapshot> listenById(String path) {
-    return _db.doc(path).snapshots().map((snapshot) {
-      return DataGetSnapshot(snapshot: snapshot, doc: snapshot.data());
-    });
+    return _db.doc(path).snapshots().map(_doc);
   }
 
   @override
@@ -178,30 +178,14 @@ class FirestoreDataDelegate extends DataDelegate {
       selections: selections,
       sorts: sorts,
       options: options,
-    ).snapshots().map((snapshot) {
-      return DataGetsSnapshot(
-        snapshot: snapshot,
-        docs: snapshot.docs.map((e) => e.data()).toList(growable: false),
-        docChanges: snapshot.docChanges
-            .map((e) => e.doc.data())
-            .whereType<Map<String, dynamic>>()
-            .toList(growable: false),
-      );
-    });
+    ).snapshots().map(_docs);
   }
 
   @override
   Future<DataGetsSnapshot> search(String path, Checker checker) async {
     final snapshot =
         await FirestoreQueryHelper.search(_db.collection(path), checker).get();
-    return DataGetsSnapshot(
-      snapshot: snapshot,
-      docs: snapshot.docs.map((e) => e.data()).toList(growable: false),
-      docChanges: snapshot.docChanges
-          .map((e) => e.doc.data())
-          .whereType<Map<String, dynamic>>()
-          .toList(growable: false),
-    );
+    return _docs(snapshot);
   }
 
   @override
@@ -249,12 +233,17 @@ class FirestoreQueryHelper {
     final value = checker.value;
     final type = checker.type;
 
+    if (field.isEmpty) return ref;
+
     if (value is String && value.isNotEmpty) {
       if (type.isContains) {
-        ref = ref.orderBy(field).startAt([value]).endAt(['$value\uf8ff']);
-      } else {
-        ref = ref.where(field, isEqualTo: value);
+        return ref.orderBy(field).startAt([value]).endAt(['$value\uf8ff']);
       }
+      return ref.where(field, isEqualTo: value);
+    }
+
+    if (value != null) {
+      return ref.where(field, isEqualTo: value);
     }
 
     return ref;
