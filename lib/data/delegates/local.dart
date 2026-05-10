@@ -94,11 +94,11 @@ class LocalDataDelegate extends DataDelegate {
     return DataGetsSnapshot(
       snapshot: snapshot,
       docs: snapshot.docs
-          .map((e) => e.data)
+          .map((e) => e.data())
           .whereType<Map<String, dynamic>>()
           .toList(growable: false),
       docChanges: snapshot.docChanges
-          .map((e) => e.doc.data)
+          .map((e) => e.doc.data())
           .whereType<Map<String, dynamic>>()
           .toList(growable: false),
     );
@@ -129,11 +129,11 @@ class LocalDataDelegate extends DataDelegate {
     return DataGetsSnapshot(
       snapshot: snapshot,
       docs: snapshot.docs
-          .map((e) => e.data)
+          .map((e) => e.data())
           .whereType<Map<String, dynamic>>()
           .toList(growable: false),
       docChanges: snapshot.docChanges
-          .map((e) => e.doc.data)
+          .map((e) => e.doc.data())
           .whereType<Map<String, dynamic>>()
           .toList(growable: false),
     );
@@ -145,11 +145,11 @@ class LocalDataDelegate extends DataDelegate {
       return DataGetsSnapshot(
         snapshot: snapshot,
         docs: snapshot.docs
-            .map((e) => e.data)
+            .map((e) => e.data())
             .whereType<Map<String, dynamic>>()
             .toList(growable: false),
         docChanges: snapshot.docChanges
-            .map((e) => e.doc.data)
+            .map((e) => e.doc.data())
             .whereType<Map<String, dynamic>>()
             .toList(growable: false),
       );
@@ -181,11 +181,11 @@ class LocalDataDelegate extends DataDelegate {
       return DataGetsSnapshot(
         snapshot: snapshot,
         docs: snapshot.docs
-            .map((e) => e.data)
+            .map((e) => e.data())
             .whereType<Map<String, dynamic>>()
             .toList(growable: false),
         docChanges: snapshot.docChanges
-            .map((e) => e.doc.data)
+            .map((e) => e.doc.data())
             .whereType<Map<String, dynamic>>()
             .toList(growable: false),
       );
@@ -199,11 +199,11 @@ class LocalDataDelegate extends DataDelegate {
     return DataGetsSnapshot(
       snapshot: snapshot,
       docs: snapshot.docs
-          .map((e) => e.data)
+          .map((e) => e.data())
           .whereType<Map<String, dynamic>>()
           .toList(growable: false),
       docChanges: snapshot.docChanges
-          .map((e) => e.doc.data)
+          .map((e) => e.doc.data())
           .whereType<Map<String, dynamic>>()
           .toList(growable: false),
     );
