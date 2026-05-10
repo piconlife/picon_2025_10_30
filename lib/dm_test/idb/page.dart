@@ -56,7 +56,8 @@ class _LocalDataTestPageState extends State<LocalDataTestPage> {
 
   static const _id = '1778319785575';
 
-  InAppQueryReference get _notes => _db.collection('notes_v2').doc('v1').collection('notes');
+  InAppQueryReference get _notes =>
+      _db.collection('notes_v2').doc('v1').collection('notes');
 
   InAppDocumentReference _noteDoc(String id) => _notes.doc(id);
 
@@ -217,17 +218,14 @@ class _LocalDataTestPageState extends State<LocalDataTestPage> {
   });
 
   Future<void> _search() => _safe('search', () async {
-    final snap = await _notes.get();
-    final filtered =
-        snap.docs
-            .where(
-              (d) =>
-                  (d.data()[NoteKey.title] as String? ?? '').contains('Note'),
-            )
-            .toList();
+    final value = "Note";
+    final snap =
+        await _notes.orderBy(NoteKey.title).startAt([value]).endAt([
+          '$value\uf8ff',
+        ]).get();
     _log_(
-      'Search "Note": ${filtered.length} items: '
-      '${filtered.map((d) => d.data()[NoteKey.title]).join(", ")}',
+      'Search "Note": ${snap.docs.length} items: '
+      '${snap.docs.map((d) => d.data()[NoteKey.title]).join(", ")}',
     );
   });
 

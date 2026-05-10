@@ -108,7 +108,7 @@ class Note {
       body: _asString(map[NoteKey.body]),
       tags: _asStringList(map[NoteKey.tags]),
       pinned: _asBool(map[NoteKey.pinned]),
-      color: _asString(map[NoteKey.color], 'white'),
+      color: _asString(map[NoteKey.color], 'null'),
       views: _asInt(map[NoteKey.views]),
       createdAt: _asIntOrNull(map[NoteKey.createdAt]),
       updatedAt: _asIntOrNull(map[NoteKey.updatedAt]),
