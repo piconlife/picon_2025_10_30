@@ -4,8 +4,24 @@ class _InAppNotifier<T> extends ValueNotifier<T> {
   _InAppNotifier(super.data);
 
   bool _disposed = false;
+  int _listenerCount = 0;
 
   bool get isDisposed => _disposed;
+
+  bool get hasActiveListeners => _listenerCount > 0;
+
+  @override
+  void addListener(VoidCallback listener) {
+    if (_disposed) return;
+    super.addListener(listener);
+    _listenerCount++;
+  }
+
+  @override
+  void removeListener(VoidCallback listener) {
+    super.removeListener(listener);
+    if (_listenerCount > 0) _listenerCount--;
+  }
 
   void notify() {
     if (_disposed) return;
@@ -16,6 +32,7 @@ class _InAppNotifier<T> extends ValueNotifier<T> {
   void dispose() {
     if (_disposed) return;
     _disposed = true;
+    _listenerCount = 0;
     super.dispose();
   }
 }
@@ -31,6 +48,7 @@ class InAppQueryNotifier extends _InAppNotifier<InAppQuerySnapshot?> {
       if (value != null) existing.value = value;
       return existing;
     }
+    if (existing != null && existing.isDisposed) children.remove(id);
     final created = InAppDocumentNotifier(value, id);
     children[id] = created;
     return created;
@@ -44,21 +62,21 @@ class InAppQueryNotifier extends _InAppNotifier<InAppQuerySnapshot?> {
       return;
     }
     final id = value.id;
+    if (id.isEmpty) {
+      super.value = null;
+      return;
+    }
     final filtered = <InAppQueryDocumentSnapshot>[];
     for (final d in value.docs) {
       final data = d.data();
       if (data.isNotEmpty) filtered.add(d);
     }
-    if (id.isNotEmpty && filtered.isNotEmpty) {
-      super.value = InAppQuerySnapshot(
-        id,
-        filtered,
-        value.docChanges,
-        value.metadata,
-      );
-    } else {
-      super.value = null;
-    }
+    super.value = InAppQuerySnapshot(
+      id,
+      filtered,
+      value.docChanges,
+      value.metadata,
+    );
   }
 
   @override

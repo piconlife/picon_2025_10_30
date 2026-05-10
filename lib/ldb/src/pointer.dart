@@ -15,18 +15,30 @@ class InAppPointer {
   bool isDocument() => components.length.isEven && components.isNotEmpty;
 
   String collectionPath(String collectionPath) {
-    assert(
-      isDocument(),
-      'Collections can only be created from a document path.',
-    );
+    if (!isDocument()) {
+      throw StateError('Collections can only be created from a document path.');
+    }
+    if (collectionPath.isEmpty) {
+      throw ArgumentError.value(
+        collectionPath,
+        'collectionPath',
+        'must not be empty.',
+      );
+    }
     return '$path/$collectionPath';
   }
 
   String documentPath(String documentPath) {
-    assert(
-      isCollection(),
-      'Documents can only be created from a collection path.',
-    );
+    if (!isCollection()) {
+      throw StateError('Documents can only be created from a collection path.');
+    }
+    if (documentPath.isEmpty) {
+      throw ArgumentError.value(
+        documentPath,
+        'documentPath',
+        'must not be empty.',
+      );
+    }
     return '$path/$documentPath';
   }
 

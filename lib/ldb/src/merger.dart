@@ -16,11 +16,21 @@ class InAppMerger {
         _apply(field, fieldValue, root[field]);
       } else if (fieldValue is Map<String, InAppValue>) {
         final base = root[field];
+        final nestedOnly = _nestedOnly(field, onlyFields);
         if (base is Map) {
           final nested = InAppMerger(Map<String, InAppValue>.from(base));
-          root[field] = nested.merge(fieldValue);
-        } else {
+          root[field] = nested.merge(fieldValue, onlyFields: nestedOnly);
+        } else if (nestedOnly == null) {
           extra[field] = fieldValue;
+        } else {
+          final filtered = <String, InAppValue>{};
+          fieldValue.forEach((k, v) {
+            if (nestedOnly.contains(k) ||
+                nestedOnly.any((p) => p.startsWith('$k.'))) {
+              filtered[k] = v;
+            }
+          });
+          if (filtered.isNotEmpty) extra[field] = filtered;
         }
       } else {
         extra[field] = fieldValue;
@@ -28,6 +38,17 @@ class InAppMerger {
     }
     if (extra.isNotEmpty) root.addAll(extra);
     return root;
+  }
+
+  static Set<String>? _nestedOnly(String field, Set<String>? only) {
+    if (only == null) return null;
+    if (only.contains(field)) return null;
+    final result = <String>{};
+    final prefix = '$field.';
+    for (final f in only) {
+      if (f.startsWith(prefix)) result.add(f.substring(prefix.length));
+    }
+    return result.isEmpty ? <String>{} : result;
   }
 
   static bool _matchesAnyField(String field, Set<String> only) {
@@ -73,7 +94,7 @@ class InAppMerger {
   void _applyArrayFilter(String field, Object? base, Object? modifier) {
     if (base is List && modifier is bool Function(Object?)) {
       final merged = base.where(modifier).toList(growable: false);
-      root[field] = merged.isEmpty ? null : merged;
+      root[field] = merged;
     }
   }
 
@@ -127,7 +148,12 @@ class InAppMerger {
   }
 
   void _applyToggle(String field, Object? base, Object? modifier) {
-    final current = base is bool ? base : (modifier is bool ? modifier : false);
-    root[field] = !current;
+    if (base is bool) {
+      root[field] = !base;
+    } else if (modifier is bool) {
+      root[field] = modifier;
+    } else {
+      root[field] = true;
+    }
   }
 }

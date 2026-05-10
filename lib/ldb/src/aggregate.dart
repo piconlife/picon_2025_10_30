@@ -35,12 +35,15 @@ class InAppAggregateQuery extends InAppReference {
       }
 
       n.addListener(listener);
-      controller.onCancel = () => n.removeListener(listener);
+      controller.onCancel = () {
+        n.removeListener(listener);
+        _db._maybeCleanupNotifier(_p.path);
+      };
 
       Future<void>(() async {
         try {
           final s = await get();
-          emit(s);
+          if (!controller.isClosed) emit(s);
         } catch (_) {}
       });
     });

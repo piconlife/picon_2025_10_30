@@ -24,17 +24,17 @@ class InAppDocumentSnapshot extends InAppSnapshot {
   Object? operator [](Object field) => get(field);
 
   T? get<T extends Object?>(Object field) {
+    if (field is InAppFieldPath && field.isDocumentId) {
+      return id is T ? id as T : null;
+    }
     if (_data == null) return null;
-    final key =
+    final List<String>? key =
         field is InAppFieldPath
             ? (field.isDocumentId ? null : field.segments)
             : field is String
             ? field.split('.')
             : null;
-    if (key == null) {
-      if (field is InAppFieldPath && field.isDocumentId) return id as T?;
-      return null;
-    }
+    if (key == null) return null;
     Object? current = _data;
     for (final seg in key) {
       if (current is Map) {
@@ -75,9 +75,30 @@ class InAppDocumentSnapshot extends InAppSnapshot {
     if (a.length != b.length) return false;
     for (final entry in a.entries) {
       if (!b.containsKey(entry.key)) return false;
-      if (b[entry.key] != entry.value) return false;
+      if (!_deepEq(b[entry.key], entry.value)) return false;
     }
     return true;
+  }
+
+  static bool _deepEq(Object? a, Object? b) {
+    if (identical(a, b)) return true;
+    if (a == null || b == null) return false;
+    if (a is Map && b is Map) {
+      if (a.length != b.length) return false;
+      for (final k in a.keys) {
+        if (!b.containsKey(k)) return false;
+        if (!_deepEq(a[k], b[k])) return false;
+      }
+      return true;
+    }
+    if (a is List && b is List) {
+      if (a.length != b.length) return false;
+      for (var i = 0; i < a.length; i++) {
+        if (!_deepEq(a[i], b[i])) return false;
+      }
+      return true;
+    }
+    return a == b;
   }
 
   @override

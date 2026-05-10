@@ -100,7 +100,6 @@ class InAppDocumentReference extends InAppReference {
   }
 
   Future<void> update(InAppDocument data, {List<Object>? onlyFields}) async {
-    final base = await get();
     Set<String>? onlySet;
     if (onlyFields != null) {
       onlySet = <String>{};
@@ -113,17 +112,25 @@ class InAppDocumentReference extends InAppReference {
         }
       }
     }
-    final merged = InAppMerger(base.data()).merge(data, onlyFields: onlySet);
-    merged[_idField] = id;
-    final ok = await _db._w(
-      reference: reference,
-      collectionPath: _p.path,
-      collectionId: _p.id,
-      documentId: id,
-      type: InAppWriteType.document,
-      value: merged,
-    );
-    final snap = ok ? InAppDocumentSnapshot(id, merged, this) : null;
+
+    InAppDocument? merged;
+    final ok = await _db._serial(_p.path, () async {
+      final base = await get();
+      final m = InAppMerger(base.data()).merge(data, onlyFields: onlySet);
+      m[_idField] = id;
+      merged = m;
+      return _db._wInner(
+        reference: reference,
+        collectionPath: _p.path,
+        collectionId: _p.id,
+        documentId: id,
+        type: InAppWriteType.document,
+        value: m,
+      );
+    });
+
+    final snap =
+        (ok && merged != null) ? InAppDocumentSnapshot(id, merged, this) : null;
     _n<void>(null, snap);
     _db._log(ok ? 'done!' : 'failed!', action: 'update', field: id);
     if (!ok) {
@@ -135,25 +142,34 @@ class InAppDocumentReference extends InAppReference {
   }
 
   Future<void> delete() async {
-    final ok = await _db._w(
-      reference: reference,
-      collectionPath: _p.path,
-      collectionId: _p.id,
-      documentId: id,
-      type: InAppWriteType.document,
-    );
-    if (ok) {
-      final remaining = await _p.get();
-      if (!remaining.exists) {
-        await _db._w(
-          type: InAppWriteType.collection,
+    final ok = await _db._serial(_p.path, () async {
+      final r = await _db._wInner(
+        reference: reference,
+        collectionPath: _p.path,
+        collectionId: _p.id,
+        documentId: id,
+        type: InAppWriteType.document,
+      );
+      if (r) {
+        final remaining = await _db._r(
           reference: _p.reference,
           collectionPath: _p.path,
           collectionId: _p.id,
           documentId: _p.id,
+          type: InAppReadType.collection,
         );
+        if (remaining is InAppQuerySnapshot && remaining.isEmpty) {
+          await _db._wInner(
+            type: InAppWriteType.collection,
+            reference: _p.reference,
+            collectionPath: _p.path,
+            collectionId: _p.id,
+            documentId: _p.id,
+          );
+        }
       }
-    }
+      return r;
+    });
     _n<void>(null, null);
     _db._log(ok ? 'done!' : 'failed!', action: 'delete', field: id);
     if (!ok) {
@@ -196,12 +212,15 @@ class InAppDocumentReference extends InAppReference {
       void listener() => emit(n.value ?? InAppDocumentSnapshot(id, null, this));
 
       n.addListener(listener);
-      controller.onCancel = () => n.removeListener(listener);
+      controller.onCancel = () {
+        n.removeListener(listener);
+        _db._maybeCleanupChild(_p.path, id);
+      };
 
       Future<void>(() async {
         try {
           final s = await get();
-          emit(s);
+          if (!controller.isClosed) emit(s);
           if (!n.isDisposed) n.value = s;
         } catch (_) {}
       });

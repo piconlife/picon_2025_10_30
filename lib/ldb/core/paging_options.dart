@@ -4,10 +4,10 @@ class InAppPagingOptions {
   final int? initialSize;
 
   const InAppPagingOptions({
-    int? initialFetchSize,
+    int? initialSize,
     this.fetchFromLast = false,
     this.fetchingSize,
-  }) : initialSize = initialFetchSize ?? fetchingSize;
+  }) : initialSize = initialSize ?? fetchingSize;
 
   InAppPagingOptions copy({
     bool? fetchFromLast,
@@ -15,7 +15,7 @@ class InAppPagingOptions {
     int? initialSize,
   }) {
     return InAppPagingOptions(
-      initialFetchSize: initialSize ?? this.initialSize,
+      initialSize: initialSize ?? this.initialSize,
       fetchingSize: fetchingSize ?? this.fetchingSize,
       fetchFromLast: fetchFromLast ?? this.fetchFromLast,
     );

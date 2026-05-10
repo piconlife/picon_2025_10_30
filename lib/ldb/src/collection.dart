@@ -152,12 +152,15 @@ abstract class InAppCollectionReference extends InAppReference {
       void listener() => emit(n.value ?? InAppQuerySnapshot(id));
 
       n.addListener(listener);
-      controller.onCancel = () => n.removeListener(listener);
+      controller.onCancel = () {
+        n.removeListener(listener);
+        _db._maybeCleanupNotifier(path);
+      };
 
       Future<void>(() async {
         try {
           final s = await get();
-          emit(s);
+          if (!controller.isClosed) emit(s);
           if (!n.isDisposed) n.value = s;
         } catch (_) {}
       });

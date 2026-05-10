@@ -133,6 +133,12 @@ class InAppTransaction {
         final result = await handler(txn).timeout(timeout);
         await txn._commit();
         return result;
+      } on ArgumentError {
+        rethrow;
+      } on StateError catch (e, st) {
+        if (txn._committed) rethrow;
+        lastError = e;
+        lastStack = st;
       } catch (e, st) {
         lastError = e;
         lastStack = st;

@@ -263,12 +263,15 @@ class InAppQueryReference extends InAppCollectionReference {
       }
 
       n.addListener(listener);
-      controller.onCancel = () => n.removeListener(listener);
+      controller.onCancel = () {
+        n.removeListener(listener);
+        _db._maybeCleanupNotifier(path);
+      };
 
       Future<void>(() async {
         try {
           final s = await get();
-          emit(s);
+          if (!controller.isClosed) emit(s);
         } catch (_) {}
       });
     });

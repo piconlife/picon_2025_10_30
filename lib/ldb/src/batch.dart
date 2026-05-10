@@ -90,16 +90,18 @@ class InAppWriteBatch {
 
   Future<void> commit() async {
     _ensureNotCommitted();
-    _committed = true;
-
-    if (_operations.isEmpty) return;
+    if (_operations.isEmpty) {
+      _committed = true;
+      return;
+    }
 
     final ops = List<_BatchOp>.unmodifiable(_operations);
+    final snapshots = await _captureSnapshots(ops);
+
+    _committed = true;
     _operations.clear();
 
-    final snapshots = await _captureSnapshots(ops);
     final completed = <int>[];
-
     try {
       for (var i = 0; i < ops.length; i++) {
         await _executeOp(ops[i]);

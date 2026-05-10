@@ -1,6 +1,7 @@
 import 'dart:async' show Stream, Completer;
 import 'dart:convert' show jsonDecode, jsonEncode;
 import 'dart:developer' show log;
+import 'dart:ui' show VoidCallback;
 
 import 'package:flutter/foundation.dart'
     show ChangeNotifier, kReleaseMode, ValueNotifier;
@@ -39,6 +40,7 @@ class InAppDatabase extends ChangeNotifier {
   final InAppDatabaseDelegate _delegate;
   final InAppDatabaseType _type;
   final Map<String, _InAppNotifier> _notifiers = {};
+  final Map<String, Future<void>> _serialQueue = {};
   InAppDatabaseVersion _version;
   bool _disposed = false;
 
@@ -76,6 +78,58 @@ class InAppDatabase extends ChangeNotifier {
       text = '$action: $text';
     }
     log(text, name: 'IN_APP_DATABASE');
+  }
+
+  Future<T> _serial<T>(String key, Future<T> Function() task) {
+    final prev = _serialQueue[key] ?? Future<void>.value();
+    final completer = Completer<T>();
+    late final Future<void> next;
+    next =
+        (() async {
+          try {
+            await prev;
+          } catch (_) {}
+          try {
+            final r = await task();
+            if (!completer.isCompleted) completer.complete(r);
+          } catch (e, st) {
+            if (!completer.isCompleted) completer.completeError(e, st);
+          } finally {
+            if (identical(_serialQueue[key], next)) {
+              _serialQueue.remove(key);
+            }
+          }
+        })();
+    _serialQueue[key] = next;
+    return completer.future;
+  }
+
+  void _maybeCleanupNotifier(String path) {
+    final n = _notifiers[path];
+    if (n == null) return;
+    if (n is InAppQueryNotifier) {
+      final hasActiveChild = n.children.values.any((c) => c.hasActiveListeners);
+      if (!n.hasActiveListeners && !hasActiveChild) {
+        _notifiers.remove(path);
+        n.dispose();
+      }
+    } else {
+      if (!n.hasActiveListeners) {
+        _notifiers.remove(path);
+        n.dispose();
+      }
+    }
+  }
+
+  void _maybeCleanupChild(String parentPath, String id) {
+    final parent = _notifiers[parentPath];
+    if (parent is! InAppQueryNotifier) return;
+    final child = parent.children[id];
+    if (child != null && !child.hasActiveListeners) {
+      parent.children.remove(id);
+      child.dispose();
+    }
+    _maybeCleanupNotifier(parentPath);
   }
 
   static InAppDatabase? _i;
@@ -131,7 +185,8 @@ class InAppDatabase extends ChangeNotifier {
     InAppDatabaseVersion? version,
     required InAppDatabaseDelegate delegate,
   }) async {
-    if (_initCompleter != null) return _initCompleter!.future;
+    final existing = _initCompleter;
+    if (existing != null) return existing.future;
     final completer = Completer<bool>();
     _initCompleter = completer;
     try {
@@ -153,13 +208,13 @@ class InAppDatabase extends ChangeNotifier {
       _databases[_defaultName] = true;
       i._log('$InAppDatabase initialized!');
       i.notifyListeners();
-      completer.complete(true);
+      if (!completer.isCompleted) completer.complete(true);
       return true;
     } catch (e) {
       _i?.initializing.value = false;
       _i?._log(e);
-      if (!completer.isCompleted) completer.complete(false);
       _initCompleter = null;
+      if (!completer.isCompleted) completer.complete(false);
       return false;
     }
   }
@@ -216,6 +271,9 @@ class InAppDatabase extends ChangeNotifier {
   static Future<bool> create(String name) async {
     final inst = i;
     try {
+      if (name.isEmpty) {
+        throw const InAppDatabaseException('Database name cannot be empty.');
+      }
       if (_databases.containsKey(name)) {
         throw InAppDatabaseException('$InAppDatabase($name) already exists.');
       }
@@ -269,7 +327,16 @@ class InAppDatabase extends ChangeNotifier {
     }
   }
 
-  Future<void> terminate() async => dispose();
+  Future<void> terminate() async {
+    if (_disposed) return;
+    final pending = List<Future<void>>.of(_serialQueue.values);
+    for (final f in pending) {
+      try {
+        await f;
+      } catch (_) {}
+    }
+    dispose();
+  }
 
   Future<void> clearPersistence() async {
     if (!isInitialized) return;
@@ -335,6 +402,7 @@ class InAppDatabase extends ChangeNotifier {
     var i = 1;
     while (i < parts.length) {
       final docId = parts[i];
+      if (i + 1 >= parts.length) break;
       final colId = parts[i + 1];
       current = current.doc(docId).collection(colId);
       i += 2;
@@ -398,6 +466,9 @@ class InAppDatabase extends ChangeNotifier {
       if (value != null) existing.value = value;
       return existing;
     }
+    if (existing != null && existing.isDisposed) {
+      _notifiers.remove(reference);
+    }
     final created = InAppQueryNotifier(value);
     _notifiers[reference] = created;
     return created;
@@ -426,6 +497,12 @@ class InAppDatabase extends ChangeNotifier {
     }
     try {
       return await callback();
+    } on ArgumentError {
+      rethrow;
+    } on StateError {
+      rethrow;
+    } on InAppDatabaseException {
+      rethrow;
     } catch (e) {
       if (attempt >= _maxRetries) rethrow;
       await Future<void>.delayed(_retryDelay * (attempt + 1));
@@ -439,24 +516,26 @@ class InAppDatabase extends ChangeNotifier {
     Iterable<String> Function(String path, Iterable<String>)? filter,
   }) async {
     final ref = _version._ref(collectionPath);
-    try {
-      return await _execute(() async {
-        if (!related) return _delegate.delete(_name, ref);
-        final paths = await _delegate.paths(_name);
-        final keys =
-            filter != null
-                ? filter(ref, paths)
-                : paths.where((p) => p.startsWith(ref));
-        var any = false;
-        for (final k in keys) {
-          if (await _delegate.delete(_name, k)) any = true;
-        }
-        return any || filter != null;
-      });
-    } catch (e) {
-      _log(e, action: 'delete', field: collectionPath);
-      return false;
-    }
+    return _serial(collectionPath, () async {
+      try {
+        return await _execute(() async {
+          if (!related) return _delegate.delete(_name, ref);
+          final paths = await _delegate.paths(_name);
+          final keys =
+              filter != null
+                  ? filter(ref, paths)
+                  : paths.where((p) => p == ref || p.startsWith('$ref/'));
+          var any = false;
+          for (final k in keys) {
+            if (await _delegate.delete(_name, k)) any = true;
+          }
+          return any || filter != null;
+        });
+      } catch (e) {
+        _log(e, action: 'delete', field: collectionPath);
+        return false;
+      }
+    });
   }
 
   Future<Iterable<String>> _k(String path) async {
@@ -464,7 +543,9 @@ class InAppDatabase extends ChangeNotifier {
       return await _execute(() async {
         final paths = await _delegate.paths(_name);
         final r = _version._ref(path);
-        return paths.where((p) => p.startsWith(r)).toList(growable: false);
+        return paths
+            .where((p) => p == r || p.startsWith('$r/'))
+            .toList(growable: false);
       });
     } catch (e) {
       _log(e, action: 'keys', field: path);
@@ -483,7 +564,14 @@ class InAppDatabase extends ChangeNotifier {
       return await _execute(() async {
         final ref = _version._ref(collectionPath);
         final raw = await _delegate.read(_name, ref);
-        final value = raw is String ? jsonDecode(raw) : raw;
+        Object? value = raw;
+        if (raw is String) {
+          try {
+            value = jsonDecode(raw);
+          } catch (_) {
+            return const InAppFailureSnapshot('Corrupted data.');
+          }
+        }
         if (value is! Map) {
           return const InAppFailureSnapshot('Data not found.');
         }
@@ -491,7 +579,14 @@ class InAppDatabase extends ChangeNotifier {
           final docs = <InAppQueryDocumentSnapshot>[];
           value.forEach((k, v) {
             if (k is! String) return;
-            final parsed = v is String ? jsonDecode(v) : v;
+            Object? parsed = v;
+            if (v is String) {
+              try {
+                parsed = jsonDecode(v);
+              } catch (_) {
+                return;
+              }
+            }
             if (parsed is! Map) return;
             final doc = Map<String, InAppValue>.from(parsed);
             if (doc.isEmpty) return;
@@ -501,7 +596,14 @@ class InAppDatabase extends ChangeNotifier {
         } else if (type.isDocument) {
           final entry = value[documentId];
           if (entry == null) return InAppDocumentSnapshot(documentId);
-          final parsed = entry is String ? jsonDecode(entry) : entry;
+          Object? parsed = entry;
+          if (entry is String) {
+            try {
+              parsed = jsonDecode(entry);
+            } catch (_) {
+              return InAppDocumentSnapshot(documentId);
+            }
+          }
           final doc =
               parsed is Map ? Map<String, InAppValue>.from(parsed) : null;
           return InAppDocumentSnapshot(documentId, doc);
@@ -519,22 +621,42 @@ class InAppDatabase extends ChangeNotifier {
     Map<String, Object?> base,
     bool isJson,
   ) async {
-    if (base.isEmpty) return null;
+    if (base.isEmpty) return isJson ? jsonEncode(<String, Object?>{}) : base;
     final l = await _delegate.limitation(_name, PathModifier.format(path));
     if (l == null || l.isUnlimited) {
       return isJson ? jsonEncode(base) : base;
     }
     final entries = base.entries;
     if (entries.length <= l.limit) return isJson ? jsonEncode(base) : base;
+    final list = entries.toList(growable: false);
     final selected =
-        l.limitByRecent
-            ? entries.toList(growable: false).reversed.take(l.limit)
-            : entries.take(l.limit);
+        l.limitByRecent ? list.reversed.take(l.limit) : list.take(l.limit);
     final reduced = Map<String, Object?>.fromEntries(selected);
     return isJson ? jsonEncode(reduced) : reduced;
   }
 
   Future<bool> _w({
+    required InAppWriteType type,
+    required String reference,
+    required String collectionPath,
+    required String collectionId,
+    required String documentId,
+    InAppDocument? value,
+  }) {
+    return _serial(
+      collectionPath,
+      () => _wInner(
+        type: type,
+        reference: reference,
+        collectionPath: collectionPath,
+        collectionId: collectionId,
+        documentId: documentId,
+        value: value,
+      ),
+    );
+  }
+
+  Future<bool> _wInner({
     required InAppWriteType type,
     required String reference,
     required String collectionPath,
@@ -547,7 +669,14 @@ class InAppDatabase extends ChangeNotifier {
       return await _execute(() async {
         final ref = _version._ref(collectionPath);
         final root = await _delegate.read(_name, ref);
-        final raw = root is String ? jsonDecode(root) : root;
+        Object? raw = root;
+        if (root is String) {
+          try {
+            raw = jsonDecode(root);
+          } catch (_) {
+            raw = null;
+          }
+        }
         final base =
             raw is Map ? Map<String, Object?>.from(raw) : <String, Object?>{};
 
@@ -592,13 +721,14 @@ class InAppDatabase extends ChangeNotifier {
       n.dispose();
     }
     _notifiers.clear();
+    _serialQueue.clear();
     initializing.dispose();
     activating.dispose();
     creating.dispose();
     deleting.dispose();
-    _databases.clear();
+    _databases.remove(_name);
     _initCompleter = null;
-    _i = null;
+    if (identical(_i, this)) _i = null;
     _log('disposed!');
     super.dispose();
   }

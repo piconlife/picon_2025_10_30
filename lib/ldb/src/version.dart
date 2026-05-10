@@ -9,11 +9,14 @@ class InAppDatabaseVersion {
   static const InAppDatabaseVersion v2 = InAppDatabaseVersion.custom('v2');
 
   static int _idCounter = 0;
+  static int _lastTs = 0;
 
   String get _id {
-    final ts = DateTime.now().microsecondsSinceEpoch;
-    final seq = (_idCounter = (_idCounter + 1) & 0xFFFF);
-    return '$ts-${seq.toRadixString(16).padLeft(4, '0')}';
+    var ts = DateTime.now().microsecondsSinceEpoch;
+    if (ts <= _lastTs) ts = _lastTs + 1;
+    _lastTs = ts;
+    _idCounter = (_idCounter + 1) & 0xFFFFFF;
+    return '$ts-${_idCounter.toRadixString(16).padLeft(6, '0')}';
   }
 
   String get _idRef => code == v1.code ? '_id' : 'id';
