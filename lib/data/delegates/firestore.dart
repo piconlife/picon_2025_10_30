@@ -1,5 +1,3 @@
-import 'dart:async' show StreamController, StreamSubscription;
-
 import '../../app/imports/cloud_firestore.dart'
     show
         AggregateQuerySnapshot,
@@ -15,7 +13,6 @@ import '../../app/imports/data_management.dart'
     show
         Checker,
         DataAggregateSnapshot,
-        DataDelegate,
         DataFetchOptions,
         DataFieldPath,
         DataFieldPaths,
@@ -26,7 +23,8 @@ import '../../app/imports/data_management.dart'
         DataQuery,
         DataSelection,
         DataSorting,
-        DataWriteBatch;
+        DataWriteBatch,
+        MulticastDataDelegate;
 
 class FirestoreWriteBatch extends DataWriteBatch {
   late final WriteBatch _batch;
@@ -53,19 +51,19 @@ class FirestoreWriteBatch extends DataWriteBatch {
   Future<void> onCommit() => _batch.commit();
 }
 
-class FirestoreDataDelegate extends DataDelegate {
+class FirestoreDataDelegate extends MulticastDataDelegate {
   final FirebaseFirestore _db;
   final Duration operationTimeout;
   final Duration countInterval;
-
-  final Map<String, _MulticastStream<DataGetsSnapshot>> _listenCache = {};
-  final Map<String, _MulticastStream<DataGetSnapshot>> _docCache = {};
-  final Map<String, _MulticastStream<DataAggregateSnapshot>> _countCache = {};
 
   FirestoreDataDelegate({
     FirebaseFirestore? firestore,
     this.operationTimeout = const Duration(seconds: 15),
     this.countInterval = const Duration(seconds: 30),
+    super.multicastListen,
+    super.multicastListenById,
+    super.multicastListenCount,
+    super.multicastListenByQuery,
   }) : _db = firestore ?? FirebaseFirestore.instance;
 
   static FirestoreDataDelegate? _i;
@@ -74,16 +72,9 @@ class FirestoreDataDelegate extends DataDelegate {
 
   static FirestoreDataDelegate get instance => _i ??= FirestoreDataDelegate();
 
+  @override
   Future<void> dispose() async {
-    final all = <_MulticastStream<dynamic>>[
-      ..._listenCache.values,
-      ..._docCache.values,
-      ..._countCache.values,
-    ];
-    _listenCache.clear();
-    _docCache.clear();
-    _countCache.clear();
-    await Future.wait(all.map((e) => e.dispose()));
+    await super.dispose();
     if (identical(_i, this)) _i = null;
   }
 
@@ -120,21 +111,6 @@ class FirestoreDataDelegate extends DataDelegate {
     );
   }
 
-  Stream<T> _multicast<T>(
-    Map<String, _MulticastStream<T>> cache,
-    String key,
-    Stream<T> Function() factory,
-  ) {
-    final existing = cache[key];
-    if (existing != null && !existing.isClosed) return existing.subscribe();
-    late _MulticastStream<T> entry;
-    entry = _MulticastStream<T>(factory, () {
-      if (identical(cache[key], entry)) cache.remove(key);
-    });
-    cache[key] = entry;
-    return entry.subscribe();
-  }
-
   Future<DataAggregateSnapshot> _safeCount(String path) async {
     try {
       final snap = await _db
@@ -146,11 +122,6 @@ class FirestoreDataDelegate extends DataDelegate {
     } catch (_) {
       return const DataAggregateSnapshot();
     }
-  }
-
-  Stream<DataAggregateSnapshot> _countStream(String path) async* {
-    yield await _safeCount(path);
-    yield* Stream.periodic(countInterval).asyncMap((_) => _safeCount(path));
   }
 
   @override
@@ -214,30 +185,37 @@ class FirestoreDataDelegate extends DataDelegate {
   }
 
   @override
-  Stream<DataGetsSnapshot> listen(String path) {
-    return _multicast(
-      _listenCache,
-      path,
-      () => _db.collection(path).snapshots().map(_docs),
-    );
+  Future<DataGetsSnapshot> search(String path, Checker checker) async {
+    final snapshot = await FirestoreQueryHelper.search(
+      _db.collection(path),
+      checker,
+    ).get().timeout(operationTimeout);
+    return _docs(snapshot);
   }
 
   @override
-  Stream<DataAggregateSnapshot> listenCount(String path) {
-    return _multicast(_countCache, path, () => _countStream(path));
+  Future<void> update(String path, Map<String, dynamic> data) {
+    return _db.doc(path).update(data).timeout(operationTimeout);
   }
 
   @override
-  Stream<DataGetSnapshot> listenById(String path) {
-    return _multicast(
-      _docCache,
-      path,
-      () => _db.doc(path).snapshots().map(_doc),
-    );
+  Stream<DataGetsSnapshot> onListen(String path) {
+    return _db.collection(path).snapshots().map(_docs);
   }
 
   @override
-  Stream<DataGetsSnapshot> listenByQuery(
+  Stream<DataGetSnapshot> onListenById(String path) {
+    return _db.doc(path).snapshots().map(_doc);
+  }
+
+  @override
+  Stream<DataAggregateSnapshot> onListenCount(String path) async* {
+    yield await _safeCount(path);
+    yield* Stream.periodic(countInterval).asyncMap((_) => _safeCount(path));
+  }
+
+  @override
+  Stream<DataGetsSnapshot> onListenByQuery(
     String path, {
     Iterable<DataQuery> queries = const [],
     Iterable<DataSelection> selections = const [],
@@ -251,20 +229,6 @@ class FirestoreDataDelegate extends DataDelegate {
       sorts: sorts,
       options: options,
     ).snapshots().map(_docs);
-  }
-
-  @override
-  Future<DataGetsSnapshot> search(String path, Checker checker) async {
-    final snapshot = await FirestoreQueryHelper.search(
-      _db.collection(path),
-      checker,
-    ).get().timeout(operationTimeout);
-    return _docs(snapshot);
-  }
-
-  @override
-  Future<void> update(String path, Map<String, dynamic> data) {
-    return _db.doc(path).update(data).timeout(operationTimeout);
   }
 
   @override
@@ -394,84 +358,5 @@ class FirestoreQueryHelper {
       }
     }
     return ref;
-  }
-}
-
-class _MulticastStream<T> {
-  final Stream<T> Function() _factory;
-  final void Function() _onTearDown;
-  final StreamController<T> _broadcast = StreamController<T>.broadcast();
-
-  StreamSubscription<T>? _upstream;
-  T? _last;
-  bool _hasLast = false;
-  bool _disposed = false;
-
-  _MulticastStream(this._factory, this._onTearDown);
-
-  bool get isClosed => _disposed || _broadcast.isClosed;
-
-  Stream<T> subscribe() {
-    late StreamController<T> view;
-    StreamSubscription<T>? sub;
-
-    view = StreamController<T>(
-      onListen: () {
-        _ensureUpstream();
-        if (_hasLast && !view.isClosed) view.add(_last as T);
-        sub = _broadcast.stream.listen(
-          (event) {
-            if (!view.isClosed) view.add(event);
-          },
-          onError: (Object e, StackTrace s) {
-            if (!view.isClosed) view.addError(e, s);
-          },
-          onDone: () {
-            if (!view.isClosed) view.close();
-          },
-        );
-      },
-      onCancel: () async {
-        await sub?.cancel();
-        sub = null;
-        _maybeTearDown();
-      },
-    );
-
-    return view.stream;
-  }
-
-  void _ensureUpstream() {
-    if (_upstream != null || _disposed) return;
-    _upstream = _factory().listen(
-      (event) {
-        _last = event;
-        _hasLast = true;
-        if (!_broadcast.isClosed) _broadcast.add(event);
-      },
-      onError: (Object e, StackTrace s) {
-        if (!_broadcast.isClosed) _broadcast.addError(e, s);
-      },
-      onDone: () {
-        if (!_broadcast.isClosed) _broadcast.close();
-      },
-    );
-  }
-
-  void _maybeTearDown() {
-    if (_broadcast.hasListener || _disposed) return;
-    _disposed = true;
-    _upstream?.cancel();
-    _upstream = null;
-    if (!_broadcast.isClosed) _broadcast.close();
-    _onTearDown();
-  }
-
-  Future<void> dispose() async {
-    if (_disposed) return;
-    _disposed = true;
-    await _upstream?.cancel();
-    _upstream = null;
-    if (!_broadcast.isClosed) await _broadcast.close();
   }
 }
