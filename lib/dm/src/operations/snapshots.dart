@@ -40,3 +40,21 @@ class DataGetsSnapshot {
     );
   }
 }
+
+class DataAggregateSnapshot {
+  final int? count;
+  final Object? snapshot;
+
+  const DataAggregateSnapshot({this.count, this.snapshot});
+
+  DataAggregateSnapshot copyWith({
+    int? count,
+    Iterable<Map<String, dynamic>>? docs,
+    Object? snapshot,
+  }) {
+    return DataAggregateSnapshot(
+      count: count ?? this.count,
+      snapshot: snapshot ?? this.snapshot,
+    );
+  }
+}

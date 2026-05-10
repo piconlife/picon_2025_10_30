@@ -21,7 +21,8 @@ import '../../app/imports/data_management.dart'
         DataFieldValue,
         DataFieldValues,
         DataFieldPath,
-        DataFieldPaths;
+        DataFieldPaths,
+        DataAggregateSnapshot;
 
 class FirestoreWriteBatch extends DataWriteBatch {
   late final WriteBatch _batch;
@@ -144,6 +145,15 @@ class FirestoreDataDelegate extends DataDelegate {
             .whereType<Map<String, dynamic>>()
             .toList(growable: false),
       );
+    });
+  }
+
+  @override
+  Stream<DataAggregateSnapshot> listenCount(String path) {
+    return Stream.periodic(Duration(seconds: 10)).asyncMap((_) {
+      return _db.collection(path).count().get().then((snapshot) {
+        return DataAggregateSnapshot(snapshot: snapshot, count: snapshot.count);
+      });
     });
   }
 

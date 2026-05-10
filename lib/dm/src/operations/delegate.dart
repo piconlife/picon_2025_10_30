@@ -4,7 +4,8 @@ import '../utils/query.dart' show DataQuery;
 import '../utils/selection.dart' show DataSelection;
 import '../utils/sorting.dart' show DataSorting;
 import 'batch.dart' show DataWriteBatch;
-import 'snapshots.dart' show DataGetsSnapshot, DataGetSnapshot;
+import 'snapshots.dart'
+    show DataGetsSnapshot, DataGetSnapshot, DataAggregateSnapshot;
 
 abstract class DataDelegate {
   const DataDelegate();
@@ -38,6 +39,8 @@ abstract class DataDelegate {
   });
 
   Stream<DataGetsSnapshot> listen(String path);
+
+  Stream<DataAggregateSnapshot> listenCount(String path);
 
   Stream<DataGetSnapshot> listenById(String path);
 

@@ -12,7 +12,8 @@ import '../../app/imports/data_management.dart'
         DataFieldValue,
         DataFieldValues,
         DataFieldPath,
-        DataFieldPaths;
+        DataFieldPaths,
+        DataAggregateSnapshot;
 import '../../app/imports/in_app_database.dart'
     show
         InAppWriteBatch,
@@ -153,6 +154,13 @@ class LocalDataDelegate extends DataDelegate {
             .whereType<Map<String, dynamic>>()
             .toList(growable: false),
       );
+    });
+  }
+
+  @override
+  Stream<DataAggregateSnapshot> listenCount(String path) {
+    return _db.collection(path).count().snapshots().map((snapshot) {
+      return DataAggregateSnapshot(snapshot: snapshot, count: snapshot.count);
     });
   }
 
