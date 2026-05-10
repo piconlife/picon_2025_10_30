@@ -35,11 +35,11 @@ class _BatchSnapshot {
 }
 
 class InAppWriteBatch {
-  final InAppDatabase _firestore;
+  final InAppDatabase _database;
   final List<_BatchOp> _operations = [];
   bool _committed = false;
 
-  InAppWriteBatch._(this._firestore);
+  InAppWriteBatch._(this._database);
 
   factory InAppWriteBatch() => InAppWriteBatch._(InAppDatabase.instance);
 
@@ -170,7 +170,7 @@ class InAppWriteBatch {
   }
 
   void _ensureSameDatabase(InAppDocumentReference document) {
-    if (!identical(document.firestore, _firestore)) {
+    if (!identical(document.database, _database)) {
       throw ArgumentError(
         'The document "${document.path}" belongs to a different InAppDatabase instance.',
       );

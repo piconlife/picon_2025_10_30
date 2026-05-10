@@ -28,11 +28,11 @@ typedef InAppTransactionHandler<T> =
     Future<T> Function(InAppTransaction transaction);
 
 class InAppTransaction {
-  final InAppDatabase _firestore;
+  final InAppDatabase _database;
   final List<_TxnOp> _operations = [];
   bool _committed = false;
 
-  InAppTransaction._(this._firestore);
+  InAppTransaction._(this._database);
 
   Future<InAppDocumentSnapshot> get(InAppDocumentReference document) {
     _ensureNotCommitted();
@@ -83,7 +83,7 @@ class InAppTransaction {
     _committed = true;
     if (_operations.isEmpty) return;
 
-    final batch = InAppWriteBatch.of(_firestore);
+    final batch = InAppWriteBatch.of(_database);
     for (final op in _operations) {
       switch (op.type) {
         case _TxnOpType.set:
@@ -109,7 +109,7 @@ class InAppTransaction {
   }
 
   void _ensureSameDatabase(InAppDocumentReference document) {
-    if (!identical(document.firestore, _firestore)) {
+    if (!identical(document.database, _database)) {
       throw ArgumentError(
         'The document "${document.path}" belongs to a different InAppDatabase instance.',
       );
