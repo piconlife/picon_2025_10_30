@@ -23,15 +23,15 @@ mixin _WriteBatchMixin on _WriteEncryptMixin {
           final w = writers[i];
           final encrypted = payloads[i];
           if (w is DataSetWriter) {
-            batch.set(w.path, encrypted ?? w.data, merge: w.options.merge);
+            batch.onSet(w.path, encrypted ?? w.data, merge: w.options.merge);
           } else if (w is DataUpdateWriter) {
-            batch.update(w.path, encrypted ?? w.data);
+            batch.onUpdate(w.path, encrypted ?? w.data);
           } else if (w is DataDeleteWriter) {
-            batch.delete(w.path);
+            batch.onDelete(w.path);
           }
         }
         if (batch.isEmpty) continue;
-        await batch.commit();
+        await batch.onCommit();
       }
     }, operation: 'write');
   }

@@ -59,7 +59,7 @@ mixin _WriteTransformMixin {
             value.options is DataSetOptions
                 ? value.options as DataSetOptions
                 : const DataSetOptions();
-        batch.set(
+        batch.onSet(
           value.path,
           _transformWrite(batch, doc, merge),
           merge: options.merge,
@@ -68,10 +68,10 @@ mixin _WriteTransformMixin {
       case DataFieldValueWriterType.update:
         final doc = value.value;
         if (doc == null || doc.isEmpty) return null;
-        batch.update(value.path, _transformWrite(batch, doc, merge));
+        batch.onUpdate(value.path, _transformWrite(batch, doc, merge));
         return value.path;
       case DataFieldValueWriterType.delete:
-        batch.delete(value.path);
+        batch.onDelete(value.path);
         return null;
     }
   }
@@ -83,17 +83,17 @@ mixin _WriteTransformMixin {
     }
     final create = value['create'];
     if (create is Map && create.isNotEmpty) {
-      batch.set(path, _transformWrite(batch, create, merge), merge: merge);
+      batch.onSet(path, _transformWrite(batch, create, merge), merge: merge);
       return path;
     }
     final update = value['update'];
     if (update is Map && update.isNotEmpty) {
-      batch.update(path, _transformWrite(batch, update, merge));
+      batch.onUpdate(path, _transformWrite(batch, update, merge));
       return path;
     }
     final delete = value['delete'];
     if (delete is bool && delete) {
-      batch.delete(path);
+      batch.onDelete(path);
       return null;
     }
     return _transformWrite(batch, value, merge);

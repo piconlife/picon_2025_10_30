@@ -60,10 +60,10 @@ mixin _DeleteMixin on _ErrorHandlingMixin {
       final end = (i + batchLimit).clamp(0, paths.length);
       final batch = delegate.onBatch();
       for (var j = i; j < end; j++) {
-        batch.delete(paths[j]);
+        batch.onDelete(paths[j]);
       }
       await _guardAsync(
-        () => batch.commit(),
+        () => batch.onCommit(),
         operation: 'delete.commit',
         path: root,
       );

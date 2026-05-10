@@ -32,23 +32,23 @@ class LocalWriteBatch extends DataWriteBatch {
   }
 
   @override
-  void onDelete(String path) {
-    _batch.delete(db.doc(path));
-  }
-
-  @override
-  void onSet(String path, Object data, {bool merge = true}) {
+  void set(String path, Object data, {bool merge = true}) {
     if (data is! Map<String, dynamic>) return;
     _batch.set(db.doc(path), data, InAppSetOptions(merge: merge));
   }
 
   @override
-  void onUpdate(String path, Map<String, dynamic> data) {
+  void update(String path, Map<String, dynamic> data) {
     _batch.update(db.doc(path), data);
   }
 
   @override
-  Future<void> onCommit() async {
+  void delete(String path) {
+    _batch.delete(db.doc(path));
+  }
+
+  @override
+  Future<void> commit() async {
     await _batch.commit();
   }
 }

@@ -22,8 +22,8 @@ mixin _CreateMixin on _ErrorHandlingMixin, _WriteTransformMixin {
       () async {
         final batch = delegate.onBatch();
         final transformed = _transformWrite(batch, safe, merge);
-        batch.set(path, transformed, merge: merge);
-        await batch.commit();
+        batch.onSet(path, transformed, merge: merge);
+        await batch.onCommit();
       },
       operation: 'create.refs',
       path: path,
