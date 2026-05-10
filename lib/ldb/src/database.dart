@@ -348,14 +348,14 @@ class InAppDatabase extends ChangeNotifier
     if (parts.length == 1) {
       return InAppQueryReference(
         db: this,
-        reference: _version._ref(field),
+        ref: _version._ref(field),
         path: field,
         id: field,
       );
     }
     InAppCollectionReference current = InAppQueryReference(
       db: this,
-      reference: _version._ref(parts.first),
+      ref: _version._ref(parts.first),
       path: parts.first,
       id: parts.first,
     );

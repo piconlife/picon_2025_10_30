@@ -8,7 +8,7 @@ class InAppQueryReference extends InAppCollectionReference {
 
   const InAppQueryReference({
     required super.db,
-    required super.reference,
+    required super.ref,
     required super.path,
     required super.id,
     super.parent,
@@ -29,7 +29,7 @@ class InAppQueryReference extends InAppCollectionReference {
   }) {
     return InAppQueryReference(
       db: _db,
-      reference: reference,
+      ref: ref,
       path: path,
       id: id,
       parent: _parent,
@@ -41,7 +41,7 @@ class InAppQueryReference extends InAppCollectionReference {
   }
 
   InAppAggregateQuery count() {
-    return InAppAggregateQuery(db: _db, reference: reference, parent: this);
+    return InAppAggregateQuery(db: _db, ref: ref, parent: this);
   }
 
   InAppQueryReference _limit(int limit, [bool fetchFromLast = false]) {

@@ -5,7 +5,7 @@ class InAppAggregateQuery extends InAppReference {
 
   const InAppAggregateQuery({
     required super.db,
-    required super.reference,
+    required super.ref,
     required InAppCollectionReference parent,
   }) : _p = parent;
 

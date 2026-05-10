@@ -1,10 +1,10 @@
 part of 'database.dart';
 
 abstract class InAppReference {
-  final String reference;
+  final String ref;
   final InAppDatabase _db;
 
-  const InAppReference({required this.reference, required InAppDatabase db})
+  const InAppReference({required this.ref, required InAppDatabase db})
     : _db = db;
 
   InAppDatabase get database => _db;
@@ -20,11 +20,11 @@ abstract class InAppReference {
       identical(this, other) ||
       other is InAppReference &&
           runtimeType == other.runtimeType &&
-          other.reference == reference;
+          other.ref == ref;
 
   @override
-  int get hashCode => Object.hash(runtimeType, reference);
+  int get hashCode => Object.hash(runtimeType, ref);
 
   @override
-  String toString() => '$runtimeType($reference)';
+  String toString() => '$runtimeType($ref)';
 }

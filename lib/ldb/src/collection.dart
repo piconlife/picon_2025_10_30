@@ -7,7 +7,7 @@ abstract class InAppCollectionReference extends InAppReference {
 
   const InAppCollectionReference({
     required super.db,
-    required super.reference,
+    required super.ref,
     required this.path,
     required this.id,
     InAppDocumentReference? parent,
@@ -17,10 +17,10 @@ abstract class InAppCollectionReference extends InAppReference {
 
   Future<List<String>> get keys async {
     final paths = await _db._k(path);
-    final prefix = '$reference/';
+    final prefix = '$ref/';
     final result = <String>{};
     for (final p in paths) {
-      if (p == reference) continue;
+      if (p == ref) continue;
       if (!p.startsWith(prefix)) continue;
       final remainder = p.substring(prefix.length);
       final first = remainder.split('/').first;
@@ -67,7 +67,7 @@ abstract class InAppCollectionReference extends InAppReference {
     }
     return InAppDocumentReference(
       db: _db,
-      reference: '$reference/$field',
+      ref: '$ref/$field',
       id: field,
       parent: this,
     );
@@ -89,7 +89,7 @@ abstract class InAppCollectionReference extends InAppReference {
   }) async {
     final query = InAppQuerySnapshot(id, data);
     final ok = await _db._w(
-      reference: reference,
+      reference: ref,
       collectionPath: path,
       collectionId: id,
       documentId: id,
@@ -103,7 +103,7 @@ abstract class InAppCollectionReference extends InAppReference {
 
   Future<bool> deleteAll({bool notifiable = false}) async {
     final ok = await _db._w(
-      reference: reference,
+      reference: ref,
       collectionPath: path,
       collectionId: id,
       documentId: id,
@@ -129,7 +129,7 @@ abstract class InAppCollectionReference extends InAppReference {
     InAppSource source = InAppSource.cache,
   ]) async {
     final result = await _db._r(
-      reference: reference,
+      reference: ref,
       collectionPath: path,
       collectionId: id,
       documentId: id,

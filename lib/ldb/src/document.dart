@@ -5,7 +5,7 @@ class InAppDocumentReference extends InAppReference {
   final InAppCollectionReference _p;
 
   const InAppDocumentReference({
-    required super.reference,
+    required super.ref,
     required super.db,
     required this.id,
     required InAppCollectionReference parent,
@@ -40,8 +40,6 @@ class InAppDocumentReference extends InAppReference {
     return value;
   }
 
-  void _notify([InAppDocumentSnapshot? snapshot]) => _n<void>(null, snapshot);
-
   InAppQueryReference collection(String field) {
     if (field.isEmpty) {
       throw ArgumentError.value(
@@ -59,7 +57,7 @@ class InAppDocumentReference extends InAppReference {
     }
     return InAppQueryReference(
       db: _db,
-      reference: '$reference/$field',
+      ref: '$ref/$field',
       path: '$path/$field',
       id: field,
       parent: this,
@@ -81,7 +79,7 @@ class InAppDocumentReference extends InAppReference {
     }
 
     final ok = await _db._w(
-      reference: reference,
+      reference: ref,
       collectionPath: _p.path,
       collectionId: _p.id,
       documentId: mId,
@@ -120,7 +118,7 @@ class InAppDocumentReference extends InAppReference {
       m[_idField] = id;
       merged = m;
       return _db._wInner(
-        reference: reference,
+        reference: ref,
         collectionPath: _p.path,
         collectionId: _p.id,
         documentId: id,
@@ -144,7 +142,7 @@ class InAppDocumentReference extends InAppReference {
   Future<void> delete() async {
     final ok = await _db._serial(_p.path, () async {
       final r = await _db._wInner(
-        reference: reference,
+        reference: ref,
         collectionPath: _p.path,
         collectionId: _p.id,
         documentId: id,
@@ -152,7 +150,7 @@ class InAppDocumentReference extends InAppReference {
       );
       if (r) {
         final remaining = await _db._r(
-          reference: _p.reference,
+          reference: _p.ref,
           collectionPath: _p.path,
           collectionId: _p.id,
           documentId: _p.id,
@@ -161,7 +159,7 @@ class InAppDocumentReference extends InAppReference {
         if (remaining is InAppQuerySnapshot && remaining.isEmpty) {
           await _db._wInner(
             type: InAppWriteType.collection,
-            reference: _p.reference,
+            reference: _p.ref,
             collectionPath: _p.path,
             collectionId: _p.id,
             documentId: _p.id,
@@ -184,7 +182,7 @@ class InAppDocumentReference extends InAppReference {
     InAppSource source = InAppSource.cache,
   ]) async {
     final result = await _db._r(
-      reference: reference,
+      reference: ref,
       collectionPath: _p.path,
       collectionId: _p.id,
       documentId: id,

@@ -141,7 +141,7 @@ void main() {
     test('parent and firestore getters', () {
       final ref = db.doc('users/u1');
       expect(ref.parent.path, 'users');
-      expect(ref.firestore, db);
+      expect(ref.database, db);
       expect(ref.id, 'u1');
       expect(ref.path, 'users/u1');
     });
@@ -571,7 +571,7 @@ void main() {
         () => batch.set(
           InAppDocumentReference(
             db: db,
-            reference: 'foreign/u1',
+            ref: 'foreign/u1',
             id: 'u1',
             parent: db.collection('foreign'),
           ),
