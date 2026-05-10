@@ -217,7 +217,7 @@ class _LocalDataTestPageState extends State<LocalDataTestPage> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 StreamBuilder<Response<int>>(
-                  stream: _repo.listenCount(interval: Duration(seconds: 5)),
+                  stream: _repo.listenCount(),
                   builder: (context, s) {
                     final count = s.data?.result.firstOrNull ?? 0;
                     return Text('Total notes: $count');

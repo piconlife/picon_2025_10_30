@@ -19,7 +19,8 @@ import 'batch.dart' show DataWriteBatch;
 import 'delegate.dart' show DataDelegate;
 import 'error_delegate.dart' show ErrorDelegate;
 import 'exception.dart' show DataOperationError;
-import 'snapshots.dart' show DataGetsSnapshot, DataGetSnapshot;
+import 'snapshots.dart'
+    show DataAggregateSnapshot, DataGetsSnapshot, DataGetSnapshot;
 import 'typedefs.dart' show Ignore;
 import 'writers.dart'
     show DataUpdateWriter, DataSetWriter, DataBatchWriter, DataDeleteWriter;
@@ -218,6 +219,10 @@ class DataOperation
     resolveDocChangesRefs: resolveDocChangesRefs,
     ignore: ignore,
   );
+
+  Stream<DataAggregateSnapshot> listenCount(String path) {
+    return _doListenCount(path);
+  }
 
   Future<void> write(List<DataBatchWriter> writers, DataEncryptor? encryptor) {
     return _doWrite(writers, encryptor);

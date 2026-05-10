@@ -44,6 +44,26 @@ mixin _SourceListenMixin<T extends Entity> on _SourceReadBaseMixin<T> {
     });
   }
 
+  Stream<Response<int>> listenCount({DataFieldParams? params}) {
+    return _executeStream(() {
+      final p = _ref(params, DataModifiers.listenCount);
+      return operation.listenCount(p).map((event) {
+        final count = event.count;
+        if (count == null) {
+          return Response<int>(
+            status: Status.networkError,
+            snapshot: event.snapshot,
+          );
+        }
+        return Response<int>(
+          data: count,
+          status: Status.ok,
+          snapshot: event.snapshot,
+        );
+      });
+    });
+  }
+
   Stream<Response<T>> listenById(
     String id, {
     DataFieldParams? params,
@@ -199,28 +219,6 @@ mixin _SourceListenMixin<T extends Entity> on _SourceReadBaseMixin<T> {
               status: Status.ok,
             );
           });
-    });
-  }
-
-  Stream<Response<int>> listenCount({
-    DataFieldParams? params,
-    Duration? interval,
-  }) {
-    return _executeStream(() {
-      final p = _ref(params, DataModifiers.listenCount);
-      return Stream.periodic(interval ?? const Duration(seconds: 10)).asyncMap((
-        _,
-      ) async {
-        try {
-          final e = await operation.count(p);
-          if (e == null) {
-            return Response(status: Status.networkError);
-          }
-          return Response(data: e, status: Status.ok);
-        } catch (error) {
-          return Response(status: Status.networkError, error: error.toString());
-        }
-      });
     });
   }
 }

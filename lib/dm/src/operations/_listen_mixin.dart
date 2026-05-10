@@ -26,6 +26,15 @@ mixin _ListenMixin on _ErrorHandlingMixin, _HydrateMixin {
     );
   }
 
+  Stream<DataAggregateSnapshot> _doListenCount(String path) {
+    return _guardStream(
+      () => delegate.listenCount(path),
+      operation: 'listenCount',
+      path: path,
+      empty: const DataAggregateSnapshot(),
+    );
+  }
+
   Stream<DataGetSnapshot> _doListenById(
     String path, {
     required bool countable,
