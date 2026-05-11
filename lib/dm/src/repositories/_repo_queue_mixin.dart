@@ -1,6 +1,8 @@
 part of 'base.dart';
 
 mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
+  static const int _maxAttempts = 5;
+
   String get queueId;
 
   Duration get backupFlushInterval;
@@ -38,7 +40,9 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     final cache = DM.i.cache;
     if (cache == null) return;
     try {
-      await cache.onPush(_queueKey, op.id, op.toJson());
+      final merged = await _mergeOnPush(cache, op);
+      if (merged == null) return;
+      await cache.onPush(_queueKey, merged.id, merged.toJson());
     } catch (e, s) {
       _report('enqueuePrimary', e, s);
     }
@@ -48,24 +52,67 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     if (optional == null) return;
     final cache = DM.i.cache;
     if (cache == null) return;
-    cache
-        .onPush(_queueKey, op.id, op.toJson())
-        .then((_) {
-          _scheduledCount++;
-          if (_scheduledCount >= backupFlushSize) {
-            _scheduledCount = 0;
-            flushBackupNow();
-            return;
-          }
-          _flushTimer ??= Timer(backupFlushInterval, () {
-            _flushTimer = null;
-            _scheduledCount = 0;
-            flushBackupNow();
-          });
-        })
-        .catchError((Object e, StackTrace s) {
-          _report('scheduleBackup', e, s);
+    () async {
+      try {
+        final merged = await _mergeOnPush(cache, op);
+        if (merged == null) return;
+        await cache.onPush(_queueKey, merged.id, merged.toJson());
+        _scheduledCount++;
+        if (_scheduledCount >= backupFlushSize) {
+          _scheduledCount = 0;
+          _flushTimer?.cancel();
+          _flushTimer = null;
+          flushBackupNow();
+          return;
+        }
+        _flushTimer ??= Timer(backupFlushInterval, () {
+          _flushTimer = null;
+          _scheduledCount = 0;
+          flushBackupNow();
         });
+      } catch (e, s) {
+        _report('scheduleBackup', e, s);
+      }
+    }();
+  }
+
+  Future<DataQueuedOp?> _mergeOnPush(
+    DataCacheDelegate cache,
+    DataQueuedOp incoming,
+  ) async {
+    final eid = incoming.entityId;
+    if (eid == null || eid.isEmpty) return incoming;
+    final entries = await cache.onReadAll(_queueKey);
+    if (entries.isEmpty) return incoming;
+
+    final superseded = <String>[];
+    for (final entry in entries) {
+      try {
+        final existing = DataQueuedOp.fromJson(entry.value);
+        if (existing.entityId != eid) continue;
+        if (_supersedes(incoming.kind, existing.kind)) {
+          superseded.add(entry.key);
+        }
+      } catch (_) {}
+    }
+    for (final id in superseded) {
+      await cache.onRemove(_queueKey, id);
+    }
+    return incoming;
+  }
+
+  bool _supersedes(DataQueuedOpKind incoming, DataQueuedOpKind existing) {
+    switch (incoming) {
+      case DataQueuedOpKind.deleteById:
+        return existing == DataQueuedOpKind.create ||
+            existing == DataQueuedOpKind.updateById;
+      case DataQueuedOpKind.updateById:
+        return existing == DataQueuedOpKind.updateById;
+      case DataQueuedOpKind.create:
+        return existing == DataQueuedOpKind.create;
+      default:
+        return false;
+    }
   }
 
   Future<void> flushBackupNow() async {
@@ -80,20 +127,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     _flushTimer = null;
     _flushing = true;
     try {
-      final entries = await cache.onReadAll(_queueKey);
-      for (final entry in entries) {
-        try {
-          final op = DataQueuedOp.fromJson(entry.value);
-          final response = await _replay(op, backup);
-          if (response.isSuccessful) {
-            await cache.onRemove(_queueKey, entry.key);
-          } else {
-            break;
-          }
-        } catch (e, s) {
-          _report('flushBackup', e, s);
-        }
-      }
+      await _drain(cache, backup, 'flushBackup');
     } finally {
       _flushing = false;
     }
@@ -106,26 +140,69 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     if (!await isConnected) return;
     _flushing = true;
     try {
-      final entries = await cache.onReadAll(_queueKey);
-      for (final entry in entries) {
-        try {
-          final op = DataQueuedOp.fromJson(entry.value);
-          final response = await _replay(op, primary);
-          if (response.isSuccessful) {
-            await cache.onRemove(_queueKey, entry.key);
-          } else {
-            break;
-          }
-        } catch (e, s) {
-          _report('drainPrimary', e, s);
-        }
-      }
+      await _drain(cache, primary, 'drainPrimary');
     } finally {
       _flushing = false;
     }
   }
 
   Future<void> _drainBackupQueue() => flushBackupNow();
+
+  Future<void> _drain(
+    DataCacheDelegate cache,
+    DataSource<T> target,
+    String tag,
+  ) async {
+    final entries = await cache.onReadAll(_queueKey);
+    for (final entry in entries) {
+      DataQueuedOp op;
+      try {
+        op = DataQueuedOp.fromJson(entry.value);
+      } catch (e, s) {
+        _report('$tag.decode', e, s);
+        await cache.onRemove(_queueKey, entry.key);
+        continue;
+      }
+
+      Response<T> response;
+      try {
+        response = await _replay(op, target);
+      } catch (e, s) {
+        _report(tag, e, s);
+        await _handleFailedOp(cache, entry.key, op);
+        break;
+      }
+
+      if (response.isSuccessful) {
+        await cache.onRemove(_queueKey, entry.key);
+        continue;
+      }
+
+      if (response.status == Status.networkError) {
+        break;
+      }
+
+      await _handleFailedOp(cache, entry.key, op);
+    }
+  }
+
+  Future<void> _handleFailedOp(
+    DataCacheDelegate cache,
+    String entryKey,
+    DataQueuedOp op,
+  ) async {
+    final next = op.copyWith(attempts: op.attempts + 1);
+    if (next.attempts >= _maxAttempts) {
+      await cache.onRemove(_queueKey, entryKey);
+      _report(
+        'queue.dropped',
+        StateError('op exhausted retries: ${op.kind.name}/${op.entityId}'),
+        StackTrace.current,
+      );
+      return;
+    }
+    await cache.onPush(_queueKey, entryKey, next.toJson());
+  }
 
   Future<Response<T>> _replay(DataQueuedOp op, DataSource<T> target) async {
     try {

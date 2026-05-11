@@ -23,6 +23,7 @@ class DataQueuedOp {
   final bool deleteRefs;
   final bool counter;
   final int createdAt;
+  final int attempts;
 
   DataQueuedOp({
     required this.id,
@@ -37,7 +38,24 @@ class DataQueuedOp {
     this.deleteRefs = false,
     this.counter = false,
     int? createdAt,
+    this.attempts = 0,
   }) : createdAt = createdAt ?? DateTime.now().microsecondsSinceEpoch;
+
+  DataQueuedOp copyWith({int? attempts}) => DataQueuedOp(
+    id: id,
+    kind: kind,
+    entityId: entityId,
+    data: data,
+    ids: ids,
+    writers: writers,
+    merge: merge,
+    createRefs: createRefs,
+    updateRefs: updateRefs,
+    deleteRefs: deleteRefs,
+    counter: counter,
+    createdAt: createdAt,
+    attempts: attempts ?? this.attempts,
+  );
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -52,6 +70,7 @@ class DataQueuedOp {
     'deleteRefs': deleteRefs,
     'counter': counter,
     'createdAt': createdAt,
+    'attempts': attempts,
   };
 
   factory DataQueuedOp.fromJson(Map<String, dynamic> json) {
@@ -74,6 +93,7 @@ class DataQueuedOp {
       deleteRefs: json['deleteRefs'] as bool? ?? false,
       counter: json['counter'] as bool? ?? false,
       createdAt: json['createdAt'] as int?,
+      attempts: json['attempts'] as int? ?? 0,
     );
   }
 }
