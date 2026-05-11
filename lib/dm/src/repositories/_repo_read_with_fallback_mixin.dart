@@ -16,15 +16,17 @@ mixin _RepoReadWithFallbackMixin<T extends Entity>
     List<Object?> cacheKeyProps = const [],
   }) {
     return _applyModifier<T>(modifierId, () async {
-      final feedback =
-          cacheKey == null
-              ? await _runOnPrimary(read)
-              : await CacheManager.i.cache(
-                cacheKey,
-                enabled: _shouldUseSingleton(singletonMode),
-                keyProps: cacheKeyProps,
-                callback: () => _runOnPrimary(read),
-              );
+      Response<T> feedback;
+      if (cacheKey == null) {
+        feedback = await _runOnPrimary(read);
+      } else {
+        feedback = await CacheManager.i.cache(
+          cacheKey,
+          enabled: _shouldUseSingleton(singletonMode),
+          keyProps: cacheKeyProps,
+          callback: () => _runOnPrimary(read),
+        );
+      }
 
       if (feedback.isValid) {
         if (!_shouldUseBackup(backupMode)) return feedback;
