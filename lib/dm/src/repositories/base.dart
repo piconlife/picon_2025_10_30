@@ -148,7 +148,7 @@ class DataRepository<T extends Entity>
     if (!backup.isValid) {
       return Response(status: backup.status, error: backup.error);
     }
-    await _syncToBackup(
+    await _syncToPrimary(
       backup.result,
       params: params,
       createRefs: createRefs,

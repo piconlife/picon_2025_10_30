@@ -72,4 +72,30 @@ mixin _RepoReadWithFallbackMixin<T extends Entity>
       await _runOnBackup(task);
     }
   }
+
+  Future<void> _syncToPrimary(
+    Iterable<T> result, {
+    required DataFieldParams? params,
+    required bool createRefs,
+    required bool merge,
+    required bool useLazy,
+  }) async {
+    if (result.isEmpty) return;
+    if (optional == null) return;
+    final writers = result.map((e) => DataWriter(id: e.id, data: e.filtered));
+    Future<Response<T>> task(DataSource<T> source) {
+      return source.creates(
+        writers,
+        params: params,
+        createRefs: createRefs,
+        merge: merge,
+      );
+    }
+
+    if (useLazy) {
+      _runOnPrimaryLazy(task);
+    } else {
+      await _runOnPrimary(task);
+    }
+  }
 }

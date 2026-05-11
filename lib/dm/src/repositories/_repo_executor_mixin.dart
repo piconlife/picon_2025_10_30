@@ -28,6 +28,15 @@ mixin _RepoExecutorMixin<T extends Entity> {
     }
   }
 
+  void _runOnPrimaryLazy<S extends Object>(
+    Future<Response<S>> Function(DataSource<T> source) callback,
+  ) {
+    _runOnPrimary(callback).catchError((Object error, StackTrace stack) {
+      _report('runOnPrimaryLazy', error, stack);
+      return Response<S>(status: Status.failure, error: error.toString());
+    });
+  }
+
   Future<Response<S>> _runOnBackup<S extends Object>(
     Future<Response<S>> Function(DataSource<T> source) callback,
   ) async {
