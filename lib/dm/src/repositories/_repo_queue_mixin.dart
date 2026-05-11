@@ -5,6 +5,8 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
 
   String get queueId;
 
+  bool get queueMode;
+
   Duration get backupFlushInterval;
 
   int get backupFlushSize;

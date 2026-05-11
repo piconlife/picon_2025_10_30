@@ -61,6 +61,9 @@ class DataRepository<T extends Entity>
   final bool cacheMode;
 
   @override
+  final bool queueMode;
+
+  @override
   final DataSource<T> primary;
 
   @override
@@ -81,6 +84,7 @@ class DataRepository<T extends Entity>
     this.lazyMode = true,
     this.restoreMode = true,
     this.cacheMode = false,
+    this.queueMode = true,
     required LocalDataSource<T> source,
     RemoteDataSource<T>? backup,
     ErrorDelegate? errorDelegate,
@@ -99,6 +103,7 @@ class DataRepository<T extends Entity>
     this.lazyMode = true,
     this.restoreMode = true,
     this.cacheMode = false,
+    this.queueMode = true,
     required RemoteDataSource<T> source,
     LocalDataSource<T>? backup,
     ErrorDelegate? errorDelegate,

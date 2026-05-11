@@ -7,12 +7,16 @@ mixin _RepoModifierMixin<T extends Entity> on _RepoExecutorMixin<T> {
 
   bool get cacheMode;
 
+  bool get queueMode;
+
   bool _shouldUseBackup([bool? override]) =>
       optional != null && (override ?? backupMode);
 
   bool _shouldUseLazy([bool? override]) => override ?? lazyMode;
 
   bool _shouldUseCache([bool? override]) => override ?? cacheMode;
+
+  bool _shouldUseQueue([bool? override]) => override ?? queueMode;
 
   Future<Response<T>> modifier(Response<T> value, DataModifiers modifier);
 

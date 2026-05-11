@@ -21,11 +21,14 @@ mixin _RepoDualWriteMixin<T extends Entity>
       }
 
       if (primaryResponse.status == Status.networkError) {
-        await _enqueuePrimary(opBuilder());
-        if (_shouldUseBackup(backupMode)) {
-          _runOnBackupLazy(write);
+        if (_shouldUseQueue()) {
+          await _enqueuePrimary(opBuilder());
+          if (_shouldUseBackup(backupMode)) {
+            _runOnBackupLazy(write);
+          }
+          return Response(status: Status.ok);
         }
-        return Response(status: Status.ok);
+        return primaryResponse;
       }
 
       if (!primaryResponse.isSuccessful) return primaryResponse;
