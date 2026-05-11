@@ -12,6 +12,6 @@ class RemoteDataRepository<T extends Entity> extends DataRepository<T> {
     super.backupMode,
     super.lazyMode,
     super.restoreMode,
-    super.singletonMode,
+    super.cacheMode,
   }) : super.remote();
 }

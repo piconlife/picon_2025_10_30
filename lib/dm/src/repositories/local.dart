@@ -12,6 +12,6 @@ class LocalDataRepository<T extends Entity> extends DataRepository<T> {
     super.lazyMode,
     super.backupMode,
     super.restoreMode,
-    super.singletonMode,
+    super.cacheMode,
   }) : super.local();
 }

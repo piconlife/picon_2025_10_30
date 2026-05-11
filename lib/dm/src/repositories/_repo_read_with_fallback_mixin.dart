@@ -22,7 +22,7 @@ mixin _RepoReadWithFallbackMixin<T extends Entity>
       } else {
         feedback = await CacheManager.i.cache(
           cacheKey,
-          enabled: _shouldUseSingleton(cacheMode),
+          enabled: _shouldUseCache(cacheMode),
           keyProps: cacheKeyProps,
           callback: () => _runOnPrimary(read),
         );

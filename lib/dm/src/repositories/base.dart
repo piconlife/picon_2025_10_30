@@ -52,7 +52,7 @@ class DataRepository<T extends Entity>
   final bool restoreMode;
 
   @override
-  final bool singletonMode;
+  final bool cacheMode;
 
   @override
   final DataSource<T> primary;
@@ -70,7 +70,7 @@ class DataRepository<T extends Entity>
     this.backupMode = true,
     this.lazyMode = true,
     this.restoreMode = true,
-    this.singletonMode = false,
+    this.cacheMode = false,
     required LocalDataSource<T> source,
     RemoteDataSource<T>? backup,
     FutureConnectivityCallback? connectivity,
@@ -86,7 +86,7 @@ class DataRepository<T extends Entity>
     this.backupMode = true,
     this.lazyMode = true,
     this.restoreMode = true,
-    this.singletonMode = false,
+    this.cacheMode = false,
     required RemoteDataSource<T> source,
     LocalDataSource<T>? backup,
     FutureConnectivityCallback? connectivity,

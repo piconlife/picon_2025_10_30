@@ -5,14 +5,14 @@ mixin _RepoModifierMixin<T extends Entity> on _RepoExecutorMixin<T> {
 
   bool get lazyMode;
 
-  bool get singletonMode;
+  bool get cacheMode;
 
   bool _shouldUseBackup([bool? override]) =>
       optional != null && (override ?? backupMode);
 
   bool _shouldUseLazy([bool? override]) => override ?? lazyMode;
 
-  bool _shouldUseSingleton([bool? override]) => override ?? singletonMode;
+  bool _shouldUseCache([bool? override]) => override ?? cacheMode;
 
   Future<Response<T>> modifier(Response<T> value, DataModifiers modifier);
 
