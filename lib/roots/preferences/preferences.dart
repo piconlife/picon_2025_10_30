@@ -233,6 +233,10 @@ class Preferences {
     return HivePreferences.setString(key, value);
   }
 
+  static Future<bool> setStringAsync(String key, String? value) {
+    return HivePreferences.setStringAsync(key, value);
+  }
+
   static bool setStrings(String key, Iterable<String>? value) {
     if (value == null) return HivePreferences.remove(key);
     return HivePreferences.setStrings(key, List.from(value));

@@ -49,6 +49,15 @@ abstract final class HivePreferences {
     }
   }
 
+  static Future<bool> _executeAsync(Future<void> Function() executor) async {
+    try {
+      await executor();
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   static bool setBool(String key, bool? value) {
     return _execute(() {
       if (value == null) {
@@ -116,6 +125,15 @@ abstract final class HivePreferences {
         return;
       }
       preferences.put(key, HivePreferencesModel()..anyString = value);
+    });
+  }
+
+  static Future<bool> setStringAsync(String key, String? value) {
+    return _executeAsync(() async {
+      if (value == null || value.isEmpty) {
+        return preferences.delete(key);
+      }
+      return preferences.put(key, HivePreferencesModel()..anyString = value);
     });
   }
 
