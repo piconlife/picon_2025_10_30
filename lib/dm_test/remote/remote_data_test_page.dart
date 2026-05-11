@@ -49,7 +49,7 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
     final res = await _repo.create(p);
 
     _log_(
-      res.isValid
+      res.isSuccessful
           ? 'Created: ${p.name} | ${p.category} | ৳${p.price}'
           : 'Error: ${res.error}',
     );
@@ -100,7 +100,7 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
     );
     final res = await _repo.create(p);
     _log_(
-      res.isValid
+      res.isSuccessful
           ? 'Created: ${p.name} | ${p.category} | ৳${p.price}'
           : 'Error: ${res.error}',
     );
