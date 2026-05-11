@@ -151,5 +151,9 @@ abstract final class HivePreferences {
     return _execute(() => preferences.delete(key));
   }
 
+  static Future<bool> removeAsync(String key) {
+    return _executeAsync(() => preferences.delete(key));
+  }
+
   static bool clear() => _execute(() => preferences.clear());
 }

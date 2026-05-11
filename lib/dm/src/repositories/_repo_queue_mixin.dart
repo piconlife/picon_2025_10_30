@@ -38,7 +38,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     final cache = DM.i.cache;
     if (cache == null) return;
     try {
-      await cache.push(_queueKey, op.id, op.toJson());
+      await cache.onPush(_queueKey, op.id, op.toJson());
     } catch (e, s) {
       _report('enqueuePrimary', e, s);
     }
@@ -49,7 +49,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     final cache = DM.i.cache;
     if (cache == null) return;
     cache
-        .push(_queueKey, op.id, op.toJson())
+        .onPush(_queueKey, op.id, op.toJson())
         .then((_) {
           _scheduledCount++;
           if (_scheduledCount >= backupFlushSize) {
@@ -80,13 +80,13 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     _flushTimer = null;
     _flushing = true;
     try {
-      final entries = await cache.readAll(_queueKey);
+      final entries = await cache.onReadAll(_queueKey);
       for (final entry in entries) {
         try {
           final op = DataQueuedOp.fromJson(entry.value);
           final response = await _replay(op, backup);
           if (response.isSuccessful) {
-            await cache.remove(_queueKey, entry.key);
+            await cache.onRemove(_queueKey, entry.key);
           } else {
             break;
           }
@@ -106,13 +106,13 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     if (!await isConnected) return;
     _flushing = true;
     try {
-      final entries = await cache.readAll(_queueKey);
+      final entries = await cache.onReadAll(_queueKey);
       for (final entry in entries) {
         try {
           final op = DataQueuedOp.fromJson(entry.value);
           final response = await _replay(op, primary);
           if (response.isSuccessful) {
-            await cache.remove(_queueKey, entry.key);
+            await cache.onRemove(_queueKey, entry.key);
           } else {
             break;
           }
@@ -213,7 +213,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     final cache = DM.i.cache;
     if (cache == null) return false;
     try {
-      return await cache.exists(_restoredKey, 'flag');
+      return await cache.onExists(_restoredKey, 'flag');
     } catch (e, s) {
       _report('isRestored', e, s);
       return false;
@@ -224,7 +224,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     final cache = DM.i.cache;
     if (cache == null) return;
     try {
-      await cache.push(_restoredKey, 'flag', {
+      await cache.onPush(_restoredKey, 'flag', {
         'at': DateTime.now().microsecondsSinceEpoch,
       });
     } catch (e, s) {
@@ -236,7 +236,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     final cache = DM.i.cache;
     if (cache == null) return;
     try {
-      await cache.remove(_restoredKey, 'flag');
+      await cache.onRemove(_restoredKey, 'flag');
     } catch (e, s) {
       _report('clearRestoredFlag', e, s);
     }

@@ -244,6 +244,10 @@ class Preferences {
 
   static bool remove(String key) => HivePreferences.remove(key);
 
+  static Future<bool> removeAsync(String key) {
+    return HivePreferences.removeAsync(key);
+  }
+
   static bool removes(Iterable<String> keys) {
     bool removed = true;
     for (var key in keys) {
