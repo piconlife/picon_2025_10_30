@@ -167,6 +167,12 @@ class _LocalDataTestPageState extends State<LocalDataTestPage> {
   }
 
   @override
+  void initState() {
+    _repo.restore();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Theme(
       data: ThemeData.dark(),
