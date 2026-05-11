@@ -10,34 +10,27 @@ mixin _RepoDualWriteMixin<T extends Entity>
     bool? lazyMode,
   }) {
     return _applyModifier<T>(modifierId, () async {
+      final primaryResponse = await _runOnPrimary(write);
+
       if (isLocalDB) {
-        final primaryResponse = await _runOnPrimary(write);
         if (!primaryResponse.isSuccessful) return primaryResponse;
         if (_shouldUseBackup(backupMode)) {
           _scheduleBackup(opBuilder());
         }
         return primaryResponse;
       }
-      final connected = await isConnected;
-      if (!connected) {
+
+      if (primaryResponse.status == Status.networkError) {
         await _enqueuePrimary(opBuilder());
         if (_shouldUseBackup(backupMode)) {
           _runOnBackupLazy(write);
         }
         return Response(status: Status.ok);
       }
-      final primaryResponse = await _runOnPrimary(write);
-      if (!primaryResponse.isSuccessful) {
-        if (primaryResponse.status == Status.networkError) {
-          await _enqueuePrimary(opBuilder());
-          if (_shouldUseBackup(backupMode)) {
-            _runOnBackupLazy(write);
-          }
-          return Response(status: Status.ok);
-        }
-        return primaryResponse;
-      }
+
+      if (!primaryResponse.isSuccessful) return primaryResponse;
       if (!_shouldUseBackup(backupMode)) return primaryResponse;
+
       if (_shouldUseLazy(lazyMode)) {
         _runOnBackupLazy(write);
       } else {
