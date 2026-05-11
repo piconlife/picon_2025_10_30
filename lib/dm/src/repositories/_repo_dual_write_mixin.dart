@@ -8,6 +8,7 @@ mixin _RepoDualWriteMixin<T extends Entity>
     required DataQueuedOp Function() opBuilder,
     bool? backupMode,
     bool? lazyMode,
+    bool? queueMode,
   }) {
     return _applyModifier<T>(modifierId, () async {
       final primaryResponse = await _runOnPrimary(write);
@@ -21,7 +22,7 @@ mixin _RepoDualWriteMixin<T extends Entity>
       }
 
       if (primaryResponse.status == Status.networkError) {
-        if (_shouldUseQueue()) {
+        if (_shouldUseQueue(queueMode)) {
           await _enqueuePrimary(opBuilder());
           if (_shouldUseBackup(backupMode)) {
             _runOnBackupLazy(write);

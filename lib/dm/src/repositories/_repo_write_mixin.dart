@@ -22,6 +22,7 @@ mixin _RepoWriteMixin<T extends Entity>
     bool createRefs = false,
     bool? lazyMode,
     bool? backupMode,
+    bool? queueMode,
   }) {
     return createById(
       data.id,
@@ -31,6 +32,7 @@ mixin _RepoWriteMixin<T extends Entity>
       createRefs: createRefs,
       lazyMode: lazyMode,
       backupMode: backupMode,
+      queueMode: queueMode,
     );
   }
 
@@ -42,6 +44,7 @@ mixin _RepoWriteMixin<T extends Entity>
     bool createRefs = false,
     bool? lazyMode,
     bool? backupMode,
+    bool? queueMode,
   }) {
     if (id.isEmpty) {
       return Future.value(Response(status: Status.invalidId));
@@ -53,6 +56,7 @@ mixin _RepoWriteMixin<T extends Entity>
       DataModifiers.create,
       backupMode: backupMode,
       lazyMode: lazyMode,
+      queueMode: queueMode,
       write:
           (source) => source.create(
             id,
@@ -80,6 +84,7 @@ mixin _RepoWriteMixin<T extends Entity>
     bool createRefs = false,
     bool? lazyMode,
     bool? backupMode,
+    bool? queueMode,
   }) {
     return createByWriters(
       data.map((e) => DataWriter(id: e.id, data: e.filtered)),
@@ -88,6 +93,7 @@ mixin _RepoWriteMixin<T extends Entity>
       createRefs: createRefs,
       lazyMode: lazyMode,
       backupMode: backupMode,
+      queueMode: queueMode,
     );
   }
 
@@ -98,6 +104,7 @@ mixin _RepoWriteMixin<T extends Entity>
     bool createRefs = false,
     bool? lazyMode,
     bool? backupMode,
+    bool? queueMode,
   }) {
     if (writers.isEmpty) {
       return Future.value(Response(status: Status.invalid));
@@ -107,6 +114,7 @@ mixin _RepoWriteMixin<T extends Entity>
       DataModifiers.creates,
       backupMode: backupMode,
       lazyMode: lazyMode,
+      queueMode: queueMode,
       write:
           (source) => source.creates(
             list,
@@ -134,6 +142,7 @@ mixin _RepoWriteMixin<T extends Entity>
     bool updateRefs = false,
     bool? lazyMode,
     bool? backupMode,
+    bool? queueMode,
   }) {
     if (id.isEmpty || data.isEmpty) {
       return Future.value(Response(status: Status.invalid));
@@ -142,6 +151,7 @@ mixin _RepoWriteMixin<T extends Entity>
       DataModifiers.updateById,
       backupMode: backupMode,
       lazyMode: lazyMode,
+      queueMode: queueMode,
       write:
           (source) => source.updateById(
             id,
@@ -170,6 +180,7 @@ mixin _RepoWriteMixin<T extends Entity>
     bool updateRefs = false,
     bool? lazyMode,
     bool? backupMode,
+    bool? queueMode,
   }) {
     if (writers.isEmpty) {
       return Future.value(Response(status: Status.invalid));
@@ -179,6 +190,7 @@ mixin _RepoWriteMixin<T extends Entity>
       DataModifiers.updateByWriters,
       backupMode: backupMode,
       lazyMode: lazyMode,
+      queueMode: queueMode,
       write:
           (source) => source.updateByWriters(
             list,
@@ -206,6 +218,7 @@ mixin _RepoWriteMixin<T extends Entity>
     bool deleteRefs = false,
     bool? lazyMode,
     bool? backupMode,
+    bool? queueMode,
   }) {
     if (id.isEmpty) {
       return Future.value(Response(status: Status.invalidId));
@@ -214,6 +227,7 @@ mixin _RepoWriteMixin<T extends Entity>
       DataModifiers.deleteById,
       backupMode: backupMode,
       lazyMode: lazyMode,
+      queueMode: queueMode,
       write:
           (source) => source.deleteById(
             id,
@@ -243,6 +257,7 @@ mixin _RepoWriteMixin<T extends Entity>
     bool deleteRefs = false,
     bool? lazyMode,
     bool? backupMode,
+    bool? queueMode,
   }) {
     if (ids.isEmpty) {
       return Future.value(Response(status: Status.invalid));
@@ -252,6 +267,7 @@ mixin _RepoWriteMixin<T extends Entity>
       DataModifiers.deleteByIds,
       backupMode: backupMode,
       lazyMode: lazyMode,
+      queueMode: queueMode,
       write:
           (source) => source.deleteByIds(
             list,
@@ -280,11 +296,13 @@ mixin _RepoWriteMixin<T extends Entity>
     bool counter = false,
     bool? lazyMode,
     bool? backupMode,
+    bool? queueMode,
   }) {
     return _dualWrite(
       DataModifiers.clear,
       backupMode: backupMode,
       lazyMode: lazyMode,
+      queueMode: queueMode,
       write:
           (source) => source.clear(
             params: params,
