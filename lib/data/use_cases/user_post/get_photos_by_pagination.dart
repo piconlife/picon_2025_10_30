@@ -24,7 +24,7 @@ class GetUserPhotosByPaginationUseCase extends BaseUserPostUseCase {
     bool singletonMode = true,
   }) {
     return repository.getByQuery(
-      singletonMode: singletonMode,
+      cacheMode: singletonMode,
       params: getParams(uid),
       queries: [DataQuery(Keys.i.type, isEqualTo: FeedType.photo.name)],
       sorts: [DataSorting(Keys.i.timeMills, descending: true)],

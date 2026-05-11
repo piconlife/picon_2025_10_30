@@ -8,7 +8,7 @@ class NoteRepository extends LocalDataRepository<Note> {
   NoteRepository()
     : super(
         source: NoteLocalSource(),
-        // backup: NoteRemoteSource(),
-        // connectivity: ConnectivityHelper.connected,
+        backup: NoteRemoteSource(),
+        connectivity: ConnectivityHelper.connected,
       );
 }

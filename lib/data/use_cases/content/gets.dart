@@ -15,7 +15,7 @@ class ContentGetsUseCase extends ContentBaseUseCase {
     bool singletonMode = true,
   }) {
     return repository.get(
-      singletonMode: singletonMode,
+      cacheMode: singletonMode,
       params: getParams(path),
     );
   }

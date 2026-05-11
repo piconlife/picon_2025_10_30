@@ -16,7 +16,7 @@ class BookmarkIsExistUseCase extends BookmarkBaseUseCase {
   Future<Response<BookmarkModel>> call(String path) async {
     final x = await repository.getByQuery(
       params: params,
-      singletonMode: true,
+      cacheMode: true,
       queries: [DataQuery(Keys.i.path, isEqualTo: path)],
       options: DataFetchOptions(initialFetchSize: 1, fetchingSize: 1),
     );

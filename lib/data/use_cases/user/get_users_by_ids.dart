@@ -16,7 +16,7 @@ class GetUsersByIdsUseCase extends BaseUserUseCase {
     bool singletonMode = true,
   }) {
     return repository.getByQuery(
-      singletonMode: singletonMode,
+      cacheMode: singletonMode,
       queries: [DataQuery(UserKeys.i.id, whereIn: ids)],
     );
   }

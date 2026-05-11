@@ -11,7 +11,7 @@ mixin _RepoReadWithFallbackMixin<T extends Entity>
     bool merge = true,
     bool? lazyMode,
     bool? backupMode,
-    bool? singletonMode,
+    bool? cacheMode,
     String? cacheKey,
     List<Object?> cacheKeyProps = const [],
   }) {
@@ -22,7 +22,7 @@ mixin _RepoReadWithFallbackMixin<T extends Entity>
       } else {
         feedback = await CacheManager.i.cache(
           cacheKey,
-          enabled: _shouldUseSingleton(singletonMode),
+          enabled: _shouldUseSingleton(cacheMode),
           keyProps: cacheKeyProps,
           callback: () => _runOnPrimary(read),
         );

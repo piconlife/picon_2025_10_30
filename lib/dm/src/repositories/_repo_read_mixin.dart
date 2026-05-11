@@ -59,7 +59,7 @@ mixin _RepoReadMixin<T extends Entity>
     bool merge = true,
     bool? lazyMode,
     bool? backupMode,
-    bool? singletonMode,
+    bool? cacheMode,
   }) {
     return _readWithFallback(
       modifierId: DataModifiers.get,
@@ -69,7 +69,7 @@ mixin _RepoReadMixin<T extends Entity>
       merge: merge,
       lazyMode: lazyMode,
       backupMode: backupMode,
-      singletonMode: singletonMode,
+      cacheMode: cacheMode,
       cacheKey: 'GET',
       cacheKeyProps: [
         params,
@@ -99,7 +99,7 @@ mixin _RepoReadMixin<T extends Entity>
     bool? createRefs,
     bool merge = true,
     bool? lazyMode,
-    bool? singletonMode,
+    bool? cacheMode,
     bool? backupMode,
   }) {
     if (id.isEmpty) {
@@ -113,7 +113,7 @@ mixin _RepoReadMixin<T extends Entity>
       merge: merge,
       lazyMode: lazyMode,
       backupMode: backupMode,
-      singletonMode: singletonMode,
+      cacheMode: cacheMode,
       cacheKey: 'GET_BY_ID',
       cacheKeyProps: [id, params, countable, resolveRefs],
       read:
@@ -138,7 +138,7 @@ mixin _RepoReadMixin<T extends Entity>
     bool merge = true,
     bool? lazyMode,
     bool? backupMode,
-    bool? singletonMode,
+    bool? cacheMode,
   }) {
     if (ids.isEmpty) {
       return Future.value(Response(status: Status.invalid));
@@ -152,7 +152,7 @@ mixin _RepoReadMixin<T extends Entity>
       merge: merge,
       lazyMode: lazyMode,
       backupMode: backupMode,
-      singletonMode: singletonMode,
+      cacheMode: cacheMode,
       cacheKey: 'GET_BY_IDS',
       cacheKeyProps: [...stableIds, params, resolveRefs, resolveDocChangesRefs],
       read:
@@ -182,7 +182,7 @@ mixin _RepoReadMixin<T extends Entity>
     bool merge = true,
     bool? lazyMode,
     bool? backupMode,
-    bool? singletonMode,
+    bool? cacheMode,
   }) {
     return _readWithFallback(
       modifierId: DataModifiers.getByQuery,
@@ -192,7 +192,7 @@ mixin _RepoReadMixin<T extends Entity>
       merge: merge,
       lazyMode: lazyMode,
       backupMode: backupMode,
-      singletonMode: singletonMode,
+      cacheMode: cacheMode,
       cacheKey: 'GET_BY_QUERY',
       cacheKeyProps: [
         params,
