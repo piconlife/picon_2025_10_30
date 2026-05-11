@@ -48,32 +48,30 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     }
   }
 
-  void _scheduleBackup(DataQueuedOp op) {
+  Future<void> _scheduleBackup(DataQueuedOp op) async {
     if (optional == null) return;
     final cache = DM.i.cache;
     if (cache == null) return;
-    () async {
-      try {
-        final merged = await _mergeOnPush(cache, op);
-        if (merged == null) return;
-        await cache.onPush(_queueKey, merged.id, merged.toJson());
-        _scheduledCount++;
-        if (_scheduledCount >= backupFlushSize) {
-          _scheduledCount = 0;
-          _flushTimer?.cancel();
-          _flushTimer = null;
-          flushBackupNow();
-          return;
-        }
-        _flushTimer ??= Timer(backupFlushInterval, () {
-          _flushTimer = null;
-          _scheduledCount = 0;
-          flushBackupNow();
-        });
-      } catch (e, s) {
-        _report('scheduleBackup', e, s);
+    try {
+      final merged = await _mergeOnPush(cache, op);
+      if (merged == null) return;
+      await cache.onPush(_queueKey, merged.id, merged.toJson());
+      _scheduledCount++;
+      if (_scheduledCount >= backupFlushSize) {
+        _scheduledCount = 0;
+        _flushTimer?.cancel();
+        _flushTimer = null;
+        await flushBackupNow();
+        return;
       }
-    }();
+      _flushTimer ??= Timer(backupFlushInterval, () {
+        _flushTimer = null;
+        _scheduledCount = 0;
+        flushBackupNow();
+      });
+    } catch (e, s) {
+      _report('scheduleBackup', e, s);
+    }
   }
 
   Future<DataQueuedOp?> _mergeOnPush(
@@ -121,8 +119,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     if (backup == null) return;
     final cache = DM.i.cache;
     if (cache == null) return;
-    final connected = await isConnected;
-    if (!connected) return;
+    if (!await isConnected) return;
     _flushTimer?.cancel();
     _flushTimer = null;
     _flushing = true;
@@ -204,6 +201,18 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     await cache.onPush(_queueKey, entryKey, next.toJson());
   }
 
+  List<DataWriter> _parseWriters(List<Map<String, dynamic>>? raws) {
+    return (raws ?? const [])
+        .map(
+          (e) => DataWriter(
+            id: (e['id'] as String?) ?? '',
+            data: ((e['data'] as Map?) ?? const {}).cast<String, dynamic>(),
+          ),
+        )
+        .where((w) => w.id.isNotEmpty)
+        .toList();
+  }
+
   Future<Response<T>> _replay(DataQueuedOp op, DataSource<T> target) async {
     try {
       switch (op.kind) {
@@ -220,19 +229,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
             createRefs: op.createRefs,
           );
         case DataQueuedOpKind.creates:
-          final raws = op.writers ?? const [];
-          final writers =
-              raws
-                  .map(
-                    (e) => DataWriter(
-                      id: (e['id'] as String?) ?? '',
-                      data:
-                          ((e['data'] as Map?) ?? const {})
-                              .cast<String, dynamic>(),
-                    ),
-                  )
-                  .where((w) => w.id.isNotEmpty)
-                  .toList();
+          final writers = _parseWriters(op.writers);
           if (writers.isEmpty) return Response(status: Status.invalid);
           return target.creates(
             writers,
@@ -247,19 +244,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
           }
           return target.updateById(eid, data, updateRefs: op.updateRefs);
         case DataQueuedOpKind.updateByWriters:
-          final raws = op.writers ?? const [];
-          final writers =
-              raws
-                  .map(
-                    (e) => DataWriter(
-                      id: (e['id'] as String?) ?? '',
-                      data:
-                          ((e['data'] as Map?) ?? const {})
-                              .cast<String, dynamic>(),
-                    ),
-                  )
-                  .where((w) => w.id.isNotEmpty)
-                  .toList();
+          final writers = _parseWriters(op.writers);
           if (writers.isEmpty) return Response(status: Status.invalid);
           return target.updateByWriters(writers, updateRefs: op.updateRefs);
         case DataQueuedOpKind.deleteById:
