@@ -2,6 +2,22 @@ part of 'base.dart';
 
 mixin _RepoListenMixin<T extends Entity>
     on _RepoExecutorMixin<T>, _RepoModifierMixin<T> {
+  Stream<Response<S>> _streamWithFallback<S extends Object>(
+    Stream<Response<S>> Function(DataSource<T> source) build,
+  ) {
+    if (isLocalDB || optional == null) {
+      return _streamOnPrimary(build);
+    }
+    return _FallbackStream<T, S>(
+      primary: primary,
+      backup: optional!,
+      resolveConnected: () => isConnected,
+      connectivityChanges: () => DM.i.connectivityChanges,
+      build: build,
+      report: _report,
+    ).stream;
+  }
+
   Stream<Response<T>> listen({
     DataFieldParams? params,
     bool? countable,
@@ -11,7 +27,7 @@ mixin _RepoListenMixin<T extends Entity>
     Ignore? ignore,
   }) {
     return _applyStreamModifier<T>(DataModifiers.listen, () {
-      return _streamOnPrimary(
+      return _streamWithFallback(
         (source) => source.listen(
           params: params,
           countable: countable,
@@ -26,7 +42,9 @@ mixin _RepoListenMixin<T extends Entity>
 
   Stream<Response<int>> listenCount({DataFieldParams? params}) {
     return _applyStreamModifier<int>(DataModifiers.listenCount, () {
-      return _streamOnPrimary((source) => source.listenCount(params: params));
+      return _streamWithFallback(
+        (source) => source.listenCount(params: params),
+      );
     });
   }
 
@@ -41,7 +59,7 @@ mixin _RepoListenMixin<T extends Entity>
       return Stream.value(Response(status: Status.invalidId));
     }
     return _applyStreamModifier<T>(DataModifiers.listenById, () {
-      return _streamOnPrimary(
+      return _streamWithFallback(
         (source) => source.listenById(
           id,
           params: params,
@@ -65,7 +83,7 @@ mixin _RepoListenMixin<T extends Entity>
       return Stream.value(Response(status: Status.invalid));
     }
     return _applyStreamModifier<T>(DataModifiers.listenByIds, () {
-      return _streamOnPrimary(
+      return _streamWithFallback(
         (source) => source.listenByIds(
           ids,
           params: params,
@@ -91,7 +109,7 @@ mixin _RepoListenMixin<T extends Entity>
     Ignore? ignore,
   }) {
     return _applyStreamModifier<T>(DataModifiers.listenByQuery, () {
-      return _streamOnPrimary(
+      return _streamWithFallback(
         (source) => source.listenByQuery(
           params: params,
           queries: queries,

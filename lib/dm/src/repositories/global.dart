@@ -1,4 +1,4 @@
-import 'dart:async' show StreamSubscription;
+import 'dart:async' show StreamSubscription, StreamController;
 
 import '../operations/cache_delegate.dart' show DataCacheDelegate;
 import '../operations/connectivity_delegate.dart' show DataConnectivityDelegate;
@@ -15,6 +15,8 @@ class DM {
   StreamSubscription<bool>? _sub;
   bool _draining = false;
   final Map<String, DataRepoDrainCallback> _drains = {};
+  final StreamController<bool> _connController =
+      StreamController<bool>.broadcast();
 
   DataConnectivityDelegate? get connectivity => _connectivity;
 
@@ -22,13 +24,19 @@ class DM {
 
   bool get hasCache => _cache != null;
 
-  void configure({DataConnectivityDelegate? connectivity, DataCacheDelegate? cache}) {
+  Stream<bool> get connectivityChanges => _connController.stream;
+
+  void configure({
+    DataConnectivityDelegate? connectivity,
+    DataCacheDelegate? cache,
+  }) {
     _connectivity = connectivity;
     _cache = cache;
     _sub?.cancel();
     _sub = null;
     if (connectivity != null) {
       _sub = connectivity.onChanged.listen((connected) {
+        _connController.add(connected);
         if (connected) drainAll();
       });
     }
@@ -36,7 +44,7 @@ class DM {
 
   Future<bool> get isConnected async {
     final c = _connectivity;
-    if (c == null) return false;
+    if (c == null) return true;
     return c.isConnected;
   }
 
@@ -69,5 +77,6 @@ class DM {
     _drains.clear();
     _connectivity = null;
     _cache = null;
+    await _connController.close();
   }
 }

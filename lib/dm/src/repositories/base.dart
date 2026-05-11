@@ -1,4 +1,4 @@
-import 'dart:async' show Timer;
+import 'dart:async' show StreamController, StreamSubscription, Timer;
 
 import 'package:flutter_entity/entity.dart' show Entity, Response, Status;
 import 'package:meta/meta.dart' show protected;
@@ -25,6 +25,7 @@ import 'global.dart' show DM;
 
 part '_repo_dual_write_mixin.dart';
 part '_repo_executor_mixin.dart';
+part '_repo_fallback_stream.dart';
 part '_repo_listen_mixin.dart';
 part '_repo_modifier_mixin.dart';
 part '_repo_queue_mixin.dart';
