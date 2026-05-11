@@ -80,7 +80,7 @@ mixin _RepoListenMixin<T extends Entity>
     Ignore? ignore,
   }) {
     if (ids.isEmpty) {
-      return Stream.value(Response(status: Status.invalid));
+      return Stream.value(Response(status: Status.invalidId));
     }
     return _applyStreamModifier<T>(DataModifiers.listenByIds, () {
       return _streamWithFallback(
