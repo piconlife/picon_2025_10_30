@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../../app/imports/data_management.dart';
 import '../../app/imports/flutter_entity.dart';
-import '../local/note_page.dart';
 import 'product.dart';
 import 'product_repository.dart';
 
@@ -178,8 +177,13 @@ class _RemoteDataTestPageState extends State<RemoteDataTestPage> {
   }
 
   @override
+  void initState() {
+    _repo.restore();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return LocalDataTestPage();
     return Theme(
       data: ThemeData.dark(),
       child: Scaffold(
