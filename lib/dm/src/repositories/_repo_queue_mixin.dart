@@ -67,7 +67,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
       _flushTimer ??= Timer(backupFlushInterval, () {
         _flushTimer = null;
         _scheduledCount = 0;
-        flushBackupNow();
+        flushBackupNow().catchError((e, s) => _report('timerFlush', e, s));
       });
     } catch (e, s) {
       _report('scheduleBackup', e, s);
@@ -78,10 +78,35 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     DataCacheDelegate cache,
     DataQueuedOp incoming,
   ) async {
-    final eid = incoming.entityId;
-    if (eid == null || eid.isEmpty) return incoming;
     final entries = await cache.onReadAll(_queueKey);
     if (entries.isEmpty) return incoming;
+
+    if (incoming.kind == DataQueuedOpKind.clear) {
+      for (final entry in entries) {
+        await cache.onRemove(_queueKey, entry.key);
+      }
+      return incoming;
+    }
+
+    if (incoming.kind == DataQueuedOpKind.deleteByIds) {
+      final targetIds = Set<String>.from(incoming.ids ?? const []);
+      for (final entry in entries) {
+        try {
+          final existing = DataQueuedOp.fromJson(entry.value);
+          final existingEid = existing.entityId;
+          if (existingEid != null && targetIds.contains(existingEid)) {
+            if (existing.kind == DataQueuedOpKind.create ||
+                existing.kind == DataQueuedOpKind.updateById) {
+              await cache.onRemove(_queueKey, entry.key);
+            }
+          }
+        } catch (_) {}
+      }
+      return incoming;
+    }
+
+    final eid = incoming.entityId;
+    if (eid == null || eid.isEmpty) return incoming;
 
     final superseded = <String>[];
     for (final entry in entries) {
@@ -115,15 +140,15 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
 
   Future<void> flushBackupNow() async {
     if (_flushing) return;
-    final backup = optional;
-    if (backup == null) return;
-    final cache = DM.i.cache;
-    if (cache == null) return;
-    if (!await isConnected) return;
-    _flushTimer?.cancel();
-    _flushTimer = null;
     _flushing = true;
     try {
+      final backup = optional;
+      if (backup == null) return;
+      final cache = DM.i.cache;
+      if (cache == null) return;
+      if (!await isConnected) return;
+      _flushTimer?.cancel();
+      _flushTimer = null;
       await _drain(cache, backup, 'flushBackup');
     } finally {
       _flushing = false;
@@ -132,11 +157,11 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
 
   Future<void> _drainPrimaryQueue() async {
     if (_flushing) return;
-    final cache = DM.i.cache;
-    if (cache == null) return;
-    if (!await isConnected) return;
     _flushing = true;
     try {
+      final cache = DM.i.cache;
+      if (cache == null) return;
+      if (!await isConnected) return;
       await _drain(cache, primary, 'drainPrimary');
     } finally {
       _flushing = false;
@@ -214,60 +239,56 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
   }
 
   Future<Response<T>> _replay(DataQueuedOp op, DataSource<T> target) async {
-    try {
-      switch (op.kind) {
-        case DataQueuedOpKind.create:
-          final eid = op.entityId;
-          final data = op.data;
-          if (eid == null || data == null) {
-            return Response(status: Status.invalid);
-          }
-          return target.create(
-            eid,
-            data,
-            merge: op.merge,
-            createRefs: op.createRefs,
-          );
-        case DataQueuedOpKind.creates:
-          final writers = _parseWriters(op.writers);
-          if (writers.isEmpty) return Response(status: Status.invalid);
-          return target.creates(
-            writers,
-            merge: op.merge,
-            createRefs: op.createRefs,
-          );
-        case DataQueuedOpKind.updateById:
-          final eid = op.entityId;
-          final data = op.data;
-          if (eid == null || data == null) {
-            return Response(status: Status.invalid);
-          }
-          return target.updateById(eid, data, updateRefs: op.updateRefs);
-        case DataQueuedOpKind.updateByWriters:
-          final writers = _parseWriters(op.writers);
-          if (writers.isEmpty) return Response(status: Status.invalid);
-          return target.updateByWriters(writers, updateRefs: op.updateRefs);
-        case DataQueuedOpKind.deleteById:
-          final eid = op.entityId;
-          if (eid == null) return Response(status: Status.invalid);
-          return target.deleteById(
-            eid,
-            counter: op.counter,
-            deleteRefs: op.deleteRefs,
-          );
-        case DataQueuedOpKind.deleteByIds:
-          final ids = op.ids ?? const <String>[];
-          if (ids.isEmpty) return Response(status: Status.invalid);
-          return target.deleteByIds(
-            ids,
-            counter: op.counter,
-            deleteRefs: op.deleteRefs,
-          );
-        case DataQueuedOpKind.clear:
-          return target.clear(counter: op.counter, deleteRefs: op.deleteRefs);
-      }
-    } catch (e) {
-      return Response(status: Status.failure, error: e.toString());
+    switch (op.kind) {
+      case DataQueuedOpKind.create:
+        final eid = op.entityId;
+        final data = op.data;
+        if (eid == null || data == null) {
+          return Response(status: Status.invalid);
+        }
+        return target.create(
+          eid,
+          data,
+          merge: op.merge,
+          createRefs: op.createRefs,
+        );
+      case DataQueuedOpKind.creates:
+        final writers = _parseWriters(op.writers);
+        if (writers.isEmpty) return Response(status: Status.invalid);
+        return target.creates(
+          writers,
+          merge: op.merge,
+          createRefs: op.createRefs,
+        );
+      case DataQueuedOpKind.updateById:
+        final eid = op.entityId;
+        final data = op.data;
+        if (eid == null || data == null) {
+          return Response(status: Status.invalid);
+        }
+        return target.updateById(eid, data, updateRefs: op.updateRefs);
+      case DataQueuedOpKind.updateByWriters:
+        final writers = _parseWriters(op.writers);
+        if (writers.isEmpty) return Response(status: Status.invalid);
+        return target.updateByWriters(writers, updateRefs: op.updateRefs);
+      case DataQueuedOpKind.deleteById:
+        final eid = op.entityId;
+        if (eid == null) return Response(status: Status.invalid);
+        return target.deleteById(
+          eid,
+          counter: op.counter,
+          deleteRefs: op.deleteRefs,
+        );
+      case DataQueuedOpKind.deleteByIds:
+        final ids = op.ids ?? const <String>[];
+        if (ids.isEmpty) return Response(status: Status.invalid);
+        return target.deleteByIds(
+          ids,
+          counter: op.counter,
+          deleteRefs: op.deleteRefs,
+        );
+      case DataQueuedOpKind.clear:
+        return target.clear(counter: op.counter, deleteRefs: op.deleteRefs);
     }
   }
 
