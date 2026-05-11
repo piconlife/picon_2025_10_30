@@ -1,15 +1,10 @@
 import '../../app/imports/data_management.dart' show RemoteDataRepository;
-import '../../roots/helpers/connectivity.dart';
-import '../models/feed_video.dart';
-import '../sources/local/video.dart';
-import '../sources/remote/feed_video.dart';
+import '../models/feed_video.dart' show VideoModel;
+import '../sources/local/video.dart' show LocalVideoDataSource;
+import '../sources/remote/feed_video.dart' show RemoteFeedVideoDataSource;
 
 class FeedVideoRepository extends RemoteDataRepository<VideoModel> {
-  FeedVideoRepository({
-    required super.source,
-    super.backup,
-    super.connectivity = ConnectivityHelper.connected,
-  });
+  FeedVideoRepository({required super.source, super.backup});
 
   static FeedVideoRepository? _i;
 

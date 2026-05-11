@@ -2,7 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_analytics/analytics.dart';
 
+import '../data/delegates/cache.dart' show CacheDelegate;
+import '../data/delegates/connectivity.dart' show ConnectivityDelegate;
 import '../firebase_options.dart';
+import 'imports/data_management.dart' show DM;
 import 'utils/secret_code.dart';
 
 Future<void> _initFirebase() async {
@@ -19,6 +22,10 @@ Future<void> _initFirebase() async {
   // });
 }
 
+void _initConnectivity() {
+  DM.i.configure(cache: CacheDelegate(), connectivity: ConnectivityDelegate());
+}
+
 void _initSecretCode() {
   Analytics.call(name: "secret_code", reason: "init", () {
     SecretCode.init("techpek");
@@ -27,6 +34,7 @@ void _initSecretCode() {
 
 Future<void> onInit() async {
   await _initFirebase();
+  _initConnectivity();
   _initSecretCode();
 }
 

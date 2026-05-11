@@ -1,5 +1,4 @@
 import '../../app/imports/data_management.dart' show RemoteDataRepository;
-import '../../roots/helpers/connectivity.dart';
 import '../models/unifier.dart';
 import '../sources/remote/unifier.dart';
 
@@ -7,7 +6,7 @@ class NameUnifierRepository extends RemoteDataRepository<NameUnifier> {
   NameUnifierRepository({
     required super.source,
     super.backup,
-    super.connectivity = ConnectivityHelper.connected,
+
     super.cacheMode = false,
   });
 
@@ -21,7 +20,7 @@ class PhoneUnifierRepository extends RemoteDataRepository<PhoneUnifier> {
   PhoneUnifierRepository({
     required super.source,
     super.backup,
-    super.connectivity = ConnectivityHelper.connected,
+
     super.cacheMode = false,
   });
 
@@ -35,7 +34,7 @@ class PrefixUnifierRepository extends RemoteDataRepository<PrefixUnifier> {
   PrefixUnifierRepository({
     required super.source,
     super.backup,
-    super.connectivity = ConnectivityHelper.connected,
+
     super.cacheMode = false,
   });
 

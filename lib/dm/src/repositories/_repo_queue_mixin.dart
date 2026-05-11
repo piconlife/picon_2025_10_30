@@ -16,14 +16,14 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
   int _scheduledCount = 0;
 
   void _initQueue() {
-    DataRepoGlobal.i.register(_queueKey, drainQueue);
+    DM.i.register(_queueKey, drainQueue);
     drainQueue();
   }
 
   void _disposeQueue() {
     _flushTimer?.cancel();
     _flushTimer = null;
-    DataRepoGlobal.i.unregister(_queueKey);
+    DM.i.unregister(_queueKey);
   }
 
   Future<void> drainQueue() async {
@@ -35,7 +35,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
   }
 
   Future<void> _enqueuePrimary(DataQueuedOp op) async {
-    final cache = DataRepoGlobal.i.cache;
+    final cache = DM.i.cache;
     if (cache == null) return;
     try {
       await cache.push(_queueKey, op.id, op.toJson());
@@ -46,7 +46,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
 
   void _scheduleBackup(DataQueuedOp op) {
     if (optional == null) return;
-    final cache = DataRepoGlobal.i.cache;
+    final cache = DM.i.cache;
     if (cache == null) return;
     cache
         .push(_queueKey, op.id, op.toJson())
@@ -72,7 +72,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     if (_flushing) return;
     final backup = optional;
     if (backup == null) return;
-    final cache = DataRepoGlobal.i.cache;
+    final cache = DM.i.cache;
     if (cache == null) return;
     final connected = await isConnected;
     if (!connected) return;
@@ -101,7 +101,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
 
   Future<void> _drainPrimaryQueue() async {
     if (_flushing) return;
-    final cache = DataRepoGlobal.i.cache;
+    final cache = DM.i.cache;
     if (cache == null) return;
     if (!await isConnected) return;
     _flushing = true;
@@ -210,7 +210,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
   }
 
   Future<bool> _isRestored() async {
-    final cache = DataRepoGlobal.i.cache;
+    final cache = DM.i.cache;
     if (cache == null) return false;
     try {
       return await cache.exists(_restoredKey, 'flag');
@@ -221,7 +221,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
   }
 
   Future<void> _markRestored() async {
-    final cache = DataRepoGlobal.i.cache;
+    final cache = DM.i.cache;
     if (cache == null) return;
     try {
       await cache.push(_restoredKey, 'flag', {
@@ -233,7 +233,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
   }
 
   Future<void> clearRestoredFlag() async {
-    final cache = DataRepoGlobal.i.cache;
+    final cache = DM.i.cache;
     if (cache == null) return;
     try {
       await cache.remove(_restoredKey, 'flag');

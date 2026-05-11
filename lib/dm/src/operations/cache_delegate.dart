@@ -1,4 +1,4 @@
-abstract class CacheDelegate {
+abstract class DataCacheDelegate {
   Future<void> push(String key, String entryId, Map<String, dynamic> entry);
 
   Future<List<MapEntry<String, Map<String, dynamic>>>> readAll(String key);

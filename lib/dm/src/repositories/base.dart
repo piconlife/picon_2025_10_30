@@ -20,7 +20,7 @@ import '../utils/query.dart' show DataQuery;
 import '../utils/selection.dart' show DataSelection;
 import '../utils/sorting.dart' show DataSorting;
 import '../utils/updating_info.dart' show DataWriter;
-import 'global.dart' show DataRepoGlobal;
+import 'global.dart' show DM;
 
 part '_repo_dual_write_mixin.dart';
 part '_repo_executor_mixin.dart';
@@ -31,8 +31,6 @@ part '_repo_queued_op.dart';
 part '_repo_read_mixin.dart';
 part '_repo_read_with_fallback_mixin.dart';
 part '_repo_write_mixin.dart';
-
-typedef FutureConnectivityCallback = Future<bool> Function();
 
 class DataRepository<T extends Entity>
     with
@@ -69,8 +67,6 @@ class DataRepository<T extends Entity>
   @override
   final ErrorDelegate errorDelegate;
 
-  final FutureConnectivityCallback? _connectivity;
-
   @override
   final Duration backupFlushInterval;
 
@@ -85,14 +81,12 @@ class DataRepository<T extends Entity>
     this.cacheMode = false,
     required LocalDataSource<T> source,
     RemoteDataSource<T>? backup,
-    FutureConnectivityCallback? connectivity,
     ErrorDelegate? errorDelegate,
     this.backupFlushInterval = const Duration(seconds: 30),
     this.backupFlushSize = 50,
   }) : type = DatabaseType.local,
        primary = source,
        optional = backup,
-       _connectivity = connectivity,
        errorDelegate = errorDelegate ?? ErrorDelegate.printing {
     _initQueue();
   }
@@ -105,14 +99,12 @@ class DataRepository<T extends Entity>
     this.cacheMode = false,
     required RemoteDataSource<T> source,
     LocalDataSource<T>? backup,
-    FutureConnectivityCallback? connectivity,
     ErrorDelegate? errorDelegate,
     this.backupFlushInterval = const Duration(seconds: 30),
     this.backupFlushSize = 50,
   }) : type = DatabaseType.remote,
        primary = source,
        optional = backup,
-       _connectivity = connectivity,
        errorDelegate = errorDelegate ?? ErrorDelegate.printing {
     _initQueue();
   }
@@ -122,10 +114,7 @@ class DataRepository<T extends Entity>
       id ?? '${type.name}:${primary.runtimeType}:${primary.path}';
 
   @override
-  Future<bool> get isConnected async {
-    if (_connectivity != null) return _connectivity();
-    return DataRepoGlobal.i.isConnected;
-  }
+  Future<bool> get isConnected => DM.i.isConnected;
 
   Future<bool> get isDisconnected async => !(await isConnected);
 

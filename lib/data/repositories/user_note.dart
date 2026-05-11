@@ -3,7 +3,6 @@ import 'package:flutter_entity/entity.dart';
 
 import '../../app/imports/data_management.dart'
     show RemoteDataRepository, DataModifiers;
-import '../../roots/helpers/connectivity.dart';
 import '../models/user_note.dart';
 import '../sources/local/user_note.dart';
 import '../sources/remote/user_note.dart';
@@ -11,11 +10,7 @@ import '../use_cases/content/gets.dart';
 import '../use_cases/feed_video/get.dart';
 
 class UserNoteRepository extends RemoteDataRepository<NoteModel> {
-  UserNoteRepository({
-    required super.source,
-    super.backup,
-    super.connectivity = ConnectivityHelper.connected,
-  });
+  UserNoteRepository({required super.source, super.backup});
 
   static UserNoteRepository? _i;
 

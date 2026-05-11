@@ -1,8 +1,7 @@
 import '../../app/imports/data_management.dart' show RemoteDataRepository;
-import '../../roots/helpers/connectivity.dart';
-import '../models/feed.dart';
-import '../sources/local/feed.dart';
-import '../sources/remote/feed.dart';
+import '../models/feed.dart' show FeedModel;
+import '../sources/local/feed.dart' show LocalFeedDataSource;
+import '../sources/remote/feed.dart' show RemoteFeedDataSource;
 
 class FeedRepository extends RemoteDataRepository<FeedModel> {
   FeedRepository({
@@ -10,7 +9,6 @@ class FeedRepository extends RemoteDataRepository<FeedModel> {
     super.backup,
     super.backupMode,
     super.restoreMode,
-    super.connectivity = ConnectivityHelper.connected,
   });
 
   static FeedRepository? _i;

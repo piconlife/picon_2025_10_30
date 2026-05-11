@@ -1,15 +1,10 @@
 import '../../app/imports/data_management.dart' show RemoteDataRepository;
-import '../../roots/helpers/connectivity.dart';
-import '../models/like.dart';
-import '../sources/local/like.dart';
-import '../sources/remote/like.dart';
+import '../models/like.dart' show LikeModel;
+import '../sources/local/like.dart' show LocalLikeDataSource;
+import '../sources/remote/like.dart' show RemoteLikeDataSource;
 
 class LikeRepository extends RemoteDataRepository<LikeModel> {
-  LikeRepository({
-    required super.source,
-    super.backup,
-    super.connectivity = ConnectivityHelper.connected,
-  });
+  LikeRepository({required super.source, super.backup});
 
   static LikeRepository? _i;
 

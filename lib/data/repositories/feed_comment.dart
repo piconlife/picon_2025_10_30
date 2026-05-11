@@ -1,15 +1,10 @@
 import '../../app/imports/data_management.dart' show RemoteDataRepository;
-import '../../roots/helpers/connectivity.dart';
-import '../models/comment.dart';
-import '../sources/local/comment.dart';
-import '../sources/remote/feed_comment.dart';
+import '../models/comment.dart' show CommentModel;
+import '../sources/local/comment.dart' show LocalCommentDataSource;
+import '../sources/remote/feed_comment.dart' show RemoteFeedCommentDataSource;
 
 class CommentRepository extends RemoteDataRepository<CommentModel> {
-  CommentRepository({
-    required super.source,
-    super.backup,
-    super.connectivity = ConnectivityHelper.connected,
-  });
+  CommentRepository({required super.source, super.backup});
 
   static CommentRepository? _i;
 

@@ -3,18 +3,13 @@ import 'package:flutter_entity/entity.dart';
 
 import '../../app/imports/data_management.dart'
     show RemoteDataRepository, DataModifiers;
-import '../../roots/helpers/connectivity.dart';
 import '../models/user_video.dart';
 import '../sources/local/user_video.dart';
 import '../sources/remote/user_video.dart';
 import '../use_cases/feed_video/get.dart';
 
 class UserVideoRepository extends RemoteDataRepository<VideoModel> {
-  UserVideoRepository({
-    required super.source,
-    super.backup,
-    super.connectivity = ConnectivityHelper.connected,
-  });
+  UserVideoRepository({required super.source, super.backup});
 
   static UserVideoRepository? _i;
 

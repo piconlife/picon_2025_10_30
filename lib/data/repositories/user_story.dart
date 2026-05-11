@@ -1,15 +1,10 @@
 import '../../app/imports/data_management.dart' show RemoteDataRepository;
-import '../../roots/helpers/connectivity.dart';
 import '../models/user_story.dart';
 import '../sources/local/user_story.dart';
 import '../sources/remote/user_story.dart';
 
 class UserStoryRepository extends RemoteDataRepository<StoryModel> {
-  UserStoryRepository({
-    required super.source,
-    super.backup,
-    super.connectivity = ConnectivityHelper.connected,
-  });
+  UserStoryRepository({required super.source, super.backup});
 
   static UserStoryRepository? _i;
 

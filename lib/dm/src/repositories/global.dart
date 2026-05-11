@@ -1,28 +1,28 @@
 import 'dart:async' show StreamSubscription;
 
-import '../operations/cache_delegate.dart' show CacheDelegate;
-import '../operations/connectivity_delegate.dart' show ConnectivityDelegate;
+import '../operations/cache_delegate.dart' show DataCacheDelegate;
+import '../operations/connectivity_delegate.dart' show DataConnectivityDelegate;
 
 typedef DataRepoDrainCallback = Future<void> Function();
 
-class DataRepoGlobal {
-  DataRepoGlobal._();
+class DM {
+  DM._();
 
-  static final DataRepoGlobal i = DataRepoGlobal._();
+  static final DM i = DM._();
 
-  ConnectivityDelegate? _connectivity;
-  CacheDelegate? _cache;
+  DataConnectivityDelegate? _connectivity;
+  DataCacheDelegate? _cache;
   StreamSubscription<bool>? _sub;
   bool _draining = false;
   final Map<String, DataRepoDrainCallback> _drains = {};
 
-  ConnectivityDelegate? get connectivity => _connectivity;
+  DataConnectivityDelegate? get connectivity => _connectivity;
 
-  CacheDelegate? get cache => _cache;
+  DataCacheDelegate? get cache => _cache;
 
   bool get hasCache => _cache != null;
 
-  void configure({ConnectivityDelegate? connectivity, CacheDelegate? cache}) {
+  void configure({DataConnectivityDelegate? connectivity, DataCacheDelegate? cache}) {
     _connectivity = connectivity;
     _cache = cache;
     _sub?.cancel();

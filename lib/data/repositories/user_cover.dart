@@ -1,15 +1,10 @@
 import '../../app/imports/data_management.dart' show RemoteDataRepository;
-import '../../roots/helpers/connectivity.dart';
 import '../models/user_cover.dart';
 import '../sources/local/user_cover.dart';
 import '../sources/remote/user_cover.dart';
 
 class UserCoverRepository extends RemoteDataRepository<CoverModel> {
-  UserCoverRepository({
-    required super.source,
-    super.backup,
-    super.connectivity = ConnectivityHelper.connected,
-  });
+  UserCoverRepository({required super.source, super.backup});
 
   static UserCoverRepository? _i;
 

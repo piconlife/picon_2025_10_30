@@ -1,15 +1,10 @@
 import '../../app/imports/data_management.dart' show RemoteDataRepository;
-import '../../roots/helpers/connectivity.dart';
-import '../models/content.dart';
-import '../sources/local/content.dart';
-import '../sources/remote/content.dart';
+import '../models/content.dart' show ContentModel;
+import '../sources/local/content.dart' show LocalContentDataSource;
+import '../sources/remote/content.dart' show RemoteContentDataSource;
 
 class ContentRepository extends RemoteDataRepository<ContentModel> {
-  ContentRepository({
-    required super.source,
-    super.backup,
-    super.connectivity = ConnectivityHelper.connected,
-  });
+  ContentRepository({required super.source, super.backup});
 
   static ContentRepository? _i;
 

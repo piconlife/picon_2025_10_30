@@ -2,17 +2,12 @@ import 'package:flutter_entity/entity.dart';
 
 import '../../app/imports/data_management.dart'
     show RemoteDataRepository, DataModifiers;
-import '../../roots/helpers/connectivity.dart';
 import '../models/user_report.dart';
 import '../sources/local/user_report.dart';
 import '../sources/remote/user_report.dart';
 
 class UserReportRepository extends RemoteDataRepository<ReportModel> {
-  UserReportRepository({
-    required super.source,
-    super.backup,
-    super.connectivity = ConnectivityHelper.connected,
-  });
+  UserReportRepository({required super.source, super.backup});
 
   static UserReportRepository? _i;
 

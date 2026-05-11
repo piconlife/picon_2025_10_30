@@ -7,7 +7,6 @@ class RemoteDataRepository<T extends Entity> extends DataRepository<T> {
     super.id,
     required super.source,
     super.backup,
-    super.connectivity,
     super.errorDelegate,
     super.backupMode,
     super.lazyMode,

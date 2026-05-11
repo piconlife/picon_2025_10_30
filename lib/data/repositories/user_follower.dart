@@ -2,18 +2,13 @@ import 'package:flutter_entity/entity.dart';
 
 import '../../app/imports/data_management.dart'
     show RemoteDataRepository, DataModifiers;
-import '../../roots/helpers/connectivity.dart';
 import '../models/user_follower.dart';
 import '../sources/local/user_follower.dart';
 import '../sources/remote/user_follower.dart';
 import '../use_cases/user/get.dart';
 
 class UserFollowerRepository extends RemoteDataRepository<FollowerModel> {
-  UserFollowerRepository({
-    required super.source,
-    super.backup,
-    super.connectivity = ConnectivityHelper.connected,
-  });
+  UserFollowerRepository({required super.source, super.backup});
 
   static UserFollowerRepository? _i;
 
