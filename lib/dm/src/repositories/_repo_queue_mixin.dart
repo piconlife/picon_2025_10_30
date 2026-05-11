@@ -25,6 +25,8 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
   void _disposeQueue() {
     _flushTimer?.cancel();
     _flushTimer = null;
+    _flushing = false;
+    _scheduledCount = 0;
     DM.i.unregister(_queueKey);
   }
 
@@ -41,8 +43,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     if (cache == null) return;
     try {
       final merged = await _mergeOnPush(cache, op);
-      if (merged == null) return;
-      await cache.onPush(_queueKey, merged.id, merged.toJson());
+      await cache.onPush(_queueKey, op.id, merged.toJson());
     } catch (e, s) {
       _report('enqueuePrimary', e, s);
     }
@@ -54,8 +55,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     if (cache == null) return;
     try {
       final merged = await _mergeOnPush(cache, op);
-      if (merged == null) return;
-      await cache.onPush(_queueKey, merged.id, merged.toJson());
+      await cache.onPush(_queueKey, op.id, merged.toJson());
       _scheduledCount++;
       if (_scheduledCount >= backupFlushSize) {
         _scheduledCount = 0;
@@ -74,7 +74,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     }
   }
 
-  Future<DataQueuedOp?> _mergeOnPush(
+  Future<DataQueuedOp> _mergeOnPush(
     DataCacheDelegate cache,
     DataQueuedOp incoming,
   ) async {
@@ -128,7 +128,8 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     if (eid != null && eid.isNotEmpty) {
       if (!targetIds.contains(eid)) return false;
       return existing.kind == DataQueuedOpKind.create ||
-          existing.kind == DataQueuedOpKind.updateById;
+          existing.kind == DataQueuedOpKind.updateById ||
+          existing.kind == DataQueuedOpKind.deleteById;
     }
     if (existing.kind == DataQueuedOpKind.creates ||
         existing.kind == DataQueuedOpKind.updateByWriters) {
