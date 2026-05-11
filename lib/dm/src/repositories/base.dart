@@ -1,3 +1,5 @@
+import 'dart:async' show Timer;
+
 import 'package:flutter_entity/entity.dart' show Entity, Response, Status;
 import 'package:meta/meta.dart' show protected;
 
@@ -18,11 +20,14 @@ import '../utils/query.dart' show DataQuery;
 import '../utils/selection.dart' show DataSelection;
 import '../utils/sorting.dart' show DataSorting;
 import '../utils/updating_info.dart' show DataWriter;
+import 'global.dart' show DataRepoGlobal;
 
 part '_repo_dual_write_mixin.dart';
 part '_repo_executor_mixin.dart';
 part '_repo_listen_mixin.dart';
 part '_repo_modifier_mixin.dart';
+part '_repo_queue_mixin.dart';
+part '_repo_queued_op.dart';
 part '_repo_read_mixin.dart';
 part '_repo_read_with_fallback_mixin.dart';
 part '_repo_write_mixin.dart';
@@ -33,6 +38,7 @@ class DataRepository<T extends Entity>
     with
         _RepoExecutorMixin<T>,
         _RepoModifierMixin<T>,
+        _RepoQueueMixin<T>,
         _RepoDualWriteMixin<T>,
         _RepoReadWithFallbackMixin<T>,
         _RepoReadMixin<T>,
@@ -65,6 +71,12 @@ class DataRepository<T extends Entity>
 
   final FutureConnectivityCallback? _connectivity;
 
+  @override
+  final Duration backupFlushInterval;
+
+  @override
+  final int backupFlushSize;
+
   DataRepository.local({
     this.id,
     this.backupMode = true,
@@ -75,11 +87,15 @@ class DataRepository<T extends Entity>
     RemoteDataSource<T>? backup,
     FutureConnectivityCallback? connectivity,
     ErrorDelegate? errorDelegate,
+    this.backupFlushInterval = const Duration(seconds: 30),
+    this.backupFlushSize = 50,
   }) : type = DatabaseType.local,
        primary = source,
        optional = backup,
        _connectivity = connectivity,
-       errorDelegate = errorDelegate ?? ErrorDelegate.printing;
+       errorDelegate = errorDelegate ?? ErrorDelegate.printing {
+    _initQueue();
+  }
 
   DataRepository.remote({
     this.id,
@@ -91,16 +107,24 @@ class DataRepository<T extends Entity>
     LocalDataSource<T>? backup,
     FutureConnectivityCallback? connectivity,
     ErrorDelegate? errorDelegate,
+    this.backupFlushInterval = const Duration(seconds: 30),
+    this.backupFlushSize = 50,
   }) : type = DatabaseType.remote,
        primary = source,
        optional = backup,
        _connectivity = connectivity,
-       errorDelegate = errorDelegate ?? ErrorDelegate.printing;
+       errorDelegate = errorDelegate ?? ErrorDelegate.printing {
+    _initQueue();
+  }
+
+  @override
+  String get queueId =>
+      id ?? '${type.name}:${primary.runtimeType}:${primary.path}';
 
   @override
   Future<bool> get isConnected async {
     if (_connectivity != null) return _connectivity();
-    return false;
+    return DataRepoGlobal.i.isConnected;
   }
 
   Future<bool> get isDisconnected async => !(await isConnected);
@@ -128,12 +152,26 @@ class DataRepository<T extends Entity>
     bool merge = true,
     bool? lazyMode,
     bool? backupMode,
+    bool force = false,
   }) async {
     if (!restoreMode) {
       return Response(status: Status.canceled, error: 'restoreMode disabled');
     }
     if (!_shouldUseBackup(backupMode)) {
       return Response(status: Status.canceled, error: 'backup unavailable');
+    }
+    if (!force) {
+      if (await _isRestored()) {
+        return Response(status: Status.canceled, error: 'already restored');
+      }
+      final existing = await _runOnPrimary(
+        (source) => source.count(params: params),
+      );
+      final hasData = existing.isSuccessful && (existing.data ?? 0) > 0;
+      if (hasData) {
+        await _markRestored();
+        return Response(status: Status.canceled, error: 'primary has data');
+      }
     }
     final backup = await _runOnBackup((source) {
       return source.get(
@@ -155,6 +193,11 @@ class DataRepository<T extends Entity>
       merge: merge,
       useLazy: _shouldUseLazy(lazyMode),
     );
+    await _markRestored();
     return Response(status: Status.ok);
+  }
+
+  Future<void> dispose() async {
+    _disposeQueue();
   }
 }

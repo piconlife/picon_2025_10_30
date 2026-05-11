@@ -1,7 +1,20 @@
 part of 'base.dart';
 
 mixin _RepoWriteMixin<T extends Entity>
-    on _RepoExecutorMixin<T>, _RepoModifierMixin<T>, _RepoDualWriteMixin<T> {
+    on
+        _RepoExecutorMixin<T>,
+        _RepoModifierMixin<T>,
+        _RepoQueueMixin<T>,
+        _RepoDualWriteMixin<T> {
+  String _opId(String kind, [String? extra]) {
+    final now = DateTime.now().microsecondsSinceEpoch;
+    return '$queueId:$kind:${extra ?? ''}:$now';
+  }
+
+  List<Map<String, dynamic>> _writersToJson(Iterable<DataWriter> writers) {
+    return writers.map((w) => {'id': w.id, 'data': w.data}).toList();
+  }
+
   Future<Response<T>> create(
     T data, {
     DataFieldParams? params,
@@ -48,6 +61,15 @@ mixin _RepoWriteMixin<T extends Entity>
             createRefs: createRefs,
             merge: merge,
           ),
+      opBuilder:
+          () => DataQueuedOp(
+            id: _opId('create', id),
+            kind: DataQueuedOpKind.create,
+            entityId: id,
+            data: data,
+            merge: merge,
+            createRefs: createRefs,
+          ),
     );
   }
 
@@ -80,14 +102,23 @@ mixin _RepoWriteMixin<T extends Entity>
     if (writers.isEmpty) {
       return Future.value(Response(status: Status.invalid));
     }
+    final list = writers.toList(growable: false);
     return _dualWrite(
       DataModifiers.creates,
       backupMode: backupMode,
       lazyMode: lazyMode,
       write:
           (source) => source.creates(
-            writers,
+            list,
             params: params,
+            merge: merge,
+            createRefs: createRefs,
+          ),
+      opBuilder:
+          () => DataQueuedOp(
+            id: _opId('creates'),
+            kind: DataQueuedOpKind.creates,
+            writers: _writersToJson(list),
             merge: merge,
             createRefs: createRefs,
           ),
@@ -120,6 +151,14 @@ mixin _RepoWriteMixin<T extends Entity>
             ignore: ignore,
             updateRefs: updateRefs,
           ),
+      opBuilder:
+          () => DataQueuedOp(
+            id: _opId('updateById', id),
+            kind: DataQueuedOpKind.updateById,
+            entityId: id,
+            data: data,
+            updateRefs: updateRefs,
+          ),
     );
   }
 
@@ -135,16 +174,24 @@ mixin _RepoWriteMixin<T extends Entity>
     if (writers.isEmpty) {
       return Future.value(Response(status: Status.invalid));
     }
+    final list = writers.toList(growable: false);
     return _dualWrite(
       DataModifiers.updateByWriters,
       backupMode: backupMode,
       lazyMode: lazyMode,
       write:
           (source) => source.updateByWriters(
-            writers,
+            list,
             params: params,
             resolveRefs: resolveRefs,
             ignore: ignore,
+            updateRefs: updateRefs,
+          ),
+      opBuilder:
+          () => DataQueuedOp(
+            id: _opId('updateByWriters'),
+            kind: DataQueuedOpKind.updateByWriters,
+            writers: _writersToJson(list),
             updateRefs: updateRefs,
           ),
     );
@@ -176,6 +223,14 @@ mixin _RepoWriteMixin<T extends Entity>
             ignore: ignore,
             deleteRefs: deleteRefs,
           ),
+      opBuilder:
+          () => DataQueuedOp(
+            id: _opId('deleteById', id),
+            kind: DataQueuedOpKind.deleteById,
+            entityId: id,
+            deleteRefs: deleteRefs,
+            counter: counter,
+          ),
     );
   }
 
@@ -192,18 +247,27 @@ mixin _RepoWriteMixin<T extends Entity>
     if (ids.isEmpty) {
       return Future.value(Response(status: Status.invalid));
     }
+    final list = ids.toList(growable: false);
     return _dualWrite(
       DataModifiers.deleteByIds,
       backupMode: backupMode,
       lazyMode: lazyMode,
       write:
           (source) => source.deleteByIds(
-            ids,
+            list,
             params: params,
             counter: counter,
             resolveRefs: resolveRefs,
             ignore: ignore,
             deleteRefs: deleteRefs,
+          ),
+      opBuilder:
+          () => DataQueuedOp(
+            id: _opId('deleteByIds'),
+            kind: DataQueuedOpKind.deleteByIds,
+            ids: list,
+            deleteRefs: deleteRefs,
+            counter: counter,
           ),
     );
   }
@@ -228,6 +292,13 @@ mixin _RepoWriteMixin<T extends Entity>
             resolveRefs: resolveRefs,
             ignore: ignore,
             deleteRefs: deleteRefs,
+          ),
+      opBuilder:
+          () => DataQueuedOp(
+            id: _opId('clear'),
+            kind: DataQueuedOpKind.clear,
+            deleteRefs: deleteRefs,
+            counter: counter,
           ),
     );
   }

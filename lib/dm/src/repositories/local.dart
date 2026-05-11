@@ -13,5 +13,7 @@ class LocalDataRepository<T extends Entity> extends DataRepository<T> {
     super.backupMode,
     super.restoreMode,
     super.cacheMode,
+    super.backupFlushInterval,
+    super.backupFlushSize,
   }) : super.local();
 }
