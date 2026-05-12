@@ -1,6 +1,6 @@
 part of 'base.dart';
 
-enum DataQueuedOpKind {
+enum _DataQueuedOpKind {
   create,
   creates,
   updateById,
@@ -10,9 +10,9 @@ enum DataQueuedOpKind {
   clear,
 }
 
-class DataQueuedOp {
+class _DataQueuedOp {
   final String id;
-  final DataQueuedOpKind kind;
+  final _DataQueuedOpKind kind;
   final String? entityId;
   final Map<String, dynamic>? data;
   final List<String>? ids;
@@ -25,7 +25,7 @@ class DataQueuedOp {
   final int createdAt;
   final int attempts;
 
-  DataQueuedOp({
+  _DataQueuedOp({
     required this.id,
     required this.kind,
     this.entityId,
@@ -41,7 +41,7 @@ class DataQueuedOp {
     this.attempts = 0,
   }) : createdAt = createdAt ?? DateTime.now().microsecondsSinceEpoch;
 
-  DataQueuedOp copyWith({int? attempts}) => DataQueuedOp(
+  _DataQueuedOp copyWith({int? attempts}) => _DataQueuedOp(
     id: id,
     kind: kind,
     entityId: entityId,
@@ -73,12 +73,12 @@ class DataQueuedOp {
     'attempts': attempts,
   };
 
-  factory DataQueuedOp.fromJson(Map<String, dynamic> json) {
-    return DataQueuedOp(
+  factory _DataQueuedOp.fromJson(Map<String, dynamic> json) {
+    return _DataQueuedOp(
       id: json['id'] as String,
-      kind: DataQueuedOpKind.values.firstWhere(
+      kind: _DataQueuedOpKind.values.firstWhere(
         (e) => e.name == json['kind'],
-        orElse: () => DataQueuedOpKind.create,
+        orElse: () => _DataQueuedOpKind.create,
       ),
       entityId: json['entityId'] as String?,
       data: (json['data'] as Map?)?.cast<String, dynamic>(),

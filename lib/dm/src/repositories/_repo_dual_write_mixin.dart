@@ -5,7 +5,7 @@ mixin _RepoDualWriteMixin<T extends Entity>
   Future<Response<T>> _dualWrite(
     DataModifiers modifierId, {
     required Future<Response<T>> Function(DataSource<T> source) write,
-    required DataQueuedOp Function() opBuilder,
+    required _DataQueuedOp Function() opBuilder,
     bool? backupMode,
     bool? lazyMode,
     bool? queueMode,

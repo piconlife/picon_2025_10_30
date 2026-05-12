@@ -40,7 +40,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     }
   }
 
-  Future<void> _enqueuePrimary(DataQueuedOp op) async {
+  Future<void> _enqueuePrimary(_DataQueuedOp op) async {
     final cache = DM.i.cache;
     if (cache == null) return;
     try {
@@ -51,7 +51,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     }
   }
 
-  Future<void> _scheduleBackup(DataQueuedOp op) async {
+  Future<void> _scheduleBackup(_DataQueuedOp op) async {
     if (optional == null) return;
     final cache = DM.i.cache;
     if (cache == null) return;
@@ -76,26 +76,26 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     }
   }
 
-  Future<DataQueuedOp> _mergeOnPush(
+  Future<_DataQueuedOp> _mergeOnPush(
     DataCacheDelegate cache,
-    DataQueuedOp incoming,
+    _DataQueuedOp incoming,
   ) async {
     final entries = await cache.onReadAll(_queueKey);
     if (entries.isEmpty) return incoming;
 
-    if (incoming.kind == DataQueuedOpKind.clear) {
+    if (incoming.kind == _DataQueuedOpKind.clear) {
       for (final entry in entries) {
         await cache.onRemove(_queueKey, entry.key);
       }
       return incoming;
     }
 
-    if (incoming.kind == DataQueuedOpKind.deleteByIds) {
+    if (incoming.kind == _DataQueuedOpKind.deleteByIds) {
       final targetIds = Set<String>.from(incoming.ids ?? const []);
       if (targetIds.isEmpty) return incoming;
       for (final entry in entries) {
         try {
-          final existing = DataQueuedOp.fromJson(entry.value);
+          final existing = _DataQueuedOp.fromJson(entry.value);
           if (_supersededByDeleteIds(existing, targetIds)) {
             await cache.onRemove(_queueKey, entry.key);
           }
@@ -110,7 +110,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     final superseded = <String>[];
     for (final entry in entries) {
       try {
-        final existing = DataQueuedOp.fromJson(entry.value);
+        final existing = _DataQueuedOp.fromJson(entry.value);
         if (_supersededByDeleteId(incoming, existing, eid)) {
           superseded.add(entry.key);
         } else if (_supersedes(incoming.kind, existing.kind) &&
@@ -125,16 +125,16 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
     return incoming;
   }
 
-  bool _supersededByDeleteIds(DataQueuedOp existing, Set<String> targetIds) {
+  bool _supersededByDeleteIds(_DataQueuedOp existing, Set<String> targetIds) {
     final eid = existing.entityId;
     if (eid != null && eid.isNotEmpty) {
       if (!targetIds.contains(eid)) return false;
-      return existing.kind == DataQueuedOpKind.create ||
-          existing.kind == DataQueuedOpKind.updateById ||
-          existing.kind == DataQueuedOpKind.deleteById;
+      return existing.kind == _DataQueuedOpKind.create ||
+          existing.kind == _DataQueuedOpKind.updateById ||
+          existing.kind == _DataQueuedOpKind.deleteById;
     }
-    if (existing.kind == DataQueuedOpKind.creates ||
-        existing.kind == DataQueuedOpKind.updateByWriters) {
+    if (existing.kind == _DataQueuedOpKind.creates ||
+        existing.kind == _DataQueuedOpKind.updateByWriters) {
       final writerIds = _writerIds(existing.writers);
       return writerIds.isNotEmpty && writerIds.every(targetIds.contains);
     }
@@ -142,13 +142,13 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
   }
 
   bool _supersededByDeleteId(
-    DataQueuedOp incoming,
-    DataQueuedOp existing,
+    _DataQueuedOp incoming,
+    _DataQueuedOp existing,
     String eid,
   ) {
-    if (incoming.kind != DataQueuedOpKind.deleteById) return false;
-    if (existing.kind == DataQueuedOpKind.creates ||
-        existing.kind == DataQueuedOpKind.updateByWriters) {
+    if (incoming.kind != _DataQueuedOpKind.deleteById) return false;
+    if (existing.kind == _DataQueuedOpKind.creates ||
+        existing.kind == _DataQueuedOpKind.updateByWriters) {
       final ids = _writerIds(existing.writers);
       return ids.length == 1 && ids.contains(eid);
     }
@@ -162,15 +162,15 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
         .toSet();
   }
 
-  bool _supersedes(DataQueuedOpKind incoming, DataQueuedOpKind existing) {
+  bool _supersedes(_DataQueuedOpKind incoming, _DataQueuedOpKind existing) {
     switch (incoming) {
-      case DataQueuedOpKind.deleteById:
-        return existing == DataQueuedOpKind.create ||
-            existing == DataQueuedOpKind.updateById;
-      case DataQueuedOpKind.updateById:
-        return existing == DataQueuedOpKind.updateById;
-      case DataQueuedOpKind.create:
-        return existing == DataQueuedOpKind.create;
+      case _DataQueuedOpKind.deleteById:
+        return existing == _DataQueuedOpKind.create ||
+            existing == _DataQueuedOpKind.updateById;
+      case _DataQueuedOpKind.updateById:
+        return existing == _DataQueuedOpKind.updateById;
+      case _DataQueuedOpKind.create:
+        return existing == _DataQueuedOpKind.create;
       default:
         return false;
     }
@@ -215,9 +215,9 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
   ) async {
     final entries = await cache.onReadAll(_queueKey);
     for (final entry in entries) {
-      DataQueuedOp op;
+      _DataQueuedOp op;
       try {
-        op = DataQueuedOp.fromJson(entry.value);
+        op = _DataQueuedOp.fromJson(entry.value);
       } catch (e, s) {
         _report('$tag.decode', e, s);
         await cache.onRemove(_queueKey, entry.key);
@@ -259,7 +259,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
   Future<void> _handleFailedOp(
     DataCacheDelegate cache,
     String entryKey,
-    DataQueuedOp op,
+    _DataQueuedOp op,
   ) async {
     final next = op.copyWith(attempts: op.attempts + 1);
     if (next.attempts >= _maxAttempts) {
@@ -286,9 +286,9 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
         .toList();
   }
 
-  Future<Response<T>> _replay(DataQueuedOp op, DataSource<T> target) async {
+  Future<Response<T>> _replay(_DataQueuedOp op, DataSource<T> target) async {
     switch (op.kind) {
-      case DataQueuedOpKind.create:
+      case _DataQueuedOpKind.create:
         final eid = op.entityId;
         final data = op.data;
         if (eid == null || data == null) {
@@ -300,7 +300,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
           merge: op.merge,
           createRefs: op.createRefs,
         );
-      case DataQueuedOpKind.creates:
+      case _DataQueuedOpKind.creates:
         final writers = _parseWriters(op.writers);
         if (writers.isEmpty) return Response(status: Status.invalid);
         return target.creates(
@@ -308,18 +308,18 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
           merge: op.merge,
           createRefs: op.createRefs,
         );
-      case DataQueuedOpKind.updateById:
+      case _DataQueuedOpKind.updateById:
         final eid = op.entityId;
         final data = op.data;
         if (eid == null || data == null) {
           return Response(status: Status.invalid);
         }
         return target.updateById(eid, data, updateRefs: op.updateRefs);
-      case DataQueuedOpKind.updateByWriters:
+      case _DataQueuedOpKind.updateByWriters:
         final writers = _parseWriters(op.writers);
         if (writers.isEmpty) return Response(status: Status.invalid);
         return target.updateByWriters(writers, updateRefs: op.updateRefs);
-      case DataQueuedOpKind.deleteById:
+      case _DataQueuedOpKind.deleteById:
         final eid = op.entityId;
         if (eid == null) return Response(status: Status.invalid);
         return target.deleteById(
@@ -327,7 +327,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
           counter: op.counter,
           deleteRefs: op.deleteRefs,
         );
-      case DataQueuedOpKind.deleteByIds:
+      case _DataQueuedOpKind.deleteByIds:
         final ids = op.ids ?? const <String>[];
         if (ids.isEmpty) return Response(status: Status.invalid);
         return target.deleteByIds(
@@ -335,7 +335,7 @@ mixin _RepoQueueMixin<T extends Entity> on _RepoExecutorMixin<T> {
           counter: op.counter,
           deleteRefs: op.deleteRefs,
         );
-      case DataQueuedOpKind.clear:
+      case _DataQueuedOpKind.clear:
         return target.clear(counter: op.counter, deleteRefs: op.deleteRefs);
     }
   }
