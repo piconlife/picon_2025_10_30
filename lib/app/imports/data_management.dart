@@ -1,1 +1,1 @@
-export '../../dm/data_management.dart';
+export 'package:data_management/data_management.dart';
