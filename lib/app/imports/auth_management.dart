@@ -1,2 +1,2 @@
-export '../../auth/core.dart';
-export '../../auth/widgets.dart';
+export 'package:auth_management/core.dart';
+export 'package:auth_management/widgets.dart';
