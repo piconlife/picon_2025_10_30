@@ -766,14 +766,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.13+1"
-  flutter_androssy_kits:
-    dependency: "direct main"
-    description:
-      name: flutter_androssy_kits
-      sha256: c6b629916972e065ab942a15892f38c5174bb9a589bcd416b93ce21c329e9336
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.14"
   flutter_bloc:
     dependency: "direct main"
     description:

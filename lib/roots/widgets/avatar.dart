@@ -7,7 +7,7 @@ import '../../app/res/placeholders.dart';
 
 class InAppAvatar extends StatelessWidget {
   final dynamic data;
-  final double size;
+  final double? size;
   final Color? backgroundColor;
   final Color? borderColor;
   final double borderSize;
@@ -22,7 +22,7 @@ class InAppAvatar extends StatelessWidget {
   const InAppAvatar(
     this.data, {
     super.key,
-    this.size = 40,
+    this.size,
     this.backgroundColor,
     this.borderColor,
     this.borderSize = 0,
@@ -53,7 +53,7 @@ class InAppAvatar extends StatelessWidget {
       onTap: onTap,
       child: AndrossyAvatar(
         data ?? InAppPlaceholders.user,
-        size: size,
+        size: size ?? double.infinity,
         backgroundColor:
             backgroundColor ??
             (context.isDarkMode ? context.mid.shade(.5) : context.mid.tint(.5)),
