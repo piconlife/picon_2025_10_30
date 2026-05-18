@@ -64,7 +64,10 @@ class _EditableAvatarState extends State<EditableAvatar> {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          InAppAvatar(_data?.data ?? widget.image ?? InAppPlaceholders.user),
+          InAppAvatar(
+            _data?.data ?? widget.image ?? InAppPlaceholders.user,
+            size: double.infinity,
+          ),
           Positioned(
             bottom: 0,
             right: 0,
