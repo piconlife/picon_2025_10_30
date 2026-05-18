@@ -147,6 +147,7 @@ dependencies:
   audioplayers: ^6.6.0
   type_ahead_text_field: ^0.0.5
   meta: ^1.17.0
+  photo_manager: ^3.9.0
 
 dev_dependencies:
   # ------------------------------------------------------------------------------------------------
