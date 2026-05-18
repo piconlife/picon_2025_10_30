@@ -8,8 +8,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:photo_manager/photo_manager.dart'
     hide PermissionState, AssetType;
 
-import '../../roots/preferences/preferences.dart';
-import '../../roots/utils/device_settings.dart';
+import '../../../roots/preferences/preferences.dart' show Preferences;
+import '../../../roots/utils/device_settings.dart' show DeviceSettings;
 import 'data.dart' show GalleryData;
 import 'directory.dart' show GalleryDirectory;
 import 'enums.dart';
