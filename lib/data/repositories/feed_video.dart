@@ -1,4 +1,4 @@
-import '../../app/imports/data_management.dart' show RemoteDataRepository;
+import '../../packages/data_management.dart' show RemoteDataRepository;
 import '../models/feed_video.dart' show VideoModel;
 import '../sources/local/video.dart' show LocalVideoDataSource;
 import '../sources/remote/feed_video.dart' show RemoteFeedVideoDataSource;

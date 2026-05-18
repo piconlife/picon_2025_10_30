@@ -1,4 +1,4 @@
-import '../../app/imports/data_management.dart' show DataConnectivityDelegate;
+import '../../packages/data_management.dart' show DataConnectivityDelegate;
 import '../../roots/helpers/connectivity.dart' show ConnectivityHelper;
 
 class ConnectivityDelegate extends DataConnectivityDelegate {

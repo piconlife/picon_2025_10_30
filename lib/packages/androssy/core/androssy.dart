@@ -3,15 +3,11 @@ import 'package:flutter/material.dart';
 import 'cached_network_image.dart';
 import 'svg_picture.dart';
 
-typedef AndrossyBuilder<Config> = Widget Function(
-  BuildContext context,
-  Config config,
-);
+typedef AndrossyBuilder<Config> =
+    Widget Function(BuildContext context, Config config);
 
-typedef AndrossyConverter<Config> = String Function(
-  BuildContext context,
-  String raw,
-);
+typedef AndrossyConverter<Config> =
+    String Function(BuildContext context, String raw);
 
 class Androssy {
   final AndrossyBuilder<AndrossyNetworkImageConfig>? cachedNetworkImageBuilder;

@@ -4,11 +4,17 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:in_app_navigator/route.dart';
 
 import '../../../../app/constants/limitations.dart';
 import '../../../../app/interfaces/dialog_date_picker.dart';
+import '../../../../packages/imports.dart'
+    show
+        AndrossyFieldProperty,
+        AndrossyField,
+        AndrossyFieldState,
+        FloatingVisibility,
+        AndrossyForm;
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/gesture.dart';

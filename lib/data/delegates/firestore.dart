@@ -1,4 +1,4 @@
-import '../../app/imports/cloud_firestore.dart'
+import '../../packages/cloud_firestore.dart'
     show
         AggregateQuerySnapshot,
         DocumentSnapshot,
@@ -9,7 +9,7 @@ import '../../app/imports/cloud_firestore.dart'
         QuerySnapshot,
         SetOptions,
         WriteBatch;
-import '../../app/imports/data_management.dart'
+import '../../packages/data_management.dart'
     show
         Checker,
         DataAggregateSnapshot,

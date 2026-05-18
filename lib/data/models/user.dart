@@ -6,7 +6,7 @@ import 'package:picon/data/parsers/enum_parser.dart';
 
 import '../../app/constants/limitations.dart';
 import '../../app/helpers/user.dart';
-import '../../app/imports/auth_management.dart' show AuthKeys, Auth;
+import '../../packages/auth_management.dart' show AuthKeys, Auth;
 import '../enums/gender.dart';
 import '../enums/lifestyle.dart';
 import '../enums/marital_status.dart';

@@ -2,11 +2,11 @@ import 'package:app_color/app_color.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/spacing.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:in_app_navigator/route.dart';
 
 import '../../../../app/devs/nav_content.dart';
 import '../../../../app/res/icons.dart';
+import '../../../../packages/imports.dart' show AndrossyTab;
 import '../../../../roots/widgets/floating_action_button.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/user_avatar.dart';

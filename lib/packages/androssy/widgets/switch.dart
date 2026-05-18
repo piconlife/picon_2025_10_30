@@ -123,10 +123,7 @@ class _SwitchButtonState extends State<AndrossySwitch>
       begin: Alignment.centerLeft,
       end: Alignment.centerRight,
     ).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.linear,
-      ),
+      CurvedAnimation(parent: _animationController, curve: Curves.linear),
     );
   }
 
@@ -168,7 +165,8 @@ class _SwitchButtonState extends State<AndrossySwitch>
     ).detect(active);
 
     var trackOutlineColor = AndrossySwitchContent(
-      active: I.activeTrackStrokeColor ??
+      active:
+          I.activeTrackStrokeColor ??
           theme.trackOutlineColor(WidgetState.selected) ??
           Colors.transparent,
       inactive:
@@ -176,7 +174,8 @@ class _SwitchButtonState extends State<AndrossySwitch>
     ).detect(active);
 
     var thumbColor = AndrossySwitchContent(
-      active: I.activeThumbColor ??
+      active:
+          I.activeThumbColor ??
           theme.thumbColor(WidgetState.selected) ??
           colorScheme.surface,
       inactive: I.inactiveThumbColor ?? theme.thumbColor.none ?? mIC,
@@ -224,13 +223,14 @@ class _SwitchButtonState extends State<AndrossySwitch>
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(borderRadius),
               color: trackColor,
-              border: trackStrokeSize > 0
-                  ? Border.all(
-                      color: trackOutlineColor,
-                      strokeAlign: BorderSide.strokeAlignInside,
-                      width: trackStrokeSize,
-                    )
-                  : null,
+              border:
+                  trackStrokeSize > 0
+                      ? Border.all(
+                        color: trackOutlineColor,
+                        strokeAlign: BorderSide.strokeAlignInside,
+                        width: trackStrokeSize,
+                      )
+                      : null,
             ),
             child: Align(
               alignment: _toggleAnimation.value,
@@ -242,27 +242,27 @@ class _SwitchButtonState extends State<AndrossySwitch>
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: thumbColor,
-                  border: thumbStrokeSize > 0
-                      ? Border.all(
-                          strokeAlign: BorderSide.strokeAlignInside,
-                          color: thumbStrokeColor,
-                          width: thumbStrokeSize,
-                        )
-                      : null,
+                  border:
+                      thumbStrokeSize > 0
+                          ? Border.all(
+                            strokeAlign: BorderSide.strokeAlignInside,
+                            color: thumbStrokeColor,
+                            width: thumbStrokeSize,
+                          )
+                          : null,
                 ),
-                child: thumbIcon != null
-                    ? FittedBox(
-                        child: Padding(
-                          padding: EdgeInsets.all(
-                            I.thumbIconSpacing ?? 0,
+                child:
+                    thumbIcon != null
+                        ? FittedBox(
+                          child: Padding(
+                            padding: EdgeInsets.all(I.thumbIconSpacing ?? 0),
+                            child: AndrossyIcon(
+                              thumbIcon,
+                              color: thumbIconTint,
+                            ),
                           ),
-                          child: AndrossyIcon(
-                            thumbIcon,
-                            color: thumbIconTint,
-                          ),
-                        ),
-                      )
-                    : null,
+                        )
+                        : null,
               ),
             ),
           ),
@@ -407,10 +407,8 @@ class AndrossySwitchContent<T> {
   final T active;
   final T inactive;
 
-  const AndrossySwitchContent({
-    required this.active,
-    T? inactive,
-  }) : inactive = inactive ?? active;
+  const AndrossySwitchContent({required this.active, T? inactive})
+    : inactive = inactive ?? active;
 
   T detect(bool isActivated) => isActivated ? active : inactive;
 }

@@ -18,7 +18,7 @@ class AndrossyButtonProperty<T> {
   });
 
   const AndrossyButtonProperty.all(T value)
-      : this(activated: value, disabled: value, enabled: value, loading: value);
+    : this(activated: value, disabled: value, enabled: value, loading: value);
 
   T? from(AndrossyButtonPropertyState state) {
     switch (state) {
@@ -218,7 +218,8 @@ class AndrossyButtonState extends State<AndrossyButton> {
     final text = widget.texts?.from(state) ?? widget.text ?? "";
 
     final primaryColor = widget.primary ?? Theme.of(context).primaryColor;
-    final isClickMode = widget.onTap != null ||
+    final isClickMode =
+        widget.onTap != null ||
         widget.onToggle != null ||
         widget.onDoubleTap != null ||
         widget.onLongPress != null ||
@@ -226,25 +227,27 @@ class AndrossyButtonState extends State<AndrossyButton> {
 
     final borderColor = widget.borderColor.from(state);
 
-    final foregroundColor = (enabled && isClickMode) || _loading
-        ? activated
-            ? widget.borderOnly
-                ? borderColor ?? primaryColor
-                : primaryColor
-            : widget.borderOnly
+    final foregroundColor =
+        (enabled && isClickMode) || _loading
+            ? activated
+                ? widget.borderOnly
+                    ? borderColor ?? primaryColor
+                    : primaryColor
+                : widget.borderOnly
                 ? borderColor ?? primaryColor
                 : Colors.white
-        : Colors.grey.withValues(alpha: 0.75);
+            : Colors.grey.withValues(alpha: 0.75);
 
     return AndrossyGesture(
-      backgroundColor: !widget.borderOnly
-          ? widget.backgroundColor.from(state) ??
-              ((enabled && isClickMode) || _loading
-                  ? activated
-                      ? primaryColor.withValues(alpha: 0.1)
-                      : primaryColor
-                  : Colors.grey.withValues(alpha: 0.1))
-          : null,
+      backgroundColor:
+          !widget.borderOnly
+              ? widget.backgroundColor.from(state) ??
+                  ((enabled && isClickMode) || _loading
+                      ? activated
+                          ? primaryColor.withValues(alpha: 0.1)
+                          : primaryColor
+                      : Colors.grey.withValues(alpha: 0.1))
+              : null,
       effects: widget.clickEffects,
       clipBehavior: Clip.antiAlias,
       enabled: widget.enabled,
@@ -259,17 +262,19 @@ class AndrossyButtonState extends State<AndrossyButton> {
       splashFactory: widget.splashFactory,
       materialType: widget.borderOnly ? MaterialType.transparency : null,
       shape: RoundedRectangleBorder(
-        side: borderColor != null || widget.borderOnly
-            ? BorderSide(
-                color: borderColor ?? foregroundColor,
-                width: widget.borderWidth,
-              )
-            : BorderSide.none,
+        side:
+            borderColor != null || widget.borderOnly
+                ? BorderSide(
+                  color: borderColor ?? foregroundColor,
+                  width: widget.borderWidth,
+                )
+                : BorderSide.none,
         borderRadius: widget.borderRadius ?? BorderRadius.circular(24),
       ),
-      onTap: _clickable && (widget.onTap != null || widget.onToggle != null)
-          ? _onTap
-          : null,
+      onTap:
+          _clickable && (widget.onTap != null || widget.onToggle != null)
+              ? _onTap
+              : null,
       onDoubleTap: _clickable ? widget.onDoubleTap : null,
       onLongPress: _clickable ? widget.onLongPress : null,
       onHover: _clickable ? widget.onHover : null,

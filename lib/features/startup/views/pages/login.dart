@@ -4,13 +4,18 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_analytics/analytics.dart';
 import 'package:in_app_navigator/route.dart';
 
 import '../../../../app/constants/app.dart';
-import '../../../../app/imports/auth_management.dart'
+import '../../../../app/res/icons.dart';
+import '../../../../data/models/user.dart';
+import '../../../../data/parsers/phone_parser.dart';
+import '../../../../data/parsers/user_parser.dart';
+import '../../../../data/parsers/validations.dart';
+import '../../../../data/use_cases/user/find_user_by_phone.dart';
+import '../../../../packages/auth_management.dart'
     show
         AuthListener,
         AuthHelper,
@@ -18,12 +23,16 @@ import '../../../../app/imports/auth_management.dart'
         PhoneAuthenticator,
         EmailAuthenticator,
         AuthBuilder;
-import '../../../../app/res/icons.dart';
-import '../../../../data/models/user.dart';
-import '../../../../data/parsers/phone_parser.dart';
-import '../../../../data/parsers/user_parser.dart';
-import '../../../../data/parsers/validations.dart';
-import '../../../../data/use_cases/user/find_user_by_phone.dart';
+import '../../../../packages/imports.dart'
+    show
+        AndrossyFieldProperty,
+        AndrossyField,
+        AndrossyFieldState,
+        FloatingVisibility,
+        AndrossyForm,
+        AndrossyOption,
+        AndrossyOptionProperty,
+        AndrossyFieldTweenProperty;
 import '../../../../roots/helpers/connectivity.dart';
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/filled_button.dart';

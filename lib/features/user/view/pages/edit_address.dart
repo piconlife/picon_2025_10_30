@@ -4,11 +4,12 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions/spacing.dart';
 import 'package:flutter_andomie/extensions/string.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/res/icons.dart';
+import '../../../../packages/imports.dart'
+    show AndrossyFieldProperty, AndrossyField, FloatingVisibility, AndrossyForm;
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/image.dart';

@@ -20,18 +20,14 @@ class AndrossyDataResponse<T extends Object?> {
   final String error;
   final T? data;
 
-  const AndrossyDataResponse.call(this.data)
-      : loading = false,
-        error = '';
+  const AndrossyDataResponse.call(this.data) : loading = false, error = '';
 
-  const AndrossyDataResponse.loader(this.loading)
-      : data = null,
-        error = '';
+  const AndrossyDataResponse.loader(this.loading) : data = null, error = '';
 
   const AndrossyDataResponse.failure(Object? error)
-      : data = null,
-        loading = false,
-        error = '$error';
+    : data = null,
+      loading = false,
+      error = '$error';
 }
 
 class AndrossyDataKeeper<T extends Object?> extends StatefulWidget {

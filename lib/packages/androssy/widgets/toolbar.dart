@@ -57,7 +57,7 @@ class AndrossyToolbar extends StatelessWidget {
       children: [
         if (leading != null) ...[leading!, SizedBox(width: titleSpace)],
         Expanded(child: _title(context)),
-        ...actions
+        ...actions,
       ],
     );
   }

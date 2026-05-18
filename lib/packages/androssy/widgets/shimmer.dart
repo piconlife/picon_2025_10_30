@@ -79,16 +79,8 @@ class _AndrossyShimmerState extends State<AndrossyShimmer>
       )..repeat();
 
       _gradient = LinearGradient(
-        colors: [
-          widget.baseColor,
-          widget.highlightColor,
-          widget.baseColor,
-        ],
-        stops: const [
-          0.1,
-          0.3,
-          0.4,
-        ],
+        colors: [widget.baseColor, widget.highlightColor, widget.baseColor],
+        stops: const [0.1, 0.3, 0.4],
         begin: const Alignment(-1.0, -0.3),
         end: const Alignment(1.0, 0.3),
       );
@@ -116,10 +108,9 @@ class _AndrossyShimmerState extends State<AndrossyShimmer>
           ),
           weight: widget.fadeWeight,
         ),
-      ]).animate(CurvedAnimation(
-        parent: _fadeController!,
-        curve: Curves.easeInOut,
-      ));
+      ]).animate(
+        CurvedAnimation(parent: _fadeController!, curve: Curves.easeInOut),
+      );
       _fadeController!.repeat(reverse: true);
     }
   }

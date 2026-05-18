@@ -4,11 +4,12 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_andomie/utils/date_helper.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/res/placeholders.dart';
 import '../../../../data/models/content.dart';
 import '../../../../data/models/user.dart';
+import '../../../../packages/imports.dart'
+    show AndrossyThumbnail, AndrossyExpandableText;
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/text.dart';
 import '../../../../roots/widgets/user_builder.dart';

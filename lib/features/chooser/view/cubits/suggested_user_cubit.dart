@@ -8,8 +8,8 @@ import 'package:flutter_entity/entity.dart';
 import 'package:random_avatar/random_avatar.dart';
 
 import '../../../../app/helpers/user.dart';
-import '../../../../app/imports/data_management.dart' show DataFieldValue;
 import '../../../../data/models/user.dart';
+import '../../../../packages/data_management.dart' show DataFieldValue;
 
 class SuggestedUsersCubit extends Cubit<Response<Selection<UserModel>>> {
   SuggestedUsersCubit() : super(Response());

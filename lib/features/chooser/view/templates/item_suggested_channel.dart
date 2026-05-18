@@ -4,11 +4,11 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/models/selection.dart';
 import 'package:flutter_andomie/utils/validator.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/res/icons.dart';
 import '../../../../app/styles/fonts.dart';
 import '../../../../data/models/channel.dart';
+import '../../../../packages/imports.dart' show AndrossyShimmer;
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/pleasure_button.dart';

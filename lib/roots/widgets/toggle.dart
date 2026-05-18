@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
+
+import '../../packages/imports.dart'
+    show AndrossyGesture, GestureAnimation, Selector;
 
 class InAppToggle extends StatefulWidget {
   final bool enabled;

@@ -119,27 +119,23 @@ class AndrossyImage extends StatelessWidget {
           width: width,
           height: height,
           fit: fit ?? BoxFit.contain,
-          colorFilter: tint != null
-              ? ColorFilter.mode(
-                  tint!,
-                  tintMode ?? BlendMode.srcIn,
-                )
-              : null,
+          colorFilter:
+              tint != null
+                  ? ColorFilter.mode(tint!, tintMode ?? BlendMode.srcIn)
+                  : null,
           theme: AndrossySvgTheme(
             currentColor: tint ?? const Color(0xFF808080),
           ),
-          source: type == AndrossyImageType.svg
-              ? AndrossySvgSource.asset
-              : type == AndrossyImageType.svgNetwork
+          source:
+              type == AndrossyImageType.svg
+                  ? AndrossySvgSource.asset
+                  : type == AndrossyImageType.svgNetwork
                   ? AndrossySvgSource.network
                   : AndrossySvgSource.string,
         ),
       );
     } else {
-      return SizedBox(
-        width: width,
-        height: height,
-      );
+      return SizedBox(width: width, height: height);
     }
   }
 }

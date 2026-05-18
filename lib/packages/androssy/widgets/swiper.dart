@@ -52,10 +52,11 @@ class _AndrossySwiperState extends State<AndrossySwiper> {
       final offsetDifference = initialOffset.dy - finalOffset.dy;
 
       if (offsetDifference.abs() > widget.swipeConfig.verticalThreshold) {
-        _initialSwipeOffset = widget.swipeConfig.swipeDetectionBehavior ==
-                AndrossySwipeDetectionBehavior.singular
-            ? null
-            : _finalSwipeOffset;
+        _initialSwipeOffset =
+            widget.swipeConfig.swipeDetectionBehavior ==
+                    AndrossySwipeDetectionBehavior.singular
+                ? null
+                : _finalSwipeOffset;
 
         final direction =
             offsetDifference > 0 ? AxisDirection.up : AxisDirection.down;
@@ -111,10 +112,11 @@ class _AndrossySwiperState extends State<AndrossySwiper> {
       final offsetDifference = initialOffset.dx - finalOffset.dx;
 
       if (offsetDifference.abs() > widget.swipeConfig.horizontalThreshold) {
-        _initialSwipeOffset = widget.swipeConfig.swipeDetectionBehavior ==
-                AndrossySwipeDetectionBehavior.singular
-            ? null
-            : _finalSwipeOffset;
+        _initialSwipeOffset =
+            widget.swipeConfig.swipeDetectionBehavior ==
+                    AndrossySwipeDetectionBehavior.singular
+                ? null
+                : _finalSwipeOffset;
 
         final direction =
             offsetDifference > 0 ? AxisDirection.left : AxisDirection.right;

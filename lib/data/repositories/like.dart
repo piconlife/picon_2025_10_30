@@ -1,4 +1,4 @@
-import '../../app/imports/data_management.dart' show RemoteDataRepository;
+import '../../packages/data_management.dart' show RemoteDataRepository;
 import '../models/like.dart' show LikeModel;
 import '../sources/local/like.dart' show LocalLikeDataSource;
 import '../sources/remote/like.dart' show RemoteLikeDataSource;

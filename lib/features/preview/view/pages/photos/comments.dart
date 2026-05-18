@@ -12,7 +12,6 @@ import 'package:flutter_entity/entity.dart';
 import 'package:picon/roots/widgets/gesture.dart';
 
 import '../../../../../app/helpers/user.dart';
-import '../../../../../app/imports/data_management.dart' show DataFieldValue;
 import '../../../../../app/res/icons.dart';
 import '../../../../../app/styles/fonts.dart';
 import '../../../../../data/constants/paths.dart';
@@ -20,6 +19,7 @@ import '../../../../../data/enums/comment_type.dart';
 import '../../../../../data/models/comment.dart';
 import '../../../../../data/models/content.dart';
 import '../../../../../data/models/user.dart';
+import '../../../../../packages/data_management.dart' show DataFieldValue;
 import '../../../../../roots/extensions/time_ago.dart';
 import '../../../../../roots/services/path_provider.dart';
 import '../../../../../roots/widgets/bottom_bar.dart';

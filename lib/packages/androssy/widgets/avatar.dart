@@ -42,7 +42,8 @@ class AndrossyAvatar extends StatelessWidget {
         child: AndrossyImage(
           data,
           fit: BoxFit.cover,
-          networkImageConfig: networkImageConfig ??
+          networkImageConfig:
+              networkImageConfig ??
               AndrossyNetworkImageConfig(
                 errorWidget: (_, __, ___) => const SizedBox(),
               ),

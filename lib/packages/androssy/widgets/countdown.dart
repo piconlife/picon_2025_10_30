@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-typedef AndrossyCountdownBuilder = Widget Function(
-  BuildContext context,
-  Duration duration,
-);
+typedef AndrossyCountdownBuilder =
+    Widget Function(BuildContext context, Duration duration);
 typedef AndrossyCountdownRemainingListener = void Function(Duration duration);
 typedef AndrossyCountdownCompleteListener = void Function(bool complete);
 

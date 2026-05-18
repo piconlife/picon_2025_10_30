@@ -1,6 +1,5 @@
-import 'package:flutter_androssy_kits/widgets.dart';
-
 import '../../app/constants/limitations.dart';
+import '../../packages/imports.dart' show AndrossyFieldError;
 
 class AuthErrors {
   const AuthErrors._();

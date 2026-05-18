@@ -1,4 +1,4 @@
-import '../../app/imports/data_management.dart' show RemoteDataRepository;
+import '../../packages/data_management.dart' show RemoteDataRepository;
 import '../models/bookmark.dart' show BookmarkModel;
 import '../sources/local/bookmark.dart' show LocalBookmarkDataSource;
 import '../sources/remote/bookmark.dart' show RemoteBookmarkDataSource;

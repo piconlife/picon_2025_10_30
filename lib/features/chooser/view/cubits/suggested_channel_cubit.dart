@@ -9,9 +9,9 @@ import 'package:random_avatar/random_avatar.dart';
 
 import '../../../../app/devs/fake.dart';
 import '../../../../app/helpers/user.dart';
-import '../../../../app/imports/data_management.dart' show DataFieldValue;
 import '../../../../data/models/channel.dart';
 import '../../../../data/models/user.dart';
+import '../../../../packages/data_management.dart' show DataFieldValue;
 
 class SuggestedChannelsCubit extends Cubit<Response<Selection<Channel>>> {
   SuggestedChannelsCubit() : super(Response());

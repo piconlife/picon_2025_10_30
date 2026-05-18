@@ -1,4 +1,4 @@
-import '../../../app/imports/data_management.dart'
+import '../../../packages/data_management.dart'
     show IterableParams, DataFieldParams;
 import '../../repositories/content.dart';
 

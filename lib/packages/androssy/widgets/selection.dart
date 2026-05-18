@@ -2,19 +2,16 @@ import 'package:flutter/material.dart';
 
 typedef AndrossySelectionCallback = void Function(String tag);
 typedef AndrossySelectionTagBuilder<T> = String Function(T value);
-typedef AndrossySelectionSearchBuilder<T> = bool Function(
-  String query,
-  T value,
-);
-typedef AndrossySelectionListBuilder<T> = Widget Function(
-  BuildContext context,
-  List<Widget> children,
-);
+typedef AndrossySelectionSearchBuilder<T> =
+    bool Function(String query, T value);
+typedef AndrossySelectionListBuilder<T> =
+    Widget Function(BuildContext context, List<Widget> children);
 
-typedef AndrossySelectionBuilder<T> = Widget Function(
-  BuildContext context,
-  AndrossySelectionInstance<T> instance,
-);
+typedef AndrossySelectionBuilder<T> =
+    Widget Function(
+      BuildContext context,
+      AndrossySelectionInstance<T> instance,
+    );
 
 final class AndrossySelectionInstance<T> {
   int index;
@@ -96,16 +93,17 @@ class _AndrossySelectionState<T> extends State<AndrossySelection<T>> {
 
   void _init() {
     _tags = List.from(widget.initialTags);
-    _roots = List.generate(widget.items.length, (index) {
-      final e = widget.items.elementAt(index);
-      final tag = widget.tagBuilder(e);
-      return AndrossySelectionInstance._(
-        index: index,
-        tag: tag,
-        data: e,
-        callback: _put,
-      );
-    }).toList();
+    _roots =
+        List.generate(widget.items.length, (index) {
+          final e = widget.items.elementAt(index);
+          final tag = widget.tagBuilder(e);
+          return AndrossySelectionInstance._(
+            index: index,
+            tag: tag,
+            data: e,
+            callback: _put,
+          );
+        }).toList();
     _filtered = widget.filterMode ? _merge((e) => e.tag) : _roots;
     _temp = _filtered;
     if (_isFilterMode) widget.controller?.addListener(_filter);
@@ -184,10 +182,7 @@ class _AndrossySelectionState<T> extends State<AndrossySelection<T>> {
   Widget build(BuildContext context) {
     final children = List.generate(_temp.length, (index) {
       final item = _temp.elementAt(index);
-      return widget.builder(
-        context,
-        item..selected = _tags.contains(item.tag),
-      );
+      return widget.builder(context, item..selected = _tags.contains(item.tag));
     });
     if (widget.listBuilder != null) {
       return widget.listBuilder!(context, children);

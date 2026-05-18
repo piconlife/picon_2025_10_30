@@ -5,21 +5,15 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:in_app_navigator/route.dart';
 
 import '../../../../app/constants/limitations.dart';
-import '../../../../app/imports/auth_management.dart'
-    show
-        AuthListener,
-        AuthHelper,
-        AuthStatus,
-        PhoneAuthenticator,
-        EmailAuthenticator,
-        AuthBuilder,
-        OtpAuthenticator;
 import '../../../../data/models/user.dart';
 import '../../../../data/parsers/validations.dart';
+import '../../../../packages/auth_management.dart'
+    show AuthHelper, PhoneAuthenticator, OtpAuthenticator;
+import '../../../../packages/imports.dart'
+    show AndrossyField, AndrossyCountdownState, AndrossyCountdown;
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/logo_trailing.dart';

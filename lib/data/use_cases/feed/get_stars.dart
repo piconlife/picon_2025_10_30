@@ -2,9 +2,9 @@ import 'package:flutter_entity/entity.dart';
 import 'package:in_app_configs/configs.dart';
 
 import '../../../app/helpers/user.dart';
-import '../../../app/imports/data_management.dart'
-    show DataQuery, DataSelection, DataSorting, DataFetchOptions;
 import '../../../app/utils/geo_pointer.dart';
+import '../../../packages/data_management.dart'
+    show DataQuery, DataSelection, DataSorting, DataFetchOptions;
 import '../../constants/keys.dart';
 import '../../models/feed.dart';
 import 'base.dart';

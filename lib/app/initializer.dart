@@ -5,7 +5,7 @@ import 'package:in_app_analytics/analytics.dart';
 import '../data/delegates/cache.dart' show CacheDelegate;
 import '../data/delegates/connectivity.dart' show ConnectivityDelegate;
 import '../firebase_options.dart';
-import 'imports/data_management.dart' show DM;
+import '../packages/data_management.dart' show DM;
 import 'utils/secret_code.dart';
 
 Future<void> _initFirebase() async {

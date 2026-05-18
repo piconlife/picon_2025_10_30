@@ -1,4 +1,4 @@
-import '../../../app/imports/data_management.dart' show IterableParams;
+import '../../../packages/data_management.dart' show IterableParams;
 import '../../repositories/feed_comment.dart';
 
 class CommentBaseUseCase {

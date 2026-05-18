@@ -6,15 +6,12 @@ import 'package:flutter_andomie/extensions/spacing.dart';
 import 'package:flutter_andomie/utils/path_replacer.dart';
 import 'package:flutter_andomie/utils/validator.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
-import '../../../../app/imports/auth_management.dart'
-    show AuthHelper, AuthBuilder;
 import '../../../../app/interfaces/bsd_privacy.dart';
 import '../../../../app/interfaces/dialog_alert.dart';
 import '../../../../app/res/icons.dart';
@@ -28,6 +25,14 @@ import '../../../../data/models/feed.dart';
 import '../../../../data/models/user.dart';
 import '../../../../data/models/user_avatar.dart';
 import '../../../../data/models/user_post.dart' show PostModel;
+import '../../../../packages/auth_management.dart' show AuthHelper, AuthBuilder;
+import '../../../../packages/imports.dart'
+    show
+        AndrossyFieldProperty,
+        AndrossyField,
+        AndrossyButton,
+        AndrossyButtonProperty,
+        GestureAnimation;
 import '../../../../roots/contents/media.dart';
 import '../../../../roots/helpers/connectivity.dart';
 import '../../../../roots/services/storage.dart';

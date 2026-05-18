@@ -3,10 +3,11 @@ import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/res/placeholders.dart';
 import '../../../../data/models/content.dart';
+import '../../../../packages/imports.dart'
+    show AndrossyImageGrid, AndrossyExpandableText;
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/hero.dart';
 import '../../../../roots/widgets/image.dart';

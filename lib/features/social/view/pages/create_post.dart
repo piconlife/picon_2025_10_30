@@ -6,7 +6,6 @@ import 'package:flutter_andomie/extensions/list.dart';
 import 'package:flutter_andomie/utils/key_generator.dart';
 import 'package:flutter_andomie/utils/path_replacer.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_entity/flutter_entity.dart';
 import 'package:in_app_navigator/route.dart';
 import 'package:in_app_settings/in_app_settings.dart';
@@ -14,8 +13,6 @@ import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
-import '../../../../app/imports/data_management.dart'
-    show DataFieldValue, DataFieldValueWriter;
 import '../../../../app/interfaces/bsd_audience.dart';
 import '../../../../app/interfaces/bsd_privacy.dart';
 import '../../../../app/res/msg.dart';
@@ -29,6 +26,15 @@ import '../../../../data/models/content.dart';
 import '../../../../data/models/feed.dart';
 import '../../../../data/models/photo.dart';
 import '../../../../data/models/user_post.dart';
+import '../../../../packages/data_management.dart'
+    show DataFieldValue, DataFieldValueWriter;
+import '../../../../packages/imports.dart'
+    show
+        AndrossyFieldProperty,
+        AndrossyField,
+        ObserverExtension,
+        AndrossyObserver,
+        FloatingVisibility;
 import '../../../../roots/contents/media.dart';
 import '../../../../roots/helpers/connectivity.dart';
 import '../../../../roots/services/path_provider.dart';

@@ -10,11 +10,11 @@ import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
 
 import '../../../../app/base/data_cubit.dart';
-import '../../../../app/imports/data_management.dart' show DataFieldValue;
 import '../../../../data/constants/keys.dart';
 import '../../../../data/enums/privacy.dart';
 import '../../../../data/models/content.dart';
 import '../../../../data/use_cases/content/update.dart';
+import '../../../../packages/data_management.dart' show DataFieldValue;
 import '../../../../roots/widgets/image.dart';
 import '../../../../roots/widgets/layout.dart';
 import '../../../../roots/widgets/scaffold.dart';

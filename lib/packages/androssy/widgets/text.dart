@@ -122,38 +122,40 @@ class AndrossyText extends StatelessWidget {
     final mPC = onPrefixClick ?? onClick;
     final mSC = onSuffixClick ?? onClick;
 
-    final span = isSpannable
-        ? TextSpan(
-            style: isEllipsis ? mStyle : null,
-            semanticsLabel: semanticsLabel,
-            children: [
-              if (isPrefix)
-                TextSpan(
-                  text: prefix,
-                  recognizer: mPC != null ? _(context, mPC) : null,
-                  style: prefixStyle ?? mStyle,
-                ),
-              if (data != null || data!.isNotEmpty)
-                TextSpan(
-                  text: data,
-                  recognizer: onClick != null ? _(context, onClick!) : null,
-                ),
-              ..._spans(context, spans),
-              if (isSuffix)
-                TextSpan(
-                  text: suffix,
-                  recognizer: mSC != null ? _(context, mSC) : null,
-                  style: suffixStyle ?? mStyle,
-                ),
-            ],
-          )
-        : null;
+    final span =
+        isSpannable
+            ? TextSpan(
+              style: isEllipsis ? mStyle : null,
+              semanticsLabel: semanticsLabel,
+              children: [
+                if (isPrefix)
+                  TextSpan(
+                    text: prefix,
+                    recognizer: mPC != null ? _(context, mPC) : null,
+                    style: prefixStyle ?? mStyle,
+                  ),
+                if (data != null || data!.isNotEmpty)
+                  TextSpan(
+                    text: data,
+                    recognizer: onClick != null ? _(context, onClick!) : null,
+                  ),
+                ..._spans(context, spans),
+                if (isSuffix)
+                  TextSpan(
+                    text: suffix,
+                    recognizer: mSC != null ? _(context, mSC) : null,
+                    style: suffixStyle ?? mStyle,
+                  ),
+              ],
+            )
+            : null;
 
     if (isEllipsis) {
       return LayoutBuilder(
         builder: (context, constraints) {
           final painter = TextPainter(
-            text: span ??
+            text:
+                span ??
                 TextSpan(
                   text: data,
                   style: mStyle,

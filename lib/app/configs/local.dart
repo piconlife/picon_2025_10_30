@@ -3,7 +3,6 @@ import 'package:flutter_androssy_dialogs/dialogs.dart';
 import 'package:in_app_configs/configs.dart';
 import 'package:object_finder/object_finder.dart';
 
-import '../../app/imports/in_app_database.dart';
 import '../../app/interfaces/bsd_audience.dart';
 import '../../app/interfaces/bsd_privacy.dart';
 import '../../app/interfaces/dialog_big_photo.dart';
@@ -14,6 +13,7 @@ import '../../features/shop/view/dialogs/bsd_market_format.dart';
 import '../../features/shore/view/dialogs/bsd_grocery_format.dart';
 import '../../features/social/view/dialogs/bsd_feed_format.dart';
 import '../../features/startup/views/dialogs/auth_biometric_permission.dart';
+import '../../packages/in_app_database.dart';
 import '../delegates/in_app_purchase_test.dart';
 
 /// Default configuration constants

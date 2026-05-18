@@ -116,9 +116,10 @@ class AndrossyTabState extends State<AndrossyTab> {
       indicator: widget.indicator,
       indicatorColor: widget.indicatorColor,
       indicatorPadding: widget.indicatorPadding,
-      indicatorSize: widget.indicatorFullWidth
-          ? TabBarIndicatorSize.tab
-          : TabBarIndicatorSize.label,
+      indicatorSize:
+          widget.indicatorFullWidth
+              ? TabBarIndicatorSize.tab
+              : TabBarIndicatorSize.label,
       indicatorWeight: widget.indicatorWeight,
       isScrollable: widget.isScrollable,
       labelPadding: widget.isScrollable ? widget.margin : null,

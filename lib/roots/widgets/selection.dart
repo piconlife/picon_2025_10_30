@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
+
+import '../../packages/imports.dart'
+    show
+        AndrossySelectionBuilder,
+        AndrossySelectionSearchBuilder,
+        AndrossySelectionTagBuilder,
+        AndrossySelectionListBuilder,
+        AndrossySelection;
 
 class InAppSelection<T> extends StatelessWidget {
   final TextEditingController? controller;

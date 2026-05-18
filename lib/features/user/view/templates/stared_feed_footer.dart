@@ -5,10 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_andomie/utils/converter.dart';
 import 'package:flutter_andomie/utils/validator.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/helpers/user.dart';
-import '../../../../app/imports/data_management.dart' show DataFieldValue;
 import '../../../../app/res/icons.dart';
 import '../../../../data/constants/keys.dart';
 import '../../../../data/enums/privacy.dart';
@@ -16,6 +14,9 @@ import '../../../../data/models/star.dart';
 import '../../../../data/use_cases/star/create.dart';
 import '../../../../data/use_cases/star/delete.dart';
 import '../../../../data/use_cases/user_post/update.dart';
+import '../../../../packages/data_management.dart' show DataFieldValue;
+import '../../../../packages/imports.dart'
+    show ObserverExtension, AndrossyObserver, ObserverIterableExtension;
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/pleasure_button.dart';
 import '../../../../roots/widgets/text.dart';

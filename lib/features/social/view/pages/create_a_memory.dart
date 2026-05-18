@@ -9,7 +9,6 @@ import 'package:flutter_andomie/extensions/list.dart';
 import 'package:flutter_andomie/utils/key_generator.dart';
 import 'package:flutter_andomie/utils/path_replacer.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/flutter_entity.dart';
 import 'package:in_app_navigator/route.dart';
@@ -31,6 +30,12 @@ import '../../../../data/models/user_post.dart';
 import '../../../../data/use_cases/content/create.dart';
 import '../../../../data/use_cases/feed/create.dart';
 import '../../../../data/use_cases/user_post/update.dart';
+import '../../../../packages/imports.dart'
+    show
+        AndrossyFieldProperty,
+        AndrossyField,
+        ObserverExtension,
+        AndrossyObserver;
 import '../../../../roots/contents/media.dart';
 import '../../../../roots/services/path_provider.dart';
 import '../../../../roots/services/storage.dart';

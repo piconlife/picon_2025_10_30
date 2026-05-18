@@ -4,7 +4,7 @@ import 'package:flutter_entity/entity.dart' show Entity, EntityObjectHelper;
 import 'package:in_app_translator/translator.dart' show Translator;
 
 import '../../app/helpers/user.dart' show UserHelper;
-import '../../app/imports/data_management.dart' show DataFieldValueWriter;
+import '../../packages/data_management.dart' show DataFieldValueWriter;
 import '../constants/keys.dart' show Keys;
 import '../enums/audience.dart' show Audience;
 import '../enums/content_state.dart' show ContentUiState;

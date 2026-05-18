@@ -3,12 +3,13 @@ import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/res/icons.dart';
 import '../../../../data/enums/feed_type.dart';
 import '../../../../data/models/content.dart';
 import '../../../../data/models/feed.dart';
+import '../../../../packages/imports.dart'
+    show AndrossySlider, AndrossyExpandableText;
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';
 import '../../../../roots/widgets/image.dart';

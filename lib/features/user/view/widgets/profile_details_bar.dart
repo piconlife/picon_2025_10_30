@@ -4,8 +4,6 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
-import 'package:flutter_androssy_kits/core/cached_network_image.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/route.dart';
@@ -22,6 +20,8 @@ import '../../../../data/models/user_follower.dart';
 import '../../../../data/models/user_following.dart';
 import '../../../../data/models/user_post.dart';
 import '../../../../data/models/user_report.dart';
+import '../../../../packages/imports.dart'
+    show AndrossyNetworkImageConfig, GestureAnimation, AndrossyGesture;
 import '../../../../roots/widgets/avatar.dart';
 import '../../../../roots/widgets/button.dart';
 import '../../../../roots/widgets/gesture.dart';

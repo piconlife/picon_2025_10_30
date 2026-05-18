@@ -1,8 +1,9 @@
 import 'package:app_color/app_color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../app/styles/fonts.dart';
+import '../../packages/imports.dart'
+    show AndrossyButton, AndrossyButtonProperty, GestureAnimation;
 
 class InAppFilledButton extends StatefulWidget {
   final bool enabled;

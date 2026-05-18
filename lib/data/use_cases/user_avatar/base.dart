@@ -1,5 +1,5 @@
 import '../../../app/helpers/user.dart';
-import '../../../app/imports/data_management.dart' show IterableParams;
+import '../../../packages/data_management.dart' show IterableParams;
 import '../../repositories/user_avatar.dart';
 
 class BaseUserAvatarUseCase {

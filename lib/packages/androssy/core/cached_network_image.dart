@@ -1,26 +1,16 @@
 import 'package:flutter/material.dart';
 
-typedef LoadingErrorWidgetBuilder = Widget Function(
-  BuildContext context,
-  String url,
-  Object error,
-);
+typedef LoadingErrorWidgetBuilder =
+    Widget Function(BuildContext context, String url, Object error);
 
-typedef ImageWidgetBuilder = Widget Function(
-  BuildContext context,
-  ImageProvider imageProvider,
-);
+typedef ImageWidgetBuilder =
+    Widget Function(BuildContext context, ImageProvider imageProvider);
 
-typedef PlaceholderWidgetBuilder = Widget Function(
-  BuildContext context,
-  String url,
-);
+typedef PlaceholderWidgetBuilder =
+    Widget Function(BuildContext context, String url);
 
-typedef ProgressIndicatorBuilder = Widget Function(
-  BuildContext context,
-  String url,
-  Object progress,
-);
+typedef ProgressIndicatorBuilder =
+    Widget Function(BuildContext context, String url, Object progress);
 
 class AndrossyNetworkImageConfig {
   final String imageUrl;
@@ -110,10 +100,10 @@ class AndrossyNetworkImageConfig {
     this.placeholderFadeInDuration,
     this.repeat = ImageRepeat.noRepeat,
     this.useOldImageOnUrlChange = false,
-  })  : imageUrl = '',
-        width = null,
-        height = null,
-        fit = null,
-        color = null,
-        colorBlendMode = null;
+  }) : imageUrl = '',
+       width = null,
+       height = null,
+       fit = null,
+       color = null,
+       colorBlendMode = null;
 }

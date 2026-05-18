@@ -1,4 +1,4 @@
-import '../../app/imports/data_management.dart' show DataCacheDelegate;
+import '../../packages/data_management.dart' show DataCacheDelegate;
 import '../../roots/preferences/preferences.dart' show Preferences;
 
 class CacheDelegate extends DataCacheDelegate {

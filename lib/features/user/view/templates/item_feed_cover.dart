@@ -4,7 +4,6 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_andomie/utils/date_helper.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:in_app_navigator/route.dart';
 
 import '../../../../app/res/placeholders.dart';
@@ -12,6 +11,8 @@ import '../../../../data/enums/gender.dart';
 import '../../../../data/models/content.dart';
 import '../../../../data/models/user.dart';
 import '../../../../data/models/user_post.dart';
+import '../../../../packages/imports.dart'
+    show AndrossyExpandableText, AndrossyFlex;
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/hero.dart';
 import '../../../../roots/widgets/image.dart';

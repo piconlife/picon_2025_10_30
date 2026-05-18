@@ -2,9 +2,10 @@ import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../../../app/res/icons.dart';
+import '../../../../packages/imports.dart'
+    show AndrossyShimmer, AndrossySingleton;
 import '../../../../roots/utils/image_provider.dart';
 import '../../../../roots/widgets/gesture.dart';
 import '../../../../roots/widgets/icon.dart';

@@ -1,8 +1,8 @@
-import '../imports/auth_management.dart'
+import '../../packages/auth_management.dart'
     show AuthDelegate, Credential, AuthException;
-import '../imports/firebase_auth.dart' hide AuthProvider;
-import '../imports/flutter_entity.dart' show Response, Status;
-import '../imports/local_auth.dart' show LocalAuthentication;
+import '../../packages/firebase_auth.dart' hide AuthProvider;
+import '../../packages/flutter_entity.dart' show Response, Status;
+import '../../packages/local_auth.dart' show LocalAuthentication;
 
 String? _toMail(String prefix, String suffix, [String type = "com"]) {
   return "$prefix@$suffix.$type";

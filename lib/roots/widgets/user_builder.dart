@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../app/helpers/user.dart';
-import '../../app/imports/auth_management.dart' show AuthBuilder;
 import '../../data/models/user.dart';
 import '../../data/use_cases/user/get.dart';
+import '../../packages/auth_management.dart' show AuthBuilder;
 
 class InAppUserBuilder extends StatefulWidget {
   final String? id;

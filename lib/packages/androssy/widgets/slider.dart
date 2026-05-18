@@ -33,15 +33,11 @@ enum PositionType {
 
   final double? _left, _right, _top, _bottom;
 
-  const PositionType({
-    double? left,
-    double? right,
-    double? top,
-    double? bottom,
-  })  : _left = left,
-        _right = right,
-        _top = top,
-        _bottom = bottom;
+  const PositionType({double? left, double? right, double? top, double? bottom})
+    : _left = left,
+      _right = right,
+      _top = top,
+      _bottom = bottom;
 }
 
 class AndrossySlider extends StatefulWidget {
@@ -142,15 +138,9 @@ class AndrossySlideCounter extends StatelessWidget {
     required this.text,
     this.borderRadius = const BorderRadius.all(Radius.circular(16)),
     this.backgroundColor = Colors.black54,
-    this.padding = const EdgeInsets.symmetric(
-      horizontal: 12,
-      vertical: 6,
-    ),
+    this.padding = const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
     this.margin = const EdgeInsets.all(12),
-    this.style = const TextStyle(
-      fontSize: 12,
-      color: Colors.white,
-    ),
+    this.style = const TextStyle(fontSize: 12, color: Colors.white),
   });
 
   @override
@@ -163,11 +153,7 @@ class AndrossySlideCounter extends StatelessWidget {
       ),
       padding: padding,
       margin: margin,
-      child: Text(
-        text,
-        maxLines: 1,
-        style: style,
-      ),
+      child: Text(text, maxLines: 1, style: style),
     );
   }
 }

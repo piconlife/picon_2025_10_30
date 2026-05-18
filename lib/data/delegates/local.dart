@@ -1,4 +1,4 @@
-import '../../app/imports/data_management.dart'
+import '../../packages/data_management.dart'
     show
         DataWriteBatch,
         DataDelegate,
@@ -14,7 +14,7 @@ import '../../app/imports/data_management.dart'
         DataFieldPath,
         DataFieldPaths,
         DataAggregateSnapshot;
-import '../../app/imports/in_app_database.dart'
+import '../../packages/in_app_database.dart'
     show
         InAppWriteBatch,
         InAppDatabase,

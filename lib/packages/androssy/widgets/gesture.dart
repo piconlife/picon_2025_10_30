@@ -5,11 +5,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-typedef GestureAnimationBuilder = Widget Function(
-  BuildContext context,
-  Animation<double> animation,
-  Widget child,
-);
+typedef GestureAnimationBuilder =
+    Widget Function(
+      BuildContext context,
+      Animation<double> animation,
+      Widget child,
+    );
 
 class AndrossyGesture extends StatefulWidget {
   final double elevation;
@@ -391,9 +392,9 @@ class GestureAnimation {
     this.repeat = false,
     this.begin,
     this.end,
-  })  : _effect =
-            builder != null ? GestureAnimations.custom : GestureAnimations.none,
-        _data = null;
+  }) : _effect =
+           builder != null ? GestureAnimations.custom : GestureAnimations.none,
+       _data = null;
 
   const GestureAnimation.scale({
     this.behavior = AnimationBehavior.normal,
@@ -408,10 +409,10 @@ class GestureAnimation {
     double target = 0.95,
     this.end = 1.0,
     this.repeat = false,
-  })  : _effect = GestureAnimations.scale,
-        begin = target,
-        builder = null,
-        _data = null;
+  }) : _effect = GestureAnimations.scale,
+       begin = target,
+       builder = null,
+       _data = null;
 
   const GestureAnimation.rotate({
     this.behavior = AnimationBehavior.normal,
@@ -426,14 +427,14 @@ class GestureAnimation {
     double target = 1.01,
     double end = 1.0,
     this.repeat = false,
-  })  : _effect = GestureAnimations.rotate,
-        curve = repeat ? Curves.linear : curve,
-        reverseCurve =
-            repeat && reverseCurve != null ? Curves.linear : reverseCurve,
-        begin = repeat ? 1 - (target - 1) : target,
-        end = repeat ? 1 + (target - 1) : end,
-        builder = null,
-        _data = null;
+  }) : _effect = GestureAnimations.rotate,
+       curve = repeat ? Curves.linear : curve,
+       reverseCurve =
+           repeat && reverseCurve != null ? Curves.linear : reverseCurve,
+       begin = repeat ? 1 - (target - 1) : target,
+       end = repeat ? 1 + (target - 1) : end,
+       builder = null,
+       _data = null;
 
   const GestureAnimation.fade({
     this.behavior = AnimationBehavior.normal,
@@ -448,10 +449,10 @@ class GestureAnimation {
     double target = 0.75,
     this.end = 1.0,
     this.repeat = false,
-  })  : _effect = GestureAnimations.fade,
-        begin = target,
-        builder = null,
-        _data = null;
+  }) : _effect = GestureAnimations.fade,
+       begin = target,
+       builder = null,
+       _data = null;
 
   GestureAnimation.pendulum({
     this.behavior = AnimationBehavior.normal,
@@ -466,11 +467,11 @@ class GestureAnimation {
     this.repeat = false,
     double angleDegree = 1.0,
     int swings = 1,
-  })  : _effect = GestureAnimations.pendulum,
-        begin = null,
-        end = null,
-        builder = null,
-        _data = _EffectData(intensity: angleDegree, count: swings);
+  }) : _effect = GestureAnimations.pendulum,
+       begin = null,
+       end = null,
+       builder = null,
+       _data = _EffectData(intensity: angleDegree, count: swings);
 
   GestureAnimation.shake({
     this.behavior = AnimationBehavior.normal,
@@ -485,11 +486,11 @@ class GestureAnimation {
     this.repeat = false,
     double intensity = 4.0,
     int shakes = 3,
-  })  : _effect = GestureAnimations.shake,
-        begin = null,
-        end = null,
-        builder = null,
-        _data = _EffectData(intensity: intensity, count: shakes);
+  }) : _effect = GestureAnimations.shake,
+       begin = null,
+       end = null,
+       builder = null,
+       _data = _EffectData(intensity: intensity, count: shakes);
 
   GestureAnimation.swing({
     this.behavior = AnimationBehavior.normal,
@@ -505,11 +506,11 @@ class GestureAnimation {
     double angleDegree = 1.0,
     double chainLength = 1.0,
     int swings = 1,
-  })  : _effect = GestureAnimations.swing,
-        begin = angleDegree / 360.0,
-        end = chainLength,
-        builder = null,
-        _data = _EffectData(count: swings);
+  }) : _effect = GestureAnimations.swing,
+       begin = angleDegree / 360.0,
+       end = chainLength,
+       builder = null,
+       _data = _EffectData(count: swings);
 
   GestureAnimation.wave({
     this.behavior = AnimationBehavior.normal,
@@ -525,15 +526,15 @@ class GestureAnimation {
     double amplitude = 1.0,
     int waves = 1,
     bool horizontal = false,
-  })  : _effect = GestureAnimations.wave,
-        begin = null,
-        end = null,
-        builder = null,
-        _data = _EffectData(
-          intensity: amplitude,
-          count: waves,
-          shadowOffset: Offset(horizontal ? 1.0 : 0.0, 0.0),
-        );
+  }) : _effect = GestureAnimations.wave,
+       begin = null,
+       end = null,
+       builder = null,
+       _data = _EffectData(
+         intensity: amplitude,
+         count: waves,
+         shadowOffset: Offset(horizontal ? 1.0 : 0.0, 0.0),
+       );
 
   GestureAnimation.wiggle({
     this.behavior = AnimationBehavior.normal,
@@ -548,11 +549,11 @@ class GestureAnimation {
     this.repeat = false,
     double angleDeg = 5.0,
     int wiggles = 3,
-  })  : _effect = GestureAnimations.wiggle,
-        begin = null,
-        end = null,
-        builder = null,
-        _data = _EffectData(intensity: angleDeg, count: wiggles);
+  }) : _effect = GestureAnimations.wiggle,
+       begin = null,
+       end = null,
+       builder = null,
+       _data = _EffectData(intensity: angleDeg, count: wiggles);
 
   GestureAnimation.depth({
     this.behavior = AnimationBehavior.normal,
@@ -571,18 +572,18 @@ class GestureAnimation {
     Offset? shadowOffset,
     BorderRadius? shadowRadius,
     double shadowSpread = 0.0,
-  })  : _effect = GestureAnimations.depth,
-        begin = null,
-        end = null,
-        builder = null,
-        _data = _EffectData(
-          intensity: depth,
-          shadowBlur: shadowBlur,
-          shadowColor: shadowColor,
-          shadowRadius: shadowRadius,
-          shadowSpread: shadowSpread,
-          shadowOffset: shadowOffset ?? Offset.zero,
-        );
+  }) : _effect = GestureAnimations.depth,
+       begin = null,
+       end = null,
+       builder = null,
+       _data = _EffectData(
+         intensity: depth,
+         shadowBlur: shadowBlur,
+         shadowColor: shadowColor,
+         shadowRadius: shadowRadius,
+         shadowSpread: shadowSpread,
+         shadowOffset: shadowOffset ?? Offset.zero,
+       );
 
   GestureAnimation.elevate({
     this.behavior = AnimationBehavior.normal,
@@ -596,11 +597,11 @@ class GestureAnimation {
     this.value = 1.0,
     this.repeat = false,
     double liftPixels = 4.0,
-  })  : _effect = GestureAnimations.elevate,
-        begin = null,
-        end = null,
-        builder = null,
-        _data = _EffectData(intensity: liftPixels);
+  }) : _effect = GestureAnimations.elevate,
+       begin = null,
+       end = null,
+       builder = null,
+       _data = _EffectData(intensity: liftPixels);
 
   GestureAnimation.push({
     this.behavior = AnimationBehavior.normal,
@@ -615,11 +616,11 @@ class GestureAnimation {
     this.repeat = false,
     required Widget shadow,
     Offset shadowOffset = const Offset(0, 7),
-  })  : _effect = GestureAnimations.push,
-        begin = null,
-        end = null,
-        builder = null,
-        _data = _EffectData(shadow: shadow, shadowOffset: shadowOffset);
+  }) : _effect = GestureAnimations.push,
+       begin = null,
+       end = null,
+       builder = null,
+       _data = _EffectData(shadow: shadow, shadowOffset: shadowOffset);
 
   Tween<double>? get _tween {
     if (begin == null && end == null) return null;
@@ -717,7 +718,8 @@ class GestureAnimation {
           animation: anim,
           builder: (ctx, ch) {
             final t = anim.value;
-            final angle = math.sin(t * data.count * 2 * math.pi) *
+            final angle =
+                math.sin(t * data.count * 2 * math.pi) *
                 (data.intensity * math.pi / 180);
             return Transform.rotate(
               angle: angle,
@@ -776,7 +778,8 @@ class GestureAnimation {
           animation: anim,
           builder: (ctx, ch) {
             final t = anim.value;
-            final angleRad = math.sin(t * data.count * 2 * math.pi) *
+            final angleRad =
+                math.sin(t * data.count * 2 * math.pi) *
                 (angleDeg * math.pi / 180);
             final dx = length * math.sin(angleRad);
             final dy = length * (1 - math.cos(angleRad));
@@ -814,7 +817,8 @@ class GestureAnimation {
           animation: anim,
           builder: (ctx, ch) {
             final t = 1.0 - anim.value;
-            final angle = math.sin(t * data.count * 2 * math.pi) *
+            final angle =
+                math.sin(t * data.count * 2 * math.pi) *
                 (data.intensity * math.pi / 180) *
                 t;
             return Transform.rotate(angle: angle, child: ch);

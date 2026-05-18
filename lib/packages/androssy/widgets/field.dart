@@ -6,35 +6,26 @@ import 'package:flutter/services.dart';
 
 import 'icon.dart';
 
-typedef OnAndrossyFieldErrorCheck = Future<AndrossyFieldError> Function(
-  String value,
-);
+typedef OnAndrossyFieldErrorCheck =
+    Future<AndrossyFieldError> Function(String value);
 typedef OnAndrossyFieldChanged = void Function(String value);
 typedef OnAndrossyFieldError = String? Function(AndrossyFieldError error);
 typedef OnAndrossyFieldValid = void Function(bool value);
 typedef OnAndrossyFieldValidator = bool Function(String value);
 
-typedef AndrossyFieldDrawableBuilder = Widget Function(
-  BuildContext context,
-  AndrossyFieldState state,
-);
+typedef AndrossyFieldDrawableBuilder =
+    Widget Function(BuildContext context, AndrossyFieldState state);
 
-typedef AndrossyFieldContextMenuBuilder = Widget Function(
-  BuildContext context,
-  EditableTextState state,
-);
+typedef AndrossyFieldContextMenuBuilder =
+    Widget Function(BuildContext context, EditableTextState state);
 
-typedef AndrossyFieldPrivateCommandListener = void Function(
-  String value,
-  Map<String, dynamic> params,
-);
+typedef AndrossyFieldPrivateCommandListener =
+    void Function(String value, Map<String, dynamic> params);
 
 typedef AndrossyFieldVoidListener = void Function();
 typedef AndrossyFieldCheckListener = Function(String tag, bool valid);
-typedef AndrossyFieldSelectionChangeListener = void Function(
-  TextSelection selection,
-  SelectionChangedCause? cause,
-);
+typedef AndrossyFieldSelectionChangeListener =
+    void Function(TextSelection selection, SelectionChangedCause? cause);
 typedef AndrossyFieldSubmitListener = void Function(String value);
 typedef AndrossyFieldTapOutsideListener = void Function(PointerDownEvent event);
 
@@ -606,12 +597,14 @@ class AndrossyFieldState extends State<AndrossyField> {
 
   late final primaryColor = widget.primaryColor ?? theme.primaryColor;
 
-  late final errorColor = widget.errorColor ??
+  late final errorColor =
+      widget.errorColor ??
       (theme.brightness == Brightness.dark
           ? Colors.red
           : const Color(0xFFFF7769));
 
-  late final secondaryColor = widget.secondaryColor ??
+  late final secondaryColor =
+      widget.secondaryColor ??
       (Theme.of(context).brightness == Brightness.dark
           ? const Color(0xFF616161)
           : const Color(0xFFBBBBBB));
@@ -671,11 +664,13 @@ class AndrossyFieldState extends State<AndrossyField> {
     error: errorColor,
   );
 
-  late final defaultIndicatorBackgroundColor =
-      widget.indicatorStrokeBackground.use._defaults(
-    enabled: secondaryColor.withAlpha(10),
-    focused: primaryColor.withAlpha(20),
-  );
+  late final defaultIndicatorBackgroundColor = widget
+      .indicatorStrokeBackground
+      .use
+      ._defaults(
+        enabled: secondaryColor.withAlpha(10),
+        focused: primaryColor.withAlpha(20),
+      );
 
   late final defaultUnderlineColor = widget.underlineColor.use._defaults(
     enabled: secondaryColor,
@@ -710,9 +705,10 @@ class AndrossyFieldState extends State<AndrossyField> {
   );
 
   late TextStyle hintStyle = style.copyWith(
-    color: text.isNotEmpty
-        ? Colors.transparent
-        : widget.hintColor ?? secondaryColor.withAlpha(100),
+    color:
+        text.isNotEmpty
+            ? Colors.transparent
+            : widget.hintColor ?? secondaryColor.withAlpha(100),
   );
 
   Widget defaultIndicator(AndrossyFieldPropertyState state) {
@@ -726,7 +722,8 @@ class AndrossyFieldState extends State<AndrossyField> {
         strokeWidth: widget.indicatorStrokeWidth ?? 2,
         color: defaultColor,
         strokeCap: StrokeCap.round,
-        backgroundColor: defaultIndicatorBackgroundColor.fromState(state) ??
+        backgroundColor:
+            defaultIndicatorBackgroundColor.fromState(state) ??
             defaultColor?.withAlpha(20),
       ),
     );
@@ -734,9 +731,10 @@ class AndrossyFieldState extends State<AndrossyField> {
 
   Widget _attach(BuildContext context, AndrossyFieldPropertyState state) {
     var mHintStyle = style.copyWith(
-      color: text.isNotEmpty
-          ? Colors.transparent
-          : widget.hintColor ?? secondaryColor.withAlpha(100),
+      color:
+          text.isNotEmpty
+              ? Colors.transparent
+              : widget.hintColor ?? secondaryColor.withAlpha(100),
     );
 
     return Row(
@@ -851,15 +849,17 @@ class AndrossyFieldState extends State<AndrossyField> {
   }
 
   Widget _decorate(Widget child) {
-    final decoration = isUnderlineHide
-        ? widget.decoration?.fromState(state) ??
-            BoxDecoration(
-              border: _border(state),
-              borderRadius: widget.borderRadius?.fromState(state),
-              color: widget.backgroundColor?.fromState(state) ??
-                  Colors.transparent,
-            )
-        : null;
+    final decoration =
+        isUnderlineHide
+            ? widget.decoration?.fromState(state) ??
+                BoxDecoration(
+                  border: _border(state),
+                  borderRadius: widget.borderRadius?.fromState(state),
+                  color:
+                      widget.backgroundColor?.fromState(state) ??
+                      Colors.transparent,
+                )
+            : null;
     final clipBehavior = isUnderlineHide ? Clip.antiAlias : Clip.none;
     final padding =
         widget.contentPadding ?? const EdgeInsets.symmetric(vertical: 8);
@@ -908,51 +908,50 @@ class AndrossyFieldState extends State<AndrossyField> {
 
     return visible
         ? Column(
-            textDirection: widget.textDirection,
-            children: [
-              if (floatingVisible)
-                _Header(
-                  animationDuration: widget.animationDuration,
-                  animationCurve: animationCurve,
-                  floatingAlignment: floatingAlignment,
-                  floatingTextSpace: floatingPadding,
-                  floatingText: floatingText,
-                  textAlign: widget.textAlign,
-                  textDirection: widget.textDirection,
-                  floatingTextStyle: floatingTextStyle,
-                ),
-              child,
-              if (underlineVisible)
-                _Underline(
-                  active: isFocused,
-                  animationDuration: widget.animationDuration,
-                  animationCurve: animationCurve,
-                  color: defaultUnderlineColor.fromState(state),
-                  height: underlineHeight,
-                ),
-              if (footerVisible)
-                _Footer(
-                  animationDuration: widget.animationDuration,
-                  animationCurve: animationCurve,
-                  counterVisibility: counterVisibility,
-                  hasError: hasError,
-                  floatingTextSpace: floatingPadding,
-                  textDirection: widget.textDirection,
-                  footerAlignment: footerAlignment,
-                  textAlign: widget.textAlign,
-                  counter: counter,
-                  errorText: errorText,
-                  helperText: isIndicatorVisible
-                      ? widget.loadingText ?? ""
-                      : helperText,
-                  footerTextStyle: defaultFooterStyle.fromState(state),
-                  counterTextStyle: widget.counterStyle?.fromState(state),
-                  errorTextStyle: widget.errorStyle?.fromState(state),
-                  helperTextStyle: widget.helperStyle?.fromState(state),
-                  isFocused: isFocused,
-                ),
-            ],
-          )
+          textDirection: widget.textDirection,
+          children: [
+            if (floatingVisible)
+              _Header(
+                animationDuration: widget.animationDuration,
+                animationCurve: animationCurve,
+                floatingAlignment: floatingAlignment,
+                floatingTextSpace: floatingPadding,
+                floatingText: floatingText,
+                textAlign: widget.textAlign,
+                textDirection: widget.textDirection,
+                floatingTextStyle: floatingTextStyle,
+              ),
+            child,
+            if (underlineVisible)
+              _Underline(
+                active: isFocused,
+                animationDuration: widget.animationDuration,
+                animationCurve: animationCurve,
+                color: defaultUnderlineColor.fromState(state),
+                height: underlineHeight,
+              ),
+            if (footerVisible)
+              _Footer(
+                animationDuration: widget.animationDuration,
+                animationCurve: animationCurve,
+                counterVisibility: counterVisibility,
+                hasError: hasError,
+                floatingTextSpace: floatingPadding,
+                textDirection: widget.textDirection,
+                footerAlignment: footerAlignment,
+                textAlign: widget.textAlign,
+                counter: counter,
+                errorText: errorText,
+                helperText:
+                    isIndicatorVisible ? widget.loadingText ?? "" : helperText,
+                footerTextStyle: defaultFooterStyle.fromState(state),
+                counterTextStyle: widget.counterStyle?.fromState(state),
+                errorTextStyle: widget.errorStyle?.fromState(state),
+                helperTextStyle: widget.helperStyle?.fromState(state),
+                isFocused: isFocused,
+              ),
+          ],
+        )
         : child;
   }
 
@@ -1304,10 +1303,7 @@ class AndrossyFieldState extends State<AndrossyField> {
   EdgeInsets get drawableEndSpace {
     final isRTL = widget.textDirection == TextDirection.rtl;
     final space = widget.drawableEndPadding?.fromState(state) ?? 12;
-    return EdgeInsets.only(
-      left: !isRTL ? space : 0,
-      right: isRTL ? space : 0,
-    );
+    return EdgeInsets.only(left: !isRTL ? space : 0, right: isRTL ? space : 0);
   }
 
   dynamic get drawableStart {
@@ -1321,10 +1317,7 @@ class AndrossyFieldState extends State<AndrossyField> {
   EdgeInsets get drawableStartSpace {
     final isRTL = widget.textDirection == TextDirection.rtl;
     final space = widget.drawableStartPadding?.fromState(state) ?? 12;
-    return EdgeInsets.only(
-      left: isRTL ? space : 0,
-      right: !isRTL ? space : 0,
-    );
+    return EdgeInsets.only(left: isRTL ? space : 0, right: !isRTL ? space : 0);
   }
 
   late String? errorText = widget.errorText;
@@ -1353,8 +1346,8 @@ class AndrossyFieldState extends State<AndrossyField> {
     return maxLength > 0
         ? '$currentLength / $maxLength'
         : currentLength > 0
-            ? "$currentLength"
-            : "";
+        ? "$currentLength"
+        : "";
   }
 
   late String characters = widget.characters ?? '';
@@ -1365,9 +1358,7 @@ class AndrossyFieldState extends State<AndrossyField> {
     return [
       ...?widget.inputFormatters,
       if (characters.isNotEmpty)
-        FilteringTextInputFormatter.allow(
-          RegExp("[${widget.characters}]"),
-        ),
+        FilteringTextInputFormatter.allow(RegExp("[${widget.characters}]")),
       if (ignorableCharacters.isNotEmpty)
         FilteringTextInputFormatter.deny(
           RegExp("[${widget.ignorableCharacters}]"),
@@ -1460,19 +1451,23 @@ class _Footer extends StatelessWidget {
       color: footerTextStyle?.color,
     );
 
-    final counterColor = cv.isAuto && !isFocused
-        ? Colors.transparent
-        : counterTextStyle?.color ?? footerTextStyle?.color;
+    final counterColor =
+        cv.isAuto && !isFocused
+            ? Colors.transparent
+            : counterTextStyle?.color ?? footerTextStyle?.color;
 
-    final counterStyle = counterTextStyle?.copyWith(color: counterColor) ??
+    final counterStyle =
+        counterTextStyle?.copyWith(color: counterColor) ??
         footerStyle?.copyWith(color: counterColor);
 
-    final errorStyle = errorTextStyle?.copyWith(
+    final errorStyle =
+        errorTextStyle?.copyWith(
           color: errorTextStyle?.color ?? footerTextStyle?.color,
         ) ??
         footerStyle;
 
-    final helperStyle = helperTextStyle?.copyWith(
+    final helperStyle =
+        helperTextStyle?.copyWith(
           color: helperTextStyle?.color ?? footerTextStyle?.color,
         ) ??
         footerStyle;
@@ -1493,17 +1488,19 @@ class _Footer extends StatelessWidget {
       mainAxisAlignment: footerAlignment,
       children: [
         Flexible(
-          child: animationDuration != null
-              ? AnimatedSize(
-                  alignment: textDirection == TextDirection.ltr
-                      ? Alignment.centerRight
-                      : Alignment.centerLeft,
-                  duration: animationDuration!,
-                  curve: animationCurve,
-                  reverseDuration: Duration.zero,
-                  child: footerMessage,
-                )
-              : footerMessage,
+          child:
+              animationDuration != null
+                  ? AnimatedSize(
+                    alignment:
+                        textDirection == TextDirection.ltr
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft,
+                    duration: animationDuration!,
+                    curve: animationCurve,
+                    reverseDuration: Duration.zero,
+                    child: footerMessage,
+                  )
+                  : footerMessage,
         ),
         _HighlightText(
           visible: counterVisible && textAlign != TextAlign.center,
@@ -1596,7 +1593,8 @@ class _HighlightText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = textStyle ??
+    final style =
+        textStyle ??
         TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w500,
@@ -1604,23 +1602,24 @@ class _HighlightText extends StatelessWidget {
         );
     return Visibility(
       visible: visible,
-      child: animationDuration != null
-          ? AnimatedDefaultTextStyle(
-              duration: animationDuration!,
-              curve: animationCurve,
-              style: style,
-              child: Text(
+      child:
+          animationDuration != null
+              ? AnimatedDefaultTextStyle(
+                duration: animationDuration!,
+                curve: animationCurve,
+                style: style,
+                child: Text(
+                  text ?? "",
+                  textAlign: textAlign,
+                  textDirection: textDirection,
+                ),
+              )
+              : Text(
                 text ?? "",
                 textAlign: textAlign,
                 textDirection: textDirection,
+                style: style,
               ),
-            )
-          : Text(
-              text ?? "",
-              textAlign: textAlign,
-              textDirection: textDirection,
-              style: style,
-            ),
     );
   }
 }
@@ -1662,23 +1661,14 @@ class _Icon extends StatelessWidget {
         duration: animationDuration!,
         switchInCurve: animationCurve,
         transitionBuilder: (child, animation) {
-          return FadeTransition(
-            opacity: animation,
-            child: child,
-          );
+          return FadeTransition(opacity: animation, child: child);
         },
         child: child,
       );
     }
-    child = Padding(
-      padding: margin,
-      child: child,
-    );
+    child = Padding(padding: margin, child: child);
     if (onToggleClick != null) {
-      child = GestureDetector(
-        onTap: onToggleClick,
-        child: child,
-      );
+      child = GestureDetector(onTap: onToggleClick, child: child);
     }
     return child;
   }
@@ -1791,10 +1781,8 @@ class AndrossyFieldTweenProperty<T> {
   final T active;
   final T inactive;
 
-  const AndrossyFieldTweenProperty({
-    required this.active,
-    T? inactive,
-  }) : inactive = inactive ?? active;
+  const AndrossyFieldTweenProperty({required this.active, T? inactive})
+    : inactive = inactive ?? active;
 
   const AndrossyFieldTweenProperty.all(T value) : this(active: value);
 
@@ -1845,29 +1833,29 @@ class AndrossyFieldProperty<T> {
     T? readOnly,
     T? valid,
     T? validFocused,
-  })  : _disabled = disabled,
-        _error = error,
-        _errorFocused = errorFocused,
-        _focused = focused,
-        _loading = loading,
-        _loadingFocused = loadingFocused,
-        _readOnly = readOnly,
-        _validFocused = validFocused,
-        _valid = valid,
-        _none = false;
+  }) : _disabled = disabled,
+       _error = error,
+       _errorFocused = errorFocused,
+       _focused = focused,
+       _loading = loading,
+       _loadingFocused = loadingFocused,
+       _readOnly = readOnly,
+       _validFocused = validFocused,
+       _valid = valid,
+       _none = false;
 
   const AndrossyFieldProperty.none()
-      : enabled = null,
-        _disabled = null,
-        _error = null,
-        _errorFocused = null,
-        _focused = null,
-        _loading = null,
-        _loadingFocused = null,
-        _readOnly = null,
-        _validFocused = null,
-        _valid = null,
-        _none = true;
+    : enabled = null,
+      _disabled = null,
+      _error = null,
+      _errorFocused = null,
+      _focused = null,
+      _loading = null,
+      _loadingFocused = null,
+      _readOnly = null,
+      _validFocused = null,
+      _valid = null,
+      _none = true;
 
   const AndrossyFieldProperty.all(T? value) : this(enabled: value);
 

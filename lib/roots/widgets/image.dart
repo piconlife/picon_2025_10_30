@@ -1,7 +1,8 @@
 import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:in_app_translation/in_app_translation.dart';
+
+import '../../packages/imports.dart' show AndrossyImage, AndrossyImageType;
 
 class InAppImage extends AndrossyImage {
   final DimenData? dimen;

@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
 
-typedef AndrossyOptionCallback = Widget Function(
-  BuildContext context,
-  Widget child,
-  VoidCallback callback,
-);
+typedef AndrossyOptionCallback =
+    Widget Function(BuildContext context, Widget child, VoidCallback callback);
 
-typedef AndrossyOptionBuilder<T> = Widget Function(
-  BuildContext context,
-  int index,
-  bool selected,
-);
+typedef AndrossyOptionBuilder<T> =
+    Widget Function(BuildContext context, int index, bool selected);
 
 typedef AndrossyOptionChanged<T> = void Function(int index);
 
@@ -18,10 +12,8 @@ class AndrossyOptionProperty<T extends Object?> {
   final T? active;
   final T? inactive;
 
-  const AndrossyOptionProperty({
-    T? active,
-    this.inactive,
-  }) : active = active ?? inactive;
+  const AndrossyOptionProperty({T? active, this.inactive})
+    : active = active ?? inactive;
 
   const AndrossyOptionProperty.all(T? value) : this(inactive: value);
 

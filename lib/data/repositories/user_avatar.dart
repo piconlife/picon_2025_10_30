@@ -1,4 +1,4 @@
-import '../../app/imports/data_management.dart' show RemoteDataRepository;
+import '../../packages/data_management.dart' show RemoteDataRepository;
 import '../models/user_avatar.dart';
 import '../sources/local/user_avatar.dart';
 import '../sources/remote/user_avatar.dart';

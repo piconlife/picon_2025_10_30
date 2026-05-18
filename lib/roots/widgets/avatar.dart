@@ -1,9 +1,10 @@
 import 'package:app_color/app_color.dart';
 import 'package:app_color/extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 
 import '../../app/res/placeholders.dart';
+import '../../packages/imports.dart'
+    show AndrossyAvatar, GestureAnimation, AndrossyGesture;
 
 class InAppAvatar extends StatelessWidget {
   final dynamic data;

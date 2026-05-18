@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
+
+import '../../packages/imports.dart'
+    show kAndrossyShimmerDuration, AndrossyShimmer;
 
 class InAppShimmer extends StatelessWidget {
   final Color? background;

@@ -3,9 +3,9 @@ import 'package:flutter_entity/entity.dart';
 
 import '../../../../app/base/data_cubit.dart';
 import '../../../../app/helpers/user.dart';
-import '../../../../app/imports/data_management.dart' show DataFieldValue;
 import '../../../../data/models/user.dart';
 import '../../../../data/use_cases/user/get_users_by_ids.dart';
+import '../../../../packages/data_management.dart' show DataFieldValue;
 
 class VerifiedUsersCubit extends DataCubit<Selection<UserModel>> {
   VerifiedUsersCubit(super.context);

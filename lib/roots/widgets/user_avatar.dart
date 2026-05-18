@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_androssy_kits/core/cached_network_image.dart';
 
-import '../../app/imports/auth_management.dart' show AuthBuilder;
 import '../../app/res/placeholders.dart';
 import '../../data/models/user.dart';
+import '../../packages/auth_management.dart' show AuthBuilder;
+import '../../packages/imports.dart' show AndrossyNetworkImageConfig;
 import 'gesture.dart';
 import 'image.dart';
 

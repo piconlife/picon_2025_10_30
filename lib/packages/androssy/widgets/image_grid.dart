@@ -98,16 +98,11 @@ class _Builder extends StatelessWidget {
     }
 
     if (flexible) {
-      child = Expanded(
-        child: child,
-      );
+      child = Expanded(child: child);
     }
 
     if (dimension != null && dimension! > 0) {
-      child = AspectRatio(
-        aspectRatio: dimension!,
-        child: child,
-      );
+      child = AspectRatio(aspectRatio: dimension!, child: child);
     }
 
     return child;
@@ -117,34 +112,30 @@ class _Builder extends StatelessWidget {
 class _LayerX extends StatelessWidget {
   final AndrossyImageGridState controller;
 
-  const _LayerX({
-    required this.controller,
-  });
+  const _LayerX({required this.controller});
 
   @override
   Widget build(BuildContext context) {
     final aspectRatio = controller.ratioBuilder(1);
     return aspectRatio != null && aspectRatio > 0
         ? _Builder(
-            controller: controller,
-            dimension: aspectRatio,
-            child: controller.builder(context, 0),
-          )
+          controller: controller,
+          dimension: aspectRatio,
+          child: controller.builder(context, 0),
+        )
         : _Builder(
-            controller: controller,
-            maxHeight: 500,
-            resizable: true,
-            child: controller.builder(context, 0),
-          );
+          controller: controller,
+          maxHeight: 500,
+          resizable: true,
+          child: controller.builder(context, 0),
+        );
   }
 }
 
 class _LayerX2 extends StatelessWidget {
   final AndrossyImageGridState controller;
 
-  const _LayerX2({
-    required this.controller,
-  });
+  const _LayerX2({required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -159,9 +150,7 @@ class _LayerX2 extends StatelessWidget {
             flexible: true,
             child: controller.builder(context, 0),
           ),
-          SizedBox(
-            width: controller.spaceBetween,
-          ),
+          SizedBox(width: controller.spaceBetween),
           _Builder(
             controller: controller,
             flexible: true,
@@ -176,9 +165,7 @@ class _LayerX2 extends StatelessWidget {
 class _LayerX3 extends StatelessWidget {
   final AndrossyImageGridState controller;
 
-  const _LayerX3({
-    required this.controller,
-  });
+  const _LayerX3({required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -193,9 +180,7 @@ class _LayerX3 extends StatelessWidget {
             dimension: 0.8,
             child: controller.builder(context, 0),
           ),
-          SizedBox(
-            width: controller.spaceBetween,
-          ),
+          SizedBox(width: controller.spaceBetween),
           Expanded(
             child: Flex(
               direction: Axis.vertical,
@@ -205,9 +190,7 @@ class _LayerX3 extends StatelessWidget {
                   flexible: true,
                   child: controller.builder(context, 1),
                 ),
-                SizedBox(
-                  height: controller.spaceBetween,
-                ),
+                SizedBox(height: controller.spaceBetween),
                 _Builder(
                   controller: controller,
                   flexible: true,
@@ -225,9 +208,7 @@ class _LayerX3 extends StatelessWidget {
 class _LayerX4 extends StatelessWidget {
   final AndrossyImageGridState controller;
 
-  const _LayerX4({
-    required this.controller,
-  });
+  const _LayerX4({required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -246,9 +227,7 @@ class _LayerX4 extends StatelessWidget {
                   dimension: 1,
                   child: controller.builder(context, 0),
                 ),
-                SizedBox(
-                  width: controller.spaceBetween,
-                ),
+                SizedBox(width: controller.spaceBetween),
                 _Builder(
                   controller: controller,
                   dimension: 1,
@@ -257,9 +236,7 @@ class _LayerX4 extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
-            height: controller.spaceBetween,
-          ),
+          SizedBox(height: controller.spaceBetween),
           Expanded(
             child: Flex(
               direction: Axis.horizontal,
@@ -269,9 +246,7 @@ class _LayerX4 extends StatelessWidget {
                   dimension: 1,
                   child: controller.builder(context, 2),
                 ),
-                SizedBox(
-                  width: controller.spaceBetween,
-                ),
+                SizedBox(width: controller.spaceBetween),
                 _Builder(
                   controller: controller,
                   dimension: 1,
@@ -289,9 +264,7 @@ class _LayerX4 extends StatelessWidget {
 class _LayerX5 extends StatelessWidget {
   final AndrossyImageGridState controller;
 
-  const _LayerX5({
-    required this.controller,
-  });
+  const _LayerX5({required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -310,9 +283,7 @@ class _LayerX5 extends StatelessWidget {
                   flexible: true,
                   child: controller.builder(context, 0),
                 ),
-                SizedBox(
-                  width: controller.spaceBetween,
-                ),
+                SizedBox(width: controller.spaceBetween),
                 _Builder(
                   controller: controller,
                   flexible: true,
@@ -321,9 +292,7 @@ class _LayerX5 extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
-            height: controller.spaceBetween,
-          ),
+          SizedBox(height: controller.spaceBetween),
           Expanded(
             child: Flex(
               direction: Axis.horizontal,
@@ -333,17 +302,13 @@ class _LayerX5 extends StatelessWidget {
                   flexible: true,
                   child: controller.builder(context, 2),
                 ),
-                SizedBox(
-                  width: controller.spaceBetween,
-                ),
+                SizedBox(width: controller.spaceBetween),
                 _Builder(
                   controller: controller,
                   flexible: true,
                   child: controller.builder(context, 3),
                 ),
-                SizedBox(
-                  width: controller.spaceBetween,
-                ),
+                SizedBox(width: controller.spaceBetween),
                 _Builder(
                   controller: controller,
                   flexible: true,
@@ -361,9 +326,7 @@ class _LayerX5 extends StatelessWidget {
 class _LayerX6 extends StatelessWidget {
   final AndrossyImageGridState controller;
 
-  const _LayerX6({
-    required this.controller,
-  });
+  const _LayerX6({required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -382,17 +345,13 @@ class _LayerX6 extends StatelessWidget {
                   flexible: true,
                   child: controller.builder(context, 0),
                 ),
-                SizedBox(
-                  width: controller.spaceBetween,
-                ),
+                SizedBox(width: controller.spaceBetween),
                 _Builder(
                   controller: controller,
                   flexible: true,
                   child: controller.builder(context, 1),
                 ),
-                SizedBox(
-                  width: controller.spaceBetween,
-                ),
+                SizedBox(width: controller.spaceBetween),
                 _Builder(
                   controller: controller,
                   flexible: true,
@@ -401,9 +360,7 @@ class _LayerX6 extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
-            height: controller.spaceBetween,
-          ),
+          SizedBox(height: controller.spaceBetween),
           Expanded(
             child: Flex(
               direction: Axis.horizontal,
@@ -413,17 +370,13 @@ class _LayerX6 extends StatelessWidget {
                   flexible: true,
                   child: controller.builder(context, 3),
                 ),
-                SizedBox(
-                  width: controller.spaceBetween,
-                ),
+                SizedBox(width: controller.spaceBetween),
                 _Builder(
                   controller: controller,
                   flexible: true,
                   child: controller.builder(context, 4),
                 ),
-                SizedBox(
-                  width: controller.spaceBetween,
-                ),
+                SizedBox(width: controller.spaceBetween),
                 _Builder(
                   controller: controller,
                   flexible: true,
@@ -441,9 +394,7 @@ class _LayerX6 extends StatelessWidget {
 class _LayerXn extends StatelessWidget {
   final AndrossyImageGridState controller;
 
-  const _LayerXn({
-    required this.controller,
-  });
+  const _LayerXn({required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -462,17 +413,13 @@ class _LayerXn extends StatelessWidget {
                   flexible: true,
                   child: controller.builder(context, 0),
                 ),
-                SizedBox(
-                  width: controller.spaceBetween,
-                ),
+                SizedBox(width: controller.spaceBetween),
                 _Builder(
                   controller: controller,
                   flexible: true,
                   child: controller.builder(context, 1),
                 ),
-                SizedBox(
-                  width: controller.spaceBetween,
-                ),
+                SizedBox(width: controller.spaceBetween),
                 _Builder(
                   controller: controller,
                   flexible: true,
@@ -481,9 +428,7 @@ class _LayerXn extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
-            height: controller.spaceBetween,
-          ),
+          SizedBox(height: controller.spaceBetween),
           Expanded(
             child: Flex(
               direction: Axis.horizontal,
@@ -493,17 +438,13 @@ class _LayerXn extends StatelessWidget {
                   flexible: true,
                   child: controller.builder(context, 3),
                 ),
-                SizedBox(
-                  width: controller.spaceBetween,
-                ),
+                SizedBox(width: controller.spaceBetween),
                 _Builder(
                   controller: controller,
                   flexible: true,
                   child: controller.builder(context, 4),
                 ),
-                SizedBox(
-                  width: controller.spaceBetween,
-                ),
+                SizedBox(width: controller.spaceBetween),
                 Expanded(
                   child: SizedBox(
                     width: double.infinity,

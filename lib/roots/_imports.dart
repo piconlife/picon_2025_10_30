@@ -5,12 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/instance.dart';
-import 'package:flutter_andomie/utils/assets.dart';
-import 'package:flutter_andomie/utils/hit_logger.dart';
-import 'package:flutter_andomie/utils/internet.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
-import 'package:flutter_androssy_kits/flutter_androssy_kits.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -41,8 +36,6 @@ import '../app/delegates/tracker.dart';
 import '../app/delegates/translation.dart';
 import '../app/delegates/translator.dart';
 import '../app/helpers/user.dart';
-import '../app/imports/auth_management.dart' show AuthProvider, Authorizer;
-import '../app/imports/in_app_database.dart';
 import '../app/interfaces/bsd_editor.dart';
 import '../app/interfaces/bsd_options.dart';
 import '../app/interfaces/dialog_alert.dart';
@@ -57,6 +50,17 @@ import '../app/settings/remote.dart';
 import '../app/widgets/cached_network_image_error.dart';
 import '../app/widgets/cached_network_image_progress.dart';
 import '../data/models/user.dart';
+import '../packages/auth_management.dart' show AuthProvider, Authorizer;
+import '../packages/imports.dart'
+    show
+        Andomie,
+        Androssy,
+        AndrossySvgSource,
+        AndrossySvgTheme,
+        Assets,
+        HitLogger,
+        Internet;
+import '../packages/in_app_database.dart';
 import '../routes/delegate.dart';
 import 'helpers/connectivity.dart';
 import 'helpers/location.dart';

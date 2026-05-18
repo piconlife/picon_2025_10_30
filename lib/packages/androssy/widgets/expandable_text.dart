@@ -84,9 +84,7 @@ class _AndrossyExpandableTextState extends State<AndrossyExpandableText>
         lowerBound: (widget.initial / widget.data.length).clamp(0.0, 1.0),
         vsync: this,
       );
-      _animation = CurveTween(
-        curve: widget.curve,
-      ).animate(_controller!);
+      _animation = CurveTween(curve: widget.curve).animate(_controller!);
     }
   }
 
@@ -128,11 +126,12 @@ class _AndrossyExpandableTextState extends State<AndrossyExpandableText>
     return Text.rich(
       TextSpan(
         text: text.toString(),
-        children: _isExpansion &&
-                extra.isNotEmpty &&
-                !(_controller?.isAnimating ?? false)
-            ? [TextSpan(text: extra, style: widget.expandableStyle)]
-            : null,
+        children:
+            _isExpansion &&
+                    extra.isNotEmpty &&
+                    !(_controller?.isAnimating ?? false)
+                ? [TextSpan(text: extra, style: widget.expandableStyle)]
+                : null,
       ),
       locale: widget.locale,
       selectionColor: widget.selectionColor,
@@ -151,9 +150,13 @@ class _AndrossyExpandableTextState extends State<AndrossyExpandableText>
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _toggle,
-      child: _animation != null
-          ? AnimatedBuilder(animation: _animation!, builder: (_, __) => _text)
-          : ColoredBox(color: Colors.transparent, child: _text),
+      child:
+          _animation != null
+              ? AnimatedBuilder(
+                animation: _animation!,
+                builder: (_, __) => _text,
+              )
+              : ColoredBox(color: Colors.transparent, child: _text),
     );
   }
 }

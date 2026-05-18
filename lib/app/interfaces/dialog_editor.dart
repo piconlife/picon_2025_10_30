@@ -4,8 +4,9 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 
+import '../../packages/imports.dart'
+    show AndrossyField, FloatingVisibility, AndrossyFieldProperty;
 import '../../roots/widgets/text.dart';
 import '../../roots/widgets/text_button.dart';
 import '../styles/fonts.dart';

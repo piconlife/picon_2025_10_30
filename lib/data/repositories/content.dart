@@ -1,4 +1,4 @@
-import '../../app/imports/data_management.dart' show RemoteDataRepository;
+import '../../packages/data_management.dart' show RemoteDataRepository;
 import '../models/content.dart' show ContentModel;
 import '../sources/local/content.dart' show LocalContentDataSource;
 import '../sources/remote/content.dart' show RemoteContentDataSource;

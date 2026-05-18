@@ -1,6 +1,8 @@
 import 'package:app_color/app_color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
+
+import '../../packages/imports.dart'
+    show GestureAnimation, AndrossyButtonProperty, AndrossyButton;
 
 class InAppIconButton extends StatelessWidget {
   final dynamic data;

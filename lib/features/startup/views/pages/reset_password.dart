@@ -4,16 +4,22 @@ import 'package:app_dimen/app_dimen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/extensions.dart';
 import 'package:flutter_androssy_dialogs/dialogs.dart';
-import 'package:flutter_androssy_kits/widgets.dart';
 import 'package:flutter_entity/entity.dart';
 import 'package:in_app_navigator/route.dart';
 import 'package:object_finder/object_finder.dart';
 
-import '../../../../app/imports/auth_management.dart' show AuthHelper;
 import '../../../../app/res/icons.dart';
 import '../../../../data/models/user.dart';
 import '../../../../data/parsers/validations.dart';
 import '../../../../data/use_cases/unifier/update_user_password.dart';
+import '../../../../packages/auth_management.dart' show AuthHelper;
+import '../../../../packages/imports.dart'
+    show
+        AndrossyFieldProperty,
+        AndrossyField,
+        AndrossyFieldState,
+        AndrossyForm,
+        AndrossyFieldTweenProperty;
 import '../../../../roots/widgets/appbar.dart';
 import '../../../../roots/widgets/filled_button.dart';
 import '../../../../roots/widgets/logo_trailing.dart';

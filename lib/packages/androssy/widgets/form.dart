@@ -169,10 +169,10 @@ class AndrossyForm extends StatefulWidget {
     this.textCapitalization,
     this.keyboardAppearance,
   }) : controller = (controller ?? AndrossyFormController())._(
-          initialCheckTime: initialCheckTime,
-          valid: onValid,
-          children: _extract(children),
-        );
+         initialCheckTime: initialCheckTime,
+         valid: onValid,
+         children: _extract(children),
+       );
 
   AndrossyForm copyWith({
     AndrossyFormController? controller,
@@ -392,23 +392,23 @@ class AndrossyFormState extends State<AndrossyForm> {
   Widget build(BuildContext context) {
     return widget.direction == Axis.vertical
         ? Column(
-            mainAxisAlignment: widget.mainAxisAlignment,
-            mainAxisSize: widget.mainAxisSize,
-            crossAxisAlignment: widget.crossAxisAlignment,
-            textBaseline: widget.textBaseline,
-            textDirection: widget.textDirection,
-            verticalDirection: widget.verticalDirection,
-            children: _children,
-          )
+          mainAxisAlignment: widget.mainAxisAlignment,
+          mainAxisSize: widget.mainAxisSize,
+          crossAxisAlignment: widget.crossAxisAlignment,
+          textBaseline: widget.textBaseline,
+          textDirection: widget.textDirection,
+          verticalDirection: widget.verticalDirection,
+          children: _children,
+        )
         : Row(
-            mainAxisAlignment: widget.mainAxisAlignment,
-            mainAxisSize: widget.mainAxisSize,
-            crossAxisAlignment: widget.crossAxisAlignment,
-            textBaseline: widget.textBaseline,
-            textDirection: widget.textDirection,
-            verticalDirection: widget.verticalDirection,
-            children: _children,
-          );
+          mainAxisAlignment: widget.mainAxisAlignment,
+          mainAxisSize: widget.mainAxisSize,
+          crossAxisAlignment: widget.crossAxisAlignment,
+          textBaseline: widget.textBaseline,
+          textDirection: widget.textDirection,
+          verticalDirection: widget.verticalDirection,
+          children: _children,
+        );
   }
 
   List<Widget> get _children {
@@ -496,23 +496,17 @@ class AndrossyFormState extends State<AndrossyForm> {
     if (widget is AndrossyField) {
       return modifier?.call(widget) ?? widget;
     } else if (widget is AndrossyForm) {
-      List<Widget> children = widget.children.map((e) {
-        return _lookup(e, modifier);
-      }).toList();
+      List<Widget> children =
+          widget.children.map((e) {
+            return _lookup(e, modifier);
+          }).toList();
       return widget.copyWith(children: children);
     } else if (widget is SizedBox && widget.child != null) {
       final child = _lookup(widget.child!, modifier);
-      return SizedBox(
-        width: widget.width,
-        height: widget.height,
-        child: child,
-      );
+      return SizedBox(width: widget.width, height: widget.height, child: child);
     } else if (widget is Expanded) {
       final child = _lookup(widget.child, modifier);
-      return Expanded(
-        flex: widget.flex,
-        child: child,
-      );
+      return Expanded(flex: widget.flex, child: child);
     } else if (widget is Container && widget.child != null) {
       final child = _lookup(widget.child!, modifier);
       return Container(
